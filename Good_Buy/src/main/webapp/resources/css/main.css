@@ -18,7 +18,7 @@
 .visual-area .main-visual .slick-slide img {width: 100%;}
 .visual-area .main-visual .slick-dots {position:absolute;bottom: 24px;width: 100%;text-align: center;}
 .visual-area .main-visual .slick-dots li {display:inline-block;padding:5px;}
-.visual-area .main-visual .slick-dots li button {border:0;background:rgba(134, 152, 182, 0.8);width: 10px;height: 10px;font-size:0;border-radius: 100%;}
+.visual-area .main-visual .slick-dots li button {border:0;background: #828282;width: 10px;height: 10px;font-size:0;border-radius: 100%;opacity: 0.5;}
 .visual-area .main-visual .slick-dots li.slick-active button {background:var(--primary);}
 .visual-area .slick-arrow {position:absolute;display:block;width: 80px;height: 80px;top:50%;margin-top:-50px;transition:all 0.2s !important;z-index: 990;text-align: center;line-height: 80px;font-size: 30px;}
 .visual-area .slick-arrow.visu-prev {left: 0;opacity:0.3;}

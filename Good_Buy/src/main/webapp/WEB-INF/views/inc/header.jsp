@@ -5,7 +5,7 @@
 <div id="hd_wrap" class="hd-wrap">
 	<section class="hd-top">
 		<div class="hd-logo">
-			<a href="/"><h1><img src="${pageContext.request.contextPath}/resources/img/logo.png" alt="GoodBuy"></h1></a>
+			<a href="/"><h1><i class="fa-solid fa-basket-shopping"></i><br>Good Buy</a>
 		</div>
 		<div class="hd-sch">
 			<form action="" method="get">

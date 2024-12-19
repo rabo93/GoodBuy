@@ -1,0 +1,107 @@
+@charset "UTF-8";
+.join-wrap h3 {
+	text-align: center;
+	color: var(--dark);
+	font-size: 150%;
+	font-weight: bolder;
+	margin: 2rem auto 1rem;
+}
+
+#form-container {
+	height: auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #fff;
+	margin: 10px auto 30px;
+}
+
+#form-inner-container {
+	background-color: white;
+	max-width: 70%;
+	border-radius: 8px;
+	border: 1px solid var(--light-gray);
+	background: var(--light-blue);
+}
+
+#sign-up-container, #sign-in-container {
+    display: inline-block;
+    padding: 2rem;
+}
+
+.join-wrap  form input[type="text"] , .join-wrap  form input[type="password"], 
+.join-wrap  form input[type="button"],  .join-wrap  form input[type="submit"],  
+.join-wrap  form input[type="date"] {
+	display: block;
+	margin-bottom: 11px;
+	border: 0;
+	background-color: var(--ivory);
+	padding: 0.8rem 1rem;
+	margin-top: 10px;
+	border-radius: 8px;
+	width: 100%;
+	border: 1px solid #fae9de;
+	font-size: 0.875rem;
+}
+
+#gender-container {
+	display: flex;
+	gap: 10px;
+	margin-top: 10px;
+}
+
+.gender-option {
+	display: flex;
+	align-items: center;
+	padding: 5px;
+	border-radius: 30px;
+	gap: 8px;
+	margin-bottom: 20px;
+}
+
+
+.mem_addr_form {
+	display: flex;
+	margin-bottom: 20px;
+	margin-top: 10px;
+	border-radius: 30px;
+}
+
+.join-wrap button[type="button"] {
+	padding: 1rem;
+	background-color: var(--primary);
+	border-radius: 10px;
+	color: white;
+	margin-bottom: 20px; /* 버튼 아래쪽 여백 추가 */
+	font-weight: 700;
+	font-size: 1rem;
+	width: 100%;
+	margin-top: 20px;
+}
+
+.join-wrap button[type="button"]:hover {
+	background-color: #3364e9;
+}
+.join-wrap section {margin-top:10px;}
+.join-wrap section label {margin-top: 10px;display:flex;width: 100%;}
+
+.join-wrap section .terms-all {margin-top:20px;font-size:16px;padding: 10px;}
+
+#joinForm {}
+#joinForm .row {}
+#joinForm .row .box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+#joinForm .row .box input[type=button], #joinForm .row .box input[type=submit] {width:150px;background: var(--primary);color: var(--white);font-weight: 700;cursor: pointer;}
+#joinForm .result {font-size:14px; margin-bottom:1rem;}
+#joinForm .row .box input[type=button].before {background:var(--primary);}
+#joinForm .row .box input[type=button].after {background: #555;border-color:#555;}
+#joinForm .row .box .auth-input {position:relative;flex: 1 1 0;}
+#joinForm .row .box .auth-input .rest-time {position:absolute;right: 11px;top: 50%;transform: translateY(-50%);color: #555;font-weight: 700;font-size: 13px;}
+
+#joinForm .row .form-sel {border: 1px solid #fae9de;background: var(--ivory);padding: 8px 20px 8px 10px;font-size: 14px;color: var(--dark);border-radius: 8px;margin: 10px 0;}
+#joinForm .row.last-row {margin-top: 3rem;padding-top: 1rem;border-top:1px solid #eee;margin-bottom: 1rem;} 
+#joinForm .row.last-row > label:first-child {font-size:16px;}

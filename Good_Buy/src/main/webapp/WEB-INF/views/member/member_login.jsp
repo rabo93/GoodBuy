@@ -21,9 +21,9 @@
 <!-- ******************* 아래 CSS와 JS는 페이지별로 알맞게 Import 해주세요 ****************** -->
 <!-- CSS for Page -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/login.css">
-
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 <!-- JS for Page -->
+
+
 
 </head>
 <body>

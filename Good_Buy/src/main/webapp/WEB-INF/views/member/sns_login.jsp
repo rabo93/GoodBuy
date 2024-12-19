@@ -20,6 +20,9 @@
 <!-- CSS for Page -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/login.css">
 <!-- JS for Page -->
+<!-- 카카오 스크립트 -->
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+
 
 </head>
 <body>
@@ -34,7 +37,9 @@
 				    <h1 class="login-ttl">LOGIN</h1>
 				    <div class="login-box">
 		    			<a href="MemberLogin">ID/PW로 로그인</a>
-		    			<a href="#" class="sns-login"><i class="fa-solid fa-comment"></i>  카카오로 로그인</a>
+		    			<a class="sns-login" onclick="kakaoLogin()">
+						   <i class="fa-solid fa-comment"></i>카카오톡으로 간편로그인
+						</a>
 		    			<a href="#" class="sns-login"><img alt="네이버로그인" src="${pageContext.request.contextPath}/resources/img/naver-icon.png" > 네이버로 로그인</a>
 			       </div>
 		       </div>
@@ -45,6 +50,19 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
-	
+	<script th:inline="javascript">
+		<!-- 카카오 로그인 연동 -->
+		function kakaoLogin() {
+			$.ajax({
+				url:'/memberLoginForm/getKakaoAuthUrl',
+				type:'post',
+				async: false,
+				dataType: 'text',
+				success: function (res) {
+					location.href = res;
+			 	}
+			});
+		}
+	</script>
 </body>
 </html>

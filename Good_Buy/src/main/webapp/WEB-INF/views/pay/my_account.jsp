@@ -23,7 +23,7 @@
 
 <!-- JS for Page -->
 <script src="../../resources/js/product.js"></script>
-
+<script src="../../resources/js/pay.js"></script>
 
 
 
@@ -42,21 +42,39 @@
 				<div class="account-container">
 			        <!-- 페이지 제목 -->
 			        <h2 class="page-title">굿페이 - 내 연결계좌 관리</h2>
-			
-			        <!-- 연결된 계좌 -->
-			        <div class="linked-account">
-			            <div class="account-info">
-			                <div class="icon"></div>
-			                <span class="account-number">우체국 <strong>1234567890123</strong></span>
-			            </div>
-			            <button class="primary-account-btn">주계좌</button>
-			        </div>
-			
-			        <!-- 연결계좌 추가 버튼 -->
-			        <div class="add-account">
-			            <button class="add-account-btn">+ 연결계좌 추가하기</button>
-			        </div>
-			    </div>
+			        
+			        <%-- 세션 객체의 "token" 속성이 비어있을 경우 계좌 미인증 회원으로 계좌연결 버튼 표시 --%>
+					<%-- 아니면, 계좌관리 기능에 대한 버튼 표시 --%>
+					<c:choose>
+						<c:when test="${empty sessionScope.token}">
+							계좌 미인증 회원입니다.<br>
+							계좌 인증을 먼저 수행한 후 서비스 이용이 가능합니다!<br>
+							<%-- form 태그로 인증 수행 시 중간 오류 발생하면 뒤로 가기 작업을 별도로 수행해야하므로 --%>
+							<%-- 새 창을 통해 인증 수행 화면을 표시 --%>
+							<input type="button" value="계좌연결" onclick="linkAccount()">
+						</c:when>
+						
+			        
+						<c:otherwise>
+					        <!-- 연결된 계좌 -->
+					        <div class="linked-account">
+					            <div class="account-info">
+					                <div class="icon"></div>
+					                <span class="account-number">우체국 <strong>1234567890123</strong></span>
+					            </div>
+					            <button class="primary-account-btn">주계좌</button>
+					        </div>
+					        <div class="add-account">
+					            <button class="add-account-btn">+ 연결계좌 추가하기</button>
+					        </div>
+				        </c:otherwise>
+					</c:choose>
+			    </div><!-- account-container 끝  -->
+			    
+			    
+			    
+			    
+			    
 				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 			</div>
 		</section>

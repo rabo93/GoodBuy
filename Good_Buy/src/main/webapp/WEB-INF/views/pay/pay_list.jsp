@@ -34,21 +34,12 @@
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 				 <div class="goodpay-container">
-				 
-				 
-				 
-				 
 	                <h2 class="page-title">굿페이 > 홈</h2>
-	                
-	                * 1. 광고는 상품상세 한개씩 페이로 결제하는 방식으로 
-                    * 2. 페이사용할 때 결제 비번 넣기 
-	                
-				 
 			        <!-- 상단: 계좌 정보 -->
 			        <div class="account-box">
 			        	<div class="info">
 				        	<h1><i class="fa-solid fa-money-bill"></i>&nbsp;&nbsp;굿페이</h1>
-				            <button class="my-account" onclick="location.href='my_account.jsp'">내 계좌</button>
+				            <button class="my-account" onclick="location.href='MyAccount'">내 계좌</button>
 			        	</div>
 			            <div class="balance">
 			                <h1>30,000원</h1>

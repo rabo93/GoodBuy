@@ -22,6 +22,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
 
+
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
 
@@ -46,13 +47,11 @@
 				<a href="MySupport">1:1문의내역</a>
 			</aside>
 			<div class="my-container">
-				<div class="contents-ttl">나의 후기 <small>(총 <span>${reviewCount}</span>건)</small></div>
+				<div class="contents-ttl">관심목록 <small>(총 <span>${reviewCount}</span>건)</small></div>
 				<div class="contents">
 					<!-- contents -->
 					<section class="my-rev-wrap">
 						<div class="my-rev-li">
-
-							<h3>관심목록</h3>
 							<div>
 								<img alt="" src="">
 							</div>
@@ -70,5 +69,6 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
+
 </body>
 </html>

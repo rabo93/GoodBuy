@@ -18,7 +18,7 @@
 		<div class="hd-gnb">
 			<div class="gnb-left">
 				<a href="ProductRegist" class="gnb-btn"><i class="fa-solid fa-store"></i> 판매하기</a>
-				<a href="#" class="gnb-btn"><i class="fa-solid fa-comment-dots"></i> 채팅하기</a>
+				<a href="ChatMain" class="gnb-btn"><i class="fa-solid fa-comment-dots"></i> 채팅하기</a>
 			</div>
 			<div class="gnb-right">
 				<!-- 로그인 전 -->

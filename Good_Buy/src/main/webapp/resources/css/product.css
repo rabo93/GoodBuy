@@ -1,0 +1,114 @@
+@charset "UTF-8";
+
+/* =============================== product_list.jsp =============================== */
+.product-item-wrap {display:flex;align-items:flex-start;gap: 2rem;}
+
+.item-sch-area {padding: 1.2rem;background: var(--light-gray);border-radius: 10px;position: sticky;top: 0;}
+.item-sch-area .sch-inner h2 {font-size: 1.2em;font-weight: bold;}
+
+.item-sch-area .sch-inner .sch-box-reset:hover{box-shadow: 0px 0px 0px 5px #ff7235;}
+.item-sch-area .sch-inner .sch-box-reset {
+	margin-top: 15px;
+    padding: 8px 15px 8px 15px;
+    min-width: 100px;
+    float: right;
+    height: auto;
+    box-sizing: border-box;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 700;
+    background-color: #ff7235;
+    border: 2px solid #ff7235;
+    color: #ffffff;
+    display: block;
+}
+.item-sch-area .sch-inner .sch-box {}
+.item-sch-area .sch-inner .sch-box li {margin: 5px 0 0 0;}
+.item-sch-area .sch-inner .sch-box li [type="radio"] {
+	margin-left: 10px;
+	margin-right: 10px;
+	vertical-align: middle;
+	appearance: none;
+	border: max(2px, 0.1em) solid gray;
+	border-radius: 50%;
+	width: 1.15em;
+	height: 1.15em;
+}
+.item-sch-area .sch-inner .sch-box li [type="radio"]:checked {border: 0.4em solid #ff7235;}
+.item-sch-area .sch-inner .sch-box li [type="radio"]:hover {box-shadow: 0 0 0 max(4px, 0.2em) lightgray;cursor: pointer;}
+.item-sch-area .sch-inner .sch-box li [type="checkbox"] {
+	margin-left: 10px;
+	margin-right: 10px;
+	vertical-align: middle;
+	appearance: none;
+	border: max(2px, 0.1em) solid gray;
+	border-radius: 20%;
+	width: 1.15em;
+	height: 1.15em;
+}
+.item-sch-area .sch-inner .sch-box li [type="checkbox"]:checked {border: 0.4em solid #ff7235;}
+.item-sch-area .sch-inner .sch-box li [type="checkbox"]:hover {box-shadow: 0 0 0 max(4px, 0.2em) lightgray;cursor: pointer;}
+
+.item-sch-area .sch-inner .sch-box .ip-num-box {display: flex;margin: 10px;}
+
+.item-sch-area .sch-inner .sch-box .ip-tt {
+	margin-left: 5px;
+	vertical-align: middle;
+	appearance: none;
+	border: max(2px, 0.1em) solid gray;
+	border-radius: 5%;
+	width: 220px;
+}
+
+.item-sch-area .sch-inner .sch-box .ip-num-box .ip-num1 {margin-right: 5px;}
+.item-sch-area .sch-inner .sch-box .ip-num-box .ip-num2 {margin-left: 5px;}
+.item-sch-area .sch-inner .sch-box .ip-num-box .ip-num {
+	vertical-align: middle;
+	appearance: none;
+	border: max(2px, 0.1em) solid gray;
+	border-radius: 5%;
+	width: 100px;
+}
+
+.item-sch-area .sch-inner .sch-box .filter-name {font-size: 1.2em;font-weight: bold;}
+
+.item-sch-area .sch-inner .sch-box-line {margin: 12px;background-color: #000000;height: 1px;}
+
+.item-list-area .product-wrap {grid-template-columns: repeat(3, minmax(0, 1fr));}
+
+/* =============================== product_regi.jsp =============================== */
+.item-regi h2 {font-size: 2em;}
+.item-regi .item-regi-img {display: flex;flex-wrap: wrap;padding: 0;margin: 0;list-style: none;}
+.item-regi .item-regi-img [type="file"] {display: none;}
+.item-regi .item-regi-img img {width: 100%;height: 100%;border-radius: 10px;}
+.item-regi .item-regi-img [type="button"] {
+	margin-left: 20px;
+	margin-right: 20px;
+	width: 300px;
+	height: 350px;
+	padding: 5px;
+	background-color: gray;
+	cursor: pointer; 
+	border-radius: 10px;
+}
+.item-regi .item-regi-line {margin: 12px 0px 12px 0px;background-color: #000000;height: 1px;}
+.item-regi .item-regi-name {font-size: 1.2em;font-weight: bold;}
+.item-regi .item-regi-title {display: flex;flex-wrap: wrap;padding: 0;margin: 0;list-style: none;}
+.item-regi .item-regi-description {display: flex;flex-wrap: wrap;padding: 0;margin: 0;list-style: none;}
+.item-regi .item-regi-category {display: flex;flex-wrap: wrap;padding: 0;margin: 0;list-style: none;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

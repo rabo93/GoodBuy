@@ -18,6 +18,11 @@ public class MainController {
 		return "product/product_list";
 	}
 	
+	@GetMapping("ProductRegist")
+	public String productRegist() {
+		return "product/product_regi";
+	}
+	
 	@GetMapping("AdmMain")
 	public String admMain() {
 		return "admin/adm_index";

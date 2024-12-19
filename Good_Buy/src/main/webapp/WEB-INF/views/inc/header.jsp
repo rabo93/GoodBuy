@@ -5,7 +5,7 @@
 <div id="hd_wrap" class="hd-wrap">
 	<section class="hd-top">
 		<div class="hd-logo">
-			<a href="#"><h1><img src="${pageContext.request.contextPath}/resources/img/logo.png" alt="GoodBuy"></h1></a>
+			<a href="/"><h1><img src="${pageContext.request.contextPath}/resources/img/logo.png" alt="GoodBuy"></h1></a>
 		</div>
 		<div class="hd-sch">
 			<form action="" method="get">
@@ -17,7 +17,7 @@
 		</div>
 		<div class="hd-gnb">
 			<div class="gnb-left">
-				<a href="#" class="gnb-btn"><i class="fa-solid fa-store"></i> 판매하기</a>
+				<a href="ProductRegist" class="gnb-btn"><i class="fa-solid fa-store"></i> 판매하기</a>
 				<a href="#" class="gnb-btn"><i class="fa-solid fa-comment-dots"></i> 채팅하기</a>
 			</div>
 			<div class="gnb-right">
@@ -40,7 +40,7 @@
 	</section>
 	<section class="hd-menu">
 		<nav class="hd-lnb">
-			<a href="#">여성의류</a>
+			<a href="ProductList">여성의류</a>
 			<a href="#">남성의류</a>
 			<a href="#">레저/스포츠</a>
 			<a href="#">생활용품</a>

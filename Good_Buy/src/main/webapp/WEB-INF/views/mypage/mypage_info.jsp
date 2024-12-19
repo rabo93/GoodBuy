@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,10 +39,10 @@
 				<a href="MyStore">나의 상점</a>
 				<a href="">굿페이</a>
 				<a href="">나의 광고</a>
-				<a href="MyFav">관심목록</a>
-				<a href="">구매내역</a>
-				<a href="">판매내역</a>
-				<a href="">나의 후기</a>
+				<a href="MyWish">관심목록</a>
+				<a href="MyOrder">구매내역</a>
+				<a href="MySales">판매내역</a>
+				<a href="MyReview">나의 후기</a>
 				<a href="MySupport">1:1문의내역</a>
 			</aside>
 			<div class="my-container">
@@ -97,14 +98,6 @@
 								<label>전화번호</label>
 								<div>
 									<input type="text" name="mem_phone" id="mem_phone"><br>
-								</div>
-							</div>
-							
-							<div class="set">
-								<label>선호 해쉬태그</label><br>
-								<div>
-									<input type="text" name="hashtag" id="hashtag" size="5" value="#의류">,<input type="text" name="hashtag" id="hashtag"size="5" value="#화장품">,<input type="text" name="hashtag" id="hashtag"size="5" value="#카메라">
-									<input type="text" name="hashtag" id="hashtag"size="5" value="#화장품">,<input type="text" name="hashtag" id="hashtag"size="5" value=""><br>
 								</div>
 							</div>
 							

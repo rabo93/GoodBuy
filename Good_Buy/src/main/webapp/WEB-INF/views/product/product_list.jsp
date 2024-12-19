@@ -36,32 +36,28 @@
 					<!-- navbar -->
 					<aside class="item-sch-area">
 						<div class="sch-inner">
-							<h2>검색 필터</h2>
-							<ul class="sch-box-line"></ul>
-							<ul class="sch-box">
-								<li><input type="checkbox" class="">거래가능한 상품만 보기</li>
-							</ul>
-							<ul class="sch-box-line"></ul>
-							<ul class="sch-box">
-								<li class="filter-name">정렬</li>
-								<li><input type="radio" class="ip-radio" name="sch-regi-date">최신순</li>
-								<li><input type="radio" class="ip-radio" name="sch-regi-date">오래된순</li>
-							</ul>
-							<ul class="sch-box-line"></ul>
-							<ul class="sch-box">
-								<li class="filter-name">가격</li>
-								<li><input type="checkbox" class="ip-chk">나눔</li>
-								<li><input type="checkbox" class="ip-chk">5,000원 이하</li>
-								<li><input type="checkbox" class="ip-chk">10,000원 이하</li>
-								<li><input type="checkbox" class="ip-chk">20,000원 이하</li>
-								<li class="ip-num-box"><input type="number" placeholder="부터" class="ip-num ip-num1"> ~ <input type="number" placeholder="까지" class="ip-num ip-num2"></li>
-							</ul>
-							<ul class="sch-box-line"></ul>
-							<ul class="sch-box">
-								<li class="filter-name">지역</li>
-								<li><input type="text" class="ip-tt"></li>
-							</ul>
-							<input type="button" class="sch-box-reset" value="초기화">
+							<section class="sch-box">
+								<h2>검색 필터</h2>
+								<label>
+									<input type="checkbox" class="">
+									거래가능한 상품만 보기
+								</label>
+							</section>
+							<section class="sch-box">
+								<h2>가격</h2>
+								<label><input type="checkbox" class="ip-chk"> 5,000원 이하</label>
+								<label><input type="checkbox" class="ip-chk"> 10,000원 이하</label>
+								<label><input type="checkbox" class="ip-chk"> 20,000원 이하</label>
+								
+								<input type="number" placeholder="부터" class="ip-num ip-num1"> ~ <input type="number" placeholder="까지" class="ip-num ip-num2">
+							</section>
+							<section class="sch-box">
+								<h2>지역</h2>
+								<input type="text" class="ip-tt">
+								<button type="button" name="" id="" class="sch-box-reset">
+									<i class="fa-solid fa-arrows-rotate"></i> 초기화
+								</button>
+							</section>
 						</div>
 					</aside>
 					<article class="item-list-area">

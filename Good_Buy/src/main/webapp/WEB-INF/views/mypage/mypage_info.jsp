@@ -37,7 +37,7 @@
 			<aside class="my-menu">
 				<a href="MyInfo" class="active">계정정보</a>
 				<a href="MyStore">나의 상점</a>
-				<a href="">굿페이</a>
+				<a href="GoodPay">굿페이</a>
 				<a href="">나의 광고</a>
 				<a href="MyWish">관심목록</a>
 				<a href="MyOrder">구매내역</a>

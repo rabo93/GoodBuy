@@ -1,28 +1,19 @@
 @charset "UTF-8";
 
 /* =============================== product_list.jsp =============================== */
-.product-item-wrap {display:flex;align-items:flex-start;gap: 2rem;}
+.product-item-wrap {}
 
-.item-sch-area {padding: 1.2rem;background: var(--light-gray);border-radius: 10px;position: sticky;top: 0;}
-.item-sch-area .sch-inner h2 {font-size: 1.2em;font-weight: bold;}
+.item-sch-area {background: #fff;margin: 2rem 0 4rem;border-top: 2px solid var(--dark);}
+.item-sch-area .sch-inner h2 {font-size: 16px;font-weight: 500;padding: 16px 20px;background: #f7f9fa;width: 150px;color: var(--dark);}
 
-.item-sch-area .sch-inner .sch-box-reset:hover{box-shadow: 0px 0px 0px 5px #ff7235;}
-.item-sch-area .sch-inner .sch-box-reset {
-	margin-top: 15px;
-    padding: 8px 15px 8px 15px;
-    min-width: 100px;
-    float: right;
-    height: auto;
-    box-sizing: border-box;
-    border-radius: 50px;
-    font-size: 12px;
-    font-weight: 700;
-    background-color: #ff7235;
-    border: 2px solid #ff7235;
-    color: #ffffff;
-    display: block;
+.item-sch-area .sch-inner .sch-box {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    background: var(--white);
+    border-bottom: 1px solid #dadee5;
 }
-.item-sch-area .sch-inner .sch-box {}
+
 .item-sch-area .sch-inner .sch-box li {margin: 5px 0 0 0;}
 .item-sch-area .sch-inner .sch-box li [type="radio"] {
 	margin-left: 10px;
@@ -52,12 +43,6 @@
 .item-sch-area .sch-inner .sch-box .ip-num-box {display: flex;margin: 10px;}
 
 .item-sch-area .sch-inner .sch-box .ip-tt {
-	margin-left: 5px;
-	vertical-align: middle;
-	appearance: none;
-	border: max(2px, 0.1em) solid gray;
-	border-radius: 5%;
-	width: 220px;
 }
 
 .item-sch-area .sch-inner .sch-box .ip-num-box .ip-num1 {margin-right: 5px;}
@@ -69,12 +54,22 @@
 	border-radius: 5%;
 	width: 100px;
 }
+.item-sch-area .sch-box-reset {
+    font-size: 15px;
+    font-weight: 600;
+    background: transparent;
+    border: 0;
+    display: block;
+    margin-left: auto;
+    margin-right: 1rem;
+    color: var(--primary);
+}
 
 .item-sch-area .sch-inner .sch-box .filter-name {font-size: 1.2em;font-weight: bold;}
 
 .item-sch-area .sch-inner .sch-box-line {margin: 12px;background-color: #000000;height: 1px;}
 
-.item-list-area .product-wrap {grid-template-columns: repeat(3, minmax(0, 1fr));}
+.item-list-area .product-wrap {}
 
 /* =============================== product_regi.jsp =============================== */
 .item-regi h2 {font-size: 2em;}

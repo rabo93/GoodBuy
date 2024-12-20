@@ -3,6 +3,6 @@ package com.itwillbs.goodbuy.mapper;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public class MypageMapper {
+public interface MypageMapper {
 
 }

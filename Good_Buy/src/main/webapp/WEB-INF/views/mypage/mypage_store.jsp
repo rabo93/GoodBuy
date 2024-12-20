@@ -21,6 +21,8 @@
 <!-- CSS for Page -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
+<!-- Include stylesheet -->
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
 
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
@@ -60,7 +62,7 @@
 									<label>프로필 사진</label>
 									<div>
 									<img src="../../resources/img/profile_default.png" id="preview_profile" height="60px"><br>
-										<input type="file" name="mem_profil" id="mem_profile" value="변경"><br>
+										<input type="file" name="memProfile" id="memProfile" value="변경"><br>
 									</div>
 								</div>
 									
@@ -192,7 +194,7 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
-		<!-- Include the Quill library -->
+	<!-- Include the Quill library -->
 	<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 	
 	<!-- Initialize Quill editor -->

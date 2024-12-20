@@ -3,6 +3,7 @@ package com.itwillbs.goodbuy.controller;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +29,12 @@ public class MypageController {
 	
 	@PostMapping("MyInfo")
 	public String myInfoForm(MemberVO member,HttpSession session , Model model) {
-		System.out.println("member"+member);
+		System.out.println("member"+ member);
 		MemberVO memInfo = memberService.getMember(member);
-		System.out.println(memInfo);
+		System.out.println("?????"+memInfo);
+		
+		
+		
 		
 		
 		return "mypage/mypage_info";
@@ -64,6 +68,13 @@ public class MypageController {
 	@GetMapping("MemberWithdraw")
 	public String memberWithdraw() {
 		return "mypage/mypage_withdraw";
+	}
+	
+	@PostMapping("MemberWithdraw")
+	public String memberWithdrawForm (MemberVO  member,HttpSession session , Model model ,BCryptPasswordEncoder passwordEncoder,String memPasswd) {
+		String id = (String)session.getAttribute("sId");
+//		String dbpa
+		return"";
 	}
 
 }

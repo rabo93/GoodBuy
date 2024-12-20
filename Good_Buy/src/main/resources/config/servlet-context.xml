@@ -37,7 +37,7 @@
 	<!-- ================================================================================ -->
 	<!-- DispatcherServlet 이 탐색할 기본 패키지 설정(웹과 관련된 요청을 처리하는 클래스들의 위치) -->
 	<!-- 주로, Controller, ViewResolver, Intercepter 관련 설정이 포함되는 클래스 지정 -->
-	<context:component-scan base-package="com.itwillbs.goodbuy" />
+	<context:component-scan base-package="com.itwillbs.goodbuy.controller" />
 
 	<!-- AOP 동작 설정 시 root-context.xml 과 등록할 빈 분리할 용도로 상세한 패키지 지정 변경 -->
 	<!-- 주의! 여기에 등록된 빈은 root-context.xml 에서 등록된 빈이 접근할 수 없음! -->

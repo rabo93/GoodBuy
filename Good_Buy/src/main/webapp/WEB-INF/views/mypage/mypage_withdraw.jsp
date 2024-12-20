@@ -52,7 +52,7 @@
 				<div class="my-container">
 					<form action="MemberWithdraw" method="post" class="passwdFinderForm">
 						<h3 class="ttl">탈퇴 확인을 위해 비밀번호를 입력해주세요 <span style="color: red;">*</span></h3>
-						<input type="password" id="mem_passwd" name="mem_passwd" placeholder="비밀번호 입력" required>
+						<input type="password" id="memPasswd" name="memPasswd" placeholder="비밀번호 입력" required>
 						<div id="form-controls">		
 							<button type="submit">회원탈퇴</button>
 						</div>

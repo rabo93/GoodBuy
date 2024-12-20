@@ -19,7 +19,7 @@ public class OauthController {
 	private OauthService oauthService;
 	//-----------------------------------------------------
 	// [카카오 로그인 -> callback]
-	// RedirectURI : http://localhost:8080/oauth/kakao
+	// RedirectURI : http://localhost:8081/kakaologin
 	// REST API 키 : 6a7a7bde7898c6d7f7c08a7a14bad8e9
 	@RequestMapping("/kakaologin")
 	public String kakaoAuth(@RequestParam(value = "code", required = false) String code, Model model) throws Exception{

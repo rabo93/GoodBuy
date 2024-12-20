@@ -4,4 +4,10 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itwillbs.goodbuy.mapper.MainMapper">
 
-</mapper>
+	<!-- 위시리스트 가져오기 -->
+	<select id="selectWishlist" resultType="wish">
+		SELECT *
+		FROM WISHLIST
+		WHERE id = #{mem_id}
+	</select>
+</mapper>	

@@ -143,4 +143,7 @@
 			, MEM_WITHDRAW_DATE = now()
 		 WHERE MEM_ID = #{mem_id}
 	</update>
+	
+	
+	
 </mapper>

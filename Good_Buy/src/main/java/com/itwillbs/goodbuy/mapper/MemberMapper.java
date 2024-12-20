@@ -1,5 +1,6 @@
 package com.itwillbs.goodbuy.mapper;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -7,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.itwillbs.goodbuy.vo.MailAuthInfo;
 import com.itwillbs.goodbuy.vo.MemberVO;
+import com.itwillbs.goodbuy.vo.WishlistVO;
 
 @Mapper
 public interface MemberMapper {
@@ -55,6 +57,10 @@ public interface MemberMapper {
 
 	//이메일 중복체크
 	MemberVO selectEmailId(MemberVO member);
+
+	
+	
+
 
 
 

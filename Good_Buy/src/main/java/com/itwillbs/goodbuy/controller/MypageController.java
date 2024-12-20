@@ -1,5 +1,8 @@
 package com.itwillbs.goodbuy.controller;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +15,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.service.MemberService;
+import com.itwillbs.goodbuy.service.MyPageService;
 import com.itwillbs.goodbuy.vo.MemberVO;
+import com.itwillbs.goodbuy.vo.MyPageVO;
+import com.itwillbs.goodbuy.vo.WishlistVO;
+
+import lombok.extern.log4j.Log4j2;
 
 //[회원정보 수정]
 @Controller
 public class MypageController {
 	@Autowired MemberService memberService;
+	@Autowired MyPageService myPageService;
 	
 	@GetMapping("MyInfo")
 	public String myInfo() {
@@ -32,10 +41,6 @@ public class MypageController {
 		System.out.println("member"+ member);
 		MemberVO memInfo = memberService.getMember(member);
 		System.out.println("?????"+memInfo);
-		
-		
-		
-		
 		
 		return "mypage/mypage_info";
 	}
@@ -60,8 +65,15 @@ public class MypageController {
 	public String myReview() {
 		return "mypage/mypage_review";
 	}
+
 	@GetMapping("MyWish")
-	public String myWish() {
+	public String myWish(HttpSession session,Model model,HttpServletRequest request) {
+		//로그인체크 필요
+		String id = (String)session.getAttribute("sId");
+		List<WishlistVO> wishlist = myPageService.getWishlist(id);
+		
+		System.out.println("위시리스트"+wishlist);
+		
 		return "mypage/mypage_wishlist";
 	}
 

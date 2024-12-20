@@ -1,5 +1,6 @@
 package com.itwillbs.goodbuy.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.itwillbs.goodbuy.mapper.MemberMapper;
 import com.itwillbs.goodbuy.vo.MailAuthInfo;
 import com.itwillbs.goodbuy.vo.MemberVO;
+import com.itwillbs.goodbuy.vo.WishlistVO;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -94,9 +96,6 @@ public class MemberService {
 		return mapper.updateTempPasswd(heshePasswd,mem_email);
 	}
 	
-	
-
-
 
 
 }

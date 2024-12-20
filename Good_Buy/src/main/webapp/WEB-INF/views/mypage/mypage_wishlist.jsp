@@ -54,6 +54,42 @@
 					<!-- contents -->
 					<section class="my-rev-wrap">
 						<div class="my-rev-li">
+							<c:choose>
+							<c:when test="${empty wishlist}">
+								<ul>
+									<li>관심물품이 없습니다.</li>
+								</ul>
+							</c:when>
+							<c:otherwise>
+								<ul>
+									<c:forEach var="wish" items="${wishlist}">
+										<li>
+											<div class="thumb-area">
+												<img src="${pageContext.request.contextPath}/resources/upload/${wish.class_pic}" class="card-thumb" alt="thumbnail" onclick="location.href='CourseDetail?class_id=${wish.class_id}'"/>
+<%-- 												<img src="${pageContext.request.contextPath}/resources/images/thumb_01.webp" class="card-thumb" alt="thumbnail" onclick="location.href='CourseDetail?class_id=${wish.class_id}'" /> --%>
+												<form action="MyFavDel" method="post" class="MyFavDelFrm">
+													<input type="hidden" name="class_id" value="${wish.class_id}">
+													<button type="button" class="fav-on" onclick="confirmDeleteWishItem()"><i class="fa-solid fa-heart"></i></button>
+												</form>
+											</div>
+											<div class="card-info" onclick="location.href='CourseDetail?class_id=${wish.product_id}'">
+												<div class="category">
+													<span>${wish.class_category}</span>
+												</div>
+												<div class="ttl">${wish.product_title}</div>
+												<div class="rating">
+													<i class="fa-solid fa-star"></i>
+													<span>${wish.review_score}</span>
+												</div>
+												<div class="name">${wish.teacher_name}</div>
+											</div>
+										</li>
+									</c:forEach>
+								</ul>							
+							</c:otherwise>
+							</c:choose>
+						
+						
 							<div>
 								<img alt="" src="">
 							</div>

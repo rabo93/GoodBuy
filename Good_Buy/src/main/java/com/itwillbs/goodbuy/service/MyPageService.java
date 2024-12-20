@@ -18,5 +18,14 @@ public class MyPageService {
 	public List<WishlistVO> getWishlist(String id) {
 		return mapper.selectWishlist(id);
 	}
+
+	//위시리스트 삭제
+	public int cancleMyWish(String wishlist_id) {
+		return mapper.deleteWish(wishlist_id);
+	}
+
+	public int addWishlist(WishlistVO wishlist) {
+		return mapper.insertWishlist(wishlist);
+	}
 	
 }

@@ -2,12 +2,26 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.itwillbs.goodbuy.mapper.MainMapper">
-
+<mapper namespace="com.itwillbs.goodbuy.mapper.MypageMapper">
 	<!-- 위시리스트 가져오기 -->
 	<select id="selectWishlist" resultType="wish">
 		SELECT *
 		FROM WISHLIST
-		WHERE id = #{mem_id}
+		WHERE MEM_ID = #{id}
 	</select>
+	
+	<delete id="deleteWish">
+		DELETE FROM WISHLIST
+		WHERE WISHLIST_ID= #{wishlist_id}
+	</delete>
+	
+	<insert id="insertWishlist">
+		INSERT INTO WISHLIST
+		VALUES (
+			#{wishlist_id} + 1
+			,#{prosuct_title}
+			,#{mem_id}
+		)
+	
+	</insert>
 </mapper>	

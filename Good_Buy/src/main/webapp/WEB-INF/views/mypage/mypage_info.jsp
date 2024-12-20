@@ -56,60 +56,60 @@
 							<div class="set">
 								<label>프로필 사진</label>
 								<div>
-									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="preview_profile" height="60px"><br>
-									<input type="file" name="mem_profil" id="mem_profile" value="변경"><br>
+									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
+									<input type="file" name="profile_upload" id="profile_upload" value="변경" ><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>닉네임</label>
 								<div>
-									<input type="text" name="mem_name" id="mem_name" onblur=""><br>
+									<input type="text" name="memNick" id="memNick" onblur=""><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>비밀번호</label>
 								<div>	
-									<input type="password" name="mem_passwd" id="mem_passwd"><br>
+									<input type="password" name="memPasswd" id="memPasswd"><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>비밀번호 확인</label>
 								<div>
-									<input type="password" name="mem_passwd2" id="mem_passwd2"><br>
+									<input type="password" name="memPasswd2" id="memPasswd2"><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>비밀번호 변경 확인</label>
 								<div>
-									<input type="password" name="mem_passwd3" id="mem_passwd3"><br>
+									<input type="password" name="memPasswd3" id="memPasswd3"><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>이메일</label>
 								<div>
-									<input type="text" name="mem_email" id="mem_email"><br>
+									<input type="text" name="memEmail" id="memEmail"><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>전화번호</label>
 								<div>
-									<input type="text" name="mem_phone" id="mem_phone"><br>
+									<input type="text" name="memPhone" id="memPhone"><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>주소</label>
 								<div>
-									<input type="text" name="mem_address1" id="mem_address1">
-									<input type="text" name="mem_post_code" id="mem_post_code" size="7">
+									<input type="text" name="memAddress1" id="memAddress1">
+									<input type="text" name="memPostCode" id="memPostCode" size="7">
 									<input type="button" value="주소 찾기"><br>
-									<input type="text" name="mem_address2" id="mem_address2"><br>
+									<input type="text" name="memAddress2" id="memAddress2"><br>
 								</div>
 							</div>
 							
@@ -129,11 +129,20 @@
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
 	
-
-
-
-
-
+<script type="text/javascript">
+	$("#profile_upload").on("change", function(event) {
+	
+	    var file = event.target.files[0];
+	
+	    var reader = new FileReader(); 
+	    reader.onload = function(e) {
+	
+	        $("#profile_preview").attr("src", e.target.result);
+	    }
+	
+	    reader.readAsDataURL(file);
+	});
+	</script>
 
 </body>
 </html>

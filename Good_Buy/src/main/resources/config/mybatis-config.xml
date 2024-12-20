@@ -5,5 +5,7 @@
 <configuration>
 	<typeAliases>
 		<typeAlias type="com.itwillbs.goodbuy.vo.NoticeVO" alias="notice"/>
+		<typeAlias type="com.itwillbs.goodbuy.vo.MemberVO" alias="member" />
+		<typeAlias type="com.itwillbs.goodbuy.vo.MailAuthInfo" alias="mailAuthInfo" />
 	</typeAliases>
 </configuration>

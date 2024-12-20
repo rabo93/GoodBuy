@@ -34,12 +34,13 @@ public class NoticeController {
 	
 	String uploadPath = "/resources/upload";
 	
-	
+	//	글쓰기 폼 이동
 	@GetMapping("NoticeWrite")
 	public String noticeWriteForm() {
 		return "notice/notice_write_form";
 	}
 	
+	//	글쓰기 비즈니스 로직
 	@PostMapping("NoticeWrite")
 	public String noticeWrite(NoticeVO notice, HttpSession session) {
 		//	실제 경로
@@ -56,9 +57,7 @@ public class NoticeController {
 		return "redirect:/NoticeMain";
 	}
 	
-	
-	
-
+	//	공지사항 메인페이지(리스트)
 	@GetMapping("NoticeMain")
 	public String noticeMain(Model model) {
 		List<NoticeVO> noticeList = service.getNoticeList();
@@ -67,6 +66,11 @@ public class NoticeController {
 		
 		return "notice/notice_list";
 	}
+	
+	
+	
+	
+	
 	
 	
 	//	============================================================================

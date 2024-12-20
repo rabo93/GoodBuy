@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/notice.css">
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.7.1.js"></script>
 
+
 <!-- font-awesome -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/fontawesome/all.min.css" />
 <script src="${pageContext.request.contextPath}/resources/fontawesome/all.min.js"></script>
@@ -51,6 +52,7 @@
 										<th>날짜</th>
 									</tr>
 									<c:forEach items="${noticeList}" var="noticeBoard">
+										<input type="hidden" class="nt_id" name="notice_id" value="${noticeBoard.notice_id}">
 										<tr>
 											<td class="nt_subject">${noticeBoard.notice_subject}</td>
 											<td>${noticeBoard.mem_id}</td>
@@ -107,4 +109,5 @@
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
 </body>
+<script src="${pageContext.request.contextPath}/resources/js/notice.js"></script>
 </html>

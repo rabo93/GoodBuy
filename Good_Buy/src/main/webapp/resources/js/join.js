@@ -8,11 +8,10 @@ $(document).ready(function() {
 		for (let i = 1; i < 13; i++) {
 			$('#month').append('<option value="' + i + '">' + i + '</option>');
 		}
-		for (let i = 0; i < 32; i++){
+		for (let i = 1; i < 32; i++){
 			$('#day').append('<option value ="' + i + '">' + i + '</option>');
 		}
-	}
-	);
+});
 
 // *********이메일 셀랙트박스**********
 $(document).ready(function() {
@@ -29,12 +28,12 @@ $(document).ready(function() {
 // ************* 검사**************
 
 let checkName = false;
-let checkPasswd1 = false;
-let checkPasswd2 = false;
+let checkPasswd1 = true;
+let checkPasswd2 = true;
 let checkNumber = false;
 let checkAddr = false;
-let checkMail = false;
-let checkCode = false;
+let checkMail = true;
+//let checkCode = false;
 let checkIdResult = false;
 let checkNic = false;
 let isIdValid=false;
@@ -114,9 +113,8 @@ function ckNick(){
 						checkNic = true;
 					}else {
 						$("#checkNic").text("이미 사용중인 닉네임 입니다").css("color","RED");
-						alert("닉네임을 다시 확인해주세요");
+//						alert("닉네임을 다시 확인해주세요");
 						checkNic = false;
-					
 					}
 				} ,
 			error : function(){
@@ -138,7 +136,7 @@ function ckNick(){
 //		type : "get",
 //		url : "MemberCheckMail" ,
 //		data : {
-//			mem_eemail : mail
+//			mem_email : mail
 //		},
 //		success : function(result){
 //			if(result.trim() == "false"){
@@ -155,24 +153,24 @@ function ckNick(){
 
 // ************* 비밀번호 길이검사**************
 function checkPasswdLength1() {
-    let passwd = $("#mem_passwd1").val();
-    let regex = /^(?=.*[\d])(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]{8,}$/;
-
-    if (regex.test(passwd)) {
-        $("#checkPasswd1").text("사용가능한 비밀번호 입니다");
-        $("#checkPasswd1").css("color", "green");
-        checkPasswd1 = true;
-    } else if (passwd === "") {
-        $("#checkPasswd1").text("비밀번호를 입력해주세요.");
-        $("#checkPasswd1").css("color", "red");
-        checkPasswd1 = false;
-    } else {
-        // 조건이 맞지 않는 경우
-        $("#checkPasswd1").text("8자리 이상,숫자/특수문자 중 2종류 포함 해주세요");
-        $("#checkPasswd1").css("color", "red");
-        alert("비밀번호를 확인해주세요");
-        checkPasswd1 = false;
-    }
+//    let passwd = $("#mem_passwd1").val();
+//    let regex = /^(?=.*[\d])(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]{8,}$/;
+//
+//    if (regex.test(passwd)) {
+//        $("#checkPasswd1").text("사용가능한 비밀번호 입니다");
+//        $("#checkPasswd1").css("color", "green");
+//        checkPasswd1 = true;
+//    } else if (passwd === "") {
+//        $("#checkPasswd1").text("비밀번호를 입력해주세요.");
+//        $("#checkPasswd1").css("color", "red");
+//        checkPasswd1 = false;
+//    } else {
+//        // 조건이 맞지 않는 경우
+//        $("#checkPasswd1").text("8자리 이상,숫자/특수문자 중 2종류 포함 해주세요");
+//        $("#checkPasswd1").css("color", "red");
+//        alert("비밀번호를 확인해주세요");
+//        checkPasswd1 = false;
+//    }
 }
 
 // ************* 비밀번호 같은지 검사**************
@@ -192,7 +190,7 @@ function checkPasswdResult(){
 	}
 }
 
-/**********전화전호 유효성 검사********* */
+/**********전화번호 유효성 검사********* */
 function phoneCheck(){
 	let phone = $("#mem_phone").val();
 	let regex = /^[0-9]{11}$/;

@@ -4,14 +4,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.itwillbs.goodbuy.service.MailService;
 import com.itwillbs.goodbuy.service.MemberService;
+import com.itwillbs.goodbuy.vo.AttendanceVO;
+import com.itwillbs.goodbuy.vo.MailAuthInfo;
 import com.itwillbs.goodbuy.vo.MemberVO;
 
 import lombok.extern.log4j.Log4j2;
@@ -22,8 +28,8 @@ public class MemberController {
 	@Autowired
 	private MemberService memberService;
 	
-//	@Autowired
-//	private MailService mailService;
+	@Autowired
+	private MailService mailService;
 	
 //	@Autowired
 //	private MypageService mypageService;
@@ -89,51 +95,56 @@ public class MemberController {
 //	}	
 	
 	//=================================================================================================================================
+	// Naver Login
+	// 요청 URL : https://nid.naver.com/oauth2.0/authorize
+	@GetMapping("login/oauth2/code/naver")
+	public String naverLogin() {
+		
+		return "";
+	}
+	
+	//=================================================================================================================================
 	// [회원가입 페이지 구현]
 	@GetMapping("MemberJoin")
 	public String memberJoin() {
 		return"member/member_join";
 	}
 	
-//	@PostMapping("MemberJoin")
-//	public String join(MemberVO member, Model model, BCryptPasswordEncoder passwordEncoder, HttpSession session, AttendanceVO attendance) {
-//	    log.info("member : " + member);
-//	    
-//	    // 비밀번호 암호화
-//	    String securePasswd = passwordEncoder.encode(member.getMemPasswd());
-//	    member.setMemPasswd(securePasswd);
-//
-//	    // 파일 업로드 처리
+	@PostMapping("MemberJoin")
+	public String join(MemberVO member, Model model, BCryptPasswordEncoder passwordEncoder, HttpSession session) {
+	    log.info("member : " + member);
+	    
+	    // 비밀번호 암호화
+	    String securePasswd = passwordEncoder.encode(member.getMem_passwd());
+	    member.setMem_passwd(securePasswd);
+
+	    // 파일 업로드 처리
 //	    boolean fileUploadSuccess = handleFileUpload(member, session, model);
 //	    if (!fileUploadSuccess) {
 //	        model.addAttribute("msg", "파일 업로드 중 오류가 발생했습니다.");
 //	        return "result/fail";
 //	    }
 	    
-//	    // 회원 가입 처리
-//	    int insertCount = memberService.registMember(member);
-//	    if (insertCount > 0) {
-//	    	String email = member.getMemEmail1() + "@" + member.getMemEmail2();
-//	        session.setAttribute("sId", member.getMemName());
-//	        session.setAttribute("sMail", email);
-//
-////	         이메일 인증 처리
-//	        handleEmailAuth(member);
-//
-//	        
-//	        //*****MemberJoin시 Attendance table에 mem_id insert 해야함******
-////	        int addAttendance = mypageService.addMemId(member.getMem_id());
-//	       
-//	        session.invalidate();
-//	        
-//	        return "redirect:/MemberJoinSuccess";
-//	    } else {
-//	        model.addAttribute("msg", "회원가입 실패\n항목을 다시 확인해주세요");
-//	        return "result/fail";
-//	    }
-//	}
-//
-//	// 파일 업로드 처리 메서드
+	    // 회원 가입 처리
+	    int insertCount = memberService.registMember(member);
+	    if (insertCount > 0) {
+	    	String email = member.getMem_email1() + "@" + member.getMem_email2();
+	        session.setAttribute("sId", member.getMem_name());
+	        session.setAttribute("sMail", email);
+
+//	         이메일 인증 처리
+	        handleEmailAuth(member);
+	       
+	        session.invalidate();
+	        
+	        return "redirect:/MemberJoinSuccess";
+	    } else {
+	        model.addAttribute("msg", "회원가입 실패\n항목을 다시 확인해주세요");
+	        return "result/fail";
+	    }
+	}
+
+	// 파일 업로드 처리 메서드
 //	private boolean handleFileUpload(MemberVO member, HttpSession session, Model model) {
 //	    String realPath = session.getServletContext().getRealPath(uploadPath);
 //	    System.out.println("실제 경로: " + realPath);
@@ -169,106 +180,106 @@ public class MemberController {
 //	    return true;
 //	}
 
-//	 이메일 인증 처리 메서드
-//	private void handleEmailAuth(MemberVO member) {
-//		System.out.println("memberHandle : " + member);
-//	    MailAuthInfo mailAuthInfo = mailService.sendAuthMail(member,member.getMemEmail1(),member.getMemEmail2());
-//	    System.out.println("인증정보 : " + mailAuthInfo);
-//	    memberService.registMemberAuthInfo(mailAuthInfo);
-//	}
+	// 이메일 인증 처리 메서드
+	private void handleEmailAuth(MemberVO member) {
+		System.out.println("memberHandle : " + member);
+	    MailAuthInfo mailAuthInfo = mailService.sendAuthMail(member,member.getMem_email1(),member.getMem_email2());
+	    System.out.println("인증정보 : " + mailAuthInfo);
+	    memberService.registMemberAuthInfo(mailAuthInfo);
+	}
 
 
 	//=================================================================================================================================
 	// [회원가입 성공 페이지로 이동]
 	@GetMapping("MemberJoinSuccess")
 	public String memberJoinSuccess() {
-	    return "result/success";
+	    return "member/member_join_success";
 	}
 	
-//	//=================================================================================================================================
-//	// [ 이메일 인증 ]
-//	@GetMapping ("MemberEmailAuth")
-//	public String emailAuth(MailAuthInfo mailAuthInfo , Model model) {
-//		System.out.println("mailAuthInfo"+mailAuthInfo);
-//		
-//		// MemberService
-//		boolean isAuthSuccess = memberService.requestEmailAuth(mailAuthInfo);
-//		
-//		// 인증처리 결과판별
-//		if(!isAuthSuccess) {
-//			model.addAttribute("msg", "메일 인증 실패\\다시 인증해주세요");
-//			return "result/fail";
-//		} else {
-//			model.addAttribute("msg", "메일 인증 성공\\로그인 페이지로 이동합니다");
-//			model.addAttribute("targetURL", "MemberLogin");
-//			return "result/fail"; //fail로 가는이유는 문자 출력하기 위해서
-//		}
-//		
-//	}
-//	
-//	// [ 메일 인증 재발송 ]
-//	@GetMapping("ReSendAuthMail")
-//	public String reSendAuthMail(MemberVO member,HttpSession session) {
-//		return "member/resend_auth_mail_form";
-//	}
-//	
-//	@PostMapping("ReSendAuthMail")
-//	public String reSendAuthMail(MemberVO member, Model model , HttpSession session) {
-//		MemberVO dbmember = memberService.getMember(member);
-//		
-//		if(!member.getMemEmail().equals(dbmember.getMemEmail())) {
-//			model.addAttribute("msg","[존재하지 않는 이메일]\\n이메일을 다시한번 확인해주세요");
-//			return "result/fail";
-//		}
-//		
-//		MailAuthInfo mailAuthInfo = mailService.reSendAuthMail(member, member.getMemEmail());
-//		
-//		memberService.registMemberAuthInfo(mailAuthInfo);
-//		model.addAttribute("msg", "인증메일 발송 성공");
-//		model.addAttribute("targetURL", "MemberJoinSuccess");
-//		
-//		return "result/fail";
-//		}
-//		
-//	
-//	
-//	//=================================================================================================================================
-//	// [ 아이디/닉네임 중복체크 ]
-//	@ResponseBody
-//	@GetMapping("MemberCheckId")
-//	public String memberCheckId(String mem_id, MemberVO member) {
-//		System.out.println("mem_id : "+mem_id);
-//		member = memberService.getMember(member);
-//		boolean isDuplicate = false;
-//		if(member != null) { //아이디 중복
-//			isDuplicate= true;
-//		}
-//		return isDuplicate+"";
-//	}
-//	
-//	@ResponseBody
-//	@GetMapping("MemberCheckNick")
-//	public String memberCheckNick(String mem_nick,MemberVO member) {
-//		System.out.println("mem_nick : "+mem_nick);
-//		member = memberService.getMemberNick(member);
-//		boolean isDuplicate = false;
-//		if(member != null) { //닉네임 중복
-//			isDuplicate= true;
-//		}
-//		return isDuplicate+"";
-//	}
-//	
-////	@ResponseBody
-////	@GetMapping("MemberCheckMail")
-////	public String memberCheckMail(String mem_eemail,MemberVO member) {
-////		System.out.println(mem_eemail);
-////		member = memberService.getMemberMail(member);
-////		boolean isDuplicate = false;
-////		if(member != null) {
-////			isDuplicate = true;
-////		}
-////		return isDuplicate+"";
-////	}
+	//=================================================================================================================================
+	// [ 이메일 인증 ]
+	@GetMapping ("MemberEmailAuth")
+	public String emailAuth(MailAuthInfo mailAuthInfo , Model model) {
+		System.out.println("mailAuthInfo"+mailAuthInfo);
+		
+		// MemberService
+		boolean isAuthSuccess = memberService.requestEmailAuth(mailAuthInfo);
+		
+		// 인증처리 결과판별
+		if(!isAuthSuccess) {
+			model.addAttribute("msg", "메일 인증 실패\\다시 인증해주세요");
+			return "result/fail";
+		} else {
+			model.addAttribute("msg", "메일 인증 성공\\로그인 페이지로 이동합니다");
+			model.addAttribute("targetURL", "MemberLogin");
+			return "result/fail"; //fail로 가는이유는 문자 출력하기 위해서
+		}
+		
+	}
+	
+	// [ 메일 인증 재발송 ]
+	@GetMapping("ReSendAuthMail")
+	public String reSendAuthMail(MemberVO member,HttpSession session) {
+		return "member/resend_auth_mail_form";
+	}
+	
+	@PostMapping("ReSendAuthMail")
+	public String reSendAuthMail(MemberVO member, Model model , HttpSession session) {
+		MemberVO dbmember = memberService.getMember(member);
+		
+		if(!member.getMem_email().equals(dbmember.getMem_email())) {
+			model.addAttribute("msg","[존재하지 않는 이메일]\\n이메일을 다시한번 확인해주세요");
+			return "result/fail";
+		}
+		
+		MailAuthInfo mailAuthInfo = mailService.reSendAuthMail(member, member.getMem_email());
+		
+		memberService.registMemberAuthInfo(mailAuthInfo);
+		model.addAttribute("msg", "인증메일 발송 성공");
+		model.addAttribute("targetURL", "MemberJoinSuccess");
+		
+		return "result/fail";
+		}
+		
+	
+	
+	//=================================================================================================================================
+	// [ 아이디/닉네임 중복체크 ]
+	@ResponseBody
+	@GetMapping("MemberCheckId")
+	public String memberCheckId(String mem_id, MemberVO member) {
+		System.out.println("mem_id : "+mem_id);
+		member = memberService.getMember(member);
+		boolean isDuplicate = false;
+		if(member != null) { //아이디 중복
+			isDuplicate= true;
+		}
+		return isDuplicate+"";
+	}
+	
+	@ResponseBody
+	@GetMapping("MemberCheckNick")
+	public String memberCheckNick(String mem_nick,MemberVO member) {
+		System.out.println("mem_nick : "+mem_nick);
+		member = memberService.getMemberNick(member);
+		boolean isDuplicate = false;
+		if(member != null) { //닉네임 중복
+			isDuplicate= true;
+		}
+		return isDuplicate + "";
+	}
+	
+	@ResponseBody
+	@GetMapping("MemberCheckMail")
+	public String memberCheckMail(String mem_email,MemberVO member) {
+		System.out.println(mem_email);
+		member = memberService.getMemberMail(member);
+		boolean isDuplicate = false;
+		if(member != null) {
+			isDuplicate = true;
+		}
+		return isDuplicate+"";
+	}
 //	
 //	
 //	

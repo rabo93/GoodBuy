@@ -1,22 +1,21 @@
 package com.itwillbs.goodbuy.controller;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itwillbs.goodbuy.service.MailService;
 import com.itwillbs.goodbuy.service.MemberService;
-import com.itwillbs.goodbuy.vo.AttendanceVO;
 import com.itwillbs.goodbuy.vo.MailAuthInfo;
 import com.itwillbs.goodbuy.vo.MemberVO;
 
@@ -48,51 +47,52 @@ public class MemberController {
 		return "member/member_login";
 	}
 	
-//	@PostMapping("MemberLogin")
-//	public String login(MemberVO member, Model model, HttpSession session,
-//						BCryptPasswordEncoder passwordEncoder, 
-//						@RequestParam(value = "rememberId", required = false) String rememberId,
-//						@CookieValue(value="userId",required=false)String cookieUser, 
-//						HttpServletResponse response) {
-////		System.out.println("아이디 기억하기 체크@@" + rememberId); //on
-////		System.out.println("가져온 쿠키아이디@@" + cookieUser);
-//		Cookie cookie = new Cookie("userId", member.getMemId()); //쿠키설정
-//		
-//		if(rememberId != null) { //체크
-//			cookie.setMaxAge(60*60*24*30);
-//		} else {
-//			cookie.setMaxAge(0);
-//		}
-//		
-//		response.addCookie(cookie);
-//		
-//		MemberVO dbMember = memberService.getMember(member);
-//		log.info("DB에 저장된 회원 정보 : " + dbMember);
-//		
-//		if(dbMember == null || !passwordEncoder.matches(member.getMemPasswd(), dbMember.getMemPasswd())) {		
-//			model.addAttribute("msg", "로그인 실패!\\n아이디와 패스워드를 다시 확인해주세요");
-//			return "result/fail";
-//		} else if(dbMember.getMemStatus() == 3) { // 로그인 성공이지만, 탈퇴 회원일 경우
-//			model.addAttribute("msg", "탈퇴한 회원입니다!");
-//			return "result/fail";
-//		} else { //로그인 성공
-//			session.setAttribute("sId", dbMember.getMemId());
-//			session.setAttribute("sNick", dbMember.getMemNick());
-//			session.setAttribute("sGrade", dbMember.getMemGrade());
-//			session.setMaxInactiveInterval(60 * 120);
-////			return "redirect:/";
-//			
-//			// 이전 페이지 저장 후 로그인 시 리다이렉트처리
-//			if(session.getAttribute("prevURL") == null) {
-//				return "redirect:/";
-//			} else {
-//				// request.getServletPath() 메서드를 통해 이전 요청 URL 을 저장할 경우
-//				// "/요청URL" 형식으로 저장되므로 redirect:/ 에서 / 제외하고 결합하여 사용
-//				return "redirect:" + session.getAttribute("prevURL");
-//			}
-//		}
-//		
-//	}	
+	@PostMapping("MemberLogin")
+	public String login(MemberVO member, Model model, HttpSession session,
+						BCryptPasswordEncoder passwordEncoder, 
+						@RequestParam(value = "rememberId", required = false) String rememberId,
+						@CookieValue(value="userId",required=false)String cookieUser, 
+						HttpServletResponse response) {
+		System.out.println("아이디 기억하기 체크@@" + rememberId); //on
+		System.out.println("가져온 쿠키아이디@@" + cookieUser);
+		Cookie cookie = new Cookie("userId", member.getMem_id()); //쿠키설정
+		
+		if(rememberId != null) { //체크
+			cookie.setMaxAge(60*60*24*30);
+		} else {
+			cookie.setMaxAge(0);
+		}
+		
+		response.addCookie(cookie);
+		
+		MemberVO dbMember = memberService.getMember(member);
+		log.info("DB에 저장된 회원 정보 : " + dbMember);
+		
+		if(dbMember == null || !passwordEncoder.matches(member.getMem_passwd(), dbMember.getMem_passwd())) {		
+			model.addAttribute("msg", "로그인 실패!\\n아이디와 패스워드를 다시 확인해주세요");
+			return "result/fail";
+		} else if(dbMember.getMem_status() == 3) { // 로그인 성공이지만, 탈퇴 회원일 경우
+			model.addAttribute("msg", "탈퇴한 회원입니다!");
+			return "result/fail";
+		} else { //로그인 성공
+			session.setAttribute("sId", dbMember.getMem_id());
+			session.setAttribute("sNick", dbMember.getMem_nick());
+			session.setAttribute("sGrade", dbMember.getMem_grade());
+			session.setAttribute("sProfile", dbMember.getMem_profile());
+			session.setMaxInactiveInterval(60 * 120);
+//			return "redirect:/";
+			
+			// 이전 페이지 저장 후 로그인 시 리다이렉트처리
+			if(session.getAttribute("prevURL") == null) {
+				return "redirect:/";
+			} else {
+				// request.getServletPath() 메서드를 통해 이전 요청 URL 을 저장할 경우
+				// "/요청URL" 형식으로 저장되므로 redirect:/ 에서 / 제외하고 결합하여 사용
+				return "redirect:" + session.getAttribute("prevURL");
+			}
+		}
+		
+	}	
 	
 	//=================================================================================================================================
 	// Naver Login

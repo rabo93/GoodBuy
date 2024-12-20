@@ -1,0 +1,516 @@
+@charset "UTF-8";
+/* 페이지 제목 */
+.page-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* 계좌 정보 상단 */
+.account-box {
+	margin: 0 100px;
+    margin-bottom: 40px;
+    padding: 0 20px;
+    border: 1px solid #f0f0f5;
+    border-radius: 15px;
+}
+.balance {
+    display: flex;
+    justify-content: center;
+}
+
+.fa-arrow-rotate-right {
+	padding: 10px;
+	font-size: 20px;
+	color: #7F8184;
+
+}
+
+.balance h1 {
+    font-size: 28px;
+    color: #333;
+    margin: 10px 0;
+}
+.account-box .info {
+    display: flex;
+    justify-content: space-between;
+	margin: 20px 0;
+}
+
+.info h1 {
+	font-size: 20px;
+}
+
+
+.my-account {
+    border: none;
+    background-color: #f0f0f5;
+    border-radius: 25px;
+    padding: 10px 30px;
+    font-size: 16px;
+}
+
+.buttons {
+	display: flex;
+    justify-content: center;
+}
+.buttons  button {
+	
+    background-color: #FF7235;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.charge-btn {
+/*     background-color: #0078ff; */
+}
+
+.transfer-btn {
+/*     background-color: #4caf50; */
+}
+
+/* 최근 이용내역 */
+.history h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    
+/*     color: #555; */
+}
+
+.see-all {
+    text-decoration: none;
+    color: #7F8184;
+    font-size: 12px;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.history-item .icon {
+    width: 35px;
+    height: 35px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.history-item .details {
+    flex: 1;
+}
+
+.history-item .details span {
+    display: block;
+    font-size: 14px;
+}
+
+.history-item .date {
+    font-size: 12px;
+    color: #999;
+}
+
+.history-item .amount {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+
+/* my_account.jsp */
+/* 연결계좌 컨테이너 */
+.account-container {
+/*     width: 400px; */
+    background-color: #ffffff;
+    border-radius: 10px;
+/*     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+    padding: 20px;
+}
+
+
+
+/* 연결된 계좌 */
+.linked-account {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fb;
+    border: 1px solid #e0e0e0;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.account-info {
+    display: flex;
+    align-items: center;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    background-color: #333;
+    margin-right: 10px;
+    border-radius: 4px;
+}
+
+.account-number {
+    font-size: 14px;
+    color: #333;
+}
+
+.account-number strong {
+    font-weight: bold;
+}
+
+.primary-account-btn {
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    font-size: 12px;
+    padding: 5px 10px;
+    color: #555;
+    cursor: pointer;
+}
+/* 추가 버튼 */
+.add-account {
+    text-align: center;
+}
+
+.add-account-btn {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    width: 100%;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-account-btn:hover {
+    background-color: #f0f0f0;
+}
+
+
+
+/* pay_charge.jsp */
+/* 계좌 선택 */
+.account-dropdown {
+    margin-bottom: 20px;
+}
+
+.account-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+
+/* 입력 안내 */
+.input-section {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.input-label {
+/*     color: #aaa; */
+/*     font-size: 14px; */
+	width: 100%; /* 원하는 픽셀 크기 */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.balance-info {
+    margin-top: 5px;
+    color: #333;
+    font-size: 18px;
+}
+
+/* 금액 버튼 */
+.amount-btns {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.amount-btn, .use-charge-btn {
+    flex: 1;
+    margin: 0 5px;
+    padding: 10px 0;
+    font-size: 14px;
+    color: #333;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+/*     transition: background-color 0.3s; */
+}
+
+.amount-btn:hover, .use-charge-btn:hover {
+    background-color: #e0e0e0;
+}
+
+
+/* 충전하기 버튼 */
+.recharge-button {
+    margin-top: 20px;
+}
+
+.recharge-btn {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 16px;
+/*     color: #ffffff; */
+    background-color: #d8d8d8;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.recharge-btn:hover {
+    background-color: #c0c0c0;
+}
+
+.keypad {
+    margin-bottom: 20px;
+}
+
+.key-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.key {
+    flex: 1;
+    margin: 0 5px;
+    padding: 15px 0;
+    font-size: 18px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.key:hover {
+    background-color: #f0f0f0;
+}
+
+.key.delete {
+    color: #ff3333;
+    font-weight: bold;
+}
+
+
+/* pay_remit.jsp */
+/* 입력 안내 */
+.input-section {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.input-label {
+	width: 100%; /* 원하는 픽셀 크기 */
+    padding: 8px;
+    margin:8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+/* 충전하기 버튼, 추천송금 버튼 */
+.recharge-button, .recommend-button {
+    margin-top: 20px;
+    display: flex;
+}
+
+.recharge-btn {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 16px;
+    background-color: #d8d8d8;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.recharge-btn:hover, .recommend-btn:hover {
+    background-color: #c0c0c0;
+}
+
+/* 추천 송금 버튼 */
+.recommend-button {
+	overflow: hidden; /* float 요소로 인한 레이아웃 깨짐 방지 */
+	position: relative; 
+}
+.recommend-btn {
+	margin: 0 auto;
+    width: 40%;
+    padding: 12px;
+	background-color: black;
+    color: #FF7235;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    justify-content: space-between;
+    
+}
+.close-x {
+	text-align: right;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    color: white;
+}
+
+.recommend-btn:hover .close-x {
+    opacity: 0.7; /* x 버튼 hover 시 투명도 변경 */
+}
+
+/* 내계좌, 최근송금계좌 */
+.accounts h3 {
+    font-size: 18px;
+    margin-top: 40px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+/*     color: #555; */
+}
+/* 연결된 계좌 */
+.linked-account {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fb;
+    border: 1px solid #e0e0e0;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.account-info {
+    display: flex;
+    align-items: center;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    background-color: #333;
+    margin-right: 10px;
+    border-radius: 4px;
+}
+
+.account-number {
+    font-size: 14px;
+    color: #333;
+}
+
+.account-number strong {
+    font-weight: bold;
+}
+
+.primary-account-btn {
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    font-size: 12px;
+    padding: 5px 10px;
+    color: #555;
+    cursor: pointer;
+}
+
+/* pay_use_list.jsp */
+
+/* 상단 버튼들 */
+.use-buttons {
+/*     text-align: center; */
+    margin-bottom: 20px;
+}
+
+
+.use-buttons button {
+    background-color: #FF7235;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.charge-btn {
+/*     background-color: #0078ff; */
+}
+
+.transfer-btn {
+/*     background-color: #4caf50; */
+}
+
+/* 최근 이용내역 */
+.history h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    color: #555;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.history-item .icon {
+    width: 35px;
+    height: 35px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.history-item .details {
+    flex: 1;
+}
+
+.history-item .details span {
+    display: block;
+    font-size: 14px;
+}
+
+.history-item .date {
+    font-size: 12px;
+    color: #999;
+}
+
+.history-item .amount {
+    font-size: 14px;
+    font-weight: bold;
+}
+

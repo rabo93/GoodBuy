@@ -22,7 +22,8 @@
 			</div>
 			<div class="gnb-right">
 				<!-- 로그인 전 -->
-				<a href="#" class="gnb-btn"><i class="fa-solid fa-user"></i> 로그인</a>
+				<a href="SNSLogin" class="gnb-btn"><i class="fa-solid fa-user"></i> 로그인</a>
+				
 				<!-- 로그인하면 -->
 				<a href="#" class="gnb-btn login" style="display:none;">
 					<!-- 프로필사진 있으면 그거 띄우고 없으면 기본프로필사진 대체 -->

@@ -7,19 +7,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
+
 <!-- default -->
-<link rel="stylesheet" href="../../resources/css/common.css">
-<link rel="stylesheet" href="../../resources/css/default.css">
-<script src="../../resources/js/jquery-3.7.1.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/default.css">
+<script src="${pageContext.request.contextPath}/resources/js/jquery-3.7.1.js"></script>
 
 <!-- font-awesome -->
-<link rel="stylesheet" href="../../resources/fontawesome/all.min.css" />
-<script src="../../resources/fontawesome/all.min.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/fontawesome/all.min.css" />
+<script src="${pageContext.request.contextPath}/resources/fontawesome/all.min.js"></script>
+
 
 <!-- ******************* 아래 CSS와 JS는 페이지별로 알맞게 Import 해주세요 ****************** -->
 <!-- CSS for Page -->
-<link rel="stylesheet" href="../../resources/css/login.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/login.css">
 <!-- JS for Page -->
+
+
 
 </head>
 <body>

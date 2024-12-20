@@ -87,7 +87,8 @@ public class MemberController {
 			session.setMaxInactiveInterval(60 * 120);
 			
 			// [ 핀테크 엑세스토큰 정보 조회하여 세션에 저장하는 기능 추가 ]
-			PayToken token = payService.getPayTokenInfo(member.getMem_id());
+			PayToken token = payService.getPayTokenInfo(dbMember.getMem_id());
+//			System.out.println("member 토큰 확인 : " + token);
 			session.setAttribute("token", token);
 			
 //			return "redirect:/";

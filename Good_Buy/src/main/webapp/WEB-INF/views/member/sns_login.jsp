@@ -40,7 +40,7 @@
 		    			<a class="sns-login" onclick="kakaoLogin()">
 						   <i class="fa-solid fa-comment"></i>카카오톡으로 간편로그인
 						</a>
-		    			<a href="#" class="sns-login"><img alt="네이버로그인" src="${pageContext.request.contextPath}/resources/img/naver-icon.png" > 네이버로 로그인</a>
+		    			<a href="NaverLogin" class="sns-login"><img alt="네이버로그인" src="${pageContext.request.contextPath}/resources/img/naver-icon.png" > 네이버로 로그인</a>
 			       </div>
 		       </div>
 		       <!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
@@ -63,6 +63,16 @@
 			 	}
 			});
 		}
+		
+// 		function naverLogin() {
+// 			var naver_id_login = new naver_id_login("v2NPkz3kuDJkYM_nAyMT", "NaverLogin");
+// 	        var state = naver_id_login.getUniqState();
+// 	        naver_id_login.setButton("white", 2,40);
+// 	        naver_id_login.setDomain("http://localhost:8081");
+// 	        naver_id_login.setState(state);
+// 	        naver_id_login.setPopup();
+// 	        naver_id_login.init_naver_id_login();
+// 		}
 	</script>
 </body>
 </html>

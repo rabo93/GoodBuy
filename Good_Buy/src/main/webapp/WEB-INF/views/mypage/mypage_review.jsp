@@ -48,16 +48,14 @@
 				<a href="">나의 광고</a>
 			</aside>
 			<div class="my-container">
-				<div class="contents-ttl">나의 후기 <small>(총 <span>${reviewCount}</span>건)</small></div>
+				<div class="contents-ttl">나의 후기 <small>(총 <span>1</span>건)</small></div>
 				<div class="contents">
 					<!-- contents -->
 					<section class="my-rev-wrap">
 						<div class="my-rev-li">
-						
-						이제 작성해야함!!!!!!!!!!
 						<c:choose>
 								<c:when test="${empty myReview}">
-									<div class="empty">작성된 수강평이 없습니다.</div>
+									<div class="empty">작성된 후기가 없습니다.</div>
 								</c:when>
 								<c:otherwise>	
 									<div class="review-rating">

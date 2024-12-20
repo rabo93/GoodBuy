@@ -1,5 +1,6 @@
 package com.itwillbs.goodbuy.mapper;
 
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.itwillbs.goodbuy.vo.MailAuthInfo;
 import com.itwillbs.goodbuy.vo.MemberVO;
+import com.itwillbs.goodbuy.vo.WishlistVO;
 
 @Mapper
 public interface MemberMapper {
@@ -63,8 +65,6 @@ public interface MemberMapper {
 
 	// 네이버 회원 정보 저장
 	int insertNaverMember(MemberVO member);
-
-
 
 
 	

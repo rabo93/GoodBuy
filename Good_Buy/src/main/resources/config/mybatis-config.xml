@@ -4,8 +4,11 @@
   "https://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
+		<typeAlias type="com.itwillbs.goodbuy.vo.NoticeVO" alias="notice"/>
 		<typeAlias type="com.itwillbs.goodbuy.vo.MemberVO" alias="member" />
 		<typeAlias type="com.itwillbs.goodbuy.vo.MailAuthInfo" alias="mailAuthInfo" />
+		<typeAlias type="com.itwillbs.goodbuy.vo.WishlistVO" alias="wish" />
+		<typeAlias type="com.itwillbs.goodbuy.vo.ProductVO" alias="product" />
 		<typeAlias type="com.itwillbs.goodbuy.vo.PayToken" alias="payToken"/>
 	</typeAliases>
 </configuration>

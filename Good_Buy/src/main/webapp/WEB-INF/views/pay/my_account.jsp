@@ -44,9 +44,6 @@
 			        <!-- 페이지 제목 -->
 			        <h2 class="page-title">굿페이 - 내 연결계좌 관리</h2>
 			        
-			        
-			        token : ${token }
-			        id : ${sId }
 			        <%-- 세션 객체의 "token" 속성이 비어있을 경우 계좌 미인증 회원으로 계좌연결 버튼 표시 --%>
 					<%-- 아니면, 계좌관리 기능에 대한 버튼 표시 --%>
 					<c:choose>
@@ -67,16 +64,36 @@
 			        
 						<c:otherwise>
 					        <!-- 연결된 계좌 -->
-					        <div class="linked-account">
-					            <div class="account-info">
-					                <div class="icon"></div>
-					                <span class="account-number">우체국 <strong>1234567890123</strong></span>
-					            </div>
-					            <button class="primary-account-btn">주계좌</button>
-					        </div>
+<%-- 					        은행이름 : ${bankUserInfo.bank_name } --%>
+<%-- 					        객체 : ${bankUserInfo.res_list} --%>
+<%-- 					        <c:forEach var="account" items="${bankUserInfo.res_list}"> --%>
+<%-- 					        	${account.bank_name} --%>
+<%-- 					        	${account.account_num_masked} --%>
+<%-- 					        </c:forEach> --%>
+					        
+					        
+					        <c:forEach var="account" items="${bankUserInfo.res_list}">
+						        <a href="#" title="${account.account_num_masked}계좌의 상세정보 보기"  onclick="document.getElementById('PayAccountDetail').submit();">
+							        <div class="linked-account">
+							            <div class="account-info">
+							                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
+							                <span class="account-number">${account.bank_name}<strong>${account.account_num_masked}</strong></span>
+							            </div>
+							            <button class="primary-account-btn">주계좌</button>
+							        </div>
+							    </a>
+							    <form action="PayAccountDetail" method="POST" id="PayAccountDetail">
+									<input type="hidden" name="fintech_use_num" value="${account.fintech_use_num}">
+									<input type="hidden" name="account_holder_name" value="${account.account_holder_name}">
+									<input type="hidden" name="account_num_masked" value="${account.account_num_masked}">
+								</form>
+					        </c:forEach>
 					        <div class="add-account">
 					            <button class="add-account-btn">+ 연결계좌 추가하기</button>
 					        </div>
+					        
+					        
+					        
 				        </c:otherwise>
 					</c:choose>
 			    </div><!-- account-container 끝  -->

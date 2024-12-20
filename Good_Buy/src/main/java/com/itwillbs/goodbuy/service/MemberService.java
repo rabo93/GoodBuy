@@ -93,6 +93,12 @@ public class MemberService {
 	public int setTempPasswd(String heshePasswd, String mem_email) {
 		return mapper.updateTempPasswd(heshePasswd,mem_email);
 	}
+
+
+	// 네이버 로그인 회원 저장
+	public int registNaverMember(MemberVO member) {
+		return mapper.insertNaverMember(member);
+	}
 	
 	
 

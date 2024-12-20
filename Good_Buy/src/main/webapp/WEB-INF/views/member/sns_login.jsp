@@ -67,17 +67,17 @@
 	</script>
 	<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
 	<script type="text/javascript">
-        var naver_id_login = new naver_id_login("v2NPkz3kuDJkYM_nAyMT", "NaverCallback");
+        var naver_id_login = new naver_id_login("v2NPkz3kuDJkYM_nAyMT", "http://localhost:8081/NaverCallback");
         var state = naver_id_login.getUniqState();
         naver_id_login.setButton("green", 3, 48);
-        naver_id_login.setDomain("localhost:8081/");
+        naver_id_login.setDomain("localhost:8081");
         naver_id_login.setState(state);
         naver_id_login.setPopup();
         naver_id_login.init_naver_id_login();
         
         window.addEventListener('message', function (event) {
         	if (event.data === 'NaverLoginSuccess') {
-	        	window.location.href = 'list.board'; 
+	        	window.location.href = '/.'; 
 	         }
          });
     </script>

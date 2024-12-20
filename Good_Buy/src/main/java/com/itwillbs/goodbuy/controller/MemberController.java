@@ -113,17 +113,33 @@ public class MemberController {
 	
 	@ResponseBody
 	@PostMapping("NaverLogin")
-	public String naverLogin(MemberVO member) {
-		System.out.println(member);
-//		int loginResult = memberService.registMember(member);
+	public int naverLogin(MemberVO member, HttpSession session) {
+		log.info(">>>>>>>>> 네이버 가입 계정 : " + member);
 		
+		String mem_email = (String)member.getMem_email();
 		
-		return "result";
+		MemberVO dbMember = memberService.getMemberEmail(mem_email);
+		
+		log.info(">>>>>>>>>> 네이버 중복계정여부: " + dbMember);
+		
+		int result = 0;
+		if(dbMember == null) {
+			result = memberService.registNaverMember(member);
+		}
+		
+		session.setAttribute("sId", member.getMem_id());
+		session.setAttribute("sNick", member.getMem_nick());
+		session.setAttribute("sGrade", member.getMem_grade());
+		session.setAttribute("sProfile", member.getMem_profile());
+		session.setMaxInactiveInterval(60 * 120);
+					
+		return result;
 	}
 	
 	@GetMapping("NaverLoginSuccess")
-	public String naverLoginSuccess() {
-		return "result/success";
+	public String naverLoginSuccess(MemberVO member) {
+		log.info(">>>>>>>>> 네이버 로그인 계정 : " + member);
+		return "";
 	}
 	
 	//=================================================================================================================================

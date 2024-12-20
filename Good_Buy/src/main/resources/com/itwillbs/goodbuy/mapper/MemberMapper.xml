@@ -166,5 +166,38 @@
 	        '일반',
 			1
 	    )
-	</insert>	
+	</insert>
+	
+	<!-- 네이버 회원 저장 -->
+	<insert id="insertNaverMember">
+		<selectKey keyProperty="mem_idx" resultType="int" order="BEFORE" >
+			SELECT IFNULL(MAX(MEM_IDX), 0)
+			FROM MEMBER
+		</selectKey>
+		INSERT
+		  INTO MEMBER (
+		  	MEM_IDX
+		  	, MEM_ID
+		  	, MEM_NAME
+		  	, MEM_NICK
+		  	, MEM_PROFILE
+		  	, MEM_EMAIL
+		  	, MEM_GRADE
+		  	, MEM_STATUS
+		  	, MEM_REG_DATE
+		  	, SNS_STATUS
+		  ) VALUES (
+		  	#{mem_idx} + 1
+		  	, #{mem_id}
+		  	, #{mem_name}
+		  	, #{mem_nick}
+		  	, #{mem_profile}
+		  	, #{mem_email}
+		  	, '일반'
+		  	, 1
+		  	, now()
+		  	, 1
+		  )
+	</insert>
+	
 </mapper>

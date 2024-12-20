@@ -16,4 +16,6 @@ public class NaverApiClient {
 //	
 //	@Value("${naver.client_secret}")
 //	private String client_secret;
+//	
+	
 }

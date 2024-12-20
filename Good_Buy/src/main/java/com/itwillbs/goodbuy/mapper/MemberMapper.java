@@ -61,6 +61,9 @@ public interface MemberMapper {
 	//카카오 회원정보 인서트 
 	MemberVO insertMemberInfo(HashMap<String, Object> userInfo);
 
+	// 네이버 회원 정보 저장
+	int insertNaverMember(MemberVO member);
+
 
 
 

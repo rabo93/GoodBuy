@@ -31,7 +31,6 @@ public class MemberService {
 	}
 
 
-
 	public void registMemberAuthInfo(MailAuthInfo mailauthInfo) {
 		MailAuthInfo dbMailAuthInfo = mapper.selectMailAuthInfo(mailauthInfo);
 		if (dbMailAuthInfo == null) {

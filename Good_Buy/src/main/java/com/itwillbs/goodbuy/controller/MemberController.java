@@ -12,14 +12,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itwillbs.goodbuy.service.MemberService;
+import com.itwillbs.goodbuy.vo.MemberVO;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Controller
 public class MemberController {
-//	@Autowired
-//	private MemberService memberService;
+	@Autowired
+	private MemberService memberService;
 	
 //	@Autowired
 //	private MailService mailService;
@@ -38,6 +39,9 @@ public class MemberController {
 	
 	@GetMapping("MemberLogin")
 	public String memberLoginForm() {
+//		String str = memberService.getMemberPasswd("asdasd");
+//		System.out.println(str);
+//		
 		return "member/member_login";
 	}
 	

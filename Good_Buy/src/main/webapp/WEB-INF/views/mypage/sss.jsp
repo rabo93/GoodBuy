@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,7 +22,6 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
 
-
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
 
@@ -32,43 +31,43 @@
 		<jsp:include page="/WEB-INF/views/inc/header.jsp"></jsp:include>
 	</header>
 	<main>
-			<!-- 계정설정 -->
-		<h2 class="page-ttl">마이페이지</h2>
-		<section class="my-wrap">
-			<aside class="my-menu">
-				<a href="MyInfo">계정정보</a>
+		<!-- 계정설정 -->
+		<section class="wrapper">
+			<div class="page-inner">
+				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
+				<!-- -->
+				<h2 class="page-ttl">마이페이지</h2>
+				<section class="my-wrap">
+				<aside class="my-menu">
+				<a href="MyInfo" class="active">계정정보</a>
 				<a href="MyStore">나의 상점</a>
-				<a href="GoodPay">굿페이</a>
+				<a href="">굿페이</a>
 				<a href="">나의 광고</a>
-				<a href="MyWish" class="active">관심목록</a>
+				<a href="MyWish">관심목록</a>
 				<a href="MyOrder">구매내역</a>
 				<a href="MySales">판매내역</a>
 				<a href="MyReview">나의 후기</a>
 				<a href="MySupport">1:1문의내역</a>
-			</aside>
-			<div class="my-container">
-				<div class="contents-ttl">관심목록 <small>(총 <span>${reviewCount}</span>건)</small></div>
-				<div class="contents">
-					<!-- contents -->
-					<section class="my-rev-wrap">
-						<div class="my-rev-li">
-							<div>
-								<img alt="" src="">
-							</div>
-							<div>
-								<div class="">${product_title}</div>
-							</div>
-
-						</div>
-					</section>
-					<!-- // contents -->
+				</aside>
+				<div class="my-container">
+					<div class="contents-ttl">판매내역</div>
+					
 				</div>
-			</div>
+				</section>
+
+				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
+		</div>
 		</section>
 	</main>
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
+
+
+
+
+
+
 
 </body>
 </html>

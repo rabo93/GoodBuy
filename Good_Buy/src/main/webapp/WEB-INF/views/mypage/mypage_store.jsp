@@ -53,13 +53,13 @@
 						<div>
 							<form action="MyStore" class="my-frm">
 								<div>
-									<h3>${session.sId}홍길동의 상점</h3><br> 
+								<h3>${session.sId}홍길동의 상점</h3><br> 
 								</div>
 								
 								<div class="set">
 									<label>프로필 사진</label>
 									<div>
-										<img src="../../resources/img/profile_default.png" id="preview_profile" height="60px"><br>
+									<img src="../../resources/img/profile_default.png" id="preview_profile" height="60px"><br>
 										<input type="file" name="mem_profil" id="mem_profile" value="변경"><br>
 									</div>
 								</div>
@@ -192,11 +192,15 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
+		<!-- Include the Quill library -->
+	<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 	
-
-
-
-
+	<!-- Initialize Quill editor -->
+	<script>
+	  const quill = new Quill('#editor', {
+	    theme: 'snow'
+	  });
+	</script>
 
 
 </body>

@@ -7,18 +7,18 @@ import lombok.Data;
 @Data
 	public class MemberVO {
 		private int memIdx;
-		private String memId;
-		private String memPasswd;
-		private String memName;
-		private String memNick;
-		private String memBirthday;
+		private String mem_id;
+		private String mem_passwd;
+		private String mem_name;
+		private String mem_nick;
+		private String mem_birthday;
 		//--------------------------
-		private String memEmail;
-		private String memEmail1;
-		private String memEmail2;
+		private String mem_email;
+		private String mem_email1;
+		private String mem_email2;
 		//--------------------------
-		private String memGender;
-		private String memPhone;
+		private String mem_gender;
+		private String mem_phone;
 		//--------------------------
 		private String memPostCode;
 		private String memAddress1;

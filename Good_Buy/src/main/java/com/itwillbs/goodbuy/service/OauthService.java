@@ -9,16 +9,22 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.itwillbs.goodbuy.mapper.MemberMapper;
+import com.itwillbs.goodbuy.vo.MemberVO;
 
 import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Service
 public class OauthService {
+	@Autowired
+	private MemberMapper memberMapper;
+	
 	//-------------------------------------------------------------------
 	// [카카오 로그인 연동]
 	// 1. 인가코드로 엑세스토큰 발급 요청
@@ -154,11 +160,14 @@ public class OauthService {
 
             JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
             JsonObject kakao_account = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
-
+            
+            // 카카오에서 응답받은 id값을 임의의 id값으로 변환하여 저장
+            String id = "kakao@" + element.getAsJsonObject().get("id").getAsString();
             String nickname = properties.getAsJsonObject().get("nickname").getAsString();
             String profile_image = properties.getAsJsonObject().get("profile_image").getAsString();
             String email = kakao_account.getAsJsonObject().get("email").getAsString();
-
+            
+            userInfo.put("id", id);
             userInfo.put("nickname", nickname);
             userInfo.put("email", email);
             userInfo.put("profile_image", profile_image);
@@ -170,5 +179,13 @@ public class OauthService {
         return userInfo;
 		
 	}
+	
+	//--------------------------------------------------------------------------------------
+	// 3. 카카오 회원 정보 삽입
+	public MemberVO setMemberInfo(HashMap<String, Object> userInfo) {
+		return memberMapper.insertMemberInfo(userInfo);
+	}
+
+	
 
 }

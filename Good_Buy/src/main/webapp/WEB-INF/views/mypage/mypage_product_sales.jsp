@@ -38,17 +38,19 @@
 			<!-- -->
 			<h2 class="page-ttl">마이페이지</h2>
 			<section class="my-wrap">
-			<aside class="my-menu">
-				<a href="MyInfo">계정정보</a>
-				<a href="MyStore">나의 상점</a>
-				<a href="GoodPay">굿페이</a>
-				<a href="">나의 광고</a>
-				<a href="MyWish">관심목록</a>
-				<a href="MyOrder">구매내역</a>
-				<a href="MySales" class="active">판매내역</a>
-				<a href="MyReview">나의 후기</a>
-				<a href="MySupport">1:1문의내역</a>
-			</aside>
+				<aside class="my-menu">
+					<h3>거래 정보</h3>
+					<a href="MyStore">나의 상점</a>
+					<a href="GoodPay">굿페이</a>
+					<a href="MyOrder">구매내역</a>
+					<a href="MySales" class="active">판매내역</a>
+					<h3>나의 정보</h3>
+					<a href="MyInfo">계정정보</a>
+					<a href="MyWish">관심목록</a>
+					<a href="MyReview">나의 후기</a>
+					<a href="MySupport">1:1문의내역</a>
+					<a href="">나의 광고</a>
+				</aside>
 				<div class="my-container">
 					<div class="contents-ttl">판매내역
 					<div class="my-tabs">

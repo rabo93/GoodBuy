@@ -9,6 +9,9 @@ import com.itwillbs.goodbuy.mapper.MemberMapper;
 import com.itwillbs.goodbuy.vo.MailAuthInfo;
 import com.itwillbs.goodbuy.vo.MemberVO;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @Service
 public class MemberService {
 	@Autowired
@@ -17,7 +20,6 @@ public class MemberService {
 	public int registMember(MemberVO member) {
 		return mapper.insertMember(member);
 	}
-
 
 
 	public void registMemberAuthInfo(MailAuthInfo mailauthInfo) {
@@ -54,11 +56,6 @@ public class MemberService {
 		return mapper.selectMemberPasswd(id);
 	}
 
-//	public int modifyMember(Map<String, String> map) {
-//		// TODO Auto-generated method stub
-//		return mapper.updateMember(map,mem_id);
-//	}
-//}
 
 	public MemberVO getMember(MemberVO member) {
 		return mapper.selectMember(member);
@@ -96,7 +93,8 @@ public class MemberService {
 	public int setTempPasswd(String heshePasswd, String mem_email) {
 		return mapper.updateTempPasswd(heshePasswd,mem_email);
 	}
-
+	
+	
 
 
 

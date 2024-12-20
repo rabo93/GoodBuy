@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,15 +35,17 @@
 		<h2 class="page-ttl">마이페이지</h2>
 		<section class="my-wrap">
 			<aside class="my-menu">
-				<a href="MyInfo" class="active">계정정보</a>
+				<h3>거래 정보</h3>
 				<a href="MyStore">나의 상점</a>
-				<a href="">굿페이</a>
-				<a href="">나의 광고</a>
-				<a href="MyFav">관심목록</a>
-				<a href="">구매내역</a>
-				<a href="">판매내역</a>
-				<a href="">나의 후기</a>
+				<a href="GoodPay">굿페이</a>
+				<a href="MyOrder">구매내역</a>
+				<a href="MySales">판매내역</a>
+				<h3>나의 정보</h3>
+				<a href="MyInfo" class="active">계정정보</a>
+				<a href="MyWish">관심목록</a>
+				<a href="MyReview">나의 후기</a>
 				<a href="MySupport">1:1문의내역</a>
+				<a href="">나의 광고</a>
 			</aside>
 			<div class="my-container">
 				<div class="contents-ttl">계정설정</div>
@@ -53,58 +56,60 @@
 							<div class="set">
 								<label>프로필 사진</label>
 								<div>
-									<img src="../../resources/img/profile_default.png" id="preview_profile" height="60px"><br>
-									<input type="file" name="mem_profil" id="mem_profile" value="변경"><br>
+									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
+									<input type="file" name="profile_upload" id="profile_upload" value="변경" ><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>닉네임</label>
 								<div>
-									<input type="text" name="mem_name" id="mem_name" onblur=""><br>
+									<input type="text" name="memNick" id="memNick" onblur=""><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>비밀번호</label>
 								<div>	
-									<input type="password" name="mem_passwd" id="mem_passwd"><br>
+									<input type="password" name="memPasswd" id="memPasswd"><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>비밀번호 확인</label>
 								<div>
-									<input type="password" name="mem_passwd2" id="mem_passwd2"><br>
+									<input type="password" name="memPasswd2" id="memPasswd2"><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>비밀번호 변경 확인</label>
 								<div>
-									<input type="password" name="mem_passwd3" id="mem_passwd3"><br>
+									<input type="password" name="memPasswd3" id="memPasswd3"><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>이메일</label>
 								<div>
-									<input type="text" name="mem_email" id="mem_email"><br>
+									<input type="text" name="memEmail" id="memEmail"><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>전화번호</label>
 								<div>
-									<input type="text" name="mem_phone" id="mem_phone"><br>
+									<input type="text" name="memPhone" id="memPhone"><br>
 								</div>
 							</div>
 							
 							<div class="set">
-								<label>선호 해쉬태그</label><br>
+								<label>주소</label>
 								<div>
-									<input type="text" name="hashtag" id="hashtag" size="5" value="#의류">,<input type="text" name="hashtag" id="hashtag"size="5" value="#화장품">,<input type="text" name="hashtag" id="hashtag"size="5" value="#카메라">
-									<input type="text" name="hashtag" id="hashtag"size="5" value="#화장품">,<input type="text" name="hashtag" id="hashtag"size="5" value=""><br>
+									<input type="text" name="memAddress1" id="memAddress1">
+									<input type="text" name="memPostCode" id="memPostCode" size="7">
+									<input type="button" value="주소 찾기"><br>
+									<input type="text" name="memAddress2" id="memAddress2"><br>
 								</div>
 							</div>
 							
@@ -124,11 +129,20 @@
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
 	
-
-
-
-
-
+<script type="text/javascript">
+	$("#profile_upload").on("change", function(event) {
+	
+	    var file = event.target.files[0];
+	
+	    var reader = new FileReader(); 
+	    reader.onload = function(e) {
+	
+	        $("#profile_preview").attr("src", e.target.result);
+	    }
+	
+	    reader.readAsDataURL(file);
+	});
+	</script>
 
 </body>
 </html>

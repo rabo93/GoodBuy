@@ -8,19 +8,19 @@
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
 <!-- default -->
-<link rel="stylesheet" href="../../resources/css/common.css">
-<link rel="stylesheet" href="../../resources/css/default.css">
-<script src="../../resources/js/jquery-3.7.1.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/default.css">
+<script src="${pageContext.request.contextPath}/resources/js/jquery-3.7.1.js"></script>
 
 <!-- font-awesome -->
-<link rel="stylesheet" href="../../resources/fontawesome/all.min.css" />
-<script src="../../resources/fontawesome/all.min.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/fontawesome/all.min.css" />
+<script src="${pageContext.request.contextPath}/resources/fontawesome/all.min.js"></script>
 
 <!-- ******************* 아래 CSS와 JS는 페이지별로 알맞게 Import 해주세요 ****************** -->
 <!-- CSS for Page -->
-<link rel="stylesheet" href="../../resources/css/join.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/join.css">
 <!-- JS for Page -->
-<script src="../../resources/js/join.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/join.js"></script>
 
 </head>
 <body>
@@ -60,11 +60,35 @@
 									</section>
 									
 									<section class="row">
+										<label for="mem_email1">이메일</label>
+										<div class="box">
+											<input type="text" name="mem_email1" id="mem_email1" placeholder="Email" required>
+											@
+											<input type="text" size="10" id="mem_email2" name="mem_email2">
+											<select id="emaildmain" class="form-sel">
+												<option value="">직접입력</option>
+												<option value="naver.com">naver.com</option>
+												<option value="gmail.com">gmail.com</option>
+												<option value="daum.net">daum.net</option>
+											</select> 
+										</div>
+										<div id="checkMail" class="result"></div>
+									</section>
+									
+									<section class="row">
 										<label for="mem_name">이름</label>
 										<div class="box">
 											<input type="text" name="mem_name" id="mem_name" placeholder="이름" onblur="checkNameResult()"> 
 										</div>
 										<div id="checkName" class="result"></div>
+									</section>
+									
+									<section class="row">
+										<label for="mem_name">별명</label>
+										<div class="box">
+											<input type="text" name="mem_nick" id="mem_nick" placeholder="별명" onblur="ckNick()"> 
+										</div>
+										<div id="checkNic" class="result"></div>
 									</section>
 									
 									<section class="row">
@@ -78,7 +102,8 @@
 									<section class="row">
 										<label for="mem_passwd1">비밀번호</label>
 										<div class="box">
-											<input type="password" name="mem_passwd" id="mem_passwd1" placeholder="비밀번호 입력" onblur="checkPasswdLength1()" required> 
+<!-- 											<input type="password" name="mem_passwd" id="mem_passwd1" placeholder="비밀번호 입력" onblur="checkPasswdLength1()" required>  -->
+											<input type="password" name="mem_passwd" id="mem_passwd1" placeholder="비밀번호 입력" required> 
 										</div>
 										<div id="checkPasswd1" class="result"></div>
 									</section>

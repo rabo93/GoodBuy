@@ -40,7 +40,8 @@
 		    			<a href="https://kauth.kakao.com/oauth/authorize?client_id=6a7a7bde7898c6d7f7c08a7a14bad8e9&redirect_uri=http://localhost:8081/kakaologin&response_type=code" class="sns-login" >
 						   <i class="fa-solid fa-comment"></i>카카오톡으로 간편로그인
 						</a>
-		    			<a href="NaverLogin" class="sns-login"><img alt="네이버로그인" src="${pageContext.request.contextPath}/resources/img/naver-icon.png" > 네이버로 로그인</a>
+						<div id="naver_id_login" ></div>
+<%-- 		    			<a href="NaverLogin" class="sns-login"><img alt="네이버로그인" src="${pageContext.request.contextPath}/resources/img/naver-icon.png" > 네이버로 로그인</a> --%>
 			       </div>
 		       </div>
 		       <!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
@@ -63,16 +64,22 @@
 			 	}
 			});
 		}
-		
-// 		function naverLogin() {
-// 			var naver_id_login = new naver_id_login("v2NPkz3kuDJkYM_nAyMT", "NaverLogin");
-// 	        var state = naver_id_login.getUniqState();
-// 	        naver_id_login.setButton("white", 2,40);
-// 	        naver_id_login.setDomain("http://localhost:8081");
-// 	        naver_id_login.setState(state);
-// 	        naver_id_login.setPopup();
-// 	        naver_id_login.init_naver_id_login();
-// 		}
 	</script>
+	<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+	<script type="text/javascript">
+        var naver_id_login = new naver_id_login("v2NPkz3kuDJkYM_nAyMT", "NaverCallback");
+        var state = naver_id_login.getUniqState();
+        naver_id_login.setButton("green", 3, 48);
+        naver_id_login.setDomain("localhost:8081/");
+        naver_id_login.setState(state);
+        naver_id_login.setPopup();
+        naver_id_login.init_naver_id_login();
+        
+        window.addEventListener('message', function (event) {
+        	if (event.data === 'NaverLoginSuccess') {
+	        	window.location.href = 'list.board'; 
+	         }
+         });
+    </script>
 </body>
 </html>

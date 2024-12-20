@@ -96,11 +96,24 @@ public class MemberController {
 	
 	//=================================================================================================================================
 	// Naver Login
-	// 요청 URL : https://nid.naver.com/oauth2.0/authorize
-	@GetMapping("login/oauth2/code/naver")
-	public String naverLogin() {
+	@GetMapping("NaverCallback")
+	public String naverCallback() {
+		return "member/naver_callback";
+	}
+	
+	@ResponseBody
+	@PostMapping("NaverLogin")
+	public String naverLogin(MemberVO member) {
+		System.out.println(member);
+//		int loginResult = memberService.registMember(member);
 		
-		return "";
+		
+		return "result";
+	}
+	
+	@GetMapping("NaverLoginSuccess")
+	public String naverLoginSuccess() {
+		return "result/success";
 	}
 	
 	//=================================================================================================================================

@@ -272,14 +272,14 @@ public class MemberController {
 //	
 //	
 //	
-//	//=================================================================================================================================
-//	// [ 로그아웃 ]
-//	@GetMapping("MemberLogout")
-//	public String logout(HttpSession session) {
-//		session.invalidate();
-//		return "redirect:/";
-//	}
-//		
+	//=================================================================================================================================
+	// [ 로그아웃 ]
+	@GetMapping("MemberLogout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/";
+	}
+		
 //	//=================================================================================================================================
 //	// [ 회원정보 수정 ]
 //	@LoginCheck(memberRole = MemberRole.USER)

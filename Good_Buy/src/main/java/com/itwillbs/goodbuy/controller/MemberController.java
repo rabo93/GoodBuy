@@ -94,44 +94,6 @@ public class MemberController {
 //		
 //	}	
 	
-	//-----------------------------------------------------
-	// [SNS 연동 로그인]
-	// 1. 카카오 로그인
-	// 카카오 로그인 기능이 처리되는 페이지
-	// RedirectURI : http://localhost:8080/KakaoAuth // 참고에는 localhost:0900/oauth/kakao로 해놈
-	// REST API 키 : 6a7a7bde7898c6d7f7c08a7a14bad8e9
-	@RequestMapping(value = "/memberLoginForm/getKakaoAuthUrl")
-	public @ResponseBody String getKakaoAuthUrl(HttpServletRequest request) throws Exception {
-	    // reqUrl에 발급받은 발급받은 REST API 키와 redirct_uri 넣기
-		// kauth.kakao.com/oauth/authorize?client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code
-		String reqUrl =
-	            "https://kauth.kakao.com/oauth/authorize?"
-	            + "client_id=6a7a7bde7898c6d7f7c08a7a14bad8e9"
-	            + "&redirect_uri=http://localhost:8080/KakaoAuth"
-	            + "&response_type=code";
-	    return reqUrl;
-	}   
-	
-	@RequestMapping(value = "/KakaoAuth")
-	public String oauthKakao(
-	        @RequestParam(value = "code",required = false) String authorize_code
-	        , HttpSession session, RedirectAttributes rttr) throws Exception {
-	    log.info(">>>>>>> 인가 코드 : " + authorize_code);
-	    
-	    // 인가 코드로 엑세스토큰(access_Token) 가져오기
-	    String access_Token = memberService.getAccessToken(authorize_code);
-	    log.info(">>>>>>>> 엑세스 토큰 : " + access_Token);
-	    
-	    
-	    
-	    // 가져온 access_Token으로 사용자 정보 가져오기
-//	    String view = memberService.getuserinfo(access_Token, session, rttr);
-	    
-
-//	    return view;
-	    return "";
-	}
-	
 	//=================================================================================================================================
 	// Naver Login
 	// 요청 URL : https://nid.naver.com/oauth2.0/authorize
@@ -321,14 +283,14 @@ public class MemberController {
 //	
 //	
 //	
-//	//=================================================================================================================================
-//	// [ 로그아웃 ]
-//	@GetMapping("MemberLogout")
-//	public String logout(HttpSession session) {
-//		session.invalidate();
-//		return "redirect:/";
-//	}
-//		
+	//=================================================================================================================================
+	// [ 로그아웃 ]
+	@GetMapping("MemberLogout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/";
+	}
+		
 //	//=================================================================================================================================
 //	// [ 회원정보 수정 ]
 //	@LoginCheck(memberRole = MemberRole.USER)

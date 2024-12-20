@@ -37,7 +37,7 @@
 				    <h1 class="login-ttl">LOGIN</h1>
 				    <div class="login-box">
 		    			<a href="MemberLogin">ID/PW로 로그인</a>
-		    			<a class="sns-login" onclick="kakaoLogin()">
+		    			<a href="https://kauth.kakao.com/oauth/authorize?client_id=6a7a7bde7898c6d7f7c08a7a14bad8e9&redirect_uri=http://localhost:8081/kakaologin&response_type=code" class="sns-login" >
 						   <i class="fa-solid fa-comment"></i>카카오톡으로 간편로그인
 						</a>
 		    			<a href="NaverLogin" class="sns-login"><img alt="네이버로그인" src="${pageContext.request.contextPath}/resources/img/naver-icon.png" > 네이버로 로그인</a>

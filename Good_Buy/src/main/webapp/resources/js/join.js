@@ -8,7 +8,7 @@ $(document).ready(function() {
 		for (let i = 1; i < 13; i++) {
 			$('#month').append('<option value="' + i + '">' + i + '</option>');
 		}
-		for (let i = 0; i < 32; i++){
+		for (let i = 1; i < 32; i++){
 			$('#day').append('<option value ="' + i + '">' + i + '</option>');
 		}
 });
@@ -153,24 +153,24 @@ function ckNick(){
 
 // ************* 비밀번호 길이검사**************
 function checkPasswdLength1() {
-    let passwd = $("#mem_passwd1").val();
-    let regex = /^(?=.*[\d])(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]{8,}$/;
-
-    if (regex.test(passwd)) {
-        $("#checkPasswd1").text("사용가능한 비밀번호 입니다");
-        $("#checkPasswd1").css("color", "green");
-        checkPasswd1 = true;
-    } else if (passwd === "") {
-        $("#checkPasswd1").text("비밀번호를 입력해주세요.");
-        $("#checkPasswd1").css("color", "red");
-        checkPasswd1 = false;
-    } else {
-        // 조건이 맞지 않는 경우
-        $("#checkPasswd1").text("8자리 이상,숫자/특수문자 중 2종류 포함 해주세요");
-        $("#checkPasswd1").css("color", "red");
-        alert("비밀번호를 확인해주세요");
-        checkPasswd1 = false;
-    }
+//    let passwd = $("#mem_passwd1").val();
+//    let regex = /^(?=.*[\d])(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]{8,}$/;
+//
+//    if (regex.test(passwd)) {
+//        $("#checkPasswd1").text("사용가능한 비밀번호 입니다");
+//        $("#checkPasswd1").css("color", "green");
+//        checkPasswd1 = true;
+//    } else if (passwd === "") {
+//        $("#checkPasswd1").text("비밀번호를 입력해주세요.");
+//        $("#checkPasswd1").css("color", "red");
+//        checkPasswd1 = false;
+//    } else {
+//        // 조건이 맞지 않는 경우
+//        $("#checkPasswd1").text("8자리 이상,숫자/특수문자 중 2종류 포함 해주세요");
+//        $("#checkPasswd1").css("color", "red");
+//        alert("비밀번호를 확인해주세요");
+//        checkPasswd1 = false;
+//    }
 }
 
 // ************* 비밀번호 같은지 검사**************

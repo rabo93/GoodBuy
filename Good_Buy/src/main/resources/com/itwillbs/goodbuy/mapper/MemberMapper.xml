@@ -180,6 +180,7 @@
 		  	, MEM_ID
 		  	, MEM_NAME
 		  	, MEM_NICK
+		  	, MEM_GENDER
 		  	, MEM_PROFILE
 		  	, MEM_EMAIL
 		  	, MEM_GRADE
@@ -191,6 +192,7 @@
 		  	, #{mem_id}
 		  	, #{mem_name}
 		  	, #{mem_nick}
+		  	, #{mem_gender}
 		  	, #{mem_profile}
 		  	, #{mem_email}
 		  	, '일반'

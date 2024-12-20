@@ -42,8 +42,8 @@
 			email = naver_id_login.getProfileData('email');
 			id = naver_id_login.getProfileData('id');
 			gender = naver_id_login.getProfileData('gender');
-            img = naver_id_login.getProfileData('profileImage');
-            		
+            img = naver_id_login.getProfileData('profile_image');
+            
 			$.ajax({
 				type: 'POST',
 				url: 'NaverLogin', 
@@ -52,7 +52,8 @@
 					'mem_name': name,
 					'mem_email': email,
 					'mem_nick': nickname,
-					'mem_gender' : gender
+					'mem_gender' : gender,
+					'mem_profile' : img
 					}, // data
 				dataType: 'text',
 				success: function(result) {

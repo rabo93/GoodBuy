@@ -123,10 +123,11 @@ public class MemberController {
 		
 		log.info(">>>>>>>>>> 네이버 중복계정여부: " + dbMember);
 		
-		int result = 0;
+		int result = 1;
 		if(dbMember == null) {
 			result = memberService.registNaverMember(member);
 		}
+		log.info(">>>>> 네이버 계정 등록 결과 : " + result);
 		
 		session.setAttribute("sId", member.getMem_id());
 		session.setAttribute("sNick", member.getMem_nick());

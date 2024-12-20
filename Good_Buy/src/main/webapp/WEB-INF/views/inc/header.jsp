@@ -6,7 +6,8 @@
 <div id="hd_wrap" class="hd-wrap">
 	<section class="hd-top">
 		<div class="hd-logo">
-			<a href="/"><h1><i class="fa-solid fa-basket-shopping"></i><br>Good Buy</a>
+<!-- 			<a href="/"><h1><i class="fa-solid fa-basket-shopping"></i><br>Good Buy</h1></a> -->
+			<a href="/"><h1><img src="${pageContext.request.contextPath}/resources/img/new_logo.svg" alt="굿바"></h1></a>
 		</div>
 		<div class="hd-sch">
 			<form action="" method="get">
@@ -27,7 +28,7 @@
 						<button type="button" class="gnb-btn" id="login-btn">
 							<c:choose>
 								<c:when test="${not empty sessionScope.sProfile}">
-									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" alt="프로필사진">
+									<img src="${sessionScope.sProfile}" alt="프로필사진">
 								</c:when>
 								<c:otherwise>
 									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" alt="프로필사진">

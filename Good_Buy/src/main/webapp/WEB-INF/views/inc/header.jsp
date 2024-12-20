@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- header -->
 <div id="hd_wrap" class="hd-wrap">
 	<section class="hd-top">
@@ -21,21 +21,30 @@
 				<a href="ChatMain" class="gnb-btn"><i class="fa-solid fa-comment-dots"></i> 채팅하기</a>
 			</div>
 			<div class="gnb-right">
-				<!-- 로그인 전 -->
-				<a href="SNSLogin" class="gnb-btn"><i class="fa-solid fa-user"></i> 로그인</a>
-				
-				<!-- 로그인하면 -->
-				<a href="#" class="gnb-btn login" style="display:none;">
-					<!-- 프로필사진 있으면 그거 띄우고 없으면 기본프로필사진 대체 -->
-					<img src="../resources/img/user_thumb.png" alt="기본 프로필사진">
-				</a>
-					<b>${nickname}</b> 님
-				<div class="panel" style="display:none;">
-					<a href="#">내 상점</a>
-					<a href="#">거래내역</a>
-					<a href="#">배송관리</a>
-					<a href="#">로그아웃</a>
-				</div>
+				<c:choose>
+					<c:when test="${not empty sessionScope.sId}">
+						<button type="button" class="gnb-btn" id="login-btn">
+							<c:choose>
+								<c:when test="${not empty sessionScope.sProfile}">
+									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" alt="프로필사진">
+								</c:when>
+								<c:otherwise>
+									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" alt="프로필사진">
+								</c:otherwise>
+							</c:choose>
+							<b>${sessionScope.sNick}</b> 님
+						</button>
+						<div id="login-panel">
+							<a href="MyStore">나의상점</a>
+							<a href="GoodPay">굿페이</a>
+							<a href="MyInfo">계정정보</a>
+							<a href="MemberLogout">로그아웃</a>
+						</div>
+					</c:when>
+					<c:otherwise>
+						<a href="SNSLogin" class="gnb-btn"><i class="fa-solid fa-user"></i> 로그인</a>
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</div>
 	</section>
@@ -50,3 +59,19 @@
 		</nav>
 	</section>
 </div>
+<script>
+	const loginBtn = document.querySelector("#login-btn");
+	const panel = document.querySelector("#login-panel");
+	loginBtn.addEventListener("click", function(){
+		event.stopPropagation();
+		panel.classList.toggle("on");
+	});
+	
+	panel.addEventListener("click", function(event) {
+		event.stopPropagation();
+	});
+	
+	document.addEventListener("click", function() {
+		panel.classList.remove("on");
+	});
+</script>

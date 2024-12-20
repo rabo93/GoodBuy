@@ -16,6 +16,28 @@
 			 , #{token.scope}
 		)	
 	</insert>
+	
+	<!-- 기존 엑세스토큰 정보 조회 - SELECT -->
+	<!-- 사용자일련번호(user_seq_no)가 일치하는 레코드의 엑세스토큰(access_token) 컬럼 조회 -->
+	<select id="selectTokenInfo" resultType="string">
+		SELECT access_token
+		FROM bank_access_token
+		WHERE user_seq_no = #{token.user_seq_no}
+	</select>
+	
+	<!-- 엑세스토큰 정보 갱신 - UPDATE -->
+	<!-- 사용자일련번호(user_seq_no)가 일치하는 레코드의 정보 갱신(사용자일련번호 제외 나머지) -->
+	<update id="updateAccessToken">
+		UPDATE bank_access_token
+		SET
+			access_token = #{token.access_token}
+			, token_type = #{token.token_type}
+			, expires_in = #{token.expires_in}
+			, refresh_token = #{token.refresh_token}
+			, scope = #{token.scope}
+		WHERE user_seq_no = #{token.user_seq_no}
+	</update>
 
+	
 
 </mapper>

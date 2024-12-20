@@ -62,54 +62,61 @@
 							</div>
 							
 							<div class="set">
+								<label>아이디</label>
+								<div>
+									<input type="text" name="mem_id" id="mem_id" value="${sessionScope.sId}" readonly><br>
+								</div>
+							</div>
+
+							<div class="set">
 								<label>닉네임</label>
 								<div>
-									<input type="text" name="memNick" id="memNick" onblur=""><br>
+									<input type="text" name="mem_nick" id="mem_nick" placeholder="${sessionScope.sNick}" onblur=""><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>비밀번호</label>
 								<div>	
-									<input type="password" name="memPasswd" id="memPasswd"><br>
+									<input type="password" name="mem_passwd" id="mem_passwd"><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>비밀번호 확인</label>
 								<div>
-									<input type="password" name="memPasswd2" id="memPasswd2"><br>
+									<input type="password" name="mem_passwd2" id="mem_passwd2"><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>비밀번호 변경 확인</label>
 								<div>
-									<input type="password" name="memPasswd3" id="memPasswd3"><br>
+									<input type="password" name="mem_passwd3" id="mem_passwd3"><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>이메일</label>
 								<div>
-									<input type="text" name="memEmail" id="memEmail"><br>
+									<input type="text" name="mem_eail" id="mem_email"><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>전화번호</label>
 								<div>
-									<input type="text" name="memPhone" id="memPhone"><br>
+									<input type="text" name="mem_phone" id="mem_phone"><br>
 								</div>
 							</div>
 							
 							<div class="set">
 								<label>주소</label>
 								<div>
-									<input type="text" name="memAddress1" id="memAddress1">
-									<input type="text" name="memPostCode" id="memPostCode" size="7">
+									<input type="text" name="mem_address1" id="mem_address1">
+									<input type="text" name="mem_post_code" id="mem_post_code" size="7">
 									<input type="button" value="주소 찾기"><br>
-									<input type="text" name="memAddress2" id="memAddress2"><br>
+									<input type="text" name="mem_address2" id="mem_address2"><br>
 								</div>
 							</div>
 							

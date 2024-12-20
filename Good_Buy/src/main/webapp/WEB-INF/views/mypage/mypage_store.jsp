@@ -57,13 +57,13 @@
 						<div>
 							<form action="MyStore" class="my-frm" method="post">
 								<div>
-								<h3>${session.sId}홍길동의 상점</h3><br> 
+								
 								</div>
 								
 								<div class="set">
-									<label>프로필 사진</label>
 									<div>
 										<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
+										<h3>${sessionScope.sNick}의 상점</h3><br> 
 									</div>
 								</div>
 									
@@ -72,6 +72,9 @@
 									<!-- Create the editor container -->
 									<div id="editor">
 									  <p>상점소개를 입력해주세요	</p>
+									</div>
+									<div>
+										<input type="submit" value="저장"> 
 									</div>
 								</div>
 							</form>

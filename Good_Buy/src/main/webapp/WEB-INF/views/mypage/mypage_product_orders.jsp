@@ -55,43 +55,41 @@
 						<div class="contents-ttl">
 							<h3>구매내역</h3>
 							<div class="product-list">
-							<ul class="product-wrap">
-								<!-- 2개 -->
-								<li class="product-card">
-									<img src="../../resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" />
-									<div class="card-info">
-										<div class="category">
-											<span>생활용품</span>
-											<span class="type">직거래</span>
+								<ul class="product-wrap">
+									<!-- 2개 -->
+									<li class="product-card">
+										<img src="../../resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" />
+										<div class="card-info">
+											<div class="category">
+												<span>생활용품</span>
+												<span class="type">직거래</span>
+											</div>
+											<div class="ttl">[구매완료]젠하이저 H3PRO 팝니다</div>
+											<div class="price">55,000 원</div>
 										</div>
-										<div class="ttl">[구매완료]젠하이저 H3PRO 팝니다</div>
-										<div class="price">55,000 원</div>
-									</div>
-									<div>
-										<button>후기보내기</button>
-									</div>
-								</li>
-							</ul>
-							<ul class="product-wrap">
-								<!-- 2개 -->
-								<li class="product-card">
-									<img src="../../resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" />
-									<div class="card-info">
-										<div class="category">
-											<span>생활용품</span>
-											<span class="type">직거래</span>
+										<div>
+											<button>후기보내기</button>
 										</div>
-										<div class="ttl">[구매완료]젠하이저 H3PRO 팝니다</div>
-										<div class="price">55,000 원</div>
-									</div>
-									<div>
-										<button>후기보내기</button>
-									</div>
-								</li>
-							</ul>
+									</li>
+								</ul>
+								<ul class="product-wrap">
+									<!-- 2개 -->
+									<li class="product-card">
+										<img src="../../resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" />
+										<div class="card-info">
+											<div class="category">
+												<span>생활용품</span>
+												<span class="type">직거래</span>
+											</div>
+											<div class="ttl">[구매완료]젠하이저 H3PRO 팝니다</div>
+											<div class="price">55,000 원</div>
+										</div>
+										<div>
+											<button>후기보내기</button>
+										</div>
+									</li>
+								</ul>
 						</div>
-
-
 						</div>
 					</div>
 				</section>

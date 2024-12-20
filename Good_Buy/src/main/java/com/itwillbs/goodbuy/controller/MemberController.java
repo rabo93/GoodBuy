@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.itwillbs.goodbuy.service.MailService;
 import com.itwillbs.goodbuy.service.MemberService;
+import com.itwillbs.goodbuy.service.PayService;
 import com.itwillbs.goodbuy.vo.MailAuthInfo;
 import com.itwillbs.goodbuy.vo.MemberVO;
+import com.itwillbs.goodbuy.vo.PayToken;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -29,6 +31,9 @@ public class MemberController {
 	
 	@Autowired
 	private MailService mailService;
+	
+	@Autowired
+	private PayService payService;
 	
 //	@Autowired
 //	private MypageService mypageService;
@@ -80,6 +85,11 @@ public class MemberController {
 			session.setAttribute("sGrade", dbMember.getMem_grade());
 			session.setAttribute("sProfile", dbMember.getMem_profile());
 			session.setMaxInactiveInterval(60 * 120);
+			
+			// [ 핀테크 엑세스토큰 정보 조회하여 세션에 저장하는 기능 추가 ]
+			PayToken token = payService.getPayTokenInfo(member.getMem_id());
+			session.setAttribute("token", token);
+			
 //			return "redirect:/";
 			
 			// 이전 페이지 저장 후 로그인 시 리다이렉트처리
@@ -96,11 +106,24 @@ public class MemberController {
 	
 	//=================================================================================================================================
 	// Naver Login
-	// 요청 URL : https://nid.naver.com/oauth2.0/authorize
-	@GetMapping("login/oauth2/code/naver")
-	public String naverLogin() {
+	@GetMapping("NaverCallback")
+	public String naverCallback() {
+		return "member/naver_callback";
+	}
+	
+	@ResponseBody
+	@PostMapping("NaverLogin")
+	public String naverLogin(MemberVO member) {
+		System.out.println(member);
+//		int loginResult = memberService.registMember(member);
 		
-		return "";
+		
+		return "result";
+	}
+	
+	@GetMapping("NaverLoginSuccess")
+	public String naverLoginSuccess() {
+		return "result/success";
 	}
 	
 	//=================================================================================================================================

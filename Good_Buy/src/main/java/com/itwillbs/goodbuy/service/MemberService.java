@@ -81,7 +81,7 @@ public class MemberService {
 		return mapper.updateMember(map);
 	}
 
-	
+	// 이메일 조회 요청
 	public MemberVO getMemberEmail(String mem_email) {
 		return mapper.selectEmail(mem_email);
 	}

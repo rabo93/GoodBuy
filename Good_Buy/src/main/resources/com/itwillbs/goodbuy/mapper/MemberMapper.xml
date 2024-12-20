@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itwillbs.goodbuy.mapper.MemberMapper">
+	
+	<!-- 아이디 중복체크  -->
+	<select id="selectMember" resultType="member">
+		SELECT *
+		  FROM MEMBER
+		 WHERE MEM_ID = #{mem_id}
+	</select>
+	
+	<!-- 닉네임 중복체크 -->
+	<select id="selectMemberNick" resultType="member">
+		SELECT *
+		  FROM MEMBER
+		 WHERE MEM_NICK = #{mem_nick}
+	</select>
+	
+	
+<!-- 	이메일 중복체크 -->
+<!-- 	<select id="selectEmailId" resultType="member"> -->
+<!-- 		SELECT SUBSTRING_INDEX(#{MEM_EMAIL}, '@', 1) -->
+<!-- 		FROM MEMBER -->
+<!-- 		WHERE MEM_EMAIL = #{mem_email} -->
+	
+<!-- 	</select>	 -->
+	<select id="selectMemberPasswd" resultType="String">
+		SELECT MEM_PASSWD
+		  FROM MEMBER
+		 WHERE MEM_ID = #{mem_id} 
+	</select>
+<!--   회원정보 수정 - 비밀번호 변경	 --> 
+<!-- 	<update id="updateNewPasswd"> -->
+<!-- 		UPDATE MEMBER -->
+<!-- 		   SET mem_passwd = #{mem_passwd} -->
+<!-- 		 WHERE mem_id = #{mem_id} -->
+<!-- 	</update> -->
+	
+<!-- 	이메일로 비밀번호 변경 - 이메일 존재 확인  -->
+	<select id="selectEmail" resultType="member">
+		SELECT MEM_ID, MEM_EMAIL, MEM_NAME
+		  FROM MEMBER
+		 WHERE MEM_EMAIL = #{mem_email}
+	</select>
+
+	
+	<insert id="insertMember">
+		<selectKey keyProperty="mem_idx" resultType="int" order="BEFORE" >
+			SELECT IFNULL(MAX(MEM_IDX), 0)
+			FROM MEMBER
+		</selectKey>
+		INSERT 
+		  INTO MEMBER 
+		VALUES (
+			    #{mem_idx} + 1
+			   , #{mem_id}
+			   , #{mem_passwd}
+			   , #{mem_name}
+			   , #{mem_nick}
+			   , #{mem_birthday}
+			   , CONCAT(#{mem_email1}, '@', #{mem_email2})
+			   , #{mem_gender}
+			   , #{mem_phone}
+			   , #{mem_post_code}
+			   , #{mem_address1}
+			   , #{mem_address2}
+			   , '일반'
+			   , 1
+			   , now()
+			   , null
+			   , #{mem_profile}
+			   , #{mem_intro}
+			   , 1
+			   , 1
+		)
+	</insert>
+<!-- 	   , SUBSTR(#{file_pp}, INSTR(#{file_pp}, '_') + 1) -->
+	
+	<update id="updateMember" >
+	UPDATE MEMBER
+	SET
+		MEM_NICK = #{mem_nick}
+		, MEM_POST_CODE = #{mem_post_code}
+		<if test="!mem_passwd.equals('')"> 
+<!-- 		<if test="mem_passwd != null and mem_passwd != ''"> -->
+			, MEM_PASSWD = #{mem_passwd}
+		</if>
+		, MEM_ADDRESS1 = #{mem_address1}
+		, MEM_ADDRESS2 = #{mem_address2}
+		, MEM_PHONE = #{mem_phone}
+<!-- 		, mem_email = CONCAT(#{mem_email1}, '@', #{mem_email2}) -->
+	WHERE
+		mem_id = #{mem_id}
+</update>
+<!-- 	메일 인증 후, 인증상태 변경  -->
+	<update id="updateMailAuthStatus">
+		UPDATE MEMBER
+		   SET AUTH_STATUS = 'Y'
+		 WHERE MEM_EMAIL = #{mem_email}
+	</update>
+<!-- 	메일 인증 후, 인증코드 테이블에서 인증코드 삭제 -->
+	<delete id="deleteMailAuthInfo">
+	DELETE FROM MAIL_AUTH_INFO
+	WHERE MEM_EMAIL = #{mem_email}
+	</delete>
+	
+	<insert id="insertMailAuthInfo">
+	INSERT INTO MAIL_AUTH_INFO (MEM_EMAIL, AUTH_CODE)
+	VALUES(
+		#{mem_email}
+		, #{auth_code}
+	)
+	</insert>
+	
+	<update id="updateMailAuthInfo">
+	UPDATE MAIL_AUTH_INFO
+	   SET AUTH_CODE = #{auth_code}
+	 WHERE MEM_EMAIL = #{mem_email}
+	</update>
+
+<!-- 	이메일 인증정보 조회  -->
+	<select id="selectMailAuthInfo" resultType="mailAuthInfo">
+		SELECT *
+		  FROM MAIL_AUTH_INFO
+		 WHERE MEM_EMAIL = #{mem_email}
+	</select>
+	
+<!-- 	패스워드 찾기로 비번변경 -->
+
+	<update id="updateTempPasswd">
+		UPDATE MEMBER
+		   SET MEM_PASSWD = #{heshePasswd}
+		WHERE MEM_EMAIL = #{mem_email} 
+	</update>
+	
+<!-- 	회원탈퇴  status = 3 -->
+	<update id="updateMemberStatus">
+		UPDATE MEMBER
+		  SET 
+		  	MEM_STATUS = #{mem_status}
+			, MEM_WITHDRAW_DATE = now()
+		 WHERE MEM_ID = #{mem_id}
+	</update>
+</mapper>

@@ -34,9 +34,13 @@ public class OauthController {
 		
 		// 2. 가져온 엑세스 토큰으로 사용자 정보 요청
 		HashMap<String, Object> userInfo = oauthService.getUserInfo(accessToken);
+		log.info(userInfo);
 		log.info(">>>>>>> 닉네임 : " + userInfo.get("nickname"));
 		log.info(">>>>>>> 이메일 : " + userInfo.get("email"));
 		log.info(">>>>>>> 프로필사진 : " + userInfo.get("profile_image"));
+		
+		model.addAttribute("nickname", userInfo.get("nickname"));
+		System.out.println(model);
 		
 		return "index";
 	}   

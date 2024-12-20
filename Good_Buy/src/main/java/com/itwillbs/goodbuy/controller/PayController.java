@@ -125,7 +125,7 @@ public class PayController {
 	@PostMapping("PayAccountDetail")
 	public String payAccountDetail(@RequestParam Map<String, String> map, HttpSession session, Model model) {
 		// 2.3. 계좌조회 서비스(사용자) - 2.3.1. 잔액조회 API 서비스 요청 (POST)
-		log.info(">>>>>>>>>>>>>>>계좌 잔액조회 요청 파라미터 : " + map);
+//		log.info(">>>>>>>>>>>>>>>계좌 잔액조회 요청 파라미터 : " + map);
 		// AOP로 어노테이션 써서 계좌 체크하기!
 		return "pay/pay_account_detail";		
 	}

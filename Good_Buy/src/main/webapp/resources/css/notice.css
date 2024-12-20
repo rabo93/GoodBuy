@@ -204,7 +204,8 @@
     color: var(--white);
 }
 #nt_dt_form .tb-btns button.btn-02 {
-    background: var(--danger);
+    background: #ff2b43;
+/*     background: var(--danger); */
     color: var(--white);
 }
 #nt_dt_form .tb-btns button.btn-03 {
@@ -221,5 +222,5 @@
 .tb-wrap .btns {padding:1.2rem 20px;display:flex;align-items:center;justify-content:center;gap:0.5rem;}
 .tb-wrap .btns input {cursor:pointer;}
 .tb-wrap .btns input[type=submit] {border:0;background: var(--primary);color: var(--white);padding: 10px 24px;border-radius:4px;font-weight: 600;}
-.tb-wrap .btns input[type=button] {border:0;background: var(--danger);color: var(--white);padding: 10px 24px;border-radius:4px;font-weight: 600;}
+.tb-wrap .btns input[type=button] {border:0;background: #ff2b43;color: var(--white);padding: 10px 24px;border-radius:4px;font-weight: 600;}
 

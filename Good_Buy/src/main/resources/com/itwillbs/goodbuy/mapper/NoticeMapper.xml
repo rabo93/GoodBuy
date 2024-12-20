@@ -3,13 +3,16 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itwillbs.goodbuy.mapper.NoticeMapper">
+	<!-- 공지사항 전체내용 불러오기 -->
 	<select id="getNoticeList" resultType="notice">
-		SELECT NOTICE_SUBJECT
+		SELECT NOTICE_ID
+			 , NOTICE_SUBJECT
 			 , NOTICE_DATE
 			 , MEM_ID
 		  FROM NOTICE
 	</select>
 	
+	<!-- 공지사항 글쓰기 작업 -->
 	<insert id="insertNotice">
 		<selectKey keyProperty="notice_id" resultType="int" order="BEFORE" >
 		SELECT IFNULL(MAX(NOTICE_ID), 0)
@@ -27,4 +30,84 @@
 			 , 0
 		)
 	</insert>
+	
+	<!-- 공지사항 상세내용 조회 -->
+	<select id="getNoticeBoard" resultType="notice">
+		SELECT NOTICE_ID
+			 , NOTICE_SUBJECT
+		     , NOTICE_CONTENT
+		     , NOTICE_DATE
+		     , NOTICE_FILE
+		     , NOTICE_READ_COUNT
+		     , MEM_ID
+		  FROM NOTICE
+		 WHERE NOTICE_ID = #{notice_id}
+	</select>
+	
+	<!-- 공지사항 게시글 삭제 -->
+	<delete id="deleteNotice">
+		DELETE
+		  FROM NOTICE
+		 WHERE NOTICE_ID = #{notice_id}
+	</delete>
+	
+	<!-- 공지사항 수정폼에서 첨부파일 삭제 -->
+	<update id="deleteNoticeFile">
+		UPDATE NOTICE
+		   SET NOTICE_FILE = CASE WHEN NOTICE_FILE = #{file} THEN '' ELSE NOTICE_FILE END
+		 WHERE NOTICE_ID = #{notice_id}
+	</update>
+	
+	<update id="updateNotice">
+		UPDATE NOTICE
+		   SET NOTICE_SUBJECT = #{notice_subject}
+		     , NOTICE_CONTENT = #{notice_content}
+		<if test="!notice_file.equals('')">
+			 , NOTICE_FILE = #{notice_file}
+		</if>
+		 WHERE NOTICE_ID = #{notice_id}
+	</update>
+	
+	
+	
+	<!-- 조회수 증가 작업 -->
+	<update id="updateReadCount">
+		<selectKey keyProperty="notice_read_count" resultType="int" order="AFTER">
+		SELECT NOTICE_READ_COUNT
+		  FROM NOTICE
+		 WHERE NOTICE_ID = #{notice_id}
+		</selectKey>
+		UPDATE NOTICE
+		   SET NOTICE_READ_COUNT = NOTICE_READ_COUNT + 1
+		 WHERE NOTICE_ID = #{notice_id}
+	</update>
+	
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

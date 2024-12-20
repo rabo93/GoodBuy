@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.itwillbs.goodbuy.service.NoticeService;
@@ -37,7 +38,7 @@ public class NoticeController {
 	//	글쓰기 폼 이동
 	@GetMapping("NoticeWrite")
 	public String noticeWriteForm() {
-		return "notice/notice_write_form";
+		return "notice/notice_write";
 	}
 	
 	//	글쓰기 비즈니스 로직
@@ -49,7 +50,6 @@ public class NoticeController {
 		String subDir = createDirectories(realPath);
 		realPath += "/" + subDir;
 		String fileName = addFileProcess(notice, realPath, subDir);
-		log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> fileName : " + fileName);
 		notice.setNotice_file(fileName);
 		
 		service.insertNotice(notice);
@@ -60,16 +60,115 @@ public class NoticeController {
 	//	공지사항 메인페이지(리스트)
 	@GetMapping("NoticeMain")
 	public String noticeMain(Model model) {
+		//	모든 공지사항 게시글 조회
 		List<NoticeVO> noticeList = service.getNoticeList();
-		log.info(">>>> noticeList : " + noticeList);
 		model.addAttribute("noticeList", noticeList);
 		
 		return "notice/notice_list";
 	}
 	
+	//	공지사항 글 상세보기
+	@GetMapping("NoticeDetail")
+	public String noticeDetail(int notice_id, Model model) {
+		//	notice_id 로 DB에서 공지사항 제목, 내용 등 가져오기
+		NoticeVO notice = service.getNoticeBoard(notice_id, true);
+		//	파일 원본명 세팅
+		String originalFile = notice.getNotice_file().substring(notice.getNotice_file().indexOf("_") + 1);
+		
+		model.addAttribute("notice", notice);
+		model.addAttribute("originalFile", originalFile);
+		
+		return "notice/notice_detail";
+	}
 	
+	//	공지사항 게시글 삭제
+	@GetMapping("NoticeDelete")
+	public String noitceDelete(int notice_id, Model model, HttpSession session) {
+		//	notice_id 로 DB에서 공지사항 제목, 내용 등 가져오기
+		NoticeVO notice = service.getNoticeBoard(notice_id, false);
+		if (notice == null) {	// 게시글이 존재하지 않을 경우
+			model.addAttribute("msg", "존재하지 않는 게시글입니다.");
+			return "result/fail";
+		}
+		//	DB에서 게시글 삭제 작업
+		int deleteCount = service.deleteNotice(notice_id);
+		
+//		게시글 삭제 성공 시 첨부파일 제거 작업
+		if (deleteCount > 0) {	
+			String realPath = getRealPath(session);
+			Path path = Paths.get(realPath, notice.getNotice_file());
+			try {
+				Files.delete(path);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return "redirect:/NoticeMain";
+		} else {	//	실패 시
+			model.addAttribute("msg", "삭제 실패!");
+			return "result/fail";
+		}
+	}
 	
+	//	공지사항 수정폼 이동
+	@GetMapping("NoticeModify")
+	public String noticeModifyForm(int notice_id, Model model) {
+		//	notice_id 로 DB에서 공지사항 제목, 내용 등 가져오기
+		NoticeVO notice = service.getNoticeBoard(notice_id, false);
+		//	파일 원본명 세팅
+		String originalFile = notice.getNotice_file().substring(notice.getNotice_file().indexOf("_") + 1);
+		
+		model.addAttribute("notice", notice);
+		model.addAttribute("originalFile", originalFile);
+		
+		return "notice/notice_modify";
+	}
 	
+	//	공지사항 수정 비즈니스 로직
+	@PostMapping("NoticeModify")
+	public String noticeModify(NoticeVO notice, Model model, HttpSession session) {
+		System.out.println(notice);
+		
+		if(!notice.getFile().equals("")) {
+			String realPath = getRealPath(session);
+			String subDir = createDirectories(realPath);
+			realPath += "/" + subDir;
+			String fileName = addFileProcess(notice, realPath, subDir);
+			notice.setNotice_file(fileName);
+		}
+		
+		int updateCount = service.updateNotice(notice);
+		
+		if(updateCount < 0) {
+			model.addAttribute("msg", "글 수정에 실패했습니다.");
+			return "result/fail";
+		}
+		
+		return "redirect:/NoticeDetail?notice_id=" + notice.getNotice_id();
+	}
+	
+	//	공지사항 수정폼에서 첨부파일 삭제(AJAX)
+	@ResponseBody
+	@PostMapping("NoticeDeleteFile")
+	public String noticeDeleteFile(@RequestParam Map<String, String> map, HttpSession session) {
+		System.out.println(map);
+		String result = "false";
+		
+		int deleteCount = service.deleteNoticeFile(map);
+		if (deleteCount > 0) {
+			String realPath = session.getServletContext().getRealPath(uploadPath);
+			if (!map.get("file").equals("")) {
+				Path path = Paths.get(realPath, map.get("file"));
+				try {
+					Files.delete(path);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				result = "true";
+			}
+		}
+		
+		return result;
+	}
 	
 	
 	
@@ -112,15 +211,15 @@ public class NoticeController {
 		String fileName = "";
 		
 		if(!muti.getOriginalFilename().equals("")) {
-			fileName = UUID.randomUUID().toString().subSequence(0, 8) + "_" + muti.getOriginalFilename();
-			notice.setNotice_file(subDir +  "/" + fileName);
+			String temp = UUID.randomUUID().toString().subSequence(0, 8) + "_" + muti.getOriginalFilename();
 			try {
-				muti.transferTo(new File(realPath, fileName));
+				muti.transferTo(new File(realPath, temp));
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			fileName += subDir + "/" + temp;
 		}
 		
 		return fileName;

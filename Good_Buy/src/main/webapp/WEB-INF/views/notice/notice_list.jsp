@@ -52,12 +52,13 @@
 										<th>날짜</th>
 									</tr>
 									<c:forEach items="${noticeList}" var="noticeBoard">
-										<input type="hidden" class="nt_id" name="notice_id" value="${noticeBoard.notice_id}">
 										<tr>
+											<td class="nt_id" hidden>${noticeBoard.notice_id}</td>
 											<td class="nt_subject">${noticeBoard.notice_subject}</td>
 											<td>${noticeBoard.mem_id}</td>
 											<td>${noticeBoard.notice_date}</td>
 										</tr>
+<%-- 										<input type="hidden" class="nt_id" name="notice_id" value="${noticeBoard.notice_id}"> --%>
 									</c:forEach>
 							</table>
 						</div>
@@ -110,4 +111,9 @@
 	</footer>
 </body>
 <script src="${pageContext.request.contextPath}/resources/js/notice.js"></script>
+<script type="text/javascript">
+	if (performance.navigation.type === 1) {
+		location.href= "NoticeMain";
+	}
+</script>
 </html>

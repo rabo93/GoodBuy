@@ -16,12 +16,12 @@ public class PayService {
 	private PayMapper mapper;
 	
 	@Autowired
-	private PayApiClient bankApiClient;
+	private PayApiClient payApiClient;
 
 	// 액세스 토큰 정보 DB 저장 요청
 	public PayToken getAccessToken(Map<String, String> authResponse) {
 		// BankApiClient - requestAccessToken() 메서드 호출하여 엑세스토큰 발급 요청
-		return bankApiClient.requestAccessToken(authResponse);	
+		return payApiClient.requestAccessToken(authResponse);	
 	}
 
 	// DB - 엑세스토큰 정보 저장 요청
@@ -39,5 +39,16 @@ public class PayService {
 		}
 		
 	}
+
+	// DB - 엑세스토큰 정보 조회 요청
+	public PayToken getPayTokenInfo(String mem_id) {
+		return mapper.selectPayTokenInfo(mem_id);
+	}
+
+	// API - 핀테크 사용자 정보 조회
+	public Map<String, Object> getPayUserInfo(PayToken token) {
+		return payApiClient.requestPayUserInfo(token);
+	}
+
 
 }

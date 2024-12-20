@@ -18,5 +18,8 @@ public interface PayMapper {
 	// 엑세스토큰 정보 갱신
 	void updateAccessToken(Map<String, Object> map);
 
+	// 엑세스토큰 정보 조회 요청
+	PayToken selectPayTokenInfo(String mem_id);
+
 
 }

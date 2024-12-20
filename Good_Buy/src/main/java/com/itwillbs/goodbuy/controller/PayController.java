@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.itwillbs.goodbuy.aop.LoginCheck;
+import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.service.PayService;
 import com.itwillbs.goodbuy.vo.PayToken;
 
@@ -23,21 +25,21 @@ public class PayController {
 	@Autowired
 	PayService service;
 	
-	
+	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("GoodPay")
-	public String goodPay(HttpSession session, Model model) {
-		String id = (String)session.getAttribute("sId");
+	public String goodPay() {
 		
-		model.addAttribute("id", id);
 		return "pay/pay_list";
 	}
-	
+	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("MyAccount")
 	public String myAccount() {
+		System.out.println("my account 잘들어오나?");
 		return "pay/my_account";
 	}
 	
 	// 사용자 인증 요청에 대한 콜백 처리
+	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("Callback")
 	public String callback(@RequestParam Map<String, String> authResponse, HttpSession session, Model model) {
 		// System.out.println("callback 잘되나? " + authResponse); 
@@ -68,6 +70,33 @@ public class PayController {
 //				model.addAttribute("targetURL", "BankMain");
 		model.addAttribute("isClose", true);
 		return "result/success";
+	}
+	
+	// 2.2. 사용자/서비스 관리 - 2.2.1. 사용자정보조회 API (GET)
+	@LoginCheck(memberRole = MemberRole.USER)
+	@GetMapping("BankUserInfo")
+	public String bankUserInfo(HttpSession session, Model model) {
+		// 엑세스토큰 관련 정보가 저장된 BankToken 객체(token)를 세션에서 꺼내기
+		PayToken token = (PayToken)session.getAttribute("token");
+		System.out.println("토큰 정보 : " + token);
 		
+		if(token == null || token.getAccess_token() == null) {
+			model.addAttribute("msg", "계좌 인증 필수!");
+			model.addAttribute("targetURL", "BankMain");
+			return "result/fail";
+		}
+		
+		// BankService - getBankUserInfo() 메서드 호출하여 핀테크 사용자 정보 조회
+		Map<String, Object> bankUserInfo = service.getPayUserInfo(token);
+		log.info(">>>>> 핀테크 사용자 정보 : " + bankUserInfo);
+		
+		// API 응답코드(rsp_code)가 "A0000" 이 아닐 경우 요청 처리 실패
+		if(!bankUserInfo.get("rsp_code").equals("A0000")) {
+			model.addAttribute("msg", bankUserInfo.get("rsp_message"));
+			return "result/fail";
+		}
+
+		model.addAttribute("bankUserInfo", bankUserInfo);
+		return "bank/bank_user_info";
 	}
 }

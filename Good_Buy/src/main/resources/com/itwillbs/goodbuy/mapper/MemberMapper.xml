@@ -40,7 +40,8 @@
 	
 <!-- 	이메일로 비밀번호 변경 - 이메일 존재 확인  -->
 	<select id="selectEmail" resultType="member">
-		SELECT MEM_ID, MEM_EMAIL, MEM_NAME
+<!-- 		SELECT MEM_ID, MEM_EMAIL, MEM_NAME -->
+		SELECT *
 		  FROM MEMBER
 		 WHERE MEM_EMAIL = #{mem_email}
 	</select>
@@ -72,7 +73,7 @@
 			   , null
 			   , #{mem_profile}
 			   , #{mem_intro}
-			   , 1
+			   , 2				-- SNS연동 상태(1:연동 / 2:연동안함)
 			   , 1
 		)
 	</insert>
@@ -128,7 +129,6 @@
 	</select>
 	
 <!-- 	패스워드 찾기로 비번변경 -->
-
 	<update id="updateTempPasswd">
 		UPDATE MEMBER
 		   SET MEM_PASSWD = #{heshePasswd}
@@ -143,4 +143,28 @@
 			, MEM_WITHDRAW_DATE = now()
 		 WHERE MEM_ID = #{mem_id}
 	</update>
+	
+	<!-- 카카오 회원정보 인서트 -->
+	<insert id="insertMemberInfo" parameterType="map">
+		INSERT INTO MEMBER (
+        MEM_ID,
+        MEM_NAME,
+        MEM_NICK,
+        MEM_EMAIL,
+       	MEM_PROFILE,
+        SNS_STATUS,
+        MEM_GRADE,
+        MEM_STATUS
+	    )
+	    VALUES (
+	        #{id},
+	        #{nickname},
+	        #{nickname},
+	        #{email},
+	        #{profile_image},
+	        1,						-- 1:연동 / 2:연동안함
+	        '일반',
+			1
+	    )
+	</insert>	
 </mapper>

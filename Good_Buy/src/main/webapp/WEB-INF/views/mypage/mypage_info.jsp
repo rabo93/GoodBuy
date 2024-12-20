@@ -54,7 +54,7 @@
 							<div class="set">
 								<label>프로필 사진</label>
 								<div>
-									<img src="../../resources/img/profile_default.png" id="preview_profile" height="60px"><br>
+									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="preview_profile" height="60px"><br>
 									<input type="file" name="mem_profil" id="mem_profile" value="변경"><br>
 								</div>
 							</div>
@@ -98,6 +98,16 @@
 								<label>전화번호</label>
 								<div>
 									<input type="text" name="mem_phone" id="mem_phone"><br>
+								</div>
+							</div>
+							
+							<div class="set">
+								<label>주소</label>
+								<div>
+									<input type="text" name="mem_address1" id="mem_address1">
+									<input type="text" name="mem_post_code" id="mem_post_code" size="7">
+									<input type="button" value="주소 찾기"><br>
+									<input type="text" name="mem_address2" id="mem_address2"><br>
 								</div>
 							</div>
 							

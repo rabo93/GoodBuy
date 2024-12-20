@@ -40,8 +40,18 @@ public class OauthController {
 		log.info(">>>>>>> 프로필사진 : " + userInfo.get("profile_image"));
 		
 		model.addAttribute("nickname", userInfo.get("nickname"));
-		System.out.println(model);
+//		model.addAttribute("msg", "카카오 로그인 성공! \n추가 정보 입력 페이지로 이동합니다.");
+		//=> 생각해보니.. 로그인할때마다 추가 정보 입력은 말이 안됨
 		
+		// 로그인 성공시 회원 정보 DB에 저장
+		// => email로 기존에 등록된 회원 이메일이 없을시 인서트
+//		String memberEmail = oauthService.getMemberEmail(userInfo.get("email"));
+//		if(memberEmail == null) {
+//			oauthService.setMemberInfo(userInfo);
+//		}
+		
+		
+		//메인페이지로 이동
 		return "index";
 	}   
 	

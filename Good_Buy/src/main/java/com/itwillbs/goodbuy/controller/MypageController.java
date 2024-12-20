@@ -73,7 +73,13 @@ public class MypageController {
 	@PostMapping("MemberWithdraw")
 	public String memberWithdrawForm (MemberVO  member,HttpSession session , Model model ,BCryptPasswordEncoder passwordEncoder,String memPasswd) {
 		String id = (String)session.getAttribute("sId");
-//		String dbpa
+		String dbPasswd = memberService.getMemberPasswd(id);
+		if(dbPasswd == null || !passwordEncoder.matches(memPasswd, dbPasswd)) {
+			model.addAttribute("msg", "권한이 없습니다.//n비밀번호를 다시 확인해주세요.");
+			return "result/fail";
+		}
+		
+		
 		return"";
 	}
 

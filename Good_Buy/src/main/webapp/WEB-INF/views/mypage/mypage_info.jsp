@@ -56,8 +56,8 @@
 							<div class="set">
 								<label>프로필 사진</label>
 								<div>
-									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="preview_profile" height="60px"><br>
-									<input type="file" name="" id="" value="변경"><br>
+									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
+									<input type="file" name="profile_upload" id="profile_upload" value="변경" ><br>
 								</div>
 							</div>
 							
@@ -129,11 +129,20 @@
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
 	
-
-
-
-
-
+<script type="text/javascript">
+	$("#profile_upload").on("change", function(event) {
+	
+	    var file = event.target.files[0];
+	
+	    var reader = new FileReader(); 
+	    reader.onload = function(e) {
+	
+	        $("#profile_preview").attr("src", e.target.result);
+	    }
+	
+	    reader.readAsDataURL(file);
+	});
+	</script>
 
 </body>
 </html>

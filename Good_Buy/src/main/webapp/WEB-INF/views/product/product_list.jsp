@@ -38,8 +38,8 @@
 						<div class="sch-inner">
 							<section class="sch-box">
 								<h2>검색 필터</h2>
-								<label>
-									<input type="checkbox" class="">
+								<label class="filter-name">
+									<input type="checkbox" class="sch-box">
 									거래가능한 상품만 보기
 								</label>
 							</section>
@@ -48,8 +48,9 @@
 								<label><input type="checkbox" class="ip-chk"> 5,000원 이하</label>
 								<label><input type="checkbox" class="ip-chk"> 10,000원 이하</label>
 								<label><input type="checkbox" class="ip-chk"> 20,000원 이하</label>
-								
-								<input type="number" placeholder="부터" class="ip-num ip-num1"> ~ <input type="number" placeholder="까지" class="ip-num ip-num2">
+								<div class="ip-num">
+									<input type="number" placeholder="부터" class="ip-num1"> ~ <input type="number" placeholder="까지" class="ip-num2">
+								</div>
 							</section>
 							<section class="sch-box">
 								<h2>지역</h2>

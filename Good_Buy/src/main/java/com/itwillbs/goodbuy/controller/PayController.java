@@ -97,6 +97,6 @@ public class PayController {
 		}
 
 		model.addAttribute("bankUserInfo", bankUserInfo);
-		return "bank/bank_user_info";
+		return "pay/bank_user_info";
 	}
 }

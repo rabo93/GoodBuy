@@ -125,15 +125,11 @@ public class PayApiClient {
 		URI uri = UriComponentsBuilder
 					.fromUriString(base_url) // 기본 요청 주소 생성
 					.path("/v2.0/user/me") // 상세 요청 주소(세부 경로) 생성
-//						.path("/v2.0") // path() 메서드 복수개 순차적 연결도 가능
-//						.path("/user")
-//						.path("/me")
 					.queryParam("user_seq_no", token.getUser_seq_no()) // GET 방식 요청 파라미터
 					.encode() // 주소 인코딩
 					.build() // UriComponents 타입 객체 생성
 					.toUri(); // URI 타입 객체로 변환
-		System.out.println("요청 주소 : " + uri.toString());
-		// => https://testapi.openbanking.or.kr/v2.0/user/me?user_seq_no=1101002290
+		//System.out.println("요청 주소 : " + uri.toString());
 		
 		// 2. 사용자 정보 조회 API 요청에 사용될 헤더정보를 관리할 HttpHeaders 객체 생성
 		// 2-1) HttpHeaders 객체 생성
@@ -154,18 +150,11 @@ public class PayApiClient {
 		RestTemplate restTemplate = new RestTemplate();
 		
 		// 4-2). RestTemplate 객체의 exchange() 메서드를 HTTP(REST API) 요청 수행 - GET
-		//       (GET 방식 요청을 사용하기 위해 getForObject() 메서드 활용도 가능함)
-		//    => 파라미터 : 요청 URL(URI 객체), HTTP 요청 메서드, HttpEntity 객체, 응답데이터타입
-		//    => 리턴타입 : ResponseEntity<T>
-		//    => 이 때, 응답데이터타입으로 클래스 타입 지정 시 ResponseEntity<Map<String, Object>> 로 지정
 		//       단, Map 타입 지정을 통해 응답되는 JSON 데이터를 자동으로 파싱하려면 
 		//       ParameterizedTypeReference 객체를 통해 관리되어야 함
 		// -------------------
 		// Map 타입 지정 시 제네릭타입을 사용하기 위해 ResponseEntity<Map<K, V>> 를 지정하더라도
 		// exchange() 메서드에서 Map.class 지정 시 Map<K, V>.class 형태로 지정 불가능하다!
-		// 따라서, ParameterizedTypeReference 타입을 활용하여 파싱될 클래스에 제네릭타입을 지정한
-		// 별도의 객체를 생성한 후 ParameterizedTypeReference 객체를 파싱 타입 클래스로 지정하는 방법 사용
-		// => 이 때, 객체 생성 시 추상클래스 뒤의 구현체 중괄호 블럭{} 표기
 		ParameterizedTypeReference<Map<String, Object>> responseType = new ParameterizedTypeReference<Map<String,Object>>() {};
 		// => 응답데이터 중 res_list(계좌목록) 값이 리스트 형태의 "객체" 이므로
 		//    제네릭타입을 <String, String> 대신 <String, Object> 타입으로 지정

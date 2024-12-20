@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!-- header -->
 <div id="hd_wrap" class="hd-wrap">
 	<section class="hd-top">
@@ -40,6 +41,7 @@
 							<a href="MyInfo">계정정보</a>
 							<a href="MemberLogout">로그아웃</a>
 						</div>
+						<script src="${pageContext.request.contextPath}/resources/js/header.js"></script>
 					</c:when>
 					<c:otherwise>
 						<a href="SNSLogin" class="gnb-btn"><i class="fa-solid fa-user"></i> 로그인</a>
@@ -59,19 +61,3 @@
 		</nav>
 	</section>
 </div>
-<script>
-	const loginBtn = document.querySelector("#login-btn");
-	const panel = document.querySelector("#login-panel");
-	loginBtn.addEventListener("click", function(){
-		event.stopPropagation();
-		panel.classList.toggle("on");
-	});
-	
-	panel.addEventListener("click", function(event) {
-		event.stopPropagation();
-	});
-	
-	document.addEventListener("click", function() {
-		panel.classList.remove("on");
-	});
-</script>

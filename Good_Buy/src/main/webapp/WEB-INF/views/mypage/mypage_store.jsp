@@ -21,6 +21,8 @@
 <!-- CSS for Page -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
+<!-- Include stylesheet -->
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
 
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
@@ -35,8 +37,8 @@
 		<h2 class="page-ttl">마이페이지</h2>
 		<section class="my-wrap">
 			<aside class="my-menu">
-				<a href="MyInfo" class="active">계정정보</a>
-				<a href="MyStore">나의 상점</a>
+				<a href="MyInfo">계정정보</a>
+				<a href="MyStore" class="active">나의 상점</a>
 				<a href="">굿페이</a>
 				<a href="">나의 광고</a>
 				<a href="MyWish">관심목록</a>
@@ -53,13 +55,15 @@
 						<div>
 							<form action="MyStore" class="my-frm">
 								<div>
-									<h3>${session.sId}홍길동의 상점</h3><br> 
+									<h3>
+										${session.sId}홍길동의 상점 - 나의 상점 개설일 : 
+									</h3><br> 
 								</div>
 								
 								<div class="set">
 									<label>프로필 사진</label>
 									<div>
-										<img src="../../resources/img/profile_default.png" id="preview_profile" height="60px"><br>
+										<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="preview_profile" height="60px"><br>
 										<input type="file" name="mem_profil" id="mem_profile" value="변경"><br>
 									</div>
 								</div>
@@ -192,11 +196,15 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
+		<!-- Include the Quill library -->
+	<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 	
-
-
-
-
+	<!-- Initialize Quill editor -->
+	<script>
+	  const quill = new Quill('#editor', {
+	    theme: 'snow'
+	  });
+	</script>
 
 
 </body>

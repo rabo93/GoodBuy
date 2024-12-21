@@ -30,19 +30,18 @@
 		naver_id_login.get_naver_userprofile("naverSignInCallback()");
 		console.log('콜백실행')  
 		 
-		let nickname, name, email, id, gender, img;
 	  // 네이버 사용자 프로필 조회 이후 프로필 정보를 처리할 callback function
 		function naverSignInCallback() {
 			console.log(naver_id_login);
 			console.log(naver_id_login.getProfileData('email'));
 			console.log(naver_id_login.getProfileData('profileImage'));
 			
-			nickname = naver_id_login.getProfileData('nickname');
-			name = naver_id_login.getProfileData('name');
-			email = naver_id_login.getProfileData('email');
-			id = naver_id_login.getProfileData('id');
-			gender = naver_id_login.getProfileData('gender');
-            img = naver_id_login.getProfileData('profile_image');
+			const nickname = naver_id_login.getProfileData('nickname');
+			const name = naver_id_login.getProfileData('name');
+			const email = naver_id_login.getProfileData('email');
+			const id = naver_id_login.getProfileData('id');
+			const gender = naver_id_login.getProfileData('gender');
+			const img = naver_id_login.getProfileData('profile_image');
             
 			$.ajax({
 				type: 'POST',
@@ -57,16 +56,24 @@
 					}, // data
 				dataType: 'text',
 				success: function(result) {
+					console.log("result :" + result);
+					
 					if(result == 1) {
-						console.log('성공')
+						console.log("신규회원 가입 성공!");
 						closePopupAndRedirect(); 
-					} else  {
+					} else if(result == 2)  {
+						console.log("기존회원 로그인 성공!");
+						closePopupAndRedirect(); 
+					} else {
+						console.error("가입 실패");
+						alert("로그인에 실패했습니다. 다시 시도해주세요.");
 						window.close();
 					}
-				}, 
-				error: function(result) {
-					window.close();
-				} 
+				}, error: function(xhr, status, error) {
+			        console.error('AJAX 요청 실패:', error);
+			        alert('서버와의 통신 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+			        window.close();
+			    }
 			}) 
 		 }
 		
@@ -74,6 +81,15 @@
 			window.opener.postMessage('NaverLoginSuccess', '*'); 
 			window.close(); 
 		}
+		
+		window.addEventListener("load", function () {
+		    const urlParams = new URLSearchParams(window.location.search);
+		    const error = urlParams.get('error');
+
+		    if (error === 'access_denied') {
+		        window.close();
+		    }
+		});
     </script>
 </body>
 </html>

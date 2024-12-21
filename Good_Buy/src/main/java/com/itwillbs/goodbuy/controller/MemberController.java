@@ -123,25 +123,43 @@ public class MemberController {
 		
 		log.info(">>>>>>>>>> 네이버 중복계정여부: " + dbMember);
 		
-		int result = 1;
-		if(dbMember == null) {
-			result = memberService.registNaverMember(member);
-		}
-		log.info(">>>>> 네이버 계정 등록 결과 : " + result);
-		
+		// 신규 회원 처리
+	    if (dbMember == null) {
+	        int result = memberService.registNaverMember(member);
+
+	        if (result != 1) {
+	            log.error(">>>>> 네이버 계정 등록 실패");
+	            return 0; // 등록 실패
+	        }
+
+	        log.info(">>>>> 신규 네이버 계정 등록 성공");
+
+	        // 등록된 회원 정보 다시 조회
+	        dbMember = memberService.getMemberEmail(mem_email);
+	        if (dbMember == null) {
+	            log.error(">>>>> 회원 등록 후 조회 실패");
+	            return 0; // 예외 처리
+	        }
+
+	        setSessionAttributes(session, dbMember); // 세션 설정
+	        return 1; // 신규 회원 등록 성공
+	    }
+
+	    // 기존 회원 처리
+	    setSessionAttributes(session, dbMember); // 세션 설정
+	    log.info(">>>>> 네이버 중복 계정(기존 회원)");
+	    return 2; // 기존 회원
+	}
+	
+	
+	
+	// 세션 설정 메서드 
+	public void setSessionAttributes(HttpSession session, MemberVO member) {
 		session.setAttribute("sId", member.getMem_id());
 		session.setAttribute("sNick", member.getMem_nick());
 		session.setAttribute("sGrade", member.getMem_grade());
 		session.setAttribute("sProfile", member.getMem_profile());
 		session.setMaxInactiveInterval(60 * 120);
-					
-		return result;
-	}
-	
-	@GetMapping("NaverLoginSuccess")
-	public String naverLoginSuccess(MemberVO member) {
-		log.info(">>>>>>>>> 네이버 로그인 계정 : " + member);
-		return "";
 	}
 	
 	//=================================================================================================================================

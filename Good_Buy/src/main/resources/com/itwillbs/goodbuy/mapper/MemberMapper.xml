@@ -202,4 +202,11 @@
 		  )
 	</insert>
 	
+	<update id="insertStoreIntro">
+		INSERT INTO MEMBER (STORE_INTRO)
+		VALUES #{store_intro}
+		WHERE MEM_ID = #{id}
+	
+	</update>
+	
 </mapper>

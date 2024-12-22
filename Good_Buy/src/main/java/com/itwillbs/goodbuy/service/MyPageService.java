@@ -27,5 +27,10 @@ public class MyPageService {
 	public int addWishlist(WishlistVO wishlist) {
 		return mapper.insertWishlist(wishlist);
 	}
+
+	//위시리스트 갯수 세기 
+	public int wishlistCount(String id) {
+		return mapper.selectWishlistCount(id);
+	}
 	
 }

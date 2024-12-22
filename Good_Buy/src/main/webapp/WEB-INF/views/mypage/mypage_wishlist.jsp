@@ -49,7 +49,7 @@
 				<a href="">나의 광고</a>
 			</aside>
 			<div class="my-container">
-				<div class="contents-ttl">관심목록 <small>(총 <span>1</span>건)</small></div>
+				<div class="contents-ttl">관심목록 <small>(총 <span>${wishlistCount}</span>건)</small></div>
 				<div class="contents">
 					<!-- contents -->
 					<section class="my-rev-wrap">
@@ -87,7 +87,7 @@
 											<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" height="180px"/>
 											<form action="MyWishDel" method="post" class="MyWishDelFrm">
 												<input type="hidden" name="wishlist_id" value="${wish.wishlist_id}">
-												<button type="button" class="fav-on" onclick="confirmDeleteWishItem()"><i class="fa-solid fa-heart"></i></button>
+												<button type="button" class="fav-on" onclick="confirmDeleteWishItem(this)"><i class="fa-solid fa-heart"></i></button>
 											</form>
 											<div class="card-info">
 												<div class="category">
@@ -118,10 +118,10 @@
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
 	<script>
-		function confirmDeleteWishItem() {
-			if(confirm("관심상품에서 삭제하시겠습니까?")) {
-				document.querySelector(".MyWishDelFrm").submit();
-			}
+		function confirmDeleteWishItem(button) {
+		    if (confirm("관심상품에서 삭제하시겠습니까?")) {
+		        button.closest(".MyWishDelFrm").submit();
+		    }
 		}
 	</script>
 

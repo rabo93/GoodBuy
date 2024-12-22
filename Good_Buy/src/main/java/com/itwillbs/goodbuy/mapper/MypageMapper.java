@@ -18,5 +18,7 @@ public interface MypageMapper {
 	
 	//위시리스트 추가
 	int insertWishlist(WishlistVO wishlist);
+	//위시리스트 갯수세
+	int selectWishlistCount(String id);
 
 }

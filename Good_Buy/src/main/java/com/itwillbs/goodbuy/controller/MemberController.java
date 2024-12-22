@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.itwillbs.goodbuy.aop.LoginCheck;
+import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.service.MailService;
 import com.itwillbs.goodbuy.service.MemberService;
 import com.itwillbs.goodbuy.service.PayService;
@@ -41,7 +43,7 @@ public class MemberController {
 //	private String uploadPath = "/resources/upload";
 	
 	//=================================================================================================================================
-	// [로그인 페이지 구현]
+	// [ 로그인 페이지 구현 ]
 	@GetMapping("SNSLogin")
 	public String snsLoginForm() {
 		return "member/sns_login";
@@ -106,7 +108,7 @@ public class MemberController {
 	}	
 	
 	//=================================================================================================================================
-	// Naver Login
+	// [ Naver Login ]
 	@GetMapping("NaverCallback")
 	public String naverCallback() {
 		return "member/naver_callback";
@@ -163,7 +165,7 @@ public class MemberController {
 	}
 	
 	//=================================================================================================================================
-	// [회원가입 페이지 구현]
+	// [ 회원가입 페이지 구현 ]
 	@GetMapping("MemberJoin")
 	public String memberJoin() {
 		return"member/member_join";
@@ -249,7 +251,7 @@ public class MemberController {
 
 
 	//=================================================================================================================================
-	// [회원가입 성공 페이지로 이동]
+	// [ 회원가입 성공 페이지로 이동 ]
 	@GetMapping("MemberJoinSuccess")
 	public String memberJoinSuccess() {
 	    return "member/member_join_success";
@@ -350,27 +352,27 @@ public class MemberController {
 		return "redirect:/";
 	}
 		
-//	//=================================================================================================================================
-//	// [ 회원정보 수정 ]
-//	@LoginCheck(memberRole = MemberRole.USER)
-//	@GetMapping("MyInfo")
-//	public String memberModify(MemberVO member, HttpSession session,Model model) {
-//		String id = (String)session.getAttribute("sId");
-//		if(id == null) {
-//			model.addAttribute("msg", "로그인 후 이용해주세요");
-//			model.addAttribute("targetURL", "MemberLogin");
-//			
-//			return "member/fail";
-//		}
-//		member.setMemId(id);
-//		member = memberService.getMember(member);
-//		model.addAttribute("member", member);
-//		
-//		return "my_page/mypage_info";
-//		
-//	}	
-//	//=================================================================================================================================
-//	
+	//=================================================================================================================================
+	// [ 회원정보 수정 ]
+	@LoginCheck(memberRole = MemberRole.USER)
+	@GetMapping("MyInfo")
+	public String memberModify(MemberVO member, HttpSession session,Model model) {
+		String id = (String)session.getAttribute("sId");
+		if(id == null) {
+			model.addAttribute("msg", "로그인 후 이용해주세요");
+			model.addAttribute("targetURL", "MemberLogin");
+			
+			return "member/fail";
+		}
+		member.setMem_id(id);
+		member = memberService.getMember(member);
+		
+		model.addAttribute("member", member);
+		
+		return "mypage/mypage_info";
+		
+	}	
+	
 //	@PostMapping("MyInfo")
 //	public String memberModifyForm(MemberVO member,Model model , BCryptPasswordEncoder passwordEncoder ,@RequestParam Map<String, String>map,HttpSession session ) {
 //		System.out.println("MAP : "+map);
@@ -412,7 +414,8 @@ public class MemberController {
 //		return"member/passwd_fineder";
 //	}
 //	
-//	/******************비밀번호 찾기******************/
+	//=================================================================================================================================
+	// [ 비밀번호 찾기 ]
 //	@PostMapping("PasswdFinder")
 //	public String passwdFinderForm(String mem_email,String mem_name,MemberVO member, Model model,HttpSession session,BCryptPasswordEncoder passwordEncoder) {
 //	    try {
@@ -445,9 +448,10 @@ public class MemberController {
 //	        return "result/fail";
 //	    }
 //	}
-//	
-//
-//	/***********회원탈퇴*************/
+	
+
+	//=================================================================================================================================
+	// [ 회원 탈퇴 ]
 //	@GetMapping("MemberWithdraw")
 //	public String memberWithdraw(HttpSession session , Model model) {
 //		String id = (String) session.getAttribute("sId");

@@ -22,28 +22,28 @@ import com.itwillbs.goodbuy.vo.WishlistVO;
 
 import lombok.extern.log4j.Log4j2;
 
-//[회원정보 수정]
 @Log4j2
 @Controller
 public class MypageController {
 	@Autowired MemberService memberService;
 	@Autowired MyPageService myPageService;
 	
-	@LoginCheck(memberRole = MemberRole.USER)
-	@GetMapping("MyInfo")
-	public String myInfo() {
-		return "mypage/mypage_info";
-		
-		
-	}
-	@LoginCheck(memberRole = MemberRole.USER)
-	@PostMapping("MyInfo")
-	public String myInfoForm(MemberVO member,HttpSession session , Model model) {
-		MemberVO memInfo = memberService.getMember(member);
-//		System.out.println("회원정보"+ memInfo);
-		
-		return "mypage/mypage_info";
-	}
+//	[회원정보 수정]
+//	@LoginCheck(memberRole = MemberRole.USER)
+//	@GetMapping("MyInfo")
+//	public String myInfo() {
+//		return "mypage/mypage_info";
+//		
+//		
+//	}
+//	@LoginCheck(memberRole = MemberRole.USER)
+//	@PostMapping("MyInfo")
+//	public String myInfoForm(MemberVO member,HttpSession session , Model model) {
+//		MemberVO memInfo = memberService.getMember(member);
+////		System.out.println("회원정보"+ memInfo);
+//		
+//		return "mypage/mypage_info";
+//	}
 	
 	
 	@GetMapping("MyStore")

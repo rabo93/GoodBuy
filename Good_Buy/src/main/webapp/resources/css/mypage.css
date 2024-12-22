@@ -13,7 +13,10 @@
 .my-container .contents-ttl small {font-size:0.875rem;margin-left: 6px;font-weight:500;color:var(--gray);}
 .my-menu h3:not(:first-of-type) {border-top:1px solid #ddd;padding-top: 16px;}
 .my-menu h3 {color: var(--dark);font-size: 18px;font-weight: 700;}
-/* 계정설정 */
+
+
+
+/* 계정정보 */
 .my-frm {}
 .my-frm .set {margin: 0.4rem 0;padding: 1rem;border-bottom: 1px solid var(--light-gray);}
 .my-frm .set label {font-weight: 700;font-size: 0.875rem; color: #434f61;margin-bottom: 0.6rem;display: block;}
@@ -21,7 +24,7 @@
 .my-frm .set input[type="text"],
 .my-frm .set input[type="password"] {padding: 0px 10px;background:var(--white);border:1px solid #ddd;border-radius:4px;height: 36px;}
 .my-frm .set .profile-thumb {width: 80px;height: 80px;border-radius: 6px;border: 1px solid var(--light-gray);}
-.my-frm .set .btn-frm {background: var(--white);color: var(--gray);padding: 0 2rem;border-radius:4px;font-size: 0.875rem;border: 1px solid #ddd;font-weight: 600;height: 36px;cursor: pointer;}
+/* .my-frm .set .btn-frm {background: var(--white);color: var(--gray);padding: 0 2rem;border-radius:4px;font-size: 0.875rem;border: 1px solid #ddd;font-weight: 600;height: 36px;cursor: pointer;} */
 .my-frm .set > div {display:flex;flex-wrap:wrap;gap: 0.2rem;margin: 0.2rem 0;align-items: center;}
 .my-frm .set > div > input[type="text"], .my-frm .set > div > input[type="password"] {flex:1 1 auto;}
 .my-frm .set .ip-tips {text-align:left;display:block;font-size: 11px;padding:0.4rem;color:var(--danger);font-weight: 600;}
@@ -30,7 +33,14 @@
 .my-frm .btns .btn-submit  {background: var(--primary);border:0;color: var(--white);padding: 0 2rem;border-radius:4px;font-size: 1rem;border: 1px solid var(--milk);font-weight: 700;height: 40px;min-width: 150px;}
 .withdraw-link {font-size: 0.875rem;color: var(--gray);text-align:right;display: block;margin-top: 2rem;margin-left: auto;width: 60px;}
 
-
+/*수정하면 안되는 부분*/
+.my-frm .set #mem_id, .my-frm .set #mem_email {
+	background: var(--light-gray);
+}
 
 /*나의 상점*/
 .my-frm .set .product-set {margin: 0.4rem 0;padding: 1rem;}
+
+
+
+

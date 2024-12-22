@@ -60,9 +60,11 @@ public class OauthController {
 		// => 인서트 후 다시 vo에 담아서 리턴
 		if(vo == null) {
 			vo = oauthService.setMemberInfo(userInfo);
+			log.info(">>>>>>>> 인서트 후 MemberVO : "+ vo);
+			//MemberVO(mem_idx=11, mem_id=kakao@3842610297, mem_passwd=null, mem_name=김보라, mem_nick=김보라, mem_birthday=null, mem_email=rabo93@kakao.com, mem_email1=null, mem_email2=null, mem_gender=null, mem_phone=null, mem_post_code=null, mem_address1=null, mem_address2=null, mem_grade=일반, mem_status=1, mem_reg_date=2024-12-20, mem_withdraw_date=null, mem_profile=http://img1.kakaocdn.net/thumb/R640x640.q70/?fname=http://t1.kakaocdn.net/account_images/default_profile.jpeg, mem_intro=null, sns_status=1, auth_status=0)
 		} 
-		log.info(">>>>>>>> 인서트 후 MemberVO : "+ vo);
-		//MemberVO(mem_idx=11, mem_id=kakao@3842610297, mem_passwd=null, mem_name=김보라, mem_nick=김보라, mem_birthday=null, mem_email=rabo93@kakao.com, mem_email1=null, mem_email2=null, mem_gender=null, mem_phone=null, mem_post_code=null, mem_address1=null, mem_address2=null, mem_grade=일반, mem_status=1, mem_reg_date=2024-12-20, mem_withdraw_date=null, mem_profile=http://img1.kakaocdn.net/thumb/R640x640.q70/?fname=http://t1.kakaocdn.net/account_images/default_profile.jpeg, mem_intro=null, sns_status=1, auth_status=0)
+		
+		log.info(">>>>>>>> (이미 등록된 회원임) MemberVO : "+ vo);
 		
 		//세션에 저장
 		session.setAttribute("sId", vo.getMem_id());

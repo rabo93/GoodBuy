@@ -66,6 +66,9 @@ public interface MemberMapper {
 	// 네이버 회원 정보 저장
 	int insertNaverMember(MemberVO member);
 
+	//상점소개 저장
+	int insertStoreIntro(MemberVO member);
+
 
 	
 }

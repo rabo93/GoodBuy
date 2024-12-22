@@ -52,6 +52,22 @@ public class MypageController {
 		return "mypage/mypage_store";
 	}
 	
+	@PostMapping("MyStore")
+	public String myStoreIntro(Model model, HttpSession session, MemberVO member) {
+	    String id = (String) session.getAttribute("sId");
+	    member.setMem_id(id);  // 사용자 ID 설정
+
+	    int storeIntroCount = memberService.registStoreIntro(member);  // MemberVO 전달
+
+	    if (storeIntroCount > 0) {
+	        model.addAttribute("msg", "상점소개가 변경되었습니다.");
+	        return "result/success";
+	    } else {
+	        model.addAttribute("msg", "상점소개 변경 실패!");
+	        return "result/fail";
+	    }
+	}
+	
 	@GetMapping("MyOrder")
 	public String myOrder() {
 		return "mypage/mypage_product_orders";
@@ -68,16 +84,28 @@ public class MypageController {
 	}
 
 	@GetMapping("MyWish")
-	public String myWish(HttpSession session,Model model,HttpServletRequest request) {
-		savePreviousUrl(request, session);
-		
-		String id = (String)session.getAttribute("sId");
-		List<WishlistVO> wishlist = myPageService.getWishlist(id);
-		System.out.println("위시리스트 : " + wishlist);
-		model.addAttribute("wishlist", wishlist);
-		
-		return "mypage/mypage_wishlist";
+	public String myWish(HttpSession session, Model model, HttpServletRequest request) {
+	    savePreviousUrl(request, session);
+
+	    // 세션에서 사용자 ID 가져오기
+	    String id = (String) session.getAttribute("sId");
+	    System.out.println("세션 ID: " + id);
+
+	    // 위시리스트 조회
+	    List<WishlistVO> wishlist = myPageService.getWishlist(id);
+	    System.out.println("위시리스트: " + wishlist);
+	    model.addAttribute("wishlist", wishlist);
+
+	    // 위시리스트 개수 조회 => 수정중 
+	    System.out.println("id???????????????"+id); //여기부터 안불러옴
+	    int wishlistCount = myPageService.wishlistCount(id);
+	    
+	    model.addAttribute("wishlistCount", wishlistCount);
+	    System.out.println("위시리스트 갯수: " + wishlistCount);
+
+	    return "mypage/mypage_wishlist";
 	}
+	
 	
 	//[관심목록 추가]
 	@GetMapping("MyWishAdd")

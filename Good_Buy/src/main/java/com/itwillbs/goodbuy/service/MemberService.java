@@ -101,6 +101,13 @@ public class MemberService {
 	public int registNaverMember(MemberVO member) {
 		return mapper.insertNaverMember(member);
 	}
+
+	//상점 소개 변경
+
+	public int registStoreIntro(MemberVO member) {
+		// TODO Auto-generated method stub
+		return mapper.insertStoreIntro(member);
+	}
 	
 
 

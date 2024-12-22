@@ -70,9 +70,10 @@
 								<div class="set">
 									<label>상점 소개</label>
 									<!-- Create the editor container -->
-									<div id="editor">
-									  <p>상점소개를 입력해주세요	</p>
-									</div>
+									<textarea rows="5" cols="10" name="store_intro" id="store_intro">상점소개를 입력해주세요.</textarea>
+<!-- 									<div id="store_intro" name="store_intro"> -->
+<!-- 									  <p>상점소개를 입력해주세요	</p> -->
+<!-- 									</div> -->
 									<div>
 										<input type="submit" value="저장"> 
 									</div>

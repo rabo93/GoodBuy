@@ -9,7 +9,7 @@ import com.itwillbs.goodbuy.vo.ProductVO;
 @Mapper
 public interface ProductMapper {
 
-	int registProduct();
+	int registProduct(ProductVO product);
 
 	List<ProductVO> selectProductList(String id);
 

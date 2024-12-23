@@ -11,15 +11,5 @@ public class MainController {
 	public String main() {
 		return "index";
 	}
-
-	@GetMapping("ProductList")
-	public String productList() {
-		return "product/product_list";
-	}
-	
-	@GetMapping("ProductRegist")
-	public String productRegist() {
-		return "product/product_regi";
-	}
 	
 }

@@ -18,8 +18,10 @@ import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.service.MemberService;
 import com.itwillbs.goodbuy.service.MyPageService;
+import com.itwillbs.goodbuy.service.ProductService;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.MyPageVO;
+import com.itwillbs.goodbuy.vo.ProductVO;
 import com.itwillbs.goodbuy.vo.WishlistVO;
 
 import lombok.extern.log4j.Log4j2;
@@ -29,6 +31,7 @@ import lombok.extern.log4j.Log4j2;
 public class MypageController {
 	@Autowired MemberService memberService;
 	@Autowired MyPageService myPageService;
+	@Autowired ProductService productService;
 	
 //	[회원정보 수정]
 //	@LoginCheck(memberRole = MemberRole.USER)
@@ -50,7 +53,9 @@ public class MypageController {
 	
 	@GetMapping("MyStore")
 	public String myStore(MemberVO member,HttpSession session,Model model) {
+		
 		return "mypage/mypage_store";
+		
 	}
 	
 	@PostMapping("MyStore")
@@ -80,8 +85,24 @@ public class MypageController {
 	}
 	
 	@GetMapping("MySales")
-	public String mySale() {
+	public String mySale(Model model,HttpSession session) {
+		//세션에 사용자 ID 저장 
+		String id = (String) session.getAttribute("sId");
+		
+		//판매내역 조회
+		List<ProductVO> productlist =(List<ProductVO>) productService.getProductList(id);
+		model.addAttribute("product", productlist);
+		System.out.println("상품목록 조회"+productlist);
+		
+		//판매내역 갯수조회
+		
+		int salesCount = productService.salesCount(id);
+		model.addAttribute("salesCount", salesCount);
+		
+		
+		
 		return "mypage/mypage_product_sales";
+		
 	}
 	
 	@GetMapping("MyReview")
@@ -102,8 +123,7 @@ public class MypageController {
 	    System.out.println("위시리스트: " + wishlist);
 	    model.addAttribute("wishlist", wishlist);
 
-	    // 위시리스트 개수 조회 => 수정중 
-	    System.out.println("id???????????????"+id); //여기부터 안불러옴
+	    // 위시리스트 개수 조회
 	    int wishlistCount = myPageService.wishlistCount(id);
 	    
 	    model.addAttribute("wishlistCount", wishlistCount);

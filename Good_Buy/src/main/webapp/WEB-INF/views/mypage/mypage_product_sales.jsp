@@ -1,11 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
 <!-- default -->
@@ -52,8 +56,7 @@
 					<a href="">나의 광고</a>
 				</aside>
 				<div class="my-container">
-					<div class="contents-ttl">판매내역
-					<div class="my-tabs">
+					<div class="contents-ttl"><h3>판매내역 <small>(총 <span>${salesCount}</span>건)</small></h3><div class="my-tabs">
 						<button>전체</button>
 						<button>진행중</button>
 						<button>거래완료</button>
@@ -62,108 +65,107 @@
 					</div>
 				<section>
 					<div>
-						<h3>진행중</h3>		
-						<div class="product-list">
-							<ul class="product-wrap">
-								<!-- 8개 -->
-								<li class="product-card">
-									<img src="../../resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" />
-									<div class="card-info">
-										<div class="category">
-											<span>생활용품</span>
-											<span class="type">직거래</span>
-										</div>
-										<div class="ttl">[예약중]젠하이저 H3PRO 팝니다</div>
-										<div class="price">55,000 원</div>
-										<div class="card-row">
-											<span class="add">부산 해운대구</span>
-											<span class="name">홍길동동이</span>
-											<span class="time">1분 전</span>
-										</div>
-									</div>
-								</li>
-								<li class="product-card">
-									<img src="../../resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" />
-									<div class="card-info">
-										<div class="category">
-											<span>생활용품</span>
-											<span class="type">직거래</span>
-										</div>
-										<div class="ttl">[예약중]젠하이저 H3PRO 팝니다</div>
-										<div class="price">55,000 원</div>
-										<div class="card-row">
-											<span class="add">부산 해운대구</span>
-											<span class="name">홍길동동이</span>
-											<span class="time">1분 전</span>
-										</div>
-									</div>
-								</li>
-							</ul>
-						</div>
-					</div>
 					
-					<h3>거래완료</h3>
-											<div class="product-list">
-							<ul class="product-wrap">
-								<!-- 8개 -->
-								<li class="product-card">
-									<img src="../../resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" />
-									<div class="card-info">
-										<div class="category">
-											<span>생활용품</span>
-											<span class="type">직거래</span>
-										</div>
-										<div class="ttl">[거래완료]젠하이저 H3PRO 팝니다</div>
-										<div class="price">55,000 원</div>
-										<div class="card-row">
-											<span class="add">부산 해운대구</span>
-											<span class="name">홍길동동이</span>
-											<span class="time">1분 전</span>
-										</div>
-									</div>
-								</li>
-								<li class="product-card">
-									<img src="../../resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" />
-									<div class="card-info">
-										<div class="category">
-											<span>생활용품</span>
-											<span class="type">직거래</span>
-										</div>
-										<div class="ttl">[거래완료]젠하이저 H3PRO 팝니다</div>
-										<div class="price">55,000 원</div>
-										<div class="card-row">
-											<span class="add">부산 해운대구</span>
-											<span class="name">홍길동동이</span>
-											<span class="time">1분 전</span>
-										</div>
-									</div>
-								</li>
+					<c:choose>
+						<c:when test="${empty product}">
+							<ul>
+								<li>판매내역이 없습니다.</li>
 							</ul>
-						</div>
+						</c:when>
+						<c:otherwise>
+							<c:forEach var="product" items="${product}">
+								<li class="product-card">
+											<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" height="180px"/>
+											<div class="card-info">
+												<div class="category">
+													<span>생활용품</span>
+													<span class="type">직거래</span>
+												</div>
+												<div class="ttl">[${product.product_status}]${product.product_title}</div>
+												<div class="price">
+													<fmt:formatNumber  value="${product.product_price}" type="number" pattern="#,###" />원
+												</div>
+												<div class="card-row">
+													<span class="add">부산 해운대구</span>
+													<span class="name">홍길동동이</span>
+												</div>
+											</div>
+										</li>
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
 					
-					<div>
-					<h3>취소/환불</h3>
-											<div class="product-list">
-							<ul class="product-wrap">
-								<!-- 8개 -->
-								<li class="product-card">
-									<img src="../../resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" />
-									<div class="card-info">
-										<div class="category">
-											<span>생활용품</span>
-											<span class="type">직거래</span>
-										</div>
-										<div class="ttl">젠하이저 H3PRO 팝니다</div>
-										<div class="price">55,000 원</div>
-										<div class="card-row">
-											<span class="add">부산 해운대구</span>
-											<span class="name">홍길동동이</span>
-											<span class="time">1분 전</span>
-										</div>
-									</div>
-								</li>
-							</ul>
-						</div>
+					<!-- ================================================================ -->
+<!-- 						<h3>진행중</h3>		 -->
+<!-- 						<div class="product-list"> -->
+<!-- 							<ul class="product-wrap"> -->
+<!-- 								8개 -->
+<!-- 								<li class="product-card"> -->
+<!-- 									<img src="../../resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" /> -->
+<!-- 									<div class="card-info"> -->
+<!-- 										<div class="category"> -->
+<!-- 											<span>생활용품</span> -->
+<!-- 											<span class="type">직거래</span> -->
+<!-- 										</div> -->
+<!-- 										<div class="ttl">[예약중]젠하이저 H3PRO 팝니다</div> -->
+<!-- 										<div class="price">55,000 원</div> -->
+<!-- 										<div class="card-row"> -->
+<!-- 											<span class="add">부산 해운대구</span> -->
+<!-- 											<span class="name">홍길동동이</span> -->
+<!-- 											<span class="time">1분 전</span> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 								</li> -->
+<!-- 							</ul> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+					
+<!-- 					<h3>거래완료</h3> -->
+<!-- 					<div class="product-list"> -->
+<!-- 							<ul class="product-wrap"> -->
+<!-- 								8개 -->
+<!-- 								<li class="product-card"> -->
+<!-- 									<img src="../../resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" /> -->
+<!-- 									<div class="card-info"> -->
+<!-- 										<div class="category"> -->
+<!-- 											<span>생활용품</span> -->
+<!-- 											<span class="type">직거래</span> -->
+<!-- 										</div> -->
+<!-- 										<div class="ttl">[거래완료]젠하이저 H3PRO 팝니다</div> -->
+<!-- 										<div class="price">55,000 원</div> -->
+<!-- 										<div class="card-row"> -->
+<!-- 											<span class="add">부산 해운대구</span> -->
+<!-- 											<span class="name">홍길동동이</span> -->
+<!-- 											<span class="time">1분 전</span> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 								</li> -->
+<!-- 							</ul> -->
+<!-- 						</div> -->
+					
+<!-- 					<div> -->
+<!-- 					<h3>취소/환불</h3> -->
+<!-- 											<div class="product-list"> -->
+<!-- 							<ul class="product-wrap"> -->
+<!-- 								8개 -->
+<!-- 								<li class="product-card"> -->
+<!-- 									<img src="../../resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" /> -->
+<!-- 									<div class="card-info"> -->
+<!-- 										<div class="category"> -->
+<!-- 											<span>생활용품</span> -->
+<!-- 											<span class="type">직거래</span> -->
+<!-- 										</div> -->
+<%-- 										<div class="ttl">${productlist.product_title}</div> --%>
+<%-- 										<div class="price">${productlist.product_price}</div> --%>
+<!-- 										<div class="card-row"> -->
+<!-- 											<span class="add">부산 해운대구</span> -->
+<!-- 											<span class="name">홍길동동이</span> -->
+<!-- 											<span class="time">1분 전</span> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 								</li> -->
+<!-- 							</ul> -->
+<!-- 						</div> -->
 					</div>
 				</section>
 				</div>

@@ -35,7 +35,7 @@
 				<section class="item-regi">
 					<div>
 						<h2 class="page-title">상품 등록</h2>
-						<form action="item-regi-submit" method="post">
+						<form action="item-regist" method="post">
 							<section class="item-regi-img">
 								<h2 class="item-regi-name">상품이미지</h2>
 								<div class="item-thumb">
@@ -99,17 +99,23 @@
 									</div>
 								</div>	
 							</section>
-							<ul class="item-regi-price">
-								<li class="item-regi-name">상품설명</li>
-								<li><input type="radio" name="shipping-fee" id="shipping-fee-disable"><label for="shipping-fee-disable">택배비 포함</label></li>
-								<li><input type="radio" name="shipping-fee" id="shipping-fee-enable"><label for="shipping-fee-enable">택배비 미포함</label></li>
-								<li><input type="number" class="shipping-fee-price"></li>
-								<li><input type="number" class="item-price"></li>
-								<li><input type="checkbox" class="item-discount">가격 제안 가능</li>
-							</ul>
+							<section class="item-regi-price">
+								<h6 class="item-regi-name">상품설명</h6>
+								<div class="item-regi-price-box">
+									<label><input type="radio" name="shipping-fee" id="shipping-fee-disable">택배비 포함</label>
+									<label><input type="radio" name="shipping-fee" id="shipping-fee-enable">택배비 미포함</label>
+									<div class="item-regi-price-number">
+										<input type="number" class="shipping-fee-price">
+										<div><input type="number" class="item-price"></div>
+										<label class="item-discount-box"><input type="checkbox" class="item-discount">가격 제안 가능</label>
+									</div>
+								</div>
+							</section>
 						</form>
-						<input type="button" class="item-backpage">
-						<input type="submit" class="item-submit">
+						<div class="item-regi-submit-group">
+							<input type="button" class="item-backpage" onclick="history.back()" value="뒤로 가기">
+							<input type="submit" class="item-submit" value="상품 등록">
+						</div>
 					</div>
 				</section>
 				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->

@@ -66,7 +66,7 @@
 						<div class="product-list">
 							<ul class="product-wrap">
 								<!-- 8개 -->
-								<li class="product-card">
+								<li class="product-card" onclick="location.href='ProductDetail'">
 									<img src="../../resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" />
 									<div class="card-info">
 										<div class="category">

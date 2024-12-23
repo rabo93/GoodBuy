@@ -1,5 +1,6 @@
 package com.itwillbs.goodbuy.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.itwillbs.goodbuy.mapper.MemberMapper;
 import com.itwillbs.goodbuy.vo.MailAuthInfo;
 import com.itwillbs.goodbuy.vo.MemberVO;
+import com.itwillbs.goodbuy.vo.WishlistVO;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -79,7 +81,7 @@ public class MemberService {
 		return mapper.updateMember(map);
 	}
 
-	
+	// 이메일 조회 요청
 	public MemberVO getMemberEmail(String mem_email) {
 		return mapper.selectEmail(mem_email);
 	}
@@ -93,10 +95,20 @@ public class MemberService {
 	public int setTempPasswd(String heshePasswd, String mem_email) {
 		return mapper.updateTempPasswd(heshePasswd,mem_email);
 	}
-	
-	
 
 
+	// 네이버 로그인 회원 저장
+	public int registNaverMember(MemberVO member) {
+		return mapper.insertNaverMember(member);
+	}
+
+	//상점 소개 변경
+
+	public int registStoreIntro(MemberVO member) {
+		// TODO Auto-generated method stub
+		return mapper.insertStoreIntro(member);
+	}
+	
 
 
 }

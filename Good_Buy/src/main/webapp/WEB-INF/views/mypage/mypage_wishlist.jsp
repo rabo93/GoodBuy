@@ -49,18 +49,64 @@
 				<a href="">나의 광고</a>
 			</aside>
 			<div class="my-container">
-				<div class="contents-ttl">관심목록 <small>(총 <span>${reviewCount}</span>건)</small></div>
+				<div class="contents-ttl">관심목록 <small>(총 <span>${wishlistCount}</span>건)</small></div>
 				<div class="contents">
 					<!-- contents -->
 					<section class="my-rev-wrap">
 						<div class="my-rev-li">
-							<div>
-								<img alt="" src="">
-							</div>
-							<div>
-								<div class="">${product_title}</div>
-							</div>
+							<c:choose>
+							<c:when test="${empty wishlist}">
+								<ul>
+									<li>관심상품이 없습니다.</li>
+								</ul>
+							</c:when>
+							<c:otherwise>
+								<ul>
+									<c:forEach var="wish" items="${wishlist}">
+<!-- 										<li> -->
+<!-- 											<div class="thumb-area"> -->
+<%-- <%-- 												<img src="${pageContext.request.contextPath}/resources/upload/${wish.class_pic}" class="card-thumb" alt="thumbnail" onclick="location.href='CourseDetail?class_id=${wish.class_id}'"/> --%> 
+<%-- <%-- 												<img src="${pageContext.request.contextPath}/resources/images/thumb_01.webp" class="card-thumb" alt="thumbnail" onclick="location.href='CourseDetail?class_id=${wish.class_id}'" /> --%>
+<!-- <!-- 												<form action="MyFavDel" method="post" class="MyFavDelFrm"> --> 
+<%-- <%-- 													<input type="hidden" name="class_id" value="${wish.class_id}"> --%>
+<!-- <!-- 													<button type="button" class="fav-on" onclick="confirmDeleteWishItem()"><i class="fa-solid fa-heart"></i></button> --> 
+<!-- <!-- 												</form> -->
+<!-- 											</div> -->
+<!-- 											<div class="card-info" onclick=""> -->
+<!-- 												<div class="category"> -->
+<%-- <%-- 													<span>${wish.class_category}</span> --%>
+<!-- 												</div> -->
+<%-- 												<div class="ttl">${wish.product_title}</div> --%>
+<!-- 												<div class="rating"> -->
+<!-- <!-- 													<i class="fa-solid fa-star"></i> --> 
+<%-- <%-- 													<span>${wish.review_score}</span> --%> 
+<!-- 												</div> -->
+<!-- 											</div> -->
+<!-- 										</li> -->
+										<li class="product-card">
+											<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" height="180px"/>
+											<form action="MyWishDel" method="post" class="MyWishDelFrm">
+												<input type="hidden" name="wishlist_id" value="${wish.wishlist_id}">
+												<button type="button" class="fav-on" onclick="confirmDeleteWishItem(this)"><i class="fa-solid fa-heart"></i></button>
+											</form>
+											<div class="card-info">
+												<div class="category">
+													<span>생활용품</span>
+													<span class="type">직거래</span>
+												</div>
+												<div class="ttl">${wish.product_title}</div>
+												<div class="price">55,000 원</div>
+												<div class="card-row">
+													<span class="add">부산 해운대구</span>
+													<span class="name">홍길동동이</span>
+												</div>
+											</div>
+										</li>
 
+									</c:forEach>
+								</ul>							
+							</c:otherwise>
+							</c:choose>
 						</div>
 					</section>
 					<!-- // contents -->
@@ -71,6 +117,13 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
+	<script>
+		function confirmDeleteWishItem(button) {
+		    if (confirm("관심상품에서 삭제하시겠습니까?")) {
+		        button.closest(".MyWishDelFrm").submit();
+		    }
+		}
+	</script>
 
 </body>
 </html>

@@ -9,7 +9,6 @@ import lombok.extern.log4j.Log4j2;
 public class MainController {
 	@GetMapping("/")
 	public String main() {
-		log.info(">>>>>>로그 체크");
 		return "index";
 	}
 	

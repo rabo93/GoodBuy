@@ -12,7 +12,7 @@
     display: block;
     width: 100%;
     margin-bottom: 20px;
-    border: 1px solid #fae9de;
+    border: 1px solid #cedfd5;
     background-color: var(--ivory);
     padding: 15px;
     border-radius: 8px;
@@ -82,16 +82,19 @@
 .login-wrap .login-box a {display:block;width:100%;text-align:center;border-radius: 10px;overflow:hidden;margin: 8px 0;font-weight: 600;line-height: 48px;}
 .login-wrap .login-box a:first-of-type {background:var(--dark);color:var(--white);}
 .login-wrap .login-box .sns-login:nth-of-type(2) {background: #fee500;color: #181600;}
-.login-wrap .login-box .sns-login:last-of-type {background:#03c75a;color:var(--white);display: flex;justify-content:center;align-items: center;}
-.login-wrap .login-box .sns-login:last-of-type img {width:30px;}
+/*.login-wrap .login-box .sns-login:last-of-type {background:#03c75a;color:var(--white);display: flex;justify-content:center;align-items: center;}
+.login-wrap .login-box .sns-login:last-of-type img {width:30px;}*/
 
 /* .passwd_find a {color:var(--dark);} */
 
 .lab-box.pw {position:relative;}
-.lab-box.pw svg {position:absolute;right: 16px;bottom: 17px;color: var(--dark);}
+.lab-box.pw .passwd-view {position:absolute;right: 16px;bottom: 17px;color: var(--dark);}
 
 
 .checkbox-container a {margin-left:auto;font-size:14px;font-weight:700;color:var(--dark);}
 .checkbox-container a:hover {color:var(--primary);}
 
+#naver_id_login {text-align:center;}
+#naver_id_login img {display:block;margin:0 auto;}
+#naver_id_login a {background:#1ec800;}
 

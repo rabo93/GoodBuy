@@ -48,9 +48,11 @@
 				    			<label for="mem_passwd">비밀번호</label>
 				    			<input type="password" name="mem_passwd" id="mem_passwd" placeholder="비밀번호 입력">
 				    			<!-- 클릭시 비밀번호 입력 보이기 -->
-				    			<i class="fa-solid fa-eye"></i>
+				    			<button type="button" class="passwd-view">
+					    			<i class="fa-solid fa-eye"></i>
+				    			</button>
 				    			<!-- 클릭시 비밀번호 입력 안보이기 -->
-				    			<i class="fa-solid fa-eye-slash"></i>
+<!-- 				    			<i class="fa-solid fa-eye-slash"></i> -->
 				    		</div>
 			               	<div class="checkbox-container">
 			              	 	<label for="rememberId">
@@ -75,5 +77,22 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
+	<script>
+		const pwBtn = document.querySelector(".passwd-view");
+		const pwInput = document.querySelector("#mem_passwd");
+		pwBtn.addEventListener("click", function(){
+			pwBtn.innerHTML = '<i class="fa-solid fa-eye"></i>';
+			pwBtn.classList.toggle("view");
+			if (pwBtn.classList.contains("view")){
+				pwBtn.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+			}
+			
+			if (pwInput.type === "password") {
+				pwInput.type = "text"; // 비밀번호 표시
+		 	 } else {
+		 		pwInput.type = "password"; // 비밀번호 숨김
+		  	}
+		});
+	</script>
 </body>
 </html>

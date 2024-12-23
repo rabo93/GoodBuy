@@ -37,9 +37,27 @@
 				<div class="sec-inner">
 					<div class="visual-area">
 						<div class="main-visual">
-							<div><img src="${pageContext.request.contextPath}/resources/img/main_visual_01.jpg" alt="배너1"></div>
-							<div><img src="${pageContext.request.contextPath}/resources/img/main_visual_02.jpg" alt="배너1"></div>
-							<div><img src="${pageContext.request.contextPath}/resources/img/main_visual_03.jpg" alt="배너1"></div>
+<%-- 							<div><img src="${pageContext.request.contextPath}/resources/img/main_visual_01.jpg" alt="배너1"></div> --%>
+<%-- 							<div><img src="${pageContext.request.contextPath}/resources/img/main_visual_02.jpg" alt="배너1"></div> --%>
+<%-- 							<div><img src="${pageContext.request.contextPath}/resources/img/main_visual_03.jpg" alt="배너1"></div> --%>
+							<div>
+								<section class="ban-wrap">
+									<div class="ban-text">
+										<span class="ttl">가까운 이웃은 직접 만나서, 먼 곳은 택배로 간편하게!</span>
+										<span class="subttl">쉽고 간편한 중고 거래를 시작해보세요.</span>
+									</div>
+									<img src="${pageContext.request.contextPath}/resources/img/ban_01.png">
+								</section>
+							</div>
+							<div>
+								<section class="ban-wrap">
+									<div class="ban-text">
+										<span class="ttl">굿바이 페이를 이용해 수수료 없이 편하게 거래해보세요!</span>
+										<span class="subttl">언제 어디서든, 손쉽게 거래할 수 있어요!</span>
+									</div>
+									<img src="${pageContext.request.contextPath}/resources/img/ban_02.png">
+								</section>
+							</div>
 						</div>
 						<a href="#" class="visu-prev"><i class="fa-solid fa-chevron-left"></i></a>
 						<a href="#" class="visu-next"><i class="fa-solid fa-chevron-right"></i></a>

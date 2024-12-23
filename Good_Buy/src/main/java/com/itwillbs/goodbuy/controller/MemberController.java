@@ -1,24 +1,27 @@
 package com.itwillbs.goodbuy.controller;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.itwillbs.goodbuy.aop.LoginCheck;
+import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.service.MailService;
 import com.itwillbs.goodbuy.service.MemberService;
-import com.itwillbs.goodbuy.vo.AttendanceVO;
+import com.itwillbs.goodbuy.service.PayService;
 import com.itwillbs.goodbuy.vo.MailAuthInfo;
 import com.itwillbs.goodbuy.vo.MemberVO;
+import com.itwillbs.goodbuy.vo.PayToken;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -31,13 +34,16 @@ public class MemberController {
 	@Autowired
 	private MailService mailService;
 	
+	@Autowired
+	private PayService payService;
+	
 //	@Autowired
 //	private MypageService mypageService;
 	
 //	private String uploadPath = "/resources/upload";
 	
 	//=================================================================================================================================
-	// [로그인 페이지 구현]
+	// [ 로그인 페이지 구현 ]
 	@GetMapping("SNSLogin")
 	public String snsLoginForm() {
 		return "member/sns_login";
@@ -48,63 +54,118 @@ public class MemberController {
 		return "member/member_login";
 	}
 	
-//	@PostMapping("MemberLogin")
-//	public String login(MemberVO member, Model model, HttpSession session,
-//						BCryptPasswordEncoder passwordEncoder, 
-//						@RequestParam(value = "rememberId", required = false) String rememberId,
-//						@CookieValue(value="userId",required=false)String cookieUser, 
-//						HttpServletResponse response) {
-////		System.out.println("아이디 기억하기 체크@@" + rememberId); //on
-////		System.out.println("가져온 쿠키아이디@@" + cookieUser);
-//		Cookie cookie = new Cookie("userId", member.getMemId()); //쿠키설정
-//		
-//		if(rememberId != null) { //체크
-//			cookie.setMaxAge(60*60*24*30);
-//		} else {
-//			cookie.setMaxAge(0);
-//		}
-//		
-//		response.addCookie(cookie);
-//		
-//		MemberVO dbMember = memberService.getMember(member);
-//		log.info("DB에 저장된 회원 정보 : " + dbMember);
-//		
-//		if(dbMember == null || !passwordEncoder.matches(member.getMemPasswd(), dbMember.getMemPasswd())) {		
-//			model.addAttribute("msg", "로그인 실패!\\n아이디와 패스워드를 다시 확인해주세요");
-//			return "result/fail";
-//		} else if(dbMember.getMemStatus() == 3) { // 로그인 성공이지만, 탈퇴 회원일 경우
-//			model.addAttribute("msg", "탈퇴한 회원입니다!");
-//			return "result/fail";
-//		} else { //로그인 성공
-//			session.setAttribute("sId", dbMember.getMemId());
-//			session.setAttribute("sNick", dbMember.getMemNick());
-//			session.setAttribute("sGrade", dbMember.getMemGrade());
-//			session.setMaxInactiveInterval(60 * 120);
-////			return "redirect:/";
-//			
-//			// 이전 페이지 저장 후 로그인 시 리다이렉트처리
-//			if(session.getAttribute("prevURL") == null) {
-//				return "redirect:/";
-//			} else {
-//				// request.getServletPath() 메서드를 통해 이전 요청 URL 을 저장할 경우
-//				// "/요청URL" 형식으로 저장되므로 redirect:/ 에서 / 제외하고 결합하여 사용
-//				return "redirect:" + session.getAttribute("prevURL");
-//			}
-//		}
-//		
-//	}	
+	@PostMapping("MemberLogin")
+	public String login(MemberVO member, Model model, HttpSession session,
+						BCryptPasswordEncoder passwordEncoder, 
+						@RequestParam(value = "rememberId", required = false) String rememberId,
+						@CookieValue(value="userId",required=false)String cookieUser, 
+						HttpServletResponse response) {
+		System.out.println("아이디 기억하기 체크@@" + rememberId); //on
+		System.out.println("가져온 쿠키아이디@@" + cookieUser);
+		Cookie cookie = new Cookie("userId", member.getMem_id()); //쿠키설정
+		
+		if(rememberId != null) { //체크
+			cookie.setMaxAge(60*60*24*30);
+		} else {
+			cookie.setMaxAge(0);
+		}
+		
+		response.addCookie(cookie);
+		
+		MemberVO dbMember = memberService.getMember(member);
+		log.info("DB에 저장된 회원 정보 : " + dbMember);
+		
+		if(dbMember == null || !passwordEncoder.matches(member.getMem_passwd(), dbMember.getMem_passwd())) {		
+			model.addAttribute("msg", "로그인 실패!\\n아이디와 패스워드를 다시 확인해주세요");
+			return "result/fail";
+		} else if(dbMember.getMem_status() == 3) { // 로그인 성공이지만, 탈퇴 회원일 경우
+			model.addAttribute("msg", "탈퇴한 회원입니다!");
+			return "result/fail";
+		} else { //로그인 성공
+			session.setAttribute("sId", dbMember.getMem_id());
+			session.setAttribute("sNick", dbMember.getMem_nick());
+			session.setAttribute("sGrade", dbMember.getMem_grade());
+			session.setAttribute("sProfile", dbMember.getMem_profile());
+			session.setMaxInactiveInterval(60 * 120);
+			
+			// [ 핀테크 엑세스토큰 정보 조회하여 세션에 저장하는 기능 추가 ]
+			PayToken token = payService.getPayTokenInfo(dbMember.getMem_id());
+//			System.out.println("member 토큰 확인 : " + token);
+			session.setAttribute("token", token);
+			
+//			return "redirect:/";
+			
+			// 이전 페이지 저장 후 로그인 시 리다이렉트처리
+			if(session.getAttribute("prevURL") == null) {
+				return "redirect:/";
+			} else {
+				// request.getServletPath() 메서드를 통해 이전 요청 URL 을 저장할 경우
+				// "/요청URL" 형식으로 저장되므로 redirect:/ 에서 / 제외하고 결합하여 사용
+				return "redirect:" + session.getAttribute("prevURL");
+			}
+		}
+		
+	}	
 	
 	//=================================================================================================================================
-	// Naver Login
-	// 요청 URL : https://nid.naver.com/oauth2.0/authorize
-	@GetMapping("login/oauth2/code/naver")
-	public String naverLogin() {
+	// [ Naver Login ]
+	@GetMapping("NaverCallback")
+	public String naverCallback() {
+		return "member/naver_callback";
+	}
+	
+	@ResponseBody
+	@PostMapping("NaverLogin")
+	public int naverLogin(MemberVO member, HttpSession session) {
+		log.info(">>>>>>>>> 네이버 가입 계정 : " + member);
 		
-		return "";
+		String mem_email = (String)member.getMem_email();
+		
+		MemberVO dbMember = memberService.getMemberEmail(mem_email);
+		
+		log.info(">>>>>>>>>> 네이버 중복계정여부: " + dbMember);
+		
+		// 신규 회원 처리
+	    if (dbMember == null) {
+	        int result = memberService.registNaverMember(member);
+
+	        if (result != 1) {
+	            log.error(">>>>> 네이버 계정 등록 실패");
+	            return 0; // 등록 실패
+	        }
+
+	        log.info(">>>>> 신규 네이버 계정 등록 성공");
+
+	        // 등록된 회원 정보 다시 조회
+	        dbMember = memberService.getMemberEmail(mem_email);
+	        if (dbMember == null) {
+	            log.error(">>>>> 회원 등록 후 조회 실패");
+	            return 0; // 예외 처리
+	        }
+
+	        setSessionAttributes(session, dbMember); // 세션 설정
+	        return 1; // 신규 회원 등록 성공
+	    }
+
+	    // 기존 회원 처리
+	    setSessionAttributes(session, dbMember); // 세션 설정
+	    log.info(">>>>> 네이버 중복 계정(기존 회원)");
+	    return 2; // 기존 회원
+	}
+	
+	
+	
+	// 세션 설정 메서드 
+	public void setSessionAttributes(HttpSession session, MemberVO member) {
+		session.setAttribute("sId", member.getMem_id());
+		session.setAttribute("sNick", member.getMem_nick());
+		session.setAttribute("sGrade", member.getMem_grade());
+		session.setAttribute("sProfile", member.getMem_profile());
+		session.setMaxInactiveInterval(60 * 120);
 	}
 	
 	//=================================================================================================================================
-	// [회원가입 페이지 구현]
+	// [ 회원가입 페이지 구현 ]
 	@GetMapping("MemberJoin")
 	public String memberJoin() {
 		return"member/member_join";
@@ -190,7 +251,7 @@ public class MemberController {
 
 
 	//=================================================================================================================================
-	// [회원가입 성공 페이지로 이동]
+	// [ 회원가입 성공 페이지로 이동 ]
 	@GetMapping("MemberJoinSuccess")
 	public String memberJoinSuccess() {
 	    return "member/member_join_success";
@@ -291,27 +352,27 @@ public class MemberController {
 		return "redirect:/";
 	}
 		
-//	//=================================================================================================================================
-//	// [ 회원정보 수정 ]
-//	@LoginCheck(memberRole = MemberRole.USER)
-//	@GetMapping("MyInfo")
-//	public String memberModify(MemberVO member, HttpSession session,Model model) {
-//		String id = (String)session.getAttribute("sId");
-//		if(id == null) {
-//			model.addAttribute("msg", "로그인 후 이용해주세요");
-//			model.addAttribute("targetURL", "MemberLogin");
-//			
-//			return "member/fail";
-//		}
-//		member.setMemId(id);
-//		member = memberService.getMember(member);
-//		model.addAttribute("member", member);
-//		
-//		return "my_page/mypage_info";
-//		
-//	}	
-//	//=================================================================================================================================
-//	
+	//=================================================================================================================================
+	// [ 회원정보 수정 ]
+	@LoginCheck(memberRole = MemberRole.USER)
+	@GetMapping("MyInfo")
+	public String memberModify(MemberVO member, HttpSession session,Model model) {
+		String id = (String)session.getAttribute("sId");
+		if(id == null) {
+			model.addAttribute("msg", "로그인 후 이용해주세요");
+			model.addAttribute("targetURL", "MemberLogin");
+			
+			return "member/fail";
+		}
+		member.setMem_id(id);
+		member = memberService.getMember(member);
+		
+		model.addAttribute("member", member);
+		
+		return "mypage/mypage_info";
+		
+	}	
+	
 //	@PostMapping("MyInfo")
 //	public String memberModifyForm(MemberVO member,Model model , BCryptPasswordEncoder passwordEncoder ,@RequestParam Map<String, String>map,HttpSession session ) {
 //		System.out.println("MAP : "+map);
@@ -353,7 +414,8 @@ public class MemberController {
 //		return"member/passwd_fineder";
 //	}
 //	
-//	/******************비밀번호 찾기******************/
+	//=================================================================================================================================
+	// [ 비밀번호 찾기 ]
 //	@PostMapping("PasswdFinder")
 //	public String passwdFinderForm(String mem_email,String mem_name,MemberVO member, Model model,HttpSession session,BCryptPasswordEncoder passwordEncoder) {
 //	    try {
@@ -386,9 +448,10 @@ public class MemberController {
 //	        return "result/fail";
 //	    }
 //	}
-//	
-//
-//	/***********회원탈퇴*************/
+	
+
+	//=================================================================================================================================
+	// [ 회원 탈퇴 ]
 //	@GetMapping("MemberWithdraw")
 //	public String memberWithdraw(HttpSession session , Model model) {
 //		String id = (String) session.getAttribute("sId");

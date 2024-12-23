@@ -1,5 +1,7 @@
 package com.itwillbs.goodbuy.mapper;
 
+import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -7,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.itwillbs.goodbuy.vo.MailAuthInfo;
 import com.itwillbs.goodbuy.vo.MemberVO;
+import com.itwillbs.goodbuy.vo.WishlistVO;
 
 @Mapper
 public interface MemberMapper {
@@ -38,8 +41,8 @@ public interface MemberMapper {
 	// 회원 패스워드 조회
 	String selectMemberPasswd(String id);
 	
-	//비번찾기
-//	MemberVO selectEmail(MemberVO member);
+	
+	// 이메일 조회 요청
 	MemberVO selectEmail(String mem_email);
 	
 	
@@ -55,8 +58,16 @@ public interface MemberMapper {
 
 	//이메일 중복체크
 	MemberVO selectEmailId(MemberVO member);
+	
+	
+	//카카오 회원정보 인서트 
+	MemberVO insertMemberInfo(HashMap<String, Object> userInfo);
 
+	// 네이버 회원 정보 저장
+	int insertNaverMember(MemberVO member);
 
+	//상점소개 저장
+	int insertStoreIntro(MemberVO member);
 
 
 	

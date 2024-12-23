@@ -34,6 +34,7 @@
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 				 <div class="goodpay-container">
+				 
 	                <h2 class="page-title">굿페이 > 홈</h2>
 			        <!-- 상단: 계좌 정보 -->
 			        <div class="account-box">

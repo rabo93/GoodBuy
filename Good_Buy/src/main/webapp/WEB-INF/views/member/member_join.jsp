@@ -84,9 +84,9 @@
 									</section>
 									
 									<section class="row">
-										<label for="mem_name">별명</label>
+										<label for="mem_nick">닉네임</label>
 										<div class="box">
-											<input type="text" name="mem_nick" id="mem_nick" placeholder="별명" onblur="ckNick()"> 
+											<input type="text" name="mem_nick" id="mem_nick" placeholder="닉네임" onblur="ckNick()"> 
 										</div>
 										<div id="checkNic" class="result"></div>
 									</section>
@@ -157,7 +157,7 @@
 									
 									<section class="row last-row">
 										<label for="check_all">
-											<input type="checkbox" name="terms" class="terms" id="terms_all" checked> 전체 동의하기
+											<input type="checkbox" id="terms_all" required> 전체 동의하기
 										</label>
 										<div>
 											<label>

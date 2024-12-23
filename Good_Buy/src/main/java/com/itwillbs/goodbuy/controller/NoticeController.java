@@ -7,12 +7,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.itwillbs.goodbuy.service.NoticeService;
 import com.itwillbs.goodbuy.vo.NoticeVO;
+import com.itwillbs.goodbuy.vo.PageInfo;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -60,8 +63,12 @@ public class NoticeController {
 	//	공지사항 메인페이지(리스트)
 	@GetMapping("NoticeMain")
 	public String noticeMain(Model model) {
-		//	모든 공지사항 게시글 조회
-		List<NoticeVO> noticeList = service.getNoticeList();
+		//	공지사항 게시글 조회
+		int pageNum = 1;	//	기본 시작 페이지번호
+		int listLimit = 10;	//	페이지 당 게시물 수
+		int startRow = (pageNum - 1) * listLimit;
+		
+		List<NoticeVO> noticeList = service.getNoticeList(startRow, listLimit);
 		model.addAttribute("noticeList", noticeList);
 		
 		return "notice/notice_list";
@@ -170,6 +177,53 @@ public class NoticeController {
 		return result;
 	}
 	
+	@GetMapping("NoticeListJson")
+	@ResponseBody
+	public String noticeListJson(@RequestParam(defaultValue = "1") int pageNum,
+								 Model model) {
+		log.info(">>>>>> 페이지넘버 확인 : " + pageNum);
+		
+		int listLimit = 10;	//	페이지 당 게시물 수
+		int startRow = (pageNum - 1) * listLimit;	//	조회할 게시물의 DB 행 번호(row 값)
+		
+		//	2. 실제 뷰페이지에서 페이징 처리를 위한 계산 작업
+		int listCount = service.getNoticeListCount();
+		
+		//	임시) 페이지 당 페이지 번호 갯수를 1개로 지정
+		int pageListLimit = 5;
+		//	최대 페이지 번호 계산(전체 게시물 수를 페이지 당 게시물 수로 나눔)
+		//	=> 이 때, 나머지가 0보다 크면 페이지 수 + 1
+		int maxPage = listCount / listLimit + (listCount % listLimit > 0 ? 1 : 0);
+		//	=> 단, 최대 페이지 번호가 0일 경우 1페이지로 변경
+		if (maxPage == 0) {
+			maxPage = 1;
+		}
+		
+		//	현재 페이지에서 보여줄 시작 페이지 번호 계산
+		int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
+		//	현재 페이지에서 보여줄 마지막 페이지 번호 계산
+		int endPage = startPage + pageListLimit - 1;
+		
+		//	단, 마지막 페이지번호(endPage) 값이 최대 페이지번호(maxPage)보다 클 경우
+		//	마지막 페이지 번호를 최대 페이지번호로 교체
+		if (endPage > maxPage) {
+			endPage = maxPage;
+		}
+		
+		PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage, pageNum);
+		
+		List<NoticeVO> noticeList = service.getNoticeList(startRow, listLimit);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("pageInfo", pageInfo);
+		map.put("noticeList", noticeList);
+		
+		JSONObject jsonObject = new JSONObject(map);
+		
+		return jsonObject.toString();
+		
+	}
+	
 	
 	
 	//	============================================================================
@@ -224,30 +278,6 @@ public class NoticeController {
 		
 		return fileName;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }
 

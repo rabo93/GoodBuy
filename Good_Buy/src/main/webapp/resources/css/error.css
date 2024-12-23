@@ -1,0 +1,19 @@
+.error {color: var(--dark);width:100%;padding: 5rem 0;text-align: center;display: flex;align-items: center;justify-content: center;flex-direction: column;}
+.error .error-box {padding:0 30px;}
+.error .error-box i {font-size: 3rem;}
+.error .error-box img {margin: 0 auto;width: min(515px, 100%);}
+.error .error-box .desc {padding:20px 0;font-size:20px;line-height: 1.6;}
+.error .error-box .desc p {display: block;font-size: 1.5rem;margin-bottom:20px;font-weight:800}
+.error .error-box .desc span {display: block;font-size: 1rem;}
+.error .error-box .desc button {margin: 40px auto 0;background: var(--primary);padding: 1rem 3rem;border-radius:50px;font-weight: 600;color: var(--white);}
+
+@media screen and (max-width:1023px){
+  .error .error-box .desc {font-size:18px;}
+  .error .error-box .desc p {font-size:26px;margin-bottom: 10px;}
+  .error .error-box .desc button {margin:20px auto;}
+}
+
+@media screen and (max-width:640px){
+  .error .error-box .desc {font-size:14px;}
+  .error .error-box .desc p {font-size:18px;margin-bottom: 10px;}
+}

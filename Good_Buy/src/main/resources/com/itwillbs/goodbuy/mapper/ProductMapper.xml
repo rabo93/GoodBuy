@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itwillbs.goodbuy.mapper.ProductMapper">
+	
+	<!--판매 상품 리스트 조회  -->
+	<select id="selectProductList" resultType="product">
+		SELECT 
+			P.*,M.MEM_NICK
+		  FROM 
+		  	PRODUCT P JOIN MEMBER M ON P.MEM_ID = M.MEM_ID
+		 WHERE 
+		 	P.MEM_ID = #{mem_id};
+	</select>
+	
+	<!--판매 상품 리스트 갯수 조회  -->
+	<select id="salesListCount" resultType="int">
+		SELECT COUNT(*)
+		  FROM PRODUCT
+		 WHERE MEM_ID = #{mem_id}
+	</select>
+	
+	<!-- 상품 등록 -->
+	<insert id="registProduct">
+		<selectKey resultType="int" order="BEFORE" keyProperty="product_id">
+			SELECT MAX(PRODUCT_ID) + 1
+			FROM PRODUCT;
+		</selectKey>
+		INSERT
+		INTO PRODUCT
+		VALUE(
+			#{product_id}
+			, #{product_title}
+			, NULL
+			, #{product_intro}
+			, #{product_shpping_fee}
+			, #{product_price}
+			<choose>
+				<when test="product_discount_status == null">
+					, NULL
+				</when>
+				<otherwise>
+					, #{product_discount_status}
+				</otherwise>
+			</choose>
+			, #{product_category}
+			, DATE_FORMAT(now(), '%y-%m-%d')
+			, #{product_pic1}
+			, #{product_pic2}
+			, #{product_pic3}
+			, #{product_trade_adr1}
+			, #{advertisement_status}
+			, 1
+		)
+	</insert>
+	
+</mapper>

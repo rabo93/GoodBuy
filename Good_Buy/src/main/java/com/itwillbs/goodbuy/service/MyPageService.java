@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.itwillbs.goodbuy.mapper.MypageMapper;
+import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.WishlistVO;
 
 @Service
@@ -32,5 +33,6 @@ public class MyPageService {
 	public int wishlistCount(String id) {
 		return mapper.selectWishlistCount(id);
 	}
+
 	
 }

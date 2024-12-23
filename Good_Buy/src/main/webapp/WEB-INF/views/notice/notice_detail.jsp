@@ -58,10 +58,10 @@
 				</div>
 			</section>
 			<section class="tb-btns">
-<%-- 				<c:if test="${sessionScope.sGrade eq 'MEM03'}"> --%>
+				<c:if test="${sessionScope.sGrade eq '관리자'}">
 					<button class="btn-02" onclick="noticeDelete()">삭제</button>
 					<button class="btn-03" onclick="noticeModify()">수정</button>
-<%-- 				</c:if> --%>
+				</c:if>
 				<button class="btn-03" onclick="location.href='NoticeMain'">목록</button>
 			</section>
 		</div>

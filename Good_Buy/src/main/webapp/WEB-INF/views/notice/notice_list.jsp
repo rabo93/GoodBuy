@@ -97,11 +97,11 @@
 <!-- 				   		<i class="fa-solid fa-angles-right"></i> -->
 <!-- 				   	</button> -->
 <!-- 				</section> -->
-<%-- 					<c:if test="${sessionScope.sGrade eq 'MEM03'}"> --%>
+					<c:if test="${sessionScope.sGrade eq '관리자'}">
 						<div class="nt-writebtn">
 							<input type="button" value="글쓰기" onclick="location.href='NoticeWrite'">
 						</div>
-<%-- 					</c:if> --%>
+					</c:if>
 			</div>
 			<!-- *********** // 여기 안에 작업하세요. section.wrapper 건들지말기 ******** -->
 		</section>

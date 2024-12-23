@@ -53,6 +53,16 @@ public class MypageController {
 	
 	@GetMapping("MyStore")
 	public String myStore(MemberVO member,HttpSession session,Model model) {
+		String id = (String) session.getAttribute("sId");
+		
+		//판매내역 조회
+		List<ProductVO> productlist =(List<ProductVO>) productService.getProductList(id);
+		model.addAttribute("product", productlist);
+		System.out.println("상품목록 조회"+productlist);
+		
+		//판매내역 갯수조회
+		int salesCount = productService.salesCount(id);
+		model.addAttribute("salesCount", salesCount);
 		
 		return "mypage/mypage_store";
 		

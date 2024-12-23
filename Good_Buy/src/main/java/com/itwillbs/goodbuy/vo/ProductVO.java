@@ -9,6 +9,7 @@ public class ProductVO {
 	private int product_id;
 	private String product_title;
 	private String mem_id;
+	private String mem_nick;
 	private String product_intro; //상품소개
 	private int product_price;
 	private String product_category;

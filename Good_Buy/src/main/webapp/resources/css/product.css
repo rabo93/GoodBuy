@@ -116,6 +116,7 @@
 	background-color: #0dcc5a;
 	border: 2px solid #0dcc5a;
 	color:#ffffff;
+	cursor: pointer;
 	}
 .item-regi .item-regi-trade-adr .item-regi-trade-active label [type="radio"]:checked {border: 0.4em solid #0dcc5a;}
 .item-regi .item-regi-trade-adr .item-regi-trade-active label [type="radio"]:hover {box-shadow: 0 0 0 max(2px, 0.2em) #dadee5;cursor: pointer;}

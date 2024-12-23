@@ -14,8 +14,8 @@ public class ProductService {
 	@Autowired
 	private ProductMapper mapper;
 
-	public int registProduct() {
-		return mapper.registProduct();
+	public int registProduct(ProductVO product) {
+		return mapper.registProduct(product);
 	}
 		
 	//판매 상품목록 조회

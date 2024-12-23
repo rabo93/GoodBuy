@@ -28,8 +28,8 @@ public class ProductController {
 	}
 	
 	@PostMapping("ProductRegist")
-	public String productRegistSubmit() {
-		int uploadItem = productService.registProduct();
+	public String productRegistSubmit(ProductVO product) {
+		int uploadItem = productService.registProduct(product);
 		
 		return "";
 	}

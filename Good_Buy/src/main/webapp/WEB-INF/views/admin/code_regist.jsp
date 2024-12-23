@@ -5,6 +5,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
 <!-- default -->
@@ -54,25 +58,25 @@
                                     <form>
                                     	<h6 class="font-weight-bold text-primary mb-4">공통코드</h6>
                                         <div class="mb-3">
-                                            <label class="small mb-1" for="">공통코드ID</label>
-                                            <input class="form-control" id="" type="text" placeholder="공통코드 ID 입력" value="">
+                                            <label class="small mb-1" for="CODETYPE_ID">공통코드ID</label>
+                                            <input class="form-control" id="codetype_id" name="CODETYPE_ID" type="text" placeholder="공통코드 ID 입력" value="">
                                         </div>
                                         <div class="mb-3">
-                                            <label class="small mb-1" for="">공통코드명</label>
-                                            <input class="form-control" id="" type="text" placeholder="공통코드명 입력" value="">
+                                            <label class="small mb-1" for="CODETYPE_NAME">공통코드명</label>
+                                            <input class="form-control" id="codetype_name" name="CODETYPE_NAME" type="text" placeholder="공통코드명 입력" value="">
                                         </div>
                                         <div class="mb-3">
-                                            <label class="small mb-1" for="">설명</label>
-                                            <input class="form-control" id="" type="text" placeholder="설명 입력" value="">
+                                            <label class="small mb-1" for="DESCRIPTION">설명</label>
+                                            <input class="form-control" id="description" name="DESCRIPTION" type="text" placeholder="설명 입력" value="">
                                         </div>
                                         <hr class="mt-4 pt-2">
                                         <h6 class="m-0 font-weight-bold text-primary">상세코드</h6>
                                         <div class="d-flex justify-right">
-	                                        <button class="btn btn-primary ml-auto mb-2" type="button"><i class="fa-solid fa-plus"></i> 행 추가</button>
-	                                        <button class="btn btn-danger ml-2 mb-2" type="button"><i class="fa-solid fa-minus"></i> 선택 삭제</button>
+	                                        <button class="btn btn-primary ml-auto mb-2" type="button" id="commoncodeTrAdd"><i class="fa-solid fa-plus"></i> 행 추가</button>
+	                                        <button class="btn btn-danger ml-2 mb-2" type="button" id="commoncodeTrDel"><i class="fa-solid fa-minus"></i> 선택 삭제</button>
                                         </div>
 			                            <div class="table-responsive overflow-hidden">
-			                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+			                                <table class="table table-bordered" id="commoncode" width="100%" cellspacing="0">
 			                                    <thead>
 			                                        <tr>
 			                                            <th width="30px">
@@ -88,260 +92,26 @@
 			                                            <th class="col-2">사용여부</th>
 			                                        </tr>
 			                                    </thead>
-			                                    <tbody>
-			                                        <tr>
-			                                            <td>
-			                                            	<div class="custom-control custom-checkbox small">
-				                                            	<input type="checkbox" class="custom-control-input" id="customCheck">
-				                                            	<label class="custom-control-label" for="customCheck"></label>
-			                                            	</div>
-			                                            </td>
-			                                            <td>1</td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드ID 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드명 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="설명 입력"></td>
-			                                            <td>
-			                                            	<div class="form-check form-switch">
-																<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked>
-																<label class="form-check-label" for="flexSwitchCheckDefault">사용함</label>
-															</div>
-			                                            </td>
-			                                        </tr>
-			                                        <tr>
-			                                            <td>
-			                                            	<div class="custom-control custom-checkbox small">
-				                                            	<input type="checkbox" class="custom-control-input" id="customCheck">
-				                                            	<label class="custom-control-label" for="customCheck"></label>
-			                                            	</div>
-			                                            </td>
-			                                            <td>1</td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드ID 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드명 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="설명 입력"></td>
-			                                            <td>
-			                                            	<div class="form-check form-switch">
-																<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-																<label class="form-check-label" for="flexSwitchCheckDefault">사용안함</label>
-															</div>
-			                                            </td>
-			                                        </tr>
-			                                        <tr>
-			                                            <td>
-			                                            	<div class="custom-control custom-checkbox small">
-				                                            	<input type="checkbox" class="custom-control-input" id="customCheck">
-				                                            	<label class="custom-control-label" for="customCheck"></label>
-			                                            	</div>
-			                                            </td>
-			                                            <td>1</td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드ID 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드명 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="설명 입력"></td>
-			                                            <td>
-			                                            	<div class="form-check form-switch">
-																<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-																<label class="form-check-label" for="flexSwitchCheckDefault">사용안함</label>
-															</div>
-			                                            </td>
-			                                        </tr>
-			                                        <tr>
-			                                            <td>
-			                                            	<div class="custom-control custom-checkbox small">
-				                                            	<input type="checkbox" class="custom-control-input" id="customCheck">
-				                                            	<label class="custom-control-label" for="customCheck"></label>
-			                                            	</div>
-			                                            </td>
-			                                            <td>1</td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드ID 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드명 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="설명 입력"></td>
-			                                            <td>
-			                                            	<div class="form-check form-switch">
-																<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-																<label class="form-check-label" for="flexSwitchCheckDefault">사용안함</label>
-															</div>
-			                                            </td>
-			                                        </tr>
-			                                        <tr>
-			                                            <td>
-			                                            	<div class="custom-control custom-checkbox small">
-				                                            	<input type="checkbox" class="custom-control-input" id="customCheck">
-				                                            	<label class="custom-control-label" for="customCheck"></label>
-			                                            	</div>
-			                                            </td>
-			                                            <td>1</td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드ID 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드명 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="설명 입력"></td>
-			                                            <td>
-			                                            	<div class="form-check form-switch">
-																<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-																<label class="form-check-label" for="flexSwitchCheckDefault">사용안함</label>
-															</div>
-			                                            </td>
-			                                        </tr>
-			                                        <tr>
-			                                            <td>
-			                                            	<div class="custom-control custom-checkbox small">
-				                                            	<input type="checkbox" class="custom-control-input" id="customCheck">
-				                                            	<label class="custom-control-label" for="customCheck"></label>
-			                                            	</div>
-			                                            </td>
-			                                            <td>1</td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드ID 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드명 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="설명 입력"></td>
-			                                            <td>
-			                                            	<div class="form-check form-switch">
-																<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-																<label class="form-check-label" for="flexSwitchCheckDefault">사용안함</label>
-															</div>
-			                                            </td>
-			                                        </tr>
-			                                        <tr>
-			                                            <td>
-			                                            	<div class="custom-control custom-checkbox small">
-				                                            	<input type="checkbox" class="custom-control-input" id="customCheck">
-				                                            	<label class="custom-control-label" for="customCheck"></label>
-			                                            	</div>
-			                                            </td>
-			                                            <td>1</td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드ID 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드명 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="설명 입력"></td>
-			                                            <td>
-			                                            	<div class="form-check form-switch">
-																<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-																<label class="form-check-label" for="flexSwitchCheckDefault">사용안함</label>
-															</div>
-			                                            </td>
-			                                        </tr>
-			                                        <tr>
-			                                            <td>
-			                                            	<div class="custom-control custom-checkbox small">
-				                                            	<input type="checkbox" class="custom-control-input" id="customCheck">
-				                                            	<label class="custom-control-label" for="customCheck"></label>
-			                                            	</div>
-			                                            </td>
-			                                            <td>1</td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드ID 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드명 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="설명 입력"></td>
-			                                            <td>
-			                                            	<div class="form-check form-switch">
-																<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-																<label class="form-check-label" for="flexSwitchCheckDefault">사용안함</label>
-															</div>
-			                                            </td>
-			                                        </tr>
-			                                        <tr>
-			                                            <td>
-			                                            	<div class="custom-control custom-checkbox small">
-				                                            	<input type="checkbox" class="custom-control-input" id="customCheck">
-				                                            	<label class="custom-control-label" for="customCheck"></label>
-			                                            	</div>
-			                                            </td>
-			                                            <td>1</td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드ID 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드명 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="설명 입력"></td>
-			                                            <td>
-			                                            	<div class="form-check form-switch">
-																<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-																<label class="form-check-label" for="flexSwitchCheckDefault">사용안함</label>
-															</div>
-			                                            </td>
-			                                        </tr>
-			                                        <tr>
-			                                            <td>
-			                                            	<div class="custom-control custom-checkbox small">
-				                                            	<input type="checkbox" class="custom-control-input" id="customCheck">
-				                                            	<label class="custom-control-label" for="customCheck"></label>
-			                                            	</div>
-			                                            </td>
-			                                            <td>1</td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드ID 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드명 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="설명 입력"></td>
-			                                            <td>
-			                                            	<div class="form-check form-switch">
-																<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-																<label class="form-check-label" for="flexSwitchCheckDefault">사용안함</label>
-															</div>
-			                                            </td>
-			                                        </tr>
-			                                        <tr>
-			                                            <td>
-			                                            	<div class="custom-control custom-checkbox small">
-				                                            	<input type="checkbox" class="custom-control-input" id="customCheck">
-				                                            	<label class="custom-control-label" for="customCheck"></label>
-			                                            	</div>
-			                                            </td>
-			                                            <td>1</td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드ID 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드명 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="설명 입력"></td>
-			                                            <td>
-			                                            	<div class="form-check form-switch">
-																<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-																<label class="form-check-label" for="flexSwitchCheckDefault">사용안함</label>
-															</div>
-			                                            </td>
-			                                        </tr>
-			                                        <tr>
-			                                            <td>
-			                                            	<div class="custom-control custom-checkbox small">
-				                                            	<input type="checkbox" class="custom-control-input" id="customCheck">
-				                                            	<label class="custom-control-label" for="customCheck"></label>
-			                                            	</div>
-			                                            </td>
-			                                            <td>1</td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드ID 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드명 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="설명 입력"></td>
-			                                            <td>
-			                                            	<div class="form-check form-switch">
-																<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-																<label class="form-check-label" for="flexSwitchCheckDefault">사용안함</label>
-															</div>
-			                                            </td>
-			                                        </tr>
-			                                        <tr>
-			                                            <td>
-			                                            	<div class="custom-control custom-checkbox small">
-				                                            	<input type="checkbox" class="custom-control-input" id="customCheck">
-				                                            	<label class="custom-control-label" for="customCheck"></label>
-			                                            	</div>
-			                                            </td>
-			                                            <td>1</td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드ID 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드명 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="설명 입력"></td>
-			                                            <td>
-			                                            	<div class="form-check form-switch">
-																<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-																<label class="form-check-label" for="flexSwitchCheckDefault">사용안함</label>
-															</div>
-			                                            </td>
-			                                        </tr>
-			                                        <tr>
-			                                            <td>
-			                                            	<div class="custom-control custom-checkbox small">
-				                                            	<input type="checkbox" class="custom-control-input" id="customCheck">
-				                                            	<label class="custom-control-label" for="customCheck"></label>
-			                                            	</div>
-			                                            </td>
-			                                            <td>1</td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드ID 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드명 입력"></td>
-			                                            <td><input type="text" class="form-control" name="" placeholder="설명 입력"></td>
-			                                            <td>
-			                                            	<div class="form-check form-switch">
-																<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-																<label class="form-check-label" for="flexSwitchCheckDefault">사용안함</label>
-															</div>
-			                                            </td>
-			                                        </tr>
-			                                   </tbody>
+<!-- 			                                    <tbody> -->
+<!-- 			                                        <tr class="tr"> -->
+<!-- 			                                            <td> -->
+<!-- 			                                            	<div class="custom-control custom-checkbox small"> -->
+<!-- 				                                            	<input type="checkbox" class="custom-control-input" id="customCheck"> -->
+<!-- 				                                            	<label class="custom-control-label" for="customCheck"></label> -->
+<!-- 			                                            	</div> -->
+<!-- 			                                            </td> -->
+<!-- 			                                            <td>1</td> -->
+<!-- 			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드ID 입력"></td> -->
+<!-- 			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드명 입력"></td> -->
+<!-- 			                                            <td><input type="text" class="form-control" name="" placeholder="설명 입력"></td> -->
+<!-- 			                                            <td> -->
+<!-- 			                                            	<div class="form-check form-switch"> -->
+<!-- 																<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked> -->
+<!-- 																<label class="form-check-label" for="flexSwitchCheckDefault">사용함</label> -->
+<!-- 															</div> -->
+<!-- 			                                            </td> -->
+<!-- 			                                        </tr> -->
+<!-- 			                                   </tbody> -->
 			                                </table>
 			                          	</div>
                                         <button class="btn btn-primary btn-lg d-block m-auto col-3" type="submit">등록하기</button>
@@ -405,7 +175,7 @@
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
-<%--     <script src="${pageContext.request.contextPath}/resources/adm/js/code_regist.js"></script> --%>
+    <script src="${pageContext.request.contextPath}/resources/adm/js/code_regist.js"></script>
 
 </body>
 

@@ -11,27 +11,5 @@ public class MainController {
 	public String main() {
 		return "index";
 	}
-
-	@GetMapping("ProductList")
-	public String productList() {
-		return "product/product_list";
-	}
-	
-	@GetMapping("ProductRegist")
-	public String productRegist() {
-		return "product/product_regi";
-	}
-	
-	@GetMapping("AdmMain")
-	public String admMain() {
-		return "admin/adm_index";
-	}
-	
-	@GetMapping("AdmCommonCode")
-	public String admCommonCode() {
-		return "admin/adm_commoncode";
-	}
-	
-	
 	
 }

@@ -15,7 +15,7 @@
         </a>
         <div id="menu01" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="AdmCommoncodeRegist">공통코드 등록</a>
+                <a class="collapse-item" href="AdmCommoncodeRegistForm">공통코드 등록</a>
                 <a class="collapse-item" href="AdmCommoncodeList">공통코드 목록</a>
             </div>
         </div>

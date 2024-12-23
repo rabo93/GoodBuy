@@ -55,7 +55,7 @@
                                     <h5 class="m-0 font-weight-bold text-primary">공통코드 등록</h5>
                                 </div>
                                 <div class="card-body">
-                                    <form>
+                                    <form action="AdmCommoncodeRegist" name="commoncodeForm" method="post">
                                     	<h6 class="font-weight-bold text-primary mb-4">공통코드</h6>
                                         <div class="mb-3">
                                             <label class="small mb-1" for="CODETYPE_ID">공통코드ID</label>
@@ -72,8 +72,8 @@
                                         <hr class="mt-4 pt-2">
                                         <h6 class="m-0 font-weight-bold text-primary">상세코드</h6>
                                         <div class="d-flex justify-right">
-	                                        <button class="btn btn-primary ml-auto mb-2" type="button" id="commoncodeTrAdd"><i class="fa-solid fa-plus"></i> 행 추가</button>
-	                                        <button class="btn btn-danger ml-2 mb-2" type="button" id="commoncodeTrDel"><i class="fa-solid fa-minus"></i> 선택 삭제</button>
+	                                        <button class="btn btn-primary ml-auto mb-2" type="button" id="btnAddRow"><i class="fa-solid fa-plus"></i> 행 추가</button>
+	                                        <button class="btn btn-danger ml-2 mb-2" type="button" id="btnDeleteRow"><i class="fa-solid fa-minus"></i> 선택 삭제</button>
                                         </div>
 			                            <div class="table-responsive overflow-hidden">
 			                                <table class="table table-bordered" id="commoncode" width="100%" cellspacing="0">
@@ -90,31 +90,12 @@
 			                                            <th class="col-2">상세코드명</th>
 			                                            <th>설명</th>
 			                                            <th class="col-2">사용여부</th>
+			                                            <th class="col-1">순서</th>
 			                                        </tr>
 			                                    </thead>
-<!-- 			                                    <tbody> -->
-<!-- 			                                        <tr class="tr"> -->
-<!-- 			                                            <td> -->
-<!-- 			                                            	<div class="custom-control custom-checkbox small"> -->
-<!-- 				                                            	<input type="checkbox" class="custom-control-input" id="customCheck"> -->
-<!-- 				                                            	<label class="custom-control-label" for="customCheck"></label> -->
-<!-- 			                                            	</div> -->
-<!-- 			                                            </td> -->
-<!-- 			                                            <td>1</td> -->
-<!-- 			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드ID 입력"></td> -->
-<!-- 			                                            <td><input type="text" class="form-control" name="" placeholder="상세코드명 입력"></td> -->
-<!-- 			                                            <td><input type="text" class="form-control" name="" placeholder="설명 입력"></td> -->
-<!-- 			                                            <td> -->
-<!-- 			                                            	<div class="form-check form-switch"> -->
-<!-- 																<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked> -->
-<!-- 																<label class="form-check-label" for="flexSwitchCheckDefault">사용함</label> -->
-<!-- 															</div> -->
-<!-- 			                                            </td> -->
-<!-- 			                                        </tr> -->
-<!-- 			                                   </tbody> -->
 			                                </table>
 			                          	</div>
-                                        <button class="btn btn-primary btn-lg d-block m-auto col-3" type="submit">등록하기</button>
+                                        <button id="btnSave" class="btn btn-primary btn-lg d-block m-auto col-3" type="button">등록하기</button>
                                     </form>
                                 </div>
                             </div>

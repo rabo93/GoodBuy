@@ -10,4 +10,4 @@ import lombok.NoArgsConstructor;
 public class MailAuthInfo {
 	private String mem_email;
 	private String auth_code;
-	}
+}

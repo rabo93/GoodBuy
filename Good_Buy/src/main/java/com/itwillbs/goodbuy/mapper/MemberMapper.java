@@ -1,6 +1,5 @@
 package com.itwillbs.goodbuy.mapper;
 
-import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.itwillbs.goodbuy.vo.MailAuthInfo;
 import com.itwillbs.goodbuy.vo.MemberVO;
-import com.itwillbs.goodbuy.vo.WishlistVO;
+import com.itwillbs.goodbuy.vo.SmsAuthInfoVO;
 
 @Mapper
 public interface MemberMapper {
@@ -68,6 +67,13 @@ public interface MemberMapper {
 
 	//상점소개 저장
 	int insertStoreIntro(MemberVO member);
+	
+	//휴대폰번호 회원 찾기
+	String selectMemberInfo(String userPhone);
+
+	// 휴대폰번호 인증 정보 저장
+	void insertSmsAuthInfo(SmsAuthInfoVO smsAuthInfoVO);
+	
 
 
 	

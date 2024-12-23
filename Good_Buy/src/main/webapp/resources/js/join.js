@@ -9,7 +9,7 @@ let checkMail = true;
 let checkIdResult = false;
 let checkNic = false;
 let isIdValid=false;
-let phoneCheckResult = false;
+//let phoneCheckResult = false;
 
 
 //**************** 생년월일 ****************
@@ -171,19 +171,19 @@ function checkPasswdResult(){
 }
 
 /********** 전화번호 유효성 검사 ********* */
-function phoneCheck(){
-	let phone = $("#mem_phone").val();
-	let regex = /^[0-9]{11}$/;
-	
-	if (regex.test(phone)) {
-		$("#phoneCheckResult").text("");
-		phoneCheckResult = true;
-	}else {
-        $("#phoneCheckResult").css("color", "red");
-		$("#phoneCheckResult").text("전화번호가 올바르지 않습니다.");
-		phoneCheckResult = false;
-	}
-}
+//function phoneCheck(){
+//	let phone = $("#mem_phone").val();
+//	let regex = /^[0-9]{11}$/;
+//	
+//	if (regex.test(phone)) {
+//		$("#phoneCheckResult").text("");
+//		phoneCheckResult = true;
+//	}else {
+//        $("#phoneCheckResult").css("color", "red");
+//		$("#phoneCheckResult").text("전화번호가 올바르지 않습니다.");
+//		phoneCheckResult = false;
+//	}
+//}
 // ************* 이용약관 체크 **************
 //$(document).ready(function() {
 //$("#terms_all").click(function() {

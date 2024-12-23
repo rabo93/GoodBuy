@@ -42,7 +42,7 @@
 									<section class="row">
 										<label for="mem_phone">휴대폰번호</label>
 										<div class="box">
-											<input type="text" name="mem_phone" id="mem_phone" placeholder="'-'없이 입력해주세요" onblur="phoneCheck()" required> 
+											<input type="text" name="mem_phone" id="mem_phone" placeholder="'-'없이 입력해주세요" required> 
 											<input type="button" value="인증번호 요청" id="phoneChk">
 										</div>
 										<div id="phoneCheckResult" class="result"></div>
@@ -52,7 +52,7 @@
 										<label for="auth_code">인증번호</label>
 										<div class="box">
 											<div class="auth-input">
-												<input type="text" name="auth_code" id="auth_code" placeholder="인증번호입력" > 
+												<input type="text" name="auth_code" id="auth_code" placeholder="인증번호입력" disabled required> 
 												<span class="rest-time">05:00</span>
 											</div>
 											<input type="button" class="before" value="인증완료" >
@@ -210,34 +210,50 @@
 	</script>
 	<!-- *********** 문자 인증 API ************ -->
 	<script type="text/javascript">
-		$(function() {
-			$("#phoneChk").on("click", function() {
-				alert('인증번호 발송이 완료되었습니다.');
-			});
+	$(function() {
+		var code2 = "";
+        $("#phoneChk").click(function(){
+            let phone = $("#mem_phone").val(); // 버튼 클릭 시 입력값 가져오기
+            let regex = /^[0-9]{11}$/; // 전화번호 유효성 검사
+            console.log(phone);
 			
-			var phone = $("#mem_phone").val();
-			console.log(phone);
-			
-			$.ajax({
-				type: "POST",
-				url: "/user/sendSms.do",
-				data : {"userPhone" : phone},
-				cache : false,
-				success: function(data) {
-					$("#phoneCheckResult").text("인증번호 발송 성공").css("color","var(--secondary)");
-					if(data == "error") {
-						alert("휴대폰 번호가 올바르지 않습니다.");
-					}
-					
-				}
-				
-				
-			});
-			
-		});
-		
-	
-	
+            if (!regex.test(phone)) {
+    			alert("휴대폰번호가 올바르지 않습니다.");
+    			return;
+    		}
+            alert('인증번호 발송이 완료되었습니다.');
+
+            $.ajax({
+                type: "POST",
+                url: "/send-one",
+                data: {"userPhone": phone},
+                cache: false,
+                success: function(data) {
+                	console.log("응답 데이터 (문자열): " + JSON.stringify(data));
+                	
+                	if(data == "error") {
+                		alert("휴대폰번호가 올바르지 않습니다.");
+                		$("#mem_phone").attr("autofocus", true);
+                	} else { // 발송 성공시 
+                		$("#auth_code").attr("disabled", false); // 인증코드 입력창 활성화
+                		$("#mem_phone").attr("readonly", true);	// 휴대폰번호 입력창 읽기전용으로 변경
+                    	$("#phoneCheckResult").text("인증번호 발송 성공").css("color", "var(--secondary)");
+                		code2 = data;
+                	}
+                },
+                error: function(xhr) {
+                	console.log("에러 상태 코드: " + xhr.status); // 디버깅용 로그
+                    console.log("에러 메시지: " + xhr.responseText);
+
+                    if (xhr.status === 400) {
+                        alert(xhr.responseText); // 응답 메시지를 alert로 표시
+                    } else {
+                        alert("서버 요청 중 오류가 발생했습니다.");
+                    }
+                }
+            });
+        });
+    });
 	</script>
 </body>
 </html>

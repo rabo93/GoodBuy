@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
@@ -47,18 +48,19 @@ public class MemberController {
 	
 //	private String uploadPath = "/resources/upload";
 	
-	@Value("${smsApiKey}")
-	private String smsApiKey;
-	
-	@Value("${smsSecretKey}")
-	private String smsSecretKey;
-	
+//	@Value("${smsApiKey}")
+//	private String smsApiKey;
+//	
+//	@Value("${smsSecretKey}")
+//	private String smsSecretKey;
+//	
 	//문자인증
-	final DefaultMessageService messageService;
+//	final DefaultMessageService messageService;
 	
-	public MemberController() {
-        this.messageService = NurigoApp.INSTANCE.initialize("smsApiKey", "smsSecretKey", "https://api.coolsms.co.kr");
-    }
+	// application.properties에 선언한 apikey와, apiSecretKey를 받아 사용
+//	public MemberController() {
+//        this.messageService = NurigoApp.INSTANCE.initialize("smsApiKey", "smsSecretKey", "https://api.coolsms.co.kr");
+//    }
 	
 	//=================================================================================================================================
 	// [ 로그인 페이지 구현 ]
@@ -249,34 +251,15 @@ public class MemberController {
 //	    return true;
 //	}
 
-	// 이메일 인증 처리 메서드
+	//=================================================================================================================================
+	// [ 이메일 인증 처리 메서드 ]
 	private void handleEmailAuth(MemberVO member) {
 		System.out.println("memberHandle : " + member);
-	    MailAuthInfo mailAuthInfo = mailService.sendAuthMail(member,member.getMem_email1(),member.getMem_email2());
-	    System.out.println("인증정보 : " + mailAuthInfo);
-	    memberService.registMemberAuthInfo(mailAuthInfo);
-	}
-	//=================================================================================================================================
-	// [ COOLSMS 휴대폰 문자 인증 - 단일 메세지 발송 ]
-//	@PostMapping("/sendSms.do")
-//	@ResponseBody
-//	public SingleMessageSentResponse sendSms(@RequestParam("userPhone") String userPhone, HttpSession session) {
-//		Message message = new Message();
-//		
-//		// 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다
-//		String smsCode = memberService.getSmsCode();
-//		
-//		return response;
-//	}
-	
-	//=================================================================================================================================
-	// [ 회원가입 성공 페이지로 이동 ]
-	@GetMapping("MemberJoinSuccess")
-	public String memberJoinSuccess() {
-	    return "member/member_join_success";
+		MailAuthInfo mailAuthInfo = mailService.sendAuthMail(member,member.getMem_email1(),member.getMem_email2());
+		System.out.println("인증정보 : " + mailAuthInfo);
+		memberService.registMemberAuthInfo(mailAuthInfo);
 	}
 	
-	//=================================================================================================================================
 	// [ 이메일 인증 ]
 	@GetMapping ("MemberEmailAuth")
 	public String emailAuth(MailAuthInfo mailAuthInfo , Model model) {
@@ -321,8 +304,6 @@ public class MemberController {
 		return "result/fail";
 		}
 		
-	
-	
 	//=================================================================================================================================
 	// [ 아이디/닉네임 중복체크 ]
 	@ResponseBody
@@ -360,9 +341,16 @@ public class MemberController {
 		}
 		return isDuplicate+"";
 	}
-//	
-//	
-//	
+	
+	
+	
+	//=================================================================================================================================
+	// [ 회원가입 성공 페이지로 이동 ]
+	@GetMapping("MemberJoinSuccess")
+	public String memberJoinSuccess() {
+		return "member/member_join_success";
+	}
+	
 	//=================================================================================================================================
 	// [ 로그아웃 ]
 	@GetMapping("MemberLogout")

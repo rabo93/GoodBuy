@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.itwillbs.goodbuy.mapper.MemberMapper;
 import com.itwillbs.goodbuy.vo.MailAuthInfo;
 import com.itwillbs.goodbuy.vo.MemberVO;
+import com.itwillbs.goodbuy.vo.SmsAuthInfoVO;
 import com.itwillbs.goodbuy.vo.WishlistVO;
 
 import lombok.extern.log4j.Log4j2;
@@ -37,7 +38,7 @@ public class MemberService {
 	public boolean requestEmailAuth(MailAuthInfo mailAuthInfo) {
 		boolean isAuthsuccess = false;
 
-
+		
 		MailAuthInfo dbMailAuthInfo = mapper.selectMailAuthInfo(mailAuthInfo);
 		System.out.println("조회된 인증 정보" + dbMailAuthInfo);
 
@@ -107,6 +108,17 @@ public class MemberService {
 	public int registStoreIntro(MemberVO member) {
 		// TODO Auto-generated method stub
 		return mapper.insertStoreIntro(member);
+	}
+
+	
+	// 휴대폰번호 회원찾기
+	public String getMemberInfo(String userPhone) {
+		return mapper.selectMemberInfo(userPhone);
+	}
+
+	// 휴대폰번호 인증 정보 저장
+	public void registSmsAuthInfo(SmsAuthInfoVO smsAuthInfoVO) {
+		mapper.insertSmsAuthInfo(smsAuthInfoVO);
 	}
 	
 

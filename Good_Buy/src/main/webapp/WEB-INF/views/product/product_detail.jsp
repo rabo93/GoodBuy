@@ -45,7 +45,7 @@
 							</div>
 							<div class="item-detail-description">상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명</div>
 							<div class="item-detail-trade-adr">직거래 위치: 부산진구</div>
-							<div class="item-detail-shpping-fee">배송비 미포함			4,000 원</div>
+							<div class="item-detail-shpping-fee">배송비:			4,000 원</div>
 							<div class="item-detail-discount">가격제안 가능</div>
 							<div class="item-detail-price">60,000 원</div>
 							<div class="item-detail-button-group">
@@ -53,6 +53,11 @@
 								<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
 							</div>
 						</div>
+					</div>
+					<div class="item-detail-seller-info">
+						<div class="item-detail-seller-pic">판매자 프사</div>
+						<div class="item-detail-seller-nick">홍길동동이</div>
+						<div class="item-detail-seller-review">★★★★★</div>
 					</div>
 <!-- 					<div class="item-detail-seller-info"> -->
 <!-- 						<img src="../../resources/img/product_thumb.jpg" class="item-detail-seller-profile-pic"> -->

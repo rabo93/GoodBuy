@@ -184,9 +184,44 @@
 
 .item-detail .item-detail-content {display: flex;}
 
-.item-detail .item-detail-pic {width: 50%;height: auto;}
+.item-detail .item-detail-pic {width: 100%;height: auto;}
 .item-detail .item-detail-pic img {object-fit: fill;border: 1px solid var(--light-gray);border-radius: 1rem;}
-.item-detail .item-detail-content-text {}
+.item-detail .item-detail-title {font-weight: 900;font-size: 35px;}
+.item-detail .item-detail-content-text {
+    margin-left: 30px;
+}
+.item-detail .item-detail-view {display: flex;justify-content: flex-end;font-size: 18px;}
+.item-detail .item-detail-view-count {
+    margin-right: 10px;
+}
+.item-detail .item-detail-fav-count {
+    margin-right: 10px;
+}
+
+.item-detail .item-detail-description {
+    font-size: 18px;
+}
+.item-detail .item-detail-trade-adr {}
+.item-detail .item-detail-shpping-fee {}
+.item-detail .item-detail-discount {}
+.item-detail .item-detail-price {}
+
+.item-detail .item-detail-button-group {}
+.item-detail .item-detail-button-group .item-detail-fav {}
+.item-detail .item-detail-button-group .item-detail-contact-seller {}
+
+.item-detail .item-detail-seller-info {
+    display: flex;
+    margin-top: 20px;
+}
+.item-detail .item-detail-seller-info .item-detail-seller-pic {
+    margin-right: 20px;
+}
+.item-detail .item-detail-seller-info .item-detail-seller-nick {
+    font-size: 20px;
+}
+.item-detail .item-detail-seller-info .item-detail-seller-review {}
+
 
 
 

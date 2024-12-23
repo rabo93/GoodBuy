@@ -4,13 +4,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.itwillbs.goodbuy.vo.NoticeVO;
 
 @Mapper
 public interface NoticeMapper {
 	//	공지사항 게시물 조회
-	List<NoticeVO> getNoticeList();
+	List<NoticeVO> getNoticeList(@Param("startRow") int startRow,
+								 @Param("listLimit") int listLimit);
 	
 	//	공지사항 글 쓰기
 	void insertNotice(NoticeVO notice);
@@ -29,4 +32,7 @@ public interface NoticeMapper {
 
 	//	조회수 증가
 	void updateReadCount(NoticeVO notice);
+	
+	//	공지사항 게시글 총 갯수
+	int getNoticeListCount();
 }

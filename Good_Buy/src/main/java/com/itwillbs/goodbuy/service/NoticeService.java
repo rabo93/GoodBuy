@@ -14,9 +14,9 @@ public class NoticeService {
 	@Autowired
 	private NoticeMapper mapper;
 	
-	
-	public List<NoticeVO> getNoticeList() {
-		return mapper.getNoticeList();
+	//	글 목록 불러오기
+	public List<NoticeVO> getNoticeList(int startRow, int listLimit) {
+		return mapper.getNoticeList(startRow, listLimit);
 	}
 
 	//	글 작성
@@ -49,6 +49,11 @@ public class NoticeService {
 	//	공지사항 수정
 	public int updateNotice(NoticeVO notice) {
 		return mapper.updateNotice(notice);
+	}
+	
+	//	공지사항 게시글 총 갯수
+	public int getNoticeListCount() {
+		return mapper.getNoticeListCount();
 	}
 
 }

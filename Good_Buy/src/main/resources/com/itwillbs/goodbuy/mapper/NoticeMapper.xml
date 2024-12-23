@@ -10,6 +10,8 @@
 			 , NOTICE_DATE
 			 , MEM_ID
 		  FROM NOTICE
+		 LIMIT #{startRow}
+		     , #{listLimit}
 	</select>
 	
 	<!-- 공지사항 글쓰기 작업 -->
@@ -68,8 +70,6 @@
 		 WHERE NOTICE_ID = #{notice_id}
 	</update>
 	
-	
-	
 	<!-- 조회수 증가 작업 -->
 	<update id="updateReadCount">
 		<selectKey keyProperty="notice_read_count" resultType="int" order="AFTER">
@@ -81,6 +81,12 @@
 		   SET NOTICE_READ_COUNT = NOTICE_READ_COUNT + 1
 		 WHERE NOTICE_ID = #{notice_id}
 	</update>
+	
+	<!-- 공지사항 게시글 총 갯수 -->
+	<select id="getNoticeListCount" resultType="int">
+		SELECT COUNT(*)
+		  FROM NOTICE
+	</select>
 	
 </mapper>
 

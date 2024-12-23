@@ -18,9 +18,11 @@ import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.service.MemberService;
 import com.itwillbs.goodbuy.service.MyPageService;
+import com.itwillbs.goodbuy.service.MyReviewService;
 import com.itwillbs.goodbuy.service.ProductService;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.MyPageVO;
+import com.itwillbs.goodbuy.vo.MyReviewVO;
 import com.itwillbs.goodbuy.vo.ProductVO;
 import com.itwillbs.goodbuy.vo.WishlistVO;
 
@@ -32,6 +34,7 @@ public class MypageController {
 	@Autowired MemberService memberService;
 	@Autowired MyPageService myPageService;
 	@Autowired ProductService productService;
+	@Autowired MyReviewService reviewService;
 	
 //	[회원정보 수정]
 //	@LoginCheck(memberRole = MemberRole.USER)
@@ -51,6 +54,7 @@ public class MypageController {
 //	}
 	
 	
+	//[나의상점]
 	@GetMapping("MyStore")
 	public String myStore(MemberVO member,HttpSession session,Model model) {
 		String id = (String) session.getAttribute("sId");
@@ -67,7 +71,6 @@ public class MypageController {
 		return "mypage/mypage_store";
 		
 	}
-	
 	@PostMapping("MyStore")
 	public String myStoreIntro(Model model, HttpSession session, MemberVO member,HttpServletRequest request) {
 		savePreviousUrl(request, session);
@@ -88,12 +91,12 @@ public class MypageController {
 	        return "result/fail";
 	    }
 	}
-	
+	//[나의 주문]
 	@GetMapping("MyOrder")
 	public String myOrder() {
 		return "mypage/mypage_product_orders";
 	}
-	
+	//[나의 판매내역] 완
 	@GetMapping("MySales")
 	public String mySale(Model model,HttpSession session) {
 		//세션에 사용자 ID 저장 
@@ -105,18 +108,23 @@ public class MypageController {
 		System.out.println("상품목록 조회"+productlist);
 		
 		//판매내역 갯수조회
-		
 		int salesCount = productService.salesCount(id);
 		model.addAttribute("salesCount", salesCount);
-		
-		
 		
 		return "mypage/mypage_product_sales";
 		
 	}
 	
+	//[나의 리뷰]
 	@GetMapping("MyReview")
-	public String myReview() {
+	public String myReview(HttpSession session,Model model) {
+		String id = (String) session.getAttribute("sId");
+		//나의 리뷰 조회
+		List<MyReviewVO> review = reviewService.getReview(id);
+		model.addAttribute("review", review);
+		
+		
+		
 		return "mypage/mypage_review";
 	}
 
@@ -160,7 +168,7 @@ public class MypageController {
 		return "";
 	}
 	
-	//[관심목록 삭제]
+	//[관심목록 삭제] 완
 	@PostMapping("MyWishDel")
 	public String myWishDel(String wishlist_id,HttpServletRequest request,HttpSession session,Model model){
 		System.out.println("위시리스트 아이디 : "+wishlist_id);
@@ -193,7 +201,6 @@ public class MypageController {
 			return "result/fail";
 		}
 		
-		
 		return"";
 	}
 	
@@ -212,33 +219,5 @@ public class MypageController {
 			
 			session.setAttribute("prevURL", prevURL);
 		}
-
-//	@GetMapping("MyInfo")
-//	public String myInfo() {
-//		return "mypage/mypage_info";
-//	}
-//	
-//	@GetMapping("MyStore")
-//	public String myStore() {
-//		return "mypage/mypage_store";
-//	}
-//
-//	@GetMapping("MyOrder")
-//	public String myOrder() {
-//		return "mypage/mypage_product_orders";
-//	}
-//
-//	@GetMapping("MySales")
-//	public String mySale() {
-//		return "mypage/mypage_product_sales";
-//	}
-//	@GetMapping("MyReview")
-//	public String myReview() {
-//		return "mypage/mypage_review";
-//	}
-//	@GetMapping("MyWish")
-//	public String myWish() {
-//		return "mypage/mypage_wishlist";
-//	}
 
 }

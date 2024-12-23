@@ -51,13 +51,13 @@
 				<a href="">나의 광고</a>
 			</aside>
 			<div class="my-container">
-				<div class="contents-ttl">나의 후기 <small>(총 <span>1</span>건)</small></div>
+				<div class="contents-ttl">나의 후기 <small>(총 <span>${reviewCount}</span>건)</small></div>
 				<div class="contents">
 					<!-- contents -->
 					<section class="my-rev-wrap">
 						<div class="my-rev-li">
 						<c:choose>
-								<c:when test="${empty myReview}">
+								<c:when test="${empty review}">
 									<div class="empty">작성된 후기가 없습니다.</div>
 								</c:when>
 								<c:otherwise>	
@@ -65,11 +65,12 @@
 						                <span class="rating-score">${course[0].review_score}</span><br>
 						                <span class="stars"><i class="fa-solid fa-star"></i></span>
 						            </div>
-						            <c:forEach var="review" items="${myReview}" varStatus="status">
+						            <c:forEach var="review" items="${review}" varStatus="status">
 						            	<div class="review">
 										    <div class="r_header">
 										        <div class="profile-icon"></div>
 										        <div class="user-info">
+										            <div class="product">${review.product_id}</div>
 										            <div class="name">${review.mem_id}</div>
 										            <div class="date">${review.review_date}</div>
 										        </div>

@@ -41,7 +41,7 @@
 										<label for="mem_phone">휴대폰번호</label>
 										<div class="box">
 											<input type="text" name="mem_phone" id="mem_phone" placeholder="'-'없이 입력해주세요" onblur="phoneCheck()" required> 
-											<input type="button" value="인증번호 요청" >
+											<input type="button" value="인증번호 요청" id="phoneChk">
 										</div>
 										<div id="phoneCheckResult" class="result"></div>
 									</section>
@@ -205,6 +205,37 @@
 				}
 			}).open();
 		}
+	</script>
+	<!-- *********** 문자 인증 API ************ -->
+	<script type="text/javascript">
+		$(function() {
+			$("#phoneChk").on("click", function() {
+				alert('인증번호 발송이 완료되었습니다.');
+			});
+			
+			var phone = $("#mem_phone").val();
+			console.log(phone);
+			
+			$.ajax({
+				type: "POST",
+				url: "/user/sendSms.do",
+				data : {"userPhone" : phone},
+				cache : false,
+				success: function(data) {
+					$("#phoneCheckResult").text("인증번호 발송 성공").css("color","var(--secondary)");
+					if(data == "error") {
+						alert("휴대폰 번호가 올바르지 않습니다.");
+					}
+					
+				}
+				
+				
+			});
+			
+		});
+		
+	
+	
 	</script>
 </body>
 </html>

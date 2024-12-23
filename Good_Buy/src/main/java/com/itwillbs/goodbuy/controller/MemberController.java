@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,10 @@ import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.PayToken;
 
 import lombok.extern.log4j.Log4j2;
+import net.nurigo.sdk.NurigoApp;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
+import net.nurigo.sdk.message.service.DefaultMessageService;
 
 @Log4j2
 @Controller
@@ -41,6 +46,19 @@ public class MemberController {
 //	private MypageService mypageService;
 	
 //	private String uploadPath = "/resources/upload";
+	
+	@Value("${smsApiKey}")
+	private String smsApiKey;
+	
+	@Value("${smsSecretKey}")
+	private String smsSecretKey;
+	
+	//문자인증
+	final DefaultMessageService messageService;
+	
+	public MemberController() {
+        this.messageService = NurigoApp.INSTANCE.initialize("smsApiKey", "smsSecretKey", "https://api.coolsms.co.kr");
+    }
 	
 	//=================================================================================================================================
 	// [ 로그인 페이지 구현 ]
@@ -248,8 +266,19 @@ public class MemberController {
 	    System.out.println("인증정보 : " + mailAuthInfo);
 	    memberService.registMemberAuthInfo(mailAuthInfo);
 	}
-
-
+	//=================================================================================================================================
+	// [ COOLSMS 휴대폰 문자 인증 - 단일 메세지 발송 ]
+//	@PostMapping("/sendSms.do")
+//	@ResponseBody
+//	public SingleMessageSentResponse sendSms(@RequestParam("userPhone") String userPhone, HttpSession session) {
+//		Message message = new Message();
+//		
+//		// 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다
+//		String smsCode = memberService.getSmsCode();
+//		
+//		return response;
+//	}
+	
 	//=================================================================================================================================
 	// [ 회원가입 성공 페이지로 이동 ]
 	@GetMapping("MemberJoinSuccess")

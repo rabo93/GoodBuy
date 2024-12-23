@@ -1,4 +1,4 @@
-package com.itwillbs.goodbuy.controller;
+package com.itwillbs.goodbuy.handler;
 
 import java.util.HashMap;
 

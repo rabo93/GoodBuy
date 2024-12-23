@@ -1,5 +1,6 @@
 package com.itwillbs.goodbuy.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,13 +12,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.service.MemberService;
 import com.itwillbs.goodbuy.service.MyPageService;
+import com.itwillbs.goodbuy.service.ProductService;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.MyPageVO;
+import com.itwillbs.goodbuy.vo.ProductVO;
 import com.itwillbs.goodbuy.vo.WishlistVO;
 
 import lombok.extern.log4j.Log4j2;
@@ -27,6 +31,7 @@ import lombok.extern.log4j.Log4j2;
 public class MypageController {
 	@Autowired MemberService memberService;
 	@Autowired MyPageService myPageService;
+	@Autowired ProductService productService;
 	
 //	[회원정보 수정]
 //	@LoginCheck(memberRole = MemberRole.USER)
@@ -50,17 +55,23 @@ public class MypageController {
 	public String myStore(MemberVO member,HttpSession session,Model model) {
 		
 		return "mypage/mypage_store";
+		
 	}
 	
 	@PostMapping("MyStore")
-	public String myStoreIntro(Model model, HttpSession session, MemberVO member) {
-	    String id = (String) session.getAttribute("sId");
+	public String myStoreIntro(Model model, HttpSession session, MemberVO member,HttpServletRequest request) {
+		savePreviousUrl(request, session);
+		
+		String id = (String) session.getAttribute("sId");
 	    member.setMem_id(id);  // 사용자 ID 설정
-
+	    
 	    int storeIntroCount = memberService.registStoreIntro(member);  // MemberVO 전달
-
+	    
 	    if (storeIntroCount > 0) {
-	        model.addAttribute("msg", "상점소개가 변경되었습니다.");
+	    	model.addAttribute("member", member);
+	    	model.addAttribute("msg", "상점소개가 변경되었습니다.");
+	    	System.out.println(member.getMem_intro());
+	    	
 	        return "result/success";
 	    } else {
 	        model.addAttribute("msg", "상점소개 변경 실패!");
@@ -74,8 +85,24 @@ public class MypageController {
 	}
 	
 	@GetMapping("MySales")
-	public String mySale() {
+	public String mySale(Model model,HttpSession session) {
+		//세션에 사용자 ID 저장 
+		String id = (String) session.getAttribute("sId");
+		
+		//판매내역 조회
+		List<ProductVO> productlist =(List<ProductVO>) productService.getProductList(id);
+		model.addAttribute("product", productlist);
+		System.out.println("상품목록 조회"+productlist);
+		
+		//판매내역 갯수조회
+		
+		int salesCount = productService.salesCount(id);
+		model.addAttribute("salesCount", salesCount);
+		
+		
+		
 		return "mypage/mypage_product_sales";
+		
 	}
 	
 	@GetMapping("MyReview")
@@ -96,8 +123,7 @@ public class MypageController {
 	    System.out.println("위시리스트: " + wishlist);
 	    model.addAttribute("wishlist", wishlist);
 
-	    // 위시리스트 개수 조회 => 수정중 
-	    System.out.println("id???????????????"+id); //여기부터 안불러옴
+	    // 위시리스트 개수 조회
 	    int wishlistCount = myPageService.wishlistCount(id);
 	    
 	    model.addAttribute("wishlistCount", wishlistCount);

@@ -29,8 +29,9 @@
 	<select id="selectWishlistCount" resultType="int">
 		SELECT COUNT(*)
 		FROM WISHLIST
-		WHERE MEM_ID=#{id}
+		WHERE MEM_ID=#{mem_id}
 	</select>
 	
+
 	
 </mapper>	

@@ -202,11 +202,13 @@
 		  )
 	</insert>
 	
-	<update id="insertStoreIntro">
-		INSERT INTO MEMBER (STORE_INTRO)
-		VALUES #{store_intro}
-		WHERE MEM_ID = #{id}
-	
+	<!-- 	상점소개 업데이트 -->
+	<update id="updateStoreIntro" parameterType="member">
+		UPDATE MEMBER
+		   SET 
+			MEM_INTRO = #{mem_intro}
+		 WHERE MEM_ID = #{mem_id}
 	</update>
+	
 	
 </mapper>

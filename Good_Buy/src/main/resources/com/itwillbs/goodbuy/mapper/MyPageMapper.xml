@@ -32,5 +32,6 @@
 		WHERE MEM_ID=#{id}
 	</select>
 	
+
 	
 </mapper>	

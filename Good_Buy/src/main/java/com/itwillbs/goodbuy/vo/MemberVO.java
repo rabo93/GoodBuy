@@ -31,8 +31,10 @@ import lombok.Data;
 		private Date mem_withdraw_date;  
 		//--------------------------
 		private String mem_profile;	//프로필사진명
-		private String mem_intro;	//자기소개
+		private String mem_intro;	//상점소개
 		private int sns_status;		//sns연동 여부(1: 연동O /2: 연동X)
 		private int auth_status;		//인증여부(1: 인증O /2: 인증X)
+		//--------------------------
+		
 
 }

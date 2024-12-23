@@ -1,5 +1,6 @@
 package com.itwillbs.goodbuy.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
@@ -48,19 +50,23 @@ public class MypageController {
 	
 	@GetMapping("MyStore")
 	public String myStore(MemberVO member,HttpSession session,Model model) {
-		
 		return "mypage/mypage_store";
 	}
 	
 	@PostMapping("MyStore")
-	public String myStoreIntro(Model model, HttpSession session, MemberVO member) {
-	    String id = (String) session.getAttribute("sId");
+	public String myStoreIntro(Model model, HttpSession session, MemberVO member,HttpServletRequest request) {
+		savePreviousUrl(request, session);
+		
+		String id = (String) session.getAttribute("sId");
 	    member.setMem_id(id);  // 사용자 ID 설정
-
+	    
 	    int storeIntroCount = memberService.registStoreIntro(member);  // MemberVO 전달
-
+	    
 	    if (storeIntroCount > 0) {
-	        model.addAttribute("msg", "상점소개가 변경되었습니다.");
+	    	model.addAttribute("member", member);
+	    	model.addAttribute("msg", "상점소개가 변경되었습니다.");
+	    	System.out.println(member.getMem_intro());
+	    	
 	        return "result/success";
 	    } else {
 	        model.addAttribute("msg", "상점소개 변경 실패!");

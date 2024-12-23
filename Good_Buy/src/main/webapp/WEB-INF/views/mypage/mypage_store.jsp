@@ -69,9 +69,11 @@
 									
 								<div class="set">
 									<label>상점 소개</label>
+									<input type="hidden" id = "mem_id" value="${member.mem_id}"> 
+<%-- 									<input type="text" name="mem_intro" id="mem_intro" value="${member.mem_intro}"> --%>
+											<textarea rows="5" cols="50" name="mem_intro" id="mem_intro">${member.mem_intro}</textarea>
 									<!-- Create the editor container -->
-									<textarea rows="5" cols="10" name="store_intro" id="store_intro">상점소개를 입력해주세요.</textarea>
-<!-- 									<div id="store_intro" name="store_intro"> -->
+<!-- 									<div id="editor"  name="mem_intro"> -->
 <!-- 									  <p>상점소개를 입력해주세요	</p> -->
 <!-- 									</div> -->
 									<div>

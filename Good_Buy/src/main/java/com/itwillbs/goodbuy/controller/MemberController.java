@@ -86,6 +86,7 @@ public class MemberController {
 			session.setAttribute("sNick", dbMember.getMem_nick());
 			session.setAttribute("sGrade", dbMember.getMem_grade());
 			session.setAttribute("sProfile", dbMember.getMem_profile());
+			session.setAttribute("sStore", dbMember.getMem_intro()); //상점소개
 			session.setMaxInactiveInterval(60 * 120);
 			
 			// [ 핀테크 엑세스토큰 정보 조회하여 세션에 저장하는 기능 추가 ]

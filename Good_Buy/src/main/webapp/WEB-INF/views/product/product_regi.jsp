@@ -5,6 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
 <!-- default -->
@@ -35,7 +37,7 @@
 				<section class="item-regi">
 					<div>
 						<h2 class="page-title">상품 등록</h2>
-						<form action="item-regist" method="post">
+						<form action="ProductRegist" method="post">
 							<section class="item-regi-img">
 								<h2 class="item-regi-name">상품이미지</h2>
 								<div class="item-thumb">
@@ -43,40 +45,40 @@
 									<button class="item-thumb-upload" type="button" onclick="onClickUpload1()">
 										<img id="item-thumb-preview1">
 									</button>
-									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn1" >
+									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn1" name="product_pic1">
 								</div>
 								<div class="item-thumb">
 									<button class="item-thumb-upload" type="button" onclick="onClickUpload2()">
 										<img id="item-thumb-preview2">
 										
 									</button>
-									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn2" >
+									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn2" name="product_pic2">
 								</div>
 								<div class="item-thumb">
 									<button class="item-thumb-upload" type="button" onclick="onClickUpload3()">
 										<img id="item-thumb-preview3">
 									</button>
-									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn3" >
+									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn3" name="product_pic3">
 								</div>
 								<h2 class="item-thumb-description">첫번째 상품 이미지는 썸네일로 보여져요.</h2>
 							</section>
 							<section class="item-regi-section">
 								<h2 class="item-regi-name">상품명</h2>
 								<div class="item-regi-box">
-									<input type="text" class="item-regi-title-text">
-									<a href="#">거래금지 품목 보기</a>
+									<input type="text" class="item-regi-title-text" id="item-regi-title-text" name="product_title">
+									<a href="ProductBanedItem">거래금지 품목 보기</a>
 								</div>
-								<h6 class="item-regi-name-byte">(0/50)</h6>
+								<h6 class="item-regi-name-byte" id="item-regi-name-byte">(0 / 100)</h6>
 							</section>
 							<section class="item-regi-section">
 								<h2 class="item-regi-name">상품설명</h2>
-									<div><textarea class="item-regi-description-text"></textarea>
+									<div><textarea class="item-regi-description-text" id="item-regi-description-text" name="product_intro"></textarea>
 								</div>
-								<h6 class="item-regi-description-byte">(0/2000)</h6>
+								<h6 class="item-regi-description-byte" id="item-regi-description-byte">(0 / 2000)</h6>
 							</section>
 							<section class="item-regi-category">
 								<h6 class="item-regi-category-name">카테고리 & 태그</h6>
-								<select class="item-regi-category-box">
+								<select class="item-regi-category-box" name="product_category">
 									<option>여성의류</option>
 									<option>남성의류</option>
 									<option>레저/스포츠</option>
@@ -88,13 +90,12 @@
 							<section class="item-regi-trade-adr">
 								<h6 class="item-regi-name">직거래 주소 설정</h6>
 								<div class="item-regi-trade-active">
-									<label><input type="radio" name="trade-adr-val" id="trade-enable">직거래 가능</label>
-									<label><input type="radio" name="trade-adr-val" id="trade-disable">직거래 불가능</label>
-									<div class="item-trade-adr-box">
-										<input type="text" class="item-trade-adr-main">
+									<label><input type="radio" name="trade-adr-val" id="trade-enable" value="1" checked>직거래 가능</label>
+									<label><input type="radio" name="trade-adr-val" id="trade-disable" value="0">직거래 불가능</label>
+									<div class="item-trade-adr-box" id="item-trade-adr-box">
 										<div>
-											<input type="text" class="item-trade-adr-sub">
-											<input type="button" class="item-trade-adr-search" value="주소검색">
+											<input type="text" class="item-trade-adr-sub" id="item-trade-adr-sub" name="product_trade_adr1" placeholder="간략한 주소를 입력해주세요.">
+											<input type="button" class="item-trade-adr-search" value="주소검색" onclick="searchAdr()">
 										</div>
 									</div>
 								</div>	
@@ -102,20 +103,20 @@
 							<section class="item-regi-price">
 								<h6 class="item-regi-name">상품설명</h6>
 								<div class="item-regi-price-box">
-									<label><input type="radio" name="shipping-fee" id="shipping-fee-disable">택배비 포함</label>
-									<label><input type="radio" name="shipping-fee" id="shipping-fee-enable">택배비 미포함</label>
+									<label><input type="radio" name="shipping-fee" id="shipping-fee-enable"  value="0" checked>택배비 미포함</label>
+									<label><input type="radio" name="shipping-fee" id="shipping-fee-disable" value="1">택배비 포함</label>
 									<div class="item-regi-price-number">
-										<input type="number" class="shipping-fee-price">
-										<div><input type="number" class="item-price"></div>
-										<label class="item-discount-box"><input type="checkbox" class="item-discount">가격 제안 가능</label>
+										<input type="number" class="shipping-fee-price" id="shipping-fee-price" name="product_shpping_fee" placeholder="택배비를 입력해주세요.">
+										<div><input type="number" class="item-price" name="product_price" placeholder="상품 가격을 입력해주세요."></div>
+										<label class="item-discount-box"><input type="checkbox" class="item-discount" name="product_discount_status" value="1">가격 제안 가능</label>
 									</div>
 								</div>
 							</section>
+							<div class="item-regi-submit-group">
+								<input type="button" class="item-backpage" onclick="history.back()" value="뒤로 가기">
+								<input type="submit" class="item-submit" value="상품 등록">
+							</div>
 						</form>
-						<div class="item-regi-submit-group">
-							<input type="button" class="item-backpage" onclick="history.back()" value="뒤로 가기">
-							<input type="submit" class="item-submit" value="상품 등록">
-						</div>
 					</div>
 				</section>
 				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
@@ -129,41 +130,114 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script type="text/javascript">
+	// 썸네일 미리보기
 	$("#item-thumb-upload-btn1").on("change", function(event) {
-	
 	    var file = event.target.files[0];
-	
 	    var reader = new FileReader(); 
 	    reader.onload = function(e) {
-	
 	        $("#item-thumb-preview1").attr("src", e.target.result);
 	    }
-	
 	    reader.readAsDataURL(file);
 	});
 	$("#item-thumb-upload-btn2").on("change", function(event) {
-	
 	    var file = event.target.files[0];
-	
 	    var reader = new FileReader(); 
 	    reader.onload = function(e) {
-	
 	        $("#item-thumb-preview2").attr("src", e.target.result);
 	    }
-	
 	    reader.readAsDataURL(file);
 	});
 	$("#item-thumb-upload-btn3").on("change", function(event) {
-	
 	    var file = event.target.files[0];
-	
 	    var reader = new FileReader(); 
 	    reader.onload = function(e) {
-	
 	        $("#item-thumb-preview3").attr("src", e.target.result);
 	    }
-	
 	    reader.readAsDataURL(file);
 	});
+	
+	// 직거래 주소 입력박스
+	$("#trade-enable").change(function() {
+		$("#item-trade-adr-box").show();
+	})
+	$("#trade-disable").change(function() {
+		$("#item-trade-adr-box").hide();
+	})
+	
+	// 배송비 입력박스
+	$("#shipping-fee-enable").change(function() {
+		$("#shipping-fee-price").show();
+	})
+	$("#shipping-fee-disable").change(function() {
+		$("#shipping-fee-price").hide();
+	})
+	
+	// 글자수 체크
+	$("#item-regi-title-text").keyup(function(e) {
+		var content = $(this).val();
+		$("#item-regi-name-byte").text("(" + content.length + " / 100)");
+		if (content.length > 100) {
+			alert("최대 100자까지 입력 가능합니다.");
+			$(this).val(content.substring(0, 100));
+			$('#item-regi-name-byte').text("(100 / 100)");
+		}
+	});
+	$("#item-regi-description-text").keyup(function(e) {
+		var content = $(this).val();
+		$("#item-regi-description-byte").text("(" + content.length + " / 2000)");
+		if (content.length > 2000) {
+			alert("최대 2000자까지 입력 가능합니다.");
+			$(this).val(content.substring(0, 2000));
+			$('#item-regi-description-byte').text("(2000 / 2000)");
+		}
+	});
+</script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function searchAdr() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var addr = ''; // 주소 변수
+                var extraAddr = ''; // 참고항목 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+
+                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                if(data.userSelectedType === 'R'){
+                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있고, 공동주택일 경우 추가한다.
+                    if(data.buildingName !== '' && data.apartment === 'Y'){
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                    if(extraAddr !== ''){
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+                    // 조합된 참고항목을 해당 필드에 넣는다.
+                    document.getElementById("item-trade-adr-sub").value = extraAddr;
+                
+                } else {
+                    document.getElementById("item-trade-adr-sub").value = '';
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById("item-trade-adr-sub").value = addr;
+            }
+        }).open();
+    }
 </script>
 </html>

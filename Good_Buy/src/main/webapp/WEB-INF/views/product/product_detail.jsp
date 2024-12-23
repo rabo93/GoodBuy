@@ -5,6 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
 <!-- default -->
@@ -44,15 +46,22 @@
 								<div class="item-detail-fav-count">찜 8</div>
 							</div>
 							<div class="item-detail-description">상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명</div>
-							<div class="item-detail-trade-adr">직거래 위치: 부산진구</div>
-							<div class="item-detail-shpping-fee">배송비 미포함			4,000 원</div>
-							<div class="item-detail-discount">가격제안 가능</div>
-							<div class="item-detail-price">60,000 원</div>
+							<div class="item-detail-shpping-fee">배송비:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4,000 원</div>
+							<div class="item-detail-price-setting">
+								<div class="item-detail-discount">가격제안 가능</div>
+								<div class="item-detail-price">60,000 원</div>
+							</div>
 							<div class="item-detail-button-group">
+								<div class="item-detail-trade-adr">직거래 위치: 부산진구</div>
 								<input type="button" value="찜하기" class="item-detail-fav">
 								<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
 							</div>
 						</div>
+					</div>
+					<div class="item-detail-seller-info" onclick="location.href='ProductShop'" style=" cursor: pointer;">
+						<img src="../../resources/img/product_thumb.jpg" class="item-detail-seller-pic">
+						<div class="item-detail-seller-nick">홍길동동이</div>
+						<div class="item-detail-seller-review">★★★★★</div>
 					</div>
 <!-- 					<div class="item-detail-seller-info"> -->
 <!-- 						<img src="../../resources/img/product_thumb.jpg" class="item-detail-seller-profile-pic"> -->

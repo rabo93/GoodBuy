@@ -6,6 +6,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
 <!-- default -->
@@ -53,7 +56,7 @@
 
 					<div class="my-container">
 						<div class="contents-ttl">
-							<h3>구매내역</h3>
+							<h3>구매내역<small>(총 <span>${orderCount}</span>건)</small></h3>
 							<div class="product-list">
 								<ul class="product-wrap">
 									<!-- 2개 -->

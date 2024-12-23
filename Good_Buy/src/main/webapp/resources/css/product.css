@@ -100,26 +100,28 @@
 .item-regi .item-regi-category {display: flex;flex-wrap: wrap;padding: 0;margin: 0;list-style: none;border-top: 1px solid lightgray;}
 .item-regi .item-regi-category-box {width: 200px;height: 40px;align-self: center;margin: 0px 0px 10px 10px;text-align: center;}
 
-.item-regi .item-regi-trade-adr {display: flex;border-top: 1px solid lightgray;}
-.item-regi .item-regi-trade-adr .item-regi-trade-active {margin: 10px 0px 0px 10px;}
-.item-regi .item-regi-trade-adr .item-trade-adr-box {margin: 10px 0 0 0;}
+.item-regi .item-regi-trade-adr {display: flex;margin-bottom: 20px;border-top: 1px solid lightgray;}
+.item-regi .item-regi-trade-adr .item-regi-trade-active {margin: 10px 0px 0px 0px;}
+.item-regi .item-regi-trade-adr .item-trade-adr-box {margin: 10px 0px 0px 10px;}
 .item-regi .item-regi-trade-adr .item-trade-adr-box .item-trade-adr-main {width: 500px;margin-bottom: 10px;height: 40px;}
 .item-regi .item-regi-trade-adr .item-trade-adr-box .item-trade-adr-sub {width: 400px;height: 40px;}
-.item-regi .item-regi-trade-adr .item-trade-adr-box .item-trade-adr-search {    
+.item-regi .item-regi-trade-adr .item-trade-adr-box .item-trade-adr-search {
 	padding:8px 15px 8px 15px;
-    min-width: 100px;
-    height: auto;
-    box-sizing: border-box;
-    border-radius: 50px;
-    font-size: 12px;
-    font-weight: 700;
-    background-color:#ff7235;
-    border:2px solid #ff7235;
-    color:#ffffff;}
-.item-regi .item-regi-trade-adr .item-regi-trade-active label [type="radio"]:checked {border: 0.4em solid #ff7235;}
+	min-width: 100px;
+	height: 40px;
+	box-sizing: border-box;
+	border-radius: 50px;
+	font-size: 15px;
+	font-weight: 700;
+	background-color: #0dcc5a;
+	border: 2px solid #0dcc5a;
+	color:#ffffff;
+	cursor: pointer;
+	}
+.item-regi .item-regi-trade-adr .item-regi-trade-active label [type="radio"]:checked {border: 0.4em solid #0dcc5a;}
 .item-regi .item-regi-trade-adr .item-regi-trade-active label [type="radio"]:hover {box-shadow: 0 0 0 max(2px, 0.2em) #dadee5;cursor: pointer;}
 .item-regi .item-regi-trade-adr .item-regi-trade-active label [type="radio"] {
-	margin-left: 0;
+	margin-left: 10px;
 	margin-right: 10px;
 	vertical-align: middle;
 	appearance: none;
@@ -130,13 +132,13 @@
 }
 
 .item-regi .item-regi-price .item-regi-price-box {margin: 10px 0 0px 0;}
-.item-regi .item-regi-price .item-regi-price-box .shipping-fee-price {height: 50px;width: 200px;margin-bottom: 10px;}
+.item-regi .item-regi-price .item-regi-price-box .shipping-fee-price {height: 40px;width: 200px;margin-bottom: 10px;}
 .item-regi .item-regi-price .item-regi-price-box .item-price {height: 40px;width: 300px;}
 .item-regi .item-regi-price .item-regi-price-number .shipping-fee-price::-webkit-inner-spin-button {-webkit-appearance:none;}
 .item-regi .item-regi-price .item-regi-price-number .item-price::-webkit-inner-spin-button {-webkit-appearance:none;}
 .item-regi .item-regi-price .item-regi-price-number {margin: 10px 0px 0px 10px;}
 .item-regi .item-regi-price {display: flex;border-top: 1px solid lightgray;}
-.item-regi .item-regi-price label [type="radio"]:checked {border: 0.4em solid #ff7235;}
+.item-regi .item-regi-price label [type="radio"]:checked {border: 0.4em solid #0dcc5a;}
 .item-regi .item-regi-price label [type="radio"]:hover {box-shadow: 0 0 0 max(2px, 0.2em) #dadee5;cursor: pointer;}
 .item-regi .item-regi-price label [type="radio"] {
 	margin-left: 10px;
@@ -148,7 +150,7 @@
 	width: 1.15em;
 	height: 1.15em;
 }
-.item-regi .item-regi-price label [type="checkbox"]:checked {border: 0.4em solid #ff7235;}
+.item-regi .item-regi-price label [type="checkbox"]:checked {border: 0.4em solid #0dcc5a;}
 .item-regi .item-regi-price label [type="checkbox"]:hover {box-shadow: 0 0 0 max(2px, 0.2em) #dadee5;cursor: pointer;}
 .item-regi .item-regi-price label [type="checkbox"] {
 	margin: 10px 10px 0 0;
@@ -160,35 +162,193 @@
 	height: 1.15em;
 }
 
-.item-regi .item-regi-submit-group {margin: 30px 0 0 0;}
+.item-regi .item-regi-submit-group {display: flex;margin: 80px 0 0 0;}
 .item-regi .item-regi-submit-group input {
 	width: 100px;
 	height: 50px;
-	margin-right: 10px;
 	padding: 8px 15px 8px 15px;
 	box-sizing: border-box;
 	border-radius: 10px;
 	font-size: 16px;
 	font-weight: 700;
-	background-color: #ff7235;
-	border: 2px solid #ff7235;
+	background-color: #0dcc5a;
+	border: 2px solid #0dcc5a;
 	color: #ffffff;
+}
+.item-regi .item-regi-submit-group .item-backpage {
+	margin: 0 0 0 auto;
+	background-color: #cccccc;
+	border: 2px solid #cccccc;
+	cursor: pointer;
+}
+.item-regi .item-regi-submit-group .item-submit {
+	margin: 0 0px 0 20px;
 }
 
 /* =================================================================================== */
 /* ================================ product_detail.jsp =============================== */
 /* =================================================================================== */
 
-.item-detail .sec-ttl { font-size: 1.6rem; margin: 1rem 0; display:flex;align-items:center;}
+.item-detail .sec-ttl {font-size: 1.6rem; margin: 1rem 0; display:flex;align-items:center;}
 .item-detail .sec-inner {max-width:1320px;margin:0 auto;}
 
 .item-detail .item-detail-content {display: flex;}
 
-.item-detail .item-detail-pic {width: 50%;height: auto;}
+.item-detail .item-detail-pic {width: 90%;height: auto;}
 .item-detail .item-detail-pic img {object-fit: fill;border: 1px solid var(--light-gray);border-radius: 1rem;}
-.item-detail .item-detail-content-text {}
+.item-detail .item-detail-title {font-weight: 900;font-size: 30px;}
+.item-detail .item-detail-content-text {
+    margin-left: 30px;
+    display: flex;
+    flex-direction: column;
+}
+.item-detail .item-detail-view {display: flex;justify-content: flex-end;font-size: 18px;}
+.item-detail .item-detail-view-count {
+    margin-right: 10px;
+}
+.item-detail .item-detail-fav-count {
+    margin-right: 10px;
+}
 
+.item-detail .item-detail-description {
+    margin-top: 30px;
+    width: 500px;
+    height: 180px;
+    text-align: left;
+    font-size: 18px;
+}
+.item-detail .item-detail-trade-adr {
+    font-size: 18px;
+    font-weight: bold;
+}
+.item-detail .item-detail-shpping-fee {}
+.item-detail .item-detail-shpping-fee {
+    margin: 0 0 0 auto;
+    font-size: 18px;
+}
+.item-detail .item-detail-price-setting {
+    display: flex;
+    margin: 0 0 0 auto;
+}
+.item-detail .item-detail-price-setting .item-detail-discount {
+    margin-right: 30px;
+    font-size: 18px;
+    color: #0dcc5a;
+    text-shadow: 0 0 0px black;
+    align-self: center;
+}
+.item-detail .item-detail-price-setting .item-detail-price {
+    font-size: 30px;
+    font-weight: 900;
+}
 
+.item-detail .item-detail-button-group {
+    display: flex;
+}
+.item-detail .item-detail-button-group .item-detail-button-group {}
+.item-detail .item-detail-button-group .item-detail-fav {
+    width: 100px;
+    height: 50px;
+    margin-right: 10px;
+    padding: 8px 15px 8px 15px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    background-color: #cccccc;
+    border: 2px solid #cccccc;
+    color: #ffffff;
+    margin-left: auto;
+}
+.item-detail .item-detail-button-group .item-detail-contact-seller {width: 160px;height: 50px;padding: 8px 15px 8px 15px;box-sizing: border-box;border-radius: 10px;font-size: 16px;font-weight: 700;background-color: #0dcc5a;border: 2px solid #0dcc5a;color: #ffffff;}
+
+.item-detail .item-detail-seller-info {
+    width: 550px;
+    display: flex;
+    margin: 10px 0px 50px 0px;
+}
+.item-detail .item-detail-seller-info .item-detail-seller-pic {
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    margin-right: 20px;
+}
+.item-detail .item-detail-seller-info .item-detail-seller-nick {
+    font-size: 20px;
+    align-self: center;
+}
+.item-detail .item-detail-seller-info .item-detail-seller-review {color: #0dcc5a;font-size: 20px;align-self: center;margin: 0 0 0 auto;}
+
+/* =================================================================================== */
+/* ================================ product_shop.jsp =============================== */
+/* =================================================================================== */
+
+.item-shop-section .sec-ttl {font-size: 1.6rem;margin: 30px 0 1rem 0px;display:flex;align-items:center;}
+.item-shop-section .sec-inner {max-width:1320px; margin:0 auto;}
+
+.item-shop-section .item-shop-seller-info {
+    display: flex;
+    height: 220px;
+    padding: 0px 10px 30px 10px;
+    margin-top: 10px;
+    border-bottom: 2px solid;
+}
+.item-shop-section .item-shop-seller-info .item-shop-seller-pic {width: 180px;height: 180px;border-radius: 100%;margin-right: 20px;}
+.item-shop-section .item-shop-seller-info .item-shop-seller-nick {
+    font-size: 25px;
+    font-weight: 500;
+    align-self: center;
+}
+.item-shop-section .item-shop-seller-info .item-shop-seller-review {
+    text-align: right;
+    font-size: 20px;
+    margin: 0 0 0 auto;
+    align-self: end;
+}
+.item-shop-section .item-shop-seller-info .item-shop-seller-review-title {}
+.item-shop-section .item-shop-seller-info .item-shop-seller-review-star {
+    color: #0dcc5a;
+    font-size: 30px;
+}
+
+.item-shop-section .item-shop-review-list-area {
+    display: block;
+    padding: 30px 10px 50px 10px;
+    border-top: 2px solid;
+}
+.item-shop-section .item-shop-review-list-area .item-shop-review-list {
+    display: flex;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid;
+}
+.item-shop-section .item-shop-review-list-area .item-shop-review-list .item-shop-review-pic {
+    width: 80px;
+    height: 80px;
+    border-radius: 20%;
+}
+.item-shop-section .item-shop-review-list-area .item-shop-review-list .item-shop-review-content-box {
+    align-self: center;
+    margin-left: 20px;
+}
+.item-shop-section .item-shop-review-list-area .item-shop-review-list .item-shop-review-content-box .item-shop-review-content {
+    font-size: 20px;
+    font-weight: 500;
+}
+.item-shop-section .item-shop-review-list-area .item-shop-review-list .item-shop-review-content-box .item-shopreview-product {
+    color: gray;
+}
+.item-shop-section .item-shop-review-list-area .item-shop-review-list .item-shop-review-writer {
+    margin: 0 0 0 auto;
+    font-size: 20px;
+    align-self: center;
+}
+.item-shop-section .item-shop-review-list-area .item-shop-review-list .item-shop-review-list-star {
+    margin-left: 20px;
+    font-size: 20px;
+    align-self: center;
+    color: #0dcc5a;
+}
 
 
 

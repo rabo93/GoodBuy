@@ -6,6 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
 <!-- default -->
@@ -32,7 +34,6 @@
 	</header>
 	<main>
 		<section class="wrapper">
-			<!-- *********** 여기 안에 작업하세요. section.wrapper 건들지말기 ******** -->
 			<div id="nt_write_container">
 				<div class="nt-head">
 					<h2>공지사항 글쓰기</h2>
@@ -47,8 +48,7 @@
 							<tr>
 								<th>글쓴이</th>
 								<td>
-<%-- 									<input type="text" name="mem_id" value="${sessionScope.sId}" readonly> --%>
-									<input type="text" name="mem_id" value="admin" readonly>
+									<input type="text" name="mem_id" value="${sessionScope.sId}" readonly>
 								</td>
 							</tr>
 							<tr>
@@ -77,7 +77,6 @@
 					</form>
 				</section>
 			</div>
-			<!-- *********** // 여기 안에 작업하세요. section.wrapper 건들지말기 ******** -->
 		</section>
 	</main>
 	<footer>

@@ -12,16 +12,4 @@ public class MainController {
 		return "index";
 	}
 	
-	@GetMapping("AdmMain")
-	public String admMain() {
-		return "admin/adm_index";
-	}
-	
-	@GetMapping("AdmCommonCode")
-	public String admCommonCode() {
-		return "admin/adm_commoncode";
-	}
-	
-	
-	
 }

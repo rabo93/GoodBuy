@@ -109,7 +109,7 @@ public class MemberController {
 	}	
 	
 	//=================================================================================================================================
-	// [ Naver Login ]
+	// [ 네이버 로그인 ]
 	@GetMapping("NaverCallback")
 	public String naverCallback() {
 		return "member/naver_callback";
@@ -129,22 +129,14 @@ public class MemberController {
 		// 신규 회원 처리
 	    if (dbMember == null) {
 	        int result = memberService.registNaverMember(member);
+	        log.info(">>>>> 신규 네이버 계정 등록 성공");
 
 	        if (result != 1) {
 	            log.error(">>>>> 네이버 계정 등록 실패");
 	            return 0; // 등록 실패
 	        }
 
-	        log.info(">>>>> 신규 네이버 계정 등록 성공");
-
-	        // 등록된 회원 정보 다시 조회
-	        dbMember = memberService.getMemberEmail(mem_email);
-	        if (dbMember == null) {
-	            log.error(">>>>> 회원 등록 후 조회 실패");
-	            return 0; // 예외 처리
-	        }
-
-	        setSessionAttributes(session, dbMember); // 세션 설정
+	        setSessionAttributes(session, member); // 세션 설정
 	        return 1; // 신규 회원 등록 성공
 	    }
 
@@ -153,8 +145,6 @@ public class MemberController {
 	    log.info(">>>>> 네이버 중복 계정(기존 회원)");
 	    return 2; // 기존 회원
 	}
-	
-	
 	
 	// 세션 설정 메서드 
 	public void setSessionAttributes(HttpSession session, MemberVO member) {

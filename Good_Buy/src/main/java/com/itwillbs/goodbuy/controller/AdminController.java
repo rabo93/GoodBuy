@@ -10,27 +10,30 @@ import lombok.extern.log4j.Log4j2;
 @Controller
 public class AdminController {
 	
-	@GetMapping("AdminMain")
-	public String adminMain() {
+	// 관리자 메인
+	@GetMapping("AdmMain")
+	public String admMain() {
 		return "admin/index";
 	}
-	
-	// 공통코드 관리
-	@GetMapping("AdminCommoncodeList")
-	public String adminCommoncodeList() {
+	// ======================================================
+	// 공통코드 관리 - 목록
+	@GetMapping("AdmCommoncodeList")
+	public String admCommoncodeList() {
 		return "admin/code_list";
 	}
 	
-	@GetMapping("AdminCommoncodeRegist")
-	public String adminCommoncodeRegist() {
+	// 공통코드 관리 - 등록
+	@GetMapping("AdmCommoncodeRegist")
+	public String admCommoncodeRegist() {
 		return "admin/code_regist";
 	}
 	
-	@GetMapping("AdminCommoncodeModify")
-	public String adminCommoncodeModify() {
+	// 공통코드 관리 - 수정
+	@GetMapping("AdmCommoncodeModify")
+	public String admCommoncodeModify() {
 		return "admin/code_modify";
 	}
-	
+	// ======================================================
 	// 회원 관리
 	
 	// 결제 관리

@@ -58,7 +58,7 @@
 				<div class="my-container">
 					<div class="contents-ttl"><h3>판매내역 <small>(총 <span>${salesCount}</span>건)</small></h3><div class="my-tabs">
 						<button>전체</button>
-						<button>진행중</button>
+						<button>거래중</button>
 						<button>거래완료</button>
 						<button>취소/환불</button>
 					</div>
@@ -81,13 +81,26 @@
 													<span>생활용품</span>
 													<span class="type">직거래</span>
 												</div>
-												<div class="ttl">[${product.product_status}]${product.product_title}</div>
+												<div class="ttl">
+													<c:choose>
+														<c:when test="${product.product_status == 1 }">
+															[거래중]
+														</c:when>
+														<c:when test="${product.product_status == 2 }">
+															[예약중]
+														</c:when>
+														<c:otherwise>
+															[거래완료]
+														</c:otherwise>
+													</c:choose>
+													${product.product_title}
+												</div>
 												<div class="price">
 													<fmt:formatNumber  value="${product.product_price}" type="number" pattern="#,###" />원
 												</div>
 												<div class="card-row">
 													<span class="add">부산 해운대구</span>
-													<span class="name">홍길동동이</span>
+													<span class="name">${product.mem_nick}</span>
 												</div>
 											</div>
 										</li>

@@ -105,7 +105,7 @@ public class MemberService {
 
 	//상점 소개 변경
 	public int registStoreIntro(MemberVO member) {
-		return mapper.updateStoreIntro(member);
+//		return mapper.updateStoreIntro(member);
 	}
 
 	

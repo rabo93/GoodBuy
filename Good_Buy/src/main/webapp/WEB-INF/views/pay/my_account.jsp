@@ -6,6 +6,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
 <!-- default -->
@@ -40,9 +44,9 @@
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 				
+		        <h2 class="page-title">굿페이 > 내 연결계좌 관리</h2>
 				<div class="account-container">
 			        <!-- 페이지 제목 -->
-			        <h2 class="page-title">굿페이 - 내 연결계좌 관리</h2>
 			        
 			        <%-- 세션 객체의 "token" 속성이 비어있을 경우 계좌 미인증 회원으로 계좌연결 버튼 표시 --%>
 					<%-- 아니면, 계좌관리 기능에 대한 버튼 표시 --%>
@@ -71,15 +75,23 @@
 <%-- 					        	${account.account_num_masked} --%>
 <%-- 					        </c:forEach> --%>
 					        
-					        
-					        <c:forEach var="account" items="${bankUserInfo.res_list}">
+					        <c:forEach var="account" items="${bankUserInfo.res_list}" varStatus="status">
 						        <a href="#" title="${account.account_num_masked}계좌의 상세정보 보기"  onclick="document.getElementById('PayAccountDetail').submit();">
 							        <div class="linked-account">
 							            <div class="account-info">
 							                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
 							                <span class="account-number">${account.bank_name}<strong>${account.account_num_masked}</strong></span>
 							            </div>
-							            <button class="primary-account-btn">주계좌</button>
+							            <c:if test="${account.fintech_use_num eq fintech_use_num}">
+							            	<button class="primary-account-btn">대표계좌</button>
+							            </c:if>
+							            
+							            <form action="PayRegistRepresentAccount" method="POST" id="PayRegistRepresentAccount">
+											<input type="hidden" name="fintech_use_num" value="${account.fintech_use_num}">
+											<input type="hidden" name="account_holder_name" value="${account.account_holder_name}">
+											<input type="hidden" name="account_num_masked" value="${account.account_num_masked}">
+											<input type="submit" value="대표계좌로설정">
+										</form>
 							        </div>
 							    </a>
 							    <form action="PayAccountDetail" method="POST" id="PayAccountDetail">
@@ -87,6 +99,7 @@
 									<input type="hidden" name="account_holder_name" value="${account.account_holder_name}">
 									<input type="hidden" name="account_num_masked" value="${account.account_num_masked}">
 								</form>
+								
 					        </c:forEach>
 					        <div class="add-account">
 					            <button class="add-account-btn">+ 연결계좌 추가하기</button>

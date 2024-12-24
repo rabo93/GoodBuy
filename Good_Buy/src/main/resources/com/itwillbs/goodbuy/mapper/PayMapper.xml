@@ -43,5 +43,46 @@
 		FROM TOKENINFO
 		WHERE MEM_ID = #{mem_id}
 	</select>
+	
+	<!-- 사용자 대표계좌 정보 조회 - SELECT -->
+	<!-- token 객체의 user_seq_no 값과 일치하는 레코드의 user_seq_no 값 조회 -->
+	<select id="selectRepresentAccount" resultType="string">
+		SELECT USER_SEQ_NO
+		FROM ACCOUNTINFO
+		WHERE USER_SEQ_NO = #{token.user_seq_no}
+	</select>
+	
+	<select id="selectRepresentAccountNum" resultType="string">
+		SELECT FINTECH_USE_NUM
+		FROM ACCOUNTINFO
+		WHERE USER_SEQ_NO = #{token.user_seq_no}
+	</select>
+	
+	
+	<!-- 사용자 대표계좌 정보 등록 - INSERT -->
+	<!-- token 객체의 user_seq_no 와 별도의 account_num_masked(임시), account_holder_name, fintech_use_num 등록 -->
+	<insert id="insertRepresentAccount">
+		INSERT
+		INTO ACCOUNTINFO
+		VALUES (
+			#{token.user_seq_no}
+			, #{account_num_masked}
+			, #{account_holder_name}
+			, #{fintech_use_num}
+		)
+	</insert>
+	
+	<!-- 사용자 대표계좌 정보 변경 - UPDATE -->
+	<!-- token 객체의 user_seq_no 가 일치하는 레코드의 나머지 정보 변경 -->
+	<update id="updateRepresentAccount">
+		UPDATE ACCOUNTINFO
+		SET
+			ACCOUNT_NUM = #{account_num_masked}
+			, ACCOUNT_HOLDER_NAME = #{account_holder_name}
+			, FINTECH_USE_NUM = #{fintech_use_num}
+		WHERE 
+			USER_SEQ_NO = #{token.user_seq_no}
+	</update>
+	
 
 </mapper>

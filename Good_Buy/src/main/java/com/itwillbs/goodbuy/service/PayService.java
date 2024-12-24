@@ -1,5 +1,7 @@
 package com.itwillbs.goodbuy.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,35 @@ public class PayService {
 	// API - 핀테크 사용자 정보 조회
 	public Map<String, Object> getPayUserInfo(PayToken token) {
 		return payApiClient.requestPayUserInfo(token);
+	}
+
+	// API - 핀테크 계좌 잔액 조회
+	public Map<String, String> getAccountDetail(Map<String, Object> map) {
+		return payApiClient.requestAccountDetail(map);
+	}
+
+	// DB - 대표계좌 등록 요청 
+	public int registRepresentAccount(Map<String, Object> map) {
+		// 기존 사용자번호에 대한 대표 계좌가 설정되어 있는지 정보조회 
+		// PayMapper - selectRepresentAccount() 메서드 호출하여 사용자 번호에 대한 대표계좌 조회
+//		 System.out.println("map 나오나?????????????" + map); // ㅇㅇ 나옴.
+		String user_seq_no = mapper.selectRepresentAccount(map);
+//		System.out.println("PayService에서 user_seq_no : " + user_seq_no);
+		
+		// 대표 계좌 존재여부 판별
+		if(user_seq_no == null) { // 대표계좌 정보가 없을 경우
+			return mapper.insertRepresentAccount(map);
+		} else { // 대표계좌 정보가 없을 경우
+			return mapper.updateRepresentAccount(map);
+		}
+	}
+	// DB - 대표계좌 조회
+	public String getRepresentAccount(Map<String, Object> map) {
+		return mapper.selectRepresentAccount(map);
+	}
+
+	public String getRepresentAccountNum(String token) {
+		return mapper.selectRepresentAccountNum(token);
 	}
 
 

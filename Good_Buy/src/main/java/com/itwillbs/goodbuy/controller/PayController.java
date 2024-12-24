@@ -1,9 +1,6 @@
 package com.itwillbs.goodbuy.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,7 +19,6 @@ import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.aop.PayTokenCheck;
 import com.itwillbs.goodbuy.service.PayService;
 import com.itwillbs.goodbuy.vo.PayToken;
-import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -169,7 +165,8 @@ public class PayController {
 		model.addAttribute("account_holder_name", map.get("account_holder_name"));
 		model.addAttribute("account_num_masked", map.get("account_num_masked"));
 		
-		return "pay/pay_account_detail";		
+//		return "redirect:/pay_account_detail";
+		return "pay/pay_account_detail";
 	}
 	
 	// 사용자 조회 화면에서 계좌 목록 중 대표계좌로설정 버튼 클릭 시 해당 정보를 DB 에 등록 요청
@@ -205,17 +202,43 @@ public class PayController {
 		PayToken token = (PayToken)session.getAttribute("token");
 
 		map.put("token", token); // Map<String, Object> 필요
+		map.put("id", session.getAttribute("sId"));
 		log.info(">>>>>>>> 출금 이체 요청 파라미터 정보 : " + map);
 			
 		// BankService - requestWithdraw() 메서드 호출하여 출금이체 요청
 		Map<String, String> withdrawResult = service.requestWithdraw(map);
 		log.info(">>>>>>>>>>>>>출금 이체 요청 결과 : " + withdrawResult);
 			
-		// c출금이체 결과 정보 Map 객체 중 api_tran_id 값을 Model에 저장
-		model.addAttribute(withdrawResult.get("api_tran_id"));
+		if(!withdrawResult.get("rsp_code").equals("A0000") || !withdrawResult.get("bank_rsp_code").equals("000")) { // 출금실패
+			model.addAttribute("msg", "출금실패 : " + withdrawResult.get("rsp_message"));
+			return "result/fail";
+		}
+		
+		// 사용자 번호를 출금이체 결과 객체에 추가 
+		withdrawResult.put("user_seq_no", token.getUser_seq_no());
+		
+//		// 임시) withdrawResult 객체의 api_tran_dtm 속성값(문자열) 뒷자리 3자리 (밀리초)제거
+		withdrawResult.put("api_tran_dtm", withdrawResult.get("api_tran_dtm").substring(0, withdrawResult.get("api_tran_dtm").length() - 3));
+		
+		// 출금이체 성공 시 결과를 DB에 저장
+		 service.registWithdrawResult(withdrawResult);
+		
+//		// 출금이체 결과 정보 Map 객체 중 api_tran_id 값을 Model에 저장
+		model.addAttribute("bank_tran_id", withdrawResult.get("bank_tran_id"));
+		
+		
 			
 		return "redirect:/PayWithdrawResult";
 	}
 	
+	@LoginCheck(memberRole = MemberRole.USER)
+	@GetMapping("PayWithdrawResult")
+	public String payWithdrawResult(String bank_tran_id, Model model) {
+		Map<String, String> withdrawResult = service.getWithdarwResult(bank_tran_id);
+		model.addAttribute("withdrawResult", withdrawResult);
+
+		return "pay/pay_withdraw_result";
+	}
 	
+		
 }

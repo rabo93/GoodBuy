@@ -76,7 +76,13 @@
 <%-- 					        </c:forEach> --%>
 					        
 					        <c:forEach var="account" items="${bankUserInfo.res_list}" varStatus="status">
-						        <a href="#" title="${account.account_num_masked}계좌의 상세정보 보기"  onclick="document.getElementById('PayAccountDetail').submit();">
+					        	fintech_use_num : ${account.fintech_use_num}
+					        	<form action="PayAccountDetail" method="POST" id="PayAccountDetail">
+									<input type="hidden" name="fintech_use_num" value="${account.fintech_use_num}">
+									<input type="hidden" name="account_holder_name" value="${account.account_holder_name}">
+									<input type="hidden" name="account_num_masked" value="${account.account_num_masked}">
+								</form>
+						        <a href="#" title="${account.account_num_masked}계좌의 상세정보 보기"  onclick="submitForm(this);">
 							        <div class="linked-account">
 							            <div class="account-info">
 							                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
@@ -94,11 +100,7 @@
 										</form>
 							        </div>
 							    </a>
-							    <form action="PayAccountDetail" method="POST" id="PayAccountDetail">
-									<input type="hidden" name="fintech_use_num" value="${account.fintech_use_num}">
-									<input type="hidden" name="account_holder_name" value="${account.account_holder_name}">
-									<input type="hidden" name="account_num_masked" value="${account.account_num_masked}">
-								</form>
+							
 								
 					        </c:forEach>
 					        <div class="add-account">

@@ -16,3 +16,10 @@ function linkAccount() {
 							+ "&state=12345678901234567890123456789012" 
 							+ "&auth_type=0"; 
 }
+
+function submitForm(fin_num) {
+    const form = fin_num.nextElementSibling; // 바로 다음에 위치한 form 가져오기
+    if (form) {
+        form.submit(); // form 전송
+    }
+}

@@ -196,6 +196,26 @@ public class PayController {
 			model.addAttribute("msg","대표계좌 등록실패\\n관리자에게 문의하시오");
 			return "result/fail";
 		}
-		
 	}
+	@LoginCheck(memberRole = MemberRole.USER)
+	@PayTokenCheck
+	@PostMapping("PayWithdraw")
+	public String payWithdraw(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
+		// 엑세스토큰 정보가 저장된 BankToken 객체를 세션에서 꺼내기
+		PayToken token = (PayToken)session.getAttribute("token");
+
+		map.put("token", token); // Map<String, Object> 필요
+		log.info(">>>>>>>> 출금 이체 요청 파라미터 정보 : " + map);
+			
+		// BankService - requestWithdraw() 메서드 호출하여 출금이체 요청
+		Map<String, String> withdrawResult = service.requestWithdraw(map);
+		log.info(">>>>>>>>>>>>>출금 이체 요청 결과 : " + withdrawResult);
+			
+		// c출금이체 결과 정보 Map 객체 중 api_tran_id 값을 Model에 저장
+		model.addAttribute(withdrawResult.get("api_tran_id"));
+			
+		return "redirect:/PayWithdrawResult";
+	}
+	
+	
 }

@@ -1,7 +1,5 @@
 package com.itwillbs.goodbuy.service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,9 +74,15 @@ public class PayService {
 	public String getRepresentAccount(Map<String, Object> map) {
 		return mapper.selectRepresentAccount(map);
 	}
-
+	// DB - 대표계좌 조회(핀테크 번호)
 	public String getRepresentAccountNum(String token) {
 		return mapper.selectRepresentAccountNum(token);
+	}
+	// =====================================================================
+	// API - 출금이체 요청
+	public Map<String, String> requestWithdraw(Map<String, Object> map) {
+		// PayApiClient - requestWithdraw()
+		return payApiClient.requestWithdraw(map);
 	}
 
 

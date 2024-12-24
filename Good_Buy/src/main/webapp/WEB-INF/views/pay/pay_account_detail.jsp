@@ -66,7 +66,7 @@
 			<hr>
 			<%-- 2.6. 계좌이체 서비스 - 2.6.1. 출금이체 API 서비스 요청 폼 --%>
 			<%-- 거래 요청 고객(출금계좌 예금주) 정보(핀테크이용번호, 예금주명, 출금금액) 전달 --%>
-			<form action="BankWithdraw" method="post">
+			<form action="PayWithdraw" method="post">
 				<%-- 출금 계좌가 복수개일 경우 구분을 위해 핀테크 이용번호도 출금 요청 시 전송 --%>
 				<%-- 만약, 대표계좌 1개만 사용하여 입출금 구현 시 DB 에서 조회를 통해 핀테크 이용번호 조회 --%>
 				<input type="hidden" name="withdraw_client_fintech_use_num" value="${accountDetail.fintech_use_num}">

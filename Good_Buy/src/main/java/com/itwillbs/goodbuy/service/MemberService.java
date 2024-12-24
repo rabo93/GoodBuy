@@ -104,20 +104,36 @@ public class MemberService {
 	}
 
 	//상점 소개 변경
-	public int registStoreIntro(MemberVO member) {
-//		return mapper.updateStoreIntro(member);
-	}
+//	public int registStoreIntro(MemberVO member) {
+////		return mapper.updateStoreIntro(member);
+//	}
 
 	
-	// 휴대폰번호 회원찾기
+	//-------------------------------------------------------------
+	// [CoolSMS] 휴대폰번호 인증 중복 확인
 	public String getMemberInfo(String userPhone) {
 		return mapper.selectMemberInfo(userPhone);
 	}
-
-	// 휴대폰번호 인증 정보 저장
+	
+	// [CoolSMS] 휴대폰번호 인증 정보 저장
 	public void registSmsAuthInfo(SmsAuthInfoVO smsAuthInfoVO) {
 		mapper.insertSmsAuthInfo(smsAuthInfoVO);
 	}
+	
+	// [CoolSMS] 휴대폰번호 인증 정보 조회
+	public SmsAuthInfoVO getSmsAuthInfo(String userPhone) {
+		return mapper.selectSmsAuthInfo(userPhone);
+	}
+	
+	// [CoolSMS] 휴대폰번호 인증 상태 업데이트
+	public void updateAuthStatus(String userPhone) {
+		mapper.updateAuthStatus(userPhone);
+	}
+	//-------------------------------------------------------------
+
+
+
+
 	
 
 

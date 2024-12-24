@@ -74,6 +74,8 @@ public interface MemberMapper {
 
 	// 휴대폰번호 인증 정보 저장
 	void insertSmsAuthInfo(SmsAuthInfoVO smsAuthInfoVO);
+	//상점소개 변경
+	int updateStoreIntro(MemberVO member);
 	
 
 

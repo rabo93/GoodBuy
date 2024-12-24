@@ -32,12 +32,6 @@ public class AdminController {
 		return "admin/index";
 	}
 	// ======================================================
-	// 공통코드 관리 - 목록
-	@GetMapping("AdmCommoncodeList")
-	public String admCommoncodeList() {
-		return "admin/code_list";
-	}
-	
 	// 공통코드 관리 - 등록 폼 요청
 	@GetMapping("AdmCommoncodeRegistForm")
 	public String admCommoncodeRegistForm() {
@@ -57,7 +51,7 @@ public class AdminController {
             @RequestParam("CODE_SEQ") List<String> codeSeq,
             Model model, HttpSession session) {
 		
-//		System.out.println("codeStatus : " + codeStatus);
+//		log.info(">>>>>>>> codeStatus : " + codeStatus);
 		
 		List<Map<String, Object>> subCodes = new ArrayList<Map<String, Object>>();
 		for (int i = 0; i < codeIds.size(); i++) {
@@ -91,8 +85,18 @@ public class AdminController {
 	// 공통코드 관리 - 수정
 	@GetMapping("AdmCommoncodeModify")
 	public String admCommoncodeModify() {
+		
+		
 		return "admin/code_modify";
 	}
+	
+	// 공통코드 관리 - 목록
+	@GetMapping("AdmCommoncodeList")
+	public String admCommoncodeList() {
+		return "admin/code_list";
+	}
+	
+	
 	// ======================================================
 	// 회원 관리
 	

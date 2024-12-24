@@ -59,15 +59,15 @@
                                     	<h6 class="font-weight-bold text-primary mb-4">공통코드</h6>
                                         <div class="mb-3">
                                             <label class="small mb-1" for="CODETYPE_ID">공통코드ID</label>
-                                            <input class="form-control" id="codetype_id" name="CODETYPE_ID" type="text" placeholder="공통코드 ID 입력" value="">
+                                            <input class="form-control" id="codetype_id" name="CODETYPE_ID" type="text" placeholder="공통코드 ID 입력" required>
                                         </div>
                                         <div class="mb-3">
                                             <label class="small mb-1" for="CODETYPE_NAME">공통코드명</label>
-                                            <input class="form-control" id="codetype_name" name="CODETYPE_NAME" type="text" placeholder="공통코드명 입력" value="">
+                                            <input class="form-control" id="codetype_name" name="CODETYPE_NAME" type="text" placeholder="공통코드명 입력" required>
                                         </div>
                                         <div class="mb-3">
                                             <label class="small mb-1" for="DESCRIPTION">설명</label>
-                                            <input class="form-control" id="description" name="DESCRIPTION" type="text" placeholder="설명 입력" value="">
+                                            <input class="form-control" id="description" name="DESCRIPTION" type="text" placeholder="설명 입력" required>
                                         </div>
                                         <hr class="mt-4 pt-2">
                                         <h6 class="m-0 font-weight-bold text-primary">상세코드</h6>
@@ -90,7 +90,7 @@
 			                                            <th class="col-2">상세코드명</th>
 			                                            <th>설명</th>
 			                                            <th class="col-2">사용여부</th>
-			                                            <th class="col-1">순서</th>
+			                                            <th class="col-1" style="min-width:100px;">순서</th>
 			                                        </tr>
 			                                    </thead>
 			                                </table>

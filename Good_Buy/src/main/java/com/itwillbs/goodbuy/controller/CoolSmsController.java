@@ -42,33 +42,32 @@ public class CoolSmsController {
 	@Value("${coolsms.from.phone}")
 	private String fromPhoneNumber;
 	
-	
 	private DefaultMessageService messageService;
 	@PostConstruct
 	public void initMessageService() {
 		this.messageService = NurigoApp.INSTANCE.initialize(apiKey, apiSecretKey, "https://api.coolsms.co.kr");
 	}
 	
+	//======================================================================================================
 	// 단일 문자 발송
 	@PostMapping("/send-one")
 	@ResponseBody
 	public ResponseEntity<?> sendOne(@RequestParam("userPhone") String userPhone, HttpSession session) {
-		System.out.println("회원 휴대폰 번호 : " + userPhone);
+		log.info(">>>>>>>>> 회원 휴대폰 번호 : " + userPhone);
 		// 해당 휴대폰 번호로 가입한 회원이 있는지 판별
 		String memId = memberService.getMemberInfo(userPhone);
 		
-		// 이미 존재할 경우
+		// * 이미 존재할 경우 (=> 구현 다하고 주석 풀기)
 //		if (memId != null) {
 //			return ResponseEntity.badRequest()
 //					.header("Content-Type", "text/plain; charset=UTF-8")
 //					.body("이미 존재하는 휴대폰번호입니다.");
 //		}
 		
-		
-		// 존재하지 않을 경우
-        // 1) 랜덤 인증번호 생성
+		// * 존재하지 않을 경우
+        // 1) 랜덤 인증번호 생성 **아래에 랜덤 코드 생성 메서드 호출
 	    String smsCode = RandomNumber();
-        System.out.println("인증번호 : "+ smsCode);
+        log.info(">>>>>>>>>> 인증번호 : "+ smsCode);
         session.setAttribute("smsCode", smsCode);
         session.setAttribute("smsCodeTime", System.currentTimeMillis());
         
@@ -80,28 +79,66 @@ public class CoolSmsController {
         
         // 3) coolSMS API 사용하여 사용자 핸드폰에 전송
     	SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
-    	log.info(">>>>>>>>>>coolSMS API 요청 응답 : " + response);
+    	log.info(">>>>>>>>>> coolSMS API 요청 응답 : " + response);
     	
-    	// 4) DB에 인증정보 저장
+    	// 4) 인증 정보 SmsAuthInfoVO 객체에 담아서 DB에 저장
     	SmsAuthInfoVO smsAuthInfoVO = new SmsAuthInfoVO();
     	smsAuthInfoVO.setMem_phone(userPhone);
     	smsAuthInfoVO.setAuth_code(smsCode);
     	smsAuthInfoVO.setMem_id(memId);
     	memberService.registSmsAuthInfo(smsAuthInfoVO);
     	
-    	//AJAX에 성공 응답 반환
+    	// 5) AJAX에 성공 응답 반환
     	return ResponseEntity.ok(response);
 	}
-	
-	//랜덤 코드 생성
+	//-----------------------------------------------------------------------------
+	// * 랜덤 코드 생성 (6자리) *
     public static String RandomNumber() {
     	Random random = new Random();
         int randomNum = random.nextInt(1000000); // 1000000 미만인 숫자
         DecimalFormat format = new DecimalFormat("000000"); // 숫자 포맷 지정
         return format.format(randomNum);
     }
+    //-----------------------------------------------------------------------------
     
-    
+    //======================================================================================================
+    // sms로 받은 인증번호와 입력한 인증번호 검증 로직
+    @PostMapping("/verify-code")
+    @ResponseBody
+    public ResponseEntity<?> verifyCode(@RequestParam("authCode") String authCode, @RequestParam("userPhone") String userPhone) {
+    	// 1) DB에서 해당 휴대폰 번호의 인증 정보 조회
+        SmsAuthInfoVO smsAuthInfo = memberService.getSmsAuthInfo(userPhone);
+        
+        if (smsAuthInfo == null) {
+            return ResponseEntity.badRequest()
+            		.header("Content-Type", "text/plain; charset=UTF-8")
+            		.body("인증번호 요청 기록이 존재하지 않습니다.");
+        }
+        
+        // 2) 인증번호 유효시간 확인 (5분)
+        long validDuration = 5 * 60 * 1000; // 5분(밀리초)
+        long currentTime = System.currentTimeMillis();
+        long authDateTime = smsAuthInfo.getAuth_date().getTime(); // DB의 인증요청 시간
+
+        if (currentTime - authDateTime > validDuration) {
+            return ResponseEntity.badRequest()
+            		.header("Content-Type", "text/plain; charset=UTF-8")
+            		.body("인증번호가 만료되었습니다.");
+        }
+        
+        // 3) 인증번호 비교
+        if (!authCode.equals(smsAuthInfo.getAuth_code())) {
+            return ResponseEntity.badRequest()
+                    .header("Content-Type", "text/plain; charset=UTF-8")
+                    .body("인증번호가 일치하지 않습니다.");
+        }
+        
+        // 4) 인증 성공 시 인증상태(1:인증완료) 업데이트
+        memberService.updateAuthStatus(userPhone);
+        
+        return ResponseEntity.ok("인증에 성공했습니다.");
+        
+    }
     
     
     

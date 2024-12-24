@@ -210,17 +210,36 @@
 		 WHERE MEM_ID = #{mem_id}
 	</update>
 	
-	<!-- 휴대폰번호 중복체크  -->
+	
+	<!-- [CoolSMS] 휴대폰번호 인증 중복 확인  -->
 	<select id="selectMemberInfo" resultType="String">
 		SELECT MEM_ID
 		  FROM MEMBER
 		 WHERE MEM_PHONE = #{userPhone}
 	</select>
-	<!-- 휴대폰 인증 정보 저장(인증대기) -->
+	
+	<!-- [CoolSMS] 휴대폰 인증 정보 저장(인증대기) -->
 	<insert id="insertSmsAuthInfo" parameterType="smsAuthInfoVO">
 	    INSERT INTO PHONE_AUTH_INFO (MEM_PHONE, AUTH_CODE, MEM_ID, AUTH_DATE, STATUS)
 	    VALUES (#{mem_phone}, #{auth_code}, #{mem_id}, now(), 0)
 	</insert>
 	
+	<!-- [CoolSMS] 휴대폰 인증 정보 조회 -->
+	<select id="getSmsAuthInfo" parameterType="String" resultType="SmsAuthInfoVO">
+	    SELECT MEM_PHONE, AUTH_CODE, MEM_ID, AUTH_DATE, STATUS
+	      FROM PHONE_AUTH_INFO
+	     WHERE MEM_PHONE = #{userPhone}
+	       AND STATUS = 0 -- 인증대기 상태만 조회
+	     ORDER BY AUTH_DATE DESC -- 최신 요청 순으로 조회
+	     LIMIT 1
+	</select>
+	
+	<!-- [CoolSMS] 인증 상태 업데이트 -->
+	<update id="updateAuthStatus" parameterType="map">
+	    UPDATE PHONE_AUTH_INFO
+	       SET STATUS = #{status}, AUTH_DATE = now()
+	     WHERE MEM_PHONE = #{userPhone}
+	       AND STATUS = 0 -- 인증대기 상태만 업데이트
+	</update>
 	
 </mapper>

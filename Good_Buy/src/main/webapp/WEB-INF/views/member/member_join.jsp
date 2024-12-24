@@ -55,7 +55,7 @@
 												<input type="text" name="auth_code" id="auth_code" placeholder="인증번호입력" disabled required> 
 												<span class="rest-time">05:00</span>
 											</div>
-											<input type="button" class="before" value="인증완료" >
+											<input type="button" class="before" value="인증하기" id="authChkBtn">
 											<input type="button" class="after" value="인증완료" >
 										</div>
 										<div id="authCheckResult" class="result"></div>
@@ -208,10 +208,13 @@
 			}).open();
 		}
 	</script>
-	<!-- *********** 문자 인증 API ************ -->
+	
+	<!-- *********** [CoolSMS] 문자 인증 API ************ -->
 	<script type="text/javascript">
 	$(function() {
-		var code2 = "";
+		let smsCode = ""; // 서버에서 발송된 인증번호 저장
+		
+		// 인증번호 요청 버튼 클릭 이벤트
         $("#phoneChk").click(function(){
             let phone = $("#mem_phone").val(); // 버튼 클릭 시 입력값 가져오기
             let regex = /^[0-9]{11}$/; // 전화번호 유효성 검사
@@ -233,12 +236,15 @@
                 	
                 	if(data == "error") {
                 		alert("휴대폰번호가 올바르지 않습니다.");
-                		$("#mem_phone").attr("autofocus", true);
+                		$("#mem_phone").focus();
+                		
                 	} else { // 발송 성공시 
                 		$("#auth_code").attr("disabled", false); // 인증코드 입력창 활성화
                 		$("#mem_phone").attr("readonly", true);	// 휴대폰번호 입력창 읽기전용으로 변경
                     	$("#phoneCheckResult").text("인증번호 발송 성공").css("color", "var(--secondary)");
-                		code2 = data;
+                    	smsCode = data; // 서버에서 받은 인증번호 저장
+                    	
+                    	$("#authChkBtn").attr("disabled", false); // 인증하기 버튼 활성화
                 	}
                 },
                 error: function(xhr) {
@@ -253,6 +259,42 @@
                 }
             });
         });
+        
+		// 인증하기 버튼 클릭 이벤트
+		$("#authChkBtn").click(function () {
+			let authCode = $("#auth_code").val(); // 입력된 인증번호
+			
+			if (!authCode) {
+                alert("인증번호를 입력해주세요.");
+                return;
+            }
+			
+			$.ajax({
+                type: "POST",
+                url: "/verify-code",
+                data: { "authCode": authCode, "smsCode": smsCode },
+                success: function (response) {
+                    if (response.success) {
+                        alert("인증 성공!");
+                        $("#authCheckResult").text("인증 성공").css("color", "green");
+                        $(".after").attr("disabled", false); // 인증완료 버튼 활성화
+                        $("#authChkBtn").attr("disabled", true); // 인증하기 버튼 비활성화
+                    } else {
+                        alert("인증 실패! 다시 시도해주세요.");
+                        $("#authCheckResult").text("인증 실패").css("color", "red");
+                    }
+                },
+                error: function () {
+                    alert("서버 요청 중 오류가 발생했습니다.");
+                }
+            });
+			
+			
+			
+		});
+		
+		
+        
     });
 	</script>
 </body>

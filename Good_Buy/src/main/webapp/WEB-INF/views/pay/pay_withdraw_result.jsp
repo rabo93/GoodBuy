@@ -39,11 +39,6 @@
                 <h2 class="page-title">굿페이 > 굿페이 충전</h2>
                 
 				 <div class="goodpay-container">
-				 ?? 지금 출금이 아이티윌로 간거면 
-				 
-				 충전되어 있는 금액도 아이티윌로 들어간거겟네
-				 
-				 그럼 출금 결과랑 충전결과가 같이  떠야 한다. 
 				 	<h1>핀테크 계좌 출금 이체결과</h1>
 					<h3>${account_holder_name} 고객님의 정보</h3>
 					<table border="1">

@@ -43,25 +43,6 @@ public class MemberController {
 	@Autowired
 	private PayService payService;
 	
-//	@Autowired
-//	private MypageService mypageService;
-	
-//	private String uploadPath = "/resources/upload";
-	
-//	@Value("${smsApiKey}")
-//	private String smsApiKey;
-//	
-//	@Value("${smsSecretKey}")
-//	private String smsSecretKey;
-//	
-	//문자인증
-//	final DefaultMessageService messageService;
-	
-	// application.properties에 선언한 apikey와, apiSecretKey를 받아 사용
-//	public MemberController() {
-//        this.messageService = NurigoApp.INSTANCE.initialize("smsApiKey", "smsSecretKey", "https://api.coolsms.co.kr");
-//    }
-	
 	//=================================================================================================================================
 	// [ 로그인 페이지 구현 ]
 	@GetMapping("SNSLogin")
@@ -185,11 +166,31 @@ public class MemberController {
 	@PostMapping("MemberJoin")
 	public String join(MemberVO member, Model model, BCryptPasswordEncoder passwordEncoder, HttpSession session) {
 	    log.info("member : " + member);
-	    
-	    // 비밀번호 암호화
+	    //-----------------------------------------------------------------------
+	    // [ 비밀번호 암호화 ]
 	    String securePasswd = passwordEncoder.encode(member.getMem_passwd());
 	    member.setMem_passwd(securePasswd);
 
+	    //-----------------------------------------------------------------------
+	    // [ 회원 가입 처리 ]
+	    int insertCount = memberService.registMember(member);
+	    if (insertCount > 0) {
+	    	String email = member.getMem_email1() + "@" + member.getMem_email2();
+	    	session.setAttribute("sId", member.getMem_name());
+	    	session.setAttribute("sMail", email);
+	    	
+//	         이메일 인증 처리
+//	        handleEmailAuth(member);
+	    	
+	    	session.invalidate();
+	    	
+	    	return "redirect:/MemberJoinSuccess";
+	    } else {
+	    	model.addAttribute("msg", "회원가입 실패\n항목을 다시 확인해주세요");
+	    	return "result/fail";
+	    }
+	    
+	    //-----------------------------------------------------------------------
 	    // 파일 업로드 처리
 //	    boolean fileUploadSuccess = handleFileUpload(member, session, model);
 //	    if (!fileUploadSuccess) {
@@ -197,23 +198,6 @@ public class MemberController {
 //	        return "result/fail";
 //	    }
 	    
-	    // 회원 가입 처리
-	    int insertCount = memberService.registMember(member);
-	    if (insertCount > 0) {
-	    	String email = member.getMem_email1() + "@" + member.getMem_email2();
-	        session.setAttribute("sId", member.getMem_name());
-	        session.setAttribute("sMail", email);
-
-//	         이메일 인증 처리
-	        handleEmailAuth(member);
-	       
-	        session.invalidate();
-	        
-	        return "redirect:/MemberJoinSuccess";
-	    } else {
-	        model.addAttribute("msg", "회원가입 실패\n항목을 다시 확인해주세요");
-	        return "result/fail";
-	    }
 	}
 
 	// 파일 업로드 처리 메서드
@@ -253,57 +237,57 @@ public class MemberController {
 //	}
 
 	//=================================================================================================================================
-	// [ 이메일 인증 처리 메서드 ]
-	private void handleEmailAuth(MemberVO member) {
-		System.out.println("memberHandle : " + member);
-		MailAuthInfo mailAuthInfo = mailService.sendAuthMail(member,member.getMem_email1(),member.getMem_email2());
-		System.out.println("인증정보 : " + mailAuthInfo);
-		memberService.registMemberAuthInfo(mailAuthInfo);
-	}
-	
-	// [ 이메일 인증 ]
-	@GetMapping ("MemberEmailAuth")
-	public String emailAuth(MailAuthInfo mailAuthInfo , Model model) {
-		System.out.println("mailAuthInfo"+mailAuthInfo);
-		
-		// MemberService
-		boolean isAuthSuccess = memberService.requestEmailAuth(mailAuthInfo);
-		
-		// 인증처리 결과판별
-		if(!isAuthSuccess) {
-			model.addAttribute("msg", "메일 인증 실패\\다시 인증해주세요");
-			return "result/fail";
-		} else {
-			model.addAttribute("msg", "메일 인증 성공\\로그인 페이지로 이동합니다");
-			model.addAttribute("targetURL", "MemberLogin");
-			return "result/fail"; //fail로 가는이유는 문자 출력하기 위해서
-		}
-		
-	}
-	
-	// [ 메일 인증 재발송 ]
-	@GetMapping("ReSendAuthMail")
-	public String reSendAuthMail(MemberVO member,HttpSession session) {
-		return "member/resend_auth_mail_form";
-	}
-	
-	@PostMapping("ReSendAuthMail")
-	public String reSendAuthMail(MemberVO member, Model model , HttpSession session) {
-		MemberVO dbmember = memberService.getMember(member);
-		
-		if(!member.getMem_email().equals(dbmember.getMem_email())) {
-			model.addAttribute("msg","[존재하지 않는 이메일]\\n이메일을 다시한번 확인해주세요");
-			return "result/fail";
-		}
-		
-		MailAuthInfo mailAuthInfo = mailService.reSendAuthMail(member, member.getMem_email());
-		
-		memberService.registMemberAuthInfo(mailAuthInfo);
-		model.addAttribute("msg", "인증메일 발송 성공");
-		model.addAttribute("targetURL", "MemberJoinSuccess");
-		
-		return "result/fail";
-		}
+	// [ 이메일 인증 처리 메서드 ] => 안함
+//	private void handleEmailAuth(MemberVO member) {
+//		System.out.println("memberHandle : " + member);
+//		MailAuthInfo mailAuthInfo = mailService.sendAuthMail(member,member.getMem_email1(),member.getMem_email2());
+//		System.out.println("인증정보 : " + mailAuthInfo);
+//		memberService.registMemberAuthInfo(mailAuthInfo);
+//	}
+//	
+//	// [ 이메일 인증 ]
+//	@GetMapping ("MemberEmailAuth")
+//	public String emailAuth(MailAuthInfo mailAuthInfo , Model model) {
+//		System.out.println("mailAuthInfo"+mailAuthInfo);
+//		
+//		// MemberService
+//		boolean isAuthSuccess = memberService.requestEmailAuth(mailAuthInfo);
+//		
+//		// 인증처리 결과판별
+//		if(!isAuthSuccess) {
+//			model.addAttribute("msg", "메일 인증 실패\\다시 인증해주세요");
+//			return "result/fail";
+//		} else {
+//			model.addAttribute("msg", "메일 인증 성공\\로그인 페이지로 이동합니다");
+//			model.addAttribute("targetURL", "MemberLogin");
+//			return "result/fail"; //fail로 가는이유는 문자 출력하기 위해서
+//		}
+//		
+//	}
+//	
+//	// [ 메일 인증 재발송 ]
+//	@GetMapping("ReSendAuthMail")
+//	public String reSendAuthMail(MemberVO member,HttpSession session) {
+//		return "member/resend_auth_mail_form";
+//	}
+//	
+//	@PostMapping("ReSendAuthMail")
+//	public String reSendAuthMail(MemberVO member, Model model , HttpSession session) {
+//		MemberVO dbmember = memberService.getMember(member);
+//		
+//		if(!member.getMem_email().equals(dbmember.getMem_email())) {
+//			model.addAttribute("msg","[존재하지 않는 이메일]\\n이메일을 다시한번 확인해주세요");
+//			return "result/fail";
+//		}
+//		
+//		MailAuthInfo mailAuthInfo = mailService.reSendAuthMail(member, member.getMem_email());
+//		
+//		memberService.registMemberAuthInfo(mailAuthInfo);
+//		model.addAttribute("msg", "인증메일 발송 성공");
+//		model.addAttribute("targetURL", "MemberJoinSuccess");
+//		
+//		return "result/fail";
+//		}
 		
 	//=================================================================================================================================
 	// [ 아이디/닉네임 중복체크 ]

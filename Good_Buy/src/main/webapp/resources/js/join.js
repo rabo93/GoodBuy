@@ -33,29 +33,7 @@ $(document).ready(function() {
 	});
 });
 
-//function checkMail(){
-//	let mail = $("#mem_email1").val();
-//    //let email2 = $("#mem_email2").val();
-//    //let mail = email1 + "@" + email2;
-//	$.ajax({
-//		type : "get",
-//		url : "MemberCheckMail" ,
-//		data : {
-//			mem_email : mail
-//		},
-//		success : function(result){
-//			if(result.trim() == "false"){
-//				$("#checkMail").text("사용가능한 이메일입니다").css("color","green");
-//				checkNic = true;
-//			}else {
-//				$("#checkMail").text("이미 사용중인 이메일입니다").css("color","red");
-//				checkNic = false;
-//			}
-//		}
-//	})
-//};
-
-// ************* 이름 검사**************
+// ************* 이름 검사 **************
 function checkNameResult(){
 	let name = $("#mem_name").val();
 	let regex = /^[가-힣]{2,4}$/;
@@ -92,14 +70,14 @@ function checkId(){
 				}
 			} 
 		});
-	}else{
+	} else {
 		$("#checkIdResult").text("4~12글자만 사용가능");
 		$("#checkIdResult").css("color", "red");
 		checkIdResult = false;
 	}
 }
  		
-/************** 닉네임 중복검사 ************* */
+/* ************* 닉네임 중복검사 ************* */
 function ckNick(){
 	let nick = $("#mem_nick").val();
 	let regex = /^[\w가-힣]{2,8}$/;
@@ -119,40 +97,15 @@ function ckNick(){
 //						alert("닉네임을 다시 확인해주세요");
 						checkNic = false;
 					}
-				} ,
-			error : function(){
-//				alert("이미 사용중인 닉네임 입니다\n다시 입력해주세요")
-			}
+				}
 		});
-	}else{
+	} else {
 		$("#checkNic").text("2~8글자만 사용가능");
 		$("#checkNic").css("color", "red");
 		checkNic = false;
 	}
 }
 
-
-// ************* 비밀번호 길이검사**************
-function checkPasswdLength1() {
-//    let passwd = $("#mem_passwd1").val();
-//    let regex = /^(?=.*[\d])(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]{8,}$/;
-//
-//    if (regex.test(passwd)) {
-//        $("#checkPasswd1").text("사용가능한 비밀번호 입니다");
-//        $("#checkPasswd1").css("color", "green");
-//        checkPasswd1 = true;
-//    } else if (passwd === "") {
-//        $("#checkPasswd1").text("비밀번호를 입력해주세요.");
-//        $("#checkPasswd1").css("color", "red");
-//        checkPasswd1 = false;
-//    } else {
-//        // 조건이 맞지 않는 경우
-//        $("#checkPasswd1").text("8자리 이상,숫자/특수문자 중 2종류 포함 해주세요");
-//        $("#checkPasswd1").css("color", "red");
-//        alert("비밀번호를 확인해주세요");
-//        checkPasswd1 = false;
-//    }
-}
 
 // ************* 비밀번호 재입력 동일 검사**************
 function checkPasswdResult(){
@@ -170,34 +123,9 @@ function checkPasswdResult(){
 	}
 }
 
-/********** 전화번호 유효성 검사 ********* */
-//function phoneCheck(){
-//	let phone = $("#mem_phone").val();
-//	let regex = /^[0-9]{11}$/;
-//	
-//	if (regex.test(phone)) {
-//		$("#phoneCheckResult").text("");
-//		phoneCheckResult = true;
-//	}else {
-//        $("#phoneCheckResult").css("color", "red");
-//		$("#phoneCheckResult").text("전화번호가 올바르지 않습니다.");
-//		phoneCheckResult = false;
-//	}
-//}
-// ************* 이용약관 체크 **************
-//$(document).ready(function() {
-//$("#terms_all").click(function() {
-//		// 전체선택을 제외한 나머지 체크박스에 대한 반복 수행
-//		$("input[name=terms]").each(function(index, item) {
-//			// 전체선택 체크박스 체크상태값을 각 체크박스 체크상태값으로 설정
-//			$(item).prop("checked", $("#terms_all").prop("checked"));
-//		});
-//		
-//	});
-//});
 
+// "전체동의하기(terms_all)" 버튼 클릭시 전체 항목 선택/해제 이벤트
 $(document).ready(function() {
-	// "전체동의하기(terms_all)" 버튼 클릭시 전체 항목 선택/해제 이벤트
 	const checkAll = document.querySelector('#terms_all'); //id 속성 가져와서 변수에 저장
 	const checkboxes = document.querySelectorAll('.terms'); //name 속성 전체 가져와서 변수에 저장
 
@@ -225,7 +153,45 @@ $(document).ready(function() {
 });
 
 
-// **************프로필 미리보기*************
+
+
+
+/* 회원가입 버튼 */
+function checkSubmit(){
+    // 유효성 검사
+    if (!checkIdResult || !checkNic || !checkPasswd1) {
+        alert("회원정보를 다시 확인해주세요");
+        console.log("유효성 검사 실패");
+        return false;
+    }
+	
+	// 생년월일 결합
+    let year = $("#year").val();
+    let month = $("#month").val();
+    let day = $("#day").val();
+	console.log(year + ", " + month + ", " + day);
+	
+	if (year === "YEAR" || month === "MONTH" || day === "DAY") {
+        alert("생년월일을 모두 선택해주세요.");
+        return false; // 폼 제출을 막음
+    }
+	
+    // 생년월일 결합 (YYYY-MM-DD 형식)
+    month = month.padStart(2, '0'); // 2자리로 변환
+    day = day.padStart(2, '0'); // 2자리로 변환
+    let birthday = `${year}-${month}-${day}`;
+	console.log("생년월일:", birthday);
+	
+	// 숨겨진 입력 필드에 생년월일 설정
+	$("#mem_birthday").val(birthday);
+	
+	// 폼 제출
+    $("#joinForm").submit();
+};
+
+//==============================================================================
+// [ 회원 수정 ]
+// 프로필 사진
 $("#profile_img").change(function (event) {
     let file = event.target.files[0];
     let reader = new FileReader();
@@ -240,22 +206,7 @@ $("#profile_img").change(function (event) {
     }
 });
 
-
-
-
-/* 회원가입 버튼 */
-function checkSubmit(){
-    if (!checkIdResult || !checkNic || !checkPasswd1) {
-        alert("회원정보를 다시 확인해주세요");
-        console.log("유효성 검사 실패");
-        return false;
-    } else {
-        $("#joinForm").submit();
-    }
-};
-
-
-/* 수정완료 버튼 */
+// 수정완료 버튼
 function myInfoModify(){
     if (!checkIdResult || !checkNic || !checkPasswd1) {
         alert("회원정보를 다시 확인해주세요");

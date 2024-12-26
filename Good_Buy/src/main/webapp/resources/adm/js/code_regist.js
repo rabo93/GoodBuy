@@ -12,35 +12,52 @@ document.addEventListener("DOMContentLoaded", function(){
 	// 변수 선언
 	const btnAddRow = document.querySelector("#btnAddRow");
 	const btnDeleteRow = document.querySelector("#btnDeleteRow");
-	const btnSave = document.querySelector("#btnSave");
+	const btnSubmitForm = document.querySelector("#btnSubmitForm");
+	const commoncodeForm = document.querySelector("form[name=commoncodeForm]");
 
 	// 행 추가
 	function addNewRow() {
 		const rowCount = codeTable.rows().count() + 1;
-		const newRow = `
-			<tr class="tr">
-                <td>
-                	<div class="custom-control custom-checkbox small">
-                    	<input type="checkbox" class="custom-control-input" id="customCheck${rowCount}">
-                    	<label class="custom-control-label" for="customCheck${rowCount}"></label>
-                	</div>
-                </td>
-                <td class="num">${rowCount}</td>
-                <td><input type="text" class="form-control" name="CODE_ID" placeholder="상세코드ID 입력" required></td>
-                <td><input type="text" class="form-control" name="CODE_NAME" placeholder="상세코드명 입력" required></td>
-                <td><input type="text" class="form-control" name="CODE_DESCRIPTION" placeholder="설명 입력" required></td>
-                <td>
-                	<div class="form-check form-switch">
-                		<input type="hidden" value="1" name="CODE_STATUS">
-						<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault${rowCount}" checked required>
-						<label class="form-check-label" for="flexSwitchCheckDefault${rowCount}">사용함</label>
-					</div>
-                </td>
-                <td><input type="number" min="1" class="form-control" name="CODE_SEQ" placeholder="순서 입력" value="1" required></td>
-            </tr>
-		`;
-
-		codeTable.row.add($(newRow)).draw(false);
+//		const newRow = `
+//			<tr class="tr">
+//                <td>
+//                	<div class="custom-control custom-checkbox small">
+//                    	<input type="checkbox" class="custom-control-input" id="customCheck${rowCount}">
+//                    	<label class="custom-control-label" for="customCheck${rowCount}"></label>
+//                	</div>
+//                </td>
+//                <td class="num">${rowCount}</td>
+//                <td><input type="text" class="form-control" name="CODE_ID" placeholder="상세코드ID 입력" required></td>
+//                <td><input type="text" class="form-control" name="CODE_NAME" placeholder="상세코드명 입력" required></td>
+//                <td><input type="text" class="form-control" name="CODE_DESCRIPTION" placeholder="설명 입력" required></td>
+//                <td>
+//                	<div class="form-check form-switch">
+//                		<input type="hidden" value="1" name="CODE_STATUS">
+//						<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault${rowCount}" checked required>
+//						<label class="form-check-label" for="flexSwitchCheckDefault${rowCount}">사용함</label>
+//					</div>
+//                </td>
+//                <td><input type="number" min="1" class="form-control" name="CODE_SEQ" placeholder="순서 입력" value="1" required></td>
+//            </tr>
+//		`;
+//
+//		codeTable.row.add($(newRow)).draw(false);
+		codeTable.row.add([
+			`<div class="custom-control custom-checkbox small">
+               	<input type="checkbox" class="custom-control-input" id="customCheck${rowCount}">
+                <label class="custom-control-label" for="customCheck${rowCount}"></label>
+			</div>`,
+			`<span class="num">${rowCount}</span>`,
+			`<input type="text" class="form-control" name="CODE_ID" placeholder="상세코드ID 입력" required>`,
+			`<input type="text" class="form-control" name="CODE_NAME" placeholder="상세코드명 입력" required>`,
+			`<input type="text" class="form-control" name="CODE_DESCRIPTION" placeholder="설명 입력" required>`,
+			`<div class="form-check form-switch">
+        		<input type="hidden" value="1" name="CODE_STATUS">
+				<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault${rowCount}" checked>
+				<label class="form-check-label" for="flexSwitchCheckDefault${rowCount}">사용함</label>
+			</div>`,
+			`<input type="number" min="1" class="form-control" name="CODE_SEQ" placeholder="순서 입력" value="${rowCount}" required>`
+		]).draw(false);
 	}
 	
 	// 행 삭제
@@ -55,23 +72,25 @@ document.addEventListener("DOMContentLoaded", function(){
 			const row = codeTable.row($(this));
 			row.remove(this);
 		});
-//		console.log(deleteRow); // 삭제할 row 확인
+		console.log("삭제할 로우 : "+ deleteRow); // 삭제할 row 확인
 
 		codeTable.draw(true);
 		reDrawTable();
 	}
 	
-	// 행 삭제 후 컬럼 번호 새로 그리기
+	// 행 삭제 후 컬럼 번호, 순서 새로 그리기
 	function reDrawTable() {
 		codeTable.rows().every(function(i) {
-//			console.log(i); // 삭제 후 남은 row index 출력
+			console.log("삭제후 남은 row : " + i); // 삭제 후 남은 row index 출력
 			const row = this.node();
-			const newNum = $(row).find("td.num");
+			const newNum = $(row).find("span.num");
+			const newOrder = $(row).find("input[name=CODE_SEQ]");
 			
 			updateCheckboxAndSwtich(row, i);
 			
 			if(newNum.length > 0) {
 				newNum.text(i + 1);
+				newOrder.val(i + 1);
 			}
 		});
 	}
@@ -97,23 +116,54 @@ document.addEventListener("DOMContentLoaded", function(){
 		
 	}
 	
-	// 폼 전체 유효성 검사
-	function validateForm(){
-		
-	}
-	
 	// 전체 폼 저장
-	function saveFormTable() {
-	    let data = codeTable.$('input').serialize();
-	    console.log(data);
-	    validateForm();
-	    
+	function submitForm(e) {
+		e.preventDefault();
+		const formData = $(this).serializeArray();
+		console.log("폼데이터111: " + formData); // 넘어오는거 확인
+		
+		// 일반 필드 input 값 저장
+		const dataMap = {};
+		formData.forEach((field) => {
+			dataMap[field.name] = field.value;
+		});
+		
+		// datatables input 필드 값 저장
+		const tbData = [];
+		$("#commoncode tbody tr").each(function() {
+			const rowData = {};
+			$(this).find('input').each(function(){
+				rowData[$(this).attr('name')] = $(this).val();
+				console.log(rowData);
+				delete rowData[undefined];
+			});
+			tbData.push(rowData);
+			console.log("테이블 data : " + rowData);
+		});
+		
+		dataMap['tbData'] = tbData;
+		console.log(dataMap);
+		
+		$.ajax({
+			url: "AdmCommoncodeRegist",
+			type: "POST",
+			contentType : 'application/json',
+			data : JSON.stringify(dataMap),
+			success: function(response) {
+				alert("공통코드를 등록했습니다.");
+				location.reload(true);
+			},
+			error: function() {
+				alert("공통코드 등록이 실패했습니다.");
+			}
+		});
+		
 //	    $("form[name='commoncodeForm']").submit();
 	}
 	
 	// 사용여부 체크(스위치버튼) 처리
 	// 행이 추가되며 스위치 버튼이 동적으로 추가되기 때문에 이벤트 위임 방식 사용해야 함)
-	$(".form-check-input").on("change", function() {
+	$(document).on("change", ".form-check-input", function() {
 	    const switchBtn = this;
 	    const hiddenInput = switchBtn.parentElement.querySelector('input[type="hidden"][name="CODE_STATUS"]');
 	
@@ -126,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	
 	btnAddRow.addEventListener("click", addNewRow);
 	btnDeleteRow.addEventListener("click", deleteNewRow);
-	btnSave.addEventListener("click", saveFormTable);
+	commoncodeForm.addEventListener("submit", submitForm);
 
 	addNewRow(); // 최초 1행 추가해놓기
 });

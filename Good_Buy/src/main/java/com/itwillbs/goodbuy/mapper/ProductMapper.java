@@ -19,4 +19,6 @@ public interface ProductMapper {
 
 	List<Map<String, Object>> searchProductList(String pRODUCT_CATEGORY);
 	
+	List<ProductVO> selectOrderList(String id);
+	
 }

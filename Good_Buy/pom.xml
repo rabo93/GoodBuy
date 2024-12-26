@@ -225,6 +225,13 @@
 <!-- 		    <scope>test</scope> -->
 		</dependency>
 		
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-websocket -->
+		<!-- 13. 스프링 웹소켓 라이브러리(스프링 기본버전 사용) -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-websocket</artifactId>
+		    <version>${org.springframework-version}</version>
+		</dependency>
 		
 		<!-- ============================================================= -->
 		<!-- AOP 활용에 필요한 라이브러리 -->

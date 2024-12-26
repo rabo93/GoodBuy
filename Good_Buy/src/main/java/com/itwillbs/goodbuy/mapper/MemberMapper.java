@@ -69,13 +69,24 @@ public interface MemberMapper {
 	//상점소개 저장
 	int insertStoreIntro(MemberVO member);
 	
-	//휴대폰번호 회원 찾기
-	String selectMemberInfo(String userPhone);
-
-	// 휴대폰번호 인증 정보 저장
-	void insertSmsAuthInfo(SmsAuthInfoVO smsAuthInfoVO);
 	//상점소개 변경
 	int updateStoreIntro(MemberVO member);
+	
+	//----------------------------------------------------------
+	// [CoolSMS] 휴대폰번호 인증 중복 확인
+	String selectMemberInfo(String userPhone);
+
+	// [CoolSMS] 휴대폰번호 인증 정보 저장
+	void insertSmsAuthInfo(SmsAuthInfoVO smsAuthInfoVO);
+	
+	// [CoolSMS] 휴대폰번호 인증 정보 조회
+	SmsAuthInfoVO selectSmsAuthInfo(String userPhone);
+	
+	// [CoolSMS] 휴대폰번호 인증 상태 업데이트
+	void updateAuthStatus(String userPhone);
+	//----------------------------------------------------------
+
+
 	
 
 

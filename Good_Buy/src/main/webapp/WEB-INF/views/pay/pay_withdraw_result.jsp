@@ -23,27 +23,8 @@
 <!-- CSS for Page -->
 <link rel="stylesheet" href="../../resources/css/product.css">
 <link rel="stylesheet" href="../../resources/css/pay.css">
-
 <!-- JS for Page -->
 <script src="../../resources/js/product.js"></script>
-
-
-
-<style>
-
-
-
-
-</style>
-
-
-
-
-
-
-
-
-
 
 
 </head>
@@ -55,46 +36,47 @@
 		<section class="wrapper">
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
-				<div class="goodpay-container">
-			        <!-- 페이지 제목 -->
-			        <h2 class="page-title">굿페이 > 계좌송금</h2>
-			
-			        <!-- 입력 안내 -->
-			        <div class="input-section">
-			            <input type="text" class="input-label" placeholder="계좌번호를 입력하세요">
-			            <input type="text" class="input-label" placeholder="은행을 선택하세요">
-			        </div>
-			
-			         <!-- 충전하기 버튼 -->
-			        <div class="recharge-button">
-			            <button class="recharge-btn">다음</button>
-			        </div>
+                <h2 class="page-title">굿페이 > 굿페이 충전</h2>
+                
+				 <div class="goodpay-container">
+				 	<h1>핀테크 계좌 출금 이체결과</h1>
+					<h3>${account_holder_name} 고객님의 정보</h3>
+					<table border="1">
+						<tr>
+							<th>사용자번호</th> <%-- 세션의 token 객체에 저장되어 있음 --%>
+							<td>ok ${token.user_seq_no}</td>
+						</tr>
+						<tr>
+							<th>핀테크이용번호</th>
+							<td>${withdrawResult.FINTECH_USE_NUM}</td>
+						</tr>
+						<tr>
+							<th>상대방 계좌번호</th><!-- 사실 지금은 핀테크이용번호로 이체해서 상대방 계좌번호는 의미가 없다. -->
+							<%-- 핀테크 이용번호로 출금했으므로 임의의 계좌번호가 출력됨 --%>
+							<td>${withdrawResult.DPS_ACCOUNT_NUM_MASKED}</td>
+						</tr>
+						<tr>
+							<th>출금금액</th>
+							<td>￦ ${withdrawResult.TRAN_AMT}</td>
+						</tr>
+						<tr>
+							<th>출금일시</th>
+							<td>${withdrawResult.API_TRAN_DTM}</td>
+			<!-- 				DB에서 받은 날짜를 Map으로 받으면 T가 나옴. 앞에서 배웠으니 처리하라... 배운거 맞나? -->
+						</tr>
+						<tr>
+							<th colspan="2"><input type="button" value="돌아가기" onclick="history.back()"></th>
+						</tr>
+					</table>
 			        
-			         <!-- 계좌내역 -->
-			        <div class="accounts">
-			            <h3>내 계좌</h3>
-			            <!-- 연결된 계좌 -->
-				        <div class="linked-account">
-				            <div class="account-info">
-				                <div class="icon"></div>
-				                <span class="account-number">우체국 <strong>1234567890123</strong></span>
-				            </div>
-				            <button class="primary-account-btn">주계좌</button>
-				        </div>
-			       </div>
-			        <!-- 추천계좌 버튼 -->
-			        <div class="recommend-button">
-			            <button class="recommend-btn">우리은행 1234567890123 (으)로 송금
-			            	<span><i class="fa-solid fa-x"></i></span>
-			            </button>
-			        </div>
-			    
-			    
-			    
-			    
-			    
 			    </div>
-			    
+				
+				
+				
+				
+				
+			
+			
 				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 			</div>
 		</section>

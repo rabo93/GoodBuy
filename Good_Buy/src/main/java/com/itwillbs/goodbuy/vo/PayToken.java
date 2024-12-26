@@ -5,7 +5,7 @@ import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class PayToken {
+public class PayToken implements Serializable {
 	// -------------------------------------------------------
 	// 사용자 아이디 정보s
 	private String id;

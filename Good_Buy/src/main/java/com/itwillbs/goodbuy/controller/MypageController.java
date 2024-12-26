@@ -68,6 +68,14 @@ public class MypageController {
 		int salesCount = productService.salesCount(id);
 		model.addAttribute("salesCount", salesCount);
 		
+		//나의 리뷰 조회
+		List<MyReviewVO> review = reviewService.getReview(id);
+		model.addAttribute("review", review);
+		
+		//나의 리뷰 갯수조회
+		int reviewCount = reviewService.myReviewCount(id);
+		model.addAttribute("reviewCount", reviewCount);
+		
 		return "mypage/mypage_store";
 		
 	}
@@ -115,7 +123,7 @@ public class MypageController {
 		
 	}
 	
-	//[나의 리뷰]
+	//[나의 리뷰] 완
 	@GetMapping("MyReview")
 	public String myReview(HttpSession session,Model model) {
 		String id = (String) session.getAttribute("sId");
@@ -123,7 +131,9 @@ public class MypageController {
 		List<MyReviewVO> review = reviewService.getReview(id);
 		model.addAttribute("review", review);
 		
-		
+		//나의 리뷰 갯수조회
+		int reviewCount = reviewService.myReviewCount(id);
+		model.addAttribute("reviewCount", reviewCount);
 		
 		return "mypage/mypage_review";
 	}

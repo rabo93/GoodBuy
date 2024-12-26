@@ -13,5 +13,6 @@
 		<typeAlias type="com.itwillbs.goodbuy.vo.ProductOrderVO" alias="order" />
 		<typeAlias type="com.itwillbs.goodbuy.vo.PayToken" alias="payToken"/>
 		<typeAlias type="com.itwillbs.goodbuy.vo.SmsAuthInfoVO" alias="smsAuthInfoVO"/>
+		<typeAlias type="com.itwillbs.goodbuy.vo.FaqVO" alias="faq"/>
 	</typeAliases>
 </configuration>

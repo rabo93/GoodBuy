@@ -10,7 +10,7 @@
 					<li><a href="#">고객지원</a>
 						<ul>
 							<li><a href="NoticeMain">공지사항</a></li>
-							<li><a href="#">FAQ</a></li>
+							<li><a href="FaqMain">FAQ</a></li>
 							<li><a href="#">1:1 문의</a></li>
 						</ul>
 					</li>

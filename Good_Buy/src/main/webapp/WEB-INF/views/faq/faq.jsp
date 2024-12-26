@@ -23,6 +23,7 @@
 <!-- ******************* 아래 CSS와 JS는 페이지별로 알맞게 Import 해주세요 ****************** -->
 <!-- CSS for Page -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/faq.css">
 
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
@@ -38,6 +39,11 @@
 			<div id="faq_commandArea">
 				<section>
 					<div class="faq-container">
+						<c:if test="${sessionScope.sGrade eq '관리자'}">
+							<div class="faq-writebtn">
+								<input type="button" value="글쓰기" onclick="location.href='FaqWrite'">
+							</div>
+						</c:if>
 						<div class="faq-head">
 							<h2>FAQ</h2>
 						</div>
@@ -47,7 +53,7 @@
 							<button class="faq-button" onclick="showFAQ('payment')">전용페이</button>
 							<button class="faq-button" onclick="showFAQ('etc')">기타</button>
 						</div>
-						<div class="faq-list" id="course">
+						<div class="faq-list" id="policy">
 							<ul>
 								<c:forEach items="${faqList}" var="faqBoard">
 									<c:if test="${faqBoard.faq_cate eq 1}">
@@ -59,7 +65,7 @@
 								</c:forEach>
 							</ul>
 						</div>
-						<div class="faq-list" id="account">
+						<div class="faq-list" id="memberAccount">
 							<ul>
 								<c:forEach items="${faqList}" var="faqBoard">
 									<c:if test="${faqBoard.faq_cate eq 2}">
@@ -87,7 +93,7 @@
 								</c:forEach>
 							</ul>
 						</div>
-						<div class="faq-list" id="evidence">
+						<div class="faq-list" id="etc">
 							<ul>
 								<c:forEach items="${faqList}" var="faqBoard">
 									<c:if test="${faqBoard.faq_cate eq 4}">
@@ -103,11 +109,6 @@
 						</div>
 					</div>
 				</section>
-				<c:if test="${sessionScope.sGrade eq 'MEM03'}">
-					<div class="faq-writebtn">
-						<input type="button" value="글쓰기" onclick="location.href='FaqWrite'">
-					</div>
-				</c:if>
 			</div>
 			<!-- *********** // 여기 안에 작업하세요. section.wrapper 건들지말기 ******** -->
 		</section>
@@ -115,5 +116,6 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
+	<script src="${pageContext.request.contextPath}/resources/js/faq.js"></script>
 </body>
 </html>

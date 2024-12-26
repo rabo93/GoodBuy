@@ -5,14 +5,18 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.itwillbs.goodbuy.aop.LoginCheck;
@@ -27,22 +31,29 @@ public class ProductController {
 	// 이클립스 상의 가상의 업로드 경로명 저장(프로젝트 상에서 보이는 경로)
 	private String uploadPath = "/resources/upload";
 	
+	//
 	@GetMapping("ProductList")
-	public String productList() {
+	public String productList(@RequestParam String PRODUCT_CATEGORY, Model model) {
+		List<Map<String, Object>> listSearch = productService.searchProductList(PRODUCT_CATEGORY);
+		model.addAttribute("searchProductList", listSearch);
+		
 		return "product/product_list";
 	}
 	
+	// 거래금지 품목 페이지 매핑
 	@GetMapping("ProductBanedItem")
 	public String productBanedItem() {
 		return "product/product_baned_item";
 	}
 	
+	// 상품 등록 페이지 매핑
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("ProductRegist")
 	public String productRegist() {
 		return "product/product_regi";
 	}
 	
+	// 상품 등록 로직
 	@PostMapping("ProductRegist")
 	public String productRegistSubmit(ProductVO product, HttpSession session) {
 		String id = (String) session.getAttribute("sId");
@@ -53,8 +64,8 @@ public class ProductController {
 		realPath += "/" + subDir;
 		
 		try {
-			Path path = Paths.get(realPath); // 파라미터로 실제 업로드 경로 전달
-			Files.createDirectories(path); // IOException 예외 처리 필요(임시로 현재 클래스에서 처리)
+			Path path = Paths.get(realPath);
+			Files.createDirectories(path);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -108,7 +119,6 @@ public class ProductController {
 		
 		return "";
 	}
-	
 	
 	@GetMapping("ProductDetail")
 	public String prodcutDetail() {

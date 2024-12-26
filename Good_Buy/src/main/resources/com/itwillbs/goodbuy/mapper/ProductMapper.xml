@@ -48,4 +48,13 @@
 		)
 	</insert>
 	
+	<select id="searchProductList" resultType="map">
+		SELECT 
+			pro.PRODUCT_PIC1, pro.PRODUCT_CATEGORY, pro.PRODUCT_TRADE_ADR1, 
+				pro.PRODUCT_TITLE, pro.PRODUCT_PRICE, pro.MEM_ID, mem.MEM_NICK, pro.PRODUCT_REG_DATE
+		FROM PRODUCT pro join MEMBER mem
+		ON pro.MEM_ID = mem.MEM_ID
+		WHERE PRODUCT_CATEGORY = #{pRODUCT_CATEGORY}
+	</select>
+	
 </mapper>

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -58,40 +59,43 @@
 						<div class="contents-ttl">
 							<h3>구매내역<small>(총 <span>${orderCount}</span>건)</small></h3>
 							<div class="product-list">
-								<ul class="product-wrap">
-									<!-- 2개 -->
-									<li class="product-card">
-										<img src="../../resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" />
-										<div class="card-info">
-											<div class="category">
-												<span>생활용품</span>
-												<span class="type">직거래</span>
-											</div>
-											<div class="ttl">[구매완료]젠하이저 H3PRO 팝니다</div>
-											<div class="price">55,000 원</div>
-										</div>
-										<div>
-											<button>후기보내기</button>
-										</div>
-									</li>
-								</ul>
-								<ul class="product-wrap">
-									<!-- 2개 -->
-									<li class="product-card">
-										<img src="../../resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" />
-										<div class="card-info">
-											<div class="category">
-												<span>생활용품</span>
-												<span class="type">직거래</span>
-											</div>
-											<div class="ttl">[구매완료]젠하이저 H3PRO 팝니다</div>
-											<div class="price">55,000 원</div>
-										</div>
-										<div>
-											<button onclick="showUpdateModal(${product.product_id})">후기보내기</button>
-										</div>
-									</li>
-								</ul>
+							<c:choose>
+								<c:when test="${empty order}">
+									<ul>
+										<li>구매내역이 없습니다.</li>
+									</ul>
+								</c:when>
+								<c:otherwise>
+									<c:forEach var="product" items="${order}">
+										<li class="product-card">
+													<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" height="180px"/>
+													<div class="card-info">
+														<div class="category">
+															<span>${product.product_category}</span>
+															<span class="type">직거래</span>
+														</div>
+														<div class="ttl">
+															<c:choose>
+																<c:when test="${product.product_status == 3 }">
+																	[거래완료]
+																</c:when>
+																<c:otherwise>
+																</c:otherwise>
+															</c:choose>
+															${product.product_title}
+														</div>
+														<div class="price">
+															<fmt:formatNumber  value="${product.product_price}" type="number" pattern="#,###" />원
+														</div>
+														<div class="card-row">
+															<span class="add">부산 해운대구</span>
+															<span class="name">${product.mem_nick}</span>
+														</div>
+													</div>
+												</li>
+									</c:forEach>
+								</c:otherwise>
+							</c:choose>
 						</div>
 						</div>
 					</div>

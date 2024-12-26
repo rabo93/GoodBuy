@@ -23,6 +23,7 @@
 <!-- ******************* 아래 CSS와 JS는 페이지별로 알맞게 Import 해주세요 ****************** -->
 <!-- CSS for Page -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/faq.css">
 
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
@@ -58,10 +59,10 @@
 								<th>카테고리</th>
 								<td>
 									<select name="faq_cate">
-										<option value="1">강의수강</option>
-										<option value="2">계정관리</option>
-										<option value="3">결제환불</option>
-										<option value="4">증빙서류</option>
+										<option value="1">운영정책</option>
+										<option value="2">회원/계정</option>
+										<option value="3">전용페이</option>
+										<option value="4">기타</option>
 									</select>
 								</td>
 							</tr>
@@ -74,7 +75,7 @@
 						</table>
 						<section class="btns">
 							<input type="submit" value="등록">
-							<input type="button" value="취소" onclick="history.back()">
+							<input type="button" value="취소" onclick="location.href='FaqMain'">
 						</section>
 					</form>
 				</section>

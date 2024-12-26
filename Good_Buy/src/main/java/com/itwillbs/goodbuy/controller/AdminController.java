@@ -8,12 +8,15 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.itwillbs.goodbuy.service.AdminService;
 
@@ -39,39 +42,13 @@ public class AdminController {
 	}
 	
 	// 공통코드 관리 - 등록
+	@ResponseBody
 	@PostMapping("AdmCommoncodeRegist")
-	public String admCommoncodeRegist(
-			@RequestParam("CODETYPE_ID") String codeTypeId,
-            @RequestParam("CODETYPE_NAME") String codeTypeName,
-            @RequestParam("DESCRIPTION") String description,
-            @RequestParam("CODE_ID") List<String> codeIds,
-            @RequestParam("CODE_NAME") List<String> codeNames,
-            @RequestParam("CODE_DESCRIPTION") List<String> codeDescriptions,
-            @RequestParam("CODE_STATUS") List<String> codeStatus,
-            @RequestParam("CODE_SEQ") List<String> codeSeq,
-            Model model, HttpSession session) {
+	public String admCommoncodeRegist(@RequestBody Map<String, Object> dataMap, Model model, HttpSession session) {
+		log.info(">>>>>>>> formData : " + dataMap); 
 		
-//		log.info(">>>>>>>> codeStatus : " + codeStatus);
+		int insertCommonCode = service.registCommonCode(dataMap);
 		
-		List<Map<String, Object>> subCodes = new ArrayList<Map<String, Object>>();
-		for (int i = 0; i < codeIds.size(); i++) {
-			Map<String, Object> subCode = new HashMap<String, Object>();
-			subCode.put("CODE_ID", codeIds.get(i));
-			subCode.put("CODE_NAME", codeNames.get(i));
-			subCode.put("CODE_DESCRIPTION", codeDescriptions.get(i));
-			subCode.put("CODE_STATUS", codeStatus.get(i).equals("on") ? 1 : 2);
-			subCode.put("CODE_SEQ", codeSeq.get(i));
-			subCode.put("CODETYPE_ID", codeTypeId);
-			subCodes.add(subCode);
-		}
-		
-		Map<String, String> mainCode = new HashMap<String, String>();
-		mainCode.put("CODETYPE_ID", codeTypeId);
-		mainCode.put("CODETYPE_NAME", codeTypeName);
-		mainCode.put("DESCRIPTION", description);
-		
-		int insertCommonCode = service.registCommonCode(mainCode, subCodes);
-
 		if(insertCommonCode > 0) {
 			model.addAttribute("msg", "공통코드가 등록되었습니다.");
 			model.addAttribute("targetURL", "AdmCommoncodeRegistForm");
@@ -82,6 +59,42 @@ public class AdminController {
 		}
 	}
 	
+	// 공통코드 관리 - 목록
+	@GetMapping("AdmCommoncodeList")
+	public String admCommoncodeList() {
+		
+		return "admin/code_list";
+	}
+	
+	@ResponseBody
+	@PostMapping("AdmCommoncodeListForm")
+	public String admCommoncodeListForm(
+			@RequestParam("draw") int draw,
+			@RequestParam("start") int start,
+			@RequestParam("length") int length,
+			@RequestParam(value = "search[value]", defaultValue = "") String searchValue) {
+		System.out.println("draw : " + draw); // 서버사이드 페이징 - 테이블이 순차적으로 그려지는 것을 보장하기 위해 사용
+		System.out.println("start : " + start); // 서버사이드 페이징 첫번째 레코드 번호
+		System.out.println("length : " + length); // 현재 페이지에 그려질 레코드 수
+		System.out.println("searchValue : " + searchValue); // 검색어
+		
+		// 
+		List<Map<String, Object>> commonCodes = service.getCommonCodes(start, length, searchValue);
+		
+		
+//		Map<String, Object> paging = new HashMap<String, Object>();
+//		paging.put("draw", draw);
+//		paging.put("recordsTotal", commonCodes.size());
+//		paging.put("recordsFiltered", commonCodes.size());
+//		commonCodes.add(paging);
+		
+		JSONArray jArr = new JSONArray(commonCodes);
+		log.info(">>> 공통코드 목록(JSON) : " + jArr);
+		
+		return jArr.toString();
+//		return "";
+	}
+	
 	// 공통코드 관리 - 수정
 	@GetMapping("AdmCommoncodeModify")
 	public String admCommoncodeModify() {
@@ -90,11 +103,6 @@ public class AdminController {
 		return "admin/code_modify";
 	}
 	
-	// 공통코드 관리 - 목록
-	@GetMapping("AdmCommoncodeList")
-	public String admCommoncodeList() {
-		return "admin/code_list";
-	}
 	
 	
 	// ======================================================

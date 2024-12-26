@@ -71,7 +71,7 @@
 										        <div class="profile-icon"></div>
 										        <div class="user-info">
 										            <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
-										            <div class="name">${review.mem_id}</div>
+										            <div class="name">${review.buyerNick}</div>
 										            <div class="product">${review.product_title}</div>
 										            <div class="date">${review.review_date}</div>
 										        </div>

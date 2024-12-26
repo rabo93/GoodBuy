@@ -53,12 +53,14 @@
 	</section>
 	<section class="hd-menu">
 		<nav class="hd-lnb">
-			<a href="ProductList">여성의류</a>
-			<a href="#">남성의류</a>
-			<a href="#">레저/스포츠</a>
-			<a href="#">생활용품</a>
-			<a href="#">키즈</a>
-			<a href="#">도서</a>
+			<a href="ProductList?PRODUCT_CATEGORY=여성의류">여성의류</a>
+			<a href="ProductList?PRODUCT_CATEGORY=남성의류">남성의류</a>
+			<a href="ProductList?PRODUCT_CATEGORY=레저/스포츠">레저/스포츠</a>
+			<a href="ProductList?PRODUCT_CATEGORY=생활용품">생활용품</a>
+			<a href="ProductList?PRODUCT_CATEGORY=키즈">키즈</a>
+			<a href="ProductList?PRODUCT_CATEGORY=도서">도서</a>
 		</nav>
 	</section>
 </div>
+
+<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script>

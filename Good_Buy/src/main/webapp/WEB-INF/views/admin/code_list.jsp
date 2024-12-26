@@ -55,64 +55,45 @@
 		                                <table class="table table-bordered" id="codeList" width="100%" cellspacing="0">
 		                                    <thead>
 		                                        <tr>
-		                                            <th data-orderable="false"  width="30px">
-		                                            	<div class="custom-control custom-checkbox small">
-			                                            	<input type="checkbox" class="custom-control-input" id="checkAll">
-			                                            	<label class="custom-control-label" for="checkAll"></label>
-		                                            	</div>
-		                                            </th>
-		                                            <th width="30px">No.</th>
-		                                            <th class="col-2">공통코드ID</th>
-		                                            <th class="col-2">공통코드명</th>
-		                                            <th>설명</th>
-		                                            <th class="col-2">사용여부</th>
-		                                            <th class="col-2">관리</th>
+<!-- 		                                            <th data-orderable="false"  width="30px"> -->
+<!-- 		                                            	<div class="custom-control custom-checkbox small"> -->
+<!-- 			                                            	<input type="checkbox" class="custom-control-input" id="checkAll"> -->
+<!-- 			                                            	<label class="custom-control-label" for="checkAll"></label> -->
+<!-- 		                                            	</div> -->
+<!-- 		                                            </th> -->
+		                                            <th>공통코드ID</th>
+		                                            <th>공통코드명</th>
+		                                            <th>공통코드 설명</th>
+		                                            <th>상세코드ID</th>
+		                                            <th>상세코드명</th>
+		                                            <th>상세코드 설명</th>
+		                                            <th>사용여부</th>
+		                                            <th>순서</th>
+<!-- 		                                            <th>관리</th> -->
 		                                        </tr>
 		                                    </thead>
 		                                    <tbody>
 		                                        <tr>
-		                                            <td>
-		                                            	<div class="custom-control custom-checkbox small">
-			                                            	<input type="checkbox" class="custom-control-input" id="customCheck">
-			                                            	<label class="custom-control-label" for="customCheck"></label>
-		                                            	</div>
-		                                            </td>
-		                                            <td>1</td>
-		                                            <td>CODE01</td>
-		                                            <td>공통코드명1</td>
-		                                            <td>최신순 정렬 필터링</td>
-		                                            <td>
-		                                            	<div class="form-check form-switch">
-															<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked>
-															<label class="form-check-label" for="flexSwitchCheckDefault">사용함</label>
-														</div>
-		                                            </td>
-		                                            <td class="text-center">
-		                                            	<button class="btn btn-primary">수정</button>
-		                                            	<button class="btn btn-primary">삭제</button>
-		                                            </td>
-		                                        </tr>
-		                                        <tr>
-		                                            <td>
-		                                            	<div class="custom-control custom-checkbox small">
-			                                            	<input type="checkbox" class="custom-control-input" id="customCheck2">
-			                                            	<label class="custom-control-label" for="customCheck2"></label>
-		                                            	</div>
-		                                            </td>
-		                                            <td>2</td>
-		                                            <td>CODE02</td>
-		                                            <td>공통코드명2</td>
-		                                            <td>최신순 정렬 필터링</td>
-		                                            <td>
-		                                            	<div class="form-check form-switch">
-															<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked>
-															<label class="form-check-label" for="flexSwitchCheckDefault">사용함</label>
-														</div>
-		                                            </td>
-		                                            <td class="text-center">
-		                                            	<button class="btn btn-primary">수정</button>
-		                                            	<button class="btn btn-primary">삭제</button>
-		                                            </td>
+<!-- 		                                            <td> -->
+<!-- 		                                            	<div class="custom-control custom-checkbox small"> -->
+<!-- 			                                            	<input type="checkbox" class="custom-control-input" id="customCheck"> -->
+<!-- 			                                            	<label class="custom-control-label" for="customCheck"></label> -->
+<!-- 		                                            	</div> -->
+<!-- 		                                            </td> -->
+<!-- 		                                            <td>1</td> -->
+<!-- 		                                            <td>CODE01</td> -->
+<!-- 		                                            <td>공통코드명1</td> -->
+<!-- 		                                            <td>최신순 정렬 필터링</td> -->
+<!-- 		                                            <td> -->
+<!-- 		                                            	<div class="form-check form-switch"> -->
+<!-- 															<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked> -->
+<!-- 															<label class="form-check-label" for="flexSwitchCheckDefault">사용함</label> -->
+<!-- 														</div> -->
+<!-- 		                                            </td> -->
+<!-- 		                                            <td class="text-center"> -->
+<!-- 		                                            	<button class="btn btn-primary">수정</button> -->
+<!-- 		                                            	<button class="btn btn-primary">삭제</button> -->
+<!-- 		                                            </td> -->
 		                                        </tr>
 		                                   </tbody>
 		                                </table>
@@ -140,26 +121,6 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
-    <!-- Logout Modal-->
-<!--     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" -->
-<!--         aria-hidden="true"> -->
-<!--         <div class="modal-dialog" role="document"> -->
-<!--             <div class="modal-content"> -->
-<!--                 <div class="modal-header"> -->
-<!--                     <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5> -->
-<!--                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"> -->
-<!--                         <span aria-hidden="true">×</span> -->
-<!--                     </button> -->
-<!--                 </div> -->
-<!--                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div> -->
-<!--                 <div class="modal-footer"> -->
-<!--                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button> -->
-<!--                     <a class="btn btn-primary" href="login.html">Logout</a> -->
-<!--                 </div> -->
-<!--             </div> -->
-<!--         </div> -->
-<!--     </div> -->
 
     <!-- Bootstrap core JavaScript-->
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/jquery/jquery.min.js"></script>

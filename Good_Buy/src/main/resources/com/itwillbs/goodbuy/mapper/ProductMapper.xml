@@ -22,7 +22,7 @@
 	</select>
 	
 	<!-- 상품 등록 -->
-	<insert id="registProduct">
+	<insert id="registProduct" >
 		<selectKey resultType="int" order="BEFORE" keyProperty="product_id">
 			SELECT MAX(PRODUCT_ID) + 1
 			FROM PRODUCT;
@@ -32,18 +32,11 @@
 		VALUE(
 			#{product_id}
 			, #{product_title}
-			, NULL
+			, #{id}
 			, #{product_intro}
 			, #{product_shpping_fee}
 			, #{product_price}
-			<choose>
-				<when test="product_discount_status == null">
-					, NULL
-				</when>
-				<otherwise>
-					, #{product_discount_status}
-				</otherwise>
-			</choose>
+			, #{product_discount_status}
 			, #{product_category}
 			, DATE_FORMAT(now(), '%y-%m-%d')
 			, #{product_pic1}

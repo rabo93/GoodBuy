@@ -1,5 +1,7 @@
 package com.itwillbs.goodbuy.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +30,11 @@ public class ProductController {
 	}
 	
 	@PostMapping("ProductRegist")
-	public String productRegistSubmit(ProductVO product) {
-		int uploadItem = productService.registProduct(product);
+	public String productRegistSubmit(ProductVO product, HttpSession session) {
+		String id = (String) session.getAttribute("sId");
+		System.out.println("*********************" + id);
+		System.out.println("*********************" + product);
+		int uploadItem = productService.registProduct(product, id);
 		
 		return "";
 	}

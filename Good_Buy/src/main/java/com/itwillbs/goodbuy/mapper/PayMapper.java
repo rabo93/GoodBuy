@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.itwillbs.goodbuy.vo.PayToken;
 
@@ -35,5 +36,11 @@ public interface PayMapper {
 	// DB 사용자 대표계좌 정보 조회 - fintech_num
 	String selectRepresentAccountNum(String user_seq_no);
 
+	void insertTransactionResult(
+			@Param("withdrawResult") Map<String, String> withdrawResult, 
+			@Param("trnsactionType") String trnsactionType);
+
+	// 이체(출금, 입금) 결과 저장
+	Map<String, String> selectTransactionResult(String bank_tran_id);
 
 }

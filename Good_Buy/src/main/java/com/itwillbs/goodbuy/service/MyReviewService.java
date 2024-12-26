@@ -15,6 +15,10 @@ public class MyReviewService {
 	public List<MyReviewVO> getReview(String id) {
 		return mapper.selectReview(id);
 	}
+	//리뷰 갯수 조회
+	public int myReviewCount(String id) {
+		return mapper.selectReviewCount(id);
+	}
 	
 	
 	

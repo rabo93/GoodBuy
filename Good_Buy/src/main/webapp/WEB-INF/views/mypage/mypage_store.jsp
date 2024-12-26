@@ -147,24 +147,34 @@
 									<ul class="review-wrap">
 										<li class="reviewInfo-wrap">
 											<c:choose>
-												<c:when test="">
-													<ul>
-														<li>등록된 후기가 없습니다.</li>
-													</ul>
+												<c:when test="${empty review}">
+													<div class="empty">작성된 후기가 없습니다.</div>
 												</c:when>
-												<c:otherwise>
-													<ul>
-														<li class="reviewInfo-wrap">
-															<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" class="card-thumb" alt="thumbnail" />
-															<div class="user-info">
-													            <div class="name">홍길동</div>
-													            <div class="date">24.12.18</div>
-													      	</div>
-													        <div class="content">친절한 응대 감사합니다.</div>
-														<li>
-													</ul>
+												<c:otherwise>	
+				<!-- 									<div class="review-rating"> -->
+				<%-- 						                <span class="rating-score">${course[0].review_score}</span><br> --%>
+				<!-- 						                <span class="stars"><i class="fa-solid fa-star"></i></span> -->
+				<!-- 						            </div> -->
+										            <c:forEach var="review" items="${review}" varStatus="status">
+										            	<div class="review-box">
+														    <div class="r_header">
+														        <div class="profile-icon"></div>
+														        <div class="user-info">
+														            <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
+														            <div class="name">${review.mem_id}</div>
+														            <div class="product">${review.product_title}</div>
+														            <div class="date">${review.review_date}</div>
+														        </div>
+														    </div>
+												            <div class=rating>
+																<i class="fa-solid fa-star" ></i>
+																<span><b>${review.review_score}</b></span>
+															</div>
+														    <div class="review-text">${review.review_content}</div>
+														</div>
+										            </c:forEach>
 												</c:otherwise>
-											</c:choose>
+											</c:choose>	
 										</li>
 									</ul>
 									

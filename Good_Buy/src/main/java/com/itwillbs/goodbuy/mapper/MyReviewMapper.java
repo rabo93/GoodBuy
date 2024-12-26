@@ -10,5 +10,7 @@ import com.itwillbs.goodbuy.vo.MyReviewVO;
 public interface MyReviewMapper {
 	//리뷰 리스트 조회 
 	List<MyReviewVO> selectReview(String id);
+	//리뷰 갯수조회
+	int selectReviewCount(String id);
 
 }

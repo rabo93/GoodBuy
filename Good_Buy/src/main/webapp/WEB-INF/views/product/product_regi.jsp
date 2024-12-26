@@ -65,7 +65,7 @@
 							<section class="item-regi-section">
 								<h2 class="item-regi-name">상품명</h2>
 								<div class="item-regi-box">
-									<input type="text" class="item-regi-title-text" id="item-regi-title-text" name="product_title">
+									<input type="text" name="product_title" class="item-regi-title-text" id="item-regi-title-text" >
 									<a href="ProductBanedItem">거래금지 품목 보기</a>
 								</div>
 								<h6 class="item-regi-name-byte" id="item-regi-name-byte">(0 / 100)</h6>
@@ -108,6 +108,7 @@
 									<div class="item-regi-price-number">
 										<input type="number" class="shipping-fee-price" id="shipping-fee-price" name="product_shpping_fee" placeholder="택배비를 입력해주세요.">
 										<div><input type="number" class="item-price" name="product_price" placeholder="상품 가격을 입력해주세요."></div>
+										<input type="hidden" name="product_discount_status" value="0">
 										<label class="item-discount-box"><input type="checkbox" class="item-discount" name="product_discount_status" value="1">가격 제안 가능</label>
 									</div>
 								</div>

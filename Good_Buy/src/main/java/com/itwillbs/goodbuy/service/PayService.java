@@ -85,5 +85,17 @@ public class PayService {
 		return payApiClient.requestWithdraw(map);
 	}
 
+	public void registWithdrawResult(Map<String, String> withdrawResult) {
+		// 입금이체 할때도 쓸거라서 
+		// BankMapper - insertTransactionResult() 로 생성
+	    // => 파라미터 : 출금이체 결과, 거래타입 ("WI": 출금이체)
+		mapper.insertTransactionResult(withdrawResult, "WI");
+	}
+
+	// DB - 출금이체 결과 조회 요청
+	public Map<String, String> getWithdarwResult(String bank_tran_id) {
+		return mapper.selectTransactionResult(bank_tran_id);
+	}
+
 
 }

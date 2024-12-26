@@ -7,6 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+
 <!-- default -->
 <link rel="stylesheet" href="../../resources/css/common.css">
 <link rel="stylesheet" href="../../resources/css/default.css">
@@ -33,9 +36,10 @@
 		<section class="wrapper">
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
+                <h2 class="page-title">굿페이 > 홈</h2>
+                
 				 <div class="goodpay-container">
 				 
-	                <h2 class="page-title">굿페이 > 홈</h2>
 			        <!-- 상단: 계좌 정보 -->
 			        <div class="account-box">
 			        	<div class="info">

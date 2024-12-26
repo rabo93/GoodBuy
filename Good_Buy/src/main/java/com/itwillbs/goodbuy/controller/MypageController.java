@@ -79,26 +79,26 @@ public class MypageController {
 		return "mypage/mypage_store";
 		
 	}
-	@PostMapping("MyStore")
-	public String myStoreIntro(Model model, HttpSession session, MemberVO member,HttpServletRequest request) {
-		savePreviousUrl(request, session);
-		
-		String id = (String) session.getAttribute("sId");
-	    member.setMem_id(id);  // 사용자 ID 설정
-	    
-	    int storeIntroCount = memberService.registStoreIntro(member);  // MemberVO 전달
-	    
-	    if (storeIntroCount > 0) {
-	    	model.addAttribute("member", member);
-	    	model.addAttribute("msg", "상점소개가 변경되었습니다.");
-	    	System.out.println(member.getMem_intro());
-	    	
-	        return "result/success";
-	    } else {
-	        model.addAttribute("msg", "상점소개 변경 실패!");
-	        return "result/fail";
-	    }
-	}
+//	@PostMapping("MyStore")
+//	public String myStoreIntro(Model model, HttpSession session, MemberVO member,HttpServletRequest request) {
+//		savePreviousUrl(request, session);
+//		
+//		String id = (String) session.getAttribute("sId");
+//	    member.setMem_id(id);  // 사용자 ID 설정
+//	    
+////	    int storeIntroCount = memberService.registStoreIntro(member);  // MemberVO 전달
+//	    
+//	    if (storeIntroCount > 0) {
+//	    	model.addAttribute("member", member);
+//	    	model.addAttribute("msg", "상점소개가 변경되었습니다.");
+//	    	System.out.println(member.getMem_intro());
+//	    	
+//	        return "result/success";
+//	    } else {
+//	        model.addAttribute("msg", "상점소개 변경 실패!");
+//	        return "result/fail";
+//	    }
+//	}
 	//[나의 주문]
 	@GetMapping("MyOrder")
 	public String myOrder() {

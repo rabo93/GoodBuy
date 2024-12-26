@@ -43,5 +43,76 @@
 		FROM TOKENINFO
 		WHERE MEM_ID = #{mem_id}
 	</select>
+	
+	<!-- 사용자 대표계좌 정보 조회 - SELECT -->
+	<!-- token 객체의 user_seq_no 값과 일치하는 레코드의 user_seq_no 값 조회 -->
+	<select id="selectRepresentAccount" resultType="string">
+		SELECT USER_SEQ_NO
+		FROM ACCOUNTINFO
+		WHERE USER_SEQ_NO = #{token.user_seq_no}
+	</select>
+	
+	<select id="selectRepresentAccountNum" resultType="string">
+		SELECT FINTECH_USE_NUM
+		FROM ACCOUNTINFO
+		WHERE USER_SEQ_NO = #{token.user_seq_no}
+	</select>
+	
+	
+	<!-- 사용자 대표계좌 정보 등록 - INSERT -->
+	<!-- token 객체의 user_seq_no 와 별도의 account_num_masked(임시), account_holder_name, fintech_use_num 등록 -->
+	<insert id="insertRepresentAccount">
+		INSERT
+		INTO ACCOUNTINFO
+		VALUES (
+			#{token.user_seq_no}
+			, #{account_num_masked}
+			, #{account_holder_name}
+			, #{fintech_use_num}
+		)
+	</insert>
+	
+	<!-- 사용자 대표계좌 정보 변경 - UPDATE -->
+	<!-- token 객체의 user_seq_no 가 일치하는 레코드의 나머지 정보 변경 -->
+	<update id="updateRepresentAccount">
+		UPDATE ACCOUNTINFO
+		SET
+			ACCOUNT_NUM = #{account_num_masked}
+			, ACCOUNT_HOLDER_NAME = #{account_holder_name}
+			, FINTECH_USE_NUM = #{fintech_use_num}
+		WHERE 
+			USER_SEQ_NO = #{token.user_seq_no}
+	</update>
+	
 
+	<!-- 이체(출금, 입금) 결과 저장 - insert -->
+	<insert id="insertTransactionResult">
+		INSERT 
+		INTO TRANSACTIONINFO
+		VALUES (
+		  #{withdrawResult.user_seq_no}
+			, #{withdrawResult.fintech_use_num}
+			, #{trnsactionType} -- service에서 전달받은 이름을 써야함. 
+			, #{withdrawResult.api_tran_id}
+			, LEFT(#{withdrawResult.api_tran_dtm}, 14)
+			, #{withdrawResult.bank_tran_id}
+			<!-- bank_tran_date 는 문자열로 연원일까지만 포함되므로 별도의 캐스팅없이 날짜로 변환됨 -->
+			, #{withdrawResult.bank_tran_date} 
+			, #{withdrawResult.tran_amt}
+			, #{withdrawResult.rsp_code}
+			, #{withdrawResult.rsp_message}
+			, #{withdrawResult.bank_rsp_code}
+			, #{withdrawResult.bank_rsp_message}
+			, #{withdrawResult.dps_bank_code_std}
+			, #{withdrawResult.dps_account_num_masked}
+		)
+	</insert>
+	
+	<!--  이체(출금, 입금 결과 조회 - select -->
+	<!--  bank_tran_id 가 일치하는 레코드 조회 -->
+	<select id="selectTransactionResult">
+		SELECT * 
+		FROM TRANSACTIONINFO
+		WHERE  bank_tran_id = #{bank_tran_id}
+	</select>
 </mapper>

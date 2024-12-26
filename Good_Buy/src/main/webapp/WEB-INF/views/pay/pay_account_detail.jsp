@@ -66,7 +66,7 @@
 			<%-- 2.6. 계좌이체 서비스 - 2.6.1. 출금이체 API 서비스 요청 폼 --%>
 			<%-- 거래 요청 고객(출금계좌 예금주) 정보(핀테크이용번호, 예금주명, 출금금액) 전달 --%>
 			<form action="PayWithdraw" method="post">
-			
+			fintech_use_num : ${accountDetail.fintech_use_num}
 				<%-- 출금 계좌가 복수개일 경우 구분을 위해 핀테크 이용번호도 출금 요청 시 전송 --%>
 				<%-- 만약, 대표계좌 1개만 사용하여 입출금 구현 시 DB 에서 조회를 통해 핀테크 이용번호 조회 --%>
 				<input type="hidden" name="withdraw_client_fintech_use_num" value="${accountDetail.fintech_use_num}">
@@ -79,7 +79,7 @@
 			</form>
 			<%-- 2.6. 계좌이체 서비스 - 2.6.2. 입금이체 API 서비스 요청 폼 --%>
 			<%-- 거래 요청 고객(입금계좌 예금주) 정보(핀테크이용번호, 예금주명, 입금금액) 전달 --%>
-			<form action="BankDeposit" method="post">
+			<form action="PayDeposit" method="post">
 				<input type="hidden" name="deposit_client_fintech_use_num" value="${accountDetail.fintech_use_num}">
 				<input type="hidden" name="deposit_client_name" value="${account_holder_name}">
 				<%-- 실제 거래금액은 상품 결정되면 해당 상품의 거래금액을 사용 --%>

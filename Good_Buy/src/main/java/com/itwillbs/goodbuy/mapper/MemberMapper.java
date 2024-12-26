@@ -80,10 +80,10 @@ public interface MemberMapper {
 	void insertSmsAuthInfo(SmsAuthInfoVO smsAuthInfoVO);
 	
 	// [CoolSMS] 휴대폰번호 인증 정보 조회
-	SmsAuthInfoVO selectSmsAuthInfo(String userPhone);
+	SmsAuthInfoVO selectSmsAuthInfo(String authCode);
 	
 	// [CoolSMS] 휴대폰번호 인증 상태 업데이트
-	void updateAuthStatus(String userPhone);
+	void updateAuthStatus(String authCode);
 	//----------------------------------------------------------
 
 

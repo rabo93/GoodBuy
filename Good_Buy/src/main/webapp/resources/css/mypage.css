@@ -42,3 +42,6 @@
 .my-frm .set .product-set {margin: 0.4rem 0;padding: 1rem;}
 .product-list {display: flex; flex-wrap: wrap; gap: 20px;list-style: none;  padding: 0;}
  .product-card { flex: 0 1 calc(33.333% - 20px);  /* 가로 3개 (3열), 여백 고려 */ box-sizing: border-box;           /* 패딩 포함 */ border: none;         /* 카드 테두리 */ border-radius: 10px; overflow: hidden;}
+
+ /*리뷰*/
+ .review-box {margin: auto; border: solid 1px; padding: 10px;}

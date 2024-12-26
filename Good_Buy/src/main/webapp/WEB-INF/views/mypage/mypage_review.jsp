@@ -61,17 +61,18 @@
 									<div class="empty">작성된 후기가 없습니다.</div>
 								</c:when>
 								<c:otherwise>	
-									<div class="review-rating">
-						                <span class="rating-score">${course[0].review_score}</span><br>
-						                <span class="stars"><i class="fa-solid fa-star"></i></span>
-						            </div>
+<!-- 									<div class="review-rating"> -->
+<%-- 						                <span class="rating-score">${course[0].review_score}</span><br> --%>
+<!-- 						                <span class="stars"><i class="fa-solid fa-star"></i></span> -->
+<!-- 						            </div> -->
 						            <c:forEach var="review" items="${review}" varStatus="status">
-						            	<div class="review">
+						            	<div class="review-box">
 										    <div class="r_header">
 										        <div class="profile-icon"></div>
 										        <div class="user-info">
-										            <div class="product">${review.product_id}</div>
+										            <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
 										            <div class="name">${review.mem_id}</div>
+										            <div class="product">${review.product_title}</div>
 										            <div class="date">${review.review_date}</div>
 										        </div>
 										    </div>

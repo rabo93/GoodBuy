@@ -47,16 +47,16 @@
 										</div>
 										<div id="phoneCheckResult" class="result"></div>
 									</section>
-									
-									<section class="row">
+									<!-- 인증번호 요청 클릭시 섹션 보임 -->
+									<section class="row" id="authSection" style="display:none;">
 										<label for="auth_code">인증번호</label>
 										<div class="box">
 											<div class="auth-input">
 												<input type="text" name="auth_code" id="auth_code" placeholder="인증번호입력" disabled required> 
-												<span class="rest-time">05:00</span>
+												<span class="rest-time" id="rest_time">05:00</span>
 											</div>
 											<input type="button" class="before" value="인증하기" id="authChkBtn">
-											<input type="button" class="after" value="인증완료" >
+											<input type="button" class="after" value="인증완료" style="display:none;">
 										</div>
 										<div id="authCheckResult" class="result"></div>
 									</section>
@@ -212,57 +212,46 @@
 	<!-- *********** [CoolSMS] 문자 인증 API ************ -->
 	<script type="text/javascript">
 	$(function() {
-		let smsCode = ""; // 서버에서 발송된 인증번호 저장
-		
-		// 인증번호 요청 버튼 클릭 이벤트
+		// "인증번호 요청" 버튼 클릭 이벤트
         $("#phoneChk").click(function(){
             let phone = $("#mem_phone").val(); // 버튼 클릭 시 입력값 가져오기
-            let regex = /^[0-9]{11}$/; // 전화번호 유효성 검사
-            console.log(phone);
-			
+            let regex = /^[0-9]{11}$/; // 휴대폰번호 유효성 검사 : 정확히 11자리 숫자만 허용
+            
             if (!regex.test(phone)) {
-    			alert("휴대폰번호가 올바르지 않습니다.");
+    			alert("휴대폰번호는 '-' 없이 11자리 숫자로 입력해주세요.");
     			return;
     		}
+            
             alert('인증번호 발송이 완료되었습니다.');
 
             $.ajax({
                 type: "POST",
                 url: "/send-one",
-                data: {"userPhone": phone},
+                data: { "userPhone" : phone },
                 cache: false,
                 success: function(data) {
-                	console.log("응답 데이터 (문자열): " + JSON.stringify(data));
+//                 	console.log("응답 데이터: " + JSON.stringify(data));
                 	
                 	if(data == "error") {
                 		alert("휴대폰번호가 올바르지 않습니다.");
                 		$("#mem_phone").focus();
                 		
-                	} else { // 발송 성공시 
+                	} else { // 발송 성공시
+                		$("#authSection").show(); // 인증번호 섹션 표시
                 		$("#auth_code").attr("disabled", false); // 인증코드 입력창 활성화
                 		$("#mem_phone").attr("readonly", true);	// 휴대폰번호 입력창 읽기전용으로 변경
-                    	$("#phoneCheckResult").text("인증번호 발송 성공").css("color", "var(--secondary)");
-                    	smsCode = data; // 서버에서 받은 인증번호 저장
                     	
                     	$("#authChkBtn").attr("disabled", false); // 인증하기 버튼 활성화
+                        $(".after").attr("disabled", true); // 인증완료 버튼 비활성화
                 	}
-                },
-                error: function(xhr) {
-                	console.log("에러 상태 코드: " + xhr.status); // 디버깅용 로그
-                    console.log("에러 메시지: " + xhr.responseText);
-
-                    if (xhr.status === 400) {
-                        alert(xhr.responseText); // 응답 메시지를 alert로 표시
-                    } else {
-                        alert("서버 요청 중 오류가 발생했습니다.");
-                    }
                 }
             });
         });
         
-		// 인증하기 버튼 클릭 이벤트
+		// "인증하기" 버튼 클릭 이벤트 > 성공시 "인증완료" 버튼으로 바뀜
 		$("#authChkBtn").click(function () {
 			let authCode = $("#auth_code").val(); // 입력된 인증번호
+			let memPhone = $("#mem_phone").val(); // 휴대폰번호
 			
 			if (!authCode) {
                 alert("인증번호를 입력해주세요.");
@@ -272,28 +261,26 @@
 			$.ajax({
                 type: "POST",
                 url: "/verify-code",
-                data: { "authCode": authCode, "smsCode": smsCode },
+                data: { "authCode": authCode, "memPhone" : memPhone },
                 success: function (response) {
-                    if (response.success) {
-                        alert("인증 성공!");
-                        $("#authCheckResult").text("인증 성공").css("color", "green");
-                        $(".after").attr("disabled", false); // 인증완료 버튼 활성화
-                        $("#authChkBtn").attr("disabled", true); // 인증하기 버튼 비활성화
-                    } else {
-                        alert("인증 실패! 다시 시도해주세요.");
-                        $("#authCheckResult").text("인증 실패").css("color", "red");
-                    }
+                	// 서버 응답이 성공 (200)인 경우 처리
+                    alert(response || "인증 성공!");
+                	$("#auth_code").attr("readonly", true).css("background-color", "#E8F0FE");	// 인증번호 입력창 읽기전용으로 변경
+					
+                	// 인증 성공 시 "인증하기" 버튼 숨기고 "인증완료" 버튼 보이게 하기
+	                $("#authChkBtn").hide(); // 인증하기 버튼 숨기기
+	                $("#rest_time").hide(); // 남은시간 숨기기
+	                $(".after").show(); // 인증완료 버튼 보이기
+	                
                 },
-                error: function () {
-                    alert("서버 요청 중 오류가 발생했습니다.");
+                error: function (xhr) {
+                	// 서버 에러 메시지 처리
+                    let errorMessage = xhr.responseText || "인증 실패! 다시 시도해주세요.";
+                    alert(errorMessage);
+                    $("#authCheckResult").text("인증 실패").css("color", "red");
                 }
             });
-			
-			
-			
 		});
-		
-		
         
     });
 	</script>

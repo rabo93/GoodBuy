@@ -123,13 +123,15 @@ document.addEventListener("DOMContentLoaded", function(){
 		console.log("폼데이터111: " + formData); // 넘어오는거 확인
 		
 		// 일반 필드 input 값 저장
-		const dataMap = {};
+		const mainCode = {};
 		formData.forEach((field) => {
-			dataMap[field.name] = field.value;
+			if (['CODETYPE_ID', 'CODETYPE_NAME', 'DESCRIPTION'].includes(field.name)) {
+				mainCode[field.name] = field.value;
+			}
 		});
 		
 		// datatables input 필드 값 저장
-		const tbData = [];
+		const subCodes = [];
 		$("#commoncode tbody tr").each(function() {
 			const rowData = {};
 			$(this).find('input').each(function(){
@@ -137,21 +139,29 @@ document.addEventListener("DOMContentLoaded", function(){
 				console.log(rowData);
 				delete rowData[undefined];
 			});
-			tbData.push(rowData);
-			console.log("테이블 data : " + rowData);
+			subCodes.push(rowData);
 		});
 		
-		dataMap['tbData'] = tbData;
-		console.log(dataMap);
+		const commonCodes = {
+			mainCode : mainCode,
+			subCodes : subCodes
+		};
+		
+		console.log(commonCodes);
 		
 		$.ajax({
 			url: "AdmCommoncodeRegist",
 			type: "POST",
 			contentType : 'application/json',
-			data : JSON.stringify(dataMap),
+			data : JSON.stringify(commonCodes),
+			dataType : "JSON",
 			success: function(response) {
-				alert("공통코드를 등록했습니다.");
-				location.reload(true);
+				if(response.status == 'success') {
+					alert(response.message);
+					window.location.href = response.redirectURL;
+				} else {
+					alert(response.message);
+				}
 			},
 			error: function() {
 				alert("공통코드 등록이 실패했습니다.");

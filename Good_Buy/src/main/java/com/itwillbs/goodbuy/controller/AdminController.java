@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.itwillbs.goodbuy.service.AdminService;
+import com.itwillbs.goodbuy.vo.CommonCodeVO;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -44,25 +45,30 @@ public class AdminController {
 	// 공통코드 관리 - 등록
 	@ResponseBody
 	@PostMapping("AdmCommoncodeRegist")
-	public String admCommoncodeRegist(@RequestBody Map<String, Object> dataMap, Model model, HttpSession session) {
-		log.info(">>>>>>>> formData : " + dataMap); 
+	public Map<String, Object> admCommoncodeRegist(@RequestBody CommonCodeVO commonCodes, Model model, HttpSession session) {
+		Map<String, Object> mainCode = commonCodes.getMainCode();
+		List<Map<String, Object>> subCodes = commonCodes.getSubCodes();
 		
-		int insertCommonCode = service.registCommonCode(dataMap);
+		log.info(">>> mainCode : " + mainCode);
+		log.info(">>> subCodes : " + subCodes);
 		
+		int insertCommonCode = service.registCommonCode(mainCode, subCodes);
+		
+		Map<String, Object> response = new HashMap<String, Object>();
 		if(insertCommonCode > 0) {
-			model.addAttribute("msg", "공통코드가 등록되었습니다.");
-			model.addAttribute("targetURL", "AdmCommoncodeRegistForm");
-			return "result/success";
+			response.put("status", "success");
+			response.put("message", "공통코드 등록을 성공하였습니다.");
+			response.put("redirectURL", "/AdmCommoncodeRegistForm");
 		} else {
-			model.addAttribute("msg", "공통코드 등록을 실패하였습니다.");
-			return "result/fail";
+			response.put("status", "fail");
+			response.put("message", "공통코드 등록을 실패하였습니다.");
 		}
+		return response;
 	}
 	
 	// 공통코드 관리 - 목록
 	@GetMapping("AdmCommoncodeList")
 	public String admCommoncodeList() {
-		
 		return "admin/code_list";
 	}
 	
@@ -90,7 +96,6 @@ public class AdminController {
 		
 		JSONArray jArr = new JSONArray(commonCodes);
 		log.info(">>> 공통코드 목록(JSON) : " + jArr);
-		
 		return jArr.toString();
 //		return "";
 	}

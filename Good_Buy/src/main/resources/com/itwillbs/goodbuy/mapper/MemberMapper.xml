@@ -210,7 +210,6 @@
 		 WHERE MEM_ID = #{mem_id}
 	</update>
 	
-	
 	<!-- [CoolSMS] 휴대폰번호 인증 중복 확인  -->
 	<select id="selectMemberInfo" resultType="String">
 		SELECT MEM_ID
@@ -220,11 +219,10 @@
 	
 	<!-- [CoolSMS] 휴대폰 인증 정보 저장(인증대기) -->
 	<insert id="insertSmsAuthInfo" parameterType="smsAuthInfoVO">
-	    INSERT INTO PHONE_AUTH_INFO (MEM_PHONE, AUTH_CODE, MEM_ID, AUTH_DATE, STATUS)
+	    INSERT INTO PHONE_AUTH_INFO (MEM_PHONE, AUTH_CODE, AUTH_DATE, STATUS)
 	    VALUES (
 	    	#{mem_phone}
 	    	, #{auth_code}
-	    	, #{mem_id}
 	    	, now()
 	    	, 0 -- 인증대기
 	    	)

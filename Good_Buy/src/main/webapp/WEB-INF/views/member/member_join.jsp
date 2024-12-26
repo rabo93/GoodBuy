@@ -111,7 +111,7 @@
 									</section>
 									
 									<section class="row">
-										<label for="mem_passwd2">비밀번호확인</label>
+										<label for="mem_passwd2">비밀번호 확인</label>
 										<div class="box">
 											<input type="password" name="mem_passwd2" id="mem_passwd2" placeholder="비밀번호 확인" onkeyup="checkPasswdResult()" required> 
 										</div>
@@ -143,7 +143,8 @@
 										<select id="day" class="form-sel">
 											<option value="DAY">일</option>
 										</select> 
-	<!-- 									<input type="date" min="1990-01-01" max="2000-12-31" name="mem_birthday">  -->
+										<!-- 생년월일을 담을 숨겨진 입력 필드 -->
+										<input type="hidden" id="mem_birthday" name="mem_birthday" value="">
 									</section>
 									
 									<section class="row">
@@ -214,20 +215,19 @@
 	$(function() {
 		// "인증번호 요청" 버튼 클릭 이벤트
         $("#phoneChk").click(function(){
-            let phone = $("#mem_phone").val(); // 버튼 클릭 시 입력값 가져오기
+            let userPhone = $("#mem_phone").val(); // 버튼 클릭 시 입력값 가져오기
             let regex = /^[0-9]{11}$/; // 휴대폰번호 유효성 검사 : 정확히 11자리 숫자만 허용
             
-            if (!regex.test(phone)) {
+            if (!regex.test(userPhone)) {
     			alert("휴대폰번호는 '-' 없이 11자리 숫자로 입력해주세요.");
     			return;
     		}
             
-            alert('인증번호 발송이 완료되었습니다.');
 
             $.ajax({
                 type: "POST",
                 url: "/send-one",
-                data: { "userPhone" : phone },
+                data: { "userPhone" : userPhone },
                 cache: false,
                 success: function(data) {
 //                 	console.log("응답 데이터: " + JSON.stringify(data));
@@ -237,6 +237,7 @@
                 		$("#mem_phone").focus();
                 		
                 	} else { // 발송 성공시
+			            alert('인증번호 발송이 완료되었습니다.');
                 		$("#authSection").show(); // 인증번호 섹션 표시
                 		$("#auth_code").attr("disabled", false); // 인증코드 입력창 활성화
                 		$("#mem_phone").attr("readonly", true);	// 휴대폰번호 입력창 읽기전용으로 변경
@@ -244,6 +245,13 @@
                     	$("#authChkBtn").attr("disabled", false); // 인증하기 버튼 활성화
                         $(".after").attr("disabled", true); // 인증완료 버튼 비활성화
                 	}
+                },
+                error: function (xhr) {
+                    if (xhr.status === 400) {
+                        alert(xhr.responseText); // 서버에서 보낸 메시지를 alert로 표시
+                    } else {
+                        alert("서버 요청 중 오류가 발생했습니다.");
+                    }
                 }
             });
         });
@@ -251,7 +259,7 @@
 		// "인증하기" 버튼 클릭 이벤트 > 성공시 "인증완료" 버튼으로 바뀜
 		$("#authChkBtn").click(function () {
 			let authCode = $("#auth_code").val(); // 입력된 인증번호
-			let memPhone = $("#mem_phone").val(); // 휴대폰번호
+			let userPhone = $("#mem_phone").val(); // 휴대폰번호
 			
 			if (!authCode) {
                 alert("인증번호를 입력해주세요.");
@@ -261,7 +269,7 @@
 			$.ajax({
                 type: "POST",
                 url: "/verify-code",
-                data: { "authCode": authCode, "memPhone" : memPhone },
+                data: { "authCode": authCode, "userPhone" : userPhone },
                 success: function (response) {
                 	// 서버 응답이 성공 (200)인 경우 처리
                     alert(response || "인증 성공!");

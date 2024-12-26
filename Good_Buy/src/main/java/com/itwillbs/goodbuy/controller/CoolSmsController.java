@@ -53,23 +53,21 @@ public class CoolSmsController {
 	@PostMapping("/send-one")
 	@ResponseBody
 	public ResponseEntity<?> sendOne(@RequestParam("userPhone") String userPhone, HttpSession session) {
-		log.info(">>>>>>>>> 회원 휴대폰 번호 : " + userPhone);
+//		log.info(">>>>>>>>> 회원 휴대폰 번호 : " + userPhone);
 		// 해당 휴대폰 번호로 가입한 회원이 있는지 판별
 		String memId = memberService.getMemberInfo(userPhone);
 		
-		// * 이미 존재할 경우 (=> 구현 다하고 주석 풀기)
-//		if (memId != null) {
-//			return ResponseEntity.badRequest()
-//					.header("Content-Type", "text/plain; charset=UTF-8")
-//					.body("이미 존재하는 휴대폰번호입니다.");
-//		}
+//		 * 이미 존재할 경우 (=> 구현 다하고 주석 풀기)
+		if (memId != null) {
+			return ResponseEntity.badRequest()
+					.header("Content-Type", "text/plain; charset=UTF-8")
+					.body("이미 존재하는 휴대폰번호입니다.");
+		}
 		
 		// * 존재하지 않을 경우
         // 1) 랜덤 인증번호 생성 **아래에 랜덤 코드 생성 메서드 호출
 	    String smsCode = RandomNumber();
         log.info(">>>>>>>>>> 인증번호 : "+ smsCode);
-        session.setAttribute("smsCode", smsCode);
-        session.setAttribute("smsCodeTime", System.currentTimeMillis());
         
         // 2) 인증 메세지 생성
         Message message = new Message();
@@ -79,14 +77,14 @@ public class CoolSmsController {
         
         // 3) coolSMS API 사용하여 사용자 핸드폰에 전송
     	SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
-    	log.info(">>>>>>>>>> coolSMS API 요청 응답 : " + response);
+//    	log.info(">>>>>>>>>> coolSMS API 요청 응답 : " + response);
     	
     	// 4) 인증 정보 SmsAuthInfoVO 객체에 담아서 DB에 저장
     	SmsAuthInfoVO smsAuthInfoVO = new SmsAuthInfoVO();
     	smsAuthInfoVO.setMem_phone(userPhone);
     	smsAuthInfoVO.setAuth_code(smsCode);
-    	smsAuthInfoVO.setMem_id(memId);
-    	memberService.registSmsAuthInfo(smsAuthInfoVO);
+//    	smsAuthInfoVO.setMem_id(null); // 새 가입이므로 memId는 null
+    	memberService.registSmsAuthInfo(smsAuthInfoVO); 
     	
     	// 5) AJAX에 성공 응답 반환
     	return ResponseEntity.ok(response);
@@ -105,13 +103,13 @@ public class CoolSmsController {
     // sms로 받은 인증번호와 입력한 인증번호 검증 로직
     @PostMapping("/verify-code")
     @ResponseBody
-    public ResponseEntity<?> verifyCode(@RequestParam("authCode") String authCode, @RequestParam("memPhone") String memPhone) {
-    	System.out.println("입력된 인증번호 번호 : " + authCode);
-    	System.out.println("휴대폰번호 : " + memPhone);
+    public ResponseEntity<?> verifyCode(@RequestParam("authCode") String authCode, @RequestParam("userPhone") String userPhone) {
+//    	log.info("입력된 인증번호 번호 : " + authCode);
+//    	log.info("휴대폰번호 : " + memPhone);
     	
     	// 1) DB에서 입력된 인증번호의 인증 정보 조회
     	SmsAuthInfoVO smsAuthInfoVO = memberService.getSmsAuthInfo(authCode);
-        System.out.println("db에서 가져온 인증 정보 : " + smsAuthInfoVO);
+//        log.info("db에서 가져온 인증 정보 : " + smsAuthInfoVO);
         
         if (smsAuthInfoVO == null) {
             return ResponseEntity.badRequest()
@@ -123,8 +121,8 @@ public class CoolSmsController {
         long validDuration = 5 * 60 * 1000; // 5분
         long currentTime = System.currentTimeMillis();
         long authDateTime = smsAuthInfoVO.getAuth_date().getTime(); // DB에서 가져온 인증시간
-        System.out.println("현재 시간: " + currentTime);
-        System.out.println("인증 요청 시간: " + authDateTime);
+//        log.info("현재 시간: " + currentTime);
+//        log.info("인증 요청 시간: " + authDateTime);
 
         if (currentTime - authDateTime > validDuration) {
             return ResponseEntity.badRequest()
@@ -132,9 +130,8 @@ public class CoolSmsController {
                     .body("인증번호가 만료되었습니다.");
         }
         
-        
         // 3) 인증번호에 대한 휴대폰 번호 비교
-        if (!memPhone.equals(smsAuthInfoVO.getMem_phone())) {
+        if (!userPhone.equals(smsAuthInfoVO.getMem_phone())) {
             return ResponseEntity.badRequest()
                     .header("Content-Type", "text/plain; charset=UTF-8")
                     .body("인증번호가 일치하지 않습니다.");
@@ -143,11 +140,9 @@ public class CoolSmsController {
         // 4) 인증 성공 시 인증상태(1:인증완료) 업데이트
         memberService.updateAuthStatus(authCode);
         
-        
         return ResponseEntity.ok()
                 .header("Content-Type", "text/plain; charset=UTF-8")
                 .body("인증에 성공했습니다.");
-        
     }
     
     

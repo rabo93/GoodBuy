@@ -79,13 +79,25 @@
 	</select>
 	
 	<!-- 구매상품 갯수 조회 -->
+<!-- 	<select id="selectOrderCount" resultType="int"> -->
+<!-- 		SELECT COALESCE(COUNT(*), 0) as ORDERCOUNT, P.PRODUCT_ID, M.MEM_ID as SELLER_ID -->
+<!-- 		FROM PRODUCT_ORDER O -->
+<!-- 		JOIN PRODUCT P ON O.PRODUCT_ID = P.PRODUCT_ID -->
+<!-- 		JOIN MEMBER M ON M.MEM_ID = P.MEM_ID   판매자와 조인 -->
+<!-- 		WHERE O.BUYER_ID = #{mem_id}   구매자 필터 -->
+<!-- 		GROUP BY P.PRODUCT_ID, M.MEM_ID; -->
+<!-- 	</select> -->
+
 	<select id="selectOrderCount" resultType="int">
-		SELECT COUNT(*) as ORDERCOUNT, P.PRODUCT_ID, M.MEM_ID as SELLER_ID
-		FROM PRODUCT_ORDER O
-		JOIN PRODUCT P ON O.PRODUCT_ID = P.PRODUCT_ID
-		JOIN MEMBER M ON M.MEM_ID = P.MEM_ID  -- 판매자와 조인
-		WHERE O.BUYER_ID = #{mem_id}  -- 구매자 필터
-		GROUP BY P.PRODUCT_ID, M.MEM_ID;
+	    SELECT COALESCE(COUNT(*), 0)
+	    FROM (
+	        SELECT COALESCE(COUNT(*), 0) as ORDERCOUNT
+	        FROM PRODUCT_ORDER O 
+	        	JOIN PRODUCT P ON O.PRODUCT_ID = P.PRODUCT_ID 
+	        	JOIN MEMBER M ON M.MEM_ID = P.MEM_ID 
+	        WHERE O.BUYER_ID = #{mem_id}
+	        GROUP BY P.PRODUCT_ID, M.MEM_ID
+	    ) TEMP
 	</select>
 	
 </mapper>

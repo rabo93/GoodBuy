@@ -10,10 +10,11 @@ import com.itwillbs.goodbuy.vo.ProductVO;
 @Mapper
 public interface ProductMapper {
 
-	int registProduct(@Param("product") ProductVO product, String id);
+	int insertProduct(@Param("vo")ProductVO product, @Param("id")String id);
 
 	List<ProductVO> selectProductList(String id);
 
 	int salesListCount(String id);
+
 	
 }

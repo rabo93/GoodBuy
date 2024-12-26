@@ -15,7 +15,7 @@ public class ProductService {
 	private ProductMapper mapper;
 
 	public int registProduct(ProductVO product, String id) {
-		return mapper.registProduct(product, id);
+		return mapper.insertProduct(product, id);
 	}
 		
 	//판매 상품목록 조회

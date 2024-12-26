@@ -22,28 +22,28 @@
 	</select>
 	
 	<!-- 상품 등록 -->
-	<insert id="registProduct" >
+	<insert id="insertProduct" >
 		<selectKey resultType="int" order="BEFORE" keyProperty="product_id">
 			SELECT MAX(PRODUCT_ID) + 1
 			FROM PRODUCT;
 		</selectKey>
 		INSERT
 		INTO PRODUCT
-		VALUE(
+		VALUES (
 			#{product_id}
-			, #{product_title}
+			, #{vo.product_title}
 			, #{id}
-			, #{product_intro}
-			, #{product_shpping_fee}
-			, #{product_price}
-			, #{product_discount_status}
-			, #{product_category}
+			, #{vo.product_intro}
+			, #{vo.product_shpping_fee}
+			, #{vo.product_price}
+			, #{vo.product_discount_status}
+			, #{vo.product_category}
 			, DATE_FORMAT(now(), '%y-%m-%d')
-			, #{product_pic1}
-			, #{product_pic2}
-			, #{product_pic3}
-			, #{product_trade_adr1}
-			, #{advertisement_status}
+			, #{vo.product_pic1}
+			, #{vo.product_pic2}
+			, #{vo.product_pic3}
+			, #{vo.product_trade_adr1}
+			, #{vo.advertisement_status}
 			, 1
 		)
 	</insert>

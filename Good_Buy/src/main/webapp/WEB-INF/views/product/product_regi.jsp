@@ -37,7 +37,7 @@
 				<section class="item-regi">
 					<div>
 						<h2 class="page-title">상품 등록</h2>
-						<form action="ProductRegist" method="post">
+						<form action="ProductRegist" method="post" enctype="multipart/form-data">
 							<section class="item-regi-img">
 								<h2 class="item-regi-name">상품이미지</h2>
 								<div class="item-thumb">
@@ -45,20 +45,20 @@
 									<button class="item-thumb-upload" type="button" onclick="onClickUpload1()">
 										<img id="item-thumb-preview1">
 									</button>
-									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn1" name="product_pic1">
+									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn1" name="pic1">
 								</div>
 								<div class="item-thumb">
 									<button class="item-thumb-upload" type="button" onclick="onClickUpload2()">
 										<img id="item-thumb-preview2">
 										
 									</button>
-									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn2" name="product_pic2">
+									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn2" name="pic2">
 								</div>
 								<div class="item-thumb">
 									<button class="item-thumb-upload" type="button" onclick="onClickUpload3()">
 										<img id="item-thumb-preview3">
 									</button>
-									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn3" name="product_pic3">
+									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn3" name="pic3">
 								</div>
 								<h2 class="item-thumb-description">첫번째 상품 이미지는 썸네일로 보여져요.</h2>
 							</section>
@@ -106,6 +106,7 @@
 									<label><input type="radio" name="shipping-fee" id="shipping-fee-enable"  value="0" checked>택배비 미포함</label>
 									<label><input type="radio" name="shipping-fee" id="shipping-fee-disable" value="1">택배비 포함</label>
 									<div class="item-regi-price-number">
+										<input type="hidden" name="product_shpping_fee" value="0">
 										<input type="number" class="shipping-fee-price" id="shipping-fee-price" name="product_shpping_fee" placeholder="택배비를 입력해주세요.">
 										<div><input type="number" class="item-price" name="product_price" placeholder="상품 가격을 입력해주세요."></div>
 										<input type="hidden" name="product_discount_status" value="0">

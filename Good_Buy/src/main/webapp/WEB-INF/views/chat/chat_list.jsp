@@ -36,23 +36,22 @@
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 				<div class="container">
 		        <div class="sidebar">
-		            <div class="sidebar-item">
-		                <img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item">
-		                아기 유아 어그부츠 150cm
-		            </div>
-		            <div class="sidebar-item">
-		                <img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item">
-		                컨버스 소형 더플백
-		            </div>
-		            <div class="sidebar-item">
-		                <img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item">
-		                파워레인저 정글포스
-		            </div>
-		            <div class="sidebar-item">
-		                <img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item">
-		                백팩 인형 백팩
-		            </div>
-		            
+<!-- 		            <div class="sidebar-item"> -->
+<%-- 		                <img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"> --%>
+<!-- 		                아기 유아 어그부츠 150cm -->
+<!-- 		            </div> -->
+<!-- 		            <div class="sidebar-item"> -->
+<%-- 		                <img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"> --%>
+<!-- 		                컨버스 소형 더플백 -->
+<!-- 		            </div> -->
+<!-- 		            <div class="sidebar-item"> -->
+<%-- 		                <img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"> --%>
+<!-- 		                파워레인저 정글포스 -->
+<!-- 		            </div> -->
+<!-- 		            <div class="sidebar-item"> -->
+<%-- 		                <img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"> --%>
+<!-- 		                백팩 인형 백팩 -->
+<!-- 		            </div> -->
 		        </div>
 		        <div class="chat-area">
 		            <div class="chat-header">
@@ -60,19 +59,19 @@
 		                <button>구매하기</button>
 		            </div>
 		            <div class="chat-body">
-		                <div class="message user">
-		                    <div class="bubble">안녕하세요.</div>
-		                </div>
-		                <div class="message other">
-		                    <div class="bubble">안녕하세요.</div>
-		                </div>
-		                <div class="message user">
-		                    <div class="bubble">상품 구매하고 싶어요</div>
-		                </div>
+<!-- 		                <div class="message user"> -->
+<!-- 		                    <div class="bubble">안녕하세요.</div> -->
+<!-- 		                </div> -->
+<!-- 		                <div class="message other"> -->
+<!-- 		                    <div class="bubble">안녕하세요.</div> -->
+<!-- 		                </div> -->
+<!-- 		                <div class="message user"> -->
+<!-- 		                    <div class="bubble">상품 구매하고 싶어요</div> -->
+<!-- 		                </div> -->
 		            </div>
 		            <div class="chat-footer">
-		                <input type="text" placeholder="메시지를 입력하세요...">
-		                <button>전송</button>
+		                <input type="text" class="chatMessage" placeholder="메시지를 입력하세요...">
+		                <button class="btnSend">전송</button>
 		            </div>
 		        </div>
 		    </div>
@@ -83,7 +82,6 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
-	<script src="${pageContext.request.contextPath}/resources/js/jquery-3.7.1.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/js/chat.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/chat_main.js"></script>
 </body>
 </html>

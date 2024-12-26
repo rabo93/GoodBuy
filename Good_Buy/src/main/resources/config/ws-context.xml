@@ -8,6 +8,10 @@
 	<websocket:handlers>
 		<!-- <websocket:mapping> 태그 활용하여 매핑에 사용될 주소 지정 -->
 		<websocket:mapping handler="wsHandler" path="/echo"/>
+		
+		<websocket:handshake-interceptors>
+			<bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"></bean>
+		</websocket:handshake-interceptors>
 	</websocket:handlers>
 	
 	<bean id="wsHandler" class="com.itwillbs.goodbuy.handler.MyWebSocketHandler"></bean>

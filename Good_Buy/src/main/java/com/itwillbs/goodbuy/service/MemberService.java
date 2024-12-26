@@ -121,13 +121,13 @@ public class MemberService {
 	}
 	
 	// [CoolSMS] 휴대폰번호 인증 정보 조회
-	public SmsAuthInfoVO getSmsAuthInfo(String userPhone) {
-		return mapper.selectSmsAuthInfo(userPhone);
+	public SmsAuthInfoVO getSmsAuthInfo(String authCode) {
+		return mapper.selectSmsAuthInfo(authCode);
 	}
 	
 	// [CoolSMS] 휴대폰번호 인증 상태 업데이트
-	public void updateAuthStatus(String userPhone) {
-		mapper.updateAuthStatus(userPhone);
+	public void updateAuthStatus(String authCode) {
+		mapper.updateAuthStatus(authCode);
 	}
 	//-------------------------------------------------------------
 

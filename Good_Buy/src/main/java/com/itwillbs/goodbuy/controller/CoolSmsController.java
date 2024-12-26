@@ -105,38 +105,48 @@ public class CoolSmsController {
     // sms로 받은 인증번호와 입력한 인증번호 검증 로직
     @PostMapping("/verify-code")
     @ResponseBody
-    public ResponseEntity<?> verifyCode(@RequestParam("authCode") String authCode, @RequestParam("userPhone") String userPhone) {
-    	// 1) DB에서 해당 휴대폰 번호의 인증 정보 조회
-        SmsAuthInfoVO smsAuthInfo = memberService.getSmsAuthInfo(userPhone);
+    public ResponseEntity<?> verifyCode(@RequestParam("authCode") String authCode, @RequestParam("memPhone") String memPhone) {
+    	System.out.println("입력된 인증번호 번호 : " + authCode);
+    	System.out.println("휴대폰번호 : " + memPhone);
+    	
+    	// 1) DB에서 입력된 인증번호의 인증 정보 조회
+    	SmsAuthInfoVO smsAuthInfoVO = memberService.getSmsAuthInfo(authCode);
+        System.out.println("db에서 가져온 인증 정보 : " + smsAuthInfoVO);
         
-        if (smsAuthInfo == null) {
+        if (smsAuthInfoVO == null) {
             return ResponseEntity.badRequest()
             		.header("Content-Type", "text/plain; charset=UTF-8")
             		.body("인증번호 요청 기록이 존재하지 않습니다.");
         }
         
         // 2) 인증번호 유효시간 확인 (5분)
-        long validDuration = 5 * 60 * 1000; // 5분(밀리초)
+        long validDuration = 5 * 60 * 1000; // 5분
         long currentTime = System.currentTimeMillis();
-        long authDateTime = smsAuthInfo.getAuth_date().getTime(); // DB의 인증요청 시간
+        long authDateTime = smsAuthInfoVO.getAuth_date().getTime(); // DB에서 가져온 인증시간
+        System.out.println("현재 시간: " + currentTime);
+        System.out.println("인증 요청 시간: " + authDateTime);
 
         if (currentTime - authDateTime > validDuration) {
             return ResponseEntity.badRequest()
-            		.header("Content-Type", "text/plain; charset=UTF-8")
-            		.body("인증번호가 만료되었습니다.");
+                    .header("Content-Type", "text/plain; charset=UTF-8")
+                    .body("인증번호가 만료되었습니다.");
         }
         
-        // 3) 인증번호 비교
-        if (!authCode.equals(smsAuthInfo.getAuth_code())) {
+        
+        // 3) 인증번호에 대한 휴대폰 번호 비교
+        if (!memPhone.equals(smsAuthInfoVO.getMem_phone())) {
             return ResponseEntity.badRequest()
                     .header("Content-Type", "text/plain; charset=UTF-8")
                     .body("인증번호가 일치하지 않습니다.");
         }
         
         // 4) 인증 성공 시 인증상태(1:인증완료) 업데이트
-        memberService.updateAuthStatus(userPhone);
+        memberService.updateAuthStatus(authCode);
         
-        return ResponseEntity.ok("인증에 성공했습니다.");
+        
+        return ResponseEntity.ok()
+                .header("Content-Type", "text/plain; charset=UTF-8")
+                .body("인증에 성공했습니다.");
         
     }
     

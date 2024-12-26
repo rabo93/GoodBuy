@@ -1,6 +1,7 @@
 package com.itwillbs.goodbuy.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class ProductService {
 	private ProductMapper mapper;
 
 	public int registProduct(ProductVO product, String id) {
-		return mapper.registProduct(product, id);
+		return mapper.insertProduct(product, id);
 	}
 		
 	//판매 상품목록 조회
@@ -28,8 +29,17 @@ public class ProductService {
 		return mapper.salesListCount(id);
 	}
 
+	public List<Map<String, Object>> searchProductList(String pRODUCT_CATEGORY) {
+		return mapper.searchProductList(pRODUCT_CATEGORY);
+	}
+		
 	public List<ProductVO> getOrderList(String id) {
 		return mapper.selectOrderList(id);
+	}
+
+	//구매 목록 갯수 조회
+	public int orderListCount(String id) {
+		return mapper.selectOrderCount(id);
 	}
 
 }

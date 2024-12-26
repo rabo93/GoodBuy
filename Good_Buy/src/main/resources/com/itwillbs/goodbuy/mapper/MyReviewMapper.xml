@@ -15,7 +15,7 @@
 	<!-- 	리뷰 갯수 -->
 	<select id="selectReviewCount" resultType="int">
 		SELECT COUNT(*)
-		FROM PRODUCT P JOIN MEMBER M ON P.MEM_ID = M.MEM_ID
-		WHERE P.MEM_ID = #{mem_id}
+		FROM PRODUCT P JOIN MYREVIEW R ON P.PRODUCT_ID = R.PRODUCT_ID
+		WHERE P.MEM_ID = #{mem_id};
 	</select>
 </mapper>

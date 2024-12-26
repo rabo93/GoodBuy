@@ -36,28 +36,15 @@ public class MypageController {
 	@Autowired ProductService productService;
 	@Autowired MyReviewService reviewService;
 	
-//	[회원정보 수정]
-//	@LoginCheck(memberRole = MemberRole.USER)
-//	@GetMapping("MyInfo")
-//	public String myInfo() {
-//		return "mypage/mypage_info";
-//		
-//		
-//	}
-//	@LoginCheck(memberRole = MemberRole.USER)
-//	@PostMapping("MyInfo")
-//	public String myInfoForm(MemberVO member,HttpSession session , Model model) {
-//		MemberVO memInfo = memberService.getMember(member);
-////		System.out.println("회원정보"+ memInfo);
-//		
-//		return "mypage/mypage_info";
-//	}
-	
+	//세션에 사용자 ID 저장 
+	private String getSessionUserId(HttpSession session) {
+	    return (String) session.getAttribute("sId");
+	}
 	
 	//[나의상점]
 	@GetMapping("MyStore")
 	public String myStore(MemberVO member,HttpSession session,Model model) {
-		String id = (String) session.getAttribute("sId");
+		String id = getSessionUserId(session);
 		
 		//판매내역 조회
 		List<ProductVO> productlist =(List<ProductVO>) productService.getProductList(id);
@@ -102,12 +89,15 @@ public class MypageController {
 	//[나의 구매내역]
 	@GetMapping("MyOrder")
 	public String myOrder(HttpSession session,Model model) {
-		String id = (String) session.getAttribute("sId");
+		String id = getSessionUserId(session);
 		//구매내역 조회
 		List<ProductVO> orderList = productService.getOrderList(id);
 		model.addAttribute("order",orderList);
 		System.out.println("구매내역 조회"+orderList);
 		
+		//구매내역 갯수조회
+		int orderCount = productService.orderListCount(id);
+		model.addAttribute("orderCount",orderCount);
 		
 		
 		return "mypage/mypage_product_orders";
@@ -116,7 +106,7 @@ public class MypageController {
 	@GetMapping("MySales")
 	public String mySale(Model model,HttpSession session) {
 		//세션에 사용자 ID 저장 
-		String id = (String) session.getAttribute("sId");
+		String id = getSessionUserId(session);
 		
 		//판매내역 조회
 		List<ProductVO> productlist =(List<ProductVO>) productService.getProductList(id);
@@ -134,7 +124,7 @@ public class MypageController {
 	//[나의 리뷰] 완
 	@GetMapping("MyReview")
 	public String myReview(HttpSession session,Model model) {
-		String id = (String) session.getAttribute("sId");
+		String id = getSessionUserId(session);
 		//나의 리뷰 조회
 		List<MyReviewVO> review = reviewService.getReview(id);
 		model.addAttribute("review", review);
@@ -151,7 +141,7 @@ public class MypageController {
 	    savePreviousUrl(request, session);
 
 	    // 세션에서 사용자 ID 가져오기
-	    String id = (String) session.getAttribute("sId");
+	    String id = getSessionUserId(session);
 	    System.out.println("세션 ID: " + id);
 
 	    // 위시리스트 조회
@@ -172,7 +162,7 @@ public class MypageController {
 	//[관심목록 추가]
 	@GetMapping("MyWishAdd")
 	public String myWishAdd(WishlistVO wishlist,HttpServletRequest request,HttpSession session ,Model model) {
-		String id = (String)session.getAttribute("sId");
+		String id = getSessionUserId(session);
 		wishlist.setMem_id(id);
 		
 		int insertCount = myPageService.addWishlist(wishlist);
@@ -212,7 +202,7 @@ public class MypageController {
 	
 	@PostMapping("MemberWithdraw")
 	public String memberWithdrawForm (MemberVO  member,HttpSession session , Model model ,BCryptPasswordEncoder passwordEncoder,String memPasswd) {
-		String id = (String)session.getAttribute("sId");
+		String id = getSessionUserId(session);
 		String dbPasswd = memberService.getMemberPasswd(id);
 		if(dbPasswd == null || !passwordEncoder.matches(memPasswd, dbPasswd)) {
 			model.addAttribute("msg", "권한이 없습니다.//n비밀번호를 다시 확인해주세요.");

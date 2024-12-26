@@ -13,4 +13,6 @@ public class MyReviewVO {
 	    private Date review_date;		// 리뷰 날짜
 	    private String product_title;     // 상품 제목
 	    private String review_score;      // 리뷰 점수
+	    private String buyerNick;      // 구매자 NICK
+	    private String sellerNick;      // 판매자 NICK
 }

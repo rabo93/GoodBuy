@@ -56,12 +56,13 @@
 					<a href="">나의 광고</a>
 				</aside>
 				<div class="my-container">
-					<div class="contents-ttl"><h3>판매내역 <small>(총 <span>${salesCount}</span>건)</small></h3><div class="my-tabs">
-						<button>전체</button>
-						<button>거래중</button>
-						<button>거래완료</button>
-						<button>취소/환불</button>
-					</div>
+					<div class="contents-ttl"><h3>판매내역 <small>(총 <span>${salesCount}</span>건)</small></h3>
+						<div class="my-tabs">
+							<button>전체</button>
+							<button>거래중</button>
+							<button>거래완료</button>
+							<button>취소/환불</button>
+						</div>
 					</div>
 				<section>
 					<div>
@@ -89,8 +90,10 @@
 														<c:when test="${product.product_status == 2 }">
 															[예약중]
 														</c:when>
-														<c:otherwise>
+														<c:when test="${product.product_status == 3 }">
 															[거래완료]
+														</c:when>
+														<c:otherwise>
 														</c:otherwise>
 													</c:choose>
 													${product.product_title}

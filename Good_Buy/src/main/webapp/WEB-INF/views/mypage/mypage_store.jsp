@@ -106,7 +106,7 @@
 																<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" />
 																<div class="card-info">
 																	<div class="category">
-																		<span>생활용품</span>
+																		<span>${product.product_category }</span>
 																		<span class="type">직거래</span>
 																	</div>
 																	<div class="ttl">
@@ -117,15 +117,18 @@
 																			<c:when test="${product.product_status == 2 }">
 																				[예약중]
 																			</c:when>
-																			<c:otherwise>
+																			<c:when test="${product.product_status == 3 }">
 																				[거래완료]
+																			</c:when>
+																			<c:otherwise> 
+																			<!-- 널스트링 출력 -->
 																			</c:otherwise>
 																		</c:choose>
 																		${product.product_title}
 																	</div>
 																	<div class="price"><fmt:formatNumber type="number" value="${product.product_price}" pattern="#,###"/>원</div>
 																	<div class="card-row">
-																		<span class="add">부산 해운대구</span>
+																		<span class="add">${product.product_trade_adr1 }</span>
 																		<span class="name">${product.mem_nick }</span>
 																		<span class="time">1분 전</span>
 																	</div>
@@ -161,7 +164,7 @@
 														        <div class="profile-icon"></div>
 														        <div class="user-info">
 														            <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
-														            <div class="name">${review.mem_id}</div>
+														            <div class="name">${review.buyerNick}</div>
 														            <div class="product">${review.product_title}</div>
 														            <div class="date">${review.review_date}</div>
 														        </div>

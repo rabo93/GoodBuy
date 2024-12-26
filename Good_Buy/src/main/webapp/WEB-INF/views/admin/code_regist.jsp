@@ -95,7 +95,7 @@
 			                                    </thead>
 			                                </table>
 			                          	</div>
-                                        <button id="btnSave" class="btn btn-primary btn-lg d-block m-auto col-3" type="button">등록하기</button>
+                                        <button id="btnSubmitForm" class="btn btn-primary btn-lg d-block m-auto col-3">등록하기</button>
                                     </form>
                                 </div>
                             </div>

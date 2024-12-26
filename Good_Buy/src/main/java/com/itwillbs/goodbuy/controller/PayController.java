@@ -226,8 +226,6 @@ public class PayController {
 //		// 출금이체 결과 정보 Map 객체 중 api_tran_id 값을 Model에 저장
 		model.addAttribute("bank_tran_id", withdrawResult.get("bank_tran_id"));
 		
-		
-			
 		return "redirect:/PayWithdrawResult";
 	}
 	
@@ -240,4 +238,65 @@ public class PayController {
 		return "pay/pay_withdraw_result";
 	}
 	
+	
+	// 입금이체(= 기관출금)
+	@LoginCheck(memberRole = MemberRole.USER)
+	@PayTokenCheck
+	@PostMapping("PayDeposit")
+	public String PayDeposit(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
+		PayToken token = (PayToken)session.getAttribute("token");
+
+		map.put("id", session.getAttribute("sId"));
+		log.info(">>>>>>>> 입금 이체 요청 파라미터 정보 : " + map);
+		
+		// PayService - requestDeposit() 메서드 호출하여 입금이체 요청
+		Map<String, Object> depositResult = service.requestDeposit(map);
+		
+		log.info(">>>>>>>> 입금이체 요청 결과 : " + depositResult);
+
+		
+		
+		List<Map<String, String>> res_list = (List<Map<String, String>>) depositResult.get("res_list");
+
+		
+		// 입금이체가 성공했을 경우 "PayDepositResult" 페이지로 리다이렉트
+		// 아니면, "입금 실패!" 처리(fail.jsp)
+//		System.out.println("bank_rsp_code : " + depositResult.get("res_list")); // null 
+//		System.out.println("bank_rsp_code : " +  res_list.get(0).get("bank_rsp_code"));
+//		System.out.println("depositResult : " + depositResult);
+		
+		if(!depositResult.get("rsp_code").equals("A0000") || !res_list.get(0).get("bank_rsp_code").equals("000")) {
+			model.addAttribute("msg", "입금 실패! - " + depositResult.get("rsp_message"));
+			return "result/fail";
+		}
+				
+		// 사용자번호를 입금이체 결과 객체에 추가
+		depositResult.put("user_seq_no", token.getUser_seq_no());
+		// => 주의! 사용자번호 대신 PayToken 객체를 통째로 저장하려면 Map<String, Object> 필요
+				
+		// 임시) withdrawResult 객체의 api_tran_dtm 속성값(문자열)의 뒷자리 3자리(밀리초) 제거
+//		depositResult.put(
+//				"api_tran_dtm", 
+//				depositResult.get("api_tran_dtm").substring(0, (depositResult.get("api_tran_dtm")).length() - 3));
+				
+		// 출금이체 성공 시 결과를 DB 에 저장
+		// BankService - registWithdrawResult() 메서드 호출하여 DB 저장 요청
+		// => 파라미터 : 출금이체 결과(withdrawResult)   리턴타입 : void
+		service.registDepositResult(depositResult);
+				
+		// 출금이체 결과 정보 Map 객체 중 bank_tran_id 값을 Model 에 저장
+		model.addAttribute("bank_tran_id", depositResult.get("bank_tran_id"));
+				
+		
+		return "redirect:/PayDepositResult";
+	}
+	
+	// 입금이체 결과
+	@LoginCheck(memberRole = MemberRole.USER)
+	@PayTokenCheck
+	@GetMapping("PayDepositResult")
+	public String payDepositResult() {
+
+		return "pay/pay_deposit_result";
+	}
 }

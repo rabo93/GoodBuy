@@ -17,17 +17,15 @@ function linkAccount() {
 							+ "&auth_type=0"; 
 }
 
-function submitForm(fin_num) {
-//	debugger;
-//    const form = fin_num.nextElementSibling; // 바로 다음에 위치한 form 가져오기
-    const form = fin_num.parentNode.querySelector('form');
-    // console.log(fin_num.nextElementSibling); // 연결계좌 추가하기 
+function submitForm(anchor) {
+    // a 태그의 data-form-id 속성에서 관련 form의 ID를 가져옴
+    const formId = anchor.getAttribute('data-form-id');
+    const form = document.getElementById(formId);
+
     if (form && form.tagName === 'FORM') {
-	    form.submit();
-	} else {
-	    console.error('No <form> found within the parent.');
-	}
-    
-    
+        form.submit();
+    } else {
+        console.error(`No <form> found with ID: ${formId}`);
+    }
 }
 

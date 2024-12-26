@@ -32,4 +32,9 @@ public class ProductService {
 		return mapper.selectOrderList(id);
 	}
 
+	//구매 목록 갯수 조회
+	public int orderListCount(String id) {
+		return mapper.selectOrderCount(id);
+	}
+
 }

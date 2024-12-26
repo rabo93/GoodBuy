@@ -16,6 +16,9 @@ public interface ProductMapper {
 
 	int salesListCount(String id);
 
+	// 구매내역 조회
 	List<ProductVO> selectOrderList(String id);
+	// 구매내역 갯수 조회
+	int selectOrderCount(String id);
 	
 }

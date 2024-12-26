@@ -44,7 +44,7 @@
 			, #{product_pic3}
 			, #{product_trade_adr1}
 			, #{advertisement_status}
-			, 1
+			, 0
 		)
 	</insert>
 	
@@ -61,6 +61,16 @@
 		  FROM PRODUCT P JOIN PRODUCT_ORDER O ON P.PRODUCT_ID = O.PRODUCT_ID
 		  				JOIN MEMBER M ON P.MEM_ID = M.MEM_ID
 	 	 WHERE O.BUYER_ID = #{mem_id};
+	</select>
+	
+	<!-- 구매상품 갯수 조회 -->
+	<select id="selectOrderCount" resultType="int">
+		SELECT COUNT(*) as ORDERCOUNT, P.PRODUCT_ID, M.MEM_ID as SELLER_ID
+		FROM PRODUCT_ORDER O
+		JOIN PRODUCT P ON O.PRODUCT_ID = P.PRODUCT_ID
+		JOIN MEMBER M ON M.MEM_ID = P.MEM_ID  -- 판매자와 조인
+		WHERE O.BUYER_ID = #{mem_id}  -- 구매자 필터
+		GROUP BY P.PRODUCT_ID, M.MEM_ID;
 	</select>
 	
 </mapper>

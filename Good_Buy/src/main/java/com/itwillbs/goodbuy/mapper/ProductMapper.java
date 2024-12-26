@@ -15,5 +15,7 @@ public interface ProductMapper {
 	List<ProductVO> selectProductList(String id);
 
 	int salesListCount(String id);
+
+	List<ProductVO> selectOrderList(String id);
 	
 }

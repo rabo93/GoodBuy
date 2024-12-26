@@ -99,9 +99,17 @@ public class MypageController {
 //	        return "result/fail";
 //	    }
 //	}
-	//[나의 주문]
+	//[나의 구매내역]
 	@GetMapping("MyOrder")
-	public String myOrder() {
+	public String myOrder(HttpSession session,Model model) {
+		String id = (String) session.getAttribute("sId");
+		//구매내역 조회
+		List<ProductVO> orderList = productService.getOrderList(id);
+		model.addAttribute("order",orderList);
+		System.out.println("구매내역 조회"+orderList);
+		
+		
+		
 		return "mypage/mypage_product_orders";
 	}
 	//[나의 판매내역] 완

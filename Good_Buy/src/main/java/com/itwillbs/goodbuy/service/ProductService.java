@@ -28,4 +28,8 @@ public class ProductService {
 		return mapper.salesListCount(id);
 	}
 
+	public List<ProductVO> getOrderList(String id) {
+		return mapper.selectOrderList(id);
+	}
+
 }

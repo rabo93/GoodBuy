@@ -19,41 +19,42 @@ import lombok.extern.log4j.Log4j2;
 public class MemberService {
 	@Autowired
 	private MemberMapper mapper;
-
+	
+	
+	// 회원가입 시 회원 정보 등록
 	public int registMember(MemberVO member) {
 		return mapper.insertMember(member);
 	}
 
-
-	public void registMemberAuthInfo(MailAuthInfo mailauthInfo) {
-		MailAuthInfo dbMailAuthInfo = mapper.selectMailAuthInfo(mailauthInfo);
-		if (dbMailAuthInfo == null) {
-			mapper.insertMailAuthInfo(mailauthInfo);
-		} else {
-			mapper.updateMailAuthInfo(mailauthInfo);
-		}
-
-	}
-
-	public boolean requestEmailAuth(MailAuthInfo mailAuthInfo) {
-		boolean isAuthsuccess = false;
-
-		
-		MailAuthInfo dbMailAuthInfo = mapper.selectMailAuthInfo(mailAuthInfo);
-		System.out.println("조회된 인증 정보" + dbMailAuthInfo);
-
-		// 인증정보 조회결과 판별
-		if (dbMailAuthInfo != null) {
-			if (mailAuthInfo.getAuth_code().equals(dbMailAuthInfo.getAuth_code())) { // 인증코드가 일치
-				mapper.updateMailAuthStatus(mailAuthInfo); //인증상태 업데이트
-				mapper.deleteMailAuthInfo(mailAuthInfo);
-
-				isAuthsuccess = true;
-			}
-		}
-
-		return isAuthsuccess;
-	}
+	//이메일 인증 X
+//	public void registMemberAuthInfo(MailAuthInfo mailauthInfo) {
+//		MailAuthInfo dbMailAuthInfo = mapper.selectMailAuthInfo(mailauthInfo);
+//		if (dbMailAuthInfo == null) {
+//			mapper.insertMailAuthInfo(mailauthInfo);
+//		} else {
+//			mapper.updateMailAuthInfo(mailauthInfo);
+//		}
+//	}
+//
+//	public boolean requestEmailAuth(MailAuthInfo mailAuthInfo) {
+//		boolean isAuthsuccess = false;
+//
+//		
+//		MailAuthInfo dbMailAuthInfo = mapper.selectMailAuthInfo(mailAuthInfo);
+//		System.out.println("조회된 인증 정보" + dbMailAuthInfo);
+//
+//		// 인증정보 조회결과 판별
+//		if (dbMailAuthInfo != null) {
+//			if (mailAuthInfo.getAuth_code().equals(dbMailAuthInfo.getAuth_code())) { // 인증코드가 일치
+//				mapper.updateMailAuthStatus(mailAuthInfo); //인증상태 업데이트
+//				mapper.deleteMailAuthInfo(mailAuthInfo);
+//
+//				isAuthsuccess = true;
+//			}
+//		}
+//
+//		return isAuthsuccess;
+//	}
 
 	public String getMemberPasswd(String id) {
 		return mapper.selectMemberPasswd(id);
@@ -121,15 +122,17 @@ public class MemberService {
 	}
 	
 	// [CoolSMS] 휴대폰번호 인증 정보 조회
-	public SmsAuthInfoVO getSmsAuthInfo(String userPhone) {
-		return mapper.selectSmsAuthInfo(userPhone);
+	public SmsAuthInfoVO getSmsAuthInfo(String authCode) {
+		return mapper.selectSmsAuthInfo(authCode);
 	}
 	
 	// [CoolSMS] 휴대폰번호 인증 상태 업데이트
-	public void updateAuthStatus(String userPhone) {
-		mapper.updateAuthStatus(userPhone);
+	public void updateAuthStatus(String authCode) {
+		mapper.updateAuthStatus(authCode);
 	}
 	//-------------------------------------------------------------
+
+
 
 
 

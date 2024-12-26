@@ -157,14 +157,14 @@
         MEM_STATUS
 	    )
 	    VALUES (
-	        #{id},
-	        #{nickname},
-	        #{nickname},
-	        #{email},
-	        #{profile_image},
-	        1,						-- 1:연동 / 2:연동안함
-	        '일반',
-			1
+	        #{id}
+	        ,#{nickname}
+	        ,#{nickname}
+	        ,#{email}
+	        ,#{profile_image}
+	        ,1 -- 1:연동 / 2:연동안함
+	        ,'일반'
+	        ,1
 	    )
 	</insert>
 	
@@ -210,7 +210,6 @@
 		 WHERE MEM_ID = #{mem_id}
 	</update>
 	
-	
 	<!-- [CoolSMS] 휴대폰번호 인증 중복 확인  -->
 	<select id="selectMemberInfo" resultType="String">
 		SELECT MEM_ID
@@ -220,15 +219,20 @@
 	
 	<!-- [CoolSMS] 휴대폰 인증 정보 저장(인증대기) -->
 	<insert id="insertSmsAuthInfo" parameterType="smsAuthInfoVO">
-	    INSERT INTO PHONE_AUTH_INFO (MEM_PHONE, AUTH_CODE, MEM_ID, AUTH_DATE, STATUS)
-	    VALUES (#{mem_phone}, #{auth_code}, #{mem_id}, now(), 0)
+	    INSERT INTO PHONE_AUTH_INFO (MEM_PHONE, AUTH_CODE, AUTH_DATE, STATUS)
+	    VALUES (
+	    	#{mem_phone}
+	    	, #{auth_code}
+	    	, now()
+	    	, 0 -- 인증대기
+	    	)
 	</insert>
 	
 	<!-- [CoolSMS] 휴대폰 인증 정보 조회 -->
-	<select id="getSmsAuthInfo" parameterType="String" resultType="SmsAuthInfoVO">
-	    SELECT MEM_PHONE, AUTH_CODE, MEM_ID, AUTH_DATE, STATUS
+	<select id="selectSmsAuthInfo" parameterType="String" resultType="SmsAuthInfoVO">
+	    SELECT  *
 	      FROM PHONE_AUTH_INFO
-	     WHERE MEM_PHONE = #{userPhone}
+	     WHERE AUTH_CODE = #{authCode}
 	       AND STATUS = 0 -- 인증대기 상태만 조회
 	     ORDER BY AUTH_DATE DESC -- 최신 요청 순으로 조회
 	     LIMIT 1
@@ -237,9 +241,10 @@
 	<!-- [CoolSMS] 인증 상태 업데이트 -->
 	<update id="updateAuthStatus" parameterType="map">
 	    UPDATE PHONE_AUTH_INFO
-	       SET STATUS = #{status}, AUTH_DATE = now()
-	     WHERE MEM_PHONE = #{userPhone}
-	       AND STATUS = 0 -- 인증대기 상태만 업데이트
+	       SET STATUS = 1 -- 인증 완료
+	       		, AUTH_DATE = now()
+	     WHERE AUTH_CODE = #{authCode}
+	       AND STATUS = 0 
 	</update>
 	
 </mapper>

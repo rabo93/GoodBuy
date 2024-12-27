@@ -52,19 +52,17 @@ public class CoolSmsController {
 	// 단일 문자 발송
 	@PostMapping("/send-one")
 	@ResponseBody
-	public ResponseEntity<?> sendOne(@RequestParam("userPhone") String userPhone, HttpSession session) {
-//		log.info(">>>>>>>>> 회원 휴대폰 번호 : " + userPhone);
+	public ResponseEntity<?> sendOne(@RequestParam("userPhone") String userPhone) {
+		log.info(">>>>>>>>> 입력한 휴대폰 번호 : " + userPhone);
 		// 해당 휴대폰 번호로 가입한 회원이 있는지 판별
 		String memId = memberService.getMemberInfo(userPhone);
-		
-//		 * 이미 존재할 경우 (=> 구현 다하고 주석 풀기)
-		if (memId != null) {
-			return ResponseEntity.badRequest()
-					.header("Content-Type", "text/plain; charset=UTF-8")
-					.body("이미 존재하는 휴대폰번호입니다.");
-		}
-		
-		// * 존재하지 않을 경우
+		// * 이미 존재할 경우 *
+//		if (memId != null) {
+//			return ResponseEntity.badRequest()
+//					.header("Content-Type", "text/plain; charset=UTF-8")
+//					.body("이미 가입된 휴대폰번호입니다.");
+//		}
+		// * 존재하지 않을 경우 *
         // 1) 랜덤 인증번호 생성 **아래에 랜덤 코드 생성 메서드 호출
 	    String smsCode = RandomNumber();
         log.info(">>>>>>>>>> 인증번호 : "+ smsCode);
@@ -104,12 +102,12 @@ public class CoolSmsController {
     @PostMapping("/verify-code")
     @ResponseBody
     public ResponseEntity<?> verifyCode(@RequestParam("authCode") String authCode, @RequestParam("userPhone") String userPhone) {
-//    	log.info("입력된 인증번호 번호 : " + authCode);
-//    	log.info("휴대폰번호 : " + memPhone);
+//    	log.info(">>>>>>>>>> 입력된 인증번호 번호 : " + authCode);
+//    	log.info(">>>>>>>>>> 휴대폰번호 : " + memPhone);
     	
     	// 1) DB에서 입력된 인증번호의 인증 정보 조회
     	SmsAuthInfoVO smsAuthInfoVO = memberService.getSmsAuthInfo(authCode);
-//        log.info("db에서 가져온 인증 정보 : " + smsAuthInfoVO);
+//        log.info(">>>>>>>>>> db에서 가져온 인증 정보 : " + smsAuthInfoVO);
         
         if (smsAuthInfoVO == null) {
             return ResponseEntity.badRequest()
@@ -121,8 +119,8 @@ public class CoolSmsController {
         long validDuration = 5 * 60 * 1000; // 5분
         long currentTime = System.currentTimeMillis();
         long authDateTime = smsAuthInfoVO.getAuth_date().getTime(); // DB에서 가져온 인증시간
-//        log.info("현재 시간: " + currentTime);
-//        log.info("인증 요청 시간: " + authDateTime);
+//        log.info(">>>>>>>>>> 현재 시간: " + currentTime);
+//        log.info(">>>>>>>>>> 인증 요청 시간: " + authDateTime);
 
         if (currentTime - authDateTime > validDuration) {
             return ResponseEntity.badRequest()

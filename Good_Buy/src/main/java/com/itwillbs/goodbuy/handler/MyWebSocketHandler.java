@@ -35,25 +35,25 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 		userSessionList.put(session.getId(), session);
 		userList.put(getHttpSessionId(session), getWebSocketSessionId(session));
 		
-		System.out.println("클라이언트 세션 목록(" + userSessionList.keySet().size() + " 명) : " + userSessionList);
-		System.out.println("사용자 목록(" + userList.keySet().size() + " 명) : " + userList);
+//		System.out.println("클라이언트 세션 목록(" + userSessionList.keySet().size() + " 명) : " + userSessionList);
+//		System.out.println("사용자 목록(" + userList.keySet().size() + " 명) : " + userList);
 	}
 	
 	// 2. handleTextMessage - 클라이언트로부터 메세지를 수신할 경우 자동으로 호출되는 메서드
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-		System.out.println("메세지 수신됨!(handleTextMessage)");
-		System.out.println("메세지 전송한 사용자 : " + getHttpSessionId(session));
+//		System.out.println("메세지 수신됨!(handleTextMessage)");
+//		System.out.println("메세지 전송한 사용자 : " + getHttpSessionId(session));
 		
 		String jsonMsg = message.getPayload();
-		System.out.println("전송된 메세지 : " + jsonMsg);
+//		System.out.println("전송된 메세지 : " + jsonMsg);
 		
 		ChatMessage chatMessage = gson.fromJson(jsonMsg, ChatMessage.class);
-		System.out.println("파싱된 메세지 : " + chatMessage);
+//		System.out.println("파싱된 메세지 : " + chatMessage);
 		
 		String sender_id = getHttpSessionId(session);
 		String receiver_id = chatMessage.getReceiver_id();
-		System.out.println("송신자 아이디 : " + sender_id + ", 수신자 아이디 : " + receiver_id);
+//		System.out.println("송신자 아이디 : " + sender_id + ", 수신자 아이디 : " + receiver_id);
 		sendMessage(session, chatMessage);
 		
 	}
@@ -65,8 +65,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 		userSessionList.remove(session.getId());
 		
 		userList.put(getHttpSessionId(session), "");
-		System.out.println("클라이언트 세션 목록(" + userSessionList.keySet().size() + " 명) : " + userSessionList);
-		System.out.println("사용자 목록(" + userList.keySet().size() + " 명) : " + userList);
+//		System.out.println("클라이언트 세션 목록(" + userSessionList.keySet().size() + " 명) : " + userSessionList);
+//		System.out.println("사용자 목록(" + userList.keySet().size() + " 명) : " + userList);
 	}
 	
 	@Override

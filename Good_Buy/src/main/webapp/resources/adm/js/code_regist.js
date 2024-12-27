@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", function(){
 		info : false,
 		ordering : false,
 		paging : false,
+		responsive: true,
+		fixedHeader: true,
 	});
 	
 	// 변수 선언
@@ -18,30 +20,6 @@ document.addEventListener("DOMContentLoaded", function(){
 	// 행 추가
 	function addNewRow() {
 		const rowCount = codeTable.rows().count() + 1;
-//		const newRow = `
-//			<tr class="tr">
-//                <td>
-//                	<div class="custom-control custom-checkbox small">
-//                    	<input type="checkbox" class="custom-control-input" id="customCheck${rowCount}">
-//                    	<label class="custom-control-label" for="customCheck${rowCount}"></label>
-//                	</div>
-//                </td>
-//                <td class="num">${rowCount}</td>
-//                <td><input type="text" class="form-control" name="CODE_ID" placeholder="상세코드ID 입력" required></td>
-//                <td><input type="text" class="form-control" name="CODE_NAME" placeholder="상세코드명 입력" required></td>
-//                <td><input type="text" class="form-control" name="CODE_DESCRIPTION" placeholder="설명 입력" required></td>
-//                <td>
-//                	<div class="form-check form-switch">
-//                		<input type="hidden" value="1" name="CODE_STATUS">
-//						<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault${rowCount}" checked required>
-//						<label class="form-check-label" for="flexSwitchCheckDefault${rowCount}">사용함</label>
-//					</div>
-//                </td>
-//                <td><input type="number" min="1" class="form-control" name="CODE_SEQ" placeholder="순서 입력" value="1" required></td>
-//            </tr>
-//		`;
-//
-//		codeTable.row.add($(newRow)).draw(false);
 		codeTable.row.add([
 			`<div class="custom-control custom-checkbox small">
                	<input type="checkbox" class="custom-control-input" id="customCheck${rowCount}">
@@ -78,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function(){
 		reDrawTable();
 	}
 	
-	// 행 삭제 후 컬럼 번호, 순서 새로 그리기
+	// 행 삭제 후 컬럼 번호, 순서 업데이트
 	function reDrawTable() {
 		codeTable.rows().every(function(i) {
 			console.log("삭제후 남은 row : " + i); // 삭제 후 남은 row index 출력
@@ -95,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function(){
 		});
 	}
 	
-	// 체크박스, 스위치 버튼 업데이트
+	// 체크박스, 스위치 버튼 인덱스 업데이트
 	function updateCheckboxAndSwtich(row, i) {
 		const newCheckbox = $(row).find(".custom-control-input");
 		const newCheckboxLabel = $(row).find(".custom-control-label");
@@ -105,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function(){
 		if(newCheckbox.length > 0) {
 			const customCheckId = `customCheck${i + 1}`;
 			newCheckbox.attr("id", customCheckId);
-			newCheckbox.prop("check", false);
+			newCheckbox.prop("checked", false);
 			newCheckboxLabel.attr("for", customCheckId);
 		}
 		if(newSwitch.length > 0) {
@@ -120,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	function submitForm(e) {
 		e.preventDefault();
 		const formData = $(this).serializeArray();
-		console.log("폼데이터111: " + formData); // 넘어오는거 확인
+		console.log("폼데이터: " + formData); // 넘어오는거 확인
 		
 		// 일반 필드 input 값 저장
 		const mainCode = {};
@@ -164,7 +142,7 @@ document.addEventListener("DOMContentLoaded", function(){
 				}
 			},
 			error: function() {
-				alert("공통코드 등록이 실패했습니다.");
+				alert("공통코드 등록을 실패했습니다.");
 			}
 		});
 		

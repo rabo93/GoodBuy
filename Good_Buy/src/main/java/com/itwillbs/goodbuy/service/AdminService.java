@@ -51,5 +51,36 @@ public class AdminService {
 		return mapper.selectCommonCodes(start, length, searchValue);
 	}
 
+	// 공통코드 전체 컬럼 수 조회
+	public int getCommonCodesTotal() {
+		return mapper.selectCommonCodesTotal();
+	}
+
+	// 공통코드 검색 컬럼 수 조회
+	public int getCommonCodesFiltered(String searchValue) {
+		return mapper.selectCommonCodesFiltered(searchValue);
+	}
+
+	// 공통코드 컬럼 수정
+	public int modifyCommonCode(Map<String, Object> param) {
+		return mapper.updateCommonCodes(param);
+	}
+
+	// 공통코드 컬럼 삭제
+	@Transactional
+	public int removeCommonCode(Map<String, Object> param) {
+		int deleteCommonCodeResult = mapper.deleteCommonCodes(param);
+		if(deleteCommonCodeResult == 0) {
+			throw new RuntimeException("공통코드 삭제에 실패했습니다.");
+		}
+		
+		int deleteDeprecatedCommonCodeResult = mapper.deleteDeprecatedCommonCode();
+		if(deleteDeprecatedCommonCodeResult == 0) {
+			throw new RuntimeException("상위코드 삭제에 실패했습니다.");
+		}
+		
+		return deleteCommonCodeResult + deleteDeprecatedCommonCodeResult;
+	}
+
 	
 }

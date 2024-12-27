@@ -20,5 +20,20 @@ public interface AdminMapper {
 			@Param("start") int start, 
 			@Param("length") int length,
 			@Param("searchValue") String searchValue);
+	
+	// 공통코드 컬럼 수 조회
+	int selectCommonCodesTotal();
+
+	// 공통코드 검색 컬럼 수 조회
+	int selectCommonCodesFiltered(String searchValue);
+
+	// 공통코드 컬럼 수정
+	int updateCommonCodes(Map<String, Object> param);
+
+	// 공통코드 컬럼 삭제
+	int deleteCommonCodes(Map<String, Object> param);
+
+	// 사용되지않는 공통코드(상위코드) 삭제
+	int deleteDeprecatedCommonCode();
 
 }

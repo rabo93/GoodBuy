@@ -37,7 +37,7 @@
 		<section class="wrapper">
 			<!-- *********** 여기 안에 작업하세요. section.wrapper 건들지말기 ******** -->
 			<div id="faq_commandArea">
-				<section>
+<!-- 				<section> -->
 					<div class="faq-container">
 						<c:if test="${sessionScope.sGrade eq '관리자'}">
 							<div class="faq-writebtn">
@@ -55,60 +55,55 @@
 						</div>
 						<div class="faq-list" id="policy">
 							<ul>
-								<c:forEach items="${faqList}" var="faqBoard">
-									<c:if test="${faqBoard.faq_cate eq 1}">
-										<li>
-											<button class="faq-item" onclick="toggleAnswer(this)">${faqBoard.faq_subject}</button>
-											<div class="answer">${fn:replace(faqBoard.faq_content, '\\n', '<br>')}</div>
-										</li>
-									</c:if>
+								<c:forEach items="${faqList1}" var="faqBoard">
+									<li>
+										<button class="faq-item" onclick="toggleAnswer(this)">${faqBoard.faq_subject}</button>
+<%-- 										<div class="answer">${fn:replace(faqBoard.faq_content, '\\n', '<br>')}</div> --%>
+										<div class="answer">
+											${faqBoard.faq_content}
+										</div>
+									</li>
 								</c:forEach>
 							</ul>
 						</div>
 						<div class="faq-list" id="memberAccount">
 							<ul>
-								<c:forEach items="${faqList}" var="faqBoard">
-									<c:if test="${faqBoard.faq_cate eq 2}">
-										<li>
-											<button class="faq-item" onclick="toggleAnswer(this)">${faqBoard.faq_subject}</button>
-											<div class="answer">
-												${faqBoard.faq_content}
-											</div>
-										</li>
-									</c:if>
+								<c:forEach items="${faqList2}" var="faqBoard">
+									<li>
+										<button class="faq-item" onclick="toggleAnswer(this)">${faqBoard.faq_subject}</button>
+										<div class="answer">
+											${faqBoard.faq_content}
+										</div>
+									</li>
 								</c:forEach>
 							</ul>
 						</div>
 						<div class="faq-list" id="payment">
 							<ul>
-								<c:forEach items="${faqList}" var="faqBoard">
-									<c:if test="${faqBoard.faq_cate eq 3}">
-										<li>
-											<button class="faq-item" onclick="toggleAnswer(this)">${faqBoard.faq_subject}</button>
-											<div class="answer">
-												${faqBoard.faq_content}
-											</div>
-										</li>
-									</c:if>
+								<c:forEach items="${faqList3}" var="faqBoard">
+									<li>
+										<button class="faq-item" onclick="toggleAnswer(this)">${faqBoard.faq_subject}</button>
+										<div class="answer">
+											${faqBoard.faq_content}
+										</div>
+									</li>
 								</c:forEach>
 							</ul>
 						</div>
 						<div class="faq-list" id="etc">
 							<ul>
-								<c:forEach items="${faqList}" var="faqBoard">
-									<c:if test="${faqBoard.faq_cate eq 4}">
-											<li>
-												<button class="faq-item" onclick="toggleAnswer(this)">${faqBoard.faq_subject}</button>
-												<div class="answer">
-													${faqBoard.faq_content}
-												</div>
-											</li>
-									</c:if>
+								<c:forEach items="${faqList4}" var="faqBoard">
+									<li>
+										<button class="faq-item" onclick="toggleAnswer(this)">${faqBoard.faq_subject}</button>
+										<div class="answer">
+											${faqBoard.faq_content}
+										</div>
+									</li>
 								</c:forEach>
 							</ul>
 						</div>
 					</div>
-				</section>
+<!-- 				</section> -->
 			</div>
 			<!-- *********** // 여기 안에 작업하세요. section.wrapper 건들지말기 ******** -->
 		</section>

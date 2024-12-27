@@ -42,4 +42,8 @@ public class ProductService {
 		return mapper.selectOrderCount(id);
 	}
 
+	public List<Map<String, Object>> searchFliterList(int product_price, String product_category) {
+		return mapper.searchFliterList(product_price, product_category);
+	}
+
 }

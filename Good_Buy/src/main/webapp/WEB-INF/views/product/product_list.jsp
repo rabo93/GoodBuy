@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,9 +49,9 @@
 							</section>
 							<section class="sch-box">
 								<h2>가격</h2>
-								<label><input type="checkbox" class="ip-chk"> 5,000원 이하</label>
-								<label><input type="checkbox" class="ip-chk"> 10,000원 이하</label>
-								<label><input type="checkbox" class="ip-chk"> 20,000원 이하</label>
+								<label><input type="radio" class="ip-chk" name="ip-chk" value="5000"> 5,000원 이하</label>
+								<label><input type="radio" class="ip-chk" name="ip-chk" value="10000"> 10,000원 이하</label>
+								<label><input type="radio" class="ip-chk" name="ip-chk" value="20000"> 20,000원 이하</label>
 								<div class="ip-num">
 									<input type="number" placeholder="부터" class="ip-num1"> ~ <input type="number" placeholder="까지" class="ip-num2">
 								</div>
@@ -70,7 +71,7 @@
 							<ul class="product-wrap">
 								<!-- 8개 -->
 								<c:forEach items="${searchProductList}" var="list">
-									<li class="product-card" onclick="location.href='ProductDetail'">
+									<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.PRODUCT_ID}'">
 										<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1 }" class="card-thumb" alt="thumbnail" />
 										<div class="card-info">
 											<div class="category">
@@ -80,7 +81,10 @@
 												</c:if>
 											</div>
 											<div class="ttl">${list.PRODUCT_TITLE}</div>
-											<div class="price">${list.PRODUCT_PRICE} 원</div>
+											<div class="price">
+											 	<fmt:formatNumber var="price" value="${list.PRODUCT_PRICE}" type="number"/>
+											 	${price} 원
+											 </div>
 											<div class="card-row">
 												<span class="add">${list.PRODUCT_TRADE_ADR1}</span>
 												<span class="name">${list.MEM_NICK}</span>
@@ -101,4 +105,37 @@
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
 </body>
+<script type="text/javascript">
+const urlParams = new URL(location.href).searchParams;
+const category = urlParams.get('PRODUCT_CATEGORY');
+
+$("input[name='ip-chk']").change(function() {
+	let test = $("input[name='ip-chk']:checked").val();
+	
+	$.ajax({
+		url: "SearchPriceFilter",
+		type: "GET",
+		data: {
+			PRODUCT_PRICE : test,
+			PRODUCT_CATEGORY : category
+		}
+	}).done(function (data) {
+		
+	}).fail(function() {
+		alert("필터적용 실패!");
+	});
+})
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
 </html>

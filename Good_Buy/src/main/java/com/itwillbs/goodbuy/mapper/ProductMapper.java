@@ -23,5 +23,7 @@ public interface ProductMapper {
 	List<ProductVO> selectOrderList(String id);
 	// 구매내역 갯수 조회
 	int selectOrderCount(String id);
+
+	List<Map<String, Object>> searchFliterList(@Param("price")int product_price, @Param("cate")String product_category);
 	
 }

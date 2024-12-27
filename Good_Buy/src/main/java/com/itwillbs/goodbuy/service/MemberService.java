@@ -60,9 +60,9 @@ public class MemberService {
 		return mapper.selectMemberPasswd(id);
 	}
 
-
-	public MemberVO getMember(MemberVO member) {
-		return mapper.selectMember(member);
+	
+	public MemberVO getMember(String mem_id) {
+		return mapper.selectMember(mem_id);
 		
 	}
 	
@@ -77,8 +77,8 @@ public class MemberService {
 
 
 	public int modifyMember(Map<String, String> map) {
-		System.out.println("@@@mem_passwd: " + map.get("mem_passwd"));
-		System.out.println("@@@mem_name: " + map.get("mem_name"));
+		log.info(">>>> mem_passwd: " + map.get("mem_passwd"));
+		log.info(">>>> mem_nick: " + map.get("mem_nick"));
 
 		return mapper.updateMember(map);
 	}
@@ -131,6 +131,12 @@ public class MemberService {
 		mapper.updateAuthStatus(authCode);
 	}
 	//-------------------------------------------------------------
+	
+	// 회원탈퇴(삭제) 요청
+	public void removeMemInfo(String id) {
+		mapper.deleteMemInfo(id);
+	}
+
 
 
 

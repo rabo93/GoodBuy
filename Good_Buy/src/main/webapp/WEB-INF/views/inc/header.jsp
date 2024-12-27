@@ -50,6 +50,56 @@
 				</c:choose>
 			</div>
 		</div>
+		<div class="m-menu">
+          <button class="hamburger hamburger--spin" type="button">
+            <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+            </span>
+          </button>
+        </div>
+		
+		<div class="m-menu-wrap">
+        	<div class="m-menu-bg">
+        	
+        	</div>
+        	<nav id="m_nav">
+        		<div class="m-info">
+        			<c:choose>
+						<c:when test="${empty sessionScope.sId}">
+	        				<a href="SNSLogin" class="gnb-btn"><i class="fa-solid fa-user"></i> 로그인</a>
+						</c:when>
+						<c:otherwise>
+							<c:choose>
+								<c:when test="${not empty sessionScope.sProfile}">
+									<img src="${sessionScope.sProfile}" alt="프로필사진">
+								</c:when>
+								<c:otherwise>
+									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" alt="프로필사진">
+								</c:otherwise>
+							</c:choose>
+								<a href="MyInfo" class="my-info"><span>${sessionScope.sId} </span> 님</a>
+		        			<a href="ProductRegist" class="gnb-btn"><i class="fa-solid fa-store"></i> 판매하기</a>
+							<a href="ChatMain" class="gnb-btn"><i class="fa-solid fa-comment-dots"></i> 채팅하기</a>
+							<a href="MemberLogout">로그아웃</a>
+						</c:otherwise>				
+					</c:choose>
+        		</div>
+				<ul class="mgnb">
+					<li class="mgnb-menu">
+						<ul class="mgnb-dep-01">
+							<li><a href="ProductList?PRODUCT_CATEGORY=여성의류">여성의류</a></li>
+							<li><a href="ProductList?PRODUCT_CATEGORY=남성의류">남성의류</a></li>
+							<li><a href="ProductList?PRODUCT_CATEGORY=레저/스포츠">레저/스포츠</a></li>
+							<li><a href="ProductList?PRODUCT_CATEGORY=생활용품">생활용품</a></li>
+							<li><a href="ProductList?PRODUCT_CATEGORY=키즈">키즈</a></li>
+							<li><a href="ProductList?PRODUCT_CATEGORY=도서">도서</a></li>
+						</ul>
+					</li>
+<!-- 					<li><a href="BestCourse">BEST 🔥</a></li> -->
+<!-- 					<li><a href="Recommend">AI 추천🤖</a></li> -->
+				</ul>
+			</nav>
+        </div>
 	</section>
 	<section class="hd-menu">
 		<nav class="hd-lnb">
@@ -62,5 +112,5 @@
 		</nav>
 	</section>
 </div>
-
-<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/top.js"></script>
+<%-- <script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script> --%>

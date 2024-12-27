@@ -14,7 +14,7 @@ import com.itwillbs.goodbuy.vo.SmsAuthInfoVO;
 @Mapper
 public interface MemberMapper {
 	//회원 정보 조회
-	MemberVO selectMember(MemberVO member);
+	MemberVO selectMember(String mem_id);
 
 	//닉네임 조회
 	MemberVO selectMemberNick(MemberVO member);
@@ -85,6 +85,9 @@ public interface MemberMapper {
 	// [CoolSMS] 휴대폰번호 인증 상태 업데이트
 	void updateAuthStatus(String authCode);
 	//----------------------------------------------------------
+	
+	// 회원탈퇴(삭제) 요청
+	void deleteMemInfo(String id);
 
 
 	

@@ -57,7 +57,7 @@
 }
 .buttons  button {
 	
-    background-color: #FF7235;
+/*     background-color: #FF7235; */
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -67,11 +67,11 @@
 }
 
 .charge-btn {
-/*     background-color: #0078ff; */
+    background-color: var(--primary);
 }
 
 .transfer-btn {
-/*     background-color: #4caf50; */
+    background-color: var(--primary);
 }
 
 /* 최근 이용내역 */
@@ -175,13 +175,24 @@
 
 .primary-account-btn {
     border: 1px solid #ccc;
-    background-color: #f0f0f0;
+    background-color: var(--primary);
     border-radius: 15px;
     font-size: 12px;
     padding: 5px 10px;
-    color: #555;
+    color: #FFFFFF;
+    pointer-events: none
+}
+/* 대표계좌 등록버튼 */
+.PayRegistRepresentAccount {
+	border: 1px solid #ccc;
+    background-color: var(--light-gray);
+    border-radius: 15px;
+    font-size: 12px;
+    padding: 5px 10px;
+    color: var(--dark);
     cursor: pointer;
 }
+
 /* 추가 버튼 */
 .add-account {
     text-align: center;
@@ -432,7 +443,7 @@
 .account-number strong {
     font-weight: bold;
 }
-
+/*
 .primary-account-btn {
     border: 1px solid #ccc;
     background-color: #f0f0f0;
@@ -442,7 +453,7 @@
     color: #555;
     cursor: pointer;
 }
-
+*/
 /* pay_use_list.jsp */
 
 /* 상단 버튼들 */
@@ -514,3 +525,38 @@
     font-weight: bold;
 }
 
+
+
+
+/* 모달창 - 충전 및 송금 */
+.pay-account-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.pay-account-modal-content {
+  background-color: white;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  text-align: center;
+}
+.pay-account-modal-close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.pay-account-modal-close:hover,
+.pay-account-modal-close:focus {
+  color: black;
+  text-decoration: none;
+}

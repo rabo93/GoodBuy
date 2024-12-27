@@ -58,7 +58,6 @@
 		WHERE USER_SEQ_NO = #{token.user_seq_no}
 	</select>
 	
-	
 	<!-- 사용자 대표계좌 정보 등록 - INSERT -->
 	<!-- token 객체의 user_seq_no 와 별도의 account_num_masked(임시), account_holder_name, fintech_use_num 등록 -->
 	<insert id="insertRepresentAccount">
@@ -91,8 +90,9 @@
 		INTO TRANSACTIONINFO
 		VALUES (
 		  #{withdrawResult.user_seq_no}
+		     <if test="trnsactionType.equals('WI')">
 			, #{withdrawResult.fintech_use_num}
-			, #{trnsactionType} -- service에서 전달받은 이름을 써야함. 
+			, #{trnsactionType} 
 			, #{withdrawResult.api_tran_id}
 			, LEFT(#{withdrawResult.api_tran_dtm}, 14)
 			, #{withdrawResult.bank_tran_id}
@@ -105,6 +105,24 @@
 			, #{withdrawResult.bank_rsp_message}
 			, #{withdrawResult.dps_bank_code_std}
 			, #{withdrawResult.dps_account_num_masked}
+			  </if>
+			  <if test="trnsactionType.equals('DE')">
+			, #{withdrawResult.res_list[0].fintech_use_num}
+			, #{trnsactionType}  
+			, #{withdrawResult.api_tran_id}
+			, LEFT(#{withdrawResult.api_tran_dtm}, 14)
+			, #{withdrawResult.res_list[0].bank_tran_id}
+			, #{withdrawResult.res_list[0].bank_tran_date} 
+			, #{withdrawResult.res_list[0].tran_amt}
+			, #{withdrawResult.rsp_code}
+			, #{withdrawResult.rsp_message}
+			
+			
+			, #{withdrawResult.res_list[0].bank_rsp_code}
+			, #{withdrawResult.res_list[0].bank_rsp_message}
+			, #{withdrawResult.wd_bank_code_std}
+			, #{withdrawResult.wd_account_num_masked}  
+			  </if>
 		)
 	</insert>
 	

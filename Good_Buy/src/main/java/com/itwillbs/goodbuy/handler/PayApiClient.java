@@ -359,19 +359,13 @@ public class PayApiClient {
 		return responseEntity.getBody();
 	}
 
+	
+	
 	// =====================================================================
 	// 2.6. 계좌이체 서비스 - 2.6.2. 입금이체 API(POST)
 	public Map<String, Object> requestDeposit(Map<String, Object> map) {
 		PayToken token = (PayToken)map.get("adminToken");
 		String id = (String)map.get("id");
-		
-//		log.info(">>>  입금이체 map 파라미터 값" + map);
-		// => 결과 : >>>  입금이체 map 파라미터 값{deposit_client_fintech_use_num=120211385488932422519787, deposit_client_name=강주미, tran_amt=33000, id=apple123, 
-//		adminToken=PayToken(id=null, access_token=eyJhbGci, token_type=Bearer, expires_in=7775999, refresh_token=eyJhbGciA, scope=oob, user_seq_no=, rsp_code=null, rsp_message=null)}
-		/* 
-		결국에 : 요 4가지만 있음. 
-		(deposit_client_fintech_use_num,		deposit_client_name,		tran_amt,		id)
-		 */
 		
 		// -----------------------------------------------------------
 		// 요청에 사용될 bank_tran_id, tran_dtime 값 생성하기
@@ -398,15 +392,12 @@ public class PayApiClient {
 		JsonObject joReq = new JsonObject(); // 기본 생성자로 객체 생성
 		
 		joReq.addProperty("tran_no", 1); // 거래순번(2020년부터 단건이체만 가능하므로 무조건 1 고정)
-		joReq.addProperty("bank_tran_id", bank_tran_id); // ?? 필요한가??
+		joReq.addProperty("tran_dtime", tran_dtime); // 거래요청일시
+		joReq.addProperty("bank_tran_id", bank_tran_id); // 거래고유번호(참가기관)
 		
+
 		// ------------- 요청 고객(입금계좌) 정보 ------------
 		joReq.addProperty("fintech_use_num", (String)map.get("deposit_client_fintech_use_num")); // 입금계좌핀테크이용번호
-		
-		//System.out.println("deposit_client_fintech_use_num??? 넘어오나? " + (String)map.get("deposit_client_fintech_use_num"));
-		
-		
-		
 		joReq.addProperty("print_content", "아이티윌_입금"); // 입금계좌인자내역(기본값 : 임의로 아이티윌_입금 으로 고정)
 		joReq.addProperty("tran_amt", (String)map.get("tran_amt")); // 거래금액
 		joReq.addProperty("req_client_name", (String)map.get("deposit_client_name")); // 요청고객성명(입금계좌)
@@ -450,22 +441,21 @@ public class PayApiClient {
 		// 4. 헤더와 바디를 묶어서 관리하는 HttpEntity 객체 생성
 		// => 생성자에 바디 정보(JSON 문자열)와 헤더 정보(HttpHeaders)를 모두 전달
 		HttpEntity<String> httpEntity = new HttpEntity<String>(jsonObject.toString(), headers);
-		
 		// 5. REST API(RESTful API) 요청에 사용할 RestTemplate 객체 활용
 		RestTemplate restTemplate = new RestTemplate();
 		ParameterizedTypeReference<Map<String, Object>> responseType = 
-				new ParameterizedTypeReference<Map<String, Object>>() {};
-		// => 응답데이터 중 "객체" 가 존재하지 않으므로 제네릭타입을 <String, String> 사용 가능
+				new ParameterizedTypeReference<Map<String,Object>>() {};
+		// => 응답데이터 중 res_list(계좌목록) 값이 리스트 형태의 "객체" 이므로
+		//    제네릭타입을 <String, String> 대신 <String, Object> 타입으로 지정
 		
-		// exchange() 메서드 마지막 파라미터로 파싱 클래스 지정 시
-		// ParameterizedTypeReference 객체를 지정하고
-		// 리턴값을 지정하는 ResponseEntity 의 제네릭타입은 실제 파싱될 제네릭타입을 그대로 기술
+				
 		ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(
 				uri, // 요청 URL 관리하는 URI 타입 객체(또는 문자열로 된 URL 도 전달 가능) 
 				HttpMethod.POST,  // 요청 메서드(HttpMethod.XXX 상수 활용)
 				httpEntity, // 요청 정보를 관리하는 HttpEntity 객체
-				responseType); // 응답 데이터를 파싱하여 관리할 클래스
-		
+				responseType); // 응답 데이터를 파싱하여 관리할 클래스		
+				
+				
 		// 6. 응답데이터를 관리하는 ResponseEntity 객체의 getBody() 메서드 호출하여 응답 데이터 본문 리턴
 		return responseEntity.getBody();
 		

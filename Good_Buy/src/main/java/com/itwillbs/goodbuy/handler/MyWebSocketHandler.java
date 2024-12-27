@@ -78,7 +78,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 	//	========================================================================
 	//	HttpSession 객체에 저장된 세션 아이디 리턴 메서드
 	private String getHttpSessionId(WebSocketSession session) {
-		return session.getAttributes().get("sId").toString();
+		return session.getAttributes().get("sNick").toString();
 	}
 	//	WebSocketSession 객체의 아이디 리턴 메서드
 	private String getWebSocketSessionId(WebSocketSession session) {

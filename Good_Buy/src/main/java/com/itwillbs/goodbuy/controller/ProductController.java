@@ -24,6 +24,8 @@ import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.service.ProductService;
 import com.itwillbs.goodbuy.vo.ProductVO;
 
+import retrofit2.http.GET;
+
 @Controller
 public class ProductController {
 	@Autowired ProductService productService;
@@ -38,6 +40,13 @@ public class ProductController {
 		model.addAttribute("searchProductList", listSearch);
 		
 		return "product/product_list";
+	}
+	
+	@GetMapping("SearchPriceFilter")
+	public List<Map<String, Object>> searchPriceFilter(@RequestParam int PRODUCT_PRICE, @RequestParam String PRODUCT_CATEGORY) {
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>" + PRODUCT_PRICE + PRODUCT_CATEGORY);
+		List<Map<String, Object>> listSearch = productService.searchFliterList(PRODUCT_PRICE, PRODUCT_CATEGORY);
+		return listSearch;
 	}
 	
 	// 거래금지 품목 페이지 매핑

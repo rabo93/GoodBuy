@@ -67,7 +67,7 @@
 	border-radius: 30px;
 }
 
-.join-wrap button[type="button"] {
+.join-wrap button {
 	padding: 1rem;
 	background-color: #0dcc5a;
 	border-radius: 10px;
@@ -79,13 +79,15 @@
 	margin-top: 20px;
 }
 
-.join-wrap button[type="button"]:hover {
+.join-wrap button:hover {
 	background-color: #05b94d;
 }
 .join-wrap section {margin-top:10px;}
-.join-wrap section label {margin-top: 10px;display:flex;width: 100%;}
+.join-wrap section label {margin-top: 10px;display:flex;width: 100%; padding-left: 10px;}
+.terms-text { font-weight: 500; padding-left: 10px; color: var(--dark);}
 
-.join-wrap section .terms-all {margin-top:20px;font-size:16px;padding: 10px;}
+
+
 
 #joinForm {}
 #joinForm .row {}

@@ -1,5 +1,6 @@
 package com.itwillbs.goodbuy.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,24 @@ public class FaqController {
 	public String faqMain(Model model) {
 		
 		List<FaqVO> faqList = service.getFaqList();
-		model.addAttribute("faqList", faqList);
+		List<FaqVO> faqList1 = new ArrayList<FaqVO>();
+		List<FaqVO> faqList2 = new ArrayList<FaqVO>();
+		List<FaqVO> faqList3 = new ArrayList<FaqVO>();
+		List<FaqVO> faqList4 = new ArrayList<FaqVO>();
+		
+		for(FaqVO faq : faqList) {
+			switch (faq.getFaq_cate()) {
+			case 1: faqList1.add(faq); break;
+			case 2: faqList2.add(faq); break;
+			case 3: faqList3.add(faq); break;
+			case 4: faqList4.add(faq); break;
+			}
+		}
+		
+		model.addAttribute("faqList1", faqList1);
+		model.addAttribute("faqList2", faqList2);
+		model.addAttribute("faqList3", faqList3);
+		model.addAttribute("faqList4", faqList4);
 		
 		return "faq/faq";
 	}
@@ -39,12 +57,9 @@ public class FaqController {
 	//	FAQ 글쓰기 비즈니스 로직
 	@PostMapping("FaqWrite")
 	public String faqWrite(FaqVO faq, Model model) {
-//		System.out.println(faq);
 		service.insertFaq(faq);
 		
 		return "redirect:/FaqMain";
 	}
-	
-	
 	
 }

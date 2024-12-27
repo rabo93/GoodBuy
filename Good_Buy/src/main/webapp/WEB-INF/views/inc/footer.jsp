@@ -15,9 +15,9 @@
 						</ul>
 					</li>
 					<li><a href="#">광고문의</a></li>
-					<li><a href="#">운영정책</a></li>
-					<li><a href="#">이용약관</a></li>
-					<li><a href="#">개인정보처리방침</a></li>
+					<li><a href="Term">운영정책</a></li>
+					<li><a href="Policy">이용약관</a></li>
+					<li><a href="Privacy">개인정보처리방침</a></li>
 				</ul>
 			</div>
 			<div class="sns">

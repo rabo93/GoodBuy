@@ -90,11 +90,15 @@ public class PayService {
 	}
 
 	public void registWithdrawResult(Map<String, String> withdrawResult) {
-		// 입금이체 할때도 쓸거라서 
-		// BankMapper - insertTransactionResult() 로 생성
+		// PayMapper - insertTransactionResult() 로 생성
 	    // => 파라미터 : 출금이체 결과, 거래타입 ("WI": 출금이체)
 //		mapper.insertTransactionResult(withdrawResult, "WI");
 		mapper.insertTransactionResult(new HashMap<>(withdrawResult), "WI"); // Map<String, String>을 Map<String, Object>로 변환
+	}
+	
+	// DB - 입금이체 결과 저장 요청
+	public void registDepositResult(Map<String, Object> depositResult) {
+		mapper.insertTransactionResult(depositResult, "DE");
 	}
 
 	// DB - 출금이체 결과 조회 요청
@@ -119,16 +123,12 @@ public class PayService {
 		return payApiClient.requestDeposit(map);
 	}
 
-	// DB - 입금이체 결과 저장 요청
-	public void registDepositResult(Map<String, Object> depositResult) {
-		
-		// System.out.println("depositResult?? 서비스에 이 결과값 잘 나오나?? " + depositResult);
-		/*
-		res_list=[{tran_no=1, bank_tran_id=M202113854UXRDWECLFT, bank_tran_date=20190101, bank_code_tran=097, bank_rsp_code=000, bank_rsp_message=, fintech_use_num=120211385488932422519787, account_alias=20240722강주미, bank_code_std=002, bank_code_sub=0000000, bank_name=KDB산업은행, account_num_masked=202407222***, print_content=아이티윌_입금, account_holder_name=강주미, tran_amt=33000, cms_num=, savings_bank_name=, withdraw_bank_tran_id=}], user_seq_no=1101061861}
-		*/
-		
-		mapper.insertTransactionResult(depositResult, "DE");
+	// DB - 입금이체 결과 조회 요청
+	public Map<String, String> getDepositResult(String bank_tran_id) {
+		return mapper.selectTransactionResult(bank_tran_id);
 	}
+
+	
 
 
 }

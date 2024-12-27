@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,6 +26,7 @@
 <link rel="stylesheet" href="../../resources/css/pay.css">
 <!-- JS for Page -->
 <script src="../../resources/js/product.js"></script>
+<script src="../../resources/js/pay.js"></script>
 
 
 </head>
@@ -44,7 +46,13 @@
 			        <div class="account-box">
 			        	<div class="info">
 				        	<h1><i class="fa-solid fa-money-bill"></i>&nbsp;&nbsp;굿페이</h1>
-				            <button class="my-account" onclick="location.href='MyAccount'">내 계좌</button>
+				        	<c:if test="${not empty token}">  
+				            	<button class="my-account" onclick="location.href='MyAccount'">내 계좌</button>
+				            </c:if>
+				            <c:if test="${empty token}">
+				              	<button class="my-account" onclick="linkAccount()">계좌인증</button>
+				            </c:if>
+				            <c:if test=""></c:if>
 			        	</div>
 			            <div class="balance">
 			                <h1>30,000원</h1>

@@ -52,87 +52,76 @@
 				<a href="MySupport">1:1문의내역</a>
 				<a href="">나의 광고</a>
 			</aside>
+			
 			<div class="my-container">
 				<div class="contents-ttl">회원 정보 수정</div>
 				<div class="contents">
 					<!-- contents -->
 						<section class="info-set-wrap">
-						<form action="MyInfo" id="myInfo" name="myInfo" method="post" enctype="multipart/form-data" class="my-frm">
-							<div class="set">
+						<!-- 폼태그 -->
+						<form action="MyInfoModify" id="myInfo" name="myInfo" method="post" enctype="multipart/form-data" class="my-frm">
+							<section class="row">
 								<label>프로필 사진</label>
-								<div>
+								<div class="box">
 									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
 									<input type="file" class="btn-frm" name="profile_upload" id="profile_upload" value="프로필사진 변경" ><br>
 								</div>
-							</div>
+							</section>
 							
-							<div class="set">
+							<section class="row">
 								<label>아이디</label>
-								<div>
+								<div class="box">
 									<input type="text" name="mem_id" id="mem_id" value="${member.mem_id}" readonly><br>
 								</div>
-							</div>
+							</section>
 
-							<div class="set">
+							<section class="row">
 								<label for="mem_nick">닉네임</label>
-								<div>
-									<input type="text" name="mem_nick" id="mem_nick" placeholder="${member.mem_nick}" onblur="ckNick()"><br>
+								<div class="box">
+									<input type="text" name="mem_nick" id="mem_nick" placeholder="${member.mem_nick}" value="${member.mem_nick}" onblur="ckNick()"><br>
 								</div>
 								<div id="checkNic" class="result"></div>
-							</div>
+							</section>
 							
-							<div class="set">
+							<section class="row">
 								<label>기존 비밀번호</label>
-								<div>
-									<input type="password" name="old_passwd" id="old_passwd">
+								<div class="box">
+									<input type="password" name="old_passwd" id="old_passwd" placeholder="기존 비밀번호 입력" required>
 								</div>
-							</div>
+								<div id="oldPasswd" class="result"></div>
+							</section>
 							
-							<div class="set">
-								<label>비밀번호 변경</label>
-								<div>
-									<input type="password" name="mem_passwd" id="mem_passwd1" placeholder="새비밀번호 입력" onblur="checkPasswdLength1()"><br>
-<!-- 									<input type="password" id="mem_passwd1" name="mem_passwd" onblur="checkPasswdLength1()" placeholder="변경할 비밀번호 8 ~ 16글자 사이 입력"> -->
+							<section class="row">
+								<label for="mem_passwd1">비밀번호 변경</label>
+								<div class="box">
+<!-- 									<input type="password" name="mem_passwd" id="mem_passwd1" placeholder="비밀번호 입력" onblur="checkPasswdLength1()" required>  -->
+									<input type="password" name="mem_passwd" id="mem_passwd1" placeholder="새 비밀번호 입력" required> 
 								</div>
 								<div id="checkPasswd1" class="result"></div>
-							</div>
+							</section>
 							
-							<div class="set">
-								<label>비밀번호 변경 확인</label>
-								<div>
-									<input type="password" name="mem_passwd2" id="mem_passwd2" placeholder="새비밀번호 재입력" onkeyup="checkPasswdResult()"> 
+							<section class="row">
+								<label for="mem_passwd2">비밀번호 변경 확인</label>
+								<div class="box">
+									<input type="password" name="mem_passwd2" id="mem_passwd2" placeholder="새 비밀번호 재입력" onkeyup="checkPasswdResult()" required> 
 								</div>
 								<div id="checkPasswd2" class="result"></div>
-							</div>
+							</section>
 							
-							<div class="set">
+							<section class="row">
 								<label>이메일</label>
-								<div>
-									<input type="text" name="mem_eail" id="mem_email" value="${member.mem_email}" readonly><br>
+								<div class="box">
+									<input type="text" name="mem_email" id="mem_email" value="${member.mem_email}" readonly><br>
 								</div>
-							</div>
+							</section>
 							
-							<div class="set">
+							<section class="row">
 								<label for="mem_phone">휴대폰번호</label>
 								<div class="box">
-									<input type="text" name="mem_phone" id="mem_phone" placeholder="'-'없이 입력해주세요"  value="${member.mem_phone}" onblur="phoneCheck()"> 
-									<input type="button" value="인증번호 요청" >
+									<input type="text" name="mem_phone" id="mem_phone" placeholder="SNS연동 가입 회원입니다."  value="${member.mem_phone}" readonly> 
 								</div>
-							</div>
-							<!-- 인증번호 요청 클릭시 생성하기 -->
-							<div class="set">
-								<label for="auth_code">인증번호</label>
-								<div class="box">
-									<div class="auth-input">
-										<input type="text" name="auth_code" id="auth_code" placeholder="인증번호 입력" > 
-										<span class="rest-time">05:00</span>
-									</div>
-									<input type="button" class="before" value="인증완료">
-									<input type="button" class="after" value="인증완료">
-								</div>
-								<div id="authCheckResult" class="result"></div>
-							</div>
-							<div class="set">
+							</section>
+							<section class="row">
 								<label for="mem_ddress1">주소</label>
 								<div class="box">
 									<input type="text" placeholder="우편번호" id="mem_post_code" name="mem_post_code" size="6" value="${member.mem_post_code}">
@@ -141,12 +130,11 @@
 								<input type="text" name="mem_address1" placeholder="기본주소"  id="mem_ddress1" size="25" value="${member.mem_address1}">
 								<input type="text" name="mem_address2" placeholder="상세주소" id="mem_address2" size="25" value="${member.mem_address2}">
 								<div id="checkAddr" class="result"></div>
-							</div>
-							<div class="btns">
-								<input type="submit" value="수정완료" onclick="myInfoModify()"> 
-							</div>						
+							</section>
+							
+							<button id="modifyBtn" onclick="myInfoModify()">수정완료</button>
+							<a href="MemberWithdraw" class="withdraw-link">회원탈퇴</a>
 						</form>
-						<a href="MemberWithdraw" class="withdraw-link">회원탈퇴</a>
 					</section>
 					<!-- // contents -->
 				</div>
@@ -156,6 +144,7 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
+	
 	<!-- ************ 다음주소 API ************ -->
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script type="text/javascript">
@@ -163,48 +152,19 @@
 			new daum.Postcode({
 				oncomplete : function(data) {
 					console.log(data);
-					document.joinForm.mem_post_code.value = data.zonecode;
+					document.myInfo.mem_post_code.value = data.zonecode;
 
 					let address = data.address;
 					if (data.buildingName != "") {
 						address += " (" + data.buildingName + ")";
 					}
 					
-					document.joinForm.mem_address1.value = address;
-					document.joinForm.mem_address2.focus();
+					document.myInfo.mem_address1.value = address;
+					document.myInfo.mem_address2.focus();
 				}
 			}).open();
 		}
 	</script>
-	<script type="text/javascript">	
-		$("#profile_upload").on("change", function(event) {
-		
-		    var file = event.target.files[0];
-		
-		    var reader = new FileReader(); 
-		    reader.onload = function(e) {
-		
-		        $("#profile_preview").attr("src", e.target.result);
-		    }
-		
-		    reader.readAsDataURL(file);
-		});
-	</script>
-	<script type="text/javascript">
-	    $("#profile_img").change(function (event) {
-	        let file = event.target.files[0]; // 사용자가 업로드한 파일 가져오기
-	        let reader = new FileReader();
 	
-	        reader.onload = function (event2) {
-	            console.log("파일 : " + event2.target.result); // 파일 내용 확인용 로그
-	            $("#preview_profile").attr("src", event2.target.result); // 미리보기 이미지 변경
-	        };
-	
-	        // 파일을 URL로 읽어오기
-	        if (file) {
-	            reader.readAsDataURL(file);
-	        }
-	    });
-	</script>
 </body>
 </html>

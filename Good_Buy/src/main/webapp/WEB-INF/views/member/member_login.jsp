@@ -61,7 +61,8 @@
 				              	 	<input type="checkbox" name="rememberId" id="rememberId" checked>
 				              	 	아이디 기억하기
 			              	 	</label>
-			              	 	<a href="IDPWFind">ID/PW 찾기</a>
+			              	 	<a href="IDFind">아이디 찾기</a>
+			              	 	 | <a href="PWFind">비밀번호 찾기</a>
 			               	</div>
 			               	<div id="form-controls">
 								<button type="submit">로그인</button>

@@ -14,7 +14,7 @@
 
 /****************FAQ 리스트**********************/
 .faq-container {
-	width: 60%;
+	width: 80%;
 	margin: 20px auto;
 	padding: 20px;
 	display: block;
@@ -43,8 +43,8 @@
 }
 
 .faq-button:focus {
-	background: #f9f9f9;
-	color: var(--primary);
+	background: var(--primary);
+	color: var(--light-gray);
 }
 
 .faq-list {
@@ -76,6 +76,12 @@
 	padding: 15px;
 	margin-top: 10px;
 /* 	white-space: pre-line; */
+}
+.answer:before {
+	content: "A";
+    margin-right: 1.6rem;
+    font-weight: 700;
+    transform: translateY(-50%);
 }
 
 .faq-writebtn {

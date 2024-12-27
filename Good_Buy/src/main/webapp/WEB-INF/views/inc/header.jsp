@@ -63,4 +63,4 @@
 	</section>
 </div>
 
-<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script>
+<%-- <script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script> --%>

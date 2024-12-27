@@ -37,8 +37,31 @@
 				<section class="item-detail">
 					<div class="item-detail-content">
 						<div class="item-detail-pic">
-							<img src="../../resources/img/product_thumb.jpg">
+							<div class="thumb-slide">
+								<div><img src="../../resources/img/product_thumb.jpg"></div>
+								<div><img src="../../resources/img/product_thumb.jpg"></div>
+								<div><img src="../../resources/img/product_thumb.jpg"></div>
+							</div>
+							<button class="thumb-left"></button>
+							<button class="thumb-right"></button>
 						</div>
+						<script src="${pageContext.request.contextPath}/resources/js/slick.js" defer></script>
+						<script defer>
+							$(document).ready(function(){
+								$(".thumb-slide").slick({
+									infinite : true, 
+									autoplay: true,
+									autoplaySpeed : 5000,
+									dots: true,
+									speed : 400,	
+									arrows : true,
+									prevArrow : $('.thumb-left'),		// 이전 화살표 모양 설정
+									nextArrow : $('.thumb-right'),		// 다음 화살표 모양 설정
+									pauseOnHover : false,
+									draggable : true
+								});
+							});
+						</script>
 						<div class="item-detail-content-text">
 							<div class="item-detail-title">젠하이저 H3PRO 팝니다 제목은 두줄까지 가능합니다 젠하이저 H3PRO 팝니다 제목은 두줄까지 가능합니다</div>
 							<div class="item-detail-view">

@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.itwillbs.goodbuy.aop.LoginCheck;
@@ -42,10 +43,13 @@ public class ProductController {
 		return "product/product_list";
 	}
 	
+	@ResponseBody
 	@GetMapping("SearchPriceFilter")
-	public List<Map<String, Object>> searchPriceFilter(@RequestParam int PRODUCT_PRICE, @RequestParam String PRODUCT_CATEGORY) {
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>" + PRODUCT_PRICE + PRODUCT_CATEGORY);
-		List<Map<String, Object>> listSearch = productService.searchFliterList(PRODUCT_PRICE, PRODUCT_CATEGORY);
+	public List<Map<String, Object>> searchPriceFilter(@RequestParam String PRODUCT_PRICE, 
+									@RequestParam String PRODUCT_CATEGORY) {
+		int price_start = Integer.parseInt(PRODUCT_PRICE.split("_")[0]);
+		int price_end = Integer.parseInt(PRODUCT_PRICE.split("_")[1]);
+		List<Map<String, Object>> listSearch = productService.searchFliterList(price_start, price_end, PRODUCT_CATEGORY);
 		return listSearch;
 	}
 	

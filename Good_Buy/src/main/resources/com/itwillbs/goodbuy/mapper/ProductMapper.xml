@@ -65,7 +65,11 @@
 		FROM PRODUCT pro join MEMBER mem
 		ON pro.MEM_ID = mem.MEM_ID
 		WHERE 
-			PRODUCT_CATEGORY = #{cate} AND PRODUCT_PRICE <![CDATA[<]]> #{price}
+			PRODUCT_CATEGORY = #{cate} 
+		AND 
+			PRODUCT_PRICE <![CDATA[>=]]> #{price_start}
+		AND 
+			PRODUCT_PRICE <![CDATA[<=]]> #{price_end}	
 	</select>
 	
 	<!-- 구매상품 리스트 조회 -->

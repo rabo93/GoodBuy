@@ -29,3 +29,10 @@ function submitForm(anchor) {
     }
 }
 
+function openModal() {
+	document.getElementById('pay-account-modal').style.display = 'block';
+}
+
+function closeModal() {
+	document.getElementById('pay-account-modal').style.display = 'none';
+}

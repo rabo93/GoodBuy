@@ -58,7 +58,6 @@
 		WHERE USER_SEQ_NO = #{token.user_seq_no}
 	</select>
 	
-	
 	<!-- 사용자 대표계좌 정보 등록 - INSERT -->
 	<!-- token 객체의 user_seq_no 와 별도의 account_num_masked(임시), account_holder_name, fintech_use_num 등록 -->
 	<insert id="insertRepresentAccount">

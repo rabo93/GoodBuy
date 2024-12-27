@@ -31,7 +31,13 @@ public class PayController {
 	
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("GoodPay")
-	public String goodPay() {
+	public String goodPay(HttpSession session, Model model) {
+		PayToken token = (PayToken)session.getAttribute("token");
+//		Map<String, Object> bankUserInfo = service.getPayUserInfo(token);
+//		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
+//		
+//		model.addAttribute("bankUserInfo", bankUserInfo);
+//		model.addAttribute("fintech_use_num", fintech_use_num);
 		
 		return "pay/pay_list";
 	}
@@ -40,7 +46,6 @@ public class PayController {
 	public String myAccount(HttpSession session, Model model) {
 		// 엑세스토큰 관련 정보가 저장된 BankToken 객체(token)를 세션에서 꺼내기
 		PayToken token = (PayToken)session.getAttribute("token");
-		System.out.println("토큰 정보 : " + token);
 		
 		/*
 		if(token == null || token.getAccess_token() == null) {
@@ -77,8 +82,6 @@ public class PayController {
 	@GetMapping("Callback")
 	public String callback(@RequestParam Map<String, String> authResponse, HttpSession session, Model model) {
 		// System.out.println("callback 잘되나? " + authResponse); 
-		
-		
 		
 		// 임시) 메인페이지에서 엑세스토큰 요청을 별도로 수행하기 위해 세션에 인증코드 저장		
 		session.setAttribute("code", authResponse.get("code"));

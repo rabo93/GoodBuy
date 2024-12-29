@@ -31,16 +31,33 @@ public class PayController {
 	
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("GoodPay")
-	public String goodPay(HttpSession session, Model model) {
+	public String goodPay(HttpSession session) {
+		
+		String id = (String)session.getAttribute("sId");
+		// token이 등록된 id인지 조회
+		String haveToken = service.getMemIdFromToken(id);
+		if(haveToken == null) {
+			return "pay/pay_empty_list";
+		}
+		
+		
+		return "redirect:/GoodPayAuth"; 
+		
+	}
+	@LoginCheck(memberRole = MemberRole.USER)
+	@GetMapping("GoodPayAuth")
+	public String goodPayAuth(HttpSession session, Model model) {
+		
 		PayToken token = (PayToken)session.getAttribute("token");
-//		Map<String, Object> bankUserInfo = service.getPayUserInfo(token);
-//		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
-//		
-//		model.addAttribute("bankUserInfo", bankUserInfo);
-//		model.addAttribute("fintech_use_num", fintech_use_num);
+		Map<String, Object> bankUserInfo = service.getPayUserInfo(token);
+		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
+		
+		model.addAttribute("bankUserInfo", bankUserInfo);
+		model.addAttribute("fintech_use_num", fintech_use_num);
 		
 		return "pay/pay_list";
 	}
+	
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("MyAccount")
 	public String myAccount(HttpSession session, Model model) {

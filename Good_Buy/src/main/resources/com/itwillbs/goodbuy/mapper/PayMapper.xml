@@ -133,4 +133,11 @@
 		FROM TRANSACTIONINFO
 		WHERE  bank_tran_id = #{bank_tran_id}
 	</select>
+	
+	<!-- pay_list에서 토큰이 있는 id인지 조회 - select -->
+	<select id="selectMemIdFromToken" resultType="string">
+		SELECT * 
+		FROM TOKENINFO 
+		WHERE MEM_ID = #{id};
+	</select>
 </mapper>

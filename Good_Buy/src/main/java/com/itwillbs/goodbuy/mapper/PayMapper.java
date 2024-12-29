@@ -43,5 +43,7 @@ public interface PayMapper {
 	// 이체(출금, 입금) 결과 저장
 	Map<String, String> selectTransactionResult(String bank_tran_id);
 
+	String selectMemIdFromToken(String id);
+
 
 }

@@ -1,4 +1,8 @@
 @charset "UTF-8";
+.fa-money-bill {
+	color: var(--primary);
+}
+
 /* 페이지 제목 */
 .page-title {
     font-size: 18px;
@@ -35,7 +39,8 @@
 .account-box .info {
     display: flex;
     justify-content: space-between;
-	margin: 20px 0;
+    margin: 20px 0;
+    flex-direction: row;
 }
 
 .info h1 {
@@ -73,6 +78,18 @@
 .transfer-btn {
     background-color: var(--primary);
 }
+
+
+.goodpay-header{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-content: stretch;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
 
 /* 최근 이용내역 */
 .history h3 {
@@ -532,7 +549,7 @@
 .pay-account-modal {
   display: none;
   position: fixed;
-  z-index: 1000;
+  z-index: 10;
   left: 0;
   top: 0;
   width: 100%;
@@ -542,11 +559,24 @@
 }
 .pay-account-modal-content {
   background-color: white;
-  margin: 15% auto;
+  margin: 25% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 50%;
   text-align: center;
+}
+.pay-account-modal-header {
+}
+.pay-account-modal-body button{
+  margin: 0;
+  padding: 1px
+}
+
+
+.pay-account-modal-content h2 {
+	font-size: 1.1em;
+	text-align: left;
+	margin-bottom: 20px; 
 }
 .pay-account-modal-close {
   color: #aaa;

@@ -124,6 +124,10 @@ public class PayService {
 		return mapper.selectTransactionResult(bank_tran_id);
 	}
 
+	public String getMemIdFromToken(String id) {
+		return mapper.selectMemIdFromToken(id);
+	}
+
 
 	
 

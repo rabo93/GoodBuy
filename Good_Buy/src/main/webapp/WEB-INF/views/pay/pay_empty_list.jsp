@@ -45,58 +45,11 @@
 			        <div class="account-box">
 			        	<div class="info">
 				        	<h1><i class="fa-solid fa-money-bill"></i>&nbsp;&nbsp;굿페이</h1>
-			            	<button class="my-account" onclick="location.href='MyAccount'">내 계좌</button>
+				        	<div class="goodpay-header"> 
+				            	<h2>계좌 미인증 회원입니다. 계좌 인증 후 이용해 주세요.</h2>
+				        	</div>
+					        <button class="my-account" onclick="linkAccount()">계좌인증</button>
 			        	</div>
-			            <div class="balance">
-			                <h1>30,000원</h1>
-			                <i class="fa-solid fa-arrow-rotate-right"></i>
-			            </div>
-			            <div class="buttons">
-			                <button class="charge-btn"  onclick="openModal()">+ 충전</button>
-			                <button class="transfer-btn" onclick="location.href='pay_remit.jsp'">￦계좌송금</button>
-			                
-			                
-			                <%-- 충전버튼 모달창 --%>
-			                <div id="pay-account-modal" class="pay-account-modal">
-								<div class="pay-account-modal-content">
-									<div class="pay-account-modal-header">
-										<span class="pay-account-modal-close " onclick="closeModal()">&times;</span>
-										<h2>어느 계좌에서 충전 하시겠습니까?</h2>
-									</div>
-									<div class="pay-account-modal-body">
-										<c:forEach var="account" items="${bankUserInfo.res_list}" varStatus="status">
-											<form action="PayAccountDetail" method="POST" id="PayAccountDetail-${account.fintech_use_num}">
-											        <input type="hidden" name="fintech_use_num" value="${account.fintech_use_num}">
-											        <input type="hidden" name="account_holder_name" value="${account.account_holder_name}">
-											        <input type="hidden" name="account_num_masked" value="${account.account_num_masked}">
-											</form>
-											<a href="#" 
-											       title="${account.account_num_masked}계좌의 상세정보 보기" 
-											       data-form-id="PayAccountDetail-${account.fintech_use_num}" 
-											       onclick="submitForm(this);">
-									        <div class="linked-account">
-									            <div class="account-info">
-									                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
-									                <span class="account-number">${account.bank_name}<strong>${account.account_num_masked}</strong></span>
-									            </div>
-									            <c:choose>
-				  										<c:when test="${account.fintech_use_num eq fintech_use_num}">
-										            	<button class="primary-account-btn">대표계좌</button>
-											        </c:when>
-											        <c:otherwise>
-											    		<form action="PayRegistRepresentAccount" method="POST" id="PayRegistRepresentAccount">
-															<input type="hidden" name="fintech_use_num" value="${account.fintech_use_num}">
-															<input type="hidden" name="account_holder_name" value="${account.account_holder_name}">
-															<input type="hidden" name="account_num_masked" value="${account.account_num_masked}">
-														</form>    
-											        </c:otherwise>
-											    </c:choose>
-									        </div>
-									    </a>
-							        </c:forEach>
-								</div>
-							</div>
-			            </div>
 			        </div>
 			
 			        <!-- 최근 이용 내역 -->

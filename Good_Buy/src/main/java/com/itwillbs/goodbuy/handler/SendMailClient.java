@@ -24,7 +24,7 @@ public class SendMailClient {
     
     private final String HOST = "smtp.gmail.com";
     private final String PORT = "587";
-    private final String SENDER_ADDRESS ="paighkdlxld2@gmail.com";
+    private final String SENDER_ADDRESS = "paighkdlxld2@gmail.com";
 
     public void sendMail(String receiver, String subject, String content) {
         try {
@@ -39,7 +39,7 @@ public class SendMailClient {
             
             Session mailSession = Session.getDefaultInstance(props, authenticator);
             Message message = new MimeMessage(mailSession);
-            Address senderAddress = new InternetAddress(SENDER_ADDRESS, "런온");
+            Address senderAddress = new InternetAddress(SENDER_ADDRESS, "굿바이 관리자");
             
             
             Address receiverAddress = new InternetAddress(receiver);

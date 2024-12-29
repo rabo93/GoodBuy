@@ -86,6 +86,10 @@ $(document).ready(function() {
                 $("#phoneChk").hide(); // 인증번호 요청 버튼 숨기기
                 $("#phoneReChk").show(); // 인증번호 재요청 버튼 보이기
                 
+                //----------------------------------------
+                //아이디/비번 찾기할 때 인증 성공시 버튼 보이기
+                $(".find").show();
+                
             },
             error: function (xhr) {
             	// 서버 에러 메시지 처리
@@ -128,29 +132,33 @@ $(document).ready(function() {
 	//---------------------------------------------------------------------
 	// "전체동의하기(terms_all)" 체크박스 클릭시 전체 항목 선택/해제 이벤트
 	const checkAll = document.querySelector('#terms_all'); //id 속성 가져와서 변수에 저장
-	const checkboxes = document.querySelectorAll('.terms'); //name 속성 전체 가져와서 변수에 저장
 	
-	// 1. 초기 동기화 : 페이지가 처음 로드될 때 'checkAll'의 상태에 따라 다른 체크박스들의 상태를 설정
-	const isChecked = checkAll.checked; // checkAll이 체크되어 있는지 확인
-	checkboxes.forEach(checkbox => checkbox.checked = isChecked);
-	// 2. 전체선택 클릭시 이벤트
-	checkAll.addEventListener('click', function() {
-		let isChecked = checkAll.checked;
+	if(checkAll) {
+		const checkboxes = document.querySelectorAll('.terms'); //name 속성 전체 가져와서 변수에 저장
+		// 1. 초기 동기화 : 페이지가 처음 로드될 때 'checkAll'의 상태에 따라 다른 체크박스들의 상태를 설정
+		const isChecked = checkAll.checked; // checkAll이 체크되어 있는지 확인
 		checkboxes.forEach(checkbox => checkbox.checked = isChecked);
 		
-	});
-	// 3. 개별 체크박스 클릭 시, 전체선택 상태 업데이트
-	// 개별 체크박스 하나라도 체크 해제 시 전체선택 체크 해제 이벤트
-	checkboxes.forEach(checkbox => {
-		checkbox.addEventListener('click', function() {
-			let totalCnt = checkboxes.length; //총 체크박스 갯수
-			let checkedCnt = document.querySelectorAll('.terms:checked').length; //체크한 갯수
+		// 2. 전체선택 클릭시 이벤트
+		checkAll.addEventListener('click', function() {
+			let isChecked = checkAll.checked;
+			checkboxes.forEach(checkbox => checkbox.checked = isChecked);
 			
-			// 모든 체크박스가 선택되었는지 확인 후 전체선택 상태 업데이트
-			checkAll.checked = (totalCnt === checkedCnt);
 		});
-	});	
+		
+		// 3. 개별 체크박스 클릭 시, 전체선택 상태 업데이트
+		// 개별 체크박스 하나라도 체크 해제 시 전체선택 체크 해제 이벤트
+		checkboxes.forEach(checkbox => {
+			checkbox.addEventListener('click', function() {
+				let totalCnt = checkboxes.length; //총 체크박스 갯수
+				let checkedCnt = document.querySelectorAll('.terms:checked').length; //체크한 갯수
+				
+				// 모든 체크박스가 선택되었는지 확인 후 전체선택 상태 업데이트
+				checkAll.checked = (totalCnt === checkedCnt);
+			});
+		});	
 	
+	}
 });
 
 //---------------------------------------------------------------------
@@ -160,10 +168,10 @@ function checkId(){
 	let regex = /^[\d\w][\d\w_]{3,12}$/;
 	if(regex.exec(id)){
 		$.ajax({
-			type : "get" 
-			, url : "MemberCheckId" 
-			, data : { mem_id : id } 
-			, success : function(result) {
+			type : "get",
+			url : "MemberCheckId",
+			data : { mem_id : id }, 
+			success : function(result) {
 				if(result.trim() == "false") {
 					$("#checkIdResult").text("사용가능한 아이디 입니다.").css("color","var(--secondary)");
 					checkIdResult = true;

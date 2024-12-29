@@ -1,5 +1,6 @@
 package com.itwillbs.goodbuy.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -7,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
+import com.itwillbs.goodbuy.handler.GenerateRandomCode;
 import com.itwillbs.goodbuy.service.MailService;
 import com.itwillbs.goodbuy.service.MemberService;
 import com.itwillbs.goodbuy.service.PayService;
@@ -28,22 +28,23 @@ import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.PayToken;
 
 import lombok.extern.log4j.Log4j2;
-import net.nurigo.sdk.NurigoApp;
-import net.nurigo.sdk.message.model.Message;
-import net.nurigo.sdk.message.response.SingleMessageSentResponse;
-import net.nurigo.sdk.message.service.DefaultMessageService;
 
 @Log4j2
 @Controller
 public class MemberController {
 	@Autowired
 	private MemberService memberService;
-	
-//	@Autowired
-//	private MailService mailService;
-	
+	@Autowired
+	private MailService mailService;
 	@Autowired
 	private PayService payService;
+	
+	//-------------------------------------------------------
+	//세션에 사용자 ID 저장 
+	private String getSessionUserId(HttpSession session) {
+	    return (String) session.getAttribute("sId");
+	}
+	
 	
 	//=================================================================================================================================
 	// [ 로그인 페이지 구현 ]
@@ -239,59 +240,6 @@ public class MemberController {
 //	}
 
 	//=================================================================================================================================
-	// [ 이메일 인증 처리 메서드 ] => 안함
-//	private void handleEmailAuth(MemberVO member) {
-//		System.out.println("memberHandle : " + member);
-//		MailAuthInfo mailAuthInfo = mailService.sendAuthMail(member,member.getMem_email1(),member.getMem_email2());
-//		System.out.println("인증정보 : " + mailAuthInfo);
-//		memberService.registMemberAuthInfo(mailAuthInfo);
-//	}
-//	
-//	// [ 이메일 인증 ]
-//	@GetMapping ("MemberEmailAuth")
-//	public String emailAuth(MailAuthInfo mailAuthInfo , Model model) {
-//		System.out.println("mailAuthInfo"+mailAuthInfo);
-//		
-//		// MemberService
-//		boolean isAuthSuccess = memberService.requestEmailAuth(mailAuthInfo);
-//		
-//		// 인증처리 결과판별
-//		if(!isAuthSuccess) {
-//			model.addAttribute("msg", "메일 인증 실패\\다시 인증해주세요");
-//			return "result/fail";
-//		} else {
-//			model.addAttribute("msg", "메일 인증 성공\\로그인 페이지로 이동합니다");
-//			model.addAttribute("targetURL", "MemberLogin");
-//			return "result/fail"; //fail로 가는이유는 문자 출력하기 위해서
-//		}
-//		
-//	}
-//	
-//	// [ 메일 인증 재발송 ]
-//	@GetMapping("ReSendAuthMail")
-//	public String reSendAuthMail(MemberVO member,HttpSession session) {
-//		return "member/resend_auth_mail_form";
-//	}
-//	
-//	@PostMapping("ReSendAuthMail")
-//	public String reSendAuthMail(MemberVO member, Model model , HttpSession session) {
-//		MemberVO dbmember = memberService.getMember(member);
-//		
-//		if(!member.getMem_email().equals(dbmember.getMem_email())) {
-//			model.addAttribute("msg","[존재하지 않는 이메일]\\n이메일을 다시한번 확인해주세요");
-//			return "result/fail";
-//		}
-//		
-//		MailAuthInfo mailAuthInfo = mailService.reSendAuthMail(member, member.getMem_email());
-//		
-//		memberService.registMemberAuthInfo(mailAuthInfo);
-//		model.addAttribute("msg", "인증메일 발송 성공");
-//		model.addAttribute("targetURL", "MemberJoinSuccess");
-//		
-//		return "result/fail";
-//		}
-		
-	//=================================================================================================================================
 	// [ 아이디/닉네임 중복체크 ]
 	@ResponseBody
 	@GetMapping("MemberCheckId")
@@ -300,9 +248,11 @@ public class MemberController {
 		
 		member = memberService.getMember(mem_id);
 		boolean isDuplicate = false;
-		if(member != null) { //아이디 중복
+		
+		if(member != null) { //아이디 중복일 경우
 			isDuplicate= true;
 		}
+		
 		return isDuplicate+"";
 	}
 	
@@ -317,18 +267,6 @@ public class MemberController {
 		}
 		return isDuplicate + "";
 	}
-	
-//	@ResponseBody
-//	@GetMapping("MemberCheckMail")
-//	public String memberCheckMail(String mem_email,MemberVO member) {
-//		System.out.println(mem_email);
-//		member = memberService.getMemberMail(member);
-//		boolean isDuplicate = false;
-//		if(member != null) {
-//			isDuplicate = true;
-//		}
-//		return isDuplicate+"";
-//	}
 	
 	
 	//=================================================================================================================================
@@ -345,7 +283,66 @@ public class MemberController {
 		session.invalidate(); // 세션 제거
 		return "redirect:/";
 	}
+	//=================================================================================================================================
+	// [ 아이디 찾기 ]
+	@GetMapping("IDFind")
+	public String inFind(String mem_phone) {
+		return"member/id_finder";
+	}
+	
+	@ResponseBody
+	@PostMapping("MemberIdFind")
+	public String memberIdFine(@RequestParam("mem_phone") String userPhone) {
+		String mem_id = memberService.getMemberInfo(userPhone);
+		System.out.println("아이디 : " + mem_id);
 		
+		return mem_id;
+	}
+	
+	//-------------------------------------------------------------------------
+	// [ 비밀번호 찾기 ]
+	@GetMapping("PWFind")
+	public String pwFind(String mem_phone) {
+		return"member/pw_finder";
+	}
+	
+	@ResponseBody
+	@PostMapping("MemberPwFind")
+	public Map<String, Object> memberPwFind(String mem_id, String mem_phone, Model model, BCryptPasswordEncoder passwordEncoder) {
+		Map<String, Object> result = new HashMap<>();
+		System.out.println("입력한 id : " + mem_id);
+		
+		// 본인인증한 휴대폰 번호로 회원 정보 조회
+		MemberVO member = memberService.getMemInfo(mem_phone);
+		if (member == null || !member.getMem_id().equals(mem_id)) {
+	        result.put("success", false);
+	        result.put("message", "입력한 정보로 조회된 계정이 없습니다.");
+	        return result;
+	    }
+	    
+	    // 임시 비밀번호 생성
+		String temPasswd = GenerateRandomCode.getRandomCode(8);
+        String heshePasswd = passwordEncoder.encode(temPasswd); //임시비밀번호 해싱처리
+		System.out.println("임시비밀번호 : " + heshePasswd);
+		
+		// 새 임시 비밀번호로 db 업데이트
+        int updateCount = memberService.setTempPasswd(heshePasswd, mem_id);
+		
+        if (updateCount > 0) {
+	        // 메일 전송
+	        MailAuthInfo mailAuthInfo = mailService.sendPasswdMail(member, temPasswd);
+        	System.out.println("인증정보 : " + mailAuthInfo);
+//        	memberService.registMemberAuthInfo(mailAuthInfo);
+        	result.put("success", true);
+        	result.put("message", "임시 비밀번호가 발송되었습니다.");
+	        
+	    } else {
+	        result.put("success", false);
+	        result.put("message", "비밀번호 변경에 실패했습니다. 다시 시도해주세요.");
+	    }
+		return result;
+	}
+	
 	//=================================================================================================================================
 	// [ 회원정보 수정 ]
 	@LoginCheck(memberRole = MemberRole.USER)
@@ -365,7 +362,7 @@ public class MemberController {
 	@LoginCheck(memberRole = MemberRole.USER)
 	@PostMapping("MyInfoModify")
 	public String memberModifyForm(MemberVO member, BCryptPasswordEncoder passwordEncoder 
-									, @RequestParam Map<String, String> map, HttpSession session, Model model ) {
+			, @RequestParam Map<String, String> map, HttpSession session, Model model ) {
 		System.out.println("MAP : "+map);
 		System.out.println("member : "+member);
 		// MAP : {mem_address1=서울 강동구 아리수로 46, mem_id=bborara, mem_passwd=1234, mem_nick=라보, mem_phone=01074511274, mem_address2=1403, mem_passwd2=1234, mem_email=bborara93@gmail.com, old_passwd=1234, mem_post_code=05237}
@@ -387,63 +384,47 @@ public class MemberController {
 		}
 		// 변경된 회원 정보 수정
 		int updateCount = memberService.modifyMember(map);
+		System.out.println("업데이트한 갯수 : " + updateCount);
 		
 		if(updateCount > 0) {
 			model.addAttribute("msg", "회원정보 수정 성공!");
-			return"redirect:/MyInfo";
+			return"result/success";
 		} else {
 			model.addAttribute("msg", "회원정보 수정 실패!\\n다시 확인해주세요 ");
 			return"result/fail";
 		}
 		
 	}
-	//=================================================================================================================================
-	@GetMapping("IDFind")
-	public String inFind(String mem_phone) {
-		return"member/id_fineder";
-	}
-	@GetMapping("PWFind")
-	public String pwFind(String mem_phone) {
-		return"member/pw_fineder";
+	
+	// ===========================================================================================
+	// [ 회원탈퇴 ]
+	@LoginCheck(memberRole = MemberRole.USER)
+	@GetMapping("MemberWithdraw")
+	public String memberWithdraw() {
+		return "mypage/mypage_withdraw";
 	}
 	
-	//=================================================================================================================================
-	// [ 비밀번호 찾기 ]
-//	@PostMapping("PasswdFinder")
-//	public String passwdFinderForm(String mem_email,String mem_name,MemberVO member, Model model,HttpSession session,BCryptPasswordEncoder passwordEncoder) {
-//	    try {
-//	        MemberVO DBmember = memberService.getMemberEmail(mem_email);
-//	        if (DBmember == null || !member.getMemName().equals(mem_name)) {
-//	            model.addAttribute("msg", "이름또는 이메일이 일치하지 않습니다.");
-//	            return "result/fail";
-//	        }
-//	        
-//	        String temPasswd = GenerateRandomCode.getRandomCode(8);
-//	        String heshePasswd = passwordEncoder.encode(temPasswd); //임시비밀번호 해싱처리
-//	        System.out.println(heshePasswd);
-//	        int updateCount = memberService.setTempPasswd(heshePasswd,mem_email);
-//	        System.out.println("@@@@@@@@@@@@@@@@@@@@"+member);
-//	        
-//	        if(updateCount > 0) {
-//	        	MailAuthInfo mailAuthInfo = mailService.sendPasswdMail(DBmember, mem_email, temPasswd);
-//	        	System.out.println("인증정보 : " + mailAuthInfo);
-//	        	memberService.registMemberAuthInfo(mailAuthInfo);
-//	        	model.addAttribute("msg", "임시 비밀번호가 발급되었습니다\\n마이페이지에서 안전한 비밀번호로 변경해주세요");
-//	        	return "result/fail";
-//	        
-//	        } else {
-//	        	model.addAttribute("msg", "임시비밀번호 발급에 실패하였습니다.");
-//	        	return "result/fail";
-//	        }
-//	      
-//	    } catch (Exception e) {
-//	        model.addAttribute("msg", "비밀번호 재설정 중 오류가 발생했습니다.");
-//	        return "result/fail";
-//	    }
-//	}
-	
-
-	//=================================================================================================================================
-	// [ 회원 탈퇴 ]
-	// => MypageController에서 구현함
+	@LoginCheck(memberRole = MemberRole.USER)
+	@PostMapping("MemberWithdrawForm")
+	public String memberWithdrawForm (String memPasswd, BCryptPasswordEncoder passwordEncoder, HttpSession session, Model model) {
+		String id = getSessionUserId(session);
+		
+		// 해당 아이디로 DB에 비밀번호 조회
+		String dbPasswd = memberService.getMemberPasswd(id);
+		
+		// DB비밀번호와 입력한 비밀번호가 같은지 검증
+		if(dbPasswd == null || !passwordEncoder.matches(memPasswd, dbPasswd)) {
+			model.addAttribute("msg", "권한이 없습니다./n비밀번호를 다시 확인해주세요.");
+			return "result/fail";
+		}
+		
+		// 비밀번호가 맞으면 해당 아이디 계정 삭제 처리
+		memberService.removeMemInfo(id, 3); //3:탈퇴
+		session.invalidate();
+		
+		model.addAttribute("msg", "탈퇴 처리가 완료되었습니다.");
+		model.addAttribute("targetURL", "./");
+		
+		return "result/success";
+	}
 }

@@ -38,7 +38,6 @@
 		<section class="wrapper">
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
-				<!-- -->
 				<h2 class="page-ttl">회원탈퇴</h2>
 				<section class="my-wrap">
 				<aside class="my-menu">
@@ -62,7 +61,6 @@
 							<button type="submit">회원탈퇴</button>
 						</div>
 					</form>
-					
 				</div>
 				</section>
 

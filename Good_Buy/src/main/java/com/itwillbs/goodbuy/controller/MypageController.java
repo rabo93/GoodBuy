@@ -196,37 +196,7 @@ public class MypageController {
 		}
 	}
 	
-	// ===========================================================================================
-	// [ 회원탈퇴 ]
-	@LoginCheck(memberRole = MemberRole.USER)
-	@GetMapping("MemberWithdraw")
-	public String memberWithdraw() {
-		return "mypage/mypage_withdraw";
-	}
 	
-	@LoginCheck(memberRole = MemberRole.USER)
-	@PostMapping("MemberWithdrawForm")
-	public String memberWithdrawForm (String memPasswd, BCryptPasswordEncoder passwordEncoder, HttpSession session, Model model) {
-		String id = getSessionUserId(session);
-		
-		// 해당 아이디로 DB에 비밀번호 조회
-		String dbPasswd = memberService.getMemberPasswd(id);
-		
-		// DB비밀번호와 입력한 비밀번호가 같은지 검증
-		if(dbPasswd == null || !passwordEncoder.matches(memPasswd, dbPasswd)) {
-			model.addAttribute("msg", "권한이 없습니다./n비밀번호를 다시 확인해주세요.");
-			return "result/fail";
-		}
-		
-		// 비밀번호가 맞으면 해당 아이디 계정 삭제 처리
-		memberService.removeMemInfo(id);
-		session.invalidate();
-		
-		model.addAttribute("msg", "탈퇴 처리가 완료되었습니다. /n메인페이지로 이동합니다.");
-		model.addAttribute("targetURL", "./");
-		
-		return "result/success";
-	}
 	
 	// ===========================================================================================
 	// 이전 페이지 이동 저장

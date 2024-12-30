@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.itwillbs.goodbuy.service.AdminService;
 import com.itwillbs.goodbuy.vo.CommonCodeVO;
+import com.itwillbs.goodbuy.vo.FaqVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
 
 import lombok.extern.log4j.Log4j2;
@@ -184,8 +185,31 @@ public class AdminController {
 	
 	// 신고 관리
 	
-	// 고객지원 관리
-	
+	// ======================================================
+	// 고객지원 관리 
+	// - FAQ 관리
+	@GetMapping("AdmFaqList")
+	public String admFaqList() {
+		return "admin/faq_list";
+	}
+
+	@ResponseBody
+	@PostMapping("AdmFaqListForm")
+	public String admFaqListForm(@RequestParam Map<String, Object> param) {
+		log.info(">>> AdmFaqListForm param : " + param);
+//		int draw = Integer.parseInt(param.get("draw")); // 요청받은 draw 값
+//		int start = Integer.parseInt(param.get("start")); // 페이징 시작 번호
+//		int length = Integer.parseInt(param.get("length")); // 한 페이지의 컬럼 개수
+//		String searchValue = param.get("search[value]"); // 검색어
+		
+		List<FaqVO> faqList = service.getFaqList();
+		System.out.println("faqList:" + faqList);
+		
+		JSONArray ja = new JSONArray(faqList);
+		
+		return ja.toString();
+	}
+	// ======================================================
 	// 광고 관리
 	
 	// 통계

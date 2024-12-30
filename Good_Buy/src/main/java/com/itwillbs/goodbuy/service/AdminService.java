@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.itwillbs.goodbuy.mapper.AdminMapper;
+import com.itwillbs.goodbuy.vo.FaqVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
 
 import lombok.extern.log4j.Log4j2;
@@ -98,6 +99,16 @@ public class AdminService {
 	// 회원 상세 조회
 	public MemberVO getMember(String mem_id) {
 		return mapper.selectMember(mem_id);
+	}
+
+	
+	
+	
+	
+	
+	// ============== [ FAQ 관리 ] ==============
+	public List<FaqVO> getFaqList() {
+		return mapper.selectFaqList();
 	}
 
 	

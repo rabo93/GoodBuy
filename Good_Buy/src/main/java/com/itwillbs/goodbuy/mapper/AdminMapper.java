@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.itwillbs.goodbuy.vo.FaqVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
 
 @Mapper
@@ -43,5 +44,10 @@ public interface AdminMapper {
 
 	// 회원 상세정보 조회
 	MemberVO selectMember(String mem_id);
+	
+	
+	//---------------------------------------------------------
+	// Faq 목록 조회
+	List<FaqVO> selectFaqList();
 
 }

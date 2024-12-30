@@ -1,5 +1,12 @@
 package com.itwillbs.goodbuy.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,12 +23,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.handler.GenerateRandomCode;
 import com.itwillbs.goodbuy.service.MailService;
 import com.itwillbs.goodbuy.service.MemberService;
+import com.itwillbs.goodbuy.service.OauthService;
 import com.itwillbs.goodbuy.service.PayService;
 import com.itwillbs.goodbuy.vo.MailAuthInfo;
 import com.itwillbs.goodbuy.vo.MemberVO;
@@ -45,7 +54,6 @@ public class MemberController {
 	    return (String) session.getAttribute("sId");
 	}
 	
-	
 	//=================================================================================================================================
 	// [ 로그인 페이지 구현 ]
 	@GetMapping("SNSLogin")
@@ -62,20 +70,23 @@ public class MemberController {
 	public String login(MemberVO member, Model model, HttpSession session,
 						BCryptPasswordEncoder passwordEncoder, 
 						@RequestParam(value = "rememberId", required = false) String rememberId,
-						@CookieValue(value="userId",required=false)String mem_id, 
+						@CookieValue(value="userId",required=false) String cookieId,
 						HttpServletResponse response) {
-		System.out.println("아이디 기억하기 체크@@" + rememberId); //on
-		System.out.println("가져온 쿠키아이디@@" + mem_id);
+		// 로그인 시 입력받은 ID를 우선 사용하고, 쿠키 ID는 선택적으로 사용
+	    String mem_id = (member.getMem_id() != null && !member.getMem_id().isEmpty()) 
+	                    ? member.getMem_id() 
+	                    : cookieId;
+		
+		// 아이디 기억하기 체크박스 처리
 		Cookie cookie = new Cookie("userId", member.getMem_id()); //쿠키설정
-		
-		if(rememberId != null) { //체크
-			cookie.setMaxAge(60*60*24*30);
+		if(rememberId != null) { //체크 시
+			cookie.setMaxAge(60*60*24*1); // 쿠키 유효기간 1일
 		} else {
-			cookie.setMaxAge(0);
+			cookie.setMaxAge(0); // 쿠키 삭제
 		}
-		
 		response.addCookie(cookie);
 		
+		// 로그인 처리
 		MemberVO dbMember = memberService.getMember(mem_id);
 		log.info("DB에 저장된 회원 정보 : " + dbMember);
 		
@@ -90,7 +101,7 @@ public class MemberController {
 			session.setAttribute("sNick", dbMember.getMem_nick());
 			session.setAttribute("sGrade", dbMember.getMem_grade());
 			session.setAttribute("sProfile", dbMember.getMem_profile());
-			session.setAttribute("sStore", dbMember.getMem_intro()); //상점소개
+//			session.setAttribute("sStore", dbMember.getMem_intro()); //상점소개
 			session.setMaxInactiveInterval(60 * 120);
 			
 			// [ 핀테크 엑세스토큰 정보 조회하여 세션에 저장하는 기능 추가 ]
@@ -98,7 +109,6 @@ public class MemberController {
 //			System.out.println("member 토큰 확인 : " + token);
 			session.setAttribute("token", token);
 			
-//			return "redirect:/";
 			
 			// 이전 페이지 저장 후 로그인 시 리다이렉트처리
 			if(session.getAttribute("prevURL") == null) {
@@ -167,7 +177,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("MemberJoin")
-	public String join(MemberVO member, Model model, BCryptPasswordEncoder passwordEncoder, HttpSession session) {
+	public String join(MemberVO member, HttpSession session, BCryptPasswordEncoder passwordEncoder, Model model) {
 	    log.info("member : " + member);
 	    //-----------------------------------------------------------------------
 	    // [ 비밀번호 암호화 ]
@@ -178,66 +188,13 @@ public class MemberController {
 	    // [ 회원 가입 처리 ]
 	    int insertCount = memberService.registMember(member);
 	    if (insertCount > 0) {
-//	    	session.setAttribute("sId", member.getMem_id());
-//	    	session.setAttribute("sName", member.getMem_name());
-//	    	String email = member.getMem_email1() + "@" + member.getMem_email2();
-//	    	session.setAttribute("sMail", email);
-//	         이메일 인증 처리
-//	        handleEmailAuth(member);
-//	    	session.invalidate(); 
-	    	
 	    	return "redirect:/MemberJoinSuccess";
-	    	
 	    } else {
 	    	model.addAttribute("msg", "회원가입 실패\n항목을 다시 확인해주세요");
 	    	return "result/fail";
 	    }
 	    
-	    //-----------------------------------------------------------------------
-	    // 파일 업로드 처리
-//	    boolean fileUploadSuccess = handleFileUpload(member, session, model);
-//	    if (!fileUploadSuccess) {
-//	        model.addAttribute("msg", "파일 업로드 중 오류가 발생했습니다.");
-//	        return "result/fail";
-//	    }
-	    
 	}
-
-	// 파일 업로드 처리 메서드
-//	private boolean handleFileUpload(MemberVO member, HttpSession session, Model model) {
-//	    String realPath = session.getServletContext().getRealPath(uploadPath);
-//	    System.out.println("실제 경로: " + realPath);
-//
-//	    LocalDate today = LocalDate.now();
-//	    String datePattern = "yyyy/MM/dd";
-//	    DateTimeFormatter dtf = DateTimeFormatter.ofPattern(datePattern);
-//
-//	    String subDir = today.format(dtf);
-//	    realPath += "/" + subDir;
-//
-//	    try {
-//	        Path path = Paths.get(realPath);
-//	        Files.createDirectories(path);
-//	    } catch (IOException e) {
-//	        e.printStackTrace();
-//	        return false;
-//	    }
-//
-//	    MultipartFile mFile = member.getMem_pp_file();
-//	    String originalFileName = mFile.getOriginalFilename();
-//	    String saveFileName = UUID.randomUUID().toString() + "_" + originalFileName;
-//	    member.setFile_pp(subDir + "/" + saveFileName);
-//
-//	    if (!mFile.getOriginalFilename().equals("")) {
-//	        try {
-//	            mFile.transferTo(new File(realPath, saveFileName));
-//	        } catch (IOException e) {
-//	            e.printStackTrace();
-//	            return false;
-//	        }
-//	    }
-//	    return true;
-//	}
 
 	//=================================================================================================================================
 	// [ 아이디/닉네임 중복체크 ]
@@ -362,8 +319,10 @@ public class MemberController {
 	@LoginCheck(memberRole = MemberRole.USER)
 	@PostMapping("MyInfoModify")
 	public String memberModifyForm(MemberVO member, BCryptPasswordEncoder passwordEncoder 
-			, @RequestParam Map<String, String> map, HttpSession session, Model model ) {
-		System.out.println("MAP : "+map);
+			, @RequestParam Map<String, String> map
+			, @RequestParam("profile_upload") MultipartFile profileUpload
+			, HttpSession session, Model model ) {
+//		System.out.println("MAP : "+map);
 		System.out.println("member : "+member);
 		// MAP : {mem_address1=서울 강동구 아리수로 46, mem_id=bborara, mem_passwd=1234, mem_nick=라보, mem_phone=01074511274, mem_address2=1403, mem_passwd2=1234, mem_email=bborara93@gmail.com, old_passwd=1234, mem_post_code=05237}
 		// member : MemberVO(mem_idx=0, mem_id=bborara, mem_passwd=1234, mem_name=null, mem_nick=라보, mem_birthday=null, mem_email=bborara93@gmail.com, mem_email1=null, mem_email2=null, mem_gender=null, mem_phone=01074511274, mem_post_code=05237, mem_address1=서울 강동구 아리수로 46, mem_address2=1403, mem_grade=null, mem_status=0, mem_reg_date=null, mem_withdraw_date=null, mem_profile=null, mem_intro=null, sns_status=0, auth_status=0)
@@ -382,11 +341,44 @@ public class MemberController {
 		if(!map.get("mem_passwd").equals("")) {
 			map.put("mem_passwd",passwordEncoder.encode(map.get("mem_passwd")));//암호화된 새로운 비밀번호
 		}
+		
+		
+		// 프로필 사진 파일 업로드 처리
+		if (!profileUpload.isEmpty()) {
+			try {
+		        String uploadDir = session.getServletContext().getRealPath("/resources/uploads/");
+		        System.out.println("파일 저장 경로 : " + uploadDir);
+		        
+		        File uploadDirectory = new File(uploadDir);
+		       
+		        if (!uploadDirectory.exists()) {
+		            uploadDirectory.mkdirs(); // 디렉토리가 없으면 생성
+		        }
+		        
+		        // 파일 이름 생성
+		        String fileName = id + "_profile_" + profileUpload.getOriginalFilename();
+		        File destinationFile = new File(uploadDir, fileName);
+	            profileUpload.transferTo(destinationFile); // 파일 저장
+	            
+	            map.put("mem_profile", "/resources/uploads/" + fileName); // 파일 경로를 map에 추가
+	            
+//	            session.setAttribute("sProfile", member.getMem_profile());
+			} catch (IOException e) {
+	            e.printStackTrace();
+	            model.addAttribute("msg", "파일 업로드 중 오류가 발생했습니다.");
+	            return "result/fail";
+	        }
+	        
+	    }
+		
 		// 변경된 회원 정보 수정
 		int updateCount = memberService.modifyMember(map);
 		System.out.println("업데이트한 갯수 : " + updateCount);
 		
 		if(updateCount > 0) {
+			// 수정 후, 세션에 최신 프로필 사진 경로를 업데이트
+			session.setAttribute("sProfile", member.getMem_profile());
+			
 			model.addAttribute("msg", "회원정보 수정 성공!");
 			return"result/success";
 		} else {
@@ -394,7 +386,9 @@ public class MemberController {
 			return"result/fail";
 		}
 		
+		
 	}
+	
 	
 	// ===========================================================================================
 	// [ 회원탈퇴 ]
@@ -427,4 +421,8 @@ public class MemberController {
 		
 		return "result/success";
 	}
+	
+	
+
+
 }

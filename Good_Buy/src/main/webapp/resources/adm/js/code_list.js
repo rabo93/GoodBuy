@@ -1,4 +1,3 @@
-// Call the dataTables jQuery plugin
 $(document).ready(function() {
 	const modifyForm = document.querySelector("#modifyForm");
 	const codeList = $('#codeList').DataTable({
@@ -17,8 +16,7 @@ $(document).ready(function() {
 				return res.commonCodes;
 			},
 		},
-		columnDefs: [
-		],
+		columnDefs: [{ targets: 0, orderable: false }],
 		columns: [
             { data : "CODETYPE_ID", orderable: false, },
             { data : "CODETYPE_NAME", orderable: false, },
@@ -51,11 +49,10 @@ $(document).ready(function() {
             	width: '13%',
             	render : function(data, type, row) {
 					return `
-						<button class="btn btn-primary edit-btn"
-						 		data-toggle="modal" data-target="#updateCommonCodes"
-						 		data-codetype-id="${data.CODETYPE_ID}"
-						 		data-code-id="${data.CODE_ID}">수정</button>
-						<button class="btn btn-primary delete-btn"
+						<button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#updateCommonCodes"
+								data-codetype-id="${data.CODETYPE_ID}"
+								data-code-id="${data.CODE_ID}">수정</button>
+						<button class="btn btn-danger delete-btn"
 								data-codetype-id="${data.CODETYPE_ID}"
 						 		data-code-id="${data.CODE_ID}">삭제</button>
 					`;
@@ -138,12 +135,16 @@ $(document).ready(function() {
 					"CODETYPE_ID" : codetypeId,
 					"CODE_ID" : codeId
 				},
-				success: function(res){
-					console.log(res);
-					alert(res);
+				success: function(response){
+					if(response.status == 'success') {
+						alert(response.message);
+						window.location.href = response.redirectURL;
+					} else {
+						alert(response.message);
+					}
 				},
 				error : function(res) {
-					alert(res);
+					alert(res.message);
 				}
 			});
 		}

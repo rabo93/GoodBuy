@@ -32,7 +32,7 @@ public class MemberService {
 		return mapper.selectMemberPasswd(id);
 	}
 
-	
+	// 로그인
 	public MemberVO getMember(String mem_id) {
 		return mapper.selectMember(mem_id);
 		
@@ -47,7 +47,8 @@ public class MemberService {
 	}
 
 
-	// 이메일 조회 요청
+	//-------------------------------------------------------------
+	// 카카오 로그인 - 이메일 중복확인 조회 요청
 	public MemberVO getMemberEmail(String mem_email) {
 		return mapper.selectEmail(mem_email);
 	}
@@ -60,6 +61,11 @@ public class MemberService {
 	}
 
 	//-------------------------------------------------------------
+	//상점소개 들고오기
+	public MemberVO getStoreIntro(MemberVO member) {
+		return mapper.selectStoreIntro(member);
+	}
+
 	//상점 소개 변경
 	public int registStoreIntro(MemberVO member) {
 		return mapper.updateStoreIntro(member);
@@ -114,5 +120,6 @@ public class MemberService {
 	public void removeMemInfo(String id, int mem_status) {
 		mapper.updateMemberStatus(id, mem_status);
 	}
+
 
 }

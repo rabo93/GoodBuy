@@ -40,7 +40,7 @@
 							<div id="sign-up-container">
 								<form action="MemberJoin" id="joinForm" name="joinForm" method="post" enctype="multipart/form-data">
 									<section class="row">
-										<label for="mem_phone">휴대폰번호</label>
+										<label for="mem_phone">휴대폰번호</label> <span class="required"> * </span>
 										<div class="box">
 											<input type="text" name="mem_phone" id="mem_phone" placeholder="'-'없이 입력해주세요" required> 
 											<input type="button" value="인증번호 요청" id="phoneChk">
@@ -48,6 +48,7 @@
 										</div>
 										<div id="phoneCheckResult" class="result"></div>
 									</section>
+									
 									<!-- 인증번호 요청 클릭시 섹션 보임 -->
 									<section class="row" id="authSection" style="display:none;">
 										<label for="auth_code">인증번호</label>
@@ -60,6 +61,48 @@
 											<input type="button" class="after" value="인증완료" style="display:none;">
 										</div>
 										<div id="authCheckResult" class="result"></div>
+									</section>
+									
+									
+									<section class="row">
+										<label for="mem_name">이름</label> <span class="required"> * </span>
+										<div class="box">
+											<input type="text" name="mem_name" id="mem_name" placeholder="이름" onblur="checkNameResult()" required> 
+										</div>
+										<div id="checkName" class="result"></div>
+									</section>
+									
+									<section class="row">
+										<label for="mem_nick">닉네임</label> <span class="required"> * </span>
+										<div class="box">
+											<input type="text" name="mem_nick" id="mem_nick" placeholder="닉네임" onblur="ckNick()" required> 
+										</div>
+										<div id="checkNic" class="result"></div>
+									</section>
+									
+									<section class="row">
+										<label for="mem_id">아이디</label> <span class="required"> * </span>
+										<div class="box">
+											<input type="text" name="mem_id" id="mem_id" placeholder="아이디" onblur="checkId()" required> 
+										</div>
+										<div id="checkIdResult" class="result"></div>
+									</section>
+									
+									<section class="row">
+										<label for="mem_passwd1">비밀번호</label> <span class="required"> * </span>
+										<div class="box"> 
+<!-- 											<input type="password" name="mem_passwd" id="mem_passwd1" placeholder="비밀번호 입력" onblur="checkPasswdLength1()" required>  -->
+											<input type="password" name="mem_passwd" id="mem_passwd1" placeholder="비밀번호 입력" required> 
+										</div>
+										<div id="checkPasswd1" class="result"></div>
+									</section>
+									
+									<section class="row">
+										<label for="mem_passwd2">비밀번호 확인</label> <span class="required"> * </span>
+										<div class="box">
+											<input type="password" name="mem_passwd2" id="mem_passwd2" placeholder="비밀번호 재입력" required> 
+										</div>
+										<div id="checkPasswd2" class="result"></div>
 									</section>
 									
 									<section class="row">
@@ -76,47 +119,6 @@
 											</select> 
 										</div>
 										<div id="checkMail" class="result"></div>
-									</section>
-									
-									<section class="row">
-										<label for="mem_name">이름</label>
-										<div class="box">
-											<input type="text" name="mem_name" id="mem_name" placeholder="이름" onblur="checkNameResult()" required> 
-										</div>
-										<div id="checkName" class="result"></div>
-									</section>
-									
-									<section class="row">
-										<label for="mem_nick">닉네임</label>
-										<div class="box">
-											<input type="text" name="mem_nick" id="mem_nick" placeholder="닉네임" onblur="ckNick()" required> 
-										</div>
-										<div id="checkNic" class="result"></div>
-									</section>
-									
-									<section class="row">
-										<label for="mem_id">아이디</label>
-										<div class="box">
-											<input type="text" name="mem_id" id="mem_id" placeholder="아이디" onblur="checkId()" required> 
-										</div>
-										<div id="checkIdResult" class="result"></div>
-									</section>
-									
-									<section class="row">
-										<label for="mem_passwd1">비밀번호</label>
-										<div class="box">
-<!-- 											<input type="password" name="mem_passwd" id="mem_passwd1" placeholder="비밀번호 입력" onblur="checkPasswdLength1()" required>  -->
-											<input type="password" name="mem_passwd" id="mem_passwd1" placeholder="비밀번호 입력" required> 
-										</div>
-										<div id="checkPasswd1" class="result"></div>
-									</section>
-									
-									<section class="row">
-										<label for="mem_passwd2">비밀번호 확인</label>
-										<div class="box">
-											<input type="password" name="mem_passwd2" id="mem_passwd2" placeholder="비밀번호 재입력" required> 
-										</div>
-										<div id="checkPasswd2" class="result"></div>
 									</section>
 									
 									<section class="row">
@@ -141,7 +143,7 @@
 										<select id="month" class="form-sel">
 											<option value="MONTH">월</option>
 										</select>
-										<select id="day" class="form-sel">
+										<select id="day" class="form-sel" required>
 											<option value="DAY">일</option>
 										</select>
 										<!-- 생년월일(yyyy-MM-dd) -->
@@ -163,6 +165,7 @@
 										<label for="terms_all">
 											<input type="checkbox" id="terms_all" required> <span class="terms-text">전체 동의하기</span>
 										</label>
+										<span class="required"> * </span>
 										<div>
 											<label>
 												<input type="checkbox" name="terms" id="terms1" class="terms"><a href="#" class="terms-text">[필수] 굿바이 이용약관 동의</a>

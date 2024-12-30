@@ -39,12 +39,7 @@
 <!-- 		 WHERE mem_id = #{mem_id} -->
 <!-- 	</update> -->
 	
-<!-- 	이메일로 비밀번호 변경 - 이메일 존재 확인  -->
-<!-- 	<select id="selectEmail" resultType="member"> -->
-<!-- 		SELECT * -->
-<!-- 		  FROM MEMBER -->
-<!-- 		 WHERE MEM_EMAIL = #{mem_email} -->
-<!-- 	</select> -->
+
 	
 	<!-- ************************************************************** -->
 	<!-- 회원 가입 -->
@@ -105,13 +100,13 @@
 			, MEM_POST_CODE = #{mem_post_code}
 			, MEM_ADDRESS1 = #{mem_address1}
 			, MEM_ADDRESS2 = #{mem_address2}
+			, MEM_PROFILE = #{mem_profile}
 <!-- 			, MEM_PHONE = #{mem_phone} -->
 	<!-- 		, mem_email = CONCAT(#{mem_email1}, '@', #{mem_email2}) -->
 		WHERE
 			mem_id = #{mem_id}
 	</update>
 	<!-- ************************************************************** -->
-	
 	<!-- 	메일 인증 후, 인증상태 변경  -->
 	<update id="updateMailAuthStatus">
 		UPDATE MEMBER
@@ -147,6 +142,14 @@
 	
 
 	<!-- ************************************************************** -->
+	<!-- 카카오 로그인 - 이메일 중복 확인  -->
+	<select id="selectEmail" resultType="member">
+		SELECT *
+		  FROM MEMBER
+		 WHERE MEM_EMAIL = #{mem_email}
+	</select>
+	
+
 	<!-- 카카오 회원정보 인서트 -->
 	<insert id="insertMemberInfo" parameterType="map">
 		INSERT INTO MEMBER (
@@ -170,6 +173,19 @@
 	        , 1
 	    )
 	</insert>
+	
+	<select id="getMemberById" parameterType="string" resultType="member">
+	    SELECT * 
+	    FROM MEMBER 
+	    WHERE MEM_ID = #{id}
+	</select>
+	
+	
+	<update id="updatePasswd">
+		UPDATE MEMBER 
+		SET MEM_PASSWD = #{securePasswd}
+		WHERE MEM_ID = #{mem_id}
+	</update>
 	
 	<!-- ************************************************************** -->
 	<!-- 네이버 회원 저장 -->
@@ -214,6 +230,13 @@
 			MEM_INTRO = #{mem_intro}
 		 WHERE MEM_ID = #{mem_id}
 	</update>
+	
+	<!-- 	상점소개 조회 -->
+	<select id="selectStoreIntro">
+		SELECT MEM_INTRO
+		FROM MEMBER
+		WHERE MEM_ID = #{mem_id}
+	</select>
 	
 	<!-- ************************************************************** -->
 	<!-- [CoolSMS] 휴대폰번호 인증 중복 확인  -->

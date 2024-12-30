@@ -43,31 +43,18 @@
 				<jsp:include page="/WEB-INF/views/admin/inc/top.jsp"></jsp:include>
 				<!-- End of Topbar -->
                
-                <!-- Begin Page Content -->
+                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-<!--                 	<h1 class="h3 mb-4 text-gray-800">공통코드 관리</h1> -->
 					<div class="row">
                         <div class="col-lg-12">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h5 class="m-0 font-weight-bold text-primary">공통코드 목록</h5>
+                                    <h5 class="m-0 font-weight-bold text-primary">FAQ 관리</h5>
                                 </div>
                                 <div class="card-body">
-                                	<div class="table-responsive overflow-hidden">
-		                                <table class="table table-bordered" id="codeList" width="100%" cellspacing="0">
-		                                    <thead>
-		                                        <tr>
-		                                            <th>공통코드ID</th>
-		                                            <th>공통코드명</th>
-		                                            <th>공통코드 설명</th>
-		                                            <th>상세코드ID</th>
-		                                            <th>상세코드명</th>
-		                                            <th>상세코드 설명</th>
-		                                            <th>사용여부</th>
-		                                            <th>순서</th>
-		                                            <th>관리</th>
-		                                        </tr>
-		                                    </thead>
+                                	<div class="table-responsive">
+		                                <table class="table table-bordered compact" id="faqList" width="100%" cellspacing="0">
+		                                    <thead></thead>
 		                                    <tbody></tbody>
 		                                </table>
 		                          	</div>

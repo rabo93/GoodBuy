@@ -83,9 +83,47 @@
 	background-color: #05b94d;
 }
 .join-wrap section {margin-top:10px;}
-.join-wrap section label {margin-top: 10px;display:flex;width: 100%; padding-left: 10px;}
+/* .join-wrap section label {margin-top: 10px;display:flex;width: 100%; padding-left: 10px;} */
 .terms-text { font-weight: 500; padding-left: 10px; color: var(--dark);}
 
+label {
+    display: inline-block;
+    position: relative;
+}
+.required {
+    right: -10px; 
+    color: var(--red);
+}
+
+/* "전체 동의하기" 항목과 아래 약관들 간격 추가 */
+section.row.last-row > label[for="terms_all"] {
+/*     display: block; 블록 형태로 표시 */
+    margin-bottom: 10px; /* 아래와의 간격 설정 */
+}
+
+/* 약관 항목은 기존대로 정렬 */
+section.row.last-row > div {
+    display: flex;
+    flex-direction: column; /* 세로 정렬 */
+    gap: 10px; /* 각 항목 간 간격 */
+}
+
+/* 생년월일 섹션 스타일 */
+section.row label[for="mem_birthday"] {
+    display: block; /* 레이블을 블록 요소로 처리 */
+    margin-bottom: 10px; /* 아래와의 간격 추가 */
+}
+
+.birthday-select {
+    display: flex;
+    gap: 10px; /* 각 select 요소 사이 간격 */
+}
+
+.birthday-select .form-sel {
+    padding: 5px;
+    width: auto;
+    margin-bottom: 20px;
+}
 
 
 

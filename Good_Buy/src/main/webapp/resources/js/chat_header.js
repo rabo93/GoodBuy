@@ -8,8 +8,8 @@ const TYPE_INIT_COMPLETE = "INIT_COMPLETE";
 
 //	채팅 메세지 정렬 위치
 const ALIGN_CENTER = "center";
-const ALIGN_LEFT = "left";
-const ALIGN_RIGHT = "right";
+const ALIGN_LEFT = "other";
+const ALIGN_RIGHT = "user";
 //	====================================================================
 $(function() {
 	connect();
@@ -65,7 +65,9 @@ function onError() {
 //	==============================================================================
 //	자신의 채팅창에 메세지를 표시하는 함수
 function appendMessage(message, align) {
-	$(".chat-body").append("<div class='message' "+ align +"> " + message + "</div>");
+	$(".chat-body").append("<div class='message "+ align +"'>"
+							+ "<div class='bubble'>" + message + "</div>"
+							+ "</div>");
 }
 //	전달받은 메세지를 웹소켓 서버측으로 전송하는 함수
 function sendMessage(type, sender_id, receiver_id, room_id, message) {

@@ -4,9 +4,10 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itwillbs.goodbuy.mapper.FaqMapper">
 	<!-- FAQ 목록 가져오기 -->
-	<select id="getFaqList" resultType="faq">
-		SELECT FAQ_ID
-		     , FAQ_SUBJECT
+	<select id="selectFaqList" resultType="faq">
+		SELECT 
+<!-- 			FAQ_ID -->
+		      FAQ_SUBJECT
 		     , FAQ_CONTENT
 		     , FAQ_CATE
 		  FROM FAQ

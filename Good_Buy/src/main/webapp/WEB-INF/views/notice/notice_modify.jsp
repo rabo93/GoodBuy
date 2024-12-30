@@ -49,26 +49,26 @@
 								<col width="80%">
 							</colgroup>
 							<tr>
-								<td>작성자</td>
+								<th>작성자</th>
 								<td>
 <%-- 									<input type="text" name="mem_id" value="${sessionScope.sId}" readonly required /> --%>
 									<input type="text" name="mem_id" value="admin" readonly required />
 								</td>
 							</tr>
 							<tr>
-								<td>제목</td>
+								<th>제목</th>
 								<td>
-									<input name="notice_subject" value="${notice.notice_subject}" required />
+									<input type="text" name="notice_subject" value="${notice.notice_subject}" required />
 								</td>
 							</tr>
 							<tr>
-								<td>내용</td>
+								<th>내용</th>
 								<td>
 									<textarea name="notice_content" rows="15" cols="40" required>${notice.notice_content}</textarea>
 								</td>
 							</tr>
 							<tr>
-								<td>첨부파일</td>
+								<th>파일첨부</th>
 								<td>
 									<div class="board_file" id="file">
 										<c:choose>

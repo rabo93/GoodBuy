@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function(){
 		columns: [
 			// defaultContent 는 기본값 설정, 데이터 없는 컬럼일 경우 오류나기 때문에 널스트링 처리 해주어야 함
 			// 회원가입 시 유효성 체크를 한다면 defaultContent 값 설정 필요 없음!
-            { title: "No.", data: "listIndex" },
+            { title: "No.", data: "listIndex", className : "dt-center" },
             { 
 				title: "ID", 
 	            data : "mem_id", 
@@ -46,18 +46,7 @@ document.addEventListener("DOMContentLoaded", function(){
             { title: "이름", data : "mem_name", defaultContent: "",  orderable: false },
             { title: "닉네임", data : "mem_nick", defaultContent: "", orderable: false, },
             { title: "이메일", data : "mem_email", defaultContent: "", orderable: false, width: '120px',},
-            { 
-				title: "휴대폰", 
-				data : "mem_phone", 
-				defaultContent: "", 
-				orderable: false, 
-				render : function(data, type, row) {
-					if (!data) {
-						return "";
-					}
-					return formatPhone(data);
-				}
-            },
+            { title: "휴대폰", data : "mem_phone", defaultContent: "", orderable: false, },
             { 
 				title: "등급", 
 				data : "mem_grade", 
@@ -68,9 +57,9 @@ document.addEventListener("DOMContentLoaded", function(){
 					if(!data) {
 						return "";
 					} else if(data == "관리자"){
-						return "<span class='grade-adm'>관리자</span>"
+						return "<span class='grade grade-adm'>관리자</span>"
 					} else if(data == "일반"){
-						return "<span class='grade-normal'>일반</span>"
+						return "<span class='grade grade-normal'>일반</span>"
 					}
 				}
              },
@@ -83,12 +72,12 @@ document.addEventListener("DOMContentLoaded", function(){
 				width: '80px',
 				render : function(data, type, row) {
 					if(!data){
-						return "정상";
+						return "<span class='status status-01'>정상</span>";
 					}
 					switch(data) {
-						case 1: return "정상";
-						case 2: return "정지";
-						case 3: return "탈퇴";
+						case 1: return "<span class='status status-01'>정상</span>";
+						case 2: return "<span class='status status-02'>정지</span>";
+						case 3: return "<span class='status status-03'>탈퇴</span>";
 					}
 				}
             
@@ -136,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function(){
 				render : function(data, type, row) {
 //					console.log(data.mem_id);
 					return `
-						<button class="btn btn-primary edit-btn" onclick="location.href='AdmMemberModify?mem_id=${data.mem_id}'">수정</button>
+						<button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#updateMemberInfo" data-mem-id=${data.mem_id}'">수정</button>
 						<button class="btn btn-primary delete-btn" data-mem-id="${data.mem_id}">삭제</button>
 					`;
 				}
@@ -162,10 +151,28 @@ document.addEventListener("DOMContentLoaded", function(){
             },
         },
 	});
+	
+	// 공통코드 테이블 컬럼 수정 팝업 셋팅
+	memberList.on("click", '.edit-btn', function() {
+		const row = $(this).closest('tr');
+		const rowData = memberList.row(row).data();
 
+		const memGrade = rowData.mem_grade;
+		const memStatus = rowData.mem_status;
+		const memGradeSelect = document.querySelector(`#memGrade option[value="${memGrade}"]`);;
+		const memStatusSelect = document.querySelector(`#memStatus option[value="${memStatus}"]`);;
+		
+		const memId = document.querySelector("#memId");
+		memId.value = rowData.mem_id;
+		
+		// 선택 상태 설정
+	    if (memGradeSelect) memGradeSelect.selected = true;
+	    if (memStatusSelect) memStatusSelect.selected = true;
+	});
+	
 });
 
 // 휴대폰 형식 가공
-function formatPhone(phone) {
-    return phone.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
-}
+//function formatPhone(phone) {
+//    return phone.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+//}

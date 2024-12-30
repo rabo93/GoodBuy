@@ -169,15 +169,25 @@ public class AdminController {
 		return ja.toString();
 	}
 	
-	@GetMapping("AdmMemberModify")
-	public String admMemberModify(@RequestParam String mem_id, Model model) {
-		log.info(">>> 수정할 회원 Id: " + mem_id);
+	@PostMapping("AdmMemberModify")
+	public String admMemberModify(MemberVO member, Model model) {
+		log.info(">>> 수정할 회원 정보: " + member);
 		
-		MemberVO dbMember = service.getMember(mem_id);
+		int updateResult = service.modifyMemberInfo(member);
 		
-		model.addAttribute("dbMember", dbMember);
-		
-		return "admin/member_modify";
+		if(updateResult > 0) {
+			model.addAttribute("msg", "회원 상태를 수정하였습니다.");
+			model.addAttribute("targetURL", "AdmMemberList");
+			return "result/success";
+		} else {
+			model.addAttribute("msg", "회원 상태 수정에 실패하였습니다.");
+			return "result/fail";
+		}
+	}
+	
+	@GetMapping("AdmMemberDelete")
+	public String admMemberDelete(MemberVO member, Model model) {
+		return "";
 	}
 	
 	// 결제 관리

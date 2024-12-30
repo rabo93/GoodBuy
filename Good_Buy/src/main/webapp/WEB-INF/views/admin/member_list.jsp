@@ -87,55 +87,32 @@
 		<div class="modal-dialog modal-dialog-centered">
 		    <div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="updateModalLabel">회원 정보 수정</h5>
+					<h5 class="modal-title" id="updateModalLabel">회원 수정</h5>
 					<button type="button" class="close" data-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
 				</div>
 				<div class="modal-body">
-					<form action="AdmMemberModify" method="post" id="modifyForm">
-						<input type="hidden" id="oldMemId" name="old_mem_id">
-						<div class="mb-1">
-							<label for="updatedCommoncodeId" class="col-form-label">회원ID <small class="text-primary" style="font-weight:600;">공통코드ID는 수정할 수 없습니다.</small></label>
-							<input type="text" class="form-control" name="mem_id" id="memId" readonly>
+					<form action="AdmMemberModify" id="memberModifyForm" method="post">
+						<input type="hidden" id="memId" name="mem_id">
+						<div class="mb-3">
+							<label class="small mb-1" for="memGrade">회원등급</label>
+							<select class="custom-select" id="memGrade" name="mem_grade">
+								<option value="일반">일반</option>
+								<option value="관리자">관리자</option>
+							</select>
 						</div>
-						<div class="mb-1">
-							<label for="updatedCommonCodeName" class="col-form-label">이름</label>
-							<input type="text" class="form-control" name="mem_name" id="memName" required>
+						<div class="mb-3">
+							<label class="small mb-1" for="memStatus">회원상태</label>
+							<select class="custom-select" id="memStatus" name="mem_status">
+								<option value="1">정상</option>
+								<option value="2">정지</option>
+								<option value="3">탈퇴</option>
+							</select>
 						</div>
-						<div class="mb-1">
-							<label for="updatedCommonCodeDesc" class="col-form-label">닉네임</label>
-							<input type="text" class="form-control" name="CODETYPE_DESC" id="updatedCommonCodeDesc" required>
-						</div>
-						<div class="mb-1">
-							<label for="updatedCodeId" class="col-form-label">상세코드ID</label>
-							<input type="text" class="form-control" name="CODE_ID" id="updatedCodeId" required>
-						</div>
-						<div class="mb-1">
-							<label for="updatedCodeName" class="col-form-label">상세코드명</label>
-							<input type="text" class="form-control" name="CODE_NAME" id="updatedCodeName" required>
-						</div>
-						<div class="mb-1">
-							<label for="updatedCodeDesc" class="col-form-label">상세코드 설명</label>
-							<input type="text" class="form-control" name="CODE_DESC" id="updatedCodeDesc" required>
-						</div>
-						<div class="row px-2">
-							<div class="w-50">
-								<label for="updatedCodeStatus" class="col-form-label">사용여부</label>
-								<div class="form-check form-switch">
-					        		<input type="hidden" id="updatedCodeStatus" name="CODE_STATUS">
-									<input class="form-check-input" type="checkbox" role="switch" id="updateFlexSwitchCheckDefault">
-									<label class="form-check-label text-center" style="width:56px" id="updateFlexSwitchCheckDefaultLab" for="updateFlexSwitchCheckDefault"></label>
-								</div>
-							</div>
-							<div class="w-50">
-								<label for="updatedCodeSeq" class="col-form-label">상세코드 순서</label>
-								<input type="number" min="1" class="form-control" name="CODE_SEQ" id="updatedCodeSeq" placeholder="순서 입력" required>
-							</div>
-						</div>
-					</form>
+                    </form>
 				</div>
 				<div class="modal-footer justify-content-center">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="modifyForm">수정하기</button>
+					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="memberModifyForm">수정하기</button>
 				</div>
 			</div>
 		</div>

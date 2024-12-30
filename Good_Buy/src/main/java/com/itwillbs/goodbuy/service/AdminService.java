@@ -100,5 +100,10 @@ public class AdminService {
 		return mapper.selectMember(mem_id);
 	}
 
+	// 회원 상태 수정
+	public int modifyMemberInfo(MemberVO member) {
+		return mapper.updateMemberInfo(member);
+	}
+
 	
 }

@@ -123,15 +123,63 @@
      <!-- [ 회원관리 ] -->
      <!-- 전체 회원 목록 조회 - SELECT -->
      <select id="selectMemberList" resultType="member">
-     	SELECT *
-     	FROM MEMBER
+     	SELECT MEM_ID
+			   , MEM_NAME
+		       , MEM_NICK
+		       , MEM_BIRTHDAY
+		       , MEM_EMAIL
+		       , (CASE WHEN MEM_GENDER = "M" THEN "남"
+					   WHEN MEM_GENDER = "F" THEN "여" END) AS MEM_GENDER
+		       , (CASE WHEN MEM_PHONE IS NULL OR MEM_PHONE = '' THEN ''
+					   ELSE CONCAT(SUBSTR(MEM_PHONE, 1, 3), '-', SUBSTR(MEM_PHONE, 4, 4), '-', SUBSTR(MEM_PHONE, 8, 4))
+		                END) AS MEM_PHONE
+		       , MEM_POST_CODE
+		       , MEM_ADDRESS1
+		       , MEM_ADDRESS2
+		       , MEM_GRADE
+		       , MEM_STATUS
+		       , MEM_REG_DATE
+		       , MEM_WITHDRAW_DATE
+		       , MEM_PROFILE
+		       , MEM_INTRO
+		       , SNS_STATUS
+		       , AUTH_STATUS
+		  FROM MEMBER
      </select>
      
      <!-- 회원 상세 정보 조회 - SELECT -->
      <select id="selectMember" resultType="member">
-     	SELECT *
-     	FROM MEMBER
-     	WHERE MEM_ID = #{mem_id}
+     	SELECT MEM_ID
+			   , MEM_NAME
+		       , MEM_NICK
+		       , MEM_BIRTHDAY
+		       , MEM_EMAIL
+		       , (CASE WHEN MEM_GENDER = "M" THEN "남"
+					   WHEN MEM_GENDER = "F" THEN "여" END) AS MEM_GENDER
+		       , (CASE WHEN MEM_PHONE IS NULL OR MEM_PHONE = '' THEN ''
+					   ELSE CONCAT(SUBSTR(MEM_PHONE, 1, 3), '-', SUBSTR(MEM_PHONE, 4, 4), '-', SUBSTR(MEM_PHONE, 8, 4))
+		                END) AS MEM_PHONE
+		       , MEM_POST_CODE
+		       , MEM_ADDRESS1
+		       , MEM_ADDRESS2
+		       , MEM_GRADE
+		       , MEM_STATUS
+		       , MEM_REG_DATE
+		       , MEM_WITHDRAW_DATE
+		       , MEM_PROFILE
+		       , MEM_INTRO
+		       , SNS_STATUS
+		       , AUTH_STATUS
+		FROM MEMBER
+		WHERE MEM_ID = #{mem_id}
      </select>
+     
+     <!-- 회원 상태 수정 - UPDATE -->
+     <update id="updateMemberInfo">
+     	UPDATE MEMBER
+     	   SET MEM_GRADE = #{mem_grade}
+     	   	   , MEM_STATUS = #{mem_status}
+     	 WHERE MEM_ID = #{mem_id}
+     </update>
      
 </mapper>

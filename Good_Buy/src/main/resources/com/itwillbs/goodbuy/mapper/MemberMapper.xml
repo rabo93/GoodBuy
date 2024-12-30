@@ -39,12 +39,7 @@
 <!-- 		 WHERE mem_id = #{mem_id} -->
 <!-- 	</update> -->
 	
-<!-- 	이메일로 비밀번호 변경 - 이메일 존재 확인  -->
-<!-- 	<select id="selectEmail" resultType="member"> -->
-<!-- 		SELECT * -->
-<!-- 		  FROM MEMBER -->
-<!-- 		 WHERE MEM_EMAIL = #{mem_email} -->
-<!-- 	</select> -->
+
 	
 	<!-- ************************************************************** -->
 	<!-- 회원 가입 -->
@@ -111,7 +106,6 @@
 			mem_id = #{mem_id}
 	</update>
 	<!-- ************************************************************** -->
-	
 	<!-- 	메일 인증 후, 인증상태 변경  -->
 	<update id="updateMailAuthStatus">
 		UPDATE MEMBER
@@ -147,6 +141,12 @@
 	
 
 	<!-- ************************************************************** -->
+	<!-- 카카오 로그인 - 이메일 중복 확인  -->
+	<select id="selectEmail" resultType="member">
+		SELECT *
+		  FROM MEMBER
+		 WHERE MEM_EMAIL = #{mem_email}
+	</select>
 	<!-- 카카오 회원정보 인서트 -->
 	<insert id="insertMemberInfo" parameterType="map">
 		INSERT INTO MEMBER (

@@ -47,7 +47,8 @@ public class MemberService {
 	}
 
 
-	// 이메일 조회 요청
+	//-------------------------------------------------------------
+	// 카카오 로그인 - 이메일 중복확인 조회 요청
 	public MemberVO getMemberEmail(String mem_email) {
 		return mapper.selectEmail(mem_email);
 	}

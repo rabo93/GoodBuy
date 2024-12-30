@@ -1,4 +1,3 @@
-// Call the dataTables jQuery plugin
 $(document).ready(function() {
 	const modifyForm = document.querySelector("#modifyForm");
 	const codeList = $('#codeList').DataTable({

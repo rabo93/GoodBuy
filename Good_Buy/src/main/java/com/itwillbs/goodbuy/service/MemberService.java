@@ -32,7 +32,7 @@ public class MemberService {
 		return mapper.selectMemberPasswd(id);
 	}
 
-	
+	// 로그인
 	public MemberVO getMember(String mem_id) {
 		return mapper.selectMember(mem_id);
 		

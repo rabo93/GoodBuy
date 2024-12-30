@@ -41,17 +41,17 @@
 					<h2>공지사항</h2>
 				</div>
 				<section>
-<!-- 					<div class="nt-form"> -->
-<!-- 						<form class="nt-search-form" method="get"> -->
-<!-- 							<select name="searchType"> -->
-<%-- 								<option value="subject" <c:if test="${param.searchType eq 'subject'}">selected</c:if>>제목</option> --%>
-<%-- 								<option value="content" <c:if test="${param.searchType eq 'content'}">selected</c:if>>내용</option> --%>
-<%-- 								<option value="subject_content" <c:if test="${param.searchType eq 'subject_content'}">selected</c:if>>제목&내용</option> --%>
-<!-- 							</select> -->
-<!-- 							<input type="text" name="searchKeyword" placeholder="검색어를 입력하세요"> -->
-<!-- 							<input type="submit" value="검색"> -->
-<!-- 						</form> -->
-<!-- 					</div> -->
+					<div class="nt-form">
+						<form class="nt-search-form" method="get">
+							<select id="nt-searchType" name="searchType">
+								<option value="subject" <c:if test="${param.searchType eq 'subject'}">selected</c:if>>제목</option>
+								<option value="content" <c:if test="${param.searchType eq 'content'}">selected</c:if>>내용</option>
+								<option value="subject_content" <c:if test="${param.searchType eq 'subject_content'}">selected</c:if>>제목&내용</option>
+							</select>
+							<input type="text" id="nt-searchKeyword" name="searchKeyword" value="${param.searchKeyword}" placeholder="검색어를 입력하세요">
+							<input type="submit" value="검색">
+						</form>
+					</div>
 					<c:if test="${sessionScope.sGrade eq '관리자'}">
 						<div class="nt-writebtn">
 							<input type="button" value="글쓰기" onclick="location.href='NoticeWrite'">
@@ -95,53 +95,53 @@
 	}
 	
 	//	무한스크롤
-	let pageNum = "2";
-	let lastScroll = 0;
-	let isContinue = true;
-	$(window).scroll(function(){
-		let currentScroll = $(this).scrollTop();
-		let documentHeight = $(document).height();
-		let windowHeight = $(window).height();
+// 	let pageNum = "2";
+// 	let lastScroll = 0;
+// 	let isContinue = true;
+// 	$(window).scroll(function(){
+// 		let currentScroll = $(this).scrollTop();
+// 		let documentHeight = $(document).height();
+// 		let windowHeight = $(window).height();
 		
-		if(currentScroll > lastScroll) {
-			if((currentScroll + windowHeight + 10) > documentHeight && isContinue) {
-				load_list();
-				isContinue = false;
-			}
-		}
-		lastScroll = currentScroll
+// 		if(currentScroll > lastScroll) {
+// 			if((currentScroll + windowHeight + 10) > documentHeight && isContinue) {
+// 				load_list();
+// 				isContinue = false;
+// 			}
+// 		}
+// 		lastScroll = currentScroll
 
-	});
+// 	});
 	
 	
-	function load_list() {
-		$.ajax({
-			type : "GET",
-			url : "NoticeListJson",
-			data : {
-				pageNum : pageNum
-			},
-			dataType : "json"
-		}).done(function(data){
-			for (let notice of data.noticeList) {
-				let item = '<tr>'
-					 		+ '<td class="nt_id" hidden>' + notice.notice_id + '</td>'
-					 		+ '<td class="nt_subject">' + notice.notice_subject + '</td>'
-					 		+ '<td>' + notice.mem_id + '</td>'
-					 		+ '<td>' + notice.notice_date + '</td>'
-				 		+ '</tr>';
-				$(".nt-table").append(item);
-			}
+// 	function load_list() {
+// 		$.ajax({
+// 			type : "GET",
+// 			url : "NoticeListJson",
+// 			data : {
+// 				pageNum : pageNum
+// 			},
+// 			dataType : "json"
+// 		}).done(function(data){
+// 			for (let notice of data.noticeList) {
+// 				let item = '<tr>'
+// 					 		+ '<td class="nt_id" hidden>' + notice.notice_id + '</td>'
+// 					 		+ '<td class="nt_subject">' + notice.notice_subject + '</td>'
+// 					 		+ '<td>' + notice.mem_id + '</td>'
+// 					 		+ '<td>' + notice.notice_date + '</td>'
+// 				 		+ '</tr>';
+// 				$(".nt-table").append(item);
+// 			}
 			
-			if (pageNum < data.pageInfo.maxPage) {
-				isContinue = true;
-				pageNum++;
-			}
+// 			if (pageNum < data.pageInfo.maxPage) {
+// 				isContinue = true;
+// 				pageNum++;
+// 			}
 			
-		}).fail(function(){
+// 		}).fail(function(){
 			
-		});
-	}
+// 		});
+// 	}
 	
 	
 	

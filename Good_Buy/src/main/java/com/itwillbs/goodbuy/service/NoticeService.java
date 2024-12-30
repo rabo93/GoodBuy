@@ -15,8 +15,8 @@ public class NoticeService {
 	private NoticeMapper mapper;
 	
 	//	글 목록 불러오기
-	public List<NoticeVO> getNoticeList(int startRow, int listLimit) {
-		return mapper.getNoticeList(startRow, listLimit);
+	public List<NoticeVO> getNoticeList(int startRow, int listLimit, String searchType, String searchKeyword) {
+		return mapper.getNoticeList(startRow, listLimit, searchType, searchKeyword);
 	}
 
 	//	글 작성
@@ -52,8 +52,8 @@ public class NoticeService {
 	}
 	
 	//	공지사항 게시글 총 갯수
-	public int getNoticeListCount() {
-		return mapper.getNoticeListCount();
+	public int getNoticeListCount(String searchType, String searchKeyword) {
+		return mapper.getNoticeListCount(searchType, searchKeyword);
 	}
 
 }

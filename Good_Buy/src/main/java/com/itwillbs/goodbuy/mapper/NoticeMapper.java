@@ -13,7 +13,9 @@ import com.itwillbs.goodbuy.vo.NoticeVO;
 public interface NoticeMapper {
 	//	공지사항 게시물 조회
 	List<NoticeVO> getNoticeList(@Param("startRow") int startRow,
-								 @Param("listLimit") int listLimit);
+								 @Param("listLimit") int listLimit,
+								 @Param("searchType") String searchType,
+								 @Param("searchKeyword") String searchKeyword);
 	
 	//	공지사항 글 쓰기
 	void insertNotice(NoticeVO notice);
@@ -34,5 +36,6 @@ public interface NoticeMapper {
 	void updateReadCount(NoticeVO notice);
 	
 	//	공지사항 게시글 총 갯수
-	int getNoticeListCount();
+	int getNoticeListCount(@Param("searchType") String searchType,
+						   @Param("searchKeyword") String searchKeyword);
 }

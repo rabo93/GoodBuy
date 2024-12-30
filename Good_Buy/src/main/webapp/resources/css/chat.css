@@ -6,10 +6,11 @@
         }
 
 .sidebar {
-    width: 30%;
+    width: 40%;
     background-color: #fff;
     border-right: 1px solid #ddd;
     overflow-y: auto;
+    max-height: 60vh;
 }
 
 .sidebar-item {
@@ -30,10 +31,26 @@
     background-color: #f9f9f9;
 }
 
+.sidebar-item .item-container {
+	display: flex;
+	flex-direction: column;
+}
+
+.sidebar-item .item-container .item-chat {
+	margin-top: 5px;
+	font-size: 15px;
+	color : #ccc;
+}
+
+.sidebar-item .item-container .item-chat span {
+	font-size: 12px;
+}
+
 .chat-area {
     flex: 1;
     display: flex;
     flex-direction: column;
+    max-height: 60vh;
 }
 
 .chat-header {
@@ -54,6 +71,17 @@
 .chat-header .title {
     font-size: 18px;
     font-weight: bold;
+}
+
+.chat-header .item-button {
+	border:0;
+	background:var(--primary);
+	height: 34px;
+	color: var(--white);
+	font-weight: 700;
+	padding: 0 1rem;
+	border-radius: 4px;
+	font-size: 0.875rem;
 }
 
 .chat-body {
@@ -104,7 +132,7 @@
 .chat-footer button {
     margin-left: 10px;
     padding: 10px 15px;
-    background-color: #007bff;
+    background-color: var(--primary);
     color: #fff;
     border: none;
     border-radius: 5px;

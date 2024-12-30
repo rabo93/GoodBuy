@@ -62,13 +62,18 @@ public class NoticeController {
 	
 	//	공지사항 메인페이지(리스트)
 	@GetMapping("NoticeMain")
-	public String noticeMain(Model model) {
+	public String noticeMain(@RequestParam(defaultValue = "") String searchType,
+							 @RequestParam(defaultValue = "") String searchKeyword,
+							Model model) {
 		//	공지사항 게시글 조회
 		int pageNum = 1;	//	기본 시작 페이지번호
 		int listLimit = 10;	//	페이지 당 게시물 수
 		int startRow = (pageNum - 1) * listLimit;
 		
-		List<NoticeVO> noticeList = service.getNoticeList(startRow, listLimit);
+		System.out.println("searchType : " + searchType);
+		System.out.println("searchKeyword : " + searchKeyword);
+		
+		List<NoticeVO> noticeList = service.getNoticeList(startRow, listLimit, searchType, searchKeyword);
 		model.addAttribute("noticeList", noticeList);
 		
 		return "notice/notice_list";
@@ -180,6 +185,8 @@ public class NoticeController {
 	@GetMapping("NoticeListJson")
 	@ResponseBody
 	public String noticeListJson(@RequestParam(defaultValue = "1") int pageNum,
+								 @RequestParam(defaultValue = "") String searchType,
+								 @RequestParam(defaultValue = "") String searchKeyword,
 								 Model model) {
 		log.info(">>>>>> 페이지넘버 확인 : " + pageNum);
 		
@@ -187,7 +194,7 @@ public class NoticeController {
 		int startRow = (pageNum - 1) * listLimit;	//	조회할 게시물의 DB 행 번호(row 값)
 		
 		//	2. 실제 뷰페이지에서 페이징 처리를 위한 계산 작업
-		int listCount = service.getNoticeListCount();
+		int listCount = service.getNoticeListCount(searchType, searchKeyword);
 		
 		//	임시) 페이지 당 페이지 번호 갯수를 1개로 지정
 		int pageListLimit = 5;
@@ -212,7 +219,7 @@ public class NoticeController {
 		
 		PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage, pageNum);
 		
-		List<NoticeVO> noticeList = service.getNoticeList(startRow, listLimit);
+		List<NoticeVO> noticeList = service.getNoticeList(startRow, listLimit, searchType, searchKeyword);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("pageInfo", pageInfo);
@@ -259,6 +266,7 @@ public class NoticeController {
 		return subDir;
 	}
 	
+	//	파일 업로드
 	public String addFileProcess(NoticeVO notice, String realPath, String subDir) {
 		MultipartFile muti = notice.getFile();
 		notice.setNotice_file("");

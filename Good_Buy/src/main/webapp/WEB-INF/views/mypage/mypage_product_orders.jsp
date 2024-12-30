@@ -88,9 +88,10 @@
 															<fmt:formatNumber  value="${product.product_price}" type="number" pattern="#,###" />원
 														</div>
 														<div class="card-row">
-															<span class="add">부산 해운대구</span>
+															<span class="add">${product.product_trade_adr1 }</span>
 															<span class="name">${product.mem_nick}</span>
 														</div>
+															<button id="open-modal">후기 작성하기📮</button>
 													</div>
 												</li>
 									</c:forEach>
@@ -108,57 +109,82 @@
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
 	
-<div class="modal" id="writeReview">
-      <div class="modal-dim" onclick="hideModal('writeReview')"></div>
-      <div class="modal-layer">
-        <div class="modal-hd">
-			수강평 등록하기
-        </div>
-        <button class="modal-close" onclick="hideModal('writeReview')"><i class="fa-solid fa-xmark"></i></button>
-        <div class="modal-con">
-        	<form id="review_write_frm" action="MyReviewWrite" method="post">
-        		<input type="hidden" name="mem_id" value="${sessionScope.sId}">
-        		<input type="hidden" id="course_id" name="class_id">
-	        	<!-- 별점 -->
-	        	<section class="course-rating">
-				    <label class="rating-lab rating-lab-full" for="star01">
-				        <input type="radio" id="star01" class="rating-input" name="review_score" value="1">
-				        <span class="star-icon"></span>
-				    </label>
-				    <label class="rating-lab rating-lab-full" for="star02">
-				        <input type="radio" id="star02" class="rating-input" name="review_score" value="2">
-				        <span class="star-icon"></span>
-				    </label>
-				    <label class="rating-lab rating-lab-full" for="star03">
-				        <input type="radio" id="star03" class="rating-input" name="review_score" value="3">
-				        <span class="star-icon"></span>
-				    </label>
-				    <label class="rating-lab rating-lab-full" for="star04">
-				        <input type="radio" id="star04" class="rating-input" name="review_score" value="4">
-				        <span class="star-icon"></span>
-				    </label>
-				    <label class="rating-lab rating-lab-full" for="star05">
-				        <input type="radio" id="star05" class="rating-input" name="review_score" value="5">
-				        <span class="star-icon"></span>
-				    </label>
-	        	</section>
-	        	<!-- // 별점 -->
-	        	<!-- 수강평 -->
-        		<section class="review-write">
-        			<ul class="noti">
-        				<li>공개 게시판이므로 소중한 개인정보를 남기지 않도록 해주세요.</li>
-        				<li>사적인 상담 및 광고성, 욕설, 비방, 도배 등 부적절한 글은 무통보 삭제처리될 수 있습니다.</li>
-        			</ul>
-        			<textarea class="rev-con" name="review_content" rows="6" placeholder="수강후기를 남겨주세요"></textarea>
-        		</section>
-        	</form>
-        </div>
-        <div class="modal-ft">
-          <button class="reset" onclick="hideModal('writeReview')">취소</button>
-          <button type="submit" form="review_write_frm" class="active" onclick="hideModal('writeReview')">등록하기</button>
-        </div>
-      </div>
-    </div>
+	<!-- 후기작성 모달창 -->
+	<div id="review-modal" class="modal-overlay" style="display: none;">
+		<c:forEach var="product" items="${order}">
+			<div class="modal-content">
+				<h2> ${product.mem_nick}님께 구매한 [${product.product_title}]</h2>
+<!-- 				<h2>후기 작성하기</h2> -->
+				<br>
+				<textarea rows="" cols="" id="review-text" placeholder="후기를 작성해주세요."></textarea>
+				<br>
+				<button id="close-modal">닫기</button>
+				<button id="submit-review">작성완료</button>
+			</div>
+		</c:forEach>
+	</div>
+	
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$("#open-modal").click(function () {
+				$("#review-modal").fadeIn(300);
+			})
+		})
+	
+	
+	</script>
+	
+<!-- <div class="modal" id="writeReview"> -->
+<!--       <div class="modal-dim" onclick="hideModal('writeReview')"></div> -->
+<!--       <div class="modal-layer"> -->
+<!--         <div class="modal-hd"> -->
+<!-- 			수강평 등록하기 -->
+<!--         </div> -->
+<!--         <button class="modal-close" onclick="hideModal('writeReview')"><i class="fa-solid fa-xmark"></i></button> -->
+<!--         <div class="modal-con"> -->
+<!--         	<form id="review_write_frm" action="MyReviewWrite" method="post"> -->
+<%--         		<input type="hidden" name="mem_id" value="${sessionScope.sId}"> --%>
+<!--         		<input type="hidden" id="course_id" name="class_id"> -->
+<!-- 	        	별점 -->
+<!-- 	        	<section class="course-rating"> -->
+<!-- 				    <label class="rating-lab rating-lab-full" for="star01"> -->
+<!-- 				        <input type="radio" id="star01" class="rating-input" name="review_score" value="1"> -->
+<!-- 				        <span class="star-icon"></span> -->
+<!-- 				    </label> -->
+<!-- 				    <label class="rating-lab rating-lab-full" for="star02"> -->
+<!-- 				        <input type="radio" id="star02" class="rating-input" name="review_score" value="2"> -->
+<!-- 				        <span class="star-icon"></span> -->
+<!-- 				    </label> -->
+<!-- 				    <label class="rating-lab rating-lab-full" for="star03"> -->
+<!-- 				        <input type="radio" id="star03" class="rating-input" name="review_score" value="3"> -->
+<!-- 				        <span class="star-icon"></span> -->
+<!-- 				    </label> -->
+<!-- 				    <label class="rating-lab rating-lab-full" for="star04"> -->
+<!-- 				        <input type="radio" id="star04" class="rating-input" name="review_score" value="4"> -->
+<!-- 				        <span class="star-icon"></span> -->
+<!-- 				    </label> -->
+<!-- 				    <label class="rating-lab rating-lab-full" for="star05"> -->
+<!-- 				        <input type="radio" id="star05" class="rating-input" name="review_score" value="5"> -->
+<!-- 				        <span class="star-icon"></span> -->
+<!-- 				    </label> -->
+<!-- 	        	</section> -->
+<!-- 	        	// 별점 -->
+<!-- 	        	수강평 -->
+<!--         		<section class="review-write"> -->
+<!--         			<ul class="noti"> -->
+<!--         				<li>공개 게시판이므로 소중한 개인정보를 남기지 않도록 해주세요.</li> -->
+<!--         				<li>사적인 상담 및 광고성, 욕설, 비방, 도배 등 부적절한 글은 무통보 삭제처리될 수 있습니다.</li> -->
+<!--         			</ul> -->
+<!--         			<textarea class="rev-con" name="review_content" rows="6" placeholder="수강후기를 남겨주세요"></textarea> -->
+<!--         		</section> -->
+<!--         	</form> -->
+<!--         </div> -->
+<!--         <div class="modal-ft"> -->
+<!--           <button class="reset" onclick="hideModal('writeReview')">취소</button> -->
+<!--           <button type="submit" form="review_write_frm" class="active" onclick="hideModal('writeReview')">등록하기</button> -->
+<!--         </div> -->
+<!--       </div> -->
+<!--     </div> -->
 
 </body>
 </html>

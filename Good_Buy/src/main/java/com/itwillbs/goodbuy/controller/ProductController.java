@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.itwillbs.goodbuy.aop.LoginCheck;
@@ -33,7 +34,7 @@ public class ProductController {
 	// 이클립스 상의 가상의 업로드 경로명 저장(프로젝트 상에서 보이는 경로)
 	private String uploadPath = "/resources/upload";
 	
-	//
+	// 상품목록 조회
 	@GetMapping("ProductList")
 	public String productList(@RequestParam String PRODUCT_CATEGORY, Model model) {
 		List<Map<String, Object>> listSearch = productService.searchProductList(PRODUCT_CATEGORY);
@@ -42,10 +43,15 @@ public class ProductController {
 		return "product/product_list";
 	}
 	
+	// 검색필터 AJAX
+	@ResponseBody
 	@GetMapping("SearchPriceFilter")
-	public List<Map<String, Object>> searchPriceFilter(@RequestParam int PRODUCT_PRICE, @RequestParam String PRODUCT_CATEGORY) {
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>" + PRODUCT_PRICE + PRODUCT_CATEGORY);
-		List<Map<String, Object>> listSearch = productService.searchFliterList(PRODUCT_PRICE, PRODUCT_CATEGORY);
+	public List<Map<String, Object>> searchPriceFilter(@RequestParam(defaultValue = "5", required=false) int PRODUCT_STATUS,
+													   @RequestParam(required=false) String PRODUCT_PRICE,
+													   @RequestParam(required=false) String PRODUCT_TRADE_ADR1,
+													   @RequestParam String PRODUCT_CATEGORY) {
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>> controller : " + PRODUCT_TRADE_ADR1);
+		List<Map<String, Object>> listSearch = productService.searchFilterList(PRODUCT_STATUS, PRODUCT_PRICE, PRODUCT_TRADE_ADR1, PRODUCT_CATEGORY);
 		return listSearch;
 	}
 	
@@ -126,7 +132,7 @@ public class ProductController {
 			}
 		}
 		
-		return "";
+		return "MySales";
 	}
 	
 	@GetMapping("ProductDetail")

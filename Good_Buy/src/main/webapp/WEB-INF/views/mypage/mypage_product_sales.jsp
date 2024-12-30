@@ -58,10 +58,11 @@
 				<div class="my-container">
 					<div class="contents-ttl"><h3>판매내역 <small>(총 <span>${salesCount}</span>건)</small></h3>
 						<div class="my-tabs">
-							<button>전체</button>
-							<button>거래중</button>
-							<button>거래완료</button>
-							<button>취소/환불</button>
+							<button class="filter-btn" data-status="all">전체</button>
+							<button class="filter-btn" data-status="0">판매중</button>
+			                <button class="filter-btn" data-status="1">거래중</button>
+			                <button class="filter-btn" data-status="2">예약중</button>
+			                <button class="filter-btn" data-status="3">거래완료</button>
 						</div>
 					</div>
 				<section>
@@ -75,7 +76,7 @@
 						</c:when>
 						<c:otherwise>
 							<c:forEach var="product" items="${product}">
-								<li class="product-card">
+								<li class="product-card" data-status="${product.product_status}">
 											<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" height="180px"/>
 											<div class="card-info">
 												<div class="category">
@@ -94,6 +95,7 @@
 															[거래완료]
 														</c:when>
 														<c:otherwise>
+														<!-- 판매중 널스트링 -->
 														</c:otherwise>
 													</c:choose>
 													${product.product_title}
@@ -102,7 +104,7 @@
 													<fmt:formatNumber  value="${product.product_price}" type="number" pattern="#,###" />원
 												</div>
 												<div class="card-row">
-													<span class="add">부산 해운대구</span>
+													<span class="add">${product.product_trade_adr1}</span>
 													<span class="name">${product.mem_nick}</span>
 												</div>
 											</div>
@@ -110,78 +112,6 @@
 							</c:forEach>
 						</c:otherwise>
 					</c:choose>
-					
-					<!-- ================================================================ -->
-<!-- 						<h3>진행중</h3>		 -->
-<!-- 						<div class="product-list"> -->
-<!-- 							<ul class="product-wrap"> -->
-<!-- 								8개 -->
-<!-- 								<li class="product-card"> -->
-<!-- 									<img src="../../resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" /> -->
-<!-- 									<div class="card-info"> -->
-<!-- 										<div class="category"> -->
-<!-- 											<span>생활용품</span> -->
-<!-- 											<span class="type">직거래</span> -->
-<!-- 										</div> -->
-<!-- 										<div class="ttl">[예약중]젠하이저 H3PRO 팝니다</div> -->
-<!-- 										<div class="price">55,000 원</div> -->
-<!-- 										<div class="card-row"> -->
-<!-- 											<span class="add">부산 해운대구</span> -->
-<!-- 											<span class="name">홍길동동이</span> -->
-<!-- 											<span class="time">1분 전</span> -->
-<!-- 										</div> -->
-<!-- 									</div> -->
-<!-- 								</li> -->
-<!-- 							</ul> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
-					
-<!-- 					<h3>거래완료</h3> -->
-<!-- 					<div class="product-list"> -->
-<!-- 							<ul class="product-wrap"> -->
-<!-- 								8개 -->
-<!-- 								<li class="product-card"> -->
-<!-- 									<img src="../../resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" /> -->
-<!-- 									<div class="card-info"> -->
-<!-- 										<div class="category"> -->
-<!-- 											<span>생활용품</span> -->
-<!-- 											<span class="type">직거래</span> -->
-<!-- 										</div> -->
-<!-- 										<div class="ttl">[거래완료]젠하이저 H3PRO 팝니다</div> -->
-<!-- 										<div class="price">55,000 원</div> -->
-<!-- 										<div class="card-row"> -->
-<!-- 											<span class="add">부산 해운대구</span> -->
-<!-- 											<span class="name">홍길동동이</span> -->
-<!-- 											<span class="time">1분 전</span> -->
-<!-- 										</div> -->
-<!-- 									</div> -->
-<!-- 								</li> -->
-<!-- 							</ul> -->
-<!-- 						</div> -->
-					
-<!-- 					<div> -->
-<!-- 					<h3>취소/환불</h3> -->
-<!-- 											<div class="product-list"> -->
-<!-- 							<ul class="product-wrap"> -->
-<!-- 								8개 -->
-<!-- 								<li class="product-card"> -->
-<!-- 									<img src="../../resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" /> -->
-<!-- 									<div class="card-info"> -->
-<!-- 										<div class="category"> -->
-<!-- 											<span>생활용품</span> -->
-<!-- 											<span class="type">직거래</span> -->
-<!-- 										</div> -->
-<%-- 										<div class="ttl">${productlist.product_title}</div> --%>
-<%-- 										<div class="price">${productlist.product_price}</div> --%>
-<!-- 										<div class="card-row"> -->
-<!-- 											<span class="add">부산 해운대구</span> -->
-<!-- 											<span class="name">홍길동동이</span> -->
-<!-- 											<span class="time">1분 전</span> -->
-<!-- 										</div> -->
-<!-- 									</div> -->
-<!-- 								</li> -->
-<!-- 							</ul> -->
-<!-- 						</div> -->
 					</div>
 				</section>
 				</div>
@@ -195,11 +125,32 @@
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
 	
+	<script>
+	$(document).ready(function () {
+	    // 필터 버튼 클릭 이벤트
+	    $(".filter-btn").click(function () {
+	        const status = $(this).data("status");  // 클릭된 버튼의 data-status 값
 
+	        // 상품 카드 필터링
+	        $(".product-card").each(function () {
+	            const productStatus = $(this).data("status");  // 각 상품 카드에서 data-status 값 가져오기
+	            
+	            // 콘솔 디버깅 (확인용)
+	            console.log("Button Status:", status);
+	            console.log("Product Status:", productStatus);
 
+	            // 상태가 일치하거나 '전체(all)'인 경우 보여주기
+	            if (status == 'all' || status == productStatus) {
+	                $(this).show();
+// 	                $(this).fadeIn();
+	            } else {
+// 	                $(this).hide();
+	                $(this).fadeOut();
+	            }
+	        });
+	    });
+	});
 
-
-
-
+    </script>
 </body>
 </html>

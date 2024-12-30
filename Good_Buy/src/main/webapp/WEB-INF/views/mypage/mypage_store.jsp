@@ -111,18 +111,10 @@
 																	</div>
 																	<div class="ttl">
 																		<c:choose>
-																			<c:when test="${product.product_status == 1 }">
-																				[거래중]
-																			</c:when>
-																			<c:when test="${product.product_status == 2 }">
-																				[예약중]
-																			</c:when>
-																			<c:when test="${product.product_status == 3 }">
-																				[거래완료]
-																			</c:when>
-																			<c:otherwise> 
-																			<!-- 널스트링 출력 -->
-																			</c:otherwise>
+																			<c:when test="${product.product_status == 1 }">[거래중]</c:when>
+																			<c:when test="${product.product_status == 2 }">[예약중]</c:when>
+																			<c:when test="${product.product_status == 3 }">[거래완료]</c:when>
+																			<c:otherwise> <!-- 널스트링 출력 --></c:otherwise>
 																		</c:choose>
 																		${product.product_title}
 																	</div>
@@ -202,6 +194,12 @@
 	  const quill = new Quill('#editor', {
 	    theme: 'snow'
 	  });
+	</script>
+	
+	<script type="text/javascript">
+	
+	
+	
 	</script>
 
 </body>

@@ -104,7 +104,7 @@
 													<fmt:formatNumber  value="${product.product_price}" type="number" pattern="#,###" />원
 												</div>
 												<div class="card-row">
-													<span class="add">부산 해운대구</span>
+													<span class="add">${product.product_trade_adr1}</span>
 													<span class="name">${product.mem_nick}</span>
 												</div>
 											</div>

@@ -1,6 +1,12 @@
 @charset "UTF-8";
-.fa-money-bill {
+.fa-money-bill{
 	color: var(--primary);
+}
+
+.fa-solid, .fa-building-columns {
+	color: var(--primary);
+	background-color: #f8f9fb;
+	height: auto;
 }
 
 /* 페이지 제목 */
@@ -114,7 +120,6 @@
     padding: 10px 0;
     border-bottom: 1px solid #eaeaea;
 }
-
 .history-item .icon {
     width: 35px;
     height: 35px;
@@ -122,7 +127,6 @@
     border-radius: 50%;
     margin-right: 10px;
 }
-
 .history-item .details {
     flex: 1;
 }

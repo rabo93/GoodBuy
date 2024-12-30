@@ -300,6 +300,7 @@ public class PayApiClient {
 		// => 요청고객 계좌번호&개설기관 표준코드 미사용 시 핀테크 이용번호 설정 필수!
 		//    (단, 동시에 두 가지 다 설정 시 오류 발생!)
 		
+		
 		jsonObject.addProperty("req_client_num", id.toUpperCase()); // 요청고객회원번호(아이디처럼 사용)
 		// => 별도의 회원 번호가 없으므로 세션 아이디 활용(영문자 알파벳 대문자 필수!)
 		jsonObject.addProperty("transfer_purpose", "ST"); // 이체용도(송금 : TR, 결제 : ST 등) => 3.17. 이체 용도 안내 참조
@@ -459,6 +460,205 @@ public class PayApiClient {
 		// 6. 응답데이터를 관리하는 ResponseEntity 객체의 getBody() 메서드 호출하여 응답 데이터 본문 리턴
 		return responseEntity.getBody();
 		
+	}
+
+	// =============================================================================
+	// [ P2P(개인간) 송금 ]
+	// 출금이체
+	public Map<String, String> requestWithdrawForTransfer(Map<String, Object> map) {
+		PayToken senderToken = (PayToken)map.get("senderToken");
+		PayToken receiverToken = (PayToken)map.get("receiverToken");
+		Map<String, String> senderAccount = (Map<String, String>)map.get("senderAccount");
+		Map<String, String> receiverAccount = (Map<String, String>)map.get("receiverAccount");
+		// -----------------------------------------------------------
+		// 세션 아이디 가져오기
+		String id = (String)senderToken.getMem_id();
+		// -----------------------------------------------------------
+		// 잔액조회 요청에 사용될 bank_tran_id, tran_dtime 값 생성하기
+		String bank_tran_id = PayValueGenerator.getBankTranId(client_use_code);
+		String tran_dtime = PayValueGenerator.getTranDTime();
+		// -----------------------------------------------------------
+		// 1. HTTP 요청에 필요한 URI 정보를 관리할 URI 객체 생성
+		URI uri = UriComponentsBuilder
+					.fromUriString(base_url) // 기본 요청 주소 생성
+					.path("/v2.0/transfer/withdraw/fin_num") // 상세 요청 주소(세부 경로) 생성
+					.encode() // 주소 인코딩
+					.build() // UriComponents 타입 객체 생성
+					.toUri(); // URI 타입 객체로 변환
+		System.out.println("요청 주소 : " + uri.toString());
+		
+		// 2. 사용자 정보 조회 API 요청에 사용될 헤더정보를 관리할 HttpHeaders 객체 생성
+		HttpHeaders headers = new HttpHeaders();
+		headers.setBearerAuth(senderToken.getAccess_token()); // 보내는 사람의 엑세스토큰
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		// ---------------------------------------------------------------------------------
+		
+		// 3. API 요청 파라미터를 JSON 형식으로 생성
+		JsonObject jsonObject = new JsonObject(); // 기본 생성자로 객체 생성
+		// ------------- 핀테크 이용기관(아이티윌) 정보 ------------
+		jsonObject.addProperty("bank_tran_id", bank_tran_id); // 거래고유번호(참가기관)
+		jsonObject.addProperty("cntr_account_type", "N"); // 약정 계좌/계정 구분("N" : 계좌)
+		jsonObject.addProperty("cntr_account_num", cntr_account_num); // 약정 계좌/계정 번호(서비스 이용기관 - 아이티윌 계좌)
+		jsonObject.addProperty("dps_print_content", id); // 입금계좌인자내역(= 입금되는 계좌에 출력할 메세지)
+		// => 임의로 현재 사용자의 세션 아이디를 내역으로 활용(사용자가 정하지 않음)
+		
+		// ------------- 요청 고객(출금계좌) 정보 ------------
+		jsonObject.addProperty("fintech_use_num", senderAccount.get("FINTECH_USE_NUM")); // 출금계좌핀테크이용번호
+		jsonObject.addProperty("wd_print_content", receiverAccount.get("ACCOUNT_HOLDER_NAME")); // 출금계좌인자내역(기본값 : 받는 계좌 예금주명 => 임의로 아이티윌로 고정)
+		jsonObject.addProperty("tran_amt", (String)map.get("tran_amt")); // 거래금액
+		jsonObject.addProperty("tran_dtime", tran_dtime); // 거래요청일시
+		jsonObject.addProperty("req_client_name", senderAccount.get("ACCOUNT_HOLDER_NAME")); // 요청고객성명(출금계좌)
+		jsonObject.addProperty("req_client_fintech_use_num", senderAccount.get("FINTECH_USE_NUM")); // 요청고객 핀테크이용번호(출금계좌)
+		// => 요청고객 계좌번호&개설기관 표준코드 미사용 시 핀테크 이용번호 설정 필수!
+		//    (단, 동시에 두 가지 다 설정 시 오류 발생!)
+		jsonObject.addProperty("req_client_num", senderToken.getUser_seq_no()); // 요청고객회원번호(사용자번호 활용)
+		// => 별도의 회원 번호가 없으므로 세션 아이디 활용(영문자 알파벳 대문자 필수!)
+		jsonObject.addProperty("transfer_purpose", "TR"); // 이체용도(송금 : TR, 결제 : ST 등) => 3.17. 이체 용도 안내 참조
+		
+		
+		
+		// ------------- 수취 고객(실제 최종 입금 대상) 정보 ------------
+		// 최종적으로 이 금액을 수신하는 계좌에 대한 정보
+		// => 이 정보(3가지)는 피싱 등의 사고 발생 시 지급 정지 등을 위한 정보로 실제 검증 수행X
+		// => 현재 수행하는 거래는 사용자 -> 이용기관(아이티윌) 계좌로 입금되므로 이용기관의 계좌 정보를 세팅
+//			jsonObject.addProperty("recv_client_name", cntr_account_holder_name); // 최종수취고객성명(입금대상)
+		jsonObject.addProperty("recv_client_name", receiverAccount.get("ACCOUNT_HOLDER_NAME")); // 최종수취고객성명(입금대상)
+		jsonObject.addProperty("recv_client_bank_code", receiverAccount.get("ACCOUNT_BANK_CODE")); // 최종수취고객계좌 개설기관 표준코드(입금대상)
+		jsonObject.addProperty("recv_client_account_num", receiverAccount.get("ACCOUNT_NUM")); // 최종수취고객계좌번호(입금대상)
+		// => 마스킹 되어있는 계좌번호지만 실제 검증 수행을 하지 않으므로 일단 사용
+		
+		System.out.println("요청 JSON 데이터 : " + jsonObject.toString());
+		
+		// ---------------------------------------------------------------
+		// 4. 헤더와 바디를 묶어서 관리하는 HttpEntity 객체 생성
+		// => 생성자에 바디 정보(JSON 문자열)와 헤더 정보(HttpHeaders)를 모두 전달
+		HttpEntity<String> httpEntity = new HttpEntity<String>(jsonObject.toString(), headers);
+		
+		// 5. REST API(RESTful API) 요청에 사용할 RestTemplate 객체 활용
+		RestTemplate restTemplate = new RestTemplate();
+		ParameterizedTypeReference<Map<String, String>> responseType = 
+				new ParameterizedTypeReference<Map<String, String>>() {};
+		// => 응답데이터 중 "객체" 가 존재하지 않으므로 제네릭타입을 <String, String> 사용 가능
+		
+		// exchange() 메서드 마지막 파라미터로 파싱 클래스 지정 시
+		// ParameterizedTypeReference 객체를 지정하고
+		// 리턴값을 지정하는 ResponseEntity 의 제네릭타입은 실제 파싱될 제네릭타입을 그대로 기술
+		ResponseEntity<Map<String, String>> responseEntity = restTemplate.exchange(
+				uri, // 요청 URL 관리하는 URI 타입 객체(또는 문자열로 된 URL 도 전달 가능) 
+				HttpMethod.POST,  // 요청 메서드(HttpMethod.XXX 상수 활용)
+				httpEntity, // 요청 정보를 관리하는 HttpEntity 객체
+				responseType); // 응답 데이터를 파싱하여 관리할 클래스
+		
+		// 6. 응답데이터를 관리하는 ResponseEntity 객체의 getBody() 메서드 호출하여 응답 데이터 본문 리턴
+		return responseEntity.getBody();
+	}
+
+	// 입금이체
+	public Map<String, Object> requestDepositForTransfer(Map<String, Object> map) {
+		PayToken senderToken = (PayToken)map.get("senderToken");
+		PayToken receiverToken = (PayToken)map.get("receiverToken");
+		PayToken adminToken = (PayToken)map.get("adminToken");
+		Map<String, String> senderAccount = (Map<String, String>)map.get("senderAccount");
+		Map<String, String> receiverAccount = (Map<String, String>)map.get("receiverAccount");
+		// -----------------------------------------------------------
+		// 세션 아이디 가져오기
+		String id = (String)senderToken.getMem_id();
+		// -----------------------------------------------------------
+		// 잔액조회 요청에 사용될 bank_tran_id, tran_dtime 값 생성하기
+		String bank_tran_id = PayValueGenerator.getBankTranId(client_use_code);
+		String tran_dtime = PayValueGenerator.getTranDTime();
+		// -----------------------------------------------------------
+		// 1. HTTP 요청에 필요한 URI 정보를 관리할 URI 객체 생성
+		URI uri = UriComponentsBuilder
+					.fromUriString(base_url) // 기본 요청 주소 생성
+					.path("/v2.0/transfer/deposit/fin_num") // 상세 요청 주소(세부 경로) 생성
+					.encode() // 주소 인코딩
+					.build() // UriComponents 타입 객체 생성
+					.toUri(); // URI 타입 객체로 변환
+		System.out.println("요청 주소 : " + uri.toString());
+		
+		// 2. 사용자 정보 조회 API 요청에 사용될 헤더정보를 관리할 HttpHeaders 객체 생성
+		HttpHeaders headers = new HttpHeaders();
+		headers.setBearerAuth(adminToken.getAccess_token());
+		// => 주의! 입금 대상(고객)의 엑세스토큰이 아닌 이용기관(아이티윌 - 이연태)의 엑세스토큰!
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		// ---------------------------------------------------------------------------------
+		// 3. API 요청 파라미터를 JSON 형식으로 생성
+		// 3-1) 1건의 입금 이체 정보를 저장할 객체 생성
+		JsonObject joReq = new JsonObject(); // 기본 생성자로 객체 생성
+		
+		joReq.addProperty("tran_no", 1); // 거래순번(2020년부터 단건이체만 가능하므로 무조건 1 고정)
+		joReq.addProperty("bank_tran_id", bank_tran_id); // 거래고유번호(참가기관)
+		
+		// -------------------------------------------------------------------------------
+		// 위에서 작업한 입금은 이용기관 -> 사용자 계좌로 입금을 수행했지만
+		// 이번 작업은 사용자 -> 이용기관 -> 사용자의 과정을 거쳐 송금을 수행하므로
+		//                 (출금이체)  (입금이체)
+		// 고객의 정보 부분이 두 종류(받는사람, 보내는사람)로 분리 설정 필요
+		// ------------- 받는 사람(입금계좌) 정보 ------------
+		joReq.addProperty("fintech_use_num", receiverAccount.get("FINTECH_USE_NUM")); // 출금계좌핀테크이용번호
+		joReq.addProperty("print_content", senderAccount.get("ACCOUNT_HOLDER_NAME")); // 입금계좌인자내역(보내는사람 이름)
+		joReq.addProperty("tran_amt", (String)map.get("tran_amt")); // 거래금액
+		
+		// ------------- 보내는 사람(요청 고객) 정보 ---------------
+		joReq.addProperty("req_client_name", senderAccount.get("ACCOUNT_HOLDER_NAME")); // 요청고객성명(입금계좌)
+		joReq.addProperty("req_client_fintech_use_num", senderAccount.get("FINTECH_USE_NUM")); // 요청고객 핀테크이용번호(입금계좌)
+		// => 요청고객 계좌번호&개설기관 표준코드 미사용 시 핀테크 이용번호 설정 필수!
+		//    (단, 동시에 두 가지 다 설정 시 오류 발생!)
+		joReq.addProperty("req_client_num", id.toUpperCase()); // 요청고객회원번호(아이디처럼 사용)
+		// => 별도의 회원 번호가 없으므로 세션 아이디 활용(영문자 알파벳 대문자 필수!)
+		joReq.addProperty("transfer_purpose", "TR"); // 이체용도(송금 : TR, 결제 : ST 등) => 3.17. 이체 용도 안내 참조
+		
+		 
+		// 3-2) 입금 이체 1건의 정보를 배열(리스트)로 관리할 JsonArray 객체 생성
+		JsonArray jaReq_list = new JsonArray();
+		// JsonArray 객체의 add() 메서드를 호출하여 1건 이체 정보가 담긴 JsonObject 객체 추가
+		jaReq_list.add(joReq);
+		
+		
+		// 3-3) 기본 입금 이체 정보를 저장할 JsonObject 객체 생성
+		JsonObject jsonObject = new JsonObject();
+		// ------------- 핀테크 이용기관(아이티윌) 정보 ------------
+		jsonObject.addProperty("cntr_account_type", "N"); // 약정 계좌/계정 구분("N" : 계좌)
+		jsonObject.addProperty("cntr_account_num", cntr_account_num); // 약정 계좌/계정 번호(서비스 이용기관 - 아이티윌 계좌)
+		
+		jsonObject.addProperty("wd_pass_phrase", "NONE"); // 입금이체용 암호문구(테스트 시 "NONE" 값 고정)
+		jsonObject.addProperty("wd_print_content", receiverAccount.get("ACCOUNT_HOLDER_NAME") + "_송금"); // 출금계좌(이용기관 - 아이티윌)인자내역
+		// => 임의로 현재 사용자의 이름을 내역으로 활용(입금이체 버튼 클릭 시 전송됨)
+		// => 아이디의 경우 길이가 길면 길이제한으로 인한 오류가 발생할 수 있음
+		
+		jsonObject.addProperty("name_check_option", "on"); // 수취인 성명 검증여부("on" : 검증, "off" 미검증, 생략 시 "on")
+		jsonObject.addProperty("tran_dtime", tran_dtime); // 거래요청일시
+		jsonObject.addProperty("req_cnt", 1); // 입금요청건수(2020년부로 다건이체 중단으로 단건이체용 1 고정)
+	
+		
+		// 3-4) 기본 입금 이체 정보 JsonObject 객체에 1건의 이체 정보 JsonArray 객체 추가
+		jsonObject.add("req_list", jaReq_list);
+
+		System.out.println("요청 JSON 데이터 : " + jsonObject.toString());
+		
+		// ---------------------------------------------------------------
+		// 4. 헤더와 바디를 묶어서 관리하는 HttpEntity 객체 생성
+		// => 생성자에 바디 정보(JSON 문자열)와 헤더 정보(HttpHeaders)를 모두 전달
+		HttpEntity<String> httpEntity = new HttpEntity<String>(jsonObject.toString(), headers);
+		
+		// 5. REST API(RESTful API) 요청에 사용할 RestTemplate 객체 활용
+		RestTemplate restTemplate = new RestTemplate();
+		ParameterizedTypeReference<Map<String, Object>> responseType = 
+				new ParameterizedTypeReference<Map<String, Object>>() {};
+		// => 응답데이터 중 "객체" 가 존재하지 않으므로 제네릭타입을 <String, String> 사용 가능
+		
+		// exchange() 메서드 마지막 파라미터로 파싱 클래스 지정 시
+		// ParameterizedTypeReference 객체를 지정하고
+		// 리턴값을 지정하는 ResponseEntity 의 제네릭타입은 실제 파싱될 제네릭타입을 그대로 기술
+		ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(
+				uri, // 요청 URL 관리하는 URI 타입 객체(또는 문자열로 된 URL 도 전달 가능) 
+				HttpMethod.POST,  // 요청 메서드(HttpMethod.XXX 상수 활용)
+				httpEntity, // 요청 정보를 관리하는 HttpEntity 객체
+				responseType); // 응답 데이터를 파싱하여 관리할 클래스
+		
+		// 6. 응답데이터를 관리하는 ResponseEntity 객체의 getBody() 메서드 호출하여 응답 데이터 본문 리턴
+		return responseEntity.getBody();
 	}
 
 	

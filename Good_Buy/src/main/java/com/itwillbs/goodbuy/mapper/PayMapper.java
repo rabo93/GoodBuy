@@ -45,5 +45,7 @@ public interface PayMapper {
 
 	String selectMemIdFromToken(String id);
 
+	Map<String, String> selectPayAccountInfo(String user_seq_no);
+
 
 }

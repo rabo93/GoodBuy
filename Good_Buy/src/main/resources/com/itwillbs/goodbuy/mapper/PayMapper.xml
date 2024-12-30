@@ -68,6 +68,8 @@
 			, #{account_num_masked}
 			, #{account_holder_name}
 			, #{fintech_use_num}
+			, #{bank_code_std}
+			, #{bank_name}
 		)
 	</insert>
 	
@@ -79,6 +81,8 @@
 			ACCOUNT_NUM = #{account_num_masked}
 			, ACCOUNT_HOLDER_NAME = #{account_holder_name}
 			, FINTECH_USE_NUM = #{fintech_use_num}
+			, ACCOUNT_BANK_CODE = #{bank_code_std}
+			, BANK_NAME = #{bank_name}
 		WHERE 
 			USER_SEQ_NO = #{token.user_seq_no}
 	</update>
@@ -140,4 +144,15 @@
 		FROM TOKENINFO 
 		WHERE MEM_ID = #{id};
 	</select>
+	
+	<!-- 사용자 계좌 정보 조회 - select -->
+	<!--  user_seq_no가 일치하는 레코드 조회 -->
+	<select id="selectPayAccountInfo">
+		SELECT *
+		FROM ACCOUNTINFO
+		WHERE user_seq_no = #{user_seq_no}
+	</select>
+	
+	
+	
 </mapper>

@@ -8,7 +8,7 @@ import lombok.Data;
 public class PayToken implements Serializable {
 	// -------------------------------------------------------
 	// 사용자 아이디 정보s
-	private String id;
+	private String mem_id;
 	// -------------------------------------------------------
 	// 엑세스토큰 관련 정보
 	private String access_token;

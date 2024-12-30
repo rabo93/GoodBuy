@@ -42,13 +42,14 @@ public interface MemberMapper {
 	// 회원 패스워드 조회
 	String selectMemberPasswd(String id);
 	
-	// 이메일 조회 요청
-	MemberVO selectEmail(String mem_email);
 
 	//이메일 중복체크
 	MemberVO selectEmailId(MemberVO member);
 	
 	
+	//----------------------------------------------------------
+	// 카카오 로그인 - 이메일 조회 요청
+	MemberVO selectEmail(String mem_email);
 
 	//----------------------------------------------------------
 	//상점소개 저장

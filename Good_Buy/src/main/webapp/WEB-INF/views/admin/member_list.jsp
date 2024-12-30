@@ -45,29 +45,16 @@
                
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-<!--                 	<h1 class="h3 mb-4 text-gray-800">공통코드 관리</h1> -->
 					<div class="row">
                         <div class="col-lg-12">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h5 class="m-0 font-weight-bold text-primary">공통코드 목록</h5>
+                                    <h5 class="m-0 font-weight-bold text-primary">회원 목록</h5>
                                 </div>
                                 <div class="card-body">
-                                	<div class="table-responsive overflow-hidden">
-		                                <table class="table table-bordered" id="codeList" width="100%" cellspacing="0">
-		                                    <thead>
-		                                        <tr>
-		                                            <th>공통코드ID</th>
-		                                            <th>공통코드명</th>
-		                                            <th>공통코드 설명</th>
-		                                            <th>상세코드ID</th>
-		                                            <th>상세코드명</th>
-		                                            <th>상세코드 설명</th>
-		                                            <th>사용여부</th>
-		                                            <th>순서</th>
-		                                            <th>관리</th>
-		                                        </tr>
-		                                    </thead>
+                                	<div class="table-responsive">
+		                                <table class="table table-bordered compact" id="memberList" width="100%" cellspacing="0">
+		                                    <thead></thead>
 		                                    <tbody></tbody>
 		                                </table>
 		                          	</div>
@@ -96,27 +83,26 @@
     </a>
     
     <!-- 수정 모달 -->
-    <div class="modal fade" id="updateCommonCodes" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal fade" id="updateMemberInfo" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 		    <div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="updateModalLabel">수정</h5>
+					<h5 class="modal-title" id="updateModalLabel">회원 정보 수정</h5>
 					<button type="button" class="close" data-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
 				</div>
 				<div class="modal-body">
-					<form action="AdmCommoncodeModify" method="post" id="modifyForm">
-						<input type="hidden" id="oldCodetypeId" name="OLD_CODETYPE_ID">
-						<input type="hidden" id="oldCodeId" name="OLD_CODE_ID">
+					<form action="AdmMemberModify" method="post" id="modifyForm">
+						<input type="hidden" id="oldMemId" name="old_mem_id">
 						<div class="mb-1">
-							<label for="updatedCommoncodeId" class="col-form-label">공통코드ID <small class="text-primary" style="font-weight:600;">공통코드ID는 수정할 수 없습니다.</small></label>
-							<input type="text" class="form-control" name="CODETYPE_ID" id="updatedCommonCodeId" readonly>
+							<label for="updatedCommoncodeId" class="col-form-label">회원ID <small class="text-primary" style="font-weight:600;">공통코드ID는 수정할 수 없습니다.</small></label>
+							<input type="text" class="form-control" name="mem_id" id="memId" readonly>
 						</div>
 						<div class="mb-1">
-							<label for="updatedCommonCodeName" class="col-form-label">공통코드명</label>
-							<input type="text" class="form-control" name="CODETYPE_NAME" id="updatedCommonCodeName" required>
+							<label for="updatedCommonCodeName" class="col-form-label">이름</label>
+							<input type="text" class="form-control" name="mem_name" id="memName" required>
 						</div>
 						<div class="mb-1">
-							<label for="updatedCommonCodeDesc" class="col-form-label">공통코드 설명</label>
+							<label for="updatedCommonCodeDesc" class="col-form-label">닉네임</label>
 							<input type="text" class="form-control" name="CODETYPE_DESC" id="updatedCommonCodeDesc" required>
 						</div>
 						<div class="mb-1">
@@ -168,10 +154,10 @@
     <!-- Page level plugins -->
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script>
+<%--     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script> --%> <%-- 반응형 --%>
 
     <!-- Page level custom scripts -->
-    <script src="${pageContext.request.contextPath}/resources/adm/js/code_list.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/js/member_list.js"></script>
 
 </body>
 

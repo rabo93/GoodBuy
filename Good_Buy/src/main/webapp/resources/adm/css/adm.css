@@ -279,3 +279,21 @@ body {font-family: "Noto Sans KR", "Nunito", serif;}
     margin-right: -2.375rem;
     margin-left: 0
 }
+
+/* DataTables 줄바꿈 및 고정 너비 스타일 */
+.dataTable td {
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+/* 열 고정 너비 설정 */
+.dataTable th,
+.dataTable td {
+    width: auto; /* 너비를 자동으로 맞추되, 테이블 설정과 함께 조율 */
+}
+
+
+.grade-adm {background: var(--danger);color: var(--white);padding: 4px 10px;border-radius: 50px; display:inline-block;}
+.grade-normal {background: var(--primary);color: var(--white);padding: 4px 10px;border-radius: 50px; display:inline-block;}
+
+

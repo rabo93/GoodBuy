@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -74,38 +75,68 @@ public class AdminController {
 	
 	@ResponseBody
 	@PostMapping("AdmCommoncodeListForm")
-	public String admCommoncodeListForm(
-			@RequestParam("draw") int draw,
-			@RequestParam("start") int start,
-			@RequestParam("length") int length,
-			@RequestParam(value = "search[value]", defaultValue = "") String searchValue) {
-		System.out.println("draw : " + draw); // 서버사이드 페이징 - 테이블이 순차적으로 그려지는 것을 보장하기 위해 사용
-		System.out.println("start : " + start); // 서버사이드 페이징 첫번째 레코드 번호
-		System.out.println("length : " + length); // 현재 페이지에 그려질 레코드 수
-		System.out.println("searchValue : " + searchValue); // 검색어
+	public String admCommoncodeListForm(@RequestParam Map<String, String> param) {	
+//		log.info(">>>> param: " + param);
+		int draw = Integer.parseInt(param.get("draw")); // 요청받은 draw 값
+		int start = Integer.parseInt(param.get("start")); // 페이징 시작 번호
+		int length = Integer.parseInt(param.get("length")); // 한 페이지의 컬럼 개수
+		String searchValue = param.get("search[value]"); // 검색어
 		
-		// 
+		log.info("searchValue: " + searchValue);
+		
 		List<Map<String, Object>> commonCodes = service.getCommonCodes(start, length, searchValue);
+		int recordsTotal = service.getCommonCodesTotal();
+		int recordsFiltered = service.getCommonCodesFiltered(searchValue);
 		
+		Map<String, Object> response = new HashMap<String, Object>();
 		
-//		Map<String, Object> paging = new HashMap<String, Object>();
-//		paging.put("draw", draw);
-//		paging.put("recordsTotal", commonCodes.size());
-//		paging.put("recordsFiltered", commonCodes.size());
-//		commonCodes.add(paging);
+		// draw, recordsTotal, recordsFiltered 값을 돌려주어야 서버사이드 페이징 작동함
+		response.put("draw", draw); // 받은 draw 값 그대로 다시 전달
+		response.put("recordsTotal", recordsTotal); // 전체 컬럼 수
+		response.put("recordsFiltered", recordsFiltered); // 검색 필터링 후 컬럼 수
+		response.put("commonCodes", commonCodes); // 컬럼 데이터
 		
-		JSONArray jArr = new JSONArray(commonCodes);
-		log.info(">>> 공통코드 목록(JSON) : " + jArr);
-		return jArr.toString();
-//		return "";
+		JSONObject jo = new JSONObject(response);
+		
+		return jo.toString();
 	}
 	
 	// 공통코드 관리 - 수정
-	@GetMapping("AdmCommoncodeModify")
-	public String admCommoncodeModify() {
+	@PostMapping("AdmCommoncodeModify")
+	public String admCommoncodeModify(@RequestParam Map<String, Object> param, Model model) {
+		log.info(">>> param : " + param);
 		
+		int updateResult = service.modifyCommonCode(param);
+		if(updateResult > 0) {
+			model.addAttribute("msg", "공통코드를 수정하였습니다.");
+			return "redirect:/AdmCommoncodeList";
+		} else {
+			model.addAttribute("msg", "공통코드 수정을 실패하였습니다.");
+			return "result/fail";
+		}
 		
-		return "admin/code_modify";
+	}
+	
+	// 공통코드 관리 - 삭제
+	@ResponseBody
+	@PostMapping("AdmDeleteCommonCode")
+	public Map<String, Object> admCommoncodeDelete(@RequestParam Map<String, Object> param) {
+		log.info(">>> param : " + param);
+		
+		int deleteResult = service.removeCommonCode(param);
+		
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		if(deleteResult > 0) {
+			response.put("status", "success");
+			response.put("message", "공통코드 삭제를 성공하였습니다.");
+			response.put("redirectURL", "/AdmCommoncodeRegistForm");
+		} else {
+			response.put("status", "fail");
+			response.put("message", "공통코드 삭제를 실패하였습니다.");
+		}
+		
+		return response;
 	}
 	
 	

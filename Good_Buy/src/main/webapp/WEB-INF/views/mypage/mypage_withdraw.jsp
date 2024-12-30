@@ -38,7 +38,6 @@
 		<section class="wrapper">
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
-				<!-- -->
 				<h2 class="page-ttl">회원탈퇴</h2>
 				<section class="my-wrap">
 				<aside class="my-menu">
@@ -55,14 +54,13 @@
 					<a href="">나의 광고</a>
 				</aside>
 				<div class="my-container">
-					<form action="MemberWithdraw" method="post" class="passwdFinderForm">
+					<form action="MemberWithdrawForm" method="post" class="passwdFinderForm">
 						<h3 class="ttl">탈퇴 확인을 위해 비밀번호를 입력해주세요 <span style="color: red;">*</span></h3>
 						<input type="password" id="memPasswd" name="memPasswd" placeholder="비밀번호 입력" required>
 						<div id="form-controls">		
 							<button type="submit">회원탈퇴</button>
 						</div>
 					</form>
-					
 				</div>
 				</section>
 

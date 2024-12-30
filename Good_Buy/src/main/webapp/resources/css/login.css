@@ -21,9 +21,29 @@
 .login-wrap form input[type="password"] {padding-right: 48px;}
 .checkbox-container {
     display: flex;
-    align-items: center;
-    align-items: baseline
+/*     align-items: center; */
+    align-items: baseline;
+    justify-content: space-between;
 }
+
+.checkbox-container .find-links {
+    margin-left: auto; /* 링크들을 오른쪽 정렬 */
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--dark);
+    display: flex;
+    gap: 8px; /* 링크 간격 조정 */
+}
+
+.checkbox-container .find-links a {
+    color: var(--dark);
+    text-decoration: none;
+}
+
+.checkbox-container .find-links a:hover {
+    color: var(--primary);
+}
+
 
 .checkbox-container input[type="checkbox"] {
     margin-right: 8px;

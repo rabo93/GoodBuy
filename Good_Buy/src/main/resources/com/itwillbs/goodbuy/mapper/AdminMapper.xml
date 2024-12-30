@@ -48,17 +48,76 @@
 		  JOIN COMMONCODE S
 		    ON M.CODETYPE_ID = S.CODETYPE_ID
 		 WHERE 1 = 1
-<!-- 		 <if test="searchValue != null and searchValue != ''"> -->
-<!-- 		 	   , M.CODETYPE_NAME LIKE CONCAT('%', #{searchValue}, '%') -->
-<!-- 		 	   , M.CODE_NAME LIKE CONCAT('%', #{searchValue}, '%') -->
-<!-- 		 	   , M.DESCRIPTION LIKE CONCAT('%', #{searchValue}, '%') -->
-<!-- 		 	   , S.CODE_NAME LIKE CONCAT('%', #{searchValue}, '%') -->
-<!-- 		 	   , S.DESCRIPTION LIKE CONCAT('%', #{searchValue}, '%') -->
-<!-- 		 	   , S.CODE_NAME LIKE CONCAT('%', #{searchValue}, '%') -->
-<!-- 		 </if> -->
+		 <if test="searchValue != null">
+		 	  AND M.CODETYPE_NAME LIKE CONCAT('%', #{searchValue}, '%')
+		 	   OR M.CODETYPE_ID LIKE CONCAT('%', #{searchValue}, '%')
+		 	   OR M.DESCRIPTION LIKE CONCAT('%', #{searchValue}, '%')
+		 	   OR S.CODE_ID LIKE CONCAT('%', #{searchValue}, '%')
+		 	   OR S.CODE_NAME LIKE CONCAT('%', #{searchValue}, '%')
+		 	   OR S.DESCRIPTION LIKE CONCAT('%', #{searchValue}, '%')
+		 </if>
 		 LIMIT
 		 	   #{start}
 		 	   , #{length}
      </select>
+     
+     <!-- 공통코드 컬럼 수 조회 - SELECT -->
+     <select id="selectCommonCodesTotal" resultType="int">
+     	SELECT COUNT(*)
+		  FROM COMMONCODETYPE M 
+		  JOIN COMMONCODE S
+		    ON M.CODETYPE_ID = S.CODETYPE_ID
+     </select>
+     
+     <!-- 공통코드 검색 컬럼 수 조회 - SELECT -->
+     <select id="selectCommonCodesFiltered" resultType="int">
+     	SELECT COUNT(*)
+		  FROM COMMONCODETYPE M 
+		  JOIN COMMONCODE S
+		    ON M.CODETYPE_ID = S.CODETYPE_ID
+		 WHERE 1 = 1
+		 <if test="searchValue != null">
+		 	  AND M.CODETYPE_NAME LIKE CONCAT('%', #{searchValue}, '%')
+		 	   OR M.CODETYPE_ID LIKE CONCAT('%', #{searchValue}, '%')
+		 	   OR M.DESCRIPTION LIKE CONCAT('%', #{searchValue}, '%')
+		 	   OR S.CODE_ID LIKE CONCAT('%', #{searchValue}, '%')
+		 	   OR S.CODE_NAME LIKE CONCAT('%', #{searchValue}, '%')
+		 	   OR S.DESCRIPTION LIKE CONCAT('%', #{searchValue}, '%')
+		 </if>
+     </select>
+     
+     <!-- 공통코드 수정 - UPDATE -->
+     <update id="updateCommonCodes">
+     	UPDATE COMMONCODETYPE M, COMMONCODE S
+		   SET 
+		    	M.CODETYPE_NAME = #{CODETYPE_NAME}
+			    , M.DESCRIPTION = #{CODETYPE_DESC}
+			    , S.CODE_ID = #{CODE_ID}
+			    , S.CODE_NAME = #{CODE_NAME}
+			    , S.DESCRIPTION = #{CODE_DESC}
+			    , S.CODE_STATUS = #{CODE_STATUS}
+			    , S.CODE_SEQ = #{CODE_SEQ}
+		 WHERE
+				M.CODETYPE_ID = #{OLD_CODETYPE_ID}
+			    AND S.CODETYPE_ID = #{OLD_CODETYPE_ID}
+			    AND S.CODE_ID = #{OLD_CODE_ID}
+     </update>
+     
+     <!-- 공통코드 삭제 - DELETE -->
+     <delete id="deleteCommonCodes">
+     	DELETE FROM COMMONCODE
+     	 WHERE CODETYPE_ID = #{CODETYPE_ID}
+     	   AND CODE_ID = #{CODE_ID}
+     </delete>
+     
+     <!-- 사용되지 않는 공통코드(상위코드) 삭제 - DELETE -->
+     <delete id="deleteDeprecatedCommonCode">
+     	DELETE FROM COMMONCODETYPE
+     	 WHERE NOT EXISTS (
+            SELECT 1
+            FROM COMMONCODE
+            WHERE COMMONCODETYPE.CODETYPE_ID = COMMONCODE.CODETYPE_ID
+        )
+     </delete>
      
 </mapper>

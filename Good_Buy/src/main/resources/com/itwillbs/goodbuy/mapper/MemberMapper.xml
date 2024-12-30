@@ -4,21 +4,26 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itwillbs.goodbuy.mapper.MemberMapper">
 	
-	<!-- 아이디 중복체크  -->
+	<!-- ************************************************************** -->
+	<!-- 회원정보 찾기  -->
 	<select id="selectMember" resultType="member">
 		SELECT *
 		  FROM MEMBER
 		 WHERE MEM_ID = #{mem_id}
 	</select>
 	
-	<!-- 닉네임 중복체크 -->
+	<select id="selectMemInfo" resultType="member">
+		SELECT *
+		  FROM MEMBER
+		 WHERE MEM_PHONE = #{mem_phone}
+	</select>
+	
 	<select id="selectMemberNick" resultType="member">
 		SELECT *
 		  FROM MEMBER
 		 WHERE MEM_NICK = #{mem_nick}
 	</select>
-	
-	
+	<!-- ************************************************************** -->
 <!-- 	이메일 중복체크 -->
 <!-- 	<select id="selectEmailId" resultType="member"> -->
 <!-- 		SELECT SUBSTRING_INDEX(#{MEM_EMAIL}, '@', 1) -->
@@ -26,11 +31,7 @@
 <!-- 		WHERE MEM_EMAIL = #{mem_email} -->
 	
 <!-- 	</select>	 -->
-	<select id="selectMemberPasswd" resultType="String">
-		SELECT MEM_PASSWD
-		  FROM MEMBER
-		 WHERE MEM_ID = #{mem_id} 
-	</select>
+	
 <!--   회원정보 수정 - 비밀번호 변경	 --> 
 <!-- 	<update id="updateNewPasswd"> -->
 <!-- 		UPDATE MEMBER -->
@@ -39,14 +40,14 @@
 <!-- 	</update> -->
 	
 <!-- 	이메일로 비밀번호 변경 - 이메일 존재 확인  -->
-	<select id="selectEmail" resultType="member">
-<!-- 		SELECT MEM_ID, MEM_EMAIL, MEM_NAME -->
-		SELECT *
-		  FROM MEMBER
-		 WHERE MEM_EMAIL = #{mem_email}
-	</select>
-
+<!-- 	<select id="selectEmail" resultType="member"> -->
+<!-- 		SELECT * -->
+<!-- 		  FROM MEMBER -->
+<!-- 		 WHERE MEM_EMAIL = #{mem_email} -->
+<!-- 	</select> -->
 	
+	<!-- ************************************************************** -->
+	<!-- 회원 가입 -->
 	<insert id="insertMember">
 		<selectKey keyProperty="mem_idx" resultType="int" order="BEFORE" >
 			SELECT IFNULL(MAX(MEM_IDX), 0)
@@ -71,31 +72,47 @@
 			   , 1
 			   , now()
 			   , null
-			   , #{mem_profile}
-			   , #{mem_intro}
+			   , null
+			   , null
 			   , 2				-- SNS연동 상태(1:연동 / 2:연동안함)
-			   , 1
+			   , 1				-- 회원인증여부(1:인증함 / 2:안함)
 		)
 	</insert>
-<!-- 	   , SUBSTR(#{file_pp}, INSTR(#{file_pp}, '_') + 1) -->
+	<!-- ************************************************************** -->
+	<select id="selectMemberPasswd" resultType="String">
+		SELECT MEM_PASSWD
+		  FROM MEMBER
+		 WHERE MEM_ID = #{mem_id} 
+	</select>
+	<!-- ************************************************************** -->
+	<!-- 패스워드 찾기로 비번변경 -->
+	<update id="updateTempPasswd">
+		UPDATE MEMBER
+		   SET MEM_PASSWD = #{heshePasswd}
+		WHERE MEM_ID = #{mem_id} 
+	</update>
 	
+	<!-- ************************************************************** -->
+	<!-- 회원 수정 -->
 	<update id="updateMember" >
-	UPDATE MEMBER
-	SET
-		MEM_NICK = #{mem_nick}
-		, MEM_POST_CODE = #{mem_post_code}
-		<if test="!mem_passwd.equals('')"> 
-<!-- 		<if test="mem_passwd != null and mem_passwd != ''"> -->
-			, MEM_PASSWD = #{mem_passwd}
-		</if>
-		, MEM_ADDRESS1 = #{mem_address1}
-		, MEM_ADDRESS2 = #{mem_address2}
-		, MEM_PHONE = #{mem_phone}
-<!-- 		, mem_email = CONCAT(#{mem_email1}, '@', #{mem_email2}) -->
-	WHERE
-		mem_id = #{mem_id}
-</update>
-<!-- 	메일 인증 후, 인증상태 변경  -->
+		UPDATE MEMBER
+		SET
+			MEM_NICK = #{mem_nick}
+			<if test="!mem_passwd.equals('')"> 
+	<!-- 		<if test="mem_passwd != null and mem_passwd != ''"> -->
+				, MEM_PASSWD = #{mem_passwd}
+			</if>
+			, MEM_POST_CODE = #{mem_post_code}
+			, MEM_ADDRESS1 = #{mem_address1}
+			, MEM_ADDRESS2 = #{mem_address2}
+<!-- 			, MEM_PHONE = #{mem_phone} -->
+	<!-- 		, mem_email = CONCAT(#{mem_email1}, '@', #{mem_email2}) -->
+		WHERE
+			mem_id = #{mem_id}
+	</update>
+	<!-- ************************************************************** -->
+	
+	<!-- 	메일 인증 후, 인증상태 변경  -->
 	<update id="updateMailAuthStatus">
 		UPDATE MEMBER
 		   SET AUTH_STATUS = 'Y'
@@ -103,22 +120,22 @@
 	</update>
 <!-- 	메일 인증 후, 인증코드 테이블에서 인증코드 삭제 -->
 	<delete id="deleteMailAuthInfo">
-	DELETE FROM MAIL_AUTH_INFO
-	WHERE MEM_EMAIL = #{mem_email}
+		DELETE FROM MAIL_AUTH_INFO
+		WHERE MEM_EMAIL = #{mem_email}
 	</delete>
 	
 	<insert id="insertMailAuthInfo">
-	INSERT INTO MAIL_AUTH_INFO (MEM_EMAIL, AUTH_CODE)
-	VALUES(
-		#{mem_email}
-		, #{auth_code}
-	)
+		INSERT INTO MAIL_AUTH_INFO (MEM_EMAIL, AUTH_CODE)
+		VALUES(
+			#{mem_email}
+			, #{auth_code}
+		)
 	</insert>
 	
 	<update id="updateMailAuthInfo">
-	UPDATE MAIL_AUTH_INFO
-	   SET AUTH_CODE = #{auth_code}
-	 WHERE MEM_EMAIL = #{mem_email}
+		UPDATE MAIL_AUTH_INFO
+		   SET AUTH_CODE = #{auth_code}
+		 WHERE MEM_EMAIL = #{mem_email}
 	</update>
 
 <!-- 	이메일 인증정보 조회  -->
@@ -128,46 +145,33 @@
 		 WHERE MEM_EMAIL = #{mem_email}
 	</select>
 	
-<!-- 	패스워드 찾기로 비번변경 -->
-	<update id="updateTempPasswd">
-		UPDATE MEMBER
-		   SET MEM_PASSWD = #{heshePasswd}
-		WHERE MEM_EMAIL = #{mem_email} 
-	</update>
-	
-<!-- 	회원탈퇴  status = 3 -->
-	<update id="updateMemberStatus">
-		UPDATE MEMBER
-		  SET 
-		  	MEM_STATUS = #{mem_status}
-			, MEM_WITHDRAW_DATE = now()
-		 WHERE MEM_ID = #{mem_id}
-	</update>
-	
+
+	<!-- ************************************************************** -->
 	<!-- 카카오 회원정보 인서트 -->
 	<insert id="insertMemberInfo" parameterType="map">
 		INSERT INTO MEMBER (
-        MEM_ID,
-        MEM_NAME,
-        MEM_NICK,
-        MEM_EMAIL,
-       	MEM_PROFILE,
-        SNS_STATUS,
-        MEM_GRADE,
-        MEM_STATUS
-	    )
+			 MEM_ID
+			 , MEM_NAME
+			 , MEM_NICK
+			 , MEM_EMAIL
+			 , MEM_PROFILE
+			 , SNS_STATUS
+			 , MEM_GRADE
+			 , MEM_STATUS
+		    )
 	    VALUES (
-	        #{id}
-	        ,#{nickname}
-	        ,#{nickname}
-	        ,#{email}
-	        ,#{profile_image}
-	        ,1 -- 1:연동 / 2:연동안함
+	    	#{id}
+	    	, #{nickname}
+	        , #{nickname}
+	        , #{email}
+	        , #{profile_image}
+	        , 1 -- 1:연동 / 2:연동안함
 	        ,'일반'
-	        ,1
+	        , 1
 	    )
 	</insert>
 	
+	<!-- ************************************************************** -->
 	<!-- 네이버 회원 저장 -->
 	<insert id="insertNaverMember">
 		<selectKey keyProperty="mem_idx" resultType="int" order="BEFORE" >
@@ -202,6 +206,7 @@
 		  )
 	</insert>
 	
+	<!-- ************************************************************** -->
 	<!-- 	상점소개 업데이트 -->
 	<update id="updateStoreIntro" parameterType="member">
 		UPDATE MEMBER
@@ -210,6 +215,7 @@
 		 WHERE MEM_ID = #{mem_id}
 	</update>
 	
+	<!-- ************************************************************** -->
 	<!-- [CoolSMS] 휴대폰번호 인증 중복 확인  -->
 	<select id="selectMemberInfo" resultType="String">
 		SELECT MEM_ID
@@ -246,5 +252,18 @@
 	     WHERE AUTH_CODE = #{authCode}
 	       AND STATUS = 0 
 	</update>
+	
+
+	<!-- ************************************************************** -->
+	<!-- 회원탈퇴  status = 3 -->
+	<update id="updateMemberStatus">
+		UPDATE MEMBER
+		  SET 
+		  	MEM_STATUS = #{mem_status}
+			, MEM_WITHDRAW_DATE = now()
+			, MEM_PHONE = NULL
+		 WHERE MEM_ID = #{mem_id}
+	</update>
+	
 	
 </mapper>

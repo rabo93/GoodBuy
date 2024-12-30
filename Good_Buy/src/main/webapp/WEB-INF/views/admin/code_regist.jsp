@@ -24,6 +24,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Nunito:wght@200..1000&display=swap" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/adm/css/sb-admin-2.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/adm/css/adm.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.css" rel="stylesheet">
 
 </head>
 <body id="page-top">
@@ -154,6 +156,7 @@
     <!-- Page level plugins -->
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script>
 
     <!-- Page level custom scripts -->
     <script src="${pageContext.request.contextPath}/resources/adm/js/code_regist.js"></script>

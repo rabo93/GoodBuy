@@ -14,7 +14,7 @@ import com.itwillbs.goodbuy.vo.SmsAuthInfoVO;
 @Mapper
 public interface MemberMapper {
 	//회원 정보 조회
-	MemberVO selectMember(MemberVO member);
+	MemberVO selectMember(String mem_id);
 
 	//닉네임 조회
 	MemberVO selectMemberNick(MemberVO member);
@@ -41,50 +41,46 @@ public interface MemberMapper {
 	// 회원 패스워드 조회
 	String selectMemberPasswd(String id);
 	
-	
 	// 이메일 조회 요청
 	MemberVO selectEmail(String mem_email);
-	
-	
-	//회원탈퇴
-	int updateMemberStatus(
-			@Param("mem_id") String id
-			, @Param("mem_status") int mem_status);
-
-	//새로운 비번 올리기
-	int updateTempPasswd(
-			@Param("heshePasswd") String heshePasswd , 
-			@Param("mem_email") String mem_email);
 
 	//이메일 중복체크
 	MemberVO selectEmailId(MemberVO member);
 	
 	
-	//카카오 회원정보 인서트 
-	MemberVO insertMemberInfo(HashMap<String, Object> userInfo);
 
-	// 네이버 회원 정보 저장
-	int insertNaverMember(MemberVO member);
-
+	//----------------------------------------------------------
 	//상점소개 저장
 	int insertStoreIntro(MemberVO member);
-	
 	//상점소개 변경
 	int updateStoreIntro(MemberVO member);
-	
+
+	//----------------------------------------------------------
+	// [네이버] 회원 정보 저장
+	int insertNaverMember(MemberVO member);
+	//----------------------------------------------------------
+	// [카카오] 회원정보 인서트 
+	MemberVO insertMemberInfo(HashMap<String, Object> userInfo);
 	//----------------------------------------------------------
 	// [CoolSMS] 휴대폰번호 인증 중복 확인
 	String selectMemberInfo(String userPhone);
-
 	// [CoolSMS] 휴대폰번호 인증 정보 저장
 	void insertSmsAuthInfo(SmsAuthInfoVO smsAuthInfoVO);
-	
 	// [CoolSMS] 휴대폰번호 인증 정보 조회
 	SmsAuthInfoVO selectSmsAuthInfo(String authCode);
-	
 	// [CoolSMS] 휴대폰번호 인증 상태 업데이트
 	void updateAuthStatus(String authCode);
 	//----------------------------------------------------------
+	// 비밀번호 찾기 - 회원정보 찾기
+	MemberVO selectMemInfo(String mem_phone);
+	// 비밀번호 찾기 - 비밀번호 업데이트
+	int updateTempPasswd(@Param("heshePasswd") String heshePasswd , @Param("mem_id") String mem_id);
+	//----------------------------------------------------------
+	// 회원탈퇴(삭제) 요청
+//	void deleteMemInfo(String id);
+	// 회원탈퇴(상태값 변경)
+	void updateMemberStatus(@Param("mem_id") String id, @Param("mem_status") int mem_status);
+
 
 
 	

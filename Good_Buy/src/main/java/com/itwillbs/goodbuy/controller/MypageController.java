@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
@@ -195,37 +196,21 @@ public class MypageController {
 		}
 	}
 	
-	@GetMapping("MemberWithdraw")
-	public String memberWithdraw() {
-		return "mypage/mypage_withdraw";
-	}
-	
-	@PostMapping("MemberWithdraw")
-	public String memberWithdrawForm (MemberVO  member,HttpSession session , Model model ,BCryptPasswordEncoder passwordEncoder,String memPasswd) {
-		String id = getSessionUserId(session);
-		String dbPasswd = memberService.getMemberPasswd(id);
-		if(dbPasswd == null || !passwordEncoder.matches(memPasswd, dbPasswd)) {
-			model.addAttribute("msg", "권한이 없습니다.//n비밀번호를 다시 확인해주세요.");
-			return "result/fail";
-		}
-		
-		return"";
-	}
 	
 	
 	// ===========================================================================================
-		// 이전 페이지 이동 저장
-		private void savePreviousUrl(HttpServletRequest request, HttpSession session) {
-			String prevURL = request.getServletPath();
-			String queryString = request.getQueryString();
+	// 이전 페이지 이동 저장
+	private void savePreviousUrl(HttpServletRequest request, HttpSession session) {
+		String prevURL = request.getServletPath();
+		String queryString = request.getQueryString();
 //			System.out.println("prevURL : " + prevURL);
 //			System.out.println("queryString : " + queryString);
-			
-			if (queryString != null) {
-				prevURL += "?" + queryString;
-			}
-			
-			session.setAttribute("prevURL", prevURL);
+		
+		if (queryString != null) {
+			prevURL += "?" + queryString;
 		}
+		
+		session.setAttribute("prevURL", prevURL);
+	}
 
 }

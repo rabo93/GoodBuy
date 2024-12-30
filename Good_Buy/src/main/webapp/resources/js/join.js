@@ -5,13 +5,7 @@ let checkNic = false;
 let checkPasswd1 = false;
 let checkPasswd2 = false;
 let checkBirthday = false;
-let checkBox = false;
-
-//let checkAddr = false;
-//let checkMail = true;
-//let checkCode = false;
-//let isIdValid=false;
-//let phoneCheckResult = false;
+let isChecked = false;
 
 $(document).ready(function() {
 	//---------------------------------------------------------------------
@@ -130,7 +124,7 @@ $(document).ready(function() {
 	}
 	
 	//---------------------------------------------------------------------
-	// "전체동의하기(terms_all)" 체크박스 클릭시 전체 항목 선택/해제 이벤트
+//	 "전체동의하기(terms_all)" 체크박스 클릭시 전체 항목 선택/해제 이벤트
 	const checkAll = document.querySelector('#terms_all'); //id 속성 가져와서 변수에 저장
 	
 	if(checkAll) {
@@ -155,10 +149,13 @@ $(document).ready(function() {
 				
 				// 모든 체크박스가 선택되었는지 확인 후 전체선택 상태 업데이트
 				checkAll.checked = (totalCnt === checkedCnt);
+				isChecked = (totalCnt === checkedCnt); // isChecked 업데이트
 			});
 		});	
 	
 	}
+	
+	
 });
 
 //---------------------------------------------------------------------
@@ -295,10 +292,10 @@ function checkSubmit(){
     //--------------------------------------------
     // ********** 유효성 검사 *********
     // 휴대폰 인증 확인
-//    if ($("#auth_code").prop("readonly") !== true) {
-//        alert("휴대폰 번호 인증을 완료해주세요.");
-//        return false;
-//    }
+    if ($("#auth_code").prop("readonly") !== true) {
+        alert("휴대폰 번호 인증을 완료해주세요.");
+        return false;
+    }
     if (!checkName) {
         alert("이름을 다시 확인해주세요.");
         return false;
@@ -316,14 +313,15 @@ function checkSubmit(){
         return false;
     }
    
-    if (!checkBirthday) {
-        alert("생년월일을 다시 확인해주세요.");
-        return false;
-    }
-    if (!checkBox) {
+    // 모든 약관 동의 여부 확인
+    checkedCnt = document.querySelectorAll('.terms:checked').length;
+    totalCnt = checkboxes.length;
+
+    if (checkedCnt !== totalCnt) {
         alert("모든 약관에 동의해주세요.");
         return false;
     }
+    
     //--------------------------------------------
 	// 폼 제출
 	$("#joinForm").submit();
@@ -335,20 +333,15 @@ function checkSubmit(){
 //==============================================================================
 // [ 회원 수정 ]
 // 프로필 사진
- $("#profile_img").change(function (event) {
-    let file = event.target.files[0]; // 사용자가 업로드한 파일 가져오기
-    let reader = new FileReader();
-
-    reader.onload = function (event2) {
-        console.log("파일 : " + event2.target.result); // 파일 내용 확인용 로그
-        $("#preview_profile").attr("src", event2.target.result); // 미리보기 이미지 변경
-    };
-
-    // 파일을 URL로 읽어오기
-    if (file) {
-        reader.readAsDataURL(file);
-    }
-});
+// 파일 선택 시 미리보기 기능
+function previewImage(event) {
+	let file = event.target.files[0]; // 사용자가 업로드한 파일 가져오기
+	let reader = new FileReader();
+	reader.onload = function(e) {
+		document.getElementById('profile_preview').src = e.target.result;
+     };
+     reader.readAsDataURL(file);
+}
 
 
 // [ 수정완료 버튼 ]

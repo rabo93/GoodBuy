@@ -63,8 +63,20 @@
 							<section class="row">
 								<label>프로필 사진</label>
 								<div class="box">
-									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
-									<input type="file" class="btn-frm" name="profile_upload" id="profile_upload" value="프로필사진 변경" ><br>
+									<c:choose>
+							            <c:when test="${not empty member.mem_profile}">
+							            	<img src="${member.mem_profile}?${System.currentTimeMillis()}" id="profile_preview"><br>
+<%-- 							                <img src="${member.mem_profile}" id="profile_preview"><br> --%>
+							            </c:when>
+							            <c:otherwise>
+							                <!-- member.memProfile이 비어 있으면 기본 이미지 출력 -->
+							                <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview"><br>
+							            </c:otherwise>
+							        </c:choose>
+									<br>
+									<!-- 파일 선택 버튼 -->
+									<input type="file" class="btn-frm" name="profile_upload" id="profile_upload" onchange="previewImage(event)"><br>
+									<br>
 								</div>
 							</section>
 							

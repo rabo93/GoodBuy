@@ -1,6 +1,7 @@
 package com.itwillbs.goodbuy.mapper;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -41,26 +42,32 @@ public interface MemberMapper {
 	// 회원 패스워드 조회
 	String selectMemberPasswd(String id);
 	
-	// 이메일 조회 요청
-	MemberVO selectEmail(String mem_email);
 
 	//이메일 중복체크
 	MemberVO selectEmailId(MemberVO member);
 	
 	
+	//----------------------------------------------------------
+	// 카카오 로그인 - 이메일 조회 요청
+	MemberVO selectEmail(String mem_email);
 
 	//----------------------------------------------------------
 	//상점소개 저장
 	int insertStoreIntro(MemberVO member);
 	//상점소개 변경
 	int updateStoreIntro(MemberVO member);
+	//상점소개 들고오기
+	MemberVO selectStoreIntro(MemberVO member);
 
 	//----------------------------------------------------------
 	// [네이버] 회원 정보 저장
 	int insertNaverMember(MemberVO member);
 	//----------------------------------------------------------
 	// [카카오] 회원정보 인서트 
-	MemberVO insertMemberInfo(HashMap<String, Object> userInfo);
+	int insertMemberInfo(HashMap<String, Object> userInfo);
+	// [카카오] 비밀번호 등록
+	int updatePasswd(@Param("mem_id")String mem_id, @Param("securePasswd") String securePasswd);
+	MemberVO getMemberById(String string);
 	//----------------------------------------------------------
 	// [CoolSMS] 휴대폰번호 인증 중복 확인
 	String selectMemberInfo(String userPhone);
@@ -80,6 +87,12 @@ public interface MemberMapper {
 //	void deleteMemInfo(String id);
 	// 회원탈퇴(상태값 변경)
 	void updateMemberStatus(@Param("mem_id") String id, @Param("mem_status") int mem_status);
+
+	
+
+	
+
+
 
 
 

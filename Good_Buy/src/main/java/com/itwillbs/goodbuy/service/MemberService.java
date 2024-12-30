@@ -60,6 +60,11 @@ public class MemberService {
 	}
 
 	//-------------------------------------------------------------
+	//상점소개 들고오기
+	public MemberVO getStoreIntro(MemberVO member) {
+		return mapper.selectStoreIntro(member);
+	}
+
 	//상점 소개 변경
 	public int registStoreIntro(MemberVO member) {
 		return mapper.updateStoreIntro(member);
@@ -114,5 +119,6 @@ public class MemberService {
 	public void removeMemInfo(String id, int mem_status) {
 		mapper.updateMemberStatus(id, mem_status);
 	}
+
 
 }

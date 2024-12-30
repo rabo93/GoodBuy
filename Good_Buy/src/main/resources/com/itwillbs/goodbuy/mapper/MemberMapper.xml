@@ -215,6 +215,13 @@
 		 WHERE MEM_ID = #{mem_id}
 	</update>
 	
+	<!-- 	상점소개 조회 -->
+	<select id="selectStoreIntro">
+		SELECT MEM_INTRO
+		FROM MEMBER
+		WHERE MEM_ID = #{mem_id}
+	</select>
+	
 	<!-- ************************************************************** -->
 	<!-- [CoolSMS] 휴대폰번호 인증 중복 확인  -->
 	<select id="selectMemberInfo" resultType="String">

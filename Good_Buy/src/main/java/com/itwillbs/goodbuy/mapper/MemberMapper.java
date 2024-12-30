@@ -1,6 +1,7 @@
 package com.itwillbs.goodbuy.mapper;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -54,6 +55,8 @@ public interface MemberMapper {
 	int insertStoreIntro(MemberVO member);
 	//상점소개 변경
 	int updateStoreIntro(MemberVO member);
+	//상점소개 들고오기
+	MemberVO selectStoreIntro(MemberVO member);
 
 	//----------------------------------------------------------
 	// [네이버] 회원 정보 저장
@@ -80,6 +83,7 @@ public interface MemberMapper {
 //	void deleteMemInfo(String id);
 	// 회원탈퇴(상태값 변경)
 	void updateMemberStatus(@Param("mem_id") String id, @Param("mem_status") int mem_status);
+
 
 
 

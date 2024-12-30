@@ -183,7 +183,14 @@ public class OauthService {
 	//--------------------------------------------------------------------------------------
 	// 3. 카카오 회원 정보 삽입
 	public MemberVO setMemberInfo(HashMap<String, Object> userInfo) {
-		return memberMapper.insertMemberInfo(userInfo);
+	    memberMapper.insertMemberInfo(userInfo);
+	    return memberMapper.getMemberById((String) userInfo.get("id"));
+//		return memberMapper.insertMemberInfo(userInfo);
+	}
+	//--------------------------------------------------------------------------------------
+	// 암호화된 비번 등록
+	public int registPasswd(String mem_id, String securePasswd) {
+		return memberMapper.updatePasswd(mem_id, securePasswd);
 	}
 
 	

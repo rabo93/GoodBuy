@@ -43,23 +43,24 @@
 							<section class="sch-box">
 								<h2>검색 필터</h2>
 								<label class="filter-name">
-									<input type="checkbox" class="sch-box">
+									<input type="checkbox" class="trade-box" name="trade-box">
 									거래가능한 상품만 보기
 								</label>
 							</section>
 							<section class="sch-box">
 								<h2>가격</h2>
-								<label><input type="radio" class="ip-chk" name="ip-chk" value="5000"> 5,000원 이하</label>
-								<label><input type="radio" class="ip-chk" name="ip-chk" value="10000"> 10,000원 이하</label>
-								<label><input type="radio" class="ip-chk" name="ip-chk" value="20000"> 20,000원 이하</label>
+								<label><input type="radio" class="ip-chk rd1" name="ip-chk" value="5000"> 5,000원 이하</label>
+								<label><input type="radio" class="ip-chk rd2" name="ip-chk" value="10000"> 10,000원 이하</label>
+								<label><input type="radio" class="ip-chk rd3" name="ip-chk" value="20000"> 20,000원 이하</label>
 								<div class="ip-num">
-									<input type="number" placeholder="부터" class="ip-num1"> ~ <input type="number" placeholder="까지" class="ip-num2">
+									<input type="number" placeholder="부터" class="ip-num1" name="ip-num1" value="0"> ~ <input type="number" placeholder="까지" class="ip-num2" name="ip-num2" value="0">
 								</div>
 							</section>
 							<section class="sch-box">
 								<h2>지역</h2>
-								<input type="text" class="ip-tt">
-								<button type="button" name="" id="" class="sch-box-reset">
+								<input type="text" class="ip-tt" name="regionSearch">
+								<input type="button" class="item-trade-adr-search" value="주소검색" onclick="addAdr()">
+								<button type="button" class="sch-box-reset" onclick="fliterReset()">
 									<i class="fa-solid fa-arrows-rotate"></i> 초기화
 								</button>
 							</section>
@@ -68,7 +69,7 @@
 					<article class="item-list-area">
 						<!-- product-list -->
 						<div class="product-list">
-							<ul class="product-wrap">
+							<ul class="product-wrap" id="product-wrap">
 								<!-- 8개 -->
 								<c:forEach items="${searchProductList}" var="list">
 									<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.PRODUCT_ID}'">
@@ -104,38 +105,6 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
+	<jsp:include page="/WEB-INF/views/product/product_list_script.jsp"></jsp:include>
 </body>
-<script type="text/javascript">
-const urlParams = new URL(location.href).searchParams;
-const category = urlParams.get('PRODUCT_CATEGORY');
-
-$("input[name='ip-chk']").change(function() {
-	let test = $("input[name='ip-chk']:checked").val();
-	
-	$.ajax({
-		url: "SearchPriceFilter",
-		type: "GET",
-		data: {
-			PRODUCT_PRICE : test,
-			PRODUCT_CATEGORY : category
-		}
-	}).done(function (data) {
-		
-	}).fail(function() {
-		alert("필터적용 실패!");
-	});
-})
-
-
-
-
-
-
-
-
-
-
-
-
-</script>
 </html>

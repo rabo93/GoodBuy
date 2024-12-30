@@ -100,6 +100,7 @@
 			, MEM_POST_CODE = #{mem_post_code}
 			, MEM_ADDRESS1 = #{mem_address1}
 			, MEM_ADDRESS2 = #{mem_address2}
+			, MEM_PROFILE = #{mem_profile}
 <!-- 			, MEM_PHONE = #{mem_phone} -->
 	<!-- 		, mem_email = CONCAT(#{mem_email1}, '@', #{mem_email2}) -->
 		WHERE
@@ -147,6 +148,8 @@
 		  FROM MEMBER
 		 WHERE MEM_EMAIL = #{mem_email}
 	</select>
+	
+
 	<!-- 카카오 회원정보 인서트 -->
 	<insert id="insertMemberInfo" parameterType="map">
 		INSERT INTO MEMBER (
@@ -170,6 +173,19 @@
 	        , 1
 	    )
 	</insert>
+	
+	<select id="getMemberById" parameterType="string" resultType="member">
+	    SELECT * 
+	    FROM MEMBER 
+	    WHERE MEM_ID = #{id}
+	</select>
+	
+	
+	<update id="updatePasswd">
+		UPDATE MEMBER 
+		SET MEM_PASSWD = #{securePasswd}
+		WHERE MEM_ID = #{mem_id}
+	</update>
 	
 	<!-- ************************************************************** -->
 	<!-- 네이버 회원 저장 -->

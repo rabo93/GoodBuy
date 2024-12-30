@@ -61,7 +61,10 @@ public interface MemberMapper {
 	int insertNaverMember(MemberVO member);
 	//----------------------------------------------------------
 	// [카카오] 회원정보 인서트 
-	MemberVO insertMemberInfo(HashMap<String, Object> userInfo);
+	int insertMemberInfo(HashMap<String, Object> userInfo);
+	// [카카오] 비밀번호 등록
+	int updatePasswd(@Param("mem_id")String mem_id, @Param("securePasswd") String securePasswd);
+	MemberVO getMemberById(String string);
 	//----------------------------------------------------------
 	// [CoolSMS] 휴대폰번호 인증 중복 확인
 	String selectMemberInfo(String userPhone);
@@ -81,6 +84,11 @@ public interface MemberMapper {
 //	void deleteMemInfo(String id);
 	// 회원탈퇴(상태값 변경)
 	void updateMemberStatus(@Param("mem_id") String id, @Param("mem_status") int mem_status);
+
+	
+
+	
+
 
 
 

@@ -72,10 +72,10 @@
 								</div>
 									
 								<div class="set">
-									<label>상점 소개</label>
+									<label>상점 소개</label><br>
 									<input type="hidden" id = "mem_id" value="${member.mem_id}"> 
 <%-- 									<input type="text" name="mem_intro" id="mem_intro" value="${member.mem_intro}"> --%>
-											<textarea rows="5" cols="50" name="mem_intro" id="mem_intro">${member.mem_intro}</textarea>
+											<textarea rows="5" cols="50" name="mem_intro" id="mem_intro">${storeIntro.mem_intro}</textarea>
 									<!-- Create the editor container -->
 <!-- 									<div id="editor"  name="mem_intro"> -->
 <!-- 									  <p>상점소개를 입력해주세요	</p> -->
@@ -85,7 +85,7 @@
 									</div>
 								</div>
 							</form>
-							<form action="" class="my-frm" method="get">
+							<form action="" class="my-frm" method="post">
 								<div>
 									<h3 class="contents-ttl">등록한 상품목록 <small>(총 <span>${salesCount}</span>건)</small> <a href="MySales"><small> 더보기></small></a></h3>
 								</div>
@@ -111,18 +111,10 @@
 																	</div>
 																	<div class="ttl">
 																		<c:choose>
-																			<c:when test="${product.product_status == 1 }">
-																				[거래중]
-																			</c:when>
-																			<c:when test="${product.product_status == 2 }">
-																				[예약중]
-																			</c:when>
-																			<c:when test="${product.product_status == 3 }">
-																				[거래완료]
-																			</c:when>
-																			<c:otherwise> 
-																			<!-- 널스트링 출력 -->
-																			</c:otherwise>
+																			<c:when test="${product.product_status == 1 }">[거래중]</c:when>
+																			<c:when test="${product.product_status == 2 }">[예약중]</c:when>
+																			<c:when test="${product.product_status == 3 }">[거래완료]</c:when>
+																			<c:otherwise> <!-- 널스트링 출력 --></c:otherwise>
 																		</c:choose>
 																		${product.product_title}
 																	</div>
@@ -202,6 +194,12 @@
 	  const quill = new Quill('#editor', {
 	    theme: 'snow'
 	  });
+	</script>
+	
+	<script type="text/javascript">
+	
+	
+	
 	</script>
 
 </body>

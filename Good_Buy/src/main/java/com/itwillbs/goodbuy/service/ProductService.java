@@ -29,8 +29,8 @@ public class ProductService {
 		return mapper.salesListCount(id);
 	}
 
-	public List<Map<String, Object>> searchProductList(String pRODUCT_CATEGORY) {
-		return mapper.searchProductList(pRODUCT_CATEGORY);
+	public List<Map<String, Object>> searchProductList(String product_category) {
+		return mapper.searchProductList(product_category);
 	}
 		
 	public List<ProductVO> getOrderList(String id) {
@@ -41,9 +41,21 @@ public class ProductService {
 	public int orderListCount(String id) {
 		return mapper.selectOrderCount(id);
 	}
+	
+	// 검색 필터 AJAX
+	public List<Map<String, Object>> searchFilterList(int product_status, 
+													  String product_price,
+													  String product_trade_adr1,
+													  String product_category) {
+	    int price_start = 0;
+	    int price_end = 0;
 
-	public List<Map<String, Object>> searchFliterList(int price_start, int price_end, String product_category) {
-		return mapper.searchFliterList(price_start, price_end, product_category);
+	    if (product_price != null) {
+	        price_start = Integer.parseInt(product_price.split("_")[0]);
+	        price_end = Integer.parseInt(product_price.split("_")[1]);
+	    }
+
+	    return mapper.searchFliterList(price_start, price_end, product_status, product_trade_adr1, product_category);
 	}
 
 }

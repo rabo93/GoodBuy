@@ -52,24 +52,37 @@
 	<select id="searchProductList" resultType="map">
 		SELECT 
 			pro.PRODUCT_PIC1, pro.PRODUCT_CATEGORY, pro.PRODUCT_TRADE_ADR1, pro.PRODUCT_ID,
-			pro.PRODUCT_TITLE, pro.PRODUCT_PRICE, pro.MEM_ID, mem.MEM_NICK, pro.PRODUCT_REG_DATE
+			pro.PRODUCT_TITLE, pro.PRODUCT_PRICE, pro.MEM_ID, mem.MEM_NICK, pro.PRODUCT_REG_DATE,
+			pro.PRODUCT_STATUS
 		FROM PRODUCT pro join MEMBER mem
 		ON pro.MEM_ID = mem.MEM_ID
-		WHERE PRODUCT_CATEGORY = #{pRODUCT_CATEGORY}
+		WHERE PRODUCT_CATEGORY = #{product_category}
 	</select>
 	
+	<!-- 검색필터별 조회 -->
 	<select id="searchFliterList" resultType="map">
 		SELECT 
 			pro.PRODUCT_PIC1, pro.PRODUCT_CATEGORY, pro.PRODUCT_TRADE_ADR1, pro.PRODUCT_ID,
-			pro.PRODUCT_TITLE, pro.PRODUCT_PRICE, pro.MEM_ID, mem.MEM_NICK, pro.PRODUCT_REG_DATE
+			pro.PRODUCT_TITLE, pro.PRODUCT_PRICE, pro.MEM_ID, mem.MEM_NICK, pro.PRODUCT_REG_DATE,
+			pro.PRODUCT_STATUS
 		FROM PRODUCT pro join MEMBER mem
 		ON pro.MEM_ID = mem.MEM_ID
 		WHERE 
 			PRODUCT_CATEGORY = #{cate} 
-		AND 
-			PRODUCT_PRICE <![CDATA[>=]]> #{price_start}
-		AND 
-			PRODUCT_PRICE <![CDATA[<=]]> #{price_end}	
+		<if test="product_status == 0">
+			AND 
+				PRODUCT_STATUS = #{product_status}
+		</if>
+		<if test="price_end != 0">
+			AND 
+				PRODUCT_PRICE <![CDATA[>=]]> #{price_start}
+			AND 
+				PRODUCT_PRICE <![CDATA[<=]]> #{price_end}	
+		</if>
+		<if test="product_trade_adr1 != null">
+			AND
+				PRODUCT_TRADE_ADR1 like '%'||#{product_trade_adr1}||'%'
+		</if>
 	</select>
 	
 	<!-- 구매상품 리스트 조회 -->

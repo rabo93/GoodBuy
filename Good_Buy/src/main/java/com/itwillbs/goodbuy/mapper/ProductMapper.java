@@ -13,17 +13,25 @@ public interface ProductMapper {
 
 	int insertProduct(@Param("vo")ProductVO product, @Param("id")String id);
 
-	List<ProductVO> selectProductList(String id);
 
 	int salesListCount(String id);
-
+	
 	// 구매내역 조회
-	List<Map<String, Object>> searchProductList(String pRODUCT_CATEGORY);
+	List<ProductVO> selectProductList(String id);
 	
 	List<ProductVO> selectOrderList(String id);
 	// 구매내역 갯수 조회
 	int selectOrderCount(String id);
-
-	List<Map<String, Object>> searchFliterList(@Param("price_start")int price_start, @Param("price_end")int price_end, @Param("cate")String product_category);
+	
+	// 카테고리별 상품목록 조회
+	List<Map<String, Object>> searchProductList(String product_category);
+	
+	// 필터별 상품목록 조회
+	List<Map<String, Object>> searchFliterList(
+			@Param("price_start")int price_start, 
+			@Param("price_end")int price_end, 
+			@Param("product_status")int product_status, 
+			@Param("product_trade_adr1")String product_trade_adr1,
+			@Param("cate")String product_category);
 	
 }

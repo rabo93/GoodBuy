@@ -43,7 +43,7 @@
 							<section class="sch-box">
 								<h2>검색 필터</h2>
 								<label class="filter-name">
-									<input type="checkbox" class="sch-box">
+									<input type="checkbox" class="trade-box" name="trade-box">
 									거래가능한 상품만 보기
 								</label>
 							</section>
@@ -58,8 +58,9 @@
 							</section>
 							<section class="sch-box">
 								<h2>지역</h2>
-								<input type="text" class="ip-tt">
-								<button type="button" name="" id="" class="sch-box-reset">
+								<input type="text" class="ip-tt" name="regionSearch">
+								<input type="button" class="item-trade-adr-search" value="주소검색" onclick="addAdr()">
+								<button type="button" class="sch-box-reset" onclick="fliterReset()">
 									<i class="fa-solid fa-arrows-rotate"></i> 초기화
 								</button>
 							</section>
@@ -103,7 +104,7 @@
 	</main>
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
-		<jsp:include page="/WEB-INF/views/product/product_list_script.jsp"></jsp:include>
 	</footer>
+	<jsp:include page="/WEB-INF/views/product/product_list_script.jsp"></jsp:include>
 </body>
 </html>

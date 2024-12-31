@@ -1,6 +1,7 @@
 package com.itwillbs.goodbuy.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.itwillbs.goodbuy.service.MemberService;
 import com.itwillbs.goodbuy.service.MyPageService;
@@ -21,6 +25,7 @@ import com.itwillbs.goodbuy.vo.ProductVO;
 import com.itwillbs.goodbuy.vo.WishlistVO;
 
 import lombok.extern.log4j.Log4j2;
+import retrofit2.http.POST;
 
 @Log4j2
 @Controller
@@ -98,6 +103,10 @@ public class MypageController {
 		int orderCount = productService.orderListCount(id);
 		model.addAttribute("orderCount",orderCount);
 		
+		//상품목록 조회
+//		List<ProductVO> productlist =(List<ProductVO>) productService.getProductList(id);
+//		model.addAttribute("product", productlist);
+		
 		
 		return "mypage/mypage_product_orders";
 	}
@@ -122,7 +131,7 @@ public class MypageController {
 		
 	}
 	
-	//[나의 리뷰] 완
+	//[나의 리뷰]
 	@GetMapping("MyReview")
 	public String myReview(HttpSession session,Model model) {
 		String id = getSessionUserId(session);
@@ -135,6 +144,24 @@ public class MypageController {
 		model.addAttribute("reviewCount", reviewCount);
 		
 		return "mypage/mypage_review";
+	}
+	@ResponseBody
+	@PostMapping("MyReviewText")
+	public String myReviewText(@RequestBody Map<String, String>reviewData,HttpSession session) {
+		String review = reviewData.get("review"); // JSON에서 'review' 키로 데이터 받기
+		String productTitle = reviewData.get("product_title");
+		String productId = reviewData.get("product_id");
+		String id = getSessionUserId(session);
+		
+		System.out.println("@@@@@@@@@@@"+review+productId + productTitle);
+		int result = reviewService.saveReviewData(id,review,productTitle,productId);
+		if(result > 0) {
+			return "result/success";
+		} else {
+			return "result/fail";
+			
+		}
+		
 	}
 
 	@GetMapping("MyWish")

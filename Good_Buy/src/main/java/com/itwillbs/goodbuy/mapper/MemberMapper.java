@@ -87,6 +87,11 @@ public interface MemberMapper {
 //	void deleteMemInfo(String id);
 	// 회원탈퇴(상태값 변경)
 	void updateMemberStatus(@Param("mem_id") String id, @Param("mem_status") int mem_status);
+	
+	
+	//	-------------------------------------------------------------
+	//	채팅 - MEM_ID 조회
+	String selectMemberId(String mem_id);
 
 	
 

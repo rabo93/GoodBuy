@@ -20,4 +20,7 @@ public class ChatMessage {
 	public static final String TYPE_TALK = "TALK";
 	public static final String TYPE_INIT = "INIT";
 	public static final String TYPE_INIT_COMPLETE = "INIT_COMPLETE";
+	public static final String TYPE_ERROR = "ERROR";
+	public static final String TYPE_START = "START";
+	public static final String TYPE_REQUEST_CHAT_LIST = "REQUEST_CHAT_LIST";
 }

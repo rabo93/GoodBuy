@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class ProductVO {
 	private int product_id;
-	private String product_title;
+	private String product_title;	//	상품명
 	private String mem_id;
 	private String mem_nick;
 	private String product_intro; //상품소개

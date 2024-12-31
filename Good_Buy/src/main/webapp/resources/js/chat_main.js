@@ -10,17 +10,29 @@ $(function() {
 		}
 	}, 1000);
 	
-	$(".btnSend").on("click", function() {
+	$(".chat-area").on("click", ".btnSend", function() {
 		sendInputMessage();
 	});
 	
-	$(".chatMessage").on("keypress", function(event) {
-//		console.log(event);
+	$(".chat-area").on("keypress", ".chatMessage", function(event) {
 		let keyCode = event.keyCode;
 		if (keyCode == 13) {
 			sendInputMessage();
 		}
 	});
+	
+	
+//	$(".btnSend").on("click", function() {
+//		sendInputMessage();
+//	});
+	
+//	$(".chatMessage").on("keypress", function(event) {
+//		console.log(event);
+//		let keyCode = event.keyCode;
+//		if (keyCode == 13) {
+//			sendInputMessage();
+//		}
+//	});
 	
 });
 

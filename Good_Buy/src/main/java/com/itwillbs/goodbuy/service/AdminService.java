@@ -92,8 +92,15 @@ public class AdminService {
 
 	// ============== [ 회원관리 ] ==============
 	// 회원 목록 조회
-	public List<MemberVO> getMemberList() {
-		return mapper.selectMemberList();
+	public List<MemberVO> getMemberList(
+			int start, 
+			int length, 
+			String searchValue, 
+			int memStatus, 
+			String memGrade, 
+			String orderColumn, 
+			String orderDir) {
+		return mapper.selectMemberList(start, length, searchValue, memStatus, memGrade, orderColumn, orderDir);
 	}
 
 	// 회원 상세 조회
@@ -105,16 +112,30 @@ public class AdminService {
 	public int modifyMemberInfo(MemberVO member) {
 		return mapper.updateMemberInfo(member);
 	}
-
 	
+	// 회원 목록 전체 컬럼 수 조회
+	public int getMemberListTotal() {
+		return mapper.selectMemberListTotal();
+	}
 	
+	// 회원 목록 필터 후 컬럼 수 조회
+	public int getMemberListFiltered(int memStatus, String memGrade, String searchValue) {
+		return mapper.selectMemberListFiltered(memStatus, memGrade, searchValue);
+	}
 	
-	
+	// 회원 삭제
+	public int removeMember(String mem_id) {
+		return mapper.deleteMember(mem_id);
+	}
 	
 	// ============== [ FAQ 관리 ] ==============
 	public List<FaqVO> getFaqList() {
 		return mapper.selectFaqList();
 	}
+
+
+
+
 
 	
 }

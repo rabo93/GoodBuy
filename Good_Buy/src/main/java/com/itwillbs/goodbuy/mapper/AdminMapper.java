@@ -39,18 +39,39 @@ public interface AdminMapper {
 	// 사용되지않는 공통코드(상위코드) 삭제
 	int deleteDeprecatedCommonCode();
 
-	// 회원 목록 조회
-	List<MemberVO> selectMemberList();
+	// 회원 목록 조회 + 검색 조건
+	List<MemberVO> selectMemberList(
+			@Param("start") int start, 
+			@Param("length") int length, 
+			@Param("searchValue") String searchValue, 
+			@Param("memStatus") int memStatus, 
+			@Param("memGrade") String memGrade, 
+			@Param("orderColumn") String orderColumn, 
+			@Param("orderDir") String orderDir);
 
 	// 회원 상세정보 조회
 	MemberVO selectMember(String mem_id);
 	
+	// 회원 상태 수정
+	int updateMemberInfo(MemberVO member);
+	
+	// 회원 목록 전체 컬럼 수 조회
+	int selectMemberListTotal();
+	
+	// 회원 검색 후 컬럼 수 조회
+	int selectMemberListFiltered(
+			@Param("memStatus") int memStatus, 
+			@Param("memGrade") String memGrade, 
+			@Param("searchValue") String searchValue);
+	
+	// 회원 삭제
+	int deleteMember(String mem_id);
 	
 	//---------------------------------------------------------
 	// Faq 목록 조회
 	List<FaqVO> selectFaqList();
 
-	// 회원 상태 수정
-	int updateMemberInfo(MemberVO member);
+
+
 
 }

@@ -145,6 +145,56 @@
 		       , SNS_STATUS
 		       , AUTH_STATUS
 		  FROM MEMBER
+		 WHERE 1 = 1
+			<if test="memStatus != null and memStatus != 0">
+		 	   AND MEM_STATUS = #{memStatus}
+		 	</if>
+		 	<if test="memGrade != null and memGrade != '전체'">
+		 	   AND MEM_GRADE = #{memGrade}
+		 	</if>
+		 	<if test="searchValue != null and searchValue != ''">
+		 	   AND (MEM_ID LIKE CONCAT('%', #{searchValue}, '%')
+		 	    	OR MEM_NAME LIKE CONCAT('%', #{searchValue}, '%')
+		 	    	OR MEM_NICK LIKE CONCAT('%', #{searchValue}, '%')
+		 	    	OR MEM_EMAIL LIKE CONCAT('%', #{searchValue}, '%')) 
+		 	</if>
+		 ORDER BY 
+			<choose>
+				<when test="orderColumn == 'mem_id'">MEM_ID</when>
+				<when test="orderColumn == 'mem_name'">MEM_NAME</when>
+				<when test="orderColumn == 'mem_nick'">MEM_NICK</when>
+				<when test="orderColumn == 'mem_email'">MEM_EMAIL</when>
+				<when test="orderColumn == 'mem_reg_date'">MEM_REG_DATE</when>
+				<otherwise>MEM_REG_DATE</otherwise>
+			</choose>
+			<if test="orderDir == 'asc'">ASC</if>
+			<if test="orderDir == 'desc'">DESC</if>
+		  LIMIT
+		 	   #{start}
+		 	   , #{length}
+     </select>
+     
+     <select id="selectMemberListTotal" resultType="int">
+     	SELECT COUNT(*)
+     	  FROM MEMBER
+     </select>
+     
+     <select id="selectMemberListFiltered" resultType="int">
+     	SELECT COUNT(*)
+     	  FROM MEMBER
+     	 WHERE 1 = 1
+			<if test="memStatus != null and memStatus != 0">
+		 	   AND MEM_STATUS = #{memStatus}
+		 	</if>
+		 	<if test="memGrade != null and memGrade != '전체'">
+		 	   AND MEM_GRADE = #{memGrade}
+		 	</if>
+		 	<if test="searchValue != null and searchValue != ''">
+		 	   AND (MEM_ID LIKE CONCAT('%', #{searchValue}, '%')
+		 	    	OR MEM_NAME LIKE CONCAT('%', #{searchValue}, '%')
+		 	    	OR MEM_NICK LIKE CONCAT('%', #{searchValue}, '%')
+		 	    	OR MEM_EMAIL LIKE CONCAT('%', #{searchValue}, '%')) 
+		 	</if>
      </select>
      
      <!-- 회원 상세 정보 조회 - SELECT -->
@@ -181,5 +231,11 @@
      	   	   , MEM_STATUS = #{mem_status}
      	 WHERE MEM_ID = #{mem_id}
      </update>
+     
+     <!-- 회원 삭제 - DELETE -->
+     <delete id="deleteMember">
+     	DELETE FROM MEMBER
+     	 WHERE MEM_ID = #{mem_id}
+     </delete>
      
 </mapper>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,7 +63,7 @@
 <!--                                         <button id="btnSubmitForm" class="btn btn-primary">수정하기</button> -->
                                     	<h6 class="font-weight-bold text-primary mb-4">기본정보</h6>
 										<section class="row">
-											<div class="col-5">
+											<div class="col-8">
 	                                    		<div class="mb-3">
 		                                            <label class="small mb-1" for="mem_id">ID</label>
 		                                            <input class="form-control" name="mem_id" value="${dbMember.mem_id}" type="text" readonly>
@@ -98,20 +99,6 @@
 		                                            <input class="form-control" name="mem_gender" type="text" value="${dbMember.mem_gender}" readonly>
 		                                        </div>
 		                                        <div class="mb-3">
-		                                            <label class="small mb-1" for="mem_nick">자기소개</label>
-		                                            <input class="form-control" name="mem_gender" type="text" value="${dbMember.mem_intro}" readonly>
-		                                        </div>
-	                                    	</div>
-	                                    	<div class="col-7">
-	                                    		<div class="mb-3">
-		                                            <label class="small mb-1" for="mem_nick">회원등급</label>
-		                                            <input class="form-control" name="mem_email" type="text" value="${dbMember.mem_grade}"> 
-		                                        </div>
-		                                        <div class="mb-3">
-		                                            <label class="small mb-1" for="mem_nick">회원상태</label>
-		                                            <input class="form-control" name="mem_email" type="text" value="${dbMember.mem_status}"> 
-		                                        </div>
-		                                        <div class="mb-3">
 		                                            <label class="small mb-1" for="mem_nick">가입일자</label>
 		                                            <input class="form-control" name="mem_gender" type="text" value="${dbMember.mem_reg_date}" readonly>
 		                                        </div>
@@ -120,12 +107,30 @@
 		                                            <input class="form-control" name="mem_gender" type="text" value="${dbMember.mem_withdraw_date}" readonly>
 		                                        </div>
 		                                        <div class="mb-3">
+		                                            <label class="small mb-1" for="mem_intro">자기소개</label>
+		                                            <textarea class="form-control" rows="3" style="resize:none;" name="mem_intro" value="${dbMember.mem_intro}" readonly></textarea>
+		                                        </div>
+	                                    	</div>
+	                                    	<div class="col-4">
+	                                    		<div class="mb-3">
+		                                            <label class="small mb-1" for="mem_profile">프로필사진</label>
+		                                            <img src="${dbMember.mem_profile}" alt="프로필사진" class="profile_img_box"> 
+		                                        </div>
+	                                    		<div class="mb-3">
+		                                            <label class="small mb-1" for="mem_nick">회원등급</label>
+		                                            <input class="form-control" name="mem_email" type="text" value="${dbMember.mem_grade}" readonly> 
+		                                        </div>
+		                                        <div class="mb-3">
+		                                            <label class="small mb-1" for="mem_nick">회원상태</label>
+		                                            <input class="form-control" name="mem_email" type="text" value="${memStatus}" readonly> 
+		                                        </div>
+		                                        <div class="mb-3">
 		                                            <label class="small mb-1" for="mem_nick">SNS 연동상태</label>
-		                                            <input class="form-control" name="mem_email" type="text" value="${dbMember.sns_status}" readonly> 
+		                                            <input class="form-control" name="mem_email" type="text" value="${snsStatus}" readonly> 
 		                                        </div>
 		                                        <div class="mb-3">
 		                                            <label class="small mb-1" for="mem_nick">회원 인증상태</label>
-		                                            <input class="form-control" name="mem_email" type="text" value="${dbMember.auth_status}" readonly> 
+		                                            <input class="form-control" name="mem_email" type="text" value="${authStatus}" readonly> 
 		                                        </div>
 	                                    	</div>
 										</section>

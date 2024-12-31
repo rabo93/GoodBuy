@@ -137,7 +137,7 @@
 								<div class="form-check form-switch">
 					        		<input type="hidden" id="updatedCodeStatus" name="CODE_STATUS">
 									<input class="form-check-input" type="checkbox" role="switch" id="updateFlexSwitchCheckDefault">
-									<label class="form-check-label text-center" style="width:56px" id="updateFlexSwitchCheckDefaultLab" for="updateFlexSwitchCheckDefault"></label>
+									<label class="form-check-label text-center" style="width:70px" id="updateFlexSwitchCheckDefaultLab" for="updateFlexSwitchCheckDefault"></label>
 								</div>
 							</div>
 							<div class="w-50">

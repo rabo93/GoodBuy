@@ -89,24 +89,32 @@
 													<h2>굿페이 충전</h2>
 												</div>
 												<div class="pay-account-modal-body">
-													<select class="account-select"  name="searchType">
-														<c:forEach var="account" items="${bankUserInfo.res_list}" varStatus="status">
-															<option value="subject" <c:if test="${account.fintech_use_num eq fintech_use_num}">selected</c:if>>
-													                ${account.bank_name} &nbsp;&nbsp; ${account.account_num_masked}
-													           		<c:if test="${account.fintech_use_num eq fintech_use_num}">
-																		( 대표계좌 )
-																	</c:if>
-													                
-													            </div>
-															</option>
-														</c:forEach>
-													</select>
+													
 													
 													
 													
 														<form action="PayWithdraw" method="post">
-															<input type="hidden" name="withdraw_client_fintech_use_num" value="">
-															<input type="hidden" name="withdraw_client_name" value="">
+														
+															
+															<select class="account-select"  name="withdraw_client_fintech_use_num">
+																<c:forEach var="account" items="${bankUserInfo.res_list}" varStatus="status">
+																	<option value="${account.fintech_use_num}" <c:if test="${account.fintech_use_num eq fintech_use_num}">selected</c:if>>
+															                ${account.bank_name} &nbsp;&nbsp; ${account.account_num_masked}
+															           		<c:if test="${account.fintech_use_num eq fintech_use_num}">
+																				( 대표계좌 )
+																			</c:if>
+																			<c:set var="withdraw_client_name" value="${account.account_holder_name}" />
+																			
+															            </div>
+																	</option>
+																	
+																</c:forEach>
+															</select>
+														
+<%-- 															<input type="hidden" name="withdraw_client_fintech_use_num" value="${withdraw_client_name }"> --%>
+															<input type="hidden" name="withdraw_client_name" value="${withdraw_client_name}">
+															<input type="hidden" name="tran_amt" value="5000">	
+														
 															<div class="input-section">
 <!-- 															거래금액 <input type="text" name="tran_amt" value="5000">  -->
 												            	<input type="text" class="input-label" placeholder="금액을 입력해 주세요" id="total-amount">

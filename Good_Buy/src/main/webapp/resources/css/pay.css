@@ -1,6 +1,12 @@
 @charset "UTF-8";
-.fa-money-bill {
+.fa-money-bill{
 	color: var(--primary);
+}
+
+.fa-solid, .fa-building-columns {
+	color: var(--primary);
+	background-color: #f8f9fb;
+	height: auto;
 }
 
 /* 페이지 제목 */
@@ -114,7 +120,6 @@
     padding: 10px 0;
     border-bottom: 1px solid #eaeaea;
 }
-
 .history-item .icon {
     width: 35px;
     height: 35px;
@@ -122,7 +127,6 @@
     border-radius: 50%;
     margin-right: 10px;
 }
-
 .history-item .details {
     flex: 1;
 }
@@ -252,6 +256,7 @@
 
 
 /* 입력 안내 */
+/*
 .input-section {
     text-align: left;
     margin-bottom: 20px;
@@ -260,16 +265,21 @@
 .input-label {
 /*     color: #aaa; */
 /*     font-size: 14px; */
-	width: 100%; /* 원하는 픽셀 크기 */
-    padding: 8px;
+	/*width: 100%; /* 원하는 픽셀 크기 */
+/*    padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
-}
+}*/
 
 .balance-info {
-    margin-top: 5px;
-    color: #333;
-    font-size: 18px;
+/*     margin-top: 5px; */
+/*     color: #333; */
+/*     font-size: 18px; */
+	color: #636363;
+    font-size: 15px;
+    text-align: left;
+    margin-top: -10px;
+    padding-left: 2px;
 }
 
 /* 금액 버튼 */
@@ -277,6 +287,7 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 .amount-btn, .use-charge-btn {
@@ -285,7 +296,7 @@
     padding: 10px 0;
     font-size: 14px;
     color: #333;
-    background-color: #f0f0f0;
+    background-color: #CCC;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -558,6 +569,7 @@
   background-color: rgba(0, 0, 0, 0.5);
 }
 .pay-account-modal-content {
+  border-radius: 10px;
   background-color: white;
   margin: 25% auto;
   padding: 20px;
@@ -568,10 +580,10 @@
 .pay-account-modal-header {
 }
 .pay-account-modal-body button{
-  margin: 0;
-  padding: 1px
+/*   margin: 0; */
+/*   padding: 1px */
+	background-color: var(--primary);
 }
-
 
 .pay-account-modal-content h2 {
 	font-size: 1.1em;
@@ -589,4 +601,19 @@
 .pay-account-modal-close:focus {
   color: black;
   text-decoration: none;
+}
+
+
+.account-select {
+	
+}
+
+.pay-account-modal-content .input-label {
+	width: 100%;
+    padding: 8px;
+    margin: auto;
+    margin-top: 7px;
+    border-radius: inherit;
+    border: none;
+    border-bottom: 1px solid #ccc;	
 }

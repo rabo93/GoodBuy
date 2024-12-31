@@ -172,6 +172,7 @@ public class PayController {
 			
 		// PayService - getAccountDetail() 메서드 호출하여 핀테크 계좌 잔액조회 요청
 		Map<String, String> accountDetail = service.getAccountDetail(map);
+//		System.out.println("getAccountDetail 잔액조회 뭐뭐 나오나? " + accountDetail);
 			
 		// ----------------------------------------------------------------------
 		// API 응답코드(rsp_code)가 "A0000" 이 아닐 경우 요청 처리 실패이므로
@@ -187,6 +188,8 @@ public class PayController {
 		model.addAttribute("accountDetail", accountDetail);
 		model.addAttribute("account_holder_name", map.get("account_holder_name"));
 		model.addAttribute("account_num_masked", map.get("account_num_masked"));
+		
+//		 System.out.println("PayConroller + 출금이체 잔액(wd_limit_remain_amt) 얼마?? " + withdrawResult.get("wd_limit_remain_amt"));
 		
 //		return "redirect:/pay_account_detail";
 		return "pay/pay_account_detail";
@@ -245,7 +248,7 @@ public class PayController {
 		
 		// 출금이체 성공 시 결과를 DB에 저장
 		 service.registWithdrawResult(withdrawResult);
-		
+		 
 //		// 출금이체 결과 정보 Map 객체 중 api_tran_id 값을 Model에 저장
 		model.addAttribute("bank_tran_id", withdrawResult.get("bank_tran_id"));
 		
@@ -305,7 +308,89 @@ public class PayController {
 		Map<String, String> depositResult = service.getDepositResult(bank_tran_id);
 		model.addAttribute("depositResult", depositResult);
 		
-
 		return "pay/pay_deposit_result";
 	}
+	
+	// 사용자간(P2P) 계좌이체(송금) = 출금이체 -> 입금이체 연속으로 요청
+	@LoginCheck(memberRole = MemberRole.USER)
+	@PayTokenCheck
+	@PostMapping("PayTransfer")
+	public String payTransfer(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
+		PayToken senderToken = (PayToken)session.getAttribute("token");
+
+		System.out.println("senderToken 토큰에 뭐 들어있나 확인!!" + senderToken);
+		
+		// 이체에 필요한 사용자 계좌(입금받는 상대방) 관련 정보(토큰) 조회
+		PayToken receiverToken = service.getPayTokenInfo((String)map.get("receiver_id"));
+		log.info(">>>>>>>> 상대방(입금받는사람) 토큰 정보 : " + receiverToken);
+		log.info(">>>>>>>> 자신(송금하는사람) 토큰 정보 : " + senderToken);
+		
+		// 수신자(상대방)의 토큰이 존재하지 않을 경우(= 계좌 등록이 되어있지 않음 등)
+		if(receiverToken == null || receiverToken.getAccess_token() == null) {
+			model.addAttribute("msg", "상대방 계좌 정보가 존재하지 않습니다!");
+			return "result/fail";
+		}
+		
+		map.put("receiverToken", receiverToken);
+		map.put("senderToken", senderToken);
+
+		// 송금인과 수신인의 계좌 정보 조회
+		// => 리턴타입 : Map<String, String>
+		Map<String, String> senderAccount = service.getPayAccountInfo(senderToken.getUser_seq_no());
+		Map<String, String> receiverAccount = service.getPayAccountInfo(receiverToken.getUser_seq_no());
+		
+		// 각 계좌정보도 Map 객체(map)에 추가
+		map.put("senderAccount", senderAccount);
+		map.put("receiverAccount", receiverAccount);
+		
+		log.info(">>>>>>>> 송금 요청 정보 : " + map);
+
+		// PayService - transfer() 메서드 호출하여 송금 작업 요청
+		Map<String, Object> transferResult = service.transfer(map);
+		
+		// 송금 요청 결과에 따른 처리
+		// 1) 출금이체결과 또는 입금이체결과 객체가 null 일 경우
+		// 2) 출금이체결과의 "rsp_code" 값이 "A0000" 이 아닐 경우
+		// 3) 입금이체결과의 "rsp_code" 값이 "A0000" 이 아닐 경우
+		Map<String, String> withdrawResult = (Map<String, String>)transferResult.get("withdrawResult");
+		Map<String, Object> depositResult = (Map<String, Object>)transferResult.get("depositResult");
+		
+		if(withdrawResult == null || depositResult == null) {
+			model.addAttribute("msg", "송금 과정에서 시스템 오류 발생!\\n관리자에게 문의바랍니다.");
+			return "result/fail";
+		} else if(!withdrawResult.get("rsp_code").equals("A0000")) {
+			model.addAttribute("msg", withdrawResult.get("rsp_message") + "(" + withdrawResult.get("bank_rsp_message") + ")");
+			return "result/fail";
+		} else if(!depositResult.get("rsp_code").equals("A0000")) {
+			model.addAttribute("msg", depositResult.get("rsp_message") + "(" + depositResult.get("bank_rsp_message") + ")");
+			return "result/fail";
+		}
+		
+		log.info(">>>>> 이체결과 : " + transferResult);
+		
+		// DB 저장과정 생략(편하게 하려면)
+		session.setAttribute("transferResult", transferResult);
+		
+		return "redirect:/PayTransferResult";
+	}
+	
+	// P2P 송금(이체) 결과 뷰페이지 처리
+	@GetMapping("PayTransferResult")
+	public String payTransferResult(HttpSession session, Model model) {
+		// 세션에 저장된 이체결과객체 (transferResult) 꺼내기
+		Map<String, Object> transferResult =(Map<String, Object>)session.getAttribute("transferResult");
+		
+		// 세션에서 객체 꺼낸 후 세션내의 객체는 제거
+		session.removeAttribute("ransferResult"); // 마치 세션을 리퀘스트 처럼 사용함.
+		// 포워딩은 리퀘스트처럼하는데 라디이렉트는 다음페이지에 유지가 안됨. 그래서 디비에서 갖고오거나 세션에담되 없애면 됨.
+		
+		// 이체 결과 객체를 모델 객체에 저장
+		model.addAttribute("transferResult", transferResult);
+		
+		return "pay/pay_transfer_result";
+		
+	}
+    
+	
+	
 }

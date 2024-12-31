@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.itwillbs.goodbuy.handler.PayApiClient;
@@ -127,6 +128,54 @@ public class PayService {
 	public String getMemIdFromToken(String id) {
 		return mapper.selectMemIdFromToken(id);
 	}
+
+	// =====================================================================
+	@Value("${bank.client_use_code}")
+	private String client_use_code;
+	
+	public Map<String, Object> transfer(Map<String, Object> map) {
+		// 출금과 입금을 하나의 요청으로 취급하기 위해 bank_tran_id 값 생성
+		// ---------------------------------------------------------------
+		// BankApiClient - requestWithdrawForTransfer() 메서드 호출하여 출금이체 요청
+		Map<String, String> withdrawResult = payApiClient.requestWithdrawForTransfer(map);
+		log.info(">>>>>>>>>>>  송금(출금)결과" + withdrawResult);
+
+		
+		
+		
+		
+		
+		
+		
+		Map<String, Object> transferResult = new HashMap<String, Object>();
+		transferResult.put("withdrawResult", withdrawResult);
+		
+		// 출금이체 성공시에만 입금이체 작업 수행
+		if(withdrawResult.get("rsp_code").equals("A0000")) {
+			PayToken adminToken = mapper.selectPayTokenInfo("admin");
+			map.put("adminToken", adminToken);
+			
+			// PayApiClient - requestDepositForTransfer() 메서드 호출하여 입금이체 요청
+			Map<String, Object> depositResult =  payApiClient.requestDepositForTransfer(map);
+			log.info(">>>>>>>>>>>  송금(입금)결과" + depositResult);
+			
+			// 출금이체 성공/실패 상관없이 결과를 Map 객체에 저장
+			transferResult.put("depositResult", depositResult);
+			
+			// 입금이체 실패 시
+			if(!depositResult.get("rsp_code").equals("A0000")) {
+				// 출금이체를 되돌려야하므로 아이티윌(이용기관) -> 출금이체계좌로 다시 입금이체 필요(생략)
+			}
+		}
+		
+		return transferResult;
+	}
+	// DB - 사용자 계좌정보 조회
+	public Map<String, String> getPayAccountInfo(String user_seq_no) {
+		return mapper.selectPayAccountInfo(user_seq_no);
+	}
+
+
 
 
 	

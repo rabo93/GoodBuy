@@ -54,8 +54,9 @@
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 				<div class="goodpay-container">
-			        <!-- 페이지 제목 -->
-			        <h2 class="page-title">굿페이 > 충전</h2>
+			        
+			        
+			        
 			
 			        <!-- 계좌 선택 -->
 			        <div class="account-dropdown">

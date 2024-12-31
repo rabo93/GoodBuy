@@ -69,9 +69,16 @@ public interface AdminMapper {
 	
 	//---------------------------------------------------------
 	// Faq 목록 조회
-	List<FaqVO> selectFaqList();
+	List<Map<String, Object>> selectFaqList(@Param("start") int start, 
+											@Param("length") int length,
+											@Param("searchValue") String searchValue);
+	// Faq 컬럼 수 조회
+	int selectFaqTotal();
+	
+	// FAQ 검색 컬럼 수 조회
+	int selectFaqFiltered(String searchValue);
 
-
-
+	// Faq 수정
+	int updateFaqInfo(FaqVO faq);
 
 }

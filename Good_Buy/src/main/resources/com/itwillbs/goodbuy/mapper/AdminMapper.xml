@@ -66,7 +66,7 @@
      	SELECT COUNT(*)
 		  FROM COMMONCODETYPE M 
 		  JOIN COMMONCODE S
-		    ON M.CODETYPE_ID = S.CODETYPE_ID
+		  ON M.CODETYPE_ID = S.CODETYPE_ID
      </select>
      
      <!-- 공통코드 검색 컬럼 수 조회 - SELECT -->
@@ -237,5 +237,49 @@
      	DELETE FROM MEMBER
      	 WHERE MEM_ID = #{mem_id}
      </delete>
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     <!-- ************************************************************* -->
+     <!-- FAQ 목록 가져오기 -->
+	<select id="selectFaqList">
+		SELECT 
+			FAQ_ID
+			,FAQ_SUBJECT
+		    , FAQ_CONTENT
+		    , FAQ_CATE
+		FROM FAQ
+		WHERE 1 = 1
+		 <if test="searchValue != null">
+		 	AND FAQ_SUBJECT LIKE CONCAT('%', #{searchValue}, '%')
+		 	OR FAQ_CONTENT LIKE CONCAT('%', #{searchValue}, '%')
+		 </if>
+		 LIMIT
+		 	#{start}
+		 	, #{length}
+	</select>
+    
+     <!-- FAQ 컬럼 수 조회 - SELECT -->
+     <select id="selectFaqTotal" resultType="int">
+     	SELECT COUNT(*)
+     	FROM FAQ
+     </select>
+     
+     <!-- FAQ 검색 컬럼 수 조회 - SELECT -->
+     <select id="selectFaqFiltered" resultType="int">
+     	SELECT COUNT(*)
+		  FROM FAQ
+		 WHERE 1 = 1
+		 <if test="searchValue != null">
+		 	  AND FAQ_SUBJECT LIKE CONCAT('%', #{searchValue}, '%')
+		 	   OR FAQ_CONTENT LIKE CONCAT('%', #{searchValue}, '%')
+		 </if>
+     </select>
      
 </mapper>

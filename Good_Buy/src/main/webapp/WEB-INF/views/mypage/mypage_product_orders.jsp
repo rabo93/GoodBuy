@@ -12,225 +12,179 @@
 
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
-<!-- default -->
+<!-- 기본 CSS 및 JS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/default.css">
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.7.1.js"></script>
-
-<!-- font-awesome -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/fontawesome/all.min.css" />
 <script src="${pageContext.request.contextPath}/resources/fontawesome/all.min.js"></script>
 
-<!-- ******************* 아래 CSS와 JS는 페이지별로 알맞게 Import 해주세요 ****************** -->
-<!-- CSS for Page -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
-
-<!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
-
 </head>
+
 <body>
-	<header>
-		<jsp:include page="/WEB-INF/views/inc/header.jsp"></jsp:include>
-	</header>
-	<main>
-		<section class="wrapper">
-			<div class="page-inner">
-				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
-				<!-- -->
-				<h2 class="page-ttl">마이페이지</h2>
-				<section class="my-wrap">
-					<aside class="my-menu">
-						<h3>거래 정보</h3>
-						<a href="MyStore">나의 상점</a>
-						<a href="GoodPay">굿페이</a>
-						<a href="MyOrder" class="active">구매내역</a>
-						<a href="MySales">판매내역</a>
-						<h3>나의 정보</h3>
-						<a href="MyInfo">계정정보</a>
-						<a href="MyWish">관심목록</a>
-						<a href="MyReview">나의 후기</a>
-						<a href="MySupport">1:1문의내역</a>
-						<a href="">나의 광고</a>
-					</aside>
+    <header>
+        <jsp:include page="/WEB-INF/views/inc/header.jsp"></jsp:include>
+    </header>
+    
+    <main>
+        <section class="wrapper">
+            <div class="page-inner">
+                <h2 class="page-ttl">마이페이지</h2>
+                
+                <section class="my-wrap">
+                    <aside class="my-menu">
+                        <h3>거래 정보</h3>
+                        <a href="MyStore">나의 상점</a>
+                        <a href="GoodPay">굿페이</a>
+                        <a href="MyOrder" class="active">구매내역</a>
+                        <a href="MySales">판매내역</a>
+                        <h3>나의 정보</h3>
+                        <a href="MyInfo">계정정보</a>
+                        <a href="MyWish">관심목록</a>
+                        <a href="MyReview">나의 후기</a>
+                        <a href="MySupport">1:1문의내역</a>
+                    </aside>
 
-					<div class="my-container">
-						<div class="contents-ttl">
-							<h3>구매내역<small>(총 <span>${orderCount}</span>건)</small></h3>
-							<div class="product-list">
-							<c:choose>
-								<c:when test="${empty order}">
-									<ul>
-										<li>구매내역이 없습니다.</li>
-									</ul>
-								</c:when>
-								<c:otherwise>
-									<c:forEach var="product" items="${order}">
-										<li class="product-card">
-													<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" height="180px"/>
-													<div class="card-info">
-														<div class="category">
-															<span>${product.product_category}</span>
-															<span class="type">직거래</span>
-														</div>
-														<div class="ttl">
-															<c:choose>
-																<c:when test="${product.product_status == 3 }">
-																	[거래완료]
-																</c:when>
-																<c:otherwise>
-																</c:otherwise>
-															</c:choose>
-															${product.product_title}
-														</div>
-														<div class="price">
-															<fmt:formatNumber  value="${product.product_price}" type="number" pattern="#,###" />원
-														</div>
-														<div class="card-row">
-															<span class="add">${product.product_trade_adr1 }</span>
-															<span class="name">${product.mem_nick}</span>
-														</div>
-															<button id="open-modal">후기 작성하기📮</button>
-													</div>
-												</li>
-									</c:forEach>
-								</c:otherwise>
-							</c:choose>
-						</div>
-						</div>
-					</div>
-				</section>
-				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
-			</div>
-		</section>
-	</main>
-	<footer>
-		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
-	</footer>
-	
-	<!-- 후기작성 모달창 -->
-	<div id="review-modal" class="modal-overlay" style="display: none;">
-		<c:forEach var="product" items="${order}">
-			<div class="modal-content">
-				<h2 id="reviewInfo"
-	    			data-product-id="${product.product_id}"
-	   				data-title="${product.product_title}">
-	   				 ${product.mem_nick}님께 구매한 [${product.product_title}]
-	   			</h2>
-				<h2>후기 보내기📮</h2>
-				<br>
-				<textarea rows="" cols="" id="review_content" placeholder="후기를 작성해주세요." name="review_content"></textarea>
-				<br>
-				<button id="close-modal">닫기</button>
-				<button id="submit-review">작성완료</button>
-			</div>
-		</c:forEach>
-	</div>
-	
-	<script type="text/javascript">
-		$(document).ready(function () {
-			$("#open-modal").click(function () {
-				$("#review-modal").fadeIn(300);
-			});
-			$("#close-modal").click(function () {
-				$("#review-modal").fadeOut(300);
-			});
-			
-			// 모달 바깥 클릭 시 닫기 (옵션)
-		    $(window).click(function (e) {
-		        if ($(e.target).is("#review-modal")) {
-		            $("#review-modal").fadeOut(300);
-		        }
-		    });
-			
-			$("#submit-review").click(function () {
-				const reviewText = $("#review_content").val();
-				const productId = $("#reviewInfo").data("product-id");
-				const productTitle = $("#reviewInfo").data("title");
-				
-				if(!reviewText.trim()){
-					alert("후기를 작성해주세요!");
-					return;
-				}
-				console.log("내용"+reviewText+", 상품이름"+productTitle+", 상품번호"+productId);
-			$.ajax({
-				url : "MyReviewText",
-				type : "POST",
-				contentType : "application/json",
-				data: JSON.stringify({
-	                review: reviewText,
-	                product_title: productTitle,  // 상품 제목 자동 전송
-	                product_id: productId  // 상품 번호
-	            }),
-				success : function (response) {
-					alert("작성하신 후기가 전달되었습니다!");
-					$("#review-modal").fadeOut(300);
-					$("#review-text").val("");  // 입력창 초기화
-				},
-				error : function () {
-					alert("후기작성에 실패했습니다.//n다시 등록해주세요.");
-				}
-				
-			});
-		});
-			
-	});
-	
-	
-	</script>
-	
-<!-- <div class="modal" id="writeReview"> -->
-<!--       <div class="modal-dim" onclick="hideModal('writeReview')"></div> -->
-<!--       <div class="modal-layer"> -->
-<!--         <div class="modal-hd"> -->
-<!-- 			수강평 등록하기 -->
-<!--         </div> -->
-<!--         <button class="modal-close" onclick="hideModal('writeReview')"><i class="fa-solid fa-xmark"></i></button> -->
-<!--         <div class="modal-con"> -->
-<!--         	<form id="review_write_frm" action="MyReviewWrite" method="post"> -->
-<%--         		<input type="hidden" name="mem_id" value="${sessionScope.sId}"> --%>
-<!--         		<input type="hidden" id="course_id" name="class_id"> -->
-<!-- 	        	별점 -->
-<!-- 	        	<section class="course-rating"> -->
-<!-- 				    <label class="rating-lab rating-lab-full" for="star01"> -->
-<!-- 				        <input type="radio" id="star01" class="rating-input" name="review_score" value="1"> -->
-<!-- 				        <span class="star-icon"></span> -->
-<!-- 				    </label> -->
-<!-- 				    <label class="rating-lab rating-lab-full" for="star02"> -->
-<!-- 				        <input type="radio" id="star02" class="rating-input" name="review_score" value="2"> -->
-<!-- 				        <span class="star-icon"></span> -->
-<!-- 				    </label> -->
-<!-- 				    <label class="rating-lab rating-lab-full" for="star03"> -->
-<!-- 				        <input type="radio" id="star03" class="rating-input" name="review_score" value="3"> -->
-<!-- 				        <span class="star-icon"></span> -->
-<!-- 				    </label> -->
-<!-- 				    <label class="rating-lab rating-lab-full" for="star04"> -->
-<!-- 				        <input type="radio" id="star04" class="rating-input" name="review_score" value="4"> -->
-<!-- 				        <span class="star-icon"></span> -->
-<!-- 				    </label> -->
-<!-- 				    <label class="rating-lab rating-lab-full" for="star05"> -->
-<!-- 				        <input type="radio" id="star05" class="rating-input" name="review_score" value="5"> -->
-<!-- 				        <span class="star-icon"></span> -->
-<!-- 				    </label> -->
-<!-- 	        	</section> -->
-<!-- 	        	// 별점 -->
-<!-- 	        	수강평 -->
-<!--         		<section class="review-write"> -->
-<!--         			<ul class="noti"> -->
-<!--         				<li>공개 게시판이므로 소중한 개인정보를 남기지 않도록 해주세요.</li> -->
-<!--         				<li>사적인 상담 및 광고성, 욕설, 비방, 도배 등 부적절한 글은 무통보 삭제처리될 수 있습니다.</li> -->
-<!--         			</ul> -->
-<!--         			<textarea class="rev-con" name="review_content" rows="6" placeholder="수강후기를 남겨주세요"></textarea> -->
-<!--         		</section> -->
-<!--         	</form> -->
-<!--         </div> -->
-<!--         <div class="modal-ft"> -->
-<!--           <button class="reset" onclick="hideModal('writeReview')">취소</button> -->
-<!--           <button type="submit" form="review_write_frm" class="active" onclick="hideModal('writeReview')">등록하기</button> -->
-<!--         </div> -->
-<!--       </div> -->
-<!--     </div> -->
+                    <div class="my-container">
+                        <div class="contents-ttl">
+                            <h3>구매내역 <small>(총 <span>${orderCount}</span>건)</small></h3>
+                            <div class="product-list">
+                                <c:choose>
+                                    <c:when test="${empty order}">
+                                        <ul>
+                                            <li>구매내역이 없습니다.</li>
+                                        </ul>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:forEach var="product" items="${order}">
+                                            <li class="product-card">
+                                                <img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg"
+                                                     class="card-thumb" alt="thumbnail" height="180px"/>
+                                                <div class="card-info">
+                                                    <div class="category">
+                                                        <span>${product.product_category}</span>
+                                                        <span class="type">직거래</span>
+                                                    </div>
+                                                    <div class="ttl">
+                                                        <c:if test="${product.product_status == 3}">
+                                                            [거래완료]
+                                                        </c:if>
+                                                        ${product.product_title}
+                                                    </div>
+                                                    <div class="price">
+                                                        <fmt:formatNumber value="${product.product_price}" type="number" pattern="#,###" />원
+                                                    </div>
+                                                    <div class="card-row">
+                                                        <span class="add">${product.product_trade_adr1}</span>
+                                                        <span class="name">${product.mem_nick}</span>
+                                                    </div>
+                                                    
+                                                    <!-- 후기 작성하기 버튼 (상품 정보 포함) -->
+                                                    <button class="open-modal-btn"
+                                                        data-product-id="${product.product_id}"
+                                                        data-title="${product.product_title}"
+                                                        data-buyer="${product.mem_nick}">
+                                                        후기 작성하기📮 >>>${product.product_id}
+                                                    </button>
+                                                </div>
+                                            </li>
+                                        </c:forEach>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
+    </footer>
 
+    <!-- 후기 작성 모달 (반복문 바깥에 모달 하나만 사용) -->
+    <div id="review-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>
+                <span id="buyerName"></span>님께 구매한 [<span id="productTitle"></span>]<br>후기 보내기📮
+            </h2>
+            <input type="hidden" id="modal_product_id"> <!-- id저장용 hidden -->
+            <textarea rows="4" cols="50" id="review_content" placeholder="후기를 작성해주세요."></textarea>
+            <br>
+            <button id="close-modal">닫기</button>
+            <button id="submit-review">작성완료</button>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        // 후기 작성하기 버튼 클릭 이벤트
+        $(".open-modal-btn").click(function () {
+            const productId = $(this).data("product-id");
+            const productTitle = $(this).data("title");
+            const buyerName = $(this).data("buyer");
+
+            // 모달에 데이터 주입
+            $("#buyerName").text(buyerName);
+            $("#productTitle").text(productTitle);
+            $("#modal_product_id").val(productId);
+
+            // 현재 클릭된 버튼 저장 (비활성화용)
+            $(this).addClass("clicked-review-btn");
+
+            $("#review-modal").fadeIn(300);
+        });
+
+        // 모달 닫기
+        $("#close-modal").click(function () {
+            $("#review-modal").fadeOut(300);
+        });
+
+        // 후기 제출 이벤트
+        $("#submit-review").click(function () {
+            const reviewText = $("#review_content").val();
+            const productId = $("#modal_product_id").val();
+            const productTitle = $("#productTitle").text();
+
+            if (!reviewText.trim()) {
+                alert("후기를 작성해주세요!");
+                return;
+            }
+
+            // 데이터 확인용 콘솔 출력
+            console.log("리뷰 내용: " + reviewText);
+            console.log("상품 ID: " + productId);
+            console.log("상품 제목: " + productTitle);
+
+            // Ajax로 데이터 전송
+            $.ajax({
+                url: "MyReviewText",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    review: reviewText,
+                    product_title: productTitle,
+                    product_id: productId
+                }),
+                success: function () {
+                    alert("후기가 등록되었습니다!");
+                    $("#review-modal").fadeOut(300);
+                    $("#review_content").val("");
+
+                    // 버튼 비활성화 (또는 숨김 처리)
+                    $(".clicked-review-btn").prop("disabled", true).text("후기 작성 완료").removeClass("open-modal-btn");
+                },
+                error: function () {
+                    alert("후기 등록에 실패했습니다.");
+                }
+            });
+        });
+    });
+
+</script>
 </body>
 </html>

@@ -25,8 +25,6 @@
 <!-- CSS for Page -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
-<!-- Include stylesheet -->
-<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
 
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
@@ -80,11 +78,7 @@
 											<label>상점 소개</label>
 											<input type="hidden" id = "mem_id" value="${member.mem_id}"> 
 		<%-- 									<input type="text" name="mem_intro" id="mem_intro" value="${member.mem_intro}"> --%>
-													<textarea rows="5" cols="50" name="mem_intro" id="mem_intro">${member.mem_intro}</textarea>
-											<!-- Create the editor container -->
-		<!-- 									<div id="editor"  name="mem_intro"> -->
-		<!-- 									  <p>상점소개를 입력해주세요	</p> -->
-		<!-- 									</div> -->
+													<textarea rows="5" cols="50" name="mem_intro" id="mem_intro">${storeIntro.mem_intro}</textarea>
 											<div>
 												<input type="submit" value="저장"> 
 											</div>
@@ -202,21 +196,5 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
-	<!-- Include the Quill library -->
-	<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-	
-	<!-- Initialize Quill editor -->
-	<script>
-	  const quill = new Quill('#editor', {
-	    theme: 'snow'
-	  });
-	</script>
-	
-	<script type="text/javascript">
-	
-	
-	
-	</script>
-
 </body>
 </html>

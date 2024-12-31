@@ -20,6 +20,11 @@ public class MyReviewService {
 		return mapper.selectReviewCount(id);
 	}
 	
+	//리뷰 등록 저장
+	public int saveReviewData(String id, String review, String productTitle, String productId) {
+		return mapper.insertReview(id,review,productTitle,productId);
+	}
+	
 	
 	
 }

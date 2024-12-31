@@ -113,10 +113,14 @@
 	<div id="review-modal" class="modal-overlay" style="display: none;">
 		<c:forEach var="product" items="${order}">
 			<div class="modal-content">
-				<h2> ${product.mem_nick}님께 구매한 [${product.product_title}]</h2>
-<!-- 				<h2>후기 작성하기</h2> -->
+				<h2 id="reviewInfo"
+	    			data-product-id="${product.product_id}"
+	   				data-title="${product.product_title}">
+	   				 ${product.mem_nick}님께 구매한 [${product.product_title}]
+	   			</h2>
+				<h2>후기 보내기📮</h2>
 				<br>
-				<textarea rows="" cols="" id="review-text" placeholder="후기를 작성해주세요."></textarea>
+				<textarea rows="" cols="" id="review_content" placeholder="후기를 작성해주세요." name="review_content"></textarea>
 				<br>
 				<button id="close-modal">닫기</button>
 				<button id="submit-review">작성완료</button>
@@ -128,8 +132,50 @@
 		$(document).ready(function () {
 			$("#open-modal").click(function () {
 				$("#review-modal").fadeIn(300);
-			})
-		})
+			});
+			$("#close-modal").click(function () {
+				$("#review-modal").fadeOut(300);
+			});
+			
+			// 모달 바깥 클릭 시 닫기 (옵션)
+		    $(window).click(function (e) {
+		        if ($(e.target).is("#review-modal")) {
+		            $("#review-modal").fadeOut(300);
+		        }
+		    });
+			
+			$("#submit-review").click(function () {
+				const reviewText = $("#review_content").val();
+				const productId = $("#reviewInfo").data("product-id");
+				const productTitle = $("#reviewInfo").data("title");
+				
+				if(!reviewText.trim()){
+					alert("후기를 작성해주세요!");
+					return;
+				}
+				console.log("내용"+reviewText+", 상품이름"+productTitle+", 상품번호"+productId);
+			$.ajax({
+				url : "MyReviewText",
+				type : "POST",
+				contentType : "application/json",
+				data: JSON.stringify({
+	                review: reviewText,
+	                product_title: productTitle,  // 상품 제목 자동 전송
+	                product_id: productId  // 상품 번호
+	            }),
+				success : function (response) {
+					alert("작성하신 후기가 전달되었습니다!");
+					$("#review-modal").fadeOut(300);
+					$("#review-text").val("");  // 입력창 초기화
+				},
+				error : function () {
+					alert("후기작성에 실패했습니다.//n다시 등록해주세요.");
+				}
+				
+			});
+		});
+			
+	});
 	
 	
 	</script>

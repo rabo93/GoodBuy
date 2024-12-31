@@ -15,41 +15,44 @@ document.addEventListener("DOMContentLoaded", function(){
 			type: "POST",
 			dataType : "JSON",
 			dataSrc: function (res) {
-				const data = res;
+				const data = res.faqList; // faqList 배열만 가져오기
+//				console.log(data);
+				
 				// FAQ_ID(PK)가 아닌 테이블 컬럼 번호 계산
 				for (let i = 0; i < data.length; i++) {
 					data[i].listIndex = i + 1;
 //					console.log(data[i]);
 				}
-				return res;
+				return data;
 			},
 		},
-		columnDefs: [
+		columnDefs: [ { targets: 0, orderable: false }
+//		columnDefs: [ 
       	],
 		columns: [
 			// defaultContent 는 기본값 설정, 데이터 없는 컬럼일 경우 오류나기 때문에 널스트링 처리 해주어야 함
 			// 등록 시 유효성 체크를 한다면 defaultContent 값 설정 필요 없음!
             { title: "No.", data: "listIndex" },
-            { title: "제목", data : "FAQ_SUBJECT", defaultContent: "",  orderable: false },
-            { title: "내용", data : "FAQ_CONTENT", defaultContent: "", orderable: false, },
+            { title: "제목", data : "FAQ_SUBJECT", defaultContent: "",  orderable: false, searchable: true, },
+            { title: "내용", data : "FAQ_CONTENT", defaultContent: "", orderable: false, searchable: true, },
             { 
 				title: "FAQ카테고리", 
 				data : "FAQ_CATE", 
 				defaultContent: "운영정책", 
-				orderable: false,
+				orderable: false,	// 정렬 비활성화
+				searchable: false, // 검색 비활성화
 				className : "dt-center", 
 				render : function(data, type, row) {
 					if(!data) {
 						return "";
-					} else if(data == "운영정책"){
-						return "<span class='faq-cate1'>운영정책</span>"
-					} else if(data == "회원/계정"){
-						return "<span class='faq-cate2'>회원/계정</span>"
-					} else if(data == "전용페이"){
-						return "<span class='faq-cate3'>전용페이</span>"
-					} else if(data == "기타"){
-						return "<span class='faq-cate4'>기타</span>"
+					} 
+					switch(data) {
+						case 1: return "<span class='faq-cate1'>운영정책</span>";
+						case 2: return "<span class='faq-cate2'>회원/계정</span>";
+						case 3: return "<span class='faq-cate2'>회원/계정</span>";
+						case 4: return "<span class='faq-cate4'>기타</span>";
 					}
+					
 				}
              },
             {
@@ -61,11 +64,28 @@ document.addEventListener("DOMContentLoaded", function(){
 				render : function(data, type, row) {
 //					console.log(data.mem_id);
 					return `
-						<button class="btn btn-primary edit-btn" onclick="location.href='AdmMemberModify?mem_id=${data.mem_id}'">수정</button>
-						<button class="btn btn-primary delete-btn" data-mem-id="${data.mem_id}">삭제</button>
+						<button class="btn btn-primary edit-btn" onclick="location.href='AdmFaqModify?faq_id=${data.faq_id}'">수정</button>
+						<button class="btn btn-primary delete-btn" data-faq-id="${data.faq_id}">삭제</button>
 					`;
 				}
-			}
+			},
+			{ 	
+				title : "사용여부",
+				data : "LIST_STATUS",
+				orderable: false, // 정렬 비활성화
+            	searchable: false, // 검색 비활성화
+				render: function(data, type, row) {
+					let isChecked = data == 1 ? "checked" : "";
+					let isUsed = data == 1 ? "사용함" : "사용안함";
+               	 return `
+               	 	<div class="form-check form-switch">
+		        		<input type="hidden" value="${data}" name="LIST_STATUS">
+						<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" ${isChecked} onClick="return false;">
+						<label class="form-check-label" for="flexSwitchCheckDefault">${isUsed}</label>
+					</div>
+               	 `;
+            	},
+            }
         ],
 		serverSide : true, // 서버사이드 처리
 		processing : true,  // 서버와 통신 시 응답을 받기 전이라는 ui를 띄울 것인지 여부
@@ -87,6 +107,21 @@ document.addEventListener("DOMContentLoaded", function(){
             },
         },
 	});
+	
+	// 사용여부 버튼 값 업데이트
+	$(document).on("change", ".form-check-input", function() {
+	    const switchBtn = this;
+	    const hiddenInput = switchBtn.parentElement.querySelector('input[type="hidden"][name="LIST_STATUS"]');
+	    const switchLabel = switchBtn.nextElementSibling;
+	
+	    if (hiddenInput) {
+	        hiddenInput.value = switchBtn.checked ? 1 : 2;
+		    switchLabel.innerText =  switchBtn.checked ? "사용함" : "사용안함";
+	    } else {
+	        console.warn("사용여부 버튼이 존재하지 않습니다.");
+	    }
+	});
+	
 
 });
 

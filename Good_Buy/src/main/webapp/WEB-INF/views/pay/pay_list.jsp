@@ -14,6 +14,9 @@
 <!-- default -->
 <link rel="stylesheet" href="../../resources/css/common.css">
 <link rel="stylesheet" href="../../resources/css/default.css">
+
+
+
 <script src="../../resources/js/jquery-3.7.1.js"></script>
 
 <!-- font-awesome -->
@@ -22,11 +25,13 @@
 
 <!-- ******************* 아래 CSS와 JS는 페이지별로 알맞게 Import 해주세요 ****************** -->
 <!-- CSS for Page -->
-<link rel="stylesheet" href="../../resources/css/product.css">
-<link rel="stylesheet" href="../../resources/css/pay.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/product.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pay.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
 <!-- JS for Page -->
-<script src="../../resources/js/product.js"></script>
-<script src="../../resources/js/pay.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/product.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/pay.js"></script>
 
 
 </head>
@@ -38,112 +43,170 @@
 		<section class="wrapper">
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
-                <h2 class="page-title">굿페이 > 홈</h2>
+                <h2 class="page-ttl">마이페이지</h2>
+
+				<section class="my-wrap">
+					<aside class="my-menu">
+						<h3>거래 정보</h3>
+						<a href="MyStore">나의 상점</a>
+						<a href="GoodPay" class="active">굿페이</a>
+						<a href="MyOrder">구매내역</a>
+						<a href="MySales">판매내역</a>
+						<h3>나의 정보</h3>
+						<a href="MyInfo">계정정보</a>
+						<a href="MyWish">관심목록</a>
+						<a href="MyReview">나의 후기</a>
+						<a href="MySupport">1:1문의내역</a>
+						<a href="">나의 광고</a>
+					</aside>
                 
-				 <div class="goodpay-container">
-			        <!-- 상단: 계좌 정보 -->
-			        <div class="account-box">
-			        	<div class="info">
-				        	<h1><i class="fa-solid fa-money-bill"></i>&nbsp;&nbsp;굿페이</h1>
-			            	<button class="my-account" onclick="location.href='MyAccount'">내 계좌</button>
-			        	</div>
-			            <div class="balance">
-			                <h1>30,000원</h1>
-			                <i class="fa-solid fa-arrow-rotate-right"></i>
-			            </div>
-			            <div class="buttons">
-			                <button class="charge-btn"  onclick="openModal()">+ 충전</button>
-			                <button class="transfer-btn" onclick="location.href='pay_remit.jsp'">￦계좌송금</button>
-			                
-			                
-			                <%-- 충전버튼 모달창 --%>
-			                <div id="pay-account-modal" class="pay-account-modal">
-								<div class="pay-account-modal-content">
-									<div class="pay-account-modal-header">
-										<span class="pay-account-modal-close " onclick="closeModal()">&times;</span>
-										<h2>어느 계좌에서 충전 하시겠습니까?</h2>
-									</div>
-									<div class="pay-account-modal-body">
-										<c:forEach var="account" items="${bankUserInfo.res_list}" varStatus="status">
-											<form action="PayAccountDetail" method="POST" id="PayAccountDetail-${account.fintech_use_num}">
-											        <input type="hidden" name="fintech_use_num" value="${account.fintech_use_num}">
-											        <input type="hidden" name="account_holder_name" value="${account.account_holder_name}">
-											        <input type="hidden" name="account_num_masked" value="${account.account_num_masked}">
-											</form>
-											<a href="#" 
-											       title="${account.account_num_masked}계좌의 상세정보 보기" 
-											       data-form-id="PayAccountDetail-${account.fintech_use_num}" 
-											       onclick="submitForm(this);">
-									        <div class="linked-account">
-									            <div class="account-info">
-									                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
-									                <span class="account-number">${account.bank_name}<strong>${account.account_num_masked}</strong></span>
-									            </div>
-									            <c:choose>
-				  										<c:when test="${account.fintech_use_num eq fintech_use_num}">
-										            	<button class="primary-account-btn">대표계좌</button>
-											        </c:when>
-											        <c:otherwise>
-											    		<form action="PayRegistRepresentAccount" method="POST" id="PayRegistRepresentAccount">
-															<input type="hidden" name="fintech_use_num" value="${account.fintech_use_num}">
-															<input type="hidden" name="account_holder_name" value="${account.account_holder_name}">
-															<input type="hidden" name="account_num_masked" value="${account.account_num_masked}">
-														</form>    
-											        </c:otherwise>
-											    </c:choose>
-									        </div>
-									    </a>
-							        </c:forEach>
-								</div>
-							</div>
-			            </div>
-			        </div>
+                
+                
+                	<div class="my-container">
+						<div class="contents-ttl">
+							<h3>굿페이 메인</h3>
+							<div class="goodpay-container">
+						        <!-- 상단: 계좌 정보 -->
+						        <div class="account-box">
+						        	<div class="info">
+							        	<h1><i class="fa-solid fa-money-bill"></i>&nbsp;&nbsp;굿페이</h1>
+						            	<button class="my-account" onclick="location.href='MyAccount'">내 계좌</button>
+						        	</div>
+						            <div class="balance">
+						                <h1>30,000원</h1>
+						                <i class="fa-solid fa-arrow-rotate-right"></i>
+						            </div>
+						            <div class="buttons">
+						                <button class="charge-btn"  onclick="openModal()">+ 충전</button>
+						                <button class="transfer-btn" onclick="주소이동">￦계좌송금</button>
+						                
+						                
+						                <%-- 충전버튼 모달창 --%>
+						                <div id="pay-account-modal" class="pay-account-modal">
+											<div class="pay-account-modal-content">
+												<div class="pay-account-modal-header">
+													<span class="pay-account-modal-close " onclick="closeModal()">&times;</span>
+													<h2>굿페이 충전</h2>
+												</div>
+												<div class="pay-account-modal-body">
+													<select class="account-select"  name="searchType">
+														<c:forEach var="account" items="${bankUserInfo.res_list}" varStatus="status">
+															<option value="subject" <c:if test="${account.fintech_use_num eq fintech_use_num}">selected</c:if>>
+													                ${account.bank_name} &nbsp;&nbsp; ${account.account_num_masked}
+													           		<c:if test="${account.fintech_use_num eq fintech_use_num}">
+																		( 대표계좌 )
+																	</c:if>
+													                
+													            </div>
+															</option>
+														</c:forEach>
+													</select>
+													
+													
+													
+														<form action="PayWithdraw" method="post">
+															<input type="hidden" name="withdraw_client_fintech_use_num" value="">
+															<input type="hidden" name="withdraw_client_name" value="">
+															<div class="input-section">
+<!-- 															거래금액 <input type="text" name="tran_amt" value="5000">  -->
+												            	<input type="text" class="input-label" placeholder="금액을 입력해 주세요" id="total-amount">
+											        		</div>
+												            <div class="balance-info">굿페이 잔액: <strong>30,000 원</strong></div>
+												            <div class="amount-btns">
+													            <input type="button" class="amount-btn" onclick="addAmount(10000)" value="+ 1만원">
+													            <input type="button" class="amount-btn" onclick="addAmount(50000)" value="+ 5만원">
+													            <input type="button" class="amount-btn" onclick="addAmount(100000)" value="+ 10만원">
+													        </div>
+													        <div class="recharge-button">
+													            <button class="recharge-btn">충전하기</button>
+<!-- 																<input type="submit"  value="충전하기"  class="recharge-btn"> -->
+													        </div>
+														</form>
+													
+													
+													
+													
+<%-- 													<c:forEach var="account" items="${bankUserInfo.res_list}" varStatus="status"> --%>
+<%-- 														<form action="PayAccountDetail" method="POST" id="PayAccountDetail-${account.fintech_use_num}"> --%>
+<%-- 														        <input type="hidden" name="fintech_use_num" value="${account.fintech_use_num}"> --%>
+<%-- 														        <input type="hidden" name="account_holder_name" value="${account.account_holder_name}"> --%>
+<%-- 														        <input type="hidden" name="account_num_masked" value="${account.account_num_masked}"> --%>
+<!-- 														</form> -->
+<!-- 														<a href="#"  -->
+<%-- 														       title="${account.account_num_masked}계좌의 상세정보 보기"  --%>
+<%-- 														       data-form-id="PayAccountDetail-${account.fintech_use_num}"  --%>
+<!-- 														       onclick="submitForm(this);"> -->
+<!-- 												        <div class="linked-account"> -->
+<!-- 												            <div class="account-info"> -->
+<!-- 												                <div class="icon"><i class="fa-solid fa-building-columns"></i></div> -->
+<%-- 												                <span class="account-number">${account.bank_name}<strong>${account.account_num_masked}</strong></span> --%>
+<!-- 												            </div> -->
+<%-- 												            <c:choose> --%>
+<%-- 							  										<c:when test="${account.fintech_use_num eq fintech_use_num}"> --%>
+<!-- 													            	<button class="primary-account-btn">대표계좌</button> -->
+<%-- 														        </c:when> --%>
+<%-- 														        <c:otherwise> --%>
+<!-- 														    		<form action="PayRegistRepresentAccount" method="POST" id="PayRegistRepresentAccount"> -->
+<%-- 																		<input type="hidden" name="fintech_use_num" value="${account.fintech_use_num}"> --%>
+<%-- 																		<input type="hidden" name="account_holder_name" value="${account.account_holder_name}"> --%>
+<%-- 																		<input type="hidden" name="account_num_masked" value="${account.account_num_masked}"> --%>
+<!-- 																	</form>     -->
+<%-- 														        </c:otherwise> --%>
+<%-- 														    </c:choose> --%>
+<!-- 												        </div> -->
+<!-- 												    </a> -->
+<%-- 										        </c:forEach> --%>
+											</div>
+										</div>
+						            </div><!-- 모달창 끝 -->
+						        </div>
+						
+						        <!-- 최근 이용 내역 -->
+						        <div class="history">
+						            <h3>최근 이용내역 <a href="pay_use_list.jsp" class="see-all">전체보기 ></a></h3>
+						            <div class="history-item">
+						                <div class="icon"></div>
+						                <div class="details">
+						                    <span>쌀국수</span>
+						                    <span class="date">12.03 12:10 | 송금</span>
+						                </div>
+						                <div class="amount">-5,000원</div>
+						            </div>
+						            <div class="history-item">
+						                <div class="icon"></div>
+						                <div class="details">
+						                    <span>믹스커피</span>
+						                    <span class="date">12.03 12:10 | 송금</span>
+						                </div>
+						                <div class="amount">-15,000원</div>
+						            </div>
+						            <div class="history-item">
+						                <div class="icon"></div>
+						                <div class="details">
+						                    <span>겨울코드</span>
+						                    <span class="date">12.03 12:10 | 송금</span>
+						                </div>
+						                <div class="amount">-50,000원</div>
+						            </div>
+						            <div class="history-item">
+						                <div class="icon"></div>
+						                <div class="details">
+						                    <span>우체국 1234</span>
+						                    <span class="date">12.03 12:10 | 충전</span>
+						                </div>
+						                <div class="amount">+100,000원</div>
+						            </div>
+						        </div><!-- history -->
+						    </div><!-- account-box -->
+						</div><!-- goodpay-container -->	
+					</div>
+				</div>
+			</section><!-- my-wrap -->	
+				
+				
+				
 			
-			        <!-- 최근 이용 내역 -->
-			        <div class="history">
-			            <h3>최근 이용내역 <a href="pay_use_list.jsp" class="see-all">전체보기 ></a></h3>
-			            <div class="history-item">
-			                <div class="icon"></div>
-			                <div class="details">
-			                    <span>쌀국수</span>
-			                    <span class="date">12.03 12:10 | 송금</span>
-			                </div>
-			                <div class="amount">-5,000원</div>
-			            </div>
-			            <div class="history-item">
-			                <div class="icon"></div>
-			                <div class="details">
-			                    <span>믹스커피</span>
-			                    <span class="date">12.03 12:10 | 송금</span>
-			                </div>
-			                <div class="amount">-15,000원</div>
-			            </div>
-			            <div class="history-item">
-			                <div class="icon"></div>
-			                <div class="details">
-			                    <span>겨울코드</span>
-			                    <span class="date">12.03 12:10 | 송금</span>
-			                </div>
-			                <div class="amount">-50,000원</div>
-			            </div>
-			            <div class="history-item">
-			                <div class="icon"></div>
-			                <div class="details">
-			                    <span>우체국 1234</span>
-			                    <span class="date">12.03 12:10 | 충전</span>
-			                </div>
-			                <div class="amount">+100,000원</div>
-			            </div>
-			        </div>
-			    </div>
-				
-				
-				
-				
-				
-			
-			
-				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
+			<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 			</div>
 		</section>
 	</main>

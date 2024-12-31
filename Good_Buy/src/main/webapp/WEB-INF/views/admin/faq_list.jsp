@@ -43,31 +43,18 @@
 				<jsp:include page="/WEB-INF/views/admin/inc/top.jsp"></jsp:include>
 				<!-- End of Topbar -->
                
-                <!-- Begin Page Content -->
+                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-<!--                 	<h1 class="h3 mb-4 text-gray-800">공통코드 관리</h1> -->
 					<div class="row">
                         <div class="col-lg-12">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h5 class="m-0 font-weight-bold text-primary">공통코드 목록</h5>
+                                    <h5 class="m-0 font-weight-bold text-primary">FAQ 관리</h5>
                                 </div>
                                 <div class="card-body">
-                                	<div class="table-responsive overflow-hidden">
-		                                <table class="table table-bordered" id="codeList" width="100%" cellspacing="0">
-		                                    <thead>
-		                                        <tr>
-		                                            <th>공통코드ID</th>
-		                                            <th>공통코드명</th>
-		                                            <th>공통코드 설명</th>
-		                                            <th>상세코드ID</th>
-		                                            <th>상세코드명</th>
-		                                            <th>상세코드 설명</th>
-		                                            <th>사용여부</th>
-		                                            <th>순서</th>
-		                                            <th>관리</th>
-		                                        </tr>
-		                                    </thead>
+                                	<div class="table-responsive">
+		                                <table class="table table-bordered compact" id="faqList" width="100%" cellspacing="0">
+		                                    <thead></thead>
 		                                    <tbody></tbody>
 		                                </table>
 		                          	</div>
@@ -96,60 +83,36 @@
     </a>
     
     <!-- 수정 모달 -->
-    <div class="modal fade" id="updateCommonCodes" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal fade" id="updateMemberInfo" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 		    <div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="updateModalLabel">수정</h5>
+					<h5 class="modal-title" id="updateModalLabel">회원 수정</h5>
 					<button type="button" class="close" data-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
 				</div>
 				<div class="modal-body">
-					<form action="AdmCommoncodeModify" method="post" id="modifyForm">
-						<input type="hidden" id="oldCodetypeId" name="OLD_CODETYPE_ID">
-						<input type="hidden" id="oldCodeId" name="OLD_CODE_ID">
-						<div class="mb-1">
-							<label for="updatedCommoncodeId" class="col-form-label">공통코드ID <small class="text-primary" style="font-weight:600;">공통코드ID는 수정할 수 없습니다.</small></label>
-							<input type="text" class="form-control" name="CODETYPE_ID" id="updatedCommonCodeId" readonly>
+					<form action="AdmFaqModify" id="faqModifyForm" method="post">
+						<input type="hidden" id="faqId" name="faq_id">
+						<div class="mb-3">
+							<label class="small mb-1" for="memGrade">회원등급</label>
+							<select class="custom-select" id="memGrade" name="mem_grade">
+								<option value="일반">일반</option>
+								<option value="관리자">관리자</option>
+							</select>
 						</div>
-						<div class="mb-1">
-							<label for="updatedCommonCodeName" class="col-form-label">공통코드명</label>
-							<input type="text" class="form-control" name="CODETYPE_NAME" id="updatedCommonCodeName" required>
+						<div class="mb-3">
+							<label class="small mb-1" for="memStatus">회원상태</label>
+							<select class="custom-select" id="memStatus" name="mem_status">
+								<option value="1">정상</option>
+								<option value="2">정지</option>
+								<option value="3">탈퇴</option>
+							</select>
 						</div>
-						<div class="mb-1">
-							<label for="updatedCommonCodeDesc" class="col-form-label">공통코드 설명</label>
-							<input type="text" class="form-control" name="CODETYPE_DESC" id="updatedCommonCodeDesc" required>
-						</div>
-						<div class="mb-1">
-							<label for="updatedCodeId" class="col-form-label">상세코드ID</label>
-							<input type="text" class="form-control" name="CODE_ID" id="updatedCodeId" required>
-						</div>
-						<div class="mb-1">
-							<label for="updatedCodeName" class="col-form-label">상세코드명</label>
-							<input type="text" class="form-control" name="CODE_NAME" id="updatedCodeName" required>
-						</div>
-						<div class="mb-1">
-							<label for="updatedCodeDesc" class="col-form-label">상세코드 설명</label>
-							<input type="text" class="form-control" name="CODE_DESC" id="updatedCodeDesc" required>
-						</div>
-						<div class="row px-2">
-							<div class="w-50">
-								<label for="updatedCodeStatus" class="col-form-label">사용여부</label>
-								<div class="form-check form-switch">
-					        		<input type="hidden" id="updatedCodeStatus" name="CODE_STATUS">
-									<input class="form-check-input" type="checkbox" role="switch" id="updateFlexSwitchCheckDefault">
-									<label class="form-check-label text-center" style="width:56px" id="updateFlexSwitchCheckDefaultLab" for="updateFlexSwitchCheckDefault"></label>
-								</div>
-							</div>
-							<div class="w-50">
-								<label for="updatedCodeSeq" class="col-form-label">상세코드 순서</label>
-								<input type="number" min="1" class="form-control" name="CODE_SEQ" id="updatedCodeSeq" placeholder="순서 입력" required>
-							</div>
-						</div>
-					</form>
+                    </form>
 				</div>
 				<div class="modal-footer justify-content-center">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="modifyForm">수정하기</button>
+					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="faqModifyForm">수정하기</button>
 				</div>
 			</div>
 		</div>
@@ -171,7 +134,7 @@
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="${pageContext.request.contextPath}/resources/adm/js/code_list.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/js/faq_list.js"></script>
 
 </body>
 

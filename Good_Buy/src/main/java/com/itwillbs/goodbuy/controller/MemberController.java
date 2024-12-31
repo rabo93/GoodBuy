@@ -70,20 +70,23 @@ public class MemberController {
 	public String login(MemberVO member, Model model, HttpSession session,
 						BCryptPasswordEncoder passwordEncoder, 
 						@RequestParam(value = "rememberId", required = false) String rememberId,
-						@CookieValue(value="userId",required=false)String mem_id, 
+						@CookieValue(value="userId",required=false) String cookieId,
 						HttpServletResponse response) {
-		System.out.println("아이디 기억하기 체크@@" + rememberId); //on
-		System.out.println("가져온 쿠키아이디@@" + mem_id);
+		// 로그인 시 입력받은 ID를 우선 사용하고, 쿠키 ID는 선택적으로 사용
+	    String mem_id = (member.getMem_id() != null && !member.getMem_id().isEmpty()) 
+	                    ? member.getMem_id() 
+	                    : cookieId;
+		
+		// 아이디 기억하기 체크박스 처리
 		Cookie cookie = new Cookie("userId", member.getMem_id()); //쿠키설정
-		
-		if(rememberId != null) { //체크
-			cookie.setMaxAge(60*60*24*30);
+		if(rememberId != null) { //체크 시
+			cookie.setMaxAge(60*60*24*1); // 쿠키 유효기간 1일
 		} else {
-			cookie.setMaxAge(0);
+			cookie.setMaxAge(0); // 쿠키 삭제
 		}
-		
 		response.addCookie(cookie);
 		
+		// 로그인 처리
 		MemberVO dbMember = memberService.getMember(mem_id);
 		log.info("DB에 저장된 회원 정보 : " + dbMember);
 		
@@ -98,7 +101,7 @@ public class MemberController {
 			session.setAttribute("sNick", dbMember.getMem_nick());
 			session.setAttribute("sGrade", dbMember.getMem_grade());
 			session.setAttribute("sProfile", dbMember.getMem_profile());
-			session.setAttribute("sStore", dbMember.getMem_intro()); //상점소개
+//			session.setAttribute("sStore", dbMember.getMem_intro()); //상점소개
 			session.setMaxInactiveInterval(60 * 120);
 			
 			// [ 핀테크 엑세스토큰 정보 조회하여 세션에 저장하는 기능 추가 ]
@@ -106,7 +109,6 @@ public class MemberController {
 //			System.out.println("member 토큰 확인 : " + token);
 			session.setAttribute("token", token);
 			
-//			return "redirect:/";
 			
 			// 이전 페이지 저장 후 로그인 시 리다이렉트처리
 			if(session.getAttribute("prevURL") == null) {
@@ -359,6 +361,8 @@ public class MemberController {
 	            profileUpload.transferTo(destinationFile); // 파일 저장
 	            
 	            map.put("mem_profile", "/resources/uploads/" + fileName); // 파일 경로를 map에 추가
+	            
+//	            session.setAttribute("sProfile", member.getMem_profile());
 			} catch (IOException e) {
 	            e.printStackTrace();
 	            model.addAttribute("msg", "파일 업로드 중 오류가 발생했습니다.");

@@ -1,5 +1,11 @@
 /* 공통코드 등록 */
 document.addEventListener("DOMContentLoaded", function(){
+	// 변수 선언
+	const btnAddRow = document.querySelector("#btnAddRow");
+	const btnDeleteRow = document.querySelector("#btnDeleteRow");
+	const commoncodeForm = document.querySelector("form[name=commoncodeForm]");
+	const checkAll = document.querySelector("#checkAll");
+	
 	// 테이블 그리기
 	const codeTable = $('#commoncode').DataTable({
 		lengthChange : false,
@@ -10,12 +16,6 @@ document.addEventListener("DOMContentLoaded", function(){
 		responsive: true,
 		fixedHeader: true,
 	});
-	
-	// 변수 선언
-	const btnAddRow = document.querySelector("#btnAddRow");
-	const btnDeleteRow = document.querySelector("#btnDeleteRow");
-	const btnSubmitForm = document.querySelector("#btnSubmitForm");
-	const commoncodeForm = document.querySelector("form[name=commoncodeForm]");
 
 	// 행 추가
 	function addNewRow() {
@@ -48,32 +48,39 @@ document.addEventListener("DOMContentLoaded", function(){
 		
 		deleteRow.each(function() {
 			const row = codeTable.row($(this));
-			row.remove(this);
+			row.remove();
 		});
-		console.log("삭제할 로우 : "+ deleteRow); // 삭제할 row 확인
+		
+//		console.log("삭제할 로우 : "+ deleteRow); // 삭제할 row 확인
 
-		codeTable.draw(true);
-		reDrawTable();
+		// 전부 삭제했을 경우 최소 1행 추가
+		if(codeTable.rows().count() == 0) {
+			alert("상세코드는 최소 1행 이상 등록하여야 합니다.");
+        	addNewRow();
+		}
+		reDrawTable(codeTable);
+		codeTable.draw(false);
 	}
 	
 	// 행 삭제 후 컬럼 번호, 순서 업데이트
-	function reDrawTable() {
-		codeTable.rows().every(function(i) {
-			console.log("삭제후 남은 row : " + i); // 삭제 후 남은 row index 출력
-			const row = this.node();
-			const newNum = $(row).find("span.num");
-			const newOrder = $(row).find("input[name=CODE_SEQ]");
-			
-			updateCheckboxAndSwtich(row, i);
-			
-			if(newNum.length > 0) {
-				newNum.text(i + 1);
-				newOrder.val(i + 1);
-			}
-		});
+	function reDrawTable(table) {
+		const rows = table.rows().nodes();
+	
+	    $(rows).each(function (index) {
+	        const row = $(this); // 현재 행
+	        const newNum = row.find("span.num");
+	        const newOrder = row.find("input[name=CODE_SEQ]");
+	
+	        // 번호와 순서 업데이트
+	        newNum.text(index + 1); // 1부터 시작하도록 설정
+	        newOrder.val(index + 1);
+	
+	        // 체크박스와 스위치 업데이트
+	        updateCheckboxAndSwtich(row, index + 1);
+	    });
 	}
 	
-	// 체크박스, 스위치 버튼 인덱스 업데이트
+	// 체크박스 , 스위치 버튼 인덱스 업데이트
 	function updateCheckboxAndSwtich(row, i) {
 		const newCheckbox = $(row).find(".custom-control-input");
 		const newCheckboxLabel = $(row).find(".custom-control-label");
@@ -81,13 +88,13 @@ document.addEventListener("DOMContentLoaded", function(){
 		const newSwitchLabel = $(row).find(".form-check-label");
 		
 		if(newCheckbox.length > 0) {
-			const customCheckId = `customCheck${i + 1}`;
+			const customCheckId = `customCheck${i}`;
 			newCheckbox.attr("id", customCheckId);
 			newCheckbox.prop("checked", false);
 			newCheckboxLabel.attr("for", customCheckId);
 		}
 		if(newSwitch.length > 0) {
-			let switchId = `flexSwitchCheckDefault${i + 1}`;
+			let switchId = `flexSwitchCheckDefault${i}`;
 			newSwitch.attr("id", switchId);
 			newSwitchLabel.attr("for", switchId);
 		}
@@ -149,6 +156,16 @@ document.addEventListener("DOMContentLoaded", function(){
 //	    $("form[name='commoncodeForm']").submit();
 	}
 	
+	// 체크박스 전체 선택
+	function allCheck() {
+	    codeTable.rows().every(function (index) {
+	        const row = this.node(); // 현재 행
+	        console.log(row);
+	        const checkBox = row.querySelector(".custom-control-input");
+	        checkBox.checked = checkAll.checked;
+	    });
+	}
+	
 	// 사용여부 체크(스위치버튼) 처리
 	// 행이 추가되며 스위치 버튼이 동적으로 추가되기 때문에 이벤트 위임 방식 사용해야 함)
 	$(document).on("change", ".form-check-input", function() {
@@ -162,9 +179,11 @@ document.addEventListener("DOMContentLoaded", function(){
 	    }
 	});
 	
+	
 	btnAddRow.addEventListener("click", addNewRow);
 	btnDeleteRow.addEventListener("click", deleteNewRow);
 	commoncodeForm.addEventListener("submit", submitForm);
+	checkAll.addEventListener("change", allCheck);
 
 	addNewRow(); // 최초 1행 추가해놓기
 });

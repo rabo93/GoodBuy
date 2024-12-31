@@ -6,6 +6,9 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.itwillbs.goodbuy.vo.FaqVO;
+import com.itwillbs.goodbuy.vo.MemberVO;
+
 @Mapper
 public interface AdminMapper {
 
@@ -35,5 +38,29 @@ public interface AdminMapper {
 
 	// 사용되지않는 공통코드(상위코드) 삭제
 	int deleteDeprecatedCommonCode();
+
+	// 회원 목록 조회
+	List<MemberVO> selectMemberList();
+
+	// 회원 상세정보 조회
+	MemberVO selectMember(String mem_id);
+	
+	// 회원 상태 수정
+	int updateMemberInfo(MemberVO member);
+	
+	//---------------------------------------------------------
+	// Faq 목록 조회
+	List<Map<String, Object>> selectFaqList(@Param("start") int start, 
+											@Param("length") int length,
+											@Param("searchValue") String searchValue);
+	// Faq 컬럼 수 조회
+	int selectFaqTotal();
+	
+	// FAQ 검색 컬럼 수 조회
+	int selectFaqFiltered(String searchValue);
+
+	// Faq 수정
+	int updateFaqInfo(FaqVO faq);
+	
 
 }

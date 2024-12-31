@@ -2,14 +2,14 @@
     pageEncoding="UTF-8"%>
 <!-- Sidebar -->
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">GoodBuy Admin</a>
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="AdmMain">GoodBuy Admin</a>
     <hr class="sidebar-divider my-0">
     <li class="nav-item">
-        <a class="nav-link" href="AdminMain"><i class="fa-solid fa-house"></i> <span>Main</span></a>
+        <a class="nav-link" href="AdmMain"><i class="fa-solid fa-house"></i> <span>Main</span></a>
     </li>
     <hr class="sidebar-divider">
     <div class="sidebar-heading">System Setting</div>
-    <li class="nav-item active">
+    <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#menu01" aria-expanded="true" aria-controls="menu01">
             <i class="fas fa-fw fa-cog"></i> <span>공통코드 관리</span>
         </a>

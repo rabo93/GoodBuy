@@ -3,14 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itwillbs.goodbuy.mapper.FaqMapper">
-	<!-- FAQ 목록 가져오기 -->
-	<select id="getFaqList" resultType="faq">
-		SELECT FAQ_ID
-		     , FAQ_SUBJECT
-		     , FAQ_CONTENT
-		     , FAQ_CATE
-		  FROM FAQ
-	</select>
+	
 	<!-- FAQ 글쓰기 -->
 	<insert id="insertFaq">
 		<selectKey keyProperty="faq_id" resultType="int" order="BEFORE" >
@@ -26,5 +19,22 @@
 			 , #{faq_cate}
 		)
 	</insert>
-	
+	<!-- FAQ 수정 -->
+	<update id="updateFaqInfo" >
+		UPDATE FAQ
+		SET <!-- 아래 부분 아직 수정 안함!!!!!!!!!!!!!!! -->
+			MEM_NICK = #{mem_nick}
+			<if test="!mem_passwd.equals('')"> 
+	<!-- 		<if test="mem_passwd != null and mem_passwd != ''"> -->
+				, MEM_PASSWD = #{mem_passwd}
+			</if>
+			, MEM_POST_CODE = #{mem_post_code}
+			, MEM_ADDRESS1 = #{mem_address1}
+			, MEM_ADDRESS2 = #{mem_address2}
+			, MEM_PROFILE = #{mem_profile}
+<!-- 			, MEM_PHONE = #{mem_phone} -->
+	<!-- 		, mem_email = CONCAT(#{mem_email1}, '@', #{mem_email2}) -->
+		WHERE
+			FAQ_ID = #{faq_id}
+	</update>
 </mapper>

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.itwillbs.goodbuy.mapper.AdminMapper;
+import com.itwillbs.goodbuy.vo.FaqVO;
+import com.itwillbs.goodbuy.vo.MemberVO;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -22,7 +24,7 @@ public class AdminService {
 	@Autowired
 	private AdminMapper mapper;
 
-	// [ 공통코드 ]
+	// ============== [ 공통코드 ] ==============
 	// 공통코드 - 등록
 	@Transactional
 	public int registCommonCode(Map<String, Object> mainCode, List<Map<String, Object>> subCodes) {
@@ -69,18 +71,68 @@ public class AdminService {
 	// 공통코드 컬럼 삭제
 	@Transactional
 	public int removeCommonCode(Map<String, Object> param) {
+		// 상위코드 삭제
 		int deleteCommonCodeResult = mapper.deleteCommonCodes(param);
 		if(deleteCommonCodeResult == 0) {
 			throw new RuntimeException("공통코드 삭제에 실패했습니다.");
 		}
 		
-		int deleteDeprecatedCommonCodeResult = mapper.deleteDeprecatedCommonCode();
-		if(deleteDeprecatedCommonCodeResult == 0) {
-			throw new RuntimeException("상위코드 삭제에 실패했습니다.");
+		// 하위코드 삭제
+		if(deleteCommonCodeResult > 0) {
+			// 하위코드 삭제
+			int deleteDeprecatedCommonCodeResult = mapper.deleteDeprecatedCommonCode();
+			
+	        return deleteCommonCodeResult + deleteDeprecatedCommonCodeResult;
+		} else {
+			log.info(">>> 삭제할 상위코드가 없습니다.");
 		}
 		
-		return deleteCommonCodeResult + deleteDeprecatedCommonCodeResult;
+		return deleteCommonCodeResult;
 	}
+
+	// ============== [ 회원관리 ] ==============
+	// 회원 목록 조회
+	public List<MemberVO> getMemberList() {
+		return mapper.selectMemberList();
+	}
+
+	// 회원 상세 조회
+	public MemberVO getMember(String mem_id) {
+		return mapper.selectMember(mem_id);
+	}
+
+	// 회원 상태 수정
+	public int modifyMemberInfo(MemberVO member) {
+		return mapper.updateMemberInfo(member);
+	}
+
+	
+	
+	
+	
+	
+	// ============== [ FAQ 관리 ] ==============
+	// FAQ 목록 조회
+	public List<Map<String, Object>> getFaqList(int start, int length, String searchValue) {
+		log.info(">>> admin faq");
+		return mapper.selectFaqList(start, length, searchValue);
+	}
+	
+	// FAQ 수정
+	public int modifyFaqInfo(FaqVO faq) {
+		return mapper.updateFaqInfo(faq);
+	}
+	
+	// FAQ 전체 컬럼 수 조회
+	public int getFaqTotal() {
+		return mapper.selectFaqTotal();
+	}
+	
+	// FAQ 검색 컬럼 수 조회
+	public int getFaqFiltered(String searchValue) {
+		return mapper.selectFaqFiltered(searchValue);
+	}
+
 
 	
 }

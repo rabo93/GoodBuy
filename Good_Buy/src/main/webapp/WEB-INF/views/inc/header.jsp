@@ -32,7 +32,7 @@
 <%-- 									<img src="${member.mem_profile}" alt="프로필사진"><br> --%>
 <%-- 								</c:when> --%>
 								<c:when test="${not empty sessionScope.sProfile}">
-									<img src="${sessionScope.sProfile}?${System.currentTimeMillis()}" alt="프로필사진">
+									<img src="${sessionScope.sProfile}?${System.currentTimeMillis()}" alt="프로필사진" class="profile-pic">
 <%-- 									<img src="${sessionScope.sProfile}" alt="프로필사진"> --%>
 								</c:when>
 								<c:otherwise>
@@ -79,7 +79,7 @@
 									<img src="${sessionScope.sProfile}" alt="프로필사진">
 								</c:when>
 								<c:otherwise>
-									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" alt="프로필사진">
+									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" alt="프로필사진" clas>
 								</c:otherwise>
 							</c:choose>
 								<a href="MyInfo" class="my-info"><span>${sessionScope.sId} </span> 님</a>

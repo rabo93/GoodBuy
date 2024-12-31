@@ -112,9 +112,27 @@ public class AdminService {
 	
 	
 	// ============== [ FAQ 관리 ] ==============
-	public List<FaqVO> getFaqList() {
-		return mapper.selectFaqList();
+	// FAQ 목록 조회
+	public List<Map<String, Object>> getFaqList(int start, int length, String searchValue) {
+		log.info(">>> admin faq");
+		return mapper.selectFaqList(start, length, searchValue);
 	}
+	
+	// FAQ 수정
+	public int modifyFaqInfo(FaqVO faq) {
+		return mapper.updateFaqInfo(faq);
+	}
+	
+	// FAQ 전체 컬럼 수 조회
+	public int getFaqTotal() {
+		return mapper.selectFaqTotal();
+	}
+	
+	// FAQ 검색 컬럼 수 조회
+	public int getFaqFiltered(String searchValue) {
+		return mapper.selectFaqFiltered(searchValue);
+	}
+
 
 	
 }

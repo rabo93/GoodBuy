@@ -86,7 +86,10 @@ public class AdminController {
 		int start = Integer.parseInt((String) param.get("start")); // 페이징 시작 번호
 		int length = Integer.parseInt((String) param.get("length")); // 한 페이지의 컬럼 개수
 		String searchValue = param.get("search[value]"); // 검색어
-//		log.info("searchValue: " + searchValue);
+		
+		int orderColumnKey = Integer.parseInt((String)param.get("order[0][column]"));
+		String orderColumn = param.get("columns[" + orderColumnKey + "][data]").toString();
+		String orderDir = param.get("order[0][dir]").toString();
 		
 		// 공통코드 전체 컬럼 수 조회
 		int recordsTotal = service.getCommonCodesTotal();
@@ -95,7 +98,7 @@ public class AdminController {
 		int recordsFiltered = service.getCommonCodesFiltered(searchValue);
 		
 		// 공통코드 전체 목록 조회
-		List<Map<String, Object>> commonCodes = service.getCommonCodes(start, length, searchValue);
+		List<Map<String, Object>> commonCodes = service.getCommonCodes(start, length, searchValue, orderColumn, orderDir);
 		
 		// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
 		Map<String, Object> response = new HashMap<String, Object>();

@@ -22,7 +22,9 @@ public interface AdminMapper {
 	List<Map<String, Object>> selectCommonCodes(
 			@Param("start") int start, 
 			@Param("length") int length,
-			@Param("searchValue") String searchValue);
+			@Param("searchValue") String searchValue,
+			@Param("orderColumn") String orderColumn,
+			@Param("orderDir") String orderDir);
 	
 	// 공통코드 컬럼 수 조회
 	int selectCommonCodesTotal();

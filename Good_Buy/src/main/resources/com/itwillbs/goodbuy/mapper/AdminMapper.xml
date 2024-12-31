@@ -56,6 +56,14 @@
 		 	   OR S.CODE_NAME LIKE CONCAT('%', #{searchValue}, '%')
 		 	   OR S.DESCRIPTION LIKE CONCAT('%', #{searchValue}, '%')
 		 </if>
+		 ORDER BY
+	 	<choose>
+			<when test="orderColumn == 'CODETYPE_ID'">M.CODETYPE_ID</when>
+			<when test="orderColumn == 'CODE_ID'">S.CODE_ID</when>
+			<otherwise>CODETYPE_ID</otherwise>
+		</choose>
+		<if test="orderDir == 'asc'">ASC</if>
+		<if test="orderDir == 'desc'">DESC</if>
 		 LIMIT
 		 	   #{start}
 		 	   , #{length}

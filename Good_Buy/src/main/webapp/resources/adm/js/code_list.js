@@ -16,12 +16,13 @@ $(document).ready(function() {
 				return res.commonCodes;
 			},
 		},
-		columnDefs: [{ targets: 0, orderable: false }],
+		order: [[0, 'asc']],
+		columnDefs: [],
 		columns: [
-            { data : "CODETYPE_ID", orderable: false, },
+            { data : "CODETYPE_ID", orderable: true, },
             { data : "CODETYPE_NAME", orderable: false, },
             { data : "MAIN_DESC", orderable: false, },
-            { data : "CODE_ID", orderable: false, },
+            { data : "CODE_ID", orderable: true, },
             { data : "CODE_NAME", orderable: false, },
             { data : "SUB_DESC", orderable: false, },
             { 
@@ -43,7 +44,7 @@ $(document).ready(function() {
             { data : "CODE_SEQ", orderable: false, className: 'dt-center', type: "string", width: '5%', },
             { 
 				data : null,
-				orderable: false, // 정렬 비활성화
+				orderable: false,
             	searchable: false, // 검색 비활성화
             	className : "dt-center", 
             	width: '13%',

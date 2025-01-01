@@ -311,6 +311,13 @@ public class PayController {
 		return "pay/pay_deposit_result";
 	}
 	
+	@LoginCheck(memberRole = MemberRole.USER)
+	@GetMapping("PayTransfer")
+	public String payTransfer() {
+		System.out.println("PayTransfer - get");
+		return "pay/pay_remit";
+	}
+	
 	// 사용자간(P2P) 계좌이체(송금) = 출금이체 -> 입금이체 연속으로 요청
 	@LoginCheck(memberRole = MemberRole.USER)
 	@PayTokenCheck

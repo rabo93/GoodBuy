@@ -78,7 +78,7 @@
 						            </div>
 						            <div class="buttons">
 						                <button class="charge-btn"  onclick="openModal()">+ 충전</button>
-						                <button class="transfer-btn" onclick="주소이동">￦계좌송금</button>
+						                <button class="transfer-btn" onclick="location.href='PayTransfer'">￦계좌송금</button>
 						                
 						                
 						                <%-- 충전버튼 모달창 --%>

@@ -49,8 +49,8 @@ public class AdminService {
 	}
 
 	// 공통코드 - 목록 조회
-	public List<Map<String, Object>> getCommonCodes(int start, int length, String searchValue) {
-		return mapper.selectCommonCodes(start, length, searchValue);
+	public List<Map<String, Object>> getCommonCodes(int start, int length, String searchValue, String orderColumn, String orderDir) {
+		return mapper.selectCommonCodes(start, length, searchValue, orderColumn, orderDir);
 	}
 
 	// 공통코드 전체 컬럼 수 조회

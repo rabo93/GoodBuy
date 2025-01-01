@@ -16,7 +16,8 @@ document.addEventListener("DOMContentLoaded", function(){
 			dataType : "JSON",
 			dataSrc: function (res) {
 				const data = res.faqList; // faqList 배열만 가져오기
-//				console.log(data);
+				console.log("data: " + data);
+				console.log("FAQ_ID: " + data.FAQ_ID);
 				
 				// FAQ_ID(PK)가 아닌 테이블 컬럼 번호 계산
 				for (let i = 0; i < data.length; i++) {
@@ -43,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function(){
 				searchable: false, // 검색 비활성화
 				className : "dt-center", 
 				render : function(data, type, row) {
+					
 					if(!data) {
 						return "";
 					} 
@@ -55,20 +57,6 @@ document.addEventListener("DOMContentLoaded", function(){
 					
 				}
              },
-            {
-				title : "관리",
-				data: null,
-				orderable : false,
-				searchable: false,
-				className : "dt-center",
-				render : function(data, type, row) {
-//					console.log(data.mem_id);
-					return `
-						<button class="btn btn-primary edit-btn" onclick="location.href='AdmFaqModify?faq_id=${data.faq_id}'">수정</button>
-						<button class="btn btn-primary delete-btn" data-faq-id="${data.faq_id}">삭제</button>
-					`;
-				}
-			},
 			{ 	
 				title : "사용여부",
 				data : "LIST_STATUS",
@@ -77,15 +65,28 @@ document.addEventListener("DOMContentLoaded", function(){
 				render: function(data, type, row) {
 					let isChecked = data == 1 ? "checked" : "";
 					let isUsed = data == 1 ? "사용함" : "사용안함";
-               	 return `
-               	 	<div class="form-check form-switch">
+	           	return `
+	           		<div class="form-check form-switch">
 		        		<input type="hidden" value="${data}" name="LIST_STATUS">
 						<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" ${isChecked} onClick="return false;">
 						<label class="form-check-label" for="flexSwitchCheckDefault">${isUsed}</label>
 					</div>
-               	 `;
+	           	 `;
             	},
-            }
+            },
+            {
+				title : "관리",
+				data: null,
+				orderable : false,
+				searchable: false,
+				className : "dt-center",
+				render : function(data, type, row) {
+					return `
+						<button class="btn btn-primary edit-btn" onclick="location.href='AdmFaqModify?faq_id=${data.FAQ_ID}'">수정</button>
+						<button class="btn btn-primary delete-btn" data-faq-id="${data.FAQ_ID}">삭제</button>
+					`;
+				}
+			},
         ],
 		serverSide : true, // 서버사이드 처리
 		processing : true,  // 서버와 통신 시 응답을 받기 전이라는 ui를 띄울 것인지 여부
@@ -107,6 +108,27 @@ document.addEventListener("DOMContentLoaded", function(){
             },
         },
 	});
+	
+	// FAQ 테이블 컬럼 수정 팝업 셋팅
+	faqList.on("click", '.edit-btn', function() {
+		const row = $(this).closest('tr');
+		const rowData = codeList.row(row).data();
+		let listStatus = rowData.LIST_STATUS == 1 ? true : false;
+		let listStatusText = rowData.LIST_STATUS == 1 ? "사용함" : "사용안함";
+//		console.log(rowData);
+		console.log(listStatus);
+		
+		// 수정 전 기본 데이터 셋팅
+		$("#oldFaqId").val(rowData.OLD_FAQ_ID);
+		
+		$("#updatedFaqSubject").val(rowData.FAQ_SUBJECT);
+		$("#updatedFaqContent").val(rowData.FAQ_CONTENT);
+		$("#updatedListStatus").val(rowData.LIST_STATUS);
+		$("#updateFlexSwitchCheckDefault").prop("checked", listStatus);
+		$("#updateFlexSwitchCheckDefaultLab").text(listStatusText);
+	});
+	
+	
 	
 	// 사용여부 버튼 값 업데이트
 	$(document).on("change", ".form-check-input", function() {

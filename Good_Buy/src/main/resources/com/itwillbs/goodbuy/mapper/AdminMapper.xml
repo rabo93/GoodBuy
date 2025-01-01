@@ -290,4 +290,15 @@
 		 </if>
      </select>
      
+     
+      <!-- FAQ 수정 - UPDATE -->
+     <update id="updateFaqInfo">
+     	UPDATE FAQ
+		   SET 
+		    	,FAQ_SUBJECT = #{FAQ_SUBJECT}
+		    	, FAQ_CONTENT = #{FAQ_CONTENT}
+			    , LIST_STATUS = #{LIST_STATUS}
+		 WHERE
+				FAQ_ID = #{OLD_FAQ_ID}
+     </update>
 </mapper>

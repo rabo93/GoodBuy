@@ -26,7 +26,8 @@
 			 , #{faq_subject}
 			 , #{faq_content}
 			 , #{faq_cate}
-		)
+			 , 1	-- 기본값 1등록
+			 )
 	</insert>
 	<!-- FAQ 수정 -->
 	<update id="updateFaqInfo" >

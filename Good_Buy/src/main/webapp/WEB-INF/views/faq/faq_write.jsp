@@ -61,8 +61,9 @@
 									<select name="faq_cate">
 										<option value="1">운영정책</option>
 										<option value="2">회원/계정</option>
-										<option value="3">전용페이</option>
-										<option value="4">기타</option>
+										<option value="3">결제/페이</option>
+										<option value="4">광고서비스</option>
+										<option value="5">기타</option>
 									</select>
 								</td>
 							</tr>

@@ -302,6 +302,7 @@ public class AdminController {
 		return "admin/faq_list";
 	}
 	
+	// [ FAQ 목록 조회 ]
 	@ResponseBody
 	@PostMapping("FaqListForm")
 	public String admFaqListForm(@RequestParam Map<String, String> param) {
@@ -311,19 +312,16 @@ public class AdminController {
 		int length = Integer.parseInt(param.get("length")); // 한 페이지의 컬럼 개수
 		String searchValue = param.get("search[value]"); // 검색어
 		
-		//-----------------------------------
 		// FAQ 전체 목록 조회
 		List<Map<String, Object>> faqList = service.getFaqList(start, length, searchValue);
-		System.out.println("faqList:" + faqList);
-//		// 공통코드 전체 목록 조회
-//		List<Map<String, Object>> commonCodes = service.getCommonCodes(start, length, searchValue);
+//		System.out.println("faqList:" + faqList);
 		
 		// FAQ 전체 컬럼 수 조회
 		int recordsTotal = service.getFaqTotal();
-		System.out.println("recordsTotal: " + recordsTotal);
+//		System.out.println("recordsTotal: " + recordsTotal);
 		// FAQ 검색 필터링 후 컬럼 수 조회
 		int recordsFiltered = service.getFaqFiltered(searchValue);
-		System.out.println("recordsFiltered: " + recordsFiltered);
+//		System.out.println("recordsFiltered: " + recordsFiltered);
 		
 		// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
 		Map<String, Object> response = new HashMap<String, Object>();
@@ -333,38 +331,52 @@ public class AdminController {
 		response.put("recordsTotal", recordsTotal); // 전체 컬럼 수
 		response.put("recordsFiltered", recordsFiltered); // 검색 필터링 후 컬럼 수
 		response.put("faqList", faqList); // 컬럼 데이터
-		System.out.println("Map: "+ response); 
+//		System.out.println("Map: "+ response); 
 		// Map: {recordsFiltered=4, faqList=[{FAQ_CATE=1, FAQ_SUBJECT=test, FAQ_CONTENT=test, FAQ_ID=1}, {FAQ_CATE=2, FAQ_SUBJECT=test_cate(2), FAQ_CONTENT=test_cate(2), FAQ_ID=2}, {FAQ_CATE=3, FAQ_SUBJECT=test_cate(3), FAQ_CONTENT=test_cate(3), FAQ_ID=3}, {FAQ_CATE=4, FAQ_SUBJECT=test_cate(4), FAQ_CONTENT=test_cate(4), FAQ_ID=4}], draw=1, recordsTotal=4}
 		
 		JSONObject jo = new JSONObject(response);
-//		JSONArray ja = new JSONArray(faqList);
-		
 		return jo.toString();
 	}
-	
-
+	//-------------------------------------------------------------------------------------
+	// [ FAQ 수정 ]
 	@PostMapping("AdmFaqModify")
-	public String admFaqModify(FaqVO faq, Model model) {
-		log.info(">>> 수정할 faq 정보: " + faq);
-		
-		int updateResult = service.modifyFaqInfo(faq);
+	public String admFaqModify(@RequestParam Map<String, Object> param, Model model) {
+		log.info(">>> 수정할 faq 정보: " + param);
+		// 수정할 faq 정보: {OLD_FAQ_ID=1, CODETYPE_NAME=test, CODETYPE_DESC=test111, LIST_STATUS=}
+		int updateResult = service.modifyFaqInfo(param);
 		
 		if(updateResult > 0) {
-			model.addAttribute("msg", "FAQ XXX 수정하였습니다.");
+			model.addAttribute("msg", "FAQ 수정하였습니다.");
 			model.addAttribute("targetURL", "AdmFaqList");
 			return "result/success";
 		} else {
-			model.addAttribute("msg", "FAQ XXX 수정에 실패하였습니다.");
+			model.addAttribute("msg", "FAQ 수정에 실패하였습니다.");
 			return "result/fail";
 		}
 	}
 	
-	@GetMapping("AdmFaqDelete")
-	public String admFaqDelete(MemberVO member, Model model) {
-		return "";
+	//-------------------------------------------------------------------------------------
+	// [ FAQ 삭제 ]
+	@ResponseBody
+	@PostMapping("AdmFaqDelete")
+	public Map<String, Object> admFaqDelete(@RequestParam("FAQ_ID") int faqId) {
+		log.info(">>>>>>> 전달받은 삭제할 faq_id: " + faqId);
+		
+		int deleteResult = service.removeFaq(faqId);
+		
+		Map<String, Object> response = new HashMap<> ();
+		
+		if(deleteResult > 0) {
+			response.put("status", "success");
+			response.put("message", "선택한 항목이 삭제되었습니다.");
+			response.put("redirectURL", "/AdmFaqList");
+		} else {
+			response.put("status", "fail");
+			response.put("message", "항목 삭제에 실패했습니다.");
+		}
+		
+		return response;
 	}
-	
-	
 	
 	
 	// ======================================================

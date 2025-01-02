@@ -262,6 +262,7 @@
 			,FAQ_SUBJECT
 		    , FAQ_CONTENT
 		    , FAQ_CATE
+		    , LIST_STATUS
 		FROM FAQ
 		WHERE 1 = 1
 		 <if test="searchValue != null">
@@ -289,5 +290,21 @@
 		 	   OR FAQ_CONTENT LIKE CONCAT('%', #{searchValue}, '%')
 		 </if>
      </select>
+     
+     <!-- FAQ 수정 -->
+     <update id="updateFaqInfo">
+     	UPDATE FAQ
+     	   SET FAQ_SUBJECT = #{FAQ_SUBJECT}
+     	   	   , FAQ_CONTENT = #{FAQ_CONTENT}
+     	   	   , FAQ_CATE = #{FAQ_CATE}
+     	   	   , LIST_STATUS = #{LIST_STATUS}
+     	 WHERE FAQ_ID = #{FAQ_ID}
+     </update>
+     
+     <!-- FAQ 삭제 -->
+     <delete id="deleteFaq">
+		DELETE FROM FAQ
+		WHERE FAQ_ID = #{faqId}     
+     </delete>
      
 </mapper>

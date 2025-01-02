@@ -100,7 +100,10 @@ public interface AdminMapper {
 	int selectFaqFiltered(String searchValue);
 
 	// Faq 수정
-	int updateFaqInfo(FaqVO faq);
+	int updateFaqInfo(Map<String, Object> param);
+	
+	// Faq 삭제
+	int deleteFaq(int faqId);
 
 
 

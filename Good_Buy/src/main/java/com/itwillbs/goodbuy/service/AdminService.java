@@ -157,11 +157,6 @@ public class AdminService {
 		return mapper.selectFaqList(start, length, searchValue);
 	}
 	
-	// FAQ 수정
-	public int modifyFaqInfo(FaqVO faq) {
-		return mapper.updateFaqInfo(faq);
-	}
-	
 	// FAQ 전체 컬럼 수 조회
 	public int getFaqTotal() {
 		return mapper.selectFaqTotal();
@@ -171,8 +166,18 @@ public class AdminService {
 	public int getFaqFiltered(String searchValue) {
 		return mapper.selectFaqFiltered(searchValue);
 	}
+	
+	// FAQ 수정
+	public int modifyFaqInfo(Map<String, Object> param) {
+		return mapper.updateFaqInfo(param);
+	}
+	
+	// FAQ 삭제
+	public int removeFaq(int faqId) {
+		return mapper.deleteFaq(faqId);
+	}
 
-
+	
 
 
 	

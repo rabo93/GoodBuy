@@ -1,6 +1,6 @@
 package com.itwillbs.goodbuy.vo;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,7 +17,7 @@ public class ProductVO {
 	private int product_price;
 	private int product_discount_status;
 	private String product_category;
-	private Date product_reg_date; //상품등록일
+	private Timestamp product_reg_date; //상품등록일
 	// ---------------------------
 	private String product_pic1;
 	private String product_pic2;

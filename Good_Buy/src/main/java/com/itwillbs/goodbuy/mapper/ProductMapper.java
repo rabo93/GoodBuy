@@ -33,5 +33,6 @@ public interface ProductMapper {
 			@Param("product_status")int product_status, 
 			@Param("product_trade_adr1")String product_trade_adr1,
 			@Param("cate")String product_category);
-	
+
+	ProductVO productSearch(int product_id);
 }

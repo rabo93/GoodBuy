@@ -57,5 +57,10 @@ public class ProductService {
 
 	    return mapper.searchFliterList(price_start, price_end, product_status, product_trade_adr1, product_category);
 	}
+	
+	// 상품 상세정보 조회
+	public ProductVO productSearch(int product_id) {
+		return mapper.productSearch(product_id);
+	}
 
 }

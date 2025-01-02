@@ -83,12 +83,16 @@
                                                     </div>
                                                     
                                                     <!-- 후기 작성하기 버튼 (상품 정보 포함) -->
-                                                    <button class="open-modal-btn"
-                                                        data-product-id="${product.product_id}"
-                                                        data-title="${product.product_title}"
-                                                        data-buyer="${product.mem_nick}">
-                                                        후기 작성하기📮 >>>${product.product_id}
-                                                    </button>
+                                                    <form action="MyOrderList" method="post" id="orderForm">
+                                                    	<input type="hidden" name="product_id" id="hiddenProductId">
+	                                                    <button class="open-modal-btn"
+														        data-product-id="${product.product_id}"
+														        data-title="${product.product_title}"
+														        data-buyer="${product.mem_nick}"
+														        type="button" ${product.review_cnt == 1 ? 'disabled' : ''}>
+														    ${product.review_cnt == 1 ? '작성완료📩' : '후기 작성하기📮'}
+														</button>
+													</form>
                                                 </div>
                                             </li>
                                         </c:forEach>
@@ -112,7 +116,7 @@
             <h2>
                 <span id="buyerName"></span>님께 구매한 [<span id="productTitle"></span>]<br>후기 보내기📮
             </h2>
-            <input type="hidden" id="modal_product_id"> <!-- id저장용 hidden -->
+            <input type="hidden" id="modal_product_id"> <!-- id저장용 -->
             <textarea rows="4" cols="50" id="review_content" placeholder="후기를 작성해주세요."></textarea>
             <br>
             <button id="close-modal">닫기</button>
@@ -134,7 +138,7 @@
             $("#modal_product_id").val(productId);
 
             // 현재 클릭된 버튼 저장 (비활성화용)
-            $(this).addClass("clicked-review-btn");
+//             $(this).addClass("clicked-review-btn");
 
             $("#review-modal").fadeIn(300);
         });
@@ -176,7 +180,7 @@
                     $("#review_content").val("");
 
                     // 버튼 비활성화 (또는 숨김 처리)
-                    $(".clicked-review-btn").prop("disabled", true).text("후기 작성 완료").removeClass("open-modal-btn");
+//                     $(".clicked-review-btn").prop("disabled", true).text("후기 작성 완료").removeClass("open-modal-btn");
                 },
                 error: function () {
                     alert("후기 등록에 실패했습니다.");
@@ -185,6 +189,38 @@
         });
     });
 
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		  $(".open-modal-btn").click(function () {
+	            const productId = $(this).data("product-id");
+				console.log(">>>>>>"+productId);
+	            // 모달에 데이터 주입
+	            $("#modal_product_id").val(productId);
+
+	            // 현재 클릭된 버튼 저장 (비활성화용)
+//	             $(this).addClass("clicked-review-btn");
+
+	            $("#review-modal").fadeIn(300);
+		$.ajax({
+			url : "MyOrder"	,
+			type : "GET",
+			contentType: "application/json",
+			data : {
+				product_id : productId
+			},
+			success : function (response) {
+				console.log("서버 응답:", response);
+			}
+		
+		
+		})
+	  });
+		
+	})
+	
+	
 </script>
 </body>
 </html>

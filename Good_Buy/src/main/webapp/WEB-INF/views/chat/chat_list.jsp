@@ -27,9 +27,9 @@
 
 </head>
 <body>
-	<header>
-		<jsp:include page="/WEB-INF/views/inc/header.jsp"></jsp:include>
-	</header>
+<!-- 	<header> -->
+<%-- 		<jsp:include page="/WEB-INF/views/inc/header.jsp"></jsp:include> --%>
+<!-- 	</header> -->
 	<main>
 		<section class="wrapper">
 			<div class="page-inner">
@@ -85,10 +85,10 @@
 			</div>
 		</section>
 	</main>
-	<footer>
-		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
-	</footer>
-	<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script>
+<!-- 	<footer> -->
+<%-- 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include> --%>
+<!-- 	</footer> -->
+<%-- 	<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script> --%>
 	<script src="${pageContext.request.contextPath}/resources/js/chat_main.js"></script>
 </body>
 </html>

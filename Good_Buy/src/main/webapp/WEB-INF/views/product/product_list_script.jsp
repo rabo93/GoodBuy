@@ -2,21 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<style>
-.item-trade-adr-search {
-    padding: 8px 15px 8px 15px;
-    min-width: 100px;
-    height: 40px;
-    box-sizing: border-box;
-    border-radius: 50px;
-    font-size: 15px;
-    font-weight: 700;
-    background-color: #0dcc5a;
-    border: 2px solid #0dcc5a;
-    color: #ffffff;
-    cursor: pointer;
-}
-</style>
 <script type="text/javascript">
 let url_href = window.location.href;
 let url = new URL(url_href);
@@ -42,7 +27,6 @@ $("input[name='trade-box']").change(function() {
 	}
 })
 
-
 $("input[name='ip-chk']").change(function() {
 	$("input[name='ip-num2']").val($("input[name='ip-chk']:checked").val());
 	if (url.searchParams.get('PRICE') == undefined) {
@@ -54,29 +38,57 @@ $("input[name='ip-chk']").change(function() {
 })
 
 $("input[name='ip-num1'], input[name='ip-num2']").change(function() {
-	if (url.searchParams.get('PRICE') == undefined) {
-		window.location.search += "&PRICE=" + $("input[name='ip-num1']").val() + "_" + $("input[name='ip-num2']").val();
-	} else {
-		url.searchParams.set('PRICE', $("input[name='ip-num1']").val() + "_" + $("input[name='ip-num2']").val());
+    if ($("input[name='ip-num1']").val() == 0 && $("input[name='ip-num2']").val() == 0) {
+    	url.searchParams.delete('PRICE')
 		window.location = url;
-	}
-})
+    } else if (url.searchParams.get('PRICE') == undefined) {
+        window.location.search += "&PRICE=" + Number($("input[name='ip-num1']").val()) + "_" + Number($("input[name='ip-num2']").val());
+    } else {
+        url.searchParams.set('PRICE', Number($("input[name='ip-num1']").val()) + "_" + Number($("input[name='ip-num2']").val()));
+        window.location = url;
+    }
+});
 
 function addAdr() {
-	if (url.searchParams.get('REGION') == undefined) {
-		window.location.search += "&REGION=" + $("input[name='regionSearch']").val();
-	} else {
-		url.searchParams.set('REGION', $("input[name='regionSearch']").val());
-		window.location = url;
+	const region = url.searchParams.get('REGION');
+	const regionValue = $("input[name='regionSearch']").val();
+	switch (true) {
+	    case regionValue === "":
+	        url.searchParams.delete('REGION');
+	        break;
+	    case region === undefined:
+	        url.searchParams.append('REGION', regionValue);
+	        break;
+	    default:
+	        url.searchParams.set('REGION', regionValue);
 	}
+	window.location = url;
+}
+
+function addAdrEnter(e) {
+    if (e.keyCode == 13) {
+        const region = url.searchParams.get('REGION');
+        const regionValue = $("input[name='regionSearch']").val();
+        switch (true) {
+            case regionValue === "":
+                url.searchParams.delete('REGION');
+                break;
+            case region === undefined:
+                url.searchParams.append('REGION', regionValue);
+                break;
+            default:
+                url.searchParams.set('REGION', regionValue);
+        }
+        window.location = url;
+    }
 }
 
 $(document).ready(function() {
 	
 	if (url.searchParams.get('PRICE') != undefined) {
 		let splitPrice = url.searchParams.get('PRICE').split('_');
-		$("input[name='ip-num1']").val(splitPrice[0]);
-		$("input[name='ip-num2']").val(splitPrice[1]);
+		$("input[name='ip-num1']").val(Number(splitPrice[0]));
+		$("input[name='ip-num2']").val(Number(splitPrice[1]));
 		switch (splitPrice[1]) {
 			case '5000': $(".rd1").prop("checked", true); break;
 			case '10000': $(".rd2").prop("checked", true); break;
@@ -91,7 +103,7 @@ $(document).ready(function() {
 	if (url.searchParams.get('REGION') != undefined) {
 		$("input[name='regionSearch']").val(url.searchParams.get('REGION'))
 	}
-	
+		
 	$.ajax({
 		
 		url: "SearchPriceFilter",
@@ -104,29 +116,31 @@ $(document).ready(function() {
 		}
 	
 	}).done(function(data) {
+		moment.locale('ko')
 		$("#product-wrap").empty();
 		for(let item of data) {
+			let category = `<span>\${item.PRODUCT_CATEGORY}</span>`;
+			if (item.PRODUCT_TRADE_ADR1) {
+				category += `<span class="type">직거래</span>`;
+			}
 			$("#product-wrap").append(
-				`<li class="product-card" onclick="location.href=\'ProductDetail?PRODUCT_ID=\${item.PRODUCT_ID}\'">` +
-					`<img src="${pageContext.request.contextPath}/resources/upload/'${item.PRODUCT_PIC1}'" class="card-thumb" alt="thumbnail"/>` +
-					`<div class="card-info">` +
-						`<div class="category">` +
-							`<span>\${item.PRODUCT_CATEGORY}</span>` +
-							`<c:if test="${item.product_trade_adr1 != ''}">` +
-								`<span class="type">직거래</span>`+
-							`</c:if>`+
-						`</div>`+
-						`<div class="ttl">\${item.PRODUCT_TITLE}</div>`+
-						`<div class="price">`+
-						 	`\${item.PRODUCT_PRICE} 원`+
-						`</div>`+
-						`<div class="card-row">`+
-							`<span class="add">\${item.PRODUCT_TRADE_ADR1}</span>`+
-							`<span class="name">\${item.MEM_NICK}</span>`+
-							`<span class="time">1분 전</span>`+
-						`</div>`+
-					`</div>`+
-				`</li>`)};
+				`<li class="product-card" onclick="location.href=\'ProductDetail?PRODUCT_ID=\${item.PRODUCT_ID}'">
+					<img src="../resources/upload/\${item.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail"/>
+					<div class="card-info">
+						<div class="category">
+							\${category}
+						</div>
+						<div class="ttl">\${item.PRODUCT_TITLE}</div>
+						<div class="price">
+						 	\${item.PRODUCT_PRICE.toLocaleString()} 원
+						</div>
+						<div class="card-row">
+							<span class="add">\${item.PRODUCT_TRADE_ADR1}</span>
+							<span class="name">\${item.MEM_NICK}</span>
+							<span class="time">\${moment(item.PRODUCT_REG_DATE, "YYYYMMDDhhmmss").fromNow()}</span>
+						</div>
+					</div>
+				</li>`)};
 	}).fail(function() {
 		alert("응 안돼");
 	})	

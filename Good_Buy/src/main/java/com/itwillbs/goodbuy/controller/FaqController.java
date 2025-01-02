@@ -29,6 +29,7 @@ public class FaqController {
 		List<FaqVO> faqList2 = new ArrayList<FaqVO>();
 		List<FaqVO> faqList3 = new ArrayList<FaqVO>();
 		List<FaqVO> faqList4 = new ArrayList<FaqVO>();
+		List<FaqVO> faqList5 = new ArrayList<FaqVO>();
 		
 		for(FaqVO faq : faqList) {
 			switch (faq.getFaq_cate()) {
@@ -36,6 +37,7 @@ public class FaqController {
 			case 2: faqList2.add(faq); break;
 			case 3: faqList3.add(faq); break;
 			case 4: faqList4.add(faq); break;
+			case 5: faqList5.add(faq); break;
 			}
 		}
 		
@@ -43,6 +45,7 @@ public class FaqController {
 		model.addAttribute("faqList2", faqList2);
 		model.addAttribute("faqList3", faqList3);
 		model.addAttribute("faqList4", faqList4);
+		model.addAttribute("faqList5", faqList5);
 		
 		return "faq/faq";
 	}

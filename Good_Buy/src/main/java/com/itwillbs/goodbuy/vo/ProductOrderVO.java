@@ -18,6 +18,7 @@ public class ProductOrderVO {
     private String product_title;      
     private String mem_nick;      
     private String product_trade_adr1;
+    private int review_cnt;
 	
 
 }

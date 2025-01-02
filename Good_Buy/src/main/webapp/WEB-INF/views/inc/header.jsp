@@ -46,6 +46,8 @@
 							<a href="GoodPay">굿페이</a>
 							<a href="MyInfo">계정정보</a>
 							<a href="MemberLogout">로그아웃</a>
+							<input type="hidden" id="sId" value="${sessionScope.sId}">
+							<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script>
 						</div>
 						<script src="${pageContext.request.contextPath}/resources/js/header.js"></script>
 					</c:when>
@@ -83,9 +85,11 @@
 								</c:otherwise>
 							</c:choose>
 								<a href="MyInfo" class="my-info"><span>${sessionScope.sId} </span> 님</a>
-		        			<a href="ProductRegist" class="gnb-btn"><i class="fa-solid fa-store"></i> 판매하기</a>
-							<a href="ChatMain" class="gnb-btn"><i class="fa-solid fa-comment-dots"></i> 채팅하기</a>
-							<a href="MemberLogout">로그아웃</a>
+			        			<a href="ProductRegist" class="gnb-btn"><i class="fa-solid fa-store"></i> 판매하기</a>
+								<a href="ChatMain" class="gnb-btn"><i class="fa-solid fa-comment-dots"></i> 채팅하기</a>
+								<a href="MemberLogout">로그아웃</a>
+								<input type="hidden" id="sId" value="${sessionScope.sId}">
+<%-- 								<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script> --%>
 						</c:otherwise>				
 					</c:choose>
         		</div>
@@ -118,4 +122,4 @@
 	</section>
 </div>
 <script src="${pageContext.request.contextPath}/resources/js/top.js"></script>
-<%-- <script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script> --%>
+

@@ -14,7 +14,7 @@ public class FaqService {
 	@Autowired
 	private FaqMapper mapper;
 	
-	//	FAQ 목록 가져오기
+	//	FAQ 목록 조회
 	public List<FaqVO> getFaqList() {
 		return mapper.getFaqList();
 	}

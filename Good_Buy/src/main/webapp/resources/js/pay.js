@@ -29,12 +29,20 @@ function submitForm(anchor) {
     }
 }
 
-function openModal() {
-	document.getElementById('pay-account-modal').style.display = 'block';
+function openModal(modal) {
+	if(modal == 'charge') {	
+		document.getElementById('pay-account-modal').style.display = 'block';
+	} else if (modal == 'refund') {
+		document.getElementById('pay-refund-modal').style.display = 'block';
+	}
 }
 
-function closeModal() {
-	document.getElementById('pay-account-modal').style.display = 'none';
+function closeModal(modal) {
+	if(modal == 'charge') {	
+		document.getElementById('pay-account-modal').style.display = 'none';
+	} else if (modal == 'refund') {
+		document.getElementById('pay-refund-modal').style.display = 'none';
+	}
 }
 
 function addAmount(amount) {

@@ -21,6 +21,7 @@ import com.itwillbs.goodbuy.service.MyReviewService;
 import com.itwillbs.goodbuy.service.ProductService;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.MyReviewVO;
+import com.itwillbs.goodbuy.vo.ProductOrderVO;
 import com.itwillbs.goodbuy.vo.ProductVO;
 import com.itwillbs.goodbuy.vo.WishlistVO;
 
@@ -94,11 +95,13 @@ public class MypageController {
 	@GetMapping("MyOrder")
 	public String myOrder(HttpSession session,Model model) {
 		String id = getSessionUserId(session);
+
 		//구매내역 조회
-		List<ProductVO> orderList = productService.getOrderList(id);
-		model.addAttribute("order",orderList);
+		List<ProductOrderVO> orderList = productService.getOrderList(id);
+		model.addAttribute("order", orderList);
 		System.out.println("구매내역 조회"+orderList);
 		
+
 		//구매내역 갯수조회
 		int orderCount = productService.orderListCount(id);
 		model.addAttribute("orderCount",orderCount);
@@ -108,7 +111,17 @@ public class MypageController {
 //		model.addAttribute("product", productlist);
 		
 		
+		
 		return "mypage/mypage_product_orders";
+	}
+	
+	@PostMapping("MyOrderList")
+	public String myOrderList(HttpSession session,Model model) {
+		String id = getSessionUserId(session);
+
+		List<ProductOrderVO> orderList = productService.getOrderList(id);
+		model.addAttribute("product", orderList);
+		return "redirect:/MyOrder";
 	}
 	
 	

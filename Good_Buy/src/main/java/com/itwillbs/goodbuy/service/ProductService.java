@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.itwillbs.goodbuy.mapper.ProductMapper;
-
+import com.itwillbs.goodbuy.vo.ProductOrderVO;
 import com.itwillbs.goodbuy.vo.ProductVO;
 
 @Service
@@ -33,7 +33,7 @@ public class ProductService {
 		return mapper.searchProductList(product_category);
 	}
 		
-	public List<ProductVO> getOrderList(String id) {
+	public List<ProductOrderVO> getOrderList(String id) {
 		return mapper.selectOrderList(id);
 	}
 

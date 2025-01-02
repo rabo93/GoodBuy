@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.itwillbs.goodbuy.vo.MyReviewVO;
+import com.itwillbs.goodbuy.vo.ProductVO;
 
 @Mapper
 public interface MyReviewMapper {
@@ -18,5 +19,8 @@ public interface MyReviewMapper {
 			, @Param("review_content") String review
 			, @Param("product_title") String productTitle
 			, @Param("product_id") String productId);
+	
+	
+	int selectReviewCountCheck(int product_id);
 
 }

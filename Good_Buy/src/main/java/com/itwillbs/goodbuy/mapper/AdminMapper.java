@@ -42,6 +42,7 @@ public interface AdminMapper {
 	// 사용되지않는 공통코드(상위코드) 삭제
 	int deleteDeprecatedCommonCode();
 
+	//---------------------------------------------------------
 	// 회원 목록 조회 + 검색 조건
 	List<MemberVO> selectMemberList(
 			@Param("start") int start, 
@@ -70,6 +71,23 @@ public interface AdminMapper {
 	// 회원 삭제
 	int deleteMember(String mem_id);
 	
+	//---------------------------------------------------------
+	// 신고 상품 목록 전체 컬럼 수 조회
+	int selectProductReportTotal();
+	
+	// 신고 상품 검색 필터링 후 컬럼 수 조회
+	int selectProductReportFiltered(
+			@Param("status") String status,
+			@Param("searchValue") String searchValue);
+
+	// 필터링 된 신고 상품 목록 가져오기
+	List<Map<String, Object>> selectProductReportList(
+			@Param("start") int start,
+			@Param("length") int length, 
+			@Param("status") String status, 
+			@Param("searchValue") String searchValue, 
+			@Param("orderColumn") String orderColumn, 
+			@Param("orderDir") String orderDir);
 	//---------------------------------------------------------
 	// 공지사항 전체 목록 컬럼 수 조회
 	int selectNoticeListTotal();
@@ -104,6 +122,10 @@ public interface AdminMapper {
 	
 	// Faq 삭제
 	int deleteFaq(int faqId);
+
+
+	
+
 
 
 

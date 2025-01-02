@@ -53,8 +53,8 @@
         <div id="menu04" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
             	<h6 class="collapse-header">Report Management</h6>
-                <a class="collapse-item" href="AdmReportMemberList">신고 회원 관리</a>
-                <a class="collapse-item" href="AdmReportProductList">신고 상품 관리</a>
+                <a class="collapse-item" href="AdmMemberReportList">신고 회원 관리</a>
+                <a class="collapse-item" href="AdmProductReportList">신고 상품 관리</a>
             </div>
         </div>
     </li>

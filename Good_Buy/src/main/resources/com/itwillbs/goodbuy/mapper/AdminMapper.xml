@@ -248,6 +248,89 @@
      	 WHERE MEM_ID = #{mem_id}
      </delete>
      
+     <!-- [ 신고 상품 관리 ] -->
+     <!-- 신고된 상품 전체 컬럼 수 조회 - SELECT -->
+     <select id="selectProductReportTotal" resultType="int">
+     	SELECT COUNT(*)
+		  FROM PRODUCT_REPORTS
+     </select>
+     
+      <!-- 신고된 상품 필터링 후 컬럼 수 조회 - SELECT -->
+     <select id="selectProductReportFiltered" resultType="int">
+     	SELECT COUNT(*)
+		  FROM PRODUCT_REPORTS R
+		  JOIN PRODUCT P
+		    ON R.PRODUCT_ID = P.PRODUCT_ID
+		 WHERE 1 = 1
+		<if test="status != null and status != ''">
+		   AND STATUS = #{status}
+		</if>
+		<if test="searchValue != null and searchValue != ''">
+		   AND (R.REPORTER_ID LIKE CONCAT('%', #{searchValue}, '%')
+			   OR R.REPORTER_ID LIKE CONCAT('%', #{searchValue}, '%')
+	 	       OR R.PRODUCT_ID LIKE CONCAT('%', #{searchValue}, '%')
+	 	       OR P.PRODUCT_TITLE LIKE CONCAT('%', #{searchValue}, '%') 
+	 	       OR R.STATUS LIKE CONCAT('%', #{searchValue}, '%') 
+	 	       OR R.REASON LIKE CONCAT('%', #{searchValue}, '%') 
+	 	       OR R.ADMIN_ID LIKE CONCAT('%', #{searchValue}, '%'))
+		</if>
+     </select>
+     
+     <!-- 필터링 된 신고 상품 목록 조회 - SELECT -->
+     <select id="selectProductReportList" resultType="map">
+     	SELECT R.REPORT_ID
+			   , R.REPORTER_ID
+		       , R.PRODUCT_ID
+		       , P.PRODUCT_TITLE
+		       , DATE_FORMAT(R.REPORT_DATE, '%Y-%m-%d %H:%i:%s') AS REPORT_DATE
+		       , R.REASON
+		       , R.STATUS
+		       , R.ACTION_REASON
+		       , R.ADMIN_ID
+		       , DATE_FORMAT(R.ACTION_DATE, '%Y-%m-%d %H:%i:%s') AS ACTION_DATE
+		  FROM PRODUCT_REPORTS R
+		  JOIN PRODUCT P
+		    ON R.PRODUCT_ID = P.PRODUCT_ID
+		 WHERE 1 = 1
+		 <if test="status != null and status != ''">
+		   AND STATUS = #{status}
+		</if>
+		<if test="searchValue != null and searchValue != ''">
+		   AND 
+		   	  (
+			   R.REPORTER_ID LIKE CONCAT('%', #{searchValue}, '%')
+			   OR R.REPORTER_ID LIKE CONCAT('%', #{searchValue}, '%')
+	 	       OR R.PRODUCT_ID LIKE CONCAT('%', #{searchValue}, '%')
+	 	       OR P.PRODUCT_TITLE LIKE CONCAT('%', #{searchValue}, '%') 
+	 	       OR R.STATUS LIKE CONCAT('%', #{searchValue}, '%') 
+	 	       OR R.REASON LIKE CONCAT('%', #{searchValue}, '%') 
+	 	       OR R.ADMIN_ID LIKE CONCAT('%', #{searchValue}, '%')
+	 	      )
+		</if>
+		 ORDER BY 
+			<choose>
+				<when test="orderColumn == 'REPORTER_ID'">R.REPORTER_ID</when>
+				<when test="orderColumn == 'PRODUCT_ID'">R.PRODUCT_ID</when>
+				<when test="orderColumn == 'PRODUCT_TITLE'">P.PRODUCT_TITLE</when>
+				<when test="orderColumn == 'REPORT_DATE'">R.REPORT_DATE</when>
+				<when test="orderColumn == 'REASON'">R.REASON</when>
+				<when test="orderColumn == 'STATUS'">R.STATUS</when>
+				<when test="orderColumn == 'ACTION_REASON'">R.ACTION_REASON</when>
+				<when test="orderColumn == 'ADMIN_ID'">R.ADMIN_ID</when>
+				<when test="orderColumn == 'ACTION_DATE'">R.ACTION_DATE</when>
+				<otherwise>R.REPORT_DATE</otherwise>
+			</choose>
+			<if test="orderDir == 'asc'">ASC</if>
+			<if test="orderDir == 'desc'">DESC</if>
+		  LIMIT
+		 	   #{start}
+		 	   , #{length}
+     </select>
+     
+     
+     
+     
+     
      <!-- [ 공지사항 관리 ] -->
      <!-- 공지사항 목록 전체 컬럼 수 조회 - SELECT -->
      <select id="selectNoticeListTotal" resultType="int">
@@ -269,6 +352,7 @@
 		 	</if>
      </select>
      
+     <!-- 공지사항 목록 필터링,검색 포함 조회 - SELECT -->
      <select id="selectNoticeList" resultType="notice">
      	SELECT *
 		  FROM NOTICE

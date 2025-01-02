@@ -49,51 +49,53 @@
                         <div class="col-lg-12">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h5 class="m-0 font-weight-bold text-primary">회원 목록</h5>
+                                    <h5 class="m-0 font-weight-bold text-primary">신고 상품 목록</h5>
                                 </div>
                                 <div class="card-body">
                                 	<div class="search-wrap border">
-									   	<section class="d-flex search-inner">
-<!-- 										   	<div class="col-3 search-box"> -->
-<!-- 			                                	<div class="search-ttl">작성일자별</div> -->
-<!-- 												<div class="input-group align-items-center justify-content-center"> -->
-<!-- 												    <input type="date" class="form-control rounded-sm mr-2" id="searchDate1" placeholder="날짜를 선택하세요" /> -->
-<!-- 													~  -->
-<!-- 												    <input type="date" class="form-control rounded-sm ml-2" id="searchDate2" placeholder="날짜를 선택하세요" /> -->
-<!-- 												</div> -->
-<!-- 										    </div> -->
-										    <div class="col-6 search-box">
+                                		<section class="d-flex search-inner">
+	                                		<div class="col-3 pl-4 search-box">
+			                                	<div class="search-ttl">상태별</div>
+											    <div class="category-filter input-group">
+											        <div class="form-check">
+													    <input class="form-check-input" id="reset" type="radio" name="status"  value="" checked>
+													    <label class="form-check-label" for="reset">전체</label>
+													</div>
+											        <div class="form-check ml-3">
+													    <input class="form-check-input" id="status1" type="radio" name="status" value="접수">
+													    <label class="form-check-label" for="status1">접수</label>
+													</div>
+													<div class="form-check ml-3">
+													    <input class="form-check-input" id="status2" type="radio" name="status" value="처리완료">
+													    <label class="form-check-label" for="status2">처리완료</label>
+													</div>
+													<div class="form-check ml-3">
+													    <input class="form-check-input" id="status3" type="radio" name="status" value="기각">
+													    <label class="form-check-label" for="status3">기각</label>
+													</div>
+											    </div>
+										    </div>
+										    <div class="col-5 pl-4 search-box">
+			                                	<div class="search-ttl">신고일자별</div>
+												<div class="input-group align-items-center justify-content-center">
+												    <input type="date" class="form-control rounded-sm mr-2" id="searchDate1" placeholder="날짜를 선택하세요" />
+													~ 
+												    <input type="date" class="form-control rounded-sm ml-2" id="searchDate2" placeholder="날짜를 선택하세요" />
+												</div>
+										    </div>
+										    <div class="col-4 search-box">
 						                        <div class="input-group">
-						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="작성자ID, 제목, 내용 검색" aria-label="Search" aria-describedby="basic-addon2">
+						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="신고자ID, 신고상품, 신고사유, 처리상태 검색" aria-label="Search" aria-describedby="basic-addon2">
 						                            <div class="input-group-append">
 						                                <button class="btn btn-primary" id="searchBtn" type="button">검색</button>
 						                            </div>
 						                        </div>
 					                        </div>
-					                        <div class="col-6 d-flex justify-right">
-												<button class="btn btn-primary ml-auto" type="button" id="btnAddRow" onclick="window.open('NoticeMain')"><i class="fa-regular fa-pen-to-square"></i> 작성하기</button>
-												<button class="btn btn-danger ml-2" type="button" id="btnDeleteRow"><i class="fa-solid fa-trash-can"></i> 선택 삭제</button>
-		                                    </div>
 									   	</section>
 									</div>
                                 	<div class="table-responsive">
-		                                <table class="table table-bordered compact" id="noticeList" width="100%" cellspacing="0">
-		                                    <thead>
-		                                    	<tr>
-		                                    		<th width="30px">
-		                                            	<div class="custom-control custom-checkbox small">
-			                                            	<input type="checkbox" class="custom-control-input" id="checkAll">
-			                                            	<label class="custom-control-label" for="checkAll"></label>
-		                                            	</div>
-		                                            </th>
-		                                            <th>No.</th>
-		                                            <th>작성자</th>
-		                                            <th>제목</th>
-		                                            <th>작성일자</th>
-		                                            <th>조회수</th>
-		                                            <th>관리</th>
-		                                    	</tr>
-		                                    </thead>
+		                                <table class="table table-bordered compact" id="productReport" width="100%" cellspacing="0">
+		                                    <thead></thead>
 		                                    <tbody></tbody>
 		                                </table>
 		                          	</div>
@@ -177,7 +179,7 @@
 <%--     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script> --%> <%-- 반응형 --%>
 
     <!-- Page level custom scripts -->
-    <script src="${pageContext.request.contextPath}/resources/adm/js/notice_list.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/js/product_report_list.js"></script>
 
 </body>
 

@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function(){
             { title: "제목", data : "FAQ_SUBJECT", defaultContent: "",  orderable: false, searchable: true, },
             { title: "내용", data : "FAQ_CONTENT", defaultContent: "", orderable: false, searchable: true, },
             { 
-				title: "FAQ카테고리", 
+				title: "FAQ 유형", 
 				data : "FAQ_CATE", 
 				defaultContent: "운영정책", 
 				orderable: false,	// 정렬 비활성화

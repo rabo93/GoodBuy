@@ -78,7 +78,7 @@
 						            </div>
 						            <div class="buttons">
 						                <button class="charge-btn"  onclick="openModal()">+ 충전</button>
-						                <button class="transfer-btn" onclick="location.href='pay_remit.jsp'">￦계좌송금</button>
+						                <button class="transfer-btn" onclick="location.href='PayTransfer'">￦계좌송금</button>
 						                
 						                
 						                <%-- 충전버튼 모달창 --%>
@@ -86,42 +86,87 @@
 											<div class="pay-account-modal-content">
 												<div class="pay-account-modal-header">
 													<span class="pay-account-modal-close " onclick="closeModal()">&times;</span>
-													<h2>어느 계좌에서 충전 하시겠습니까?</h2>
+													<h2>굿페이 충전</h2>
 												</div>
 												<div class="pay-account-modal-body">
-													<c:forEach var="account" items="${bankUserInfo.res_list}" varStatus="status">
-														<form action="PayAccountDetail" method="POST" id="PayAccountDetail-${account.fintech_use_num}">
-														        <input type="hidden" name="fintech_use_num" value="${account.fintech_use_num}">
-														        <input type="hidden" name="account_holder_name" value="${account.account_holder_name}">
-														        <input type="hidden" name="account_num_masked" value="${account.account_num_masked}">
+													
+													
+													
+													
+														<form action="PayWithdraw" method="post">
+														
+															
+															<select class="account-select"  name="withdraw_client_fintech_use_num">
+																<c:forEach var="account" items="${bankUserInfo.res_list}" varStatus="status">
+																	<option value="${account.fintech_use_num}" <c:if test="${account.fintech_use_num eq fintech_use_num}">selected</c:if>>
+															                ${account.bank_name} &nbsp;&nbsp; ${account.account_num_masked}
+															           		<c:if test="${account.fintech_use_num eq fintech_use_num}">
+																				( 대표계좌 )
+																			</c:if>
+																			<c:set var="withdraw_client_name" value="${account.account_holder_name}" />
+																			
+															            </div>
+																	</option>
+																	
+																</c:forEach>
+															</select>
+														
+<%-- 															<input type="hidden" name="withdraw_client_fintech_use_num" value="${withdraw_client_name }"> --%>
+															<input type="hidden" name="withdraw_client_name" value="${withdraw_client_name}">
+															<input type="hidden" name="tran_amt" value="5000">	
+														
+															<div class="input-section">
+<!-- 															거래금액 <input type="text" name="tran_amt" value="5000">  -->
+												            	<input type="text" class="input-label" placeholder="금액을 입력해 주세요" id="total-amount">
+											        		</div>
+												            <div class="balance-info">굿페이 잔액: <strong>30,000 원</strong></div>
+												            <div class="amount-btns">
+													            <input type="button" class="amount-btn" onclick="addAmount(10000)" value="+ 1만원">
+													            <input type="button" class="amount-btn" onclick="addAmount(50000)" value="+ 5만원">
+													            <input type="button" class="amount-btn" onclick="addAmount(100000)" value="+ 10만원">
+													        </div>
+													        <div class="recharge-button">
+													            <button class="recharge-btn">충전하기</button>
+<!-- 																<input type="submit"  value="충전하기"  class="recharge-btn"> -->
+													        </div>
 														</form>
-														<a href="#" 
-														       title="${account.account_num_masked}계좌의 상세정보 보기" 
-														       data-form-id="PayAccountDetail-${account.fintech_use_num}" 
-														       onclick="submitForm(this);">
-												        <div class="linked-account">
-												            <div class="account-info">
-												                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
-												                <span class="account-number">${account.bank_name}<strong>${account.account_num_masked}</strong></span>
-												            </div>
-												            <c:choose>
-							  										<c:when test="${account.fintech_use_num eq fintech_use_num}">
-													            	<button class="primary-account-btn">대표계좌</button>
-														        </c:when>
-														        <c:otherwise>
-														    		<form action="PayRegistRepresentAccount" method="POST" id="PayRegistRepresentAccount">
-																		<input type="hidden" name="fintech_use_num" value="${account.fintech_use_num}">
-																		<input type="hidden" name="account_holder_name" value="${account.account_holder_name}">
-																		<input type="hidden" name="account_num_masked" value="${account.account_num_masked}">
-																	</form>    
-														        </c:otherwise>
-														    </c:choose>
-												        </div>
-												    </a>
-										        </c:forEach>
+													
+													
+													
+													
+<%-- 													<c:forEach var="account" items="${bankUserInfo.res_list}" varStatus="status"> --%>
+<%-- 														<form action="PayAccountDetail" method="POST" id="PayAccountDetail-${account.fintech_use_num}"> --%>
+<%-- 														        <input type="hidden" name="fintech_use_num" value="${account.fintech_use_num}"> --%>
+<%-- 														        <input type="hidden" name="account_holder_name" value="${account.account_holder_name}"> --%>
+<%-- 														        <input type="hidden" name="account_num_masked" value="${account.account_num_masked}"> --%>
+<!-- 														</form> -->
+<!-- 														<a href="#"  -->
+<%-- 														       title="${account.account_num_masked}계좌의 상세정보 보기"  --%>
+<%-- 														       data-form-id="PayAccountDetail-${account.fintech_use_num}"  --%>
+<!-- 														       onclick="submitForm(this);"> -->
+<!-- 												        <div class="linked-account"> -->
+<!-- 												            <div class="account-info"> -->
+<!-- 												                <div class="icon"><i class="fa-solid fa-building-columns"></i></div> -->
+<%-- 												                <span class="account-number">${account.bank_name}<strong>${account.account_num_masked}</strong></span> --%>
+<!-- 												            </div> -->
+<%-- 												            <c:choose> --%>
+<%-- 							  										<c:when test="${account.fintech_use_num eq fintech_use_num}"> --%>
+<!-- 													            	<button class="primary-account-btn">대표계좌</button> -->
+<%-- 														        </c:when> --%>
+<%-- 														        <c:otherwise> --%>
+<!-- 														    		<form action="PayRegistRepresentAccount" method="POST" id="PayRegistRepresentAccount"> -->
+<%-- 																		<input type="hidden" name="fintech_use_num" value="${account.fintech_use_num}"> --%>
+<%-- 																		<input type="hidden" name="account_holder_name" value="${account.account_holder_name}"> --%>
+<%-- 																		<input type="hidden" name="account_num_masked" value="${account.account_num_masked}"> --%>
+<!-- 																	</form>     -->
+<%-- 														        </c:otherwise> --%>
+<%-- 														    </c:choose> --%>
+<!-- 												        </div> -->
+<!-- 												    </a> -->
+<%-- 										        </c:forEach> --%>
 											</div>
 										</div>
-						            </div>
+						            </div><!-- 모달창 끝 -->
 						        </div>
 						
 						        <!-- 최근 이용 내역 -->

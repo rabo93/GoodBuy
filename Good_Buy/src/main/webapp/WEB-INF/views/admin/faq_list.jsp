@@ -83,7 +83,7 @@
     </a>
     
     <!-- 수정 모달 -->
-    <div class="modal fade" id="updateCommonCodes" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal fade" id="updateFaq" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="false">
 		<div class="modal-dialog modal-dialog-centered">
 		    <div class="modal-content">
 				<div class="modal-header">
@@ -91,45 +91,40 @@
 					<button type="button" class="close" data-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
 				</div>
 				<div class="modal-body">
-					<form action="AdmCommoncodeModify" method="post" id="modifyForm">
-						<input type="hidden" id="oldCodetypeId" name="OLD_CODETYPE_ID">
-						<input type="hidden" id="oldCodeId" name="OLD_CODE_ID">
+					<form action="AdmFaqModify" method="post" id="modifyForm">
+						<!-- faq 아이디 -->
+						<input type="hidden" id="faqId" name="FAQ_ID">
 						<div class="mb-1">
-							<label for="updatedCommoncodeId" class="col-form-label">공통코드ID <small class="text-primary" style="font-weight:600;">공통코드ID는 수정할 수 없습니다.</small></label>
-							<input type="text" class="form-control" name="CODETYPE_ID" id="updatedCommonCodeId" readonly>
+							<label for="updatedFaqSubject" class="col-form-label">제목</label>
+							<input type="text" class="form-control" name="FAQ_SUBJECT" id="updatedFaqSubject" required>
 						</div>
 						<div class="mb-1">
-							<label for="updatedCommonCodeName" class="col-form-label">공통코드명</label>
-							<input type="text" class="form-control" name="CODETYPE_NAME" id="updatedCommonCodeName" required>
+							<label for="updatedFaqContent" class="col-form-label">내용</label>
+							<input type="text" class="form-control" name="FAQ_CONTENT" id="updatedFaqContent" required>
 						</div>
+<!-- 						<div class="mb-1"> -->
+<!-- 							<label for="updatedFaqCate" class="col-form-label">FAQ 유형</label> -->
+<!-- 							<input type="text" class="form-control" name="FAQ_CATE" id="updatedFaqCate" required> -->
+<!-- 						</div> -->
 						<div class="mb-1">
-							<label for="updatedCommonCodeDesc" class="col-form-label">공통코드 설명</label>
-							<input type="text" class="form-control" name="CODETYPE_DESC" id="updatedCommonCodeDesc" required>
+							<label class="small mb-1" for="memStatus">FAQ 유형</label>
+							<select class="custom-select" id=updatedFaqCate name="FAQ_CATE" >
+								<option value="1">운영정책</option>
+								<option value="2">회원/계정</option>
+								<option value="3">결제/페이</option>
+								<option value="4">광고서비스</option>
+								<option value="5">기타</option>
+							</select>
 						</div>
-						<div class="mb-1">
-							<label for="updatedCodeId" class="col-form-label">상세코드ID</label>
-							<input type="text" class="form-control" name="CODE_ID" id="updatedCodeId" required>
-						</div>
-						<div class="mb-1">
-							<label for="updatedCodeName" class="col-form-label">상세코드명</label>
-							<input type="text" class="form-control" name="CODE_NAME" id="updatedCodeName" required>
-						</div>
-						<div class="mb-1">
-							<label for="updatedCodeDesc" class="col-form-label">상세코드 설명</label>
-							<input type="text" class="form-control" name="CODE_DESC" id="updatedCodeDesc" required>
-						</div>
+						
 						<div class="row px-2">
 							<div class="w-50">
-								<label for="updatedCodeStatus" class="col-form-label">사용여부</label>
+								<label for="updatedListStatus" class="col-form-label">사용여부</label>
 								<div class="form-check form-switch">
-					        		<input type="hidden" id="updatedCodeStatus" name="CODE_STATUS">
+					        		<input type="hidden" id="updatedListStatus" name="LIST_STATUS">
 									<input class="form-check-input" type="checkbox" role="switch" id="updateFlexSwitchCheckDefault">
-									<label class="form-check-label text-center" style="width:56px" id="updateFlexSwitchCheckDefaultLab" for="updateFlexSwitchCheckDefault"></label>
+									<label class="form-check-label text-center" style="width:70px" id="updateFlexSwitchCheckDefaultLab" for="updateFlexSwitchCheckDefault"></label>
 								</div>
-							</div>
-							<div class="w-50">
-								<label for="updatedCodeSeq" class="col-form-label">상세코드 순서</label>
-								<input type="number" min="1" class="form-control" name="CODE_SEQ" id="updatedCodeSeq" placeholder="순서 입력" required>
 							</div>
 						</div>
 					</form>
@@ -158,7 +153,7 @@
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="${pageContext.request.contextPath}/resources/adm/js/code_list.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/js/faq_list.js"></script>
 
 </body>
 

@@ -120,6 +120,12 @@ public class MemberService {
 	public void removeMemInfo(String id, int mem_status) {
 		mapper.updateMemberStatus(id, mem_status);
 	}
+	
+	//	-------------------------------------------------------------
+	//	채팅 - MEM_ID 조회
+	public String selectMemberId(String mem_id) {
+		return mapper.selectMemberId(mem_id);
+	}
 
 
 }

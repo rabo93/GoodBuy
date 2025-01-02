@@ -19,4 +19,32 @@
 		FROM PRODUCT P JOIN MYREVIEW R ON P.PRODUCT_ID = R.PRODUCT_ID
 		WHERE P.MEM_ID = #{mem_id};
 	</select>
+	
+<!-- 	리뷰작성 -->
+	<insert id="insertReview" parameterType="map">
+	<selectKey resultType="int" order="BEFORE" keyProperty="review_id">
+<!-- 			SELECT MAX(REVIEW_ID) + 1 -->
+			SELECT COALESCE(MAX(REVIEW_ID), 0) + 1
+			FROM MYREVIEW;
+		</selectKey>
+	INSERT INTO MYREVIEW (
+	    REVIEW_ID
+	   , MEM_ID
+	   , REVIEW_CONTENT
+	   , REVIEW_DATE
+	   , PRODUCT_TITLE
+	   , REVIEW_SCORE
+	   , PRODUCT_ID
+	) VALUES (
+	    #{review_id}             -- 리뷰 ID
+	    , #{mem_id}             -- 회원 ID
+	    , #{review_content}   -- 리뷰 내용
+	    , now() -- 리뷰 날짜
+	    , #{product_title}
+	    , null
+	    , #{product_id}            
+	    
+	);
+	
+	</insert>
 </mapper>

@@ -29,7 +29,7 @@
         <div id="menu02" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
             	<h6 class="collapse-header">User List</h6>
-                <a class="collapse-item" href="AdmMemberList">회원 목록</a>
+                <a class="collapse-item" href="AdmMemberList" data-sub-page="AdmMemberDetailForm">회원 목록</a>
             </div>
         </div>
     </li>
@@ -110,7 +110,7 @@
 		collapseItems.forEach((item) => {
 			item.classList.remove("active");
 			
-			if (pathName == item.getAttribute('href')) {
+			if (pathName == item.getAttribute('href') || pathName == item.getAttribute('data-sub-page')) {
 				item.classList.add("active");
 				item.parentElement.parentElement.classList.add("show");
 				item.parentElement.parentElement.parentElement.classList.add("active");

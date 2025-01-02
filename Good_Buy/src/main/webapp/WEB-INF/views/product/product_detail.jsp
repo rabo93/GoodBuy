@@ -77,7 +77,9 @@
 							<div class="item-detail-button-group">
 								<div class="item-detail-trade-adr">직거래 위치: 부산진구</div>
 								<input type="button" value="찜하기" class="item-detail-fav">
-								<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
+								<a href="javascript:void(0)"  onclick="openSlideChat('admin')">
+									<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
+								</a>
 							</div>
 						</div>
 					</div>
@@ -242,9 +244,9 @@
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
 </body>
-
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script type="text/javascript">
+
 	
 </script>
 </html>

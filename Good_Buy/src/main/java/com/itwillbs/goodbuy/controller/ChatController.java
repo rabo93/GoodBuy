@@ -15,4 +15,12 @@ public class ChatController {
 		
 		return "chat/chat_list";
 	}
+	
+	@GetMapping("ChatStart")
+	public String chatStart() {
+		
+		return "chat/chatting";
+	}
+	
+	
 }

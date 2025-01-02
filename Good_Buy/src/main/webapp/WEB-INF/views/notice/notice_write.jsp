@@ -72,7 +72,7 @@
 						</table>
 						<section class="btns">
 							<input type="submit" value="등록">
-							<input type="button" value="취소" onclick="history.back()">
+							<input type="button" value="취소" onclick="location.href='NoticeMain'">
 						</section>
 					</form>
 				</section>

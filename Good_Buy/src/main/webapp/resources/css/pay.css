@@ -85,6 +85,10 @@
     background-color: var(--primary);
 }
 
+.refund-btn {
+	background-color: var(--gray);
+}
+
 
 .goodpay-header{
     display: flex;

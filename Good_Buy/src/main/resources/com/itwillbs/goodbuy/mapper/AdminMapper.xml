@@ -56,6 +56,14 @@
 		 	   OR S.CODE_NAME LIKE CONCAT('%', #{searchValue}, '%')
 		 	   OR S.DESCRIPTION LIKE CONCAT('%', #{searchValue}, '%')
 		 </if>
+		 ORDER BY
+	 	<choose>
+			<when test="orderColumn == 'CODETYPE_ID'">M.CODETYPE_ID</when>
+			<when test="orderColumn == 'CODE_ID'">S.CODE_ID</when>
+			<otherwise>CODETYPE_ID</otherwise>
+		</choose>
+		<if test="orderDir == 'asc'">ASC</if>
+		<if test="orderDir == 'desc'">DESC</if>
 		 LIMIT
 		 	   #{start}
 		 	   , #{length}
@@ -145,6 +153,58 @@
 		       , SNS_STATUS
 		       , AUTH_STATUS
 		  FROM MEMBER
+		 WHERE 1 = 1
+			<if test="memStatus != null and memStatus != 0">
+		 	   AND MEM_STATUS = #{memStatus}
+		 	</if>
+		 	<if test="memGrade != null and memGrade != '전체'">
+		 	   AND MEM_GRADE = #{memGrade}
+		 	</if>
+		 	<if test="searchValue != null and searchValue != ''">
+		 	   AND (MEM_ID LIKE CONCAT('%', #{searchValue}, '%')
+		 	    	OR MEM_NAME LIKE CONCAT('%', #{searchValue}, '%')
+		 	    	OR MEM_NICK LIKE CONCAT('%', #{searchValue}, '%')
+		 	    	OR MEM_EMAIL LIKE CONCAT('%', #{searchValue}, '%')) 
+		 	</if>
+		 ORDER BY 
+			<choose>
+				<when test="orderColumn == 'mem_id'">MEM_ID</when>
+				<when test="orderColumn == 'mem_name'">MEM_NAME</when>
+				<when test="orderColumn == 'mem_nick'">MEM_NICK</when>
+				<when test="orderColumn == 'mem_email'">MEM_EMAIL</when>
+				<when test="orderColumn == 'mem_reg_date'">MEM_REG_DATE</when>
+				<otherwise>MEM_REG_DATE</otherwise>
+			</choose>
+			<if test="orderDir == 'asc'">ASC</if>
+			<if test="orderDir == 'desc'">DESC</if>
+		  LIMIT
+		 	   #{start}
+		 	   , #{length}
+     </select>
+     
+     <!-- 회원목록 전체 컬럼 수 조회 - SELECT -->
+     <select id="selectMemberListTotal" resultType="int">
+     	SELECT COUNT(*)
+     	  FROM MEMBER
+     </select>
+     
+     <!-- 회원목록 필터링 후 컬럼 수 조회 - SELECT -->
+     <select id="selectMemberListFiltered" resultType="int">
+     	SELECT COUNT(*)
+     	  FROM MEMBER
+     	 WHERE 1 = 1
+			<if test="memStatus != null and memStatus != 0">
+		 	   AND MEM_STATUS = #{memStatus}
+		 	</if>
+		 	<if test="memGrade != null and memGrade != '전체'">
+		 	   AND MEM_GRADE = #{memGrade}
+		 	</if>
+		 	<if test="searchValue != null and searchValue != ''">
+		 	   AND (MEM_ID LIKE CONCAT('%', #{searchValue}, '%')
+		 	    	OR MEM_NAME LIKE CONCAT('%', #{searchValue}, '%')
+		 	    	OR MEM_NICK LIKE CONCAT('%', #{searchValue}, '%')
+		 	    	OR MEM_EMAIL LIKE CONCAT('%', #{searchValue}, '%')) 
+		 	</if>
      </select>
      
      <!-- 회원 상세 정보 조회 - SELECT -->
@@ -182,11 +242,69 @@
      	 WHERE MEM_ID = #{mem_id}
      </update>
      
+     <!-- 회원 삭제 - DELETE -->
+     <delete id="deleteMember">
+     	DELETE FROM MEMBER
+     	 WHERE MEM_ID = #{mem_id}
+     </delete>
      
+     <!-- [ 공지사항 관리 ] -->
+     <!-- 공지사항 목록 전체 컬럼 수 조회 - SELECT -->
+     <select id="selectNoticeListTotal" resultType="int">
+     	SELECT COUNT(*)
+     	  FROM NOTICE
+     </select>
      
+     <!-- 공지사항 필터링 후 전체 컬럼 수 조회 - SELECT -->
+     <select id="selectNoticeListFiltered" resultType="int">
+     	SELECT COUNT(*)
+     	  FROM NOTICE
+     	 WHERE 1 = 1
+     	 	<if test="searchValue != null and searchValue != ''">
+		 	   AND (
+			 	   	NOTICE_SUBJECT LIKE CONCAT('%', #{searchValue}, '%')
+		 	    	OR NOTICE_CONTENT LIKE CONCAT('%', #{searchValue}, '%')
+		 	    	OR MEM_ID LIKE CONCAT('%', #{searchValue}, '%')
+		 	   		)
+		 	</if>
+     </select>
      
+     <select id="selectNoticeList" resultType="notice">
+     	SELECT *
+		  FROM NOTICE
+		 WHERE 1 = 1
+		 	<if test="searchValue != null and searchValue != ''">
+		 	   AND (
+		 	   		NOTICE_SUBJECT LIKE CONCAT('%', #{searchValue}, '%')
+		 	    	OR NOTICE_CONTENT LIKE CONCAT('%', #{searchValue}, '%')
+		 	    	OR MEM_ID LIKE CONCAT('%', #{searchValue}, '%')
+		 	    	)
+		 	</if>
+		 ORDER BY 
+			<choose>
+				<when test="orderColumn == 'mem_id'">MEM_ID</when>
+				<when test="orderColumn == 'notice_subject'">NOTICE_SUBJECT</when>
+				<when test="orderColumn == 'notice_content'">NOTICE_CONTENT</when>
+				<when test="orderColumn == 'notice_date'">NOTICE_DATE</when>
+				<when test="orderColumn == 'notice_read_count'">NOTICE_READ_COUNT</when>
+				<otherwise>NOTICE_DATE</otherwise>
+			</choose>
+			<if test="orderDir == 'asc'">ASC</if>
+			<if test="orderDir == 'desc'">DESC</if>
+		  LIMIT
+		 	   #{start}
+		 	   , #{length}
+     </select>
      
-     
+     <delete id="deleteNotice">
+     	DELETE
+     	  FROM NOTICE
+     	 WHERE 1 = 1
+	       AND NOTICE_ID IN 
+		<foreach collection="deleteItems" item="notice_id" index="index" open="(" close=")" separator=",">
+			   #{notice_id}
+		</foreach>
+     </delete>
      
      
      
@@ -199,6 +317,7 @@
 			,FAQ_SUBJECT
 		    , FAQ_CONTENT
 		    , FAQ_CATE
+		    , LIST_STATUS
 		FROM FAQ
 		WHERE 1 = 1
 		 <if test="searchValue != null">
@@ -226,5 +345,21 @@
 		 	   OR FAQ_CONTENT LIKE CONCAT('%', #{searchValue}, '%')
 		 </if>
      </select>
+     
+     <!-- FAQ 수정 -->
+     <update id="updateFaqInfo">
+     	UPDATE FAQ
+     	   SET FAQ_SUBJECT = #{FAQ_SUBJECT}
+     	   	   , FAQ_CONTENT = #{FAQ_CONTENT}
+     	   	   , FAQ_CATE = #{FAQ_CATE}
+     	   	   , LIST_STATUS = #{LIST_STATUS}
+     	 WHERE FAQ_ID = #{FAQ_ID}
+     </update>
+     
+     <!-- FAQ 삭제 -->
+     <delete id="deleteFaq">
+		DELETE FROM FAQ
+		WHERE FAQ_ID = #{faqId}     
+     </delete>
      
 </mapper>

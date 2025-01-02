@@ -1,17 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>    
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
 <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
 <link rel="icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
-
-<title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
 <!-- default -->
 <link rel="stylesheet" href="../../resources/css/common.css">
@@ -35,6 +32,21 @@
 
 
 
+<style>
+
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
 
 
 </head>
@@ -46,12 +58,9 @@
 		<section class="wrapper">
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
-				
-				
-				
-				
-				
-				<h2 class="page-ttl">마이페이지</h2>
+<!-- 				<div class="goodpay-container"> -->
+			        
+		        <h2 class="page-ttl">마이페이지</h2>
 				<section class="my-wrap">
 					<aside class="my-menu">
 						<h3>거래 정보</h3>
@@ -71,47 +80,49 @@
 		        
 		        	<div class="my-container">
 						<div class="contents-ttl">
-							<h3>굿페이 > ${account_holder_name} 고객님의 계좌 상세정보</h3>
-							<br>	
-				
-				
-				 
-							<div class="linked-account">
-					            <div class="account-info">
-					                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
-					                <span class="account-number">
-					                		${accountDetail.bank_name}<strong>&nbsp;&nbsp;&nbsp;&nbsp;${account_num_masked}</strong>
-					                		( ￦ <fmt:formatNumber pattern="#,###">${accountDetail.wd_limit_remain_amt}</fmt:formatNumber> 원 )	
-					                </span>
-					            </div>
-					            <button class="primary-account-btn">대표계좌</button>
+							<h3>굿페이 > 계좌송금</h3>
+		        			<h1>계좌송금은 채팅창에서 상대방 아이디 눌러서 계좌송금하는 방식이다. 바로 보내는 방식이 아님. </h1>
+		        
+		        
+		        
+					
+					        <!-- 입력 안내 -->
+					        <div class="input-section">
+					            <input type="text" class="input-label" placeholder="계좌번호를 입력하세요">
+					            <input type="text" class="input-label" placeholder="은행을 선택하세요">
 					        </div>
-							
-							
-							
-				
-							<div align="center">
-								<input type="button" value="돌아가기" onclick="history.back()">
-								<hr>
-								<%-- 2.6. 계좌이체 서비스 - 2.6.2. 입금이체 API 서비스 요청 폼 --%>
-								<%-- 거래 요청 고객(입금계좌 예금주) 정보(핀테크이용번호, 예금주명, 입금금액) 전달 --%>
-								<form action="PayDeposit" method="post">
-									<input type="hidden" name="deposit_client_fintech_use_num" value="${accountDetail.fintech_use_num}">
-									<input type="hidden" name="deposit_client_name" value="${account_holder_name}">
-									<%-- 실제 거래금액은 상품 결정되면 해당 상품의 거래금액을 사용 --%>
-									<%-- 현재는 임시로 거래금액 텍스트박스를 통해 입력(임의의 기본값 입력) --%>
-									거래금액 <input type="text" name="tran_amt" value="33000"> 
-									<input type="submit" value="환불하기">
-								</form>
-								
-								
-							</div>
-						</div>
-					</div>
-				</section>
-		
-		
-			<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
+					
+					         <!-- 충전하기 버튼 -->
+					        <div class="recharge-button">
+					            <button class="recharge-btn">다음</button>
+					        </div>
+					        
+					         <!-- 계좌내역 -->
+					        <div class="accounts">
+					            <h3>내 계좌</h3>
+					            <!-- 연결된 계좌 -->
+						        <div class="linked-account">
+						            <div class="account-info">
+						                <div class="icon"></div>
+						                <span class="account-number">우체국 <strong>1234567890123</strong></span>
+						            </div>
+						            <button class="primary-account-btn">주계좌</button>
+						        </div>
+					       </div>
+					        <!-- 추천계좌 버튼 -->
+					        <div class="recommend-button">
+					            <button class="recommend-btn">우리은행 1234567890123 (으)로 송금
+					            	<span><i class="fa-solid fa-x"></i></span>
+					            </button>
+					        </div>
+		    			</div>
+		    		</div>
+		    	</section>
+			    
+			    
+<!-- 			    </div> -->
+			    
+				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 			</div>
 		</section>
 	</main>

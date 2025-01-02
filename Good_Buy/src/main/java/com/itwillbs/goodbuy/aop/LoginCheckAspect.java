@@ -177,7 +177,7 @@ public class LoginCheckAspect {
 					}
 //					
 					session.setAttribute("prevURL", prevURL);
-					throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "회원만 이용 가능합니다!\\n로그인 페이지로 이동합니다./MemberLogin") {};
+					throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "관리자만 이용 가능합니다!\\n로그인 페이지로 이동합니다./MemberLogin") {};
 				} else if(!id.equals("admin")) {
 					String prevURL = request.getServletPath();
 					String queryString = request.getQueryString();

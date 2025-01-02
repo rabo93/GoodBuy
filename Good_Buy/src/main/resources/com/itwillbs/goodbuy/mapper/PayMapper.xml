@@ -35,7 +35,7 @@
 			, expires_in = #{token.expires_in}
 			, refresh_token = #{token.refresh_token}
 			, scope = #{token.scope}
-		WHERE user_seq_no = #{token.user_seq_no}
+		WHERE USER_SEQ_NO = #{token.user_seq_no}
 	</update>
 
 	<select id="selectPayTokenInfo" resultType="payToken">
@@ -88,7 +88,7 @@
 	</update>
 	
 
-	<!-- 이체(출금, 입금) 결과 저장 - insert -->
+	<!-- 이체(출금, 입금, 송금) 결과 저장 - insert -->
 	<insert id="insertTransactionResult">
 		INSERT 
 		INTO TRANSACTIONINFO
@@ -109,6 +109,7 @@
 			, #{withdrawResult.bank_rsp_message}
 			, #{withdrawResult.dps_bank_code_std}
 			, #{withdrawResult.dps_account_num_masked}
+			, ''
 			  </if>
 			  <if test="trnsactionType.equals('DE')">
 			, #{withdrawResult.res_list[0].fintech_use_num}
@@ -120,12 +121,29 @@
 			, #{withdrawResult.res_list[0].tran_amt}
 			, #{withdrawResult.rsp_code}
 			, #{withdrawResult.rsp_message}
-			
-			
 			, #{withdrawResult.res_list[0].bank_rsp_code}
 			, #{withdrawResult.res_list[0].bank_rsp_message}
 			, #{withdrawResult.wd_bank_code_std}
-			, #{withdrawResult.wd_account_num_masked}  
+			, #{withdrawResult.wd_account_num_masked} 
+			, ''
+			  </if>
+			  <if test="trnsactionType.equals('TR')">
+			, #{withdrawResult.withdrawResult.fintech_use_num}
+			, #{trnsactionType}  
+			, #{withdrawResult.withdrawResult.api_tran_id}
+			, LEFT(#{withdrawResult.withdrawResult.api_tran_dtm}, 14)
+			, #{withdrawResult.withdrawResult.bank_tran_id}
+			, #{withdrawResult.withdrawResult.bank_tran_date} 
+			, #{withdrawResult.withdrawResult.tran_amt}
+			, #{withdrawResult.withdrawResult.rsp_code}
+			, #{withdrawResult.withdrawResult.rsp_message}
+			, #{withdrawResult.withdrawResult.bank_rsp_code}
+			, #{withdrawResult.withdrawResult.bank_rsp_message}
+			, #{withdrawResult.withdrawResult.dps_bank_code_std}
+			, #{withdrawResult.withdrawResult.dps_account_num_masked}
+			
+			-- 송금받는 사람 정보 입력
+			, #{withdrawResult.depositResult.res_list[0].fintech_use_num}  
 			  </if>
 		)
 	</insert>
@@ -135,7 +153,7 @@
 	<select id="selectTransactionResult">
 		SELECT * 
 		FROM TRANSACTIONINFO
-		WHERE  bank_tran_id = #{bank_tran_id}
+		WHERE  BANK_TRAN_ID = #{bank_tran_id}
 	</select>
 	
 	<!-- pay_list에서 토큰이 있는 id인지 조회 - select -->
@@ -150,9 +168,16 @@
 	<select id="selectPayAccountInfo">
 		SELECT *
 		FROM ACCOUNTINFO
-		WHERE user_seq_no = #{user_seq_no}
+		WHERE USER_SEQ_NO = #{user_seq_no}
 	</select>
 	
 	
+	<!-- 충전금액조회 -->
+	<select id="selectPayAmount">
+		SELECT SUM(TRAN_AMT)
+		  FROM TRANSACTIONINFO
+		 WHERE TRANSACTION_TYPE = 'WI'
+		   AND USER_SEQ_NO = #{user_seq_no};
+	</select>
 	
 </mapper>

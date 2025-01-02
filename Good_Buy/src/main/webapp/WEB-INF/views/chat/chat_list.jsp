@@ -27,9 +27,9 @@
 
 </head>
 <body>
-	<header>
-		<jsp:include page="/WEB-INF/views/inc/header.jsp"></jsp:include>
-	</header>
+<!-- 	<header> -->
+<%-- 		<jsp:include page="/WEB-INF/views/inc/header.jsp"></jsp:include> --%>
+<!-- 	</header> -->
 	<main>
 		<section class="wrapper">
 			<div class="page-inner">
@@ -79,16 +79,16 @@
 <!-- 			                <input type="text" class="chatMessage" placeholder="메시지를 입력하세요..."> -->
 <!-- 			                <button class="btnSend">전송</button> -->
 <!-- 			            </div> -->
-			        </div>
+<!-- 			        </div> -->
 		    	</div>
 				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 			</div>
 		</section>
 	</main>
-	<footer>
-		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
-	</footer>
-	<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script>
+<!-- 	<footer> -->
+<%-- 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include> --%>
+<!-- 	</footer> -->
+<%-- 	<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script> --%>
 	<script src="${pageContext.request.contextPath}/resources/js/chat_main.js"></script>
 </body>
 </html>

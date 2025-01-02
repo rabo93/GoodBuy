@@ -45,28 +45,54 @@
                
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-<!--                 	<h1 class="h3 mb-4 text-gray-800">공통코드 관리</h1> -->
 					<div class="row">
                         <div class="col-lg-12">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h5 class="m-0 font-weight-bold text-primary">공통코드 목록</h5>
+                                    <h5 class="m-0 font-weight-bold text-primary">회원 목록</h5>
                                 </div>
                                 <div class="card-body">
-                                	<div class="table-responsive overflow-hidden">
-		                                <table class="table table-bordered" id="codeList" width="100%" cellspacing="0">
+                                	<div class="search-wrap border">
+									   	<section class="d-flex search-inner">
+<!-- 										   	<div class="col-3 search-box"> -->
+<!-- 			                                	<div class="search-ttl">작성일자별</div> -->
+<!-- 												<div class="input-group align-items-center justify-content-center"> -->
+<!-- 												    <input type="date" class="form-control rounded-sm mr-2" id="searchDate1" placeholder="날짜를 선택하세요" /> -->
+<!-- 													~  -->
+<!-- 												    <input type="date" class="form-control rounded-sm ml-2" id="searchDate2" placeholder="날짜를 선택하세요" /> -->
+<!-- 												</div> -->
+<!-- 										    </div> -->
+										    <div class="col-6 search-box">
+						                        <div class="input-group">
+						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="제목, 내용 검색" aria-label="Search" aria-describedby="basic-addon2">
+						                            <div class="input-group-append">
+						                                <button class="btn btn-primary" id="searchBtn" type="button">검색</button>
+						                            </div>
+						                        </div>
+					                        </div>
+					                        <div class="col-6 d-flex justify-right">
+												<button class="btn btn-primary ml-auto" type="button" id="btnAddRow" onclick="window.open('NoticeMain')"><i class="fa-regular fa-pen-to-square"></i> 작성하기</button>
+												<button class="btn btn-danger ml-2" type="button" id="btnDeleteRow"><i class="fa-solid fa-trash-can"></i> 선택 삭제</button>
+		                                    </div>
+									   	</section>
+									</div>
+                                	<div class="table-responsive">
+		                                <table class="table table-bordered compact" id="noticeList" width="100%" cellspacing="0">
 		                                    <thead>
-		                                        <tr>
-		                                            <th>공통코드ID</th>
-		                                            <th>공통코드명</th>
-		                                            <th>공통코드 설명</th>
-		                                            <th>상세코드ID</th>
-		                                            <th>상세코드명</th>
-		                                            <th>상세코드 설명</th>
-		                                            <th>사용여부</th>
-		                                            <th>순서</th>
+		                                    	<tr>
+		                                    		<th width="30px">
+		                                            	<div class="custom-control custom-checkbox small">
+			                                            	<input type="checkbox" class="custom-control-input" id="checkAll">
+			                                            	<label class="custom-control-label" for="checkAll"></label>
+		                                            	</div>
+		                                            </th>
+		                                            <th>No.</th>
+		                                            <th>작성자</th>
+		                                            <th>제목</th>
+		                                            <th>작성일자</th>
+		                                            <th>조회수</th>
 		                                            <th>관리</th>
-		                                        </tr>
+		                                    	</tr>
 		                                    </thead>
 		                                    <tbody></tbody>
 		                                </table>
@@ -96,60 +122,40 @@
     </a>
     
     <!-- 수정 모달 -->
-    <div class="modal fade" id="updateCommonCodes" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal fade" id="updateMemberInfo" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 		    <div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="updateModalLabel">수정</h5>
+					<h5 class="modal-title" id="updateModalLabel">회원 상태 변경</h5>
 					<button type="button" class="close" data-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
 				</div>
 				<div class="modal-body">
-					<form action="AdmCommoncodeModify" method="post" id="modifyForm">
-						<input type="hidden" id="oldCodetypeId" name="OLD_CODETYPE_ID">
-						<input type="hidden" id="oldCodeId" name="OLD_CODE_ID">
-						<div class="mb-1">
-							<label for="updatedCommoncodeId" class="col-form-label">공통코드ID <small class="text-primary" style="font-weight:600;">공통코드ID는 수정할 수 없습니다.</small></label>
-							<input type="text" class="form-control" name="CODETYPE_ID" id="updatedCommonCodeId" readonly>
+					<form action="AdmMemberModify" id="memberModifyForm" method="post">
+						<input type="hidden" id="memId" name="mem_id">
+						<div class="mb-3">
+							<label for="memId2" class="col-form-label">변경 대상 회원</label>
+							<input type="text" class="form-control" id="memId2" name="mem_id2" readonly>
 						</div>
-						<div class="mb-1">
-							<label for="updatedCommonCodeName" class="col-form-label">공통코드명</label>
-							<input type="text" class="form-control" name="CODETYPE_NAME" id="updatedCommonCodeName" required>
+						<div class="mb-3">
+							<label class="small mb-1" for="memGrade">회원등급</label>
+							<select class="custom-select" id="memGrade" name="mem_grade">
+								<option value="일반">일반</option>
+								<option value="관리자">관리자</option>
+							</select>
 						</div>
-						<div class="mb-1">
-							<label for="updatedCommonCodeDesc" class="col-form-label">공통코드 설명</label>
-							<input type="text" class="form-control" name="CODETYPE_DESC" id="updatedCommonCodeDesc" required>
+						<div class="mb-3">
+							<label class="small mb-1" for="memStatus">회원상태</label>
+							<select class="custom-select" id="memStatus" name="mem_status">
+								<option value="1">정상</option>
+								<option value="2">정지</option>
+								<option value="3">탈퇴</option>
+							</select>
 						</div>
-						<div class="mb-1">
-							<label for="updatedCodeId" class="col-form-label">상세코드ID</label>
-							<input type="text" class="form-control" name="CODE_ID" id="updatedCodeId" required>
-						</div>
-						<div class="mb-1">
-							<label for="updatedCodeName" class="col-form-label">상세코드명</label>
-							<input type="text" class="form-control" name="CODE_NAME" id="updatedCodeName" required>
-						</div>
-						<div class="mb-1">
-							<label for="updatedCodeDesc" class="col-form-label">상세코드 설명</label>
-							<input type="text" class="form-control" name="CODE_DESC" id="updatedCodeDesc" required>
-						</div>
-						<div class="row px-2">
-							<div class="w-50">
-								<label for="updatedCodeStatus" class="col-form-label">사용여부</label>
-								<div class="form-check form-switch">
-					        		<input type="hidden" id="updatedCodeStatus" name="CODE_STATUS">
-									<input class="form-check-input" type="checkbox" role="switch" id="updateFlexSwitchCheckDefault">
-									<label class="form-check-label text-center" style="width:70px" id="updateFlexSwitchCheckDefaultLab" for="updateFlexSwitchCheckDefault"></label>
-								</div>
-							</div>
-							<div class="w-50">
-								<label for="updatedCodeSeq" class="col-form-label">상세코드 순서</label>
-								<input type="number" min="1" class="form-control" name="CODE_SEQ" id="updatedCodeSeq" placeholder="순서 입력" required>
-							</div>
-						</div>
-					</form>
+                    </form>
 				</div>
 				<div class="modal-footer justify-content-center">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="modifyForm">수정하기</button>
+					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="memberModifyForm">수정하기</button>
 				</div>
 			</div>
 		</div>
@@ -168,10 +174,10 @@
     <!-- Page level plugins -->
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<%--     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script> --%>
+<%--     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script> --%> <%-- 반응형 --%>
 
     <!-- Page level custom scripts -->
-    <script src="${pageContext.request.contextPath}/resources/adm/js/code_list.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/js/notice_list.js"></script>
 
 </body>
 

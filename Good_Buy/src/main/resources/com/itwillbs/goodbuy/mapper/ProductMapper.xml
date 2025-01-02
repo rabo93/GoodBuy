@@ -38,7 +38,7 @@
 			, #{vo.product_price}
 			, #{vo.product_discount_status}
 			, #{vo.product_category}
-			, DATE_FORMAT(now(), '%y-%m-%d')
+			, CURRENT_TIMESTAMP
 			, #{vo.product_pic1}
 			, #{vo.product_pic2}
 			, #{vo.product_pic3}
@@ -48,22 +48,11 @@
 		)
 	</insert>
 	
-	<!-- 상품목록 카테고리별 조회 -->
-	<select id="searchProductList" resultType="map">
-		SELECT 
-			pro.PRODUCT_PIC1, pro.PRODUCT_CATEGORY, pro.PRODUCT_TRADE_ADR1, pro.PRODUCT_ID,
-			pro.PRODUCT_TITLE, pro.PRODUCT_PRICE, pro.MEM_ID, mem.MEM_NICK, pro.PRODUCT_REG_DATE,
-			pro.PRODUCT_STATUS
-		FROM PRODUCT pro join MEMBER mem
-		ON pro.MEM_ID = mem.MEM_ID
-		WHERE PRODUCT_CATEGORY = #{product_category}
-	</select>
-	
 	<!-- 검색필터별 조회 -->
 	<select id="searchFliterList" resultType="map">
 		SELECT 
 			pro.PRODUCT_PIC1, pro.PRODUCT_CATEGORY, pro.PRODUCT_TRADE_ADR1, pro.PRODUCT_ID,
-			pro.PRODUCT_TITLE, pro.PRODUCT_PRICE, pro.MEM_ID, mem.MEM_NICK, pro.PRODUCT_REG_DATE,
+			pro.PRODUCT_TITLE, pro.PRODUCT_PRICE, mem.MEM_NICK, REPLACE(FORMAT(pro.PRODUCT_REG_DATE, 'yyyyMMddHHmmss'), ',', '') AS PRODUCT_REG_DATE,
 			pro.PRODUCT_STATUS
 		FROM PRODUCT pro join MEMBER mem
 		ON pro.MEM_ID = mem.MEM_ID
@@ -81,8 +70,28 @@
 		</if>
 		<if test="product_trade_adr1 != null">
 			AND
-				PRODUCT_TRADE_ADR1 like '%'||#{product_trade_adr1}||'%'
+				PRODUCT_TRADE_ADR1 LIKE CONCAT('%', #{product_trade_adr1}, '%')
 		</if>
+	</select>
+	
+	<!-- 상품 상세정보 조회 -->
+	<select id="productSearch" resultType="product">
+		SELECT pro.PRODUCT_PIC1
+			   , pro.PRODUCT_PIC2
+			   , pro.PRODUCT_PIC3
+			   , pro.PRODUCT_TRADE_ADR1
+			   , pro.PRODUCT_TITLE
+			   , pro.PRODUCT_INTRO
+			   , pro.PRODUCT_SHPPING_FEE
+			   , pro.PRODUCT_PRICE
+			   , mem.MEM_NICK
+			   , mem.MEM_PROFILE
+			   , pro.PRODUCT_REG_DATE
+			   , pro.PRODUCT_STATUS
+			   , pro.PRODUCT_DISCOUNT_STATUS
+		FROM PRODUCT pro join MEMBER mem
+		ON pro.MEM_ID = mem.MEM_ID
+		WHERE PRODUCT_ID = #{product_id}
 	</select>
 	
 	<!-- 구매상품 리스트 조회 -->
@@ -122,5 +131,6 @@
 	        GROUP BY P.PRODUCT_ID, M.MEM_ID
 	    ) TEMP
 	</select>
+	
 	
 </mapper>

@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +25,9 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/product.css">
 
 <!-- JS for Page -->
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script src="${pageContext.request.contextPath}/resources/js/product.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
 
 </head>
 <body>
@@ -38,59 +42,66 @@
 					<div class="item-detail-content">
 						<div class="item-detail-pic">
 							<div class="thumb-slide">
-								<div><img src="../../resources/img/product_thumb.jpg"></div>
-								<div><img src="../../resources/img/product_thumb.jpg"></div>
-								<div><img src="../../resources/img/product_thumb.jpg"></div>
+								<div><img src="/resources/img/product_thumb.jpg"></div>
+								<div><img src="/resources/img/product_thumb.jpg"></div>
+								<div><img src="/resources/img/product_thumb.jpg"></div>
 							</div>
-							<button class="thumb-left"></button>
-							<button class="thumb-right"></button>
+							<a href="#" class="visu-prev"><i class="fa-solid fa-chevron-left"></i></a>
+							<a href="#" class="visu-next"><i class="fa-solid fa-chevron-right"></i></a>
 						</div>
-						<script src="${pageContext.request.contextPath}/resources/js/slick.js" defer></script>
-						<script defer>
+						<script>
 							$(document).ready(function(){
 								$(".thumb-slide").slick({
-									infinite : true, 
-									autoplay: true,
-									autoplaySpeed : 5000,
-									dots: true,
-									speed : 400,	
-									arrows : true,
-									prevArrow : $('.thumb-left'),		// 이전 화살표 모양 설정
-									nextArrow : $('.thumb-right'),		// 다음 화살표 모양 설정
-									pauseOnHover : false,
+									autoplay: true,         // 자동 재생 설정 (true or false)
+									dots: true,             // 페이지 네비게이션 점 보이기 설정 (true or false)
+									arrows: true,           // 이전/다음 버튼 보이기 설정 (true or false)
+									infinite: true,         // 무한 롤링 설정 (true or false)
+									speed: 500,             // 슬라이드 전환 속도 (밀리초 단위)
+									slidesToShow: 1,        // 한 화면에 보여줄 슬라이드 개수
+									slidesToScroll: 1,
+									prevArrow : $('.visu-prev'),		// 이전 화살표 모양 설정
+									nextArrow : $('.visu-next'),		// 다음 화살표 모양 설정
 									draggable : true
 								});
 							});
 						</script>
 						<div class="item-detail-content-text">
-							<div class="item-detail-title">젠하이저 H3PRO 팝니다 제목은 두줄까지 가능합니다 젠하이저 H3PRO 팝니다 제목은 두줄까지 가능합니다</div>
+							<div class="item-detail-title">${productSearch.product_title}</div>
 							<div class="item-detail-view">
 								<div class="item-detail-view-count">조회수 50</div>
 								<div class="item-detail-fav-count">찜 8</div>
 							</div>
-							<div class="item-detail-description">상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명 상품 설명</div>
-							<div class="item-detail-shpping-fee">배송비:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4,000 원</div>
+							<div class="item-detail-description">${productSearch.product_intro}</div>
+							<c:choose>
+								<c:when test="${productSearch.product_shpping_fee != '' && productSearch.product_shpping_fee != undefined}">
+									<div class="item-detail-shpping-fee">배송비:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${productSearch.product_shpping_fee} 원</div>
+								</c:when>
+								<c:otherwise>
+									<div class="item-detail-shpping-fee">배송비 포함</div>
+								</c:otherwise>
+							</c:choose>
 							<div class="item-detail-price-setting">
+							<c:if test="${productSearch.product_discount_status == 1}">
 								<div class="item-detail-discount">가격제안 가능</div>
-								<div class="item-detail-price">60,000 원</div>
+							</c:if>
+								<div class="item-detail-price">${productSearch.product_price} 원</div>
 							</div>
 							<div class="item-detail-button-group">
-								<div class="item-detail-trade-adr">직거래 위치: 부산진구</div>
+								<c:if test="${productSearch.product_trade_adr1 != '' && productSearch.product_trade_adr1 != undefined}">
+									<div class="item-detail-trade-adr">직거래 위치: ${productSearch.product_trade_adr1}</div>
+								</c:if>
 								<input type="button" value="찜하기" class="item-detail-fav">
-								<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
+								<a href="javascript:void(0)"  onclick="openSlideChat('admin')">
+									<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
+								</a>
 							</div>
 						</div>
 					</div>
 					<div class="item-detail-seller-info" onclick="location.href='ProductShop'" style=" cursor: pointer;">
 						<img src="../../resources/img/product_thumb.jpg" class="item-detail-seller-pic">
-						<div class="item-detail-seller-nick">홍길동동이</div>
+						<div class="item-detail-seller-nick">${productSearch.mem_nick}</div>
 						<div class="item-detail-seller-review">★★★★★</div>
 					</div>
-<!-- 					<div class="item-detail-seller-info"> -->
-<!-- 						<img src="../../resources/img/product_thumb.jpg" class="item-detail-seller-profile-pic"> -->
-<!-- 						<div class="item-detail-seller-name">판매자 이름</div> -->
-<!-- 						<div class="item-detail-seller-review">★★★★★</div> -->
-<!-- 					</div> -->
 					<div class="item-detail-more-item">
 						<h1 class="sec-ttl">
 						이 판매자가 판매하는 다른 물품
@@ -242,9 +253,9 @@
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
 </body>
-
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script type="text/javascript">
+
 	
 </script>
 </html>

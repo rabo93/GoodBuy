@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.itwillbs.goodbuy.vo.FaqVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
+import com.itwillbs.goodbuy.vo.NoticeVO;
 
 @Mapper
 public interface AdminMapper {
@@ -70,6 +71,24 @@ public interface AdminMapper {
 	int deleteMember(String mem_id);
 	
 	//---------------------------------------------------------
+	// 공지사항 전체 목록 컬럼 수 조회
+	int selectNoticeListTotal();
+	
+	// 공지사항 필터링 후 목록 컬럼 수 조회
+	int selectNoticeListFiltered(String searchValue);
+	
+	// 공지사항 전체 목록 조회 (필터링, 검색어, 페이징 적용)
+	List<NoticeVO> selectNoticeList(
+			@Param("start") int start,
+			@Param("length") int length, 
+			@Param("searchValue") String searchValue, 
+			@Param("orderColumn") String orderColumn, 
+			@Param("orderDir") String orderDir);
+	
+	// 공지사항 삭제
+	int deleteNotice(@Param("deleteItems") List<Integer> deleteItems);
+	
+	//---------------------------------------------------------
 	// Faq 목록 조회
 	List<Map<String, Object>> selectFaqList(@Param("start") int start, 
 											@Param("length") int length,
@@ -81,6 +100,14 @@ public interface AdminMapper {
 	int selectFaqFiltered(String searchValue);
 
 	// Faq 수정
-	int updateFaqInfo(FaqVO faq);
+	int updateFaqInfo(Map<String, Object> param);
+	
+	// Faq 삭제
+	int deleteFaq(int faqId);
+
+
+
+	
+
 
 }

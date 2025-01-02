@@ -1,42 +1,9 @@
-let ws;
-//	채팅 메세지 타입 구분
-const TYPE_ENTER = "ENTER";
-const TYPE_LEAVE = "LEAVE";
-const TYPE_TALK = "TALK";
-const TYPE_INIT = "INIT";
-const TYPE_INIT_COMPLETE = "INIT_COMPLETE";
+var ws;
+var slideChat;
 
-//	채팅 메세지 정렬 위치
-const ALIGN_CENTER = "center";
-const ALIGN_LEFT = "other";
-const ALIGN_RIGHT = "user";
-//	====================================================================
-//$(function() {
-//	connect();
-//});
-
-function testOpenChat(product_id) {
-	$(".chat-area").empty();
+$(function() {
 	connect();
-	console.log("product_id : " + product_id);
-	//	상품리스트와 연동 완료시 AJAX로 활용 예정
-	$(".chat-area").append(
-		'<div class="chat-header">'
-			+ '<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>'
-			+ '<div class="title">아기 유아 어그부츠 150cm</div>'
-			+ '<button class="item-button">구매하기</button>'
-		+ '</div>'
-		+ '<div class="chat-body">'
-		+ '</div>'
-		+ '<div class="chat-footer">'
-			+ '<input type="text" class="chatMessage" placeholder="메시지를 입력하세요...">'
-			+ '<button class="btnSend">전송</button>'
-		+ '</div>'
-	);
-	
-}
-
-
+});
 
 function connect() {
 //	let ws_base_url = "ws://itwillbs.com";
@@ -51,37 +18,49 @@ function connect() {
 	ws.onerror = onError;
 }
 
+function openSlideChat(receiver_id) {
+	console.log("receiver_id : " + receiver_id);
+	let url = "ChatMain"
+	
+	slideChat = window.open(url, "slide_chat");
+	
+	slideChat.receiver_id = receiver_id;
+	
+}
+
 function onOpen () {
 	console.log("onOpen()");
-//	sendMessage(TYPE_ENTER, "", "", "", ">> 채팅방에 입장했습니다 <<");
 }
 
 function onMessage(event) {
 	console.log("onMessage()");
 	let data = JSON.parse(event.data);
-	console.log("data : " + data);
+	console.log("data : " + JSON.stringify(data));
 	
-	if(data.type == TYPE_INIT) {
-//		$(".sidebar").empty();
-		if (data.message == "null") {
-			$(".sidbar").html("채팅중인 채팅방 없음");
-			return;
-		}
-		sendMessage(TYPE_INIT_COMPLETE, "", data.receiver_id, "", "");
-	} else if(data.type == TYPE_ENTER || data.type == TYPE_LEAVE) {
-		appendMessage(data.message, ALIGN_CENTER);
-	} else if(data.type == TYPE_TALK) {
-		appendMessage(data.sender_id + " : " + data.message, ALIGN_LEFT)
-	}
+	slideChat.postMessage(event.data);
+	
 }
 
-function onClose() {
-	console.log("onClose()");
-}
-
-function onError() {
-	console.log("onError()");
-}
+//function testOpenChat(product_id) {
+//	$(".chat-area").empty();
+//	connect();
+//	console.log("product_id : " + product_id);
+//	//	상품리스트와 연동 완료시 AJAX로 활용 예정
+//	$(".chat-area").append(
+//		'<div class="chat-header">'
+//			+ '<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>'
+//			+ '<div class="title">아기 유아 어그부츠 150cm</div>'
+//			+ '<button class="item-button">구매하기</button>'
+//		+ '</div>'
+//		+ '<div class="chat-body">'
+//		+ '</div>'
+//		+ '<div class="chat-footer">'
+//			+ '<input type="text" class="chatMessage" placeholder="메시지를 입력하세요...">'
+//			+ '<button class="btnSend">전송</button>'
+//		+ '</div>'
+//	);
+//	
+//}
 
 
 //	==============================================================================
@@ -110,7 +89,14 @@ function toJsonString(type, sender_id, receiver_id, room_id, message) {
 	return JSON.stringify(data);
 }
 
+//	=====================================================================
+function onClose() {
+//	console.log("onClose()");
+}
 
+function onError() {
+	console.log("onError()");
+}
 
 
 

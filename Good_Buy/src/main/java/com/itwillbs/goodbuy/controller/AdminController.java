@@ -19,10 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.itwillbs.goodbuy.aop.LoginCheck;
+import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.service.AdminService;
 import com.itwillbs.goodbuy.vo.CommonCodeVO;
 import com.itwillbs.goodbuy.vo.FaqVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
+import com.itwillbs.goodbuy.vo.NoticeVO;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -35,6 +38,7 @@ public class AdminController {
 	
 	// [ 관리자 메인 ]
 	// 관리자 메인
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmMain")
 	public String admMain() {
 		return "admin/index";
@@ -42,12 +46,14 @@ public class AdminController {
 	// ======================================================
 	// [ 공통코드 관리 ]
 	// 공통코드 관리 - 등록 폼 요청
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmCommoncodeRegistForm")
 	public String admCommoncodeRegistForm() {
 		return "admin/code_regist";
 	}
 	
 	// 공통코드 관리 - 등록
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("AdmCommoncodeRegist")
 	public Map<String, Object> admCommoncodeRegist(@RequestBody CommonCodeVO commonCodes, Model model, HttpSession session) {
@@ -72,12 +78,14 @@ public class AdminController {
 	}
 	
 	// 공통코드 관리 - 목록
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmCommoncodeList")
 	public String admCommoncodeList() {
 		return "admin/code_list";
 	}
 	
 	// 공통코드 관리 - 요청
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("AdmCommoncodeListForm")
 	public String admCommoncodeListForm(@RequestParam Map<String, String> param) {	
@@ -85,7 +93,7 @@ public class AdminController {
 		int draw = Integer.parseInt((String) param.get("draw")); // 요청받은 draw 값
 		int start = Integer.parseInt((String) param.get("start")); // 페이징 시작 번호
 		int length = Integer.parseInt((String) param.get("length")); // 한 페이지의 컬럼 개수
-		String searchValue = param.get("search[value]"); // 검색어
+		String searchValue = param.get("search[value]").toString(); // 검색어
 		
 		int orderColumnKey = Integer.parseInt((String)param.get("order[0][column]"));
 		String orderColumn = param.get("columns[" + orderColumnKey + "][data]").toString();
@@ -115,6 +123,7 @@ public class AdminController {
 	}
 	
 	// 공통코드 관리 - 수정
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmCommoncodeModify")
 	public String admCommoncodeModify(@RequestParam Map<String, Object> param, Model model) {
 		log.info(">>> param : " + param);
@@ -131,6 +140,7 @@ public class AdminController {
 	}
 	
 	// 공통코드 관리 - 삭제
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("AdmDeleteCommonCode")
 	public Map<String, Object> admCommoncodeDelete(@RequestParam Map<String, Object> param) {
@@ -155,12 +165,14 @@ public class AdminController {
 	// ======================================================
 	// [ 회원관리 ]
 	// 회원 목록 - 뷰페이지 포워딩
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmMemberList")
 	public String admMemberList() {
 		return "admin/member_list";
 	}
 	
 	// 회원 목록 - 조회
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("AdmMemberListForm")
 	public String admMemberListForm(@RequestParam Map<String, Object> param) {
@@ -206,6 +218,7 @@ public class AdminController {
 	}
 	
 	// 회원 상세 정보 - 조회
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmMemberDetailForm")
 	public String admMemberDetailForm(String mem_id, Model model) {
 		log.info(">>> 상세 회원 정보 ID : " + mem_id);
@@ -252,6 +265,7 @@ public class AdminController {
 	}
 	
 	// 회원 상세 정보 - 수정
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmMemberModify")
 	public String admMemberModify(MemberVO member, Model model) {
 		log.info(">>> 수정할 회원 정보: " + member);
@@ -269,6 +283,7 @@ public class AdminController {
 	}
 	
 	// 회원 삭제
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("AdmMemberDelete")
 	public Map<String, Object> admMemberDelete(MemberVO member, Model model) {
@@ -295,6 +310,73 @@ public class AdminController {
 	// [ 신고 관리 ]
 	
 	// ======================================================
+	// 공지사항 관리
+	@GetMapping("AdmNoticeList")
+	public String admNoticeListForm() {
+		return "admin/notice_list";
+	}
+	
+	// 공지사항 목록	
+	@ResponseBody
+	@PostMapping("AdmNoticeList")
+	public String admNoticeList(@RequestParam Map<String, Object> param) {
+//		log.info(">>>> 공지사항 목록 param : " + param);
+		int draw = Integer.parseInt((String) param.get("draw")); // 요청받은 draw 값
+		int start = Integer.parseInt((String) param.get("start")); // 페이징 시작 번호
+		int length = Integer.parseInt((String) param.get("length")); // 한 페이지의 컬럼 개수
+		String searchValue = param.get("searchValue").toString(); // 검색어
+		
+		int orderColumnKey = Integer.parseInt((String)param.get("order[0][column]"));
+		String orderColumn = param.get("columns[" + orderColumnKey + "][data]").toString();
+		String orderDir = param.get("order[0][dir]").toString();
+		
+		// 회원 목록 전체 컬럼 수 조회
+		int recordsTotal = service.getNoticeListTotal();
+		
+		// 회원 검색 필터링 후 컬럼 수 조회
+		int recordsFiltered = service.getNoticeListFiltered(searchValue);
+		
+		// 필터링 된 회원 목록 가져오기
+		List<NoticeVO> noticeList = service.getNoticeList(start, length, searchValue, orderColumn, orderDir);
+//		log.info(">>>>> 필터링 된 공지사항 게시글 목록 : " + noticeList);
+		
+		// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		// draw, recordsTotal, recordsFiltered 값을 돌려주어야 서버사이드 페이징 작동함
+		response.put("draw", draw); // 받은 draw 값 그대로 다시 전달(보안)
+		response.put("recordsTotal", recordsTotal); // 전체 컬럼 수
+		response.put("recordsFiltered", recordsFiltered); // 검색 필터링 후 컬럼 수
+		response.put("noticeList", noticeList); // 컬럼 데이터
+		
+		JSONObject jo = new JSONObject(response);
+		
+		return jo.toString();
+	}
+	
+	// 공지사항 삭제
+	@ResponseBody
+	@PostMapping("AdmNoticeDelete")
+	public Map<String, Object> admNoticeDelete(@RequestBody List<Integer> deleteItems) {
+		log.info(">>>>>> 삭제할 공지사항 번호 : " + deleteItems);
+		
+		int deleteResult = service.removeNotice(deleteItems);
+		
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		if(deleteResult > 0) {
+			response.put("status", "success");
+			response.put("message", "선택한 게시글이 삭제되었습니다.");
+			response.put("redirectURL", "/AdmNoticeList");
+		} else {
+			response.put("status", "fail");
+			response.put("message", "게시글 삭제에 실패했습니다. 다시 시도해주세요.");
+		}
+		
+		return response;
+	}
+	
+	// ======================================================
 	// [ 고객지원 관리 ]
 	// - FAQ 관리
 	@GetMapping("AdmFaqList")
@@ -302,6 +384,7 @@ public class AdminController {
 		return "admin/faq_list";
 	}
 	
+	// [ FAQ 목록 조회 ]
 	@ResponseBody
 	@PostMapping("FaqListForm")
 	public String admFaqListForm(@RequestParam Map<String, String> param) {
@@ -311,19 +394,16 @@ public class AdminController {
 		int length = Integer.parseInt(param.get("length")); // 한 페이지의 컬럼 개수
 		String searchValue = param.get("search[value]"); // 검색어
 		
-		//-----------------------------------
 		// FAQ 전체 목록 조회
 		List<Map<String, Object>> faqList = service.getFaqList(start, length, searchValue);
-		System.out.println("faqList:" + faqList);
-//		// 공통코드 전체 목록 조회
-//		List<Map<String, Object>> commonCodes = service.getCommonCodes(start, length, searchValue);
+//		System.out.println("faqList:" + faqList);
 		
 		// FAQ 전체 컬럼 수 조회
 		int recordsTotal = service.getFaqTotal();
-		System.out.println("recordsTotal: " + recordsTotal);
+//		System.out.println("recordsTotal: " + recordsTotal);
 		// FAQ 검색 필터링 후 컬럼 수 조회
 		int recordsFiltered = service.getFaqFiltered(searchValue);
-		System.out.println("recordsFiltered: " + recordsFiltered);
+//		System.out.println("recordsFiltered: " + recordsFiltered);
 		
 		// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
 		Map<String, Object> response = new HashMap<String, Object>();
@@ -333,38 +413,52 @@ public class AdminController {
 		response.put("recordsTotal", recordsTotal); // 전체 컬럼 수
 		response.put("recordsFiltered", recordsFiltered); // 검색 필터링 후 컬럼 수
 		response.put("faqList", faqList); // 컬럼 데이터
-		System.out.println("Map: "+ response); 
+//		System.out.println("Map: "+ response); 
 		// Map: {recordsFiltered=4, faqList=[{FAQ_CATE=1, FAQ_SUBJECT=test, FAQ_CONTENT=test, FAQ_ID=1}, {FAQ_CATE=2, FAQ_SUBJECT=test_cate(2), FAQ_CONTENT=test_cate(2), FAQ_ID=2}, {FAQ_CATE=3, FAQ_SUBJECT=test_cate(3), FAQ_CONTENT=test_cate(3), FAQ_ID=3}, {FAQ_CATE=4, FAQ_SUBJECT=test_cate(4), FAQ_CONTENT=test_cate(4), FAQ_ID=4}], draw=1, recordsTotal=4}
 		
 		JSONObject jo = new JSONObject(response);
-//		JSONArray ja = new JSONArray(faqList);
-		
 		return jo.toString();
 	}
-	
-
+	//-------------------------------------------------------------------------------------
+	// [ FAQ 수정 ]
 	@PostMapping("AdmFaqModify")
-	public String admFaqModify(FaqVO faq, Model model) {
-		log.info(">>> 수정할 faq 정보: " + faq);
-		
-		int updateResult = service.modifyFaqInfo(faq);
+	public String admFaqModify(@RequestParam Map<String, Object> param, Model model) {
+		log.info(">>> 수정할 faq 정보: " + param);
+		// 수정할 faq 정보: {OLD_FAQ_ID=1, CODETYPE_NAME=test, CODETYPE_DESC=test111, LIST_STATUS=}
+		int updateResult = service.modifyFaqInfo(param);
 		
 		if(updateResult > 0) {
-			model.addAttribute("msg", "FAQ XXX 수정하였습니다.");
+			model.addAttribute("msg", "FAQ 수정하였습니다.");
 			model.addAttribute("targetURL", "AdmFaqList");
 			return "result/success";
 		} else {
-			model.addAttribute("msg", "FAQ XXX 수정에 실패하였습니다.");
+			model.addAttribute("msg", "FAQ 수정에 실패하였습니다.");
 			return "result/fail";
 		}
 	}
 	
-	@GetMapping("AdmFaqDelete")
-	public String admFaqDelete(MemberVO member, Model model) {
-		return "";
+	//-------------------------------------------------------------------------------------
+	// [ FAQ 삭제 ]
+	@ResponseBody
+	@PostMapping("AdmFaqDelete")
+	public Map<String, Object> admFaqDelete(@RequestParam("FAQ_ID") int faqId) {
+		log.info(">>>>>>> 전달받은 삭제할 faq_id: " + faqId);
+		
+		int deleteResult = service.removeFaq(faqId);
+		
+		Map<String, Object> response = new HashMap<> ();
+		
+		if(deleteResult > 0) {
+			response.put("status", "success");
+			response.put("message", "선택한 항목이 삭제되었습니다.");
+			response.put("redirectURL", "/AdmFaqList");
+		} else {
+			response.put("status", "fail");
+			response.put("message", "항목 삭제에 실패했습니다.");
+		}
+		
+		return response;
 	}
-	
-	
 	
 	
 	// ======================================================

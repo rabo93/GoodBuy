@@ -48,18 +48,19 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 	// 2. handleTextMessage - 클라이언트로부터 메세지를 수신할 경우 자동으로 호출되는 메서드
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-//		System.out.println("메세지 수신됨!(handleTextMessage)");
-//		System.out.println("메세지 전송한 사용자 : " + getHttpSessionId(session));
+		System.out.println("메세지 수신됨!(handleTextMessage)");
+		System.out.println("메세지 전송한 사용자 : " + getHttpSessionId(session));
 		
 		String jsonMsg = message.getPayload();
-//		System.out.println("전송된 메세지 : " + jsonMsg);
+		System.out.println("전송된 메세지 : " + jsonMsg);
 		
 		ChatMessage chatMessage = gson.fromJson(jsonMsg, ChatMessage.class);
-//		System.out.println("파싱된 메세지 : " + chatMessage);
+		System.out.println("파싱된 메세지 : " + chatMessage);
 		
 		String sender_id = getHttpSessionId(session);
 		String receiver_id = chatMessage.getReceiver_id();
-//		System.out.println("송신자 아이디 : " + sender_id + ", 수신자 아이디 : " + receiver_id);
+		System.out.println("송신자 아이디 : " + sender_id + ", 수신자 아이디 : " + receiver_id);
+		//	=========================================================================
 		if(chatMessage.getType().equals(ChatMessage.TYPE_INIT)) {
 			List<ChatRoom> chatRoomList = chatService.selectChatRoomList(sender_id);
 			chatMessage.setMessage(gson.toJson(chatRoomList.size() == 0 ? null : chatRoomList));
@@ -146,26 +147,11 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 	//	========================================================================
 	//	========================================================================
 	//	각 웹소켓 세션들에게 메세지 전송 메서드
-	public void sendMessage(WebSocketSession session, ChatMessage chatMessage) throws Exception {
+	public void sendMessage(WebSocketSession session, ChatMessage chatMessage) {
 		//	=========================================================
 		//	1:1 채팅이 아닌 공통 채팅방
 		String sender_id = getHttpSessionId(session);
 		System.out.println("발신자 아이디 : " + sender_id);
-//		for (WebSocketSession ws : userSessionList.values()) {
-//			if(!ws.getId().equals(session.getId())) {
-//				if(chatMessage.getType().equals(ChatMessage.TYPE_ENTER)) {
-//					chatMessage.setMessage(">> " + sender_id + " 님이 입장하셨습니다 <<");
-//				}
-//				if (chatMessage.getType().equals(ChatMessage.TYPE_LEAVE)) {
-//					chatMessage.setMessage(">> " + sender_id + " 님이 퇴장하셨습니다 <<");
-//				}
-//				chatMessage.setSender_id(sender_id);
-//				
-//				ws.sendMessage(new TextMessage(toJson(chatMessage)));
-//				
-//			}
-//		}
-		//	=========================================================
 		try {
 			session.sendMessage(new TextMessage(toJson(chatMessage)));
 		} catch (IOException e) {

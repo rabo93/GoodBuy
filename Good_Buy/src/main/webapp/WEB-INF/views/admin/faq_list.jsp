@@ -83,36 +83,55 @@
     </a>
     
     <!-- 수정 모달 -->
-    <div class="modal fade" id="updateMemberInfo" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal fade" id="updateFaq" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="false">
 		<div class="modal-dialog modal-dialog-centered">
 		    <div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="updateModalLabel">회원 수정</h5>
+					<h5 class="modal-title" id="updateModalLabel">수정</h5>
 					<button type="button" class="close" data-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
 				</div>
 				<div class="modal-body">
-					<form action="AdmFaqModify" id="faqModifyForm" method="post">
-						<input type="hidden" id="faqId" name="faq_id">
-						<div class="mb-3">
-							<label class="small mb-1" for="memGrade">회원등급</label>
-							<select class="custom-select" id="memGrade" name="mem_grade">
-								<option value="일반">일반</option>
-								<option value="관리자">관리자</option>
+					<form action="AdmFaqModify" method="post" id="modifyForm">
+						<!-- faq 아이디 -->
+						<input type="hidden" id="faqId" name="FAQ_ID">
+						<div class="mb-1">
+							<label for="updatedFaqSubject" class="col-form-label">제목</label>
+							<input type="text" class="form-control" name="FAQ_SUBJECT" id="updatedFaqSubject" required>
+						</div>
+						<div class="mb-1">
+							<label for="updatedFaqContent" class="col-form-label">내용</label>
+							<input type="text" class="form-control" name="FAQ_CONTENT" id="updatedFaqContent" required>
+						</div>
+<!-- 						<div class="mb-1"> -->
+<!-- 							<label for="updatedFaqCate" class="col-form-label">FAQ 유형</label> -->
+<!-- 							<input type="text" class="form-control" name="FAQ_CATE" id="updatedFaqCate" required> -->
+<!-- 						</div> -->
+						<div class="mb-1">
+							<label class="small mb-1" for="memStatus">FAQ 유형</label>
+							<select class="custom-select" id=updatedFaqCate name="FAQ_CATE" >
+								<option value="1">운영정책</option>
+								<option value="2">회원/계정</option>
+								<option value="3">결제/페이</option>
+								<option value="4">광고서비스</option>
+								<option value="5">기타</option>
 							</select>
 						</div>
-						<div class="mb-3">
-							<label class="small mb-1" for="memStatus">회원상태</label>
-							<select class="custom-select" id="memStatus" name="mem_status">
-								<option value="1">정상</option>
-								<option value="2">정지</option>
-								<option value="3">탈퇴</option>
-							</select>
+						
+						<div class="row px-2">
+							<div class="w-50">
+								<label for="updatedListStatus" class="col-form-label">사용여부</label>
+								<div class="form-check form-switch">
+					        		<input type="hidden" id="updatedListStatus" name="LIST_STATUS">
+									<input class="form-check-input" type="checkbox" role="switch" id="updateFlexSwitchCheckDefault">
+									<label class="form-check-label text-center" style="width:70px" id="updateFlexSwitchCheckDefaultLab" for="updateFlexSwitchCheckDefault"></label>
+								</div>
+							</div>
 						</div>
-                    </form>
+					</form>
 				</div>
 				<div class="modal-footer justify-content-center">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="faqModifyForm">수정하기</button>
+					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="modifyForm">수정하기</button>
 				</div>
 			</div>
 		</div>

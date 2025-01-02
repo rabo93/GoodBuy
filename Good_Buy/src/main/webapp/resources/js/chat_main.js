@@ -96,20 +96,35 @@ function initChat() {
 	
 }
 
+//	채팅방 목록 표시
+function showChatList(data) {
+	console.log("receiver_id : " + receiver_id);
+	console.log(data.message + " : " + typeof(data.message));
+	$(".sidebar").empty();
+	
+	if(data.message == "null") {
+		$(".sidebar").html("<div class='sidebar-item empty'>채팅중인 채팅방 없음</div>")
+	} else {
+		for(let room of JSON.parse(data.message)) {
+			appendChatRoomList(room);
+		}
+	}
+	sendMessage(TYPE_INIT_COMPLETE, "", receiver_id, "", "");
+	
+}
+
 function sendMessage(type, sender_id, receiver_id, room_id, message) {
 	opener.sendMessage(type, sender_id, receiver_id, room_id, message);
 }
 
-
-
-function startChat() {
-	let urlParams = new URL(location.href).searchParams;
-	
-	let receiver_id = urlParams.get("receiver_id") == null ? "" : urlParams.get("receiver_id");
-	
-	sendMessage(TYPE_INIT, "", receiver_id, "", "");
-	
+function startChat(data) {
+	console.log("startChat - 채팅방 생성");
 }
+
+function appendChatRoomList(room) {
+	console.log(room);
+}
+
 
 function sendInputMessage() {
 	let message = $(".chatMessage").val();

@@ -91,7 +91,7 @@
 									<div class="item-detail-trade-adr">직거래 위치: ${productSearch.product_trade_adr1}</div>
 								</c:if>
 								<input type="button" value="찜하기" class="item-detail-fav">
-								<a href="javascript:void(0)"  onclick="openSlideChat('admin')">
+								<a href="javascript:void(0)"  onclick="openSlideChat('aa1114')">
 									<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
 								</a>
 							</div>

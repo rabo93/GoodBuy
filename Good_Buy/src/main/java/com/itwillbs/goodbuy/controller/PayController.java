@@ -52,6 +52,11 @@ public class PayController {
 		Map<String, Object> bankUserInfo = service.getPayUserInfo(token);
 		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
 		
+		// 충전금액 조회
+		int pay_amount = service.getPayAmount(token.getUser_seq_no());
+//		System.out.println("충전금액 조회 : "  + pay_amount);
+		
+		model.addAttribute("pay_amount", pay_amount);
 		model.addAttribute("bankUserInfo", bankUserInfo);
 		model.addAttribute("fintech_use_num", fintech_use_num);
 		
@@ -374,8 +379,14 @@ public class PayController {
 		}
 		
 		log.info(">>>>> 이체결과 : " + transferResult);
+		// 송금결과 DB 저장
 		
-		// DB 저장과정 생략(편하게 하려면)
+		// 사용자번호를 입금이체 결과 객체에 추가
+		transferResult.put("user_seq_no", senderToken.getUser_seq_no());
+						
+		// 송금이체 성공 시 결과를 DB 에 저장
+		service.registTransferResult(transferResult);
+		
 		session.setAttribute("transferResult", transferResult);
 		
 		return "redirect:/PayTransferResult";

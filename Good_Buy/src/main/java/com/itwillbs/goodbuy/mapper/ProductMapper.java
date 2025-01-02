@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.itwillbs.goodbuy.vo.ProductOrderVO;
 import com.itwillbs.goodbuy.vo.ProductVO;
 
 @Mapper
@@ -19,7 +20,7 @@ public interface ProductMapper {
 	// 구매내역 조회
 	List<ProductVO> selectProductList(String id);
 	
-	List<ProductVO> selectOrderList(String id);
+	List<ProductOrderVO> selectOrderList(String id);
 	// 구매내역 갯수 조회
 	int selectOrderCount(String id);
 	

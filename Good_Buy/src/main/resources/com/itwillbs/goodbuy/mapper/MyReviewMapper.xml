@@ -22,7 +22,7 @@
 	
 <!-- 	리뷰작성 -->
 	<insert id="insertReview" parameterType="map">
-	<selectKey resultType="int" order="BEFORE" keyProperty="review_id">
+		<selectKey resultType="int" order="BEFORE" keyProperty="review_id">
 <!-- 			SELECT MAX(REVIEW_ID) + 1 -->
 			SELECT COALESCE(MAX(REVIEW_ID), 0) + 1
 			FROM MYREVIEW;
@@ -47,4 +47,10 @@
 	);
 	
 	</insert>
+	
+<!-- 	<select id="selectReviewCountCheck" resultType="int"> -->
+<!-- 		select COUNT(*) -->
+<!-- 		FROM MYREVIEW -->
+<!-- 		WHERE PRODUCT_ID = #{product_id}; -->
+<!-- 	</select> -->
 </mapper>

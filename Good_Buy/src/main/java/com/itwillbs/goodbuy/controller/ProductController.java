@@ -36,10 +36,7 @@ public class ProductController {
 	
 	// 상품목록 조회
 	@GetMapping("ProductList")
-	public String productList(@RequestParam String PRODUCT_CATEGORY, Model model) {
-		List<Map<String, Object>> listSearch = productService.searchProductList(PRODUCT_CATEGORY);
-		model.addAttribute("searchProductList", listSearch);
-		
+	public String productList() {
 		return "product/product_list";
 	}
 	
@@ -50,7 +47,6 @@ public class ProductController {
 													   @RequestParam(required=false) String PRODUCT_PRICE,
 													   @RequestParam(required=false) String PRODUCT_TRADE_ADR1,
 													   @RequestParam String PRODUCT_CATEGORY) {
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>> controller : " + PRODUCT_TRADE_ADR1);
 		List<Map<String, Object>> listSearch = productService.searchFilterList(PRODUCT_STATUS, PRODUCT_PRICE, PRODUCT_TRADE_ADR1, PRODUCT_CATEGORY);
 		return listSearch;
 	}
@@ -132,11 +128,15 @@ public class ProductController {
 			}
 		}
 		
-		return "MySales";
+		return "mypage/mypage_store";
 	}
 	
+	// 상품 상세 페이지
 	@GetMapping("ProductDetail")
-	public String prodcutDetail() {
+	public String prodcutDetail(@RequestParam int PRODUCT_ID, Model model) {
+		ProductVO productSearch = productService.productSearch(PRODUCT_ID);
+		model.addAttribute("productSearch", productSearch);
+		
 		return "product/product_detail";
 	}
 	

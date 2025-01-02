@@ -10,3 +10,5 @@ function onClickUpload3() {
 	let myInput = document.getElementById("item-thumb-upload-btn3");
 	myInput.click();
 }
+
+

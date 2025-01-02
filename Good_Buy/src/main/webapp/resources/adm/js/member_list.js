@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function(){
     });
 
     // 엔터키 입력으로 검색
-    $('#searchBtn').on('keypress', function(e) {
+    $('#searchKeyword').on('keypress', function(e) {
         if (e.which == 13) {
             memberList.draw();
         }
@@ -212,11 +212,9 @@ document.addEventListener("DOMContentLoaded", function(){
 					"mem_id" : memId,
 				},
 				success: function(response){
+					alert(response.message);
 					if(response.status == 'success') {
-						alert(response.message);
 						window.location.href = response.redirectURL;
-					} else {
-						alert(response.message);
 					}
 				},
 				error : function(res) {

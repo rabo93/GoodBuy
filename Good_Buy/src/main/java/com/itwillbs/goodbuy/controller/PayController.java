@@ -18,7 +18,9 @@ import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.aop.PayTokenCheck;
 import com.itwillbs.goodbuy.service.PayService;
+import com.itwillbs.goodbuy.service.ProductService;
 import com.itwillbs.goodbuy.vo.PayToken;
+import com.itwillbs.goodbuy.vo.ProductVO;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -28,6 +30,9 @@ public class PayController {
 
 	@Autowired
 	PayService service;
+	
+	@Autowired
+	ProductService  productService;
 	
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("GoodPay")
@@ -323,16 +328,23 @@ public class PayController {
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("PayTransferRequest")
 	public String payTransferRequest(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
-		System.out.println("!@#!@#");
-		System.out.println("receiver_id:" + map.get("receiver_id"));
-		System.out.println("product_id:" + map.get("product_id"));
-		PayToken senderToken = (PayToken)session.getAttribute("token");
-
-		// 이체에 필요한 사용자 계좌(입금받는 상대방) 관련 정보(토큰) 조회
-		PayToken receiverToken = service.getPayTokenInfo((String)map.get("receiver_id"));
-
-		System.out.println("PayTransfer - get");
+		int product_id = Integer.parseInt((String) map.get("product_id"));
+		PayToken token = (PayToken)session.getAttribute("token");
 		
+		
+		Map<String, Object> bankUserInfo = service.getPayUserInfo(token);
+		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
+		
+		// 충전금액 조회
+		int pay_amount = service.getPayAmount(token.getUser_seq_no());
+		
+		// 상품 조회
+		ProductVO productSearch = productService.productSearch(product_id);
+		
+		model.addAttribute("pay_amount", pay_amount);
+		model.addAttribute("productSearch", productSearch);
+		model.addAttribute("bankUserInfo", bankUserInfo);
+		model.addAttribute("fintech_use_num", fintech_use_num);
 		
 		return "pay/pay_remit";
 	}
@@ -400,11 +412,9 @@ public class PayController {
 		// 송금이체 성공 시 결과를 DB (TRANSACTIONINFO) 에 저장
 		service.registTransferResult(transferResult);
 		
-		
-		
-		
 		session.setAttribute("transferResult", transferResult);
 		
+		// 모달창에서 송금완료 시 채팅창으로 되돌아가기
 		return "redirect:/PayTransferResult";
 	}
 	

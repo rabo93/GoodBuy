@@ -1,3 +1,4 @@
+<!-- 사이드바 있을 때 -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -25,16 +26,13 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pay.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
+
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/product.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/pay.js"></script>
+
+
 </head>
-
-
-<script>
-    // 모달 창 닫기
-    window.close();
-</script>
 <body>
 	<header>
 		<jsp:include page="/WEB-INF/views/inc/header.jsp"></jsp:include>
@@ -43,11 +41,9 @@
 		<section class="wrapper">
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
-                
-                
-                
-                
-                <h2 class="page-ttl">마이페이지</h2>
+<!-- 				<div class="goodpay-container"> -->
+			        
+		        <h2 class="page-ttl">마이페이지</h2>
 				<section class="my-wrap">
 					<aside class="my-menu">
 						<h3>거래 정보</h3>
@@ -67,71 +63,51 @@
 		        
 		        	<div class="my-container">
 						<div class="contents-ttl">
-							<h3>굿페이 > 굿페이 송금</h3>
+							<h3>굿페이 > 계좌송금</h3>
+		        
+		        
+		        
+												
+					        <!-- 입력 안내 -->
+					        <div class="input-section">
+					        	<!-- 판매자의 대표계좌 가지고 와야함. 판매자 핀번호랑 id 가져오기 -->
+					        	
+					        	
+					            <input type="text" class="input-label" placeholder="계좌번호를 입력하세요">
+					            <input type="text" class="input-label" placeholder="은행을 선택하세요">
+					        </div>
+					
+					         <!-- 충전하기 버튼 -->
+					        <div class="recharge-button">
+					            <button class="recharge-btn">다음</button>
+					        </div>
+					        
+					         <!-- 계좌내역 -->
+					        <div class="accounts">
+					            <h3>내 계좌</h3>
+					            <!-- 연결된 계좌 -->
+						        <div class="linked-account">
+						            <div class="account-info">
+						                <div class="icon"></div>
+						                <span class="account-number">우체국 <strong>1234567890123</strong></span>
+						            </div>
+						            <button class="primary-account-btn">주계좌</button>
+						        </div>
+					       </div>
+					        <!-- 추천계좌 버튼 -->
+<!-- 					        <div class="recommend-button"> -->
+<!-- 					            <button class="recommend-btn">우리은행 1234567890123 (으)로 송금 -->
+<!-- 					            	<span><i class="fa-solid fa-x"></i></span> -->
+<!-- 					            </button> -->
+<!-- 					        </div> -->
+		    			</div>
+		    		</div>
+		    	</section>
+			    
+			    
 
-							<div class="goodpay-container">
-								<!-- 여기서부터 작업해야 함!!! -->
-								<h1>핀테크 계좌 송금결과</h1>
-								<h3>1)출금이체결과</h3>
-								<table id="info_table">
-									<tr>
-										<th>출금계좌번호</th> <%-- 세션의 token 객체에 저장되어 있음 --%>
-										<th>${transferResult.withdrawResult.account_num_masked}</th>
-									</tr>
-									<tr>
-										<th>핀테크이용번호</th>
-										<td>${transferResult.withdrawResult.fintech_use_num}</td>
-									</tr>
-									<tr>
-										<th>출금금액</th>
-										<td>￦ ${transferResult.withdrawResult.tran_amt}</td>
-									</tr>
-									<tr>
-										<th>출금일시</th>
-										<td>${transferResult.withdrawResult.api_tran_dtm}</td>
-						<!-- 				DB에서 받은 날짜를 Map으로 받으면 T가 나옴. 앞에서 배웠으니 처리하라... 배운거 맞나? -->
-									</tr>
-									<tr>
-										<th colspan="2"><input type="button" value="돌아가기" onclick="history.back()"></th>
-									</tr>
-								</table>
-								
-								<hr>
-								<h3>2)입금이체결과</h3>
-								<table id="info_table">
-									<tr>
-										<th>예금주명</th>
-										<th>${transferResult.depositResult.res_list[0].account_holder_name}</th>
-									</tr>
-									<tr>
-										<th>입금계좌번호</th>
-										<th>${transferResult.depositResult.res_list[0].account_num_masked}</th>
-									</tr>
-									<tr>
-										<th>입금은행명</th> 
-										<th>${transferResult.depositResult.res_list[0].bank_name}</th>
-									</tr>
-									<tr>
-										<th>핀테크이용번호</th>
-										<td>${transferResult.depositResult.res_list[0].fintech_use_num}</td>
-									</tr>
-									<tr>
-										<th>입금금액</th>
-										<td>￦ ${transferResult.depositResult.res_list[0].tran_amt}</td>
-									</tr>
-									<tr>
-										<th>입금일시</th>
-										<td>${transferResult.depositResult.api_tran_dtm}</td>
-						<!-- 				DB에서 받은 날짜를 Map으로 받으면 T가 나옴. 앞에서 배웠으니 처리하라... 배운거 맞나? -->
-									</tr>
-									<tr>
-										<th colspan="2"><input type="button" value="돌아가기" onclick="history.back()"></th>
-									</tr>
-								</table>							 	
-						    </div>
-                		</div>
-                	</div>
-				</section>
+
+			    
 				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 			</div>
 		</section>

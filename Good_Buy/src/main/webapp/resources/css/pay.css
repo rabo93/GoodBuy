@@ -85,6 +85,18 @@
     background-color: var(--primary);
 }
 
+.transfer-btn-chat {
+    background-color: var(--primary);
+    width: 100%;
+    padding: 12px 0;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+
 .refund-btn {
 	background-color: var(--gray);
 }
@@ -507,10 +519,6 @@
 
 .charge-btn {
 /*     background-color: #0078ff; */
-}
-
-.transfer-btn {
-/*     background-color: #4caf50; */
 }
 
 /* 최근 이용내역 */

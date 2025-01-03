@@ -155,17 +155,18 @@ function appendChatRoomList(room) {
 function showChatRoom(room) {
 	console.log("showChatRoom -  채팅화면 표시 ");
 	console.log(room);
-	
 	let divRoom = '<div class="chat-header">'
 		           	+ '<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>'
 		           	+ '<div class="title">'+ room.title +' </div>'
-		           	+ '<button class="item-button" onclick="location.href=' + '\'PayTransferRequest?product_id=' + product_id + '&receiver_id=' + receiver_id + '\'' + '">구매하기</button>'
+//		           	+ '<button class="item-button" onclick="location.href=' + '\'PayTransferRequest?product_id=' + product_id + '&receiver_id=' + receiver_id + '\'' + '">구매하기</button>'
+		           	+ '<button class="item-button" onclick="openPayWindow(product_id, receiver_id)">구매하기</button>'
 		           + '</div>'
 		           + '<div class="chat-body">'
 		           + '</div>'
 		           + '<div class="chat-footer">'
 		           	+ '<input type="hidden" id="room_id" value="' + room.room_id +'">'
 		           	+ '<input type="hidden" id="receiver_id" value="' + room.receiver_id +'">'
+		           	+ '<input type="hidden" id="sId" value="' + room.sender_id +'">'
 		           	+ '<input type="text" class="chatMessage" placeholder="메시지를 입력하세요...">'
 		            + '<button class="btnSend">전송</button>'
 		           + '</div>';
@@ -212,6 +213,15 @@ function sendInputMessage() {
 //	부모창의 sendMessage() 함수 호출
 function sendMessage(type, product_id, sender_id, receiver_id, room_id, message) {
 	opener.sendMessage(type, product_id, sender_id, receiver_id, room_id, message);
+}
+
+
+// ==============================================================================
+// 결제창 열기 - 창을 작게 열려고 함수로 만들었음
+function openPayWindow(product_id, receiver_id) {
+	var url = "PayTransferRequest?product_id=" + encodeURIComponent(product_id) +
+              "&receiver_id=" + encodeURIComponent(receiver_id) ;
+    payWindow = window.open(url, "chat_window", "width=500,height=500");
 }
 
 

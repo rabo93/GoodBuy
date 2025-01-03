@@ -88,7 +88,7 @@
 	<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 </footer>
 </body>
-<script src="${pageContext.request.contextPath}/resources/js/notice.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/notice_main.js"></script>
 <script type="text/javascript">
 	if (performance.navigation.type === 1) {
 		location.href= "NoticeMain";

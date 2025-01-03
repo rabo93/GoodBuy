@@ -12,6 +12,7 @@ public class ProductVO {
 	private String product_title;	//	상품명
 	private String mem_id;
 	private String mem_nick;
+	private String mem_profile;
 	private String product_intro; //상품소개
 	private int product_shpping_fee;
 	private int product_price;
@@ -30,5 +31,6 @@ public class ProductVO {
 	private String product_trade_adr1;
 	private int advertisement_status; //광고상태
 	private int product_status; //상품상태
+	private int view_count;
 
 }

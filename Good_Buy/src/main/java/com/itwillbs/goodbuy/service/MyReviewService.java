@@ -34,6 +34,14 @@ public class MyReviewService {
 	public List<MyReviewVO> getReviewHistory(String id) {
 		return mapper.selectReviewHistory(id);
 	}
+	//내가쓴 리뷰 수정
+	public int reviewEdit(String reviewContent,String productId) {
+		return mapper.updateReview(reviewContent,productId);
+	}
+	public int removeReview(int reviewId) {
+		// TODO Auto-generated method stub
+		return mapper.deleteReview(reviewId);
+	}
 	
 	
 	

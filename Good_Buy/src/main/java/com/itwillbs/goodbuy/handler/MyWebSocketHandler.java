@@ -1,6 +1,8 @@
 package com.itwillbs.goodbuy.handler;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -93,12 +95,11 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 				}	//	사용자 접속 여부 판별 끝
 				
 				
-				ChatRoom chatRoom = chatService.selectChatRoom(sender_id, receiver_id);
+				ChatRoom chatRoom = chatService.selectChatRoom(sender_id, receiver_id, product_id);
 				if(chatRoom == null) {	// 기존 채팅방 없음
 					System.out.println("새 채팅방 생성");
 					
 					String title = productService.productSearch(product_id).getProduct_title();
-					System.out.println("!@#!@#");
 					System.out.println(title);
 					//	새 채팅방 방번호 생성
 					chatMessage.setRoom_id(generateRoomID());
@@ -109,7 +110,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 					chatRoomList.add(new ChatRoom(chatMessage.getRoom_id(), product_id, title, sender_id, receiver_id, 1));
 					chatRoomList.add(new ChatRoom(chatMessage.getRoom_id(), product_id, title, receiver_id, sender_id, 1));
 					//	DB에 채팅방 저장 요청
-//					chatService.insertChatRoom(chatRoomList);
+					chatService.insertChatRoom(chatRoomList);
 					
 					//	메세지 타입 TYPE_START 지정
 					chatMessage.setType(ChatMessage.TYPE_START);
@@ -131,11 +132,27 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			
 		}
 		if (chatMessage.getType().equals(ChatMessage.TYPE_REQUEST_CHAT_LIST)) {
+			System.out.println("!@#!@#");
+			System.out.println("기존 대화 요청 조회");
+			
+			//	기존 채팅 내역 조회
+//			List<ChatMessage> chatMessageList = chatService.selectChatMessage(chatMessage);
+			//	기존 채팅 내역이 존재할 경우만 클라이언트에게 전송
+//			if (chatMessageList != null && chatMessageList.size() > 0) {
+//				chatMessage.setMessage(gson.toJson(chatMessageList));
+//				sendMessage(session, chatMessage);
+//			}
 			
 		}
 		
 		if (chatMessage.getType().equals(ChatMessage.TYPE_TALK)) {
-			System.out.println("채팅 메세지 수신!");
+			//	현재 시스템 날짜 시각정보 받아와서 저장
+			chatMessage.setSend_time(getDateTimeNow());
+			//	채팅 메세지 DB 저장 요청
+//			chatService.insertChatMessage(chatMessage);
+			
+			sendMessage(session, chatMessage);
+			
 		}
 		
 	}
@@ -192,7 +209,11 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 	private String generateRoomID() {
 		return UUID.randomUUID().toString();
 	}
-	
+	//	현재 시스템의 날짜 및 시각 정보 리턴
+	private String getDateTimeNow() {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		return LocalDateTime.now().format(dtf);
+	}
 	
 	
 }

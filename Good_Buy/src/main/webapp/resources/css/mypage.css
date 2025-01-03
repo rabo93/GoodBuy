@@ -152,8 +152,24 @@
 /* ********************************************************************** */
 /*나의 상점*/
 .my-frm .set .product-set {margin: 0.4rem 0;padding: 1rem;}
-.product-list {display: flex; flex-wrap: wrap; gap: 20px;list-style: none;  padding: 0;}
- .product-card { flex: 0 1 calc(33.333% - 20px);  /* 가로 3개 (3열), 여백 고려 */ box-sizing: border-box;           /* 패딩 포함 */ border: none;         /* 카드 테두리 */ border-radius: 10px; overflow: hidden;}
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+}
+
+.product-card {
+    flex: 0 1 calc(33.333% - 20px);  /* 3열 구성, 여백 고려 */
+    box-sizing: border-box;
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: left;
+    padding: 10px;
+}
+
+/* **********************************판매내역************************************ */
 
  /*리뷰*/
  .review-box {margin: auto; border: solid 1px; padding: 10px;}
@@ -184,3 +200,53 @@ textarea {
     height: 100px;
     margin-bottom: 10px;
 }
+
+
+/* 1:1 문의내역 */
+.inq-wrap {}
+.inq-wrap .inq-tops {text-align: right;}
+.inq-wrap .inq-tops .btn-inq {padding: 10px 1rem;background: var(--primary);font-size: 0.875rem;font-weight: 600;color: var(--white);border: 0;border-radius: 6px;margin-bottom: 10px;}
+.tb-wrap .no-data {padding: 5rem 0;text-align:center;font-size: 0.875rem;font-weight: 500;border-bottom: 1px solid #E8E9EE;background: var(--white);margin-bottom: 1rem;}
+.tb-01 {width: 100%;border-spacing: 0;border-collapse: collapse;position:relative;}
+.tb-01 thead {border: 1px solid #ddd;border-left: 0;border-right: 0;}
+.tb-01 th {background: var(--light-blue);padding: 12px  10px;color:var(--dark);font-weight: 700;font-size: 1rem;text-align: center;}
+.tb-01 td {text-align: center;color:var(--dark);font-weight: 400;padding: 10px;border-bottom: 1px solid #E8E9EE;font-size: 0.875rem;background: var(--white);}
+.tb-01 td.subject {text-align:left;font-weight:500;}
+.tb-01 a {display:block; transition:all 0.2s;}
+.tb-01 tbody tr {cursor:pointer;}
+.tb-01 tbody tr:hover td {background: #f9f9f9; color:var(--primary)}
+.tb-01 tfoot tr td {background: #F9F7F4;font-weight: var(--weight-bold);}
+.tb-01 tr.reply th, .tb-01 tr.reply td {background: #e3ebf9;}
+.inq-reply {background: var(--secondary);padding: 4px 6px;border-radius: 5px;color: var(--white);font-weight: 600;font-size: 12px;margin-left: 7px;}
+.inq-wrap .tb-inq tbody td:nth-child(2) {font-weight:700;}
+
+.inq-frm {color: var(--dark);font-weight: 500;}
+.inq-frm .row {margin-bottom: 6px;}
+.inq-frm .row select {text-align: left;font-weight: 500;padding: 6px 10px;font-size: 15px;border: 1px solid #ddd;border-radius: 4px;}
+.inq-frm .row input[type="text"] {width: 100%;padding: 8px 10px;font-size: 15px;border: 1px solid #ddd;border-radius: 4px;}
+.inq-frm .row textarea {width: 100%;padding: 8px 10px;font-size: 15px;border: 1px solid #ddd;border-radius: 4px;}
+.inq-frm .row input[type="file"] {padding: 8px 10px;font-size: 15px;border: 1px solid #ddd;border-radius: 4px;background: var(--white);width: 100%;}
+.inq-wrap .com {display: flex;align-items: stretch;margin-bottom: 0.4rem;}
+.inq-wrap .com label {flex:0 0 90px;font-weight:700;color:var(--dark);background: #d3dded;display:inline-flex;align-items:center;justify-content:center;padding: 0.9rem;text-align: center; font-size: 0.875rem;}
+.inq-wrap .com span {display: block;flex: 1 1 auto;background: var(--white);padding:0.9rem; font-weight:500;color:var(--dark);font-size:15px;}
+.inq-wrap .com span.contents {min-height:150px;padding: 1rem;line-height:1.5;}
+.inq-wrap .com a:hover {text-decoration:underline;}
+.inq-wrap .com a input[type="button"] {cursor:pointer;background: var(--primary);color: var(--white);border: 0;padding: 6px 10px;border-radius: 4px;font-size: 14px;font-weight: 700;margin-left: 10px;}
+.inq-wrap .com.attach {justify-content: center;margin-top: 14px;margin-bottom: 0;}
+.inq-wrap .com.reply label {background: var(--secondary);font-weight: 700;color: var(--white);}
+.inq-wrap .reply-hr {width:100%;height:2px;background:var(--secondary);}
+
+.inq-wrap .btns {display:flex;align-items: center;gap: 4px;justify-content: center;margin-top: 20px;}
+.inq-wrap .btns button {padding: 10px 1rem;background: var(--dark);font-size: 0.875rem;font-weight: 600;color: var(--white);border: 0;border-radius: 6px;margin-bottom: 10px;}
+.inq-frm .row.attach {background:var(--white);padding: 1rem;border: 1px solid #ddd;border-radius: 4px;display: flex;align-items: center;gap: 0.8rem;}
+.inq-frm .row.attach > i {font-size:1.2rem;color:var(--secondary);margin-right: 6px;}
+.inq-frm .row.attach a.dw {font-size:1.2rem;color:var(--primary);}
+.inq-frm .row.attach a.del {font-size:1.2rem;color:var(--danger);}
+/* 페이징 */
+#pageList {display: flex;justify-content: center;align-items: center;gap: 6px;margin: 1rem auto;}
+#pageList button {font-size: 13px;font-weight: 700;background: var(--white);border: 1px solid var(--dark);border-radius: 4px;cursor:pointer;width: 30px;height: 30px;}
+#pageList button:disabled {background:#eee;border-color:#ddd;color:#c999;}
+#pageList button:hover {background:var(--primary);color:var(--white);border-color:var(--primary);}
+#pageList strong {width: 20px;display: inline-block;text-align: center;text-decoration: underline;cursor:pointer;}
+#pageList a {display: inline-block;width: 20px;text-align: center;}
+#pageList a:hover {color:var(--primary);font-weight:600;}

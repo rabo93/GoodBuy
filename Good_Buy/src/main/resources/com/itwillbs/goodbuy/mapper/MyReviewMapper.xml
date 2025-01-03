@@ -56,9 +56,15 @@
 	  ORDER BY REVIEW_DATE DESC
 	</select>
 	
-<!-- 	<select id="selectReviewCountCheck" resultType="int"> -->
-<!-- 		select COUNT(*) -->
-<!-- 		FROM MYREVIEW -->
-<!-- 		WHERE PRODUCT_ID = #{product_id}; -->
-<!-- 	</select> -->
+	<!-- 나의 리부 수정 -->
+	<update id="updateReview">
+		UPDATE MYREVIEW
+		SET REVIEW_CONTENT = #{review_content}
+		WHERE PRODUCT_ID = #{product_id}
+	</update>
+	
+	<delete id="deleteReview">
+		DELETE FROM MYREVIEW
+		WHERE REVIEW_ID = #{review_id}
+	</delete>
 </mapper>

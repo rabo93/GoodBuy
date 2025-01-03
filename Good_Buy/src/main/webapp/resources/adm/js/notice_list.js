@@ -57,11 +57,10 @@ document.addEventListener("DOMContentLoaded", function(){
 				data: null,
 				searchable: false,
 				className : "dt-center",
-				width: '160px',
+				width: '120px',
 				render : function(data, type, row) {
 					return `
-						<button class="btn btn-primary edit-btn" onclick="window.open('NoticeDetail?notice_id=${data.notice_id}')">보기</button>
-						<button class="btn btn-primary edit-btn" onclick="window.open('NoticeModify?notice_id=${data.notice_id}')">수정</button>
+						<button class="btn btn-primary edit-btn" onclick="location.href='AdmNoticeModify?notice_id="${row.notice_id}">수정</button>
 					`;
 				}
 			}
@@ -112,18 +111,30 @@ document.addEventListener("DOMContentLoaded", function(){
 	    });
 	});
 	
+	// 버튼 이동
+	$("#btnAddRow").on("click", function() {
+		window.location.href='AdmNoticeRegist';
+	});
+	
 	// 선택한 컬럼 삭제
 	$(document).on("click", '#btnDeleteRow', function() {
+		const deleteItems = [];
+		noticeList.rows().every(function (index) {
+			const row = this.node();
+			const checkBox = row.querySelector(".custom-control-input");
+			const checkedId = row.querySelector("input[name='notice_id']");
+			if(checkBox.checked){
+				 deleteItems.push(checkedId.value);
+			}
+		});	
+		
+		if(deleteItems.length == 0) {
+			alert("삭제할 게시글을 선택하세요.");
+			return;
+		}
+			
 		if(confirm("선택한 게시글을 삭제하시겠습니까?\n삭제 후 복구가 불가능합니다.")) {
-			const deleteItems = [];
-			noticeList.rows().every(function (index) {
-				const row = this.node();
-				const checkBox = row.querySelector(".custom-control-input");
-				const checkedId = row.querySelector("input[name='notice_id']");
-				if(checkBox.checked){
-					 deleteItems.push(checkedId.value);
-				}
-			});	
+			
 			console.log(deleteItems);
 			$.ajax({
 				url : "AdmNoticeDelete",

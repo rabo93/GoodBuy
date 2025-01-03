@@ -90,6 +90,10 @@ public interface AdminMapper {
 			@Param("searchDate") String searchDate,
 			@Param("orderColumn") String orderColumn, 
 			@Param("orderDir") String orderDir);
+	
+	// 신고 상품 조치 및 수정
+	int updateProductReport(Map<String, Object> param);
+	
 	//---------------------------------------------------------
 	// 공지사항 전체 목록 컬럼 수 조회
 	int selectNoticeListTotal();
@@ -105,27 +109,38 @@ public interface AdminMapper {
 			@Param("orderColumn") String orderColumn, 
 			@Param("orderDir") String orderDir);
 	
+	// 공지사항 첨부파일 가져오기
+	List<NoticeVO> selectNoticeBoardFileList(@Param("deleteItems") List<Integer> deleteItems);
+	
 	// 공지사항 삭제
 	int deleteNotice(@Param("deleteItems") List<Integer> deleteItems);
 	
 	//---------------------------------------------------------
-	// Faq 목록 조회 (필터링, 검색어, 페이징 적용)
+	// Faq 목록 조회 (필터링, 검색어, 페이징 적용) + 검색 조건
 	List<Map<String, Object>> selectFaqList(@Param("start") int start, 
 											@Param("length") int length,
 											@Param("searchValue") String searchValue,
+											@Param("faqCate") int faqCate, 
+											@Param("listStatus") int listStatus, 
 											@Param("orderColumn") String orderColumn, 
 											@Param("orderDir") String orderDir);
-	// Faq 컬럼 수 조회
+	
+	// Faq 전체 컬럼 수 조회
 	int selectFaqTotal();
 	
-	// FAQ 검색 컬럼 수 조회
-	int selectFaqFiltered(String searchValue);
+	// FAQ 검색 후 컬럼 수 조회
+	int selectFaqFiltered(
+			@Param("faqCate") int faqCate, 
+			@Param("listStatus") int listStatus, 		
+			@Param("searchValue") String searchValue);
 
 	// Faq 수정
 	int updateFaqInfo(Map<String, Object> param);
 	
 	// Faq 삭제
 	int deleteFaq(@Param("deleteItems") List<Integer> faqIds);
+
+
 
 
 	

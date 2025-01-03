@@ -1,3 +1,6 @@
+let url = new URL(window.location.href);
+let sId = $("input[name=seller-id]").val();
+
 // product_regi.jsp
 function onClickUpload1() {
 	let myInput = document.getElementById("item-thumb-upload-btn1");
@@ -17,12 +20,27 @@ function modalOpen() {
 	$('.modal-wrap').show();
 	$('.modal-bg').show();
 }
+
 function modalClose() {
 	$('.modal-wrap').hide();
 	$('.modal-bg').hide();
 }
 
-let url = new URL(window.location.href);
+function addWishlist() {
+	$.ajax({
+		url: "AddWishlist",
+		type: "GET",
+		data: {
+			MEM_ID: sId,
+			PRODUCT_ID: url.searchParams.get('PRODUCT_ID')
+		},
+	}).done(function() {
+		
+	}).fail(function() {
+		alert("찜하기 실패\n나중에 다시 시도해주세요.");
+	});
+}
+
 function itemReporting() {
 	$.ajax({
 		url: "ItemReporting",
@@ -30,15 +48,16 @@ function itemReporting() {
 		data: {
 			PRODUCT_ID: url.searchParams.get('PRODUCT_ID'),
 			REASON: $("select[name=modal-sb] option:selected").text() === "기타" ? $(".modal-otherReason").val() :
-																				   $("select[name=modal-sb] option:selected").text()
-		}
-	}).done(function(){
-		$('.modal-result').show();
-		$('.modal-content').hide();
-	}).fail(function() {
-		alert("신고에 실패하였습니다\n나중에 다시 시도해주세요.");
+																				   $("select[name=modal-sb] option:selected").text(),
+			REPORTER_ID: sId
+		},
+	}).done(function(response){
+		alert(decodeURIComponent(response).replaceAll("+", " "));
 		modalClose();
-	})
+	}).fail(function() {
+		alert(decodeURIComponent(response).replaceAll("+", " "));
+		modalClose();
+	});
 }
 
 $(document).ready(function(){

@@ -42,9 +42,6 @@
 				<section class="item-report-modal">
 					<div class="modal-bg" onclick="modalClose();"></div>
 					<div class="modal-wrap">
-						<div class="modal-result">
-							신고해주셔서 감사합니다!
-						</div>
 						<div class="modal-content">
 							<select class="modal-sb" name="modal-sb">
 								<option value="상품 설명에 불법적이거나 음란한 내용이 포함된 경우.">부적절한 상품 내용</option>
@@ -70,8 +67,12 @@
 						<div class="item-detail-pic">
 							<div class="thumb-slide">
 								<div><img src="${pageContext.request.contextPath}/resources/upload/${productSearch.product_pic1}"></div>
-								<div><img src="${pageContext.request.contextPath}/resources/upload/${productSearch.product_pic2}"></div>
-								<div><img src="${pageContext.request.contextPath}/resources/upload/${productSearch.product_pic3}"></div>
+								<c:if test="${not empty productSearch.product_pic2}">
+									<div><img src="${pageContext.request.contextPath}/resources/upload/${productSearch.product_pic2}"></div>
+								</c:if>
+								<c:if test="${not empty productSearch.product_pic3}">
+									<div><img src="${pageContext.request.contextPath}/resources/upload/${productSearch.product_pic3}"></div>
+								</c:if>
 							</div>
 							<a href="#" class="visu-prev"><i class="fa-solid fa-chevron-left"></i></a>
 							<a href="#" class="visu-next"><i class="fa-solid fa-chevron-right"></i></a>
@@ -94,9 +95,12 @@
 							});
 						</script>
 						<div class="item-detail-content-text">
+							<c:if test="${productSearch.product_status == 4}">
+								<div class="reporting-item">이 상품은 신고처리되었습니다.</div>
+							</c:if>
 							<div class="item-detail-title">${productSearch.product_title}</div>
 							<div class="item-detail-view">
-								<div class="item-detail-view-count">조회수 50</div>
+								<div class="item-detail-view-count">조회수 ${productSearch.view_count}</div>
 								<div class="item-detail-fav-count">찜 8</div>
 							</div>
 							<div class="item-detail-description">${productSearch.product_intro}</div>
@@ -112,24 +116,33 @@
 							<c:if test="${productSearch.product_discount_status == 1}">
 								<div class="item-detail-discount">가격제안 가능</div>
 							</c:if>
-								<div class="item-detail-price">${itemPrice.toLocaleString()} 원</div>
+								<div class="item-detail-price">
+									<fmt:formatNumber type="number" maxFractionDigits="3" value="${productSearch.product_price}"/> 원
+								</div>
 							</div>
 							<div class="item-detail-button-group">
 								<c:if test="${productSearch.product_trade_adr1 != '' && productSearch.product_trade_adr1 != undefined}">
 									<div class="item-detail-trade-adr">직거래 위치: ${productSearch.product_trade_adr1}</div>
 								</c:if>
-								<input type="button" value="찜하기" class="item-detail-fav">
-								<a href="javascript:void(0)"  onclick="openSlideChat('${productSearch.mem_id}')">
-									<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
-								</a>
+								<c:if test="${not empty sessionScope.sId}">
+									<c:if test="${productSearch.product_status != 4}">
+										<input type="button" value="찜하기" class="item-detail-fav" onclick="addWishlist()">
+										<a href="javascript:void(0)"  onclick="openSlideChat('${productSearch.mem_id}','${productSearch.product_id}' )">
+											<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
+										</a>
+									</c:if>
+								</c:if>
 							</div>
-							<a onclick="modalOpen();" class="item-report">
-								<i class="fa-solid fa-land-mine-on"></i>&nbsp;이 상품 신고하기
-							</a>
+							<c:if test="${not empty sessionScope.sId}">
+								<a href="javascript:void(0)" onclick="modalOpen();" class="item-report">
+									<i class="fa-solid fa-land-mine-on"></i>&nbsp;이 상품 신고하기
+								</a>
+							</c:if>
 						</div>
 					</div>
 					<div class="item-detail-seller-info" onclick="location.href='ProductShop'" style=" cursor: pointer;">
-						<img src="../../resources/img/product_thumb.jpg" class="item-detail-seller-pic">
+						<img src="${productSearch.mem_profile}" class="item-detail-seller-pic">
+						<input type="hidden" name="seller-id" value="${sessionScope.sId}">
 						<div class="item-detail-seller-nick">${productSearch.mem_nick}</div>
 						<div class="item-detail-seller-review">★★★★★</div>
 					</div>

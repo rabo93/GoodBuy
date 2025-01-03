@@ -37,11 +37,14 @@ public interface ProductMapper {
 
 	ProductVO productSearch(int product_id);
 
-	Boolean itemReporting(
+	int itemReporting(
 			@Param("product_id")int product_id,
 			@Param("reason")String reason,
 			@Param("id")String id);
 
-
 	List<ProductVO> selectLimitProductList(String id);
+			@Param("reporter_id")String reporter_id);
+
+
+	void plusViewCount(int product_id);
 }

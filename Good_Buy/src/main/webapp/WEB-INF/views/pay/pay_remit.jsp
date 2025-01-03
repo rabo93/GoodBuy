@@ -81,13 +81,15 @@
 		        	<div class="my-container">
 						<div class="contents-ttl">
 							<h3>굿페이 > 계좌송금</h3>
-		        			<h1>계좌송금은 채팅창에서 상대방 아이디 눌러서 계좌송금하는 방식이다. 바로 보내는 방식이 아님. </h1>
 		        
 		        
 		        
-					
+												
 					        <!-- 입력 안내 -->
 					        <div class="input-section">
+					        	<!-- 판매자의 대표계좌 가지고 와야함. 판매자 핀번호랑 id 가져오기 -->
+					        	
+					        	
 					            <input type="text" class="input-label" placeholder="계좌번호를 입력하세요">
 					            <input type="text" class="input-label" placeholder="은행을 선택하세요">
 					        </div>
@@ -110,17 +112,18 @@
 						        </div>
 					       </div>
 					        <!-- 추천계좌 버튼 -->
-					        <div class="recommend-button">
-					            <button class="recommend-btn">우리은행 1234567890123 (으)로 송금
-					            	<span><i class="fa-solid fa-x"></i></span>
-					            </button>
-					        </div>
+<!-- 					        <div class="recommend-button"> -->
+<!-- 					            <button class="recommend-btn">우리은행 1234567890123 (으)로 송금 -->
+<!-- 					            	<span><i class="fa-solid fa-x"></i></span> -->
+<!-- 					            </button> -->
+<!-- 					        </div> -->
 		    			</div>
 		    		</div>
 		    	</section>
 			    
 			    
-<!-- 			    </div> -->
+
+
 			    
 				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 			</div>

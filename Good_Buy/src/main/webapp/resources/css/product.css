@@ -270,8 +270,42 @@
     border: 2px solid #cccccc;
     color: #ffffff;
     margin-left: auto;
+    cursor: pointer;
 }
-.item-detail .item-detail-button-group .item-detail-contact-seller {width: 160px;height: 50px;padding: 8px 15px 8px 15px;box-sizing: border-box;border-radius: 10px;font-size: 16px;font-weight: 700;background-color: #0dcc5a;border: 2px solid #0dcc5a;color: #ffffff;}
+.item-detail .item-detail-button-group .item-detail-contact-seller {width: 160px;height: 50px;padding: 8px 15px 8px 15px;box-sizing: border-box;border-radius: 10px;font-size: 16px;font-weight: 700;background-color: #0dcc5a;border: 2px solid #0dcc5a;color: #ffffff;cursor: pointer;}
+
+.item-detail .item-report {
+	margin: 10px 0 0 auto;
+	color: #cccccc;
+	cursor: pointer;
+}
+.item-report-modal .modal-bg{
+	display: none;
+	width:100%;
+	height:100%;
+	position:fixed;
+	top:0;left:0;
+	right:0;
+	background: rgba(0, 0, 0, 0.6);
+	z-index:999;
+}
+.item-report-modal .modal-wrap {
+	display: none;
+	position:fixed;
+	top: 50%;
+	left:50%;
+	border-radius: 20px;
+	transform:translate(-50%,-50%);
+	width: 600px;
+	height: 700px;
+	background:#fff;
+	z-index:1000;
+}
+.item-report-modal .modal-wrap .modal-sb {text-align: center;width: 500px;display: flex;}
+.item-report-modal .modal-wrap .modal-otherReason {resize: none;width: 500px;display: flex;}
+.item-report-modal .modal-wrap .model-report-btn {display: flex;}
+.item-report-modal .modal-wrap .model-close-btn {display: flex;}
+.item-report-modal .modal-result {display: none;}
 
 .item-detail .item-detail-seller-info {
     width: 550px;

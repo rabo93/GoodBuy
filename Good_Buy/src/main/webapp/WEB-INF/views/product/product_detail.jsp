@@ -26,8 +26,8 @@
 
 <!-- JS for Page -->
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/resources/js/product.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/product.js"></script>
 
 </head>
 <body>
@@ -38,18 +38,46 @@
 		<section class="wrapper">
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
+				<!-- 신고 모달창 -->
+				<section class="item-report-modal">
+					<div class="modal-bg" onclick="modalClose();"></div>
+					<div class="modal-wrap">
+						<div class="modal-result">
+							신고해주셔서 감사합니다!
+						</div>
+						<div class="modal-content">
+							<select class="modal-sb" name="modal-sb">
+								<option value="상품 설명에 불법적이거나 음란한 내용이 포함된 경우.">부적절한 상품 내용</option>
+								<option value="상품 정보가 실제 상품과 다르거나 고객을 속이는 내용이 포함된 경우.">허위 또는 오해를 유발하는 정보</option>
+								<option value="상품 이미지 또는 설명이 저작권을 침해한 경우.">저작권 침해</option>
+								<option value="판매가 금지된 불법 상품(예: 위조품, 마약, 무기 등)을 등록한 경우.">불법 상품</option>
+								<option value="동일한 상품을 여러 번 등록하여 스팸성으로 간주되는 경우.">중복 또는 스팸 상품</option>
+								<option value="기타 사유를 입력해주세요.">기타</option>
+							</select>
+							<textarea class="modal-otherReason" readonly textho></textarea>
+							<button class="model-report-btn" type="button" onclick="itemReporting()">
+								신고하기
+							</button>
+						</div>
+						<button class="model-close-btn" type="button" onclick="modalClose()">
+							닫기
+						</button>
+					</div>	
+				</section>
+				<!-- 상품 페이지 -->
 				<section class="item-detail">
 					<div class="item-detail-content">
 						<div class="item-detail-pic">
 							<div class="thumb-slide">
-								<div><img src="/resources/img/product_thumb.jpg"></div>
-								<div><img src="/resources/img/product_thumb.jpg"></div>
-								<div><img src="/resources/img/product_thumb.jpg"></div>
+								<div><img src="${pageContext.request.contextPath}/resources/upload/${productSearch.product_pic1}"></div>
+								<div><img src="${pageContext.request.contextPath}/resources/upload/${productSearch.product_pic2}"></div>
+								<div><img src="${pageContext.request.contextPath}/resources/upload/${productSearch.product_pic3}"></div>
 							</div>
 							<a href="#" class="visu-prev"><i class="fa-solid fa-chevron-left"></i></a>
 							<a href="#" class="visu-next"><i class="fa-solid fa-chevron-right"></i></a>
 						</div>
 						<script>
+							const itemPrice = ${productSearch.product_price};
 							$(document).ready(function(){
 								$(".thumb-slide").slick({
 									autoplay: true,         // 자동 재생 설정 (true or false)
@@ -84,7 +112,7 @@
 							<c:if test="${productSearch.product_discount_status == 1}">
 								<div class="item-detail-discount">가격제안 가능</div>
 							</c:if>
-								<div class="item-detail-price">${productSearch.product_price} 원</div>
+								<div class="item-detail-price">${itemPrice.toLocaleString()} 원</div>
 							</div>
 							<div class="item-detail-button-group">
 								<c:if test="${productSearch.product_trade_adr1 != '' && productSearch.product_trade_adr1 != undefined}">
@@ -95,6 +123,9 @@
 									<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
 								</a>
 							</div>
+							<a onclick="modalOpen();" class="item-report">
+								<i class="fa-solid fa-land-mine-on"></i>&nbsp;이 상품 신고하기
+							</a>
 						</div>
 					</div>
 					<div class="item-detail-seller-info" onclick="location.href='ProductShop'" style=" cursor: pointer;">
@@ -253,9 +284,4 @@
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
 </body>
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-<script type="text/javascript">
-
-	
-</script>
 </html>

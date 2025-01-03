@@ -104,6 +104,17 @@
 									<input type="submit" value="환불하기">
 								</form>
 								
+								<hr><hr>
+								<%-- 
+									P2P 송금(이체) 요청(출금이체 + 입금이체)사람이 한명 더 필요하므로 가입을 더 해야함. 
+								--%>
+								<%-- 거래 요청 고객(입금계좌 예금주) 정보(핀테크이용번호, 예금주명, 입금금액) 전달 --%>
+								<form action="PayTransfer" method="post">
+									<input type="text" name="receiver_id" placeholder="상대방 아이디 입력">
+									거래금액 <input type="text" name="tran_amt" value="2000"> 
+									<input type="submit" value="송금">
+								</form>
+								
 								
 							</div>
 						</div>

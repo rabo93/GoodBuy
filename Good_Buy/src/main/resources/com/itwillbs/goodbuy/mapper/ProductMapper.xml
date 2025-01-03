@@ -11,7 +11,8 @@
 		  FROM 
 		  	PRODUCT P JOIN MEMBER M ON P.MEM_ID = M.MEM_ID
 		 WHERE 
-		 	P.MEM_ID = #{mem_id};
+		 	P.MEM_ID = #{mem_id}
+		ORDER BY PRODUCT_REG_DATE DESC;
 	</select>
 	
 	<!--판매 상품 리스트 갯수 조회  -->
@@ -58,10 +59,16 @@
 		ON pro.MEM_ID = mem.MEM_ID
 		WHERE 
 			PRODUCT_CATEGORY = #{cate} 
-		<if test="product_status == 0">
-			AND 
-				PRODUCT_STATUS = #{product_status}
-		</if>
+		<choose>
+			<when test="product_status == 0">
+				AND 
+					PRODUCT_STATUS = #{product_status}
+			</when>
+			<otherwise>
+				AND
+					PRODUCT_STATUS BETWEEN 0 AND 3
+			</otherwise>
+		</choose>
 		<if test="price_end != 0">
 			AND 
 				PRODUCT_PRICE <![CDATA[>=]]> #{price_start}
@@ -94,20 +101,14 @@
 		WHERE PRODUCT_ID = #{product_id}
 	</select>
 	
+	<!-- 상품 신고 -->
+	<insert id="itemReporting">
+		INSERT
+		INTO 
+	</insert>
+	
 	<!-- 구매상품 리스트 조회 -->
 	<select id="selectOrderList" resultType="order">
-<!-- 		SELECT  -->
-<!-- 		  O.ORDER_ID -->
-<!-- 		, P.PRODUCT_ID -->
-<!-- 		, P.PRODUCT_TITLE  -->
-<!-- 		, P.PRODUCT_PRICE -->
-<!-- 		, P.PRODUCT_CATEGORY -->
-<!-- 		, P.PRODUCT_STATUS -->
-<!-- 		, M.MEM_NICK -->
-<!-- 		, P.PRODUCT_TRADE_ADR1 -->
-<!-- 		  FROM PRODUCT P JOIN PRODUCT_ORDER O ON P.PRODUCT_ID = O.PRODUCT_ID -->
-<!-- 		  				JOIN MEMBER M ON P.MEM_ID = M.MEM_ID -->
-<!-- 	 	 WHERE O.BUYER_ID = #{mem_id}; -->
 		SELECT 
 			  O.ORDER_ID
 			, O.PRODUCT_ID

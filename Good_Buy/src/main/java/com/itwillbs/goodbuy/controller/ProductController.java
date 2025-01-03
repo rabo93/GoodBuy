@@ -43,7 +43,7 @@ public class ProductController {
 	// 검색필터 AJAX
 	@ResponseBody
 	@GetMapping("SearchPriceFilter")
-	public List<Map<String, Object>> searchPriceFilter(@RequestParam(defaultValue = "5", required=false) int PRODUCT_STATUS,
+	public List<Map<String, Object>> searchPriceFilter(@RequestParam(defaultValue = "99", required=false) int PRODUCT_STATUS,
 													   @RequestParam(required=false) String PRODUCT_PRICE,
 													   @RequestParam(required=false) String PRODUCT_TRADE_ADR1,
 													   @RequestParam String PRODUCT_CATEGORY) {
@@ -138,6 +138,14 @@ public class ProductController {
 		model.addAttribute("productSearch", productSearch);
 		
 		return "product/product_detail";
+	}
+	
+	@GetMapping("ItemReporting")
+	public Boolean itemReporting(@RequestParam int PRODUCT_ID, @RequestParam String REASON, HttpSession session) {
+		String id = (String) session.getAttribute("sId");
+		Boolean result = productService.itemReporting(PRODUCT_ID, REASON, id);
+		System.out.println(result);
+		return null;
 	}
 	
 	@GetMapping("ProductShop")

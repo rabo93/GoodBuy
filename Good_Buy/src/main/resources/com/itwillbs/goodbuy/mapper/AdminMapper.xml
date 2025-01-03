@@ -405,17 +405,23 @@
 		SELECT *
 		  FROM FAQ
 		 WHERE 1 = 1
+		 	<if test="faqCate != null and faqCate != 0">
+		 	   AND FAQ_CATE = #{faqCate}
+		 	</if>
+		 	<if test="listStatus != null and listStatus != 0">
+		 	   AND LIST_STATUS = #{listStatus}
+		 	</if>
 		 	<if test="searchValue != null and searchValue != ''">
 		 	   AND FAQ_SUBJECT LIKE CONCAT('%', #{searchValue}, '%')
 		 		OR FAQ_CONTENT LIKE CONCAT('%', #{searchValue}, '%')
-<!-- 		 		OR FAQ_CATE LIKE CONCAT('%', #{searchValue}, '%') -->
 		 	</if>
 		 ORDER BY 
 			<choose>
 				<when test="orderColumn == 'FAQ_ID'">FAQ_ID</when>
 				<when test="orderColumn == 'FAQ_SUBJECT'">FAQ_SUBJECT</when>
 				<when test="orderColumn == 'FAQ_CONTENT'">FAQ_CONTENT</when>
-				<when test="orderColumn == 'FAQ_CATE'">FAQ_CATE</when>
+<!-- 				<when test="orderColumn == 'FAQ_CATE'">FAQ_CATE</when> -->
+				<otherwise>FAQ_CATE</otherwise>
 			</choose>
 			<if test="orderDir == 'asc'">ASC</if>
 			<if test="orderDir == 'desc'">DESC</if>
@@ -423,7 +429,7 @@
 		 	   #{start}
 		 	   , #{length}
 		 </select>
-    
+    	
      <!-- FAQ 컬럼 수 조회 - SELECT -->
      <select id="selectFaqTotal" resultType="int">
      	SELECT COUNT(*)
@@ -444,11 +450,11 @@
      <!-- FAQ 수정 -->
      <update id="updateFaqInfo">
      	UPDATE FAQ
-     	   SET FAQ_SUBJECT = #{FAQ_SUBJECT}
-     	   	   , FAQ_CONTENT = #{FAQ_CONTENT}
-     	   	   , FAQ_CATE = #{FAQ_CATE}
-     	   	   , LIST_STATUS = #{LIST_STATUS}
-     	 WHERE FAQ_ID = #{FAQ_ID}
+     	   SET FAQ_SUBJECT = #{faq_subject}
+     	   	   , FAQ_CONTENT = #{faq_content}
+     	   	   , FAQ_CATE = #{faq_cate}
+     	   	   , LIST_STATUS = #{list_status}
+     	 WHERE FAQ_ID = #{faq_id}
      </update>
      
      <!-- FAQ 삭제 -->
@@ -456,8 +462,8 @@
 		DELETE FROM FAQ
 		WHERE 1=1
 		AND FAQ_ID IN
-		<foreach collection="deleteItems" item="FAQ_ID" index="index" open="(" close=")" separator=",">
-			   #{FAQ_ID}
+		<foreach collection="deleteItems" item="faq_id" index="index" open="(" close=")" separator=",">
+			   #{faq_id}
 		</foreach>
 		
 		 

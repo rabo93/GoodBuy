@@ -171,9 +171,9 @@ public class AdminService {
 	
 	// ============== [ FAQ 관리 ] ==============
 	// FAQ 목록 조회  (필터링, 검색어, 페이징 적용)
-	public List<Map<String, Object>> getFaqList(int start, int length, String searchValue, String orderColumn, String orderDir) {
+	public List<Map<String, Object>> getFaqList(int start, int length, String searchValue, int faqCate, int listStatus, String orderColumn, String orderDir) {
 		log.info(">>> admin faq");
-		return mapper.selectFaqList(start, length, searchValue, orderColumn, orderDir);
+		return mapper.selectFaqList(start, length, searchValue, faqCate, listStatus,  orderColumn, orderDir);
 	}
 	
 	// FAQ 전체 컬럼 수 조회
@@ -182,8 +182,8 @@ public class AdminService {
 	}
 	
 	// FAQ 검색 컬럼 수 조회
-	public int getFaqFiltered(String searchValue) {
-		return mapper.selectFaqFiltered(searchValue);
+	public int getFaqFiltered(int faqCate, int listStatus, String searchValue) {
+		return mapper.selectFaqFiltered(faqCate, listStatus, searchValue);
 	}
 	
 	// FAQ 수정

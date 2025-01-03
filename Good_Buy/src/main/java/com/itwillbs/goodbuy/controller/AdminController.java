@@ -1,14 +1,11 @@
 package com.itwillbs.goodbuy.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +20,6 @@ import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.service.AdminService;
 import com.itwillbs.goodbuy.vo.CommonCodeVO;
-import com.itwillbs.goodbuy.vo.FaqVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.NoticeVO;
 
@@ -442,42 +438,45 @@ public class AdminController {
 	
 	//----------------------------------------------------------------------------------------
 	// - FAQ 관리
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmFaqList")
 	public String admFaqList() {
 		return "admin/faq_list";
 	}
 	
 	// [ FAQ 목록 조회 ]
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("FaqListForm")
 	public String admFaqListForm(@RequestParam Map<String, String> param) {
 		log.info(">>> AdmFaqListForm param : " + param);
-		//
+		
 		int draw = Integer.parseInt(param.get("draw")); // 요청받은 draw 값
 		int start = Integer.parseInt(param.get("start")); // 페이징 시작 번호
 		int length = Integer.parseInt(param.get("length")); // 한 페이지의 컬럼 개수
 		String searchValue = param.get("searchValue").toString(); // 검색어
 		
+		int faqCate = Integer.parseInt(param.get("faq_cate")); // faq유형
+		int listStatus = Integer.parseInt(param.get("list_status")); // 사용여부
+		log.info(">>> faqCate : " + faqCate); // 0 
+		log.info(">>> listStatus : " + listStatus); // 0
+		
 		// 정렬 추가(orderable)
 		// 넘겨받은 데이터 : columns[2][data]=mem_name, order[0][column]=2, order[0][dir]=desc
 		// 컬럼명 추출하려면 columns[order[0][column]][data] 형태로 만들어줘야 함
 		int orderColumnKey = Integer.parseInt((String)param.get("order[0][column]"));
-		System.out.println("orderColumnKey: "+ orderColumnKey); //4
-		
 		String orderColumn = param.get("columns[" + orderColumnKey + "][data]").toString();
-		System.out.println("orderColumn: " + orderColumn); //
-		
 		String orderDir = param.get("order[0][dir]").toString();
-		System.out.println("orderDir: " + orderDir);
 		
 		// FAQ 전체 컬럼 수 조회
 		int recordsTotal = service.getFaqTotal();
 		
 		// FAQ 검색 필터링 후 컬럼 수 조회
-		int recordsFiltered = service.getFaqFiltered(searchValue);
+		// => 파라미터 : FAQ유형, 사용여부, 검색어
+		int recordsFiltered = service.getFaqFiltered(faqCate, listStatus, searchValue);
 		
 		// FAQ 전체 목록 조회
-		List<Map<String, Object>> faqList = service.getFaqList(start, length, searchValue, orderColumn, orderDir);
+		List<Map<String, Object>> faqList = service.getFaqList(start, length, searchValue, faqCate, listStatus, orderColumn, orderDir);
 		System.out.println("faqList:" + faqList);
 		
 		// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
@@ -488,13 +487,16 @@ public class AdminController {
 		response.put("recordsTotal", recordsTotal); // 전체 컬럼 수
 		response.put("recordsFiltered", recordsFiltered); // 검색 필터링 후 컬럼 수
 		response.put("faqList", faqList); // 컬럼 데이터
-//		System.out.println("Map: "+ response); 
+		System.out.println("Map: "+ response); 
 		
 		JSONObject jo = new JSONObject(response);
 		return jo.toString();
+		
+//		return null;
 	}
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 수정 ]
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmFaqModify")
 	public String admFaqModify(@RequestParam Map<String, Object> param, Model model) {
 		log.info(">>> 수정할 faq 정보: " + param);
@@ -512,6 +514,7 @@ public class AdminController {
 	
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 삭제 ]
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("AdmFaqDelete")
 	public Map<String, Object> admFaqDelete(@RequestBody List<Integer> faqIds) {

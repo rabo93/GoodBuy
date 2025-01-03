@@ -357,7 +357,9 @@ public class AdminController {
 		return "admin/notice_list";
 	}
 	
-	// 공지사항 목록	
+	// ======================================================
+	// [ 고객지원 관리 ]
+	// - 공지사항 관리	
 	@ResponseBody
 	@PostMapping("AdmNoticeList")
 	public String admNoticeList(@RequestParam Map<String, Object> param) {
@@ -416,9 +418,28 @@ public class AdminController {
 		
 		return response;
 	}
+	//----------------------------------------------------------------------------------------
+	// - 1:1 문의
+	@GetMapping("AdmSupportList")
+	public String admSupportList() {
+		return "admin/support_list";
+	}
 	
-	// ======================================================
-	// [ 고객지원 관리 ]
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//----------------------------------------------------------------------------------------
 	// - FAQ 관리
 	@GetMapping("AdmFaqList")
 	public String admFaqList() {
@@ -430,16 +451,20 @@ public class AdminController {
 	@PostMapping("FaqListForm")
 	public String admFaqListForm(@RequestParam Map<String, String> param) {
 		log.info(">>> AdmFaqListForm param : " + param);
+		//
 		int draw = Integer.parseInt(param.get("draw")); // 요청받은 draw 값
 		int start = Integer.parseInt(param.get("start")); // 페이징 시작 번호
 		int length = Integer.parseInt(param.get("length")); // 한 페이지의 컬럼 개수
 		String searchValue = param.get("searchValue").toString(); // 검색어
 		
+		// 정렬 추가(orderable)
+		// 넘겨받은 데이터 : columns[2][data]=mem_name, order[0][column]=2, order[0][dir]=desc
+		// 컬럼명 추출하려면 columns[order[0][column]][data] 형태로 만들어줘야 함
 		int orderColumnKey = Integer.parseInt((String)param.get("order[0][column]"));
-		System.out.println("orderColumnKey: "+ orderColumnKey);
+		System.out.println("orderColumnKey: "+ orderColumnKey); //4
 		
 		String orderColumn = param.get("columns[" + orderColumnKey + "][data]").toString();
-		System.out.println("orderColumn: " + orderColumn);
+		System.out.println("orderColumn: " + orderColumn); //
 		
 		String orderDir = param.get("order[0][dir]").toString();
 		System.out.println("orderDir: " + orderDir);

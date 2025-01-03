@@ -16,7 +16,12 @@ document.addEventListener("DOMContentLoaded", function(){
 			type: "POST",
 			dataType : "JSON",
 			data: function(d) {
-                d.searchValue = $('input[name="keyword_search"]').val();
+                d.faq_cate = $('input[name="faq_cate"]:checked').val(); // faq유형별
+				d.list_statu
+				
+				
+				s = $('input[name="list_status"]:checked').val(); // 사용여부별
+                d.searchValue = $('input[name="keyword_search"]').val(); // 검색
             },
 			dataSrc: function (res) {
 				const data = res.faqList; // faqList 배열만 가져오기
@@ -32,9 +37,9 @@ document.addEventListener("DOMContentLoaded", function(){
 				return data;
 			},
 		},
-		order: [[4, 'desc']], // 최초 조회 시 작성일자 최신순으로 조회
-//		columnDefs: [ { targets: 0, orderable: false }
-		columnDefs: [ { targets: [0, 1, 6], orderable: false },
+		order: [[4, 'asc']], // 최초 조회시 카테고리(4번째 컬럼)별로 조회
+		columnDefs: [ { targets: 0, orderable: false }
+//		columnDefs: [ { targets: [0, 1, 6], orderable: false },
 //		columnDefs: [ 
       	],
 		columns: [
@@ -57,26 +62,17 @@ document.addEventListener("DOMContentLoaded", function(){
 			},
 			// defaultContent 는 기본값 설정, 데이터 없는 컬럼일 경우 오류나기 때문에 널스트링 처리 해주어야 함
 			// 등록 시 유효성 체크를 한다면 defaultContent 값 설정 필요 없음!
-            { title: "No.", data: "listIndex" , className : "dt-center",  width: '60px',},
+            { title: "No.", data: "listIndex" , className : "dt-center",  width: '60px', orderable: false},
             { title: "제목", data : "FAQ_SUBJECT", className : "dt-center", defaultContent: "", orderable: false, searchable: true, },
             { title: "내용", data : "FAQ_CONTENT", className : "dt-center", defaultContent: "", orderable: false, searchable: true, },
             { 
 				title: "FAQ 유형", 
 				data : "FAQ_CATE", 
 				defaultContent: "운영정책", 
-				orderable: false,	// 정렬 비활성화
+//				orderable: false,	// 정렬 비활성화
 				searchable: false, // 검색 비활성화
 				className : "dt-center", 
 				render : function(data, type, row) {
-//					if(!data) {
-//						return "";
-//					} 
-//					switch(data) {
-//						case 1: return "<span class='faq-cate1'>운영정책</span>";
-//						case 2: return "<span class='faq-cate2'>회원/계정</span>";
-//						case 3: return "<span class='faq-cate3'>결제/페이</span>";
-//						case 4: return "<span class='faq-cate4'>기타</span>";
-//					}
 					const categories = {
 						1: "운영정책",
 						2: "회원/계정",
@@ -84,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function(){
 						4: "광고서비스",
 						5: "기타",
 					};
-					return `<span class='faq-cate'>${categories[data] || ""}</span>`
+					return `<span class='faq-cate' status>${categories[data] || ""}</span>`
 				},
              },
 			{ 	
@@ -128,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function(){
 		processing : true,  // 서버와 통신 시 응답을 받기 전이라는 ui를 띄울 것인지 여부
 		language : {
 			emptyTable: "데이터가 없습니다.",
-			lengthMenu: "_MENU_",
+			lengthMenu: "_MENU_건씩 보기",
 			info: "현재 _START_ - _END_ / 총 _TOTAL_건",
 			infoEmpty: "데이터 없음",
 			search: "검색",
@@ -148,10 +144,18 @@ document.addEventListener("DOMContentLoaded", function(){
 	//-----------------------------------------------------
 	// 기존 검색 숨기기
 	$("#faqList_filter").attr("hidden", "hidden");
+	
+	 // 필터 변경 시 데이터 테이블 다시 로드
+    $('input[name="faq_cate"], input[name="list_status"]').on('change', function() {
+        faqList.draw();
+    });
+	
+	
 	// 검색 버튼 클릭 시 테이블 다시 로드
     $('#searchBtn').on('click', function() {
         faqList.draw();
     });
+    
 	// 엔터키 입력으로 검색
     $('#searchKeyword').on('keypress', function(e) {
         if (e.which == 13) {
@@ -196,9 +200,13 @@ document.addEventListener("DOMContentLoaded", function(){
 		const row = $(this).closest('tr');
 		const rowData = faqList.row(row).data();
 //		console.log(rowData);
-		let listStatus = rowData.LIST_STATUS == 1 ? true : false;
-		let listStatusText = rowData.LIST_STATUS == 1 ? "사용함" : "사용안함";
+		const listStatus = rowData.LIST_STATUS == 1 ? true : false;
+		const listStatusText = rowData.LIST_STATUS == 1 ? "사용함" : "사용안함";
 //		console.log(listStatus);
+		const memGradeSelect = document.querySelector(`#memGrade option[value="${memGrade}"]`);;
+		const memStatusSelect = document.querySelector(`#memStatus option[value="${memStatus}"]`);;
+		
+		
 		
 		// 수정 전 기본 데이터 셋팅
 		$("#faqId").val(rowData.FAQ_ID);
@@ -255,13 +263,11 @@ document.addEventListener("DOMContentLoaded", function(){
 					}
 				},
 				error : function(res) {
-					alert(res.message);
+					alert("삭제할 컬럼을 선택 후 삭제해주세요.");
 				}
 			});
 		}
 	});
-	
-	
 	
 });
 

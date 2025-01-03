@@ -54,21 +54,72 @@
                                 <div class="card-body">
                                 	<div class="search-wrap border">
 									   	<section class="d-flex search-inner">
+									   		<!-- 분류 단추 -->
+									   		<div class="col pl-4 search-box">
+			                                	<div class="search-ttl">FAQ유형별</div>
+											    <div class="category-filter input-group">
+											        <div class="form-check">
+													    <input class="form-check-input" id="reset" type="radio" name="faq_cate"  value="0" checked>
+													    <label class="form-check-label" for="reset">전체</label>
+													</div>
+											        <div class="form-check ml-3">
+													    <input class="form-check-input" id="faqCate1" type="radio" name="faq_cate" value="1">
+													    <label class="form-check-label" for="faqCate1">운영정책</label>
+													</div>
+													<div class="form-check ml-3">
+													    <input class="form-check-input" id="faqCate2" type="radio" name="faq_cate" value="2">
+													    <label class="form-check-label" for="faqCate2">회원/계정</label>
+													</div>
+													<div class="form-check ml-3">
+													    <input class="form-check-input" id="faqCate3" type="radio" name="faq_cate" value="3">
+													    <label class="form-check-label" for="faqCate3">결제/페이</label>
+													</div>
+													<div class="form-check ml-3">
+													    <input class="form-check-input" id="faqCate4" type="radio" name="faq_cate" value="4">
+													    <label class="form-check-label" for="faqCate4">광고서비스</label>
+													</div>
+													<div class="form-check ml-3">
+													    <input class="form-check-input" id="faqCate5" type="radio" name="faq_cate" value="5">
+													    <label class="form-check-label" for="faqCate5">기타</label>
+													</div>
+											    </div>
+										    </div>
+										    <div class="col pl-4 search-box">
+			                                	<div class="search-ttl">사용여부별</div>
+											    <div class="category-filter input-group">
+											    	<div class="form-check">
+													    <input class="form-check-input" id="listStatusAll" type="radio" name="list_status" value="전체" checked>
+													    <label class="form-check-label" for="listStatusAll">전체</label>
+													</div>
+											        <div class="form-check ml-3">
+													    <input class="form-check-input" id="listStatus1" type="radio" name="list_status" value="1">
+													    <label class="form-check-label" for="listStatus1">사용함</label>
+													</div>
+													<div class="form-check ml-3">
+													    <input class="form-check-input" id="listStatus2" type="radio" name="list_status" value="2">
+													    <label class="form-check-label" for="listStatus2">사용안함</label>
+													</div>
+											    </div>
+										    </div>
+									   	
+									   		<!-- 검색 -->
 										    <div class="col-6 search-box">
 						                        <div class="input-group">
-						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="제목, 내용 검색" aria-label="Search" aria-describedby="basic-addon2">
+						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="제목 또는 내용 검색" aria-label="Search" aria-describedby="basic-addon2">
 						                            <div class="input-group-append">
 						                                <button class="btn btn-primary" id="searchBtn" type="button">검색</button>
 						                            </div>
 						                        </div>
 					                        </div>
-					                        <div class="col-6 d-flex justify-right">
-												<button class="btn btn-primary ml-auto" type="button" id="btnAddRow" onclick="window.open('FaqWrite')"><i class="fa-regular fa-pen-to-square"></i> 작성하기</button>
-												<button class="btn btn-danger ml-2" type="button" id="btnDeleteRow"><i class="fa-solid fa-trash-can"></i> 선택 삭제</button>
-		                                    </div>
 									   	</section>
+									   	
 									</div>
-                                
+									<!-- 작성하기/선택삭제 -->
+			                        <div class="col-6 d-flex justify-right">
+										<button class="btn btn-primary ml-auto" type="button" id="btnAddRow" onclick="window.open('FaqMain')"><i class="fa-regular fa-pen-to-square"></i> 작성하기</button>
+										<button class="btn btn-danger ml-2" type="button" id="btnDeleteRow"><i class="fa-solid fa-trash-can"></i> 선택 삭제</button>
+                                    </div>
+                                    <!-- 테이블 -->
                                 	<div class="table-responsive">
 		                                <table class="table table-bordered compact" id="faqList" width="100%" cellspacing="0">
 		                                    <thead>
@@ -134,10 +185,6 @@
 							<label for="updatedFaqContent" class="col-form-label">내용</label>
 							<input type="text" class="form-control" name="FAQ_CONTENT" id="updatedFaqContent" required>
 						</div>
-<!-- 						<div class="mb-1"> -->
-<!-- 							<label for="updatedFaqCate" class="col-form-label">FAQ 유형</label> -->
-<!-- 							<input type="text" class="form-control" name="FAQ_CATE" id="updatedFaqCate" required> -->
-<!-- 						</div> -->
 						<div class="mb-1">
 							<label class="small mb-1" for="memStatus">FAQ 유형</label>
 							<select class="custom-select" id=updatedFaqCate name="FAQ_CATE" >
@@ -182,7 +229,7 @@
     <!-- Page level plugins -->
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script>
+<%--     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script> --%>
 
     <!-- Page level custom scripts -->
     <script src="${pageContext.request.contextPath}/resources/adm/js/faq_list.js"></script>

@@ -96,6 +96,16 @@
 						                                <c:when test="${product.product_status == 3}">
 						                                    [거래완료]
 						                                </c:when>
+						                                <c:when test="${product.product_status == 4}">
+						                                    [🚫신고처리된 게시물입니다.]${product.product_title}
+						                                     <div class="price">
+									                            <fmt:formatNumber value="${product.product_price}" type="number" pattern="#,###" />원
+									                        </div>
+									                        <div class="card-row">
+									                            <span class="add">${product.product_trade_adr1}</span>
+									                            <span class="name">${product.mem_nick}</span>
+									                        </div>
+						                                </c:when>
 						                                <c:otherwise>
 						                                    [판매중]
 						                                </c:otherwise>

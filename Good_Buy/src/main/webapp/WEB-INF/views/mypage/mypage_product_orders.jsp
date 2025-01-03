@@ -195,6 +195,7 @@
                     alert("후기가 등록되었습니다!");
                     $("#review-modal").fadeOut(300);
                     $("#review_content").val("");
+                    location.reload();
 
 //                     버튼 비활성화 (또는 숨김 처리)
 //                     $(".clicked-review-btn").prop("disabled", true).text("후기 작성 완료").removeClass("open-modal-btn");

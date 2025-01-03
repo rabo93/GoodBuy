@@ -89,7 +89,7 @@
 										        data-buyer="${review.mem_nick}">
 										        수정
 										    </button>
-										<button>삭제</button>
+										<button onclick="deleteReview(${review.review_id})">삭제</button>
 										</div>
 						            </c:forEach>
 								</c:otherwise>
@@ -164,7 +164,7 @@
 
             // Ajax로 데이터 전송
             $.ajax({
-                url: "MyReviewText",
+                url: "MyReviewEdit",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
@@ -177,9 +177,7 @@
                     alert("후기가 수정되었습니다!");
                     $("#review-modal").fadeOut(300);
                     $("#review_content").val("");
-
-//                     버튼 비활성화 (또는 숨김 처리)
-//                     $(".clicked-review-btn").prop("disabled", true).text("후기 작성 완료").removeClass("open-modal-btn");
+                    location.reload();
                 },
                 error: function () {
                     alert("후기 등록에 실패했습니다.");
@@ -188,6 +186,25 @@
         });
     });
 
+</script>
+
+<script>
+	function deleteReview(reviewId) {
+	    if (confirm("정말 삭제하시겠습니까?")) {
+	        $.ajax({
+	            type: "POST",
+	            url: "DeleteReview",
+	            data: { reviewId: reviewId },
+	            success: function(response) {
+	                alert("삭제되었습니다.");
+	                location.reload();
+	            },
+	            error: function() {
+	                alert("삭제 실패!");
+	            }
+	        });
+	    }
+	}
 </script>
 	
 </body>

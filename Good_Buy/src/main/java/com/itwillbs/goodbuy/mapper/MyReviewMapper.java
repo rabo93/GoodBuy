@@ -24,5 +24,11 @@ public interface MyReviewMapper {
 	
 	//내가 쓴 리뷰
 	List<MyReviewVO> selectReviewHistory(String id);
+	//내가쓴 리뷰 수정
+	int updateReview(
+			@Param("review_content") String reviewContent
+			,@Param("product_id") String productId);
+	//리뷰삭제
+	int deleteReview(int reviewId);
 
 }

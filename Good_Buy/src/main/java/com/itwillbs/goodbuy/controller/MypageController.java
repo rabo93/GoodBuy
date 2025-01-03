@@ -240,6 +240,33 @@ public class MypageController {
 		return "mypage/mypage_review_history";
 	}
 	
+	//내가쓴 후기 수정
+	@ResponseBody
+	@PostMapping("MyReviewEdit")
+	public String myReviewEdit(@RequestBody Map<String, String>reviewData,HttpSession session) {
+		String reviewContent = reviewData.get("review"); //모달창에서 입력한 review_content
+		String productId = reviewData.get("product_id");
+		String id = getSessionUserId(session);
+		
+		int result = reviewService.reviewEdit(reviewContent,productId);
+		if(result > 0) {
+			return "result/success";
+		}
+		return"result/fail";
+	}
+	
+	//내가쓴 후기 삭제
+	@ResponseBody
+	@PostMapping("DeleteReview")
+	public String deleteReview(int reviewId, HttpSession session) {
+		int result = reviewService.removeReview(reviewId);
+		if(result > 0) {
+			return "result/success";
+		}
+		return"result/fail";
+	}
+	
+	
 	//[문의내역]
 	@GetMapping("MySupport")
 	public String mySupportList(HttpSession session,Model model,MemberVO member) {

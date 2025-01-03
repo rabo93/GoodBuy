@@ -130,6 +130,25 @@ public class AdminService {
 	}
 	
 	// ============== [ 공지사항 관리 ] ==============
+	// [ 신고 회원 관리 ]
+	
+	// [ 신고 상품 관리 ]
+	// 신고 상품 목록 전체 컬럼 수 조회
+	public int getProductReportTotal() {
+		return mapper.selectProductReportTotal();
+	}
+	
+	// 신고 상품 검색 필터링 후 컬럼 수 조회
+	public int getProductReportFiltered(String status, String searchValue) {
+		return mapper.selectProductReportFiltered(status, searchValue);
+	}
+	
+	// 필터링 된 신고 상품 목록 가져오기
+	public List<Map<String, Object>> getProductReportList(int start, int length, String status, String searchValue, String orderColumn, String orderDir) {
+		return mapper.selectProductReportList(start, length, status, searchValue, orderColumn, orderDir);
+	}
+	
+	// ============== [ 공지사항 관리 ] ==============
 	// 공지사항 목록 전체 컬럼 수 조회
 	public int getNoticeListTotal() {
 		return mapper.selectNoticeListTotal();
@@ -176,6 +195,10 @@ public class AdminService {
 	public int removeFaq(List<Integer> faqIds) {
 		return mapper.deleteFaq(faqIds);
 	}
+
+
+
+
 
 	
 

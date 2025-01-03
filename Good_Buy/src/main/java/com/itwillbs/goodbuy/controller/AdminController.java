@@ -291,7 +291,6 @@ public class AdminController {
 		
 		int deleteResult = service.removeMember(member.getMem_id());
 		
-		
 		Map<String, Object> response = new HashMap<String, Object>();
 		if(deleteResult > 0) {
 			response.put("status", "success");
@@ -308,6 +307,48 @@ public class AdminController {
 	// [ 결제 관리 ]
 	
 	// [ 신고 관리 ]
+	// 신고 상품 목록 페이지 포워딩
+	@GetMapping("AdmProductReportList")
+	public String admProductReportListForm() {
+		return "admin/product_report_list";
+	}
+	
+	// 신고 상품 목록 - 필터링 및 검색
+	@ResponseBody
+	@PostMapping("AdmProductReportList")
+	public String admProductReportList(@RequestParam Map<String, Object> param) {
+		log.info(">>>> 신고 상품 목록 param : " + param);
+		int draw = Integer.parseInt((String) param.get("draw")); // 요청받은 draw 값
+		int start = Integer.parseInt((String) param.get("start")); // 페이징 시작 번호
+		int length = Integer.parseInt((String) param.get("length")); // 한 페이지의 컬럼 개수
+		String status = param.get("status").toString(); // 검색어
+		String searchValue = param.get("searchValue").toString(); // 검색어
+		
+		int orderColumnKey = Integer.parseInt((String)param.get("order[0][column]"));
+		String orderColumn = param.get("columns[" + orderColumnKey + "][data]").toString();
+		String orderDir = param.get("order[0][dir]").toString();
+		
+		// 신고 상품 목록 전체 컬럼 수 조회
+		int recordsTotal = service.getProductReportTotal();
+		
+		// 신고 상품 검색 필터링 후 컬럼 수 조회
+		int recordsFiltered = service.getProductReportFiltered(status, searchValue);
+		
+		// 필터링 된 신고 상품 목록 가져오기
+		List<Map<String, Object>> productReportList = service.getProductReportList(start, length, status, searchValue, orderColumn, orderDir);
+		log.info(">>>>> 필터링 된 신고 상품 목록 : " + productReportList);
+		
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		response.put("draw", draw);
+		response.put("recordsTotal", recordsTotal);
+		response.put("recordsFiltered", recordsFiltered);
+		response.put("productReportList", productReportList);
+		
+		JSONObject jo = new JSONObject(response);
+		
+		return jo.toString();
+	}
 	
 	// ======================================================
 	// 공지사항 관리

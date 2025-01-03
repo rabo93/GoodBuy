@@ -5,6 +5,8 @@ const TYPE_TALK = "TALK";
 const TYPE_INIT = "INIT";
 const TYPE_INIT_COMPLETE = "INIT_COMPLETE";
 const TYPE_START = "START";
+const TYPE_REQUEST_CHAT_ROOM_LIST = "REQUEST_CHAT_ROOM_LIST";
+const TYPE_REQUEST_CHAT_LIST = "REQUEST_CHAT_LIST";
 
 //	채팅 메세지 정렬 위치
 const ALIGN_CENTER = "center";
@@ -109,7 +111,7 @@ function showChatList(data) {
 			appendChatRoomList(room);
 		}
 	}
-	sendMessage(TYPE_INIT_COMPLETE, "", receiver_id, "", "");
+//	sendMessage(TYPE_INIT_COMPLETE, "", receiver_id, "", "");
 	
 }
 
@@ -123,6 +125,14 @@ function startChat(data) {
 
 function appendChatRoomList(room) {
 	console.log(room);
+	
+	if(!$(".sidebar-item").hasClass(room.room_id)) {
+		let title = room.title;
+		let divRoom = "<div class='sidebar-item " + room.room_id + "'>" + title + "<span class='messageStatus'></span></div>";
+		$("#sidebar").prepend(divRoom);
+		
+	}
+	
 }
 
 
@@ -132,10 +142,6 @@ function sendInputMessage() {
 	if(message == "") {
 		return;
 	}
-	
-	sendMessage(TYPE_TALK, "", "", "", message);
-	
-	appendMessage(message, ALIGN_RIGHT);
 	
 	$(".chatMessage").val("");
 	$(".chatMessage").focus();

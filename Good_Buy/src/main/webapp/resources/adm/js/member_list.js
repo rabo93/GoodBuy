@@ -62,13 +62,13 @@ document.addEventListener("DOMContentLoaded", function(){
 				className : "dt-center", 
 				width: '70px',
 				render : function(data, type, row) {
-					if(!data) {
-						return "";
-					} else if(data == "관리자"){
-						return "<span class='grade grade-adm'>관리자</span>"
-					} else if(data == "일반"){
-						return "<span class='grade grade-normal'>일반</span>"
-					}
+					if(!data) return "";
+					
+					switch (data) {
+			            case "관리자": return "<span class='grade grade-adm'>관리자</span>";
+			            case "일반": return "<span class='grade grade-normal'>일반</span>";
+			            default: return "";
+			        }
 				}
              },
             { 

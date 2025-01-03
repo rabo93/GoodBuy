@@ -68,4 +68,9 @@ public class ProductService {
 		return mapper.itemReporting(product_id, reason, id);
 	}
 
+	//판매상품 상위 4개 조회
+	public List<ProductVO> getProductListLimit(String id) {
+		return mapper.selectLimitProductList(id);
+	}
+
 }

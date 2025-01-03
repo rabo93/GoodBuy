@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itwillbs.goodbuy.mapper.SupportMapper">
+	<!-- 문의 리스트 조회 -->
+	<select id="selectSupportList" resultType="support">
+		SELECT *
+		FROM SUPPORT
+		WHERE MEM_ID = #{mem_id}
+		ORDER BY SUPPORT_DATE DESC
+	</select>
+	
+	<select id="selectSupportDetail" resultType="support">
+		SELECT *
+		FROM SUPPORT
+		WHERE SUPPORT_ID = #{SUPPORT_ID}
+	</select>
+
+
+</mapper>

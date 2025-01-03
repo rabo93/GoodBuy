@@ -41,4 +41,7 @@ public interface ProductMapper {
 			@Param("product_id")int product_id,
 			@Param("reason")String reason,
 			@Param("id")String id);
+
+
+	List<ProductVO> selectLimitProductList(String id);
 }

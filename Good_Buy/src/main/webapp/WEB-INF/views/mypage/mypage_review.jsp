@@ -83,6 +83,7 @@
 											</div>
 										    <div class="review-text">${review.review_content}</div>
 										</div>
+										
 						            </c:forEach>
 								</c:otherwise>
 							</c:choose>	

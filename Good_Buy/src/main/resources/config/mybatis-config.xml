@@ -17,5 +17,6 @@
 		<typeAlias type="com.itwillbs.goodbuy.vo.TermVO" alias="term"/>
 		<typeAlias type="com.itwillbs.goodbuy.vo.ChatRoom" alias="chatRoom"/>
 		<typeAlias type="com.itwillbs.goodbuy.vo.ChatMessage" alias="chatMessage"/>
+		<typeAlias type="com.itwillbs.goodbuy.vo.SupportVO" alias="support"/>
 	</typeAliases>
 </configuration>

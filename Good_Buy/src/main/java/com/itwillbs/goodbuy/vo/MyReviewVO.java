@@ -8,6 +8,7 @@ import lombok.Data;
 public class MyReviewVO {
 	    private String review_id;         // 리뷰 ID
 	    private String mem_id;            // 회원 ID
+	    private String mem_nick;            // 회원 닉네임
 	    private String review_content;    // 리뷰 내용
 	    private String product_title;     // 상품 제목
 	    private int product_id;    // (구매한)상품ID

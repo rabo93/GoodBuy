@@ -48,6 +48,14 @@
 	
 	</insert>
 	
+	<!-- 내가 쓴 리뷰 -->
+	<select id="selectReviewHistory">
+		SELECT R.* , M.MEM_NICK
+		  FROM MYREVIEW R JOIN MEMBER M ON R.MEM_ID = M.MEM_ID
+		 WHERE R.MEM_ID = #{mem_id}
+	  ORDER BY REVIEW_DATE DESC
+	</select>
+	
 <!-- 	<select id="selectReviewCountCheck" resultType="int"> -->
 <!-- 		select COUNT(*) -->
 <!-- 		FROM MYREVIEW -->

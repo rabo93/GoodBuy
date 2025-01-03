@@ -21,6 +21,7 @@
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/modal.css">
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
 </head>
 
@@ -83,16 +84,15 @@
                                                     </div>
                                                     
                                                     <!-- 후기 작성하기 버튼 (상품 정보 포함) -->
-                                                    <form action="MyOrderList" method="post" id="orderForm">
                                                     	<input type="hidden" name="product_id" id="hiddenProductId">
 	                                                    <button class="open-modal-btn"
 														        data-product-id="${product.product_id}"
 														        data-title="${product.product_title}"
 														        data-buyer="${product.mem_nick}"
+<%-- 														        data-review-cnt="${product.review_cnt}" --%>
 														        type="button" ${product.review_cnt == 1 ? 'disabled' : ''}>
 														    ${product.review_cnt == 1 ? '작성완료📩' : '후기 작성하기📮'}
 														</button>
-													</form>
                                                 </div>
                                             </li>
                                         </c:forEach>
@@ -116,7 +116,32 @@
             <h2>
                 <span id="buyerName"></span>님께 구매한 [<span id="productTitle"></span>]<br>후기 보내기📮
             </h2>
+            <!-- 별점 -->
+<!--             <section class="course-rating"> -->
+<!-- 				    <label class="rating-lab rating-lab-full" for="star1"> -->
+<!-- 				        <input type="radio" id="star1" class="rating-input" name="review_score" value="1"> -->
+<!-- 				        <span class="star-icon"></span> -->
+<!-- 				    </label> -->
+<!-- 				    <label class="rating-lab rating-lab-full" for="star2"> -->
+<!-- 				        <input type="radio" id="star2" class="rating-input" name="review_score" value="2"> -->
+<!-- 				        <span class="star-icon"></span> -->
+<!-- 				    </label> -->
+<!-- 				    <label class="rating-lab rating-lab-full" for="star3"> -->
+<!-- 				        <input type="radio" id="star3" class="rating-input" name="review_score" value="3"> -->
+<!-- 				        <span class="star-icon"></span> -->
+<!-- 				    </label> -->
+<!-- 				    <label class="rating-lab rating-lab-full" for="star4"> -->
+<!-- 				        <input type="radio" id="star4" class="rating-input" name="review_score" value="4"> -->
+<!-- 				        <span class="star-icon"></span> -->
+<!-- 				    </label> -->
+<!-- 				    <label class="rating-lab rating-lab-full" for="star5"> -->
+<!-- 				        <input type="radio" id="star5" class="rating-input" name="review_score" value="5"> -->
+<!-- 				        <span class="star-icon"></span> -->
+<!-- 				    </label> -->
+<!-- 	        	</section> -->
+            	<!-- /별점 -->
             <input type="hidden" id="modal_product_id"> <!-- id저장용 -->
+<!--             <input type="hidden" id="modal_review_cnt"> 리뷰 갯수 저장용 -->
             <textarea rows="4" cols="50" id="review_content" placeholder="후기를 작성해주세요."></textarea>
             <br>
             <button id="close-modal">닫기</button>
@@ -131,14 +156,14 @@
             const productId = $(this).data("product-id");
             const productTitle = $(this).data("title");
             const buyerName = $(this).data("buyer");
+//             const review_cnt = $(this).data("review-cnt");
 
             // 모달에 데이터 주입
             $("#buyerName").text(buyerName);
             $("#productTitle").text(productTitle);
             $("#modal_product_id").val(productId);
+//             $("#modal_review_cnt").val(review_cnt);
 
-            // 현재 클릭된 버튼 저장 (비활성화용)
-//             $(this).addClass("clicked-review-btn");
 
             $("#review-modal").fadeIn(300);
         });
@@ -153,6 +178,7 @@
             const reviewText = $("#review_content").val();
             const productId = $("#modal_product_id").val();
             const productTitle = $("#productTitle").text();
+// 			const review_cnt = $("#modal_review_cnt").val();
 
             if (!reviewText.trim()) {
                 alert("후기를 작성해주세요!");
@@ -163,6 +189,8 @@
             console.log("리뷰 내용: " + reviewText);
             console.log("상품 ID: " + productId);
             console.log("상품 제목: " + productTitle);
+// 			console.log(">>>>>>>>>>>>"+review_cnt);
+			  
 
             // Ajax로 데이터 전송
             $.ajax({
@@ -172,7 +200,8 @@
                 data: JSON.stringify({
                     review: reviewText,
                     product_title: productTitle,
-                    product_id: productId
+                    product_id: productId,
+//                     review_cnt : review_cnt
                 }),
                 success: function () {
                     alert("후기가 등록되었습니다!");
@@ -189,38 +218,6 @@
         });
     });
 
-</script>
-
-<script type="text/javascript">
-	$(document).ready(function () {
-		  $(".open-modal-btn").click(function () {
-	            const productId = $(this).data("product-id");
-				console.log(">>>>>>"+productId);
-	            // 모달에 데이터 주입
-	            $("#modal_product_id").val(productId);
-
-	            // 현재 클릭된 버튼 저장 (비활성화용)
-//	             $(this).addClass("clicked-review-btn");
-
-	            $("#review-modal").fadeIn(300);
-		$.ajax({
-			url : "MyOrder"	,
-			type : "GET",
-			contentType: "application/json",
-			data : {
-				product_id : productId
-			},
-			success : function (response) {
-				console.log("서버 응답:", response);
-			}
-		
-		
-		})
-	  });
-		
-	})
-	
-	
 </script>
 </body>
 </html>

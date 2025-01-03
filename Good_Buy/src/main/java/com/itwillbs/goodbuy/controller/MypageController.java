@@ -109,21 +109,8 @@ public class MypageController {
 		//상품목록 조회
 //		List<ProductVO> productlist =(List<ProductVO>) productService.getProductList(id);
 //		model.addAttribute("product", productlist);
-		
-		
-		
 		return "mypage/mypage_product_orders";
 	}
-	
-	@PostMapping("MyOrderList")
-	public String myOrderList(HttpSession session,Model model) {
-		String id = getSessionUserId(session);
-
-		List<ProductOrderVO> orderList = productService.getOrderList(id);
-		model.addAttribute("product", orderList);
-		return "redirect:/MyOrder";
-	}
-	
 	
 	//[나의 판매내역] 완
 	@GetMapping("MySales")
@@ -164,6 +151,7 @@ public class MypageController {
 		String review = reviewData.get("review"); // JSON에서 'review' 키로 데이터 받기
 		String productTitle = reviewData.get("product_title");
 		String productId = reviewData.get("product_id");
+//		String review_cnt = reviewData.get("review_cnt");
 		String id = getSessionUserId(session);
 		
 		System.out.println("@@@@@@@@@@@"+review+productId + productTitle);
@@ -236,6 +224,19 @@ public class MypageController {
 		}
 	}
 	
+	//내가 쓴 후기
+	@GetMapping("MyReviewHistory")
+	public String myReviewHistory(Model model,HttpSession session,MemberVO member) {
+		String id = getSessionUserId(session);
+		member.setMem_id(id);
+		
+		
+		List<MyReviewVO> reviewHistory = reviewService.getReviewHistory(id);
+		model.addAttribute("review",reviewHistory);
+		
+		
+		return "mypage/mypage_review_history";
+	}
 	
 	
 	// ===========================================================================================

@@ -15,7 +15,7 @@ public interface MypageMapper {
 	List<WishlistVO> selectWishlist(@Param("id") String id);
 
 	//위시리스트 삭제
-	int deleteWish(String wishlist_id);
+	int deleteWish(int wishlist_id);
 	
 	//위시리스트 추가
 	int insertWishlist(WishlistVO wishlist);

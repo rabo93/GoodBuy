@@ -231,7 +231,89 @@ public class NoticeController {
 		
 	}
 	
+	// [ 관리자 모드 ]
+	// 관리자 공지사항 작성 페이지 포워딩
+	@GetMapping("AdmNoticeRegist")
+	public String admNoticeRegistForm() {
+		return "admin/notice_regist";
+	}
 	
+	// 관리자 공지사항 작성
+	@PostMapping("AdmNoticeRegist")
+	public String admNoticeRegist(NoticeVO notice, HttpSession session) {
+		//	실제 경로
+		String realPath = getRealPath(session);
+		//	서브 디렉토리 생성
+		String subDir = createDirectories(realPath);
+		realPath += "/" + subDir;
+		String fileName = addFileProcess(notice, realPath, subDir);
+		notice.setNotice_file(fileName);
+		
+		service.insertNotice(notice);
+		
+		return "redirect:/AdmNoticeList";
+	}
+	
+	// 관리자 공지사항 수정폼 이동
+	@GetMapping("AdmNoticeModify")
+	public String admNoticeModifyForm(int notice_id, Model model) {
+		//	notice_id 로 DB에서 공지사항 제목, 내용 등 가져오기
+		NoticeVO notice = service.getNoticeBoard(notice_id, false);
+		//	파일 원본명 세팅
+		String originalFile = notice.getNotice_file().substring(notice.getNotice_file().indexOf("_") + 1);
+		
+		model.addAttribute("notice", notice);
+		model.addAttribute("originalFile", originalFile);
+		
+		return "admin/notice_modify";
+	}
+	
+	// 관리자 공지사항 수정 - 첨부파일 삭제
+	@ResponseBody
+	@PostMapping("AdmNoticeDeleteFile")
+	public String admNoticeDeleteFile(@RequestParam Map<String, String> map, HttpSession session) {
+		System.out.println(map);
+		String result = "false";
+		
+		int deleteCount = service.deleteNoticeFile(map);
+		if (deleteCount > 0) {
+			String realPath = session.getServletContext().getRealPath(uploadPath);
+			if (!map.get("file").equals("")) {
+				Path path = Paths.get(realPath, map.get("file"));
+				try {
+					Files.delete(path);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				result = "true";
+			}
+		}
+		
+		return result;
+	}
+	
+	// 관리자 공지사항 수정 등록
+	@PostMapping("AdmNoticeModify")
+	public String admNoticeModify(NoticeVO notice, Model model, HttpSession session) {
+		System.out.println(notice);
+		
+		if(!notice.getFile().equals("")) {
+			String realPath = getRealPath(session);
+			String subDir = createDirectories(realPath);
+			realPath += "/" + subDir;
+			String fileName = addFileProcess(notice, realPath, subDir);
+			notice.setNotice_file(fileName);
+		}
+		
+		int updateCount = service.updateNotice(notice);
+		
+		if(updateCount < 0) {
+			model.addAttribute("msg", "글 수정에 실패했습니다.");
+			return "result/fail";
+		}
+		
+		return "redirect:/AdmNoticeList";
+	}
 	
 	//	============================================================================
 	//	실제 업로드 경로 메서드

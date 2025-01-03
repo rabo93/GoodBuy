@@ -42,9 +42,6 @@
 				<section class="item-report-modal">
 					<div class="modal-bg" onclick="modalClose();"></div>
 					<div class="modal-wrap">
-						<div class="modal-result">
-							신고해주셔서 감사합니다!
-						</div>
 						<div class="modal-content">
 							<select class="modal-sb" name="modal-sb">
 								<option value="상품 설명에 불법적이거나 음란한 내용이 포함된 경우.">부적절한 상품 내용</option>
@@ -98,6 +95,9 @@
 							});
 						</script>
 						<div class="item-detail-content-text">
+							<c:if test="${productSearch.product_status == 4}">
+								<div class="reporting-item">이 상품은 신고처리되었습니다.</div>
+							</c:if>
 							<div class="item-detail-title">${productSearch.product_title}</div>
 							<div class="item-detail-view">
 								<div class="item-detail-view-count">조회수 ${productSearch.view_count}</div>
@@ -124,10 +124,14 @@
 								<c:if test="${productSearch.product_trade_adr1 != '' && productSearch.product_trade_adr1 != undefined}">
 									<div class="item-detail-trade-adr">직거래 위치: ${productSearch.product_trade_adr1}</div>
 								</c:if>
-								<input type="button" value="찜하기" class="item-detail-fav">
-								<a href="javascript:void(0)"  onclick="openSlideChat('${productSearch.mem_id}','${productSearch.product_id}' )">
-									<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
-								</a>
+								<c:if test="${not empty sessionScope.sId}">
+									<c:if test="${productSearch.product_status != 4}">
+										<input type="button" value="찜하기" class="item-detail-fav" onclick="addWishlist()">
+										<a href="javascript:void(0)"  onclick="openSlideChat('${productSearch.mem_id}','${productSearch.product_id}' )">
+											<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
+										</a>
+									</c:if>
+								</c:if>
 							</div>
 							<c:if test="${not empty sessionScope.sId}">
 								<a href="javascript:void(0)" onclick="modalOpen();" class="item-report">

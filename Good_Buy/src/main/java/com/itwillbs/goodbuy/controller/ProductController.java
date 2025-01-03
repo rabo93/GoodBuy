@@ -130,20 +130,25 @@ public class ProductController {
 			}
 		}
 		
-		return "mypage/mypage_store";
+		return "MySales";
 	}
 	
 	// 상품 상세 페이지
 	@GetMapping("ProductDetail")
 	public String prodcutDetail(@RequestParam int PRODUCT_ID, Model model, HttpSession session) {
-		String id = (String) session.getAttribute("sId");
 		ProductVO productSearch = productService.productSearch(PRODUCT_ID);
+		productService.plusviewcount(PRODUCT_ID);
 		model.addAttribute("productSearch", productSearch);
-		if (id != null) {
-			productService.plusviewcount(PRODUCT_ID);
-		}
 		
 		return "product/product_detail";
+	}
+	
+	// 상품 찜하기
+	@ResponseBody
+	@GetMapping("AddWishlist")
+	public String addWishlist() {
+		
+		return null;
 	}
 	
 	// 상품 신고

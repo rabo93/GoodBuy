@@ -135,6 +135,7 @@
 				</div>
 				<div class="modal-body">
 					<form action="AdmProductReportAction" id="productReportModifyForm" method="post">
+						<input type="hidden" id="productId" name="PRODUCT_ID">
 						<input type="hidden" id="reportId" name="REPORT_ID">
 						<input type="hidden" id="adminId" name="ADMIN_ID" value="${sessionScope.sId}">
 						<div class="mb-3">

@@ -1,3 +1,6 @@
+let url = new URL(window.location.href);
+let sId = $("input[name=seller-id]").val();
+
 // product_regi.jsp
 function onClickUpload1() {
 	let myInput = document.getElementById("item-thumb-upload-btn1");
@@ -23,9 +26,22 @@ function modalClose() {
 	$('.modal-bg').hide();
 }
 
-let url = new URL(window.location.href);
+function addWishlist() {
+	$.ajax({
+		url: "AddWishlist",
+		type: "GET",
+		data: {
+			MEM_ID: sId,
+			PRODUCT_ID: url.searchParams.get('PRODUCT_ID')
+		},
+	}).done(function() {
+		
+	}).fail(function() {
+		alert("찜하기 실패\n나중에 다시 시도해주세요.");
+	});
+}
+
 function itemReporting() {
-	let sId = $("input[name=seller-id]").val();
 	$.ajax({
 		url: "ItemReporting",
 		type: "GET",

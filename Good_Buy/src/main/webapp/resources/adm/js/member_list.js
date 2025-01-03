@@ -131,9 +131,9 @@ document.addEventListener("DOMContentLoaded", function(){
 				width: '180px',
 				render : function(data, type, row) {
 					return `
-						<button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#updateMemberInfo" data-mem-id=${data.mem_id}'">변경</button>
-						<button class="btn btn-success edit-btn" onclick="location.href='AdmMemberDetailForm?mem_id=${data.mem_id}'">보기</button>
-						<button class="btn btn-danger delete-btn" data-mem-id="${data.mem_id}">삭제</button>
+						<button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#updateMemberInfo" data-mem-id="${row.mem_id}">변경</button>
+						<button class="btn btn-success edit-btn" onclick="location.href='AdmMemberDetailForm?mem_id=${row.mem_id}'">보기</button>
+						<button class="btn btn-danger delete-btn" data-mem-id="${row.mem_id}">삭제</button>
 					`;
 				}
 			}
@@ -179,7 +179,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     });
     
-	// 공통코드 테이블 컬럼 수정 팝업 셋팅
+	// 회원 수정 팝업 셋팅
 	memberList.on("click", '.edit-btn', function() {
 		const row = $(this).closest('tr');
 		const rowData = memberList.row(row).data();

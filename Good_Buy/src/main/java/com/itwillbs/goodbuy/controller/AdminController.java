@@ -1,5 +1,9 @@
 package com.itwillbs.goodbuy.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,6 +39,9 @@ public class AdminController {
 	
 	@Autowired
 	private AdminService service;
+	
+	// 공지사항 첨부파일 URL
+	String uploadPath = "/resources/upload";
 	
 	// [ 관리자 메인 ]
 	// 관리자 메인
@@ -304,10 +311,13 @@ public class AdminController {
 		return response;
 	}
 	
+	// ================================================
 	// [ 결제 관리 ]
 	
+	// ================================================
 	// [ 신고 관리 ]
 	// 신고 상품 목록 페이지 포워딩
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmProductReportList")
 	public String admProductReportListForm() {
 		return "admin/product_report_list";
@@ -351,8 +361,27 @@ public class AdminController {
 		return jo.toString();
 	}
 	
+	// 신고 상품 목록 - 조치하기(+ 수정하기)
+	@LoginCheck(memberRole = MemberRole.ADMIN)
+	@PostMapping("AdmProductReportAction")
+	public String admProductReportAction(@RequestParam Map<String, Object> param, Model model) {
+		log.info(">>> 신고 조치 : " + param);
+		
+		int updateResult = service.modifyProductReport(param);
+		
+		if(updateResult > 0) {
+			model.addAttribute("msg", "신고사항 조치를 완료하였습니다.");
+			model.addAttribute("targetURL", "AdmProductReportList");
+			return "result/success";
+		} else {
+			model.addAttribute("msg", "신고사항 처리에 실패하였습니다.");
+			return "result/fail";
+		}
+	}
+	
 	// ======================================================
 	// 공지사항 관리
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmNoticeList")
 	public String admNoticeListForm() {
 		return "admin/notice_list";
@@ -398,21 +427,42 @@ public class AdminController {
 		return jo.toString();
 	}
 	
-	// 공지사항 삭제
+	// 공지사항 여러행 삭제
 	@ResponseBody
 	@PostMapping("AdmNoticeDelete")
-	public Map<String, Object> admNoticeDelete(@RequestBody List<Integer> deleteItems) {
+	public Map<String, Object> admNoticeDelete(@RequestBody List<Integer> deleteItems, HttpSession session) {
 		log.info(">>>>>> 삭제할 공지사항 번호 : " + deleteItems);
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+//		notice_id 로 DB에서 공지사항 제목, 내용 등 가져오기
+		List<NoticeVO> noticeFileList = service.getNoticeBoardFileList(deleteItems);
+		log.info(">>>>>> 삭제할 공지사항 목록 : " + noticeFileList);
+		
+		if (noticeFileList == null) {	// 게시글이 존재하지 않을 경우
+			response.put("status", "fail");
+			response.put("message", "게시글을 선택한 후 시도해주세요.");
+			return response;
+		}
 		
 		int deleteResult = service.removeNotice(deleteItems);
 		
-		Map<String, Object> response = new HashMap<String, Object>();
-		
-		if(deleteResult > 0) {
+		if (deleteResult > 0) {	
+			// 게시글 삭제 성공 시 첨부파일 제거 작업
+			String realPath = getRealPath(session);
+			for(NoticeVO item : noticeFileList) {
+				Path path = Paths.get(realPath, item.getNotice_file());
+				try {
+					Files.delete(path);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			// 뷰페이지 처리
 			response.put("status", "success");
 			response.put("message", "선택한 게시글이 삭제되었습니다.");
 			response.put("redirectURL", "/AdmNoticeList");
-		} else {
+		} else {	
 			response.put("status", "fail");
 			response.put("message", "게시글 삭제에 실패했습니다. 다시 시도해주세요.");
 		}
@@ -426,21 +476,14 @@ public class AdminController {
 		return "admin/support_list";
 	}
 	
+	//	실제 업로드 경로 메서드
+	public String getRealPath(HttpSession session) {
+		String realPath = session.getServletContext().getRealPath(uploadPath);
+		return realPath;
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//----------------------------------------------------------------------------------------
+	// ======================================================
+	// [ 고객지원 관리 ]
 	// - FAQ 관리
 	@GetMapping("AdmFaqList")
 	public String admFaqList() {
@@ -535,8 +578,6 @@ public class AdminController {
 	
 	
 	// ======================================================
-	// [ 광고 관리 ]
-	
-	// 통계
+	// [ 통계 ]
 	
 }

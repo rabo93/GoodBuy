@@ -58,12 +58,12 @@
 		 </if>
 		 ORDER BY
 	 	<choose>
-			<when test="orderColumn == 'CODETYPE_ID'">M.CODETYPE_ID</when>
-			<when test="orderColumn == 'CODE_ID'">S.CODE_ID</when>
+			<when test='orderColumn.equals("CODETYPE_ID")'>M.CODETYPE_ID</when>
+			<when test='orderColumn.equals("CODE_ID")'>S.CODE_ID</when>
 			<otherwise>CODETYPE_ID</otherwise>
 		</choose>
-		<if test="orderDir == 'asc'">ASC</if>
-		<if test="orderDir == 'desc'">DESC</if>
+		<if test='orderDir.equals("asc")'>ASC</if>
+		<if test='orderDir.equals("desc")'>DESC</if>
 		 LIMIT
 		 	   #{start}
 		 	   , #{length}
@@ -157,10 +157,10 @@
 			<if test="memStatus != null and memStatus != 0">
 		 	   AND MEM_STATUS = #{memStatus}
 		 	</if>
-		 	<if test="memGrade != null and memGrade != '전체'">
+		 	<if test='memGrade != null and !memGrade.equals("전체")'>
 		 	   AND MEM_GRADE = #{memGrade}
 		 	</if>
-		 	<if test="searchValue != null and searchValue != ''">
+		 	<if test="searchValue != null and !searchValue.equals('')">
 		 	   AND (MEM_ID LIKE CONCAT('%', #{searchValue}, '%')
 		 	    	OR MEM_NAME LIKE CONCAT('%', #{searchValue}, '%')
 		 	    	OR MEM_NICK LIKE CONCAT('%', #{searchValue}, '%')
@@ -168,15 +168,15 @@
 		 	</if>
 		 ORDER BY 
 			<choose>
-				<when test="orderColumn == 'mem_id'">MEM_ID</when>
-				<when test="orderColumn == 'mem_name'">MEM_NAME</when>
-				<when test="orderColumn == 'mem_nick'">MEM_NICK</when>
-				<when test="orderColumn == 'mem_email'">MEM_EMAIL</when>
-				<when test="orderColumn == 'mem_reg_date'">MEM_REG_DATE</when>
+				<when test='orderColumn.equals("mem_id")'>MEM_ID</when>
+				<when test='orderColumn.equals("mem_name")'>MEM_NAME</when>
+				<when test='orderColumn.equals("mem_nick")'>MEM_NICK</when>
+				<when test='orderColumn.equals("mem_email")'>MEM_EMAIL</when>
+				<when test='orderColumn.equals("mem_reg_date")'>MEM_REG_DATE</when>
 				<otherwise>MEM_REG_DATE</otherwise>
 			</choose>
-			<if test="orderDir == 'asc'">ASC</if>
-			<if test="orderDir == 'desc'">DESC</if>
+			<if test='orderDir.equals("asc")'>ASC</if>
+			<if test='orderDir.equals("desc")'>DESC</if>
 		  LIMIT
 		 	   #{start}
 		 	   , #{length}
@@ -196,10 +196,10 @@
 			<if test="memStatus != null and memStatus != 0">
 		 	   AND MEM_STATUS = #{memStatus}
 		 	</if>
-		 	<if test="memGrade != null and memGrade != '전체'">
+		 	<if test='memGrade != null and !memGrade.equals("전체")'>
 		 	   AND MEM_GRADE = #{memGrade}
 		 	</if>
-		 	<if test="searchValue != null and searchValue != ''">
+		 	<if test="searchValue != null and !searchValue.equals('')">
 		 	   AND (MEM_ID LIKE CONCAT('%', #{searchValue}, '%')
 		 	    	OR MEM_NAME LIKE CONCAT('%', #{searchValue}, '%')
 		 	    	OR MEM_NICK LIKE CONCAT('%', #{searchValue}, '%')
@@ -265,7 +265,7 @@
 		<if test="status != null and status != ''">
 		   AND STATUS = #{status}
 		</if>
-		<if test="searchValue != null and searchValue != ''">
+		<if test="searchValue != null and !searchValue.equals('')">
 		   AND (R.REPORTER_ID LIKE CONCAT('%', #{searchValue}, '%')
 			   OR R.REPORTER_ID LIKE CONCAT('%', #{searchValue}, '%')
 	 	       OR R.PRODUCT_ID LIKE CONCAT('%', #{searchValue}, '%')
@@ -274,7 +274,7 @@
 	 	       OR R.REASON LIKE CONCAT('%', #{searchValue}, '%') 
 	 	       OR R.ADMIN_ID LIKE CONCAT('%', #{searchValue}, '%'))
 		</if>
-		<if test="searchDate != null and searchDate != ''">
+		<if test="searchDate != null and !searchDate.equals('')">
 		   AND DATE(R.REPORT_DATE) BETWEEN LEFT(#{searchDate}, 10) AND RIGHT(#{searchDate}, 10)
 		</if>
      </select>
@@ -298,7 +298,7 @@
 		 <if test="status != null and status != ''">
 		   AND STATUS = #{status}
 		</if>
-		<if test="searchValue != null and searchValue != ''">
+		<if test="searchValue != null and !searchValue.equals('')">
 		   AND 
 		   	  (
 			   R.REPORTER_ID LIKE CONCAT('%', #{searchValue}, '%')
@@ -310,31 +310,47 @@
 	 	       OR R.ADMIN_ID LIKE CONCAT('%', #{searchValue}, '%')
 	 	      )
 		</if>
-		<if test="searchDate != null and searchDate != ''">
+		<if test="searchDate != null and !searchDate.equals('')">
 		   AND DATE(R.REPORT_DATE) BETWEEN LEFT(#{searchDate}, 10) AND RIGHT(#{searchDate}, 10)
 		</if>
 		 ORDER BY 
 			<choose>
-				<when test="orderColumn == 'REPORTER_ID'">R.REPORTER_ID</when>
-				<when test="orderColumn == 'PRODUCT_ID'">R.PRODUCT_ID</when>
-				<when test="orderColumn == 'PRODUCT_TITLE'">P.PRODUCT_TITLE</when>
-				<when test="orderColumn == 'REPORT_DATE'">R.REPORT_DATE</when>
-				<when test="orderColumn == 'REASON'">R.REASON</when>
-				<when test="orderColumn == 'STATUS'">R.STATUS</when>
-				<when test="orderColumn == 'ACTION_REASON'">R.ACTION_REASON</when>
-				<when test="orderColumn == 'ADMIN_ID'">R.ADMIN_ID</when>
-				<when test="orderColumn == 'ACTION_DATE'">R.ACTION_DATE</when>
+				<when test='orderColumn.equals("REPORTER_ID")'>R.REPORTER_ID</when>
+				<when test='orderColumn.equals("PRODUCT_ID")'>R.PRODUCT_ID</when>
+				<when test='orderColumn.equals("PRODUCT_TITLE")'>P.PRODUCT_TITLE</when>
+				<when test='orderColumn.equals("REPORT_DATE")'>R.REPORT_DATE</when>
+				<when test='orderColumn.equals("REASON")'>R.REASON</when>
+				<when test='orderColumn.equals("STATUS")'>R.STATUS</when>
+				<when test='orderColumn.equals("ACTION_REASON")'>R.ACTION_REASON</when>
+				<when test='orderColumn.equals("ADMIN_ID")'>R.ADMIN_ID</when>
+				<when test='orderColumn.equals("ACTION_DATE")'>R.ACTION_DATE</when>
 				<otherwise>R.REPORT_DATE</otherwise>
 			</choose>
-			<if test="orderDir == 'asc'">ASC</if>
-			<if test="orderDir == 'desc'">DESC</if>
+			<if test='orderDir.equals("asc")'>ASC</if>
+			<if test='orderDir.equals("desc")'>DESC</if>
 		  LIMIT
 		 	   #{start}
 		 	   , #{length}
      </select>
      
-     
-     
+     <!-- 신고 상품 조치 및 수정 - UPDATE -->
+     <!-- {PRODUCT_ID=5, REPORT_ID=9, ADMIN_ID=admin, STATUS=처리완료, ACTION_REASON=신고사유} -->
+     <update id="updateProductReport">
+     	UPDATE PRODUCT_REPORTS A LEFT JOIN PRODUCT B
+     	    ON A.PRODUCT_ID = B.PRODUCT_ID
+		<set>
+			   A.STATUS = #{STATUS}
+			   , A.ACTION_REASON = #{ACTION_REASON}
+			   , A.ADMIN_ID = #{ADMIN_ID}
+			<if test='STATUS != null or STATUS.equals("처리완료")'>
+     	   	   , B.PRODUCT_STATUS = 4
+			</if>
+		</set>
+     	 WHERE A.REPORT_ID = CAST(#{REPORT_ID} AS UNSIGNED)
+		<if test='STATUS != null or STATUS.equals("처리완료")'>
+     	   AND B.PRODUCT_ID = CAST(#{PRODUCT_ID} AS UNSIGNED)
+		</if>
+     </update>
      
      
      <!-- [ 공지사항 관리 ] -->
@@ -349,7 +365,7 @@
      	SELECT COUNT(*)
      	  FROM NOTICE
      	 WHERE 1 = 1
-     	 	<if test="searchValue != null and searchValue != ''">
+     	 	<if test="searchValue != null and !searchValue.equals('')">
 		 	   AND (
 			 	   	NOTICE_SUBJECT LIKE CONCAT('%', #{searchValue}, '%')
 		 	    	OR NOTICE_CONTENT LIKE CONCAT('%', #{searchValue}, '%')
@@ -363,7 +379,7 @@
      	SELECT *
 		  FROM NOTICE
 		 WHERE 1 = 1
-		 	<if test="searchValue != null and searchValue != ''">
+		 	<if test="searchValue != null and !searchValue.equals('')">
 		 	   AND (
 		 	   		NOTICE_SUBJECT LIKE CONCAT('%', #{searchValue}, '%')
 		 	    	OR NOTICE_CONTENT LIKE CONCAT('%', #{searchValue}, '%')
@@ -372,20 +388,33 @@
 		 	</if>
 		 ORDER BY 
 			<choose>
-				<when test="orderColumn == 'mem_id'">MEM_ID</when>
-				<when test="orderColumn == 'notice_subject'">NOTICE_SUBJECT</when>
-				<when test="orderColumn == 'notice_content'">NOTICE_CONTENT</when>
-				<when test="orderColumn == 'notice_date'">NOTICE_DATE</when>
-				<when test="orderColumn == 'notice_read_count'">NOTICE_READ_COUNT</when>
+				<when test='orderColumn.equals("mem_id")'>MEM_ID</when>
+				<when test='orderColumn.equals("notice_subject")'>NOTICE_SUBJECT</when>
+				<when test='orderColumn.equals("notice_content")'>NOTICE_CONTENT</when>
+				<when test='orderColumn.equals("notice_date")'>NOTICE_DATE</when>
+				<when test='orderColumn.equals("notice_read_count")'>NOTICE_READ_COUNT</when>
 				<otherwise>NOTICE_DATE</otherwise>
 			</choose>
-			<if test="orderDir == 'asc'">ASC</if>
-			<if test="orderDir == 'desc'">DESC</if>
+			<if test='orderDir.equals("asc")'>ASC</if>
+			<if test='orderDir.equals("desc")'>DESC</if>
 		  LIMIT
 		 	   #{start}
 		 	   , #{length}
      </select>
      
+     <!-- 공지사항 첨부파일 목록 가져오기 - SELECT -->
+     <select id="selectNoticeBoardFileList" resultType="notice">
+		SELECT NOTICE_ID
+		       , NOTICE_FILE
+		  FROM NOTICE
+		 WHERE 1 = 1
+	       AND NOTICE_ID IN 
+		<foreach collection="deleteItems" item="notice_id" index="index" open="(" close=")" separator=",">
+			   #{notice_id}
+		</foreach>
+     </select>
+     
+     <!-- 공지사항 삭제 - DELETE -->
      <delete id="deleteNotice">
      	DELETE
      	  FROM NOTICE

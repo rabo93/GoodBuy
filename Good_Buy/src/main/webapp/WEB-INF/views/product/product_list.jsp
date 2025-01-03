@@ -26,6 +26,7 @@
 
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/product_search.js"></script>
 
 </head>
 <body>
@@ -105,6 +106,6 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
-	<jsp:include page="/WEB-INF/views/product/product_list_script.jsp"></jsp:include>
+<%-- 	<jsp:include page="/WEB-INF/views/product/product_list_script.jsp"></jsp:include> --%>
 </body>
 </html>

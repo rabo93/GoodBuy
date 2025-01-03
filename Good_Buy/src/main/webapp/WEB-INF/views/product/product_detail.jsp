@@ -70,8 +70,12 @@
 						<div class="item-detail-pic">
 							<div class="thumb-slide">
 								<div><img src="${pageContext.request.contextPath}/resources/upload/${productSearch.product_pic1}"></div>
-								<div><img src="${pageContext.request.contextPath}/resources/upload/${productSearch.product_pic2}"></div>
-								<div><img src="${pageContext.request.contextPath}/resources/upload/${productSearch.product_pic3}"></div>
+								<c:if test="${not empty productSearch.product_pic2}">
+									<div><img src="${pageContext.request.contextPath}/resources/upload/${productSearch.product_pic2}"></div>
+								</c:if>
+								<c:if test="${not empty productSearch.product_pic3}">
+									<div><img src="${pageContext.request.contextPath}/resources/upload/${productSearch.product_pic3}"></div>
+								</c:if>
 							</div>
 							<a href="#" class="visu-prev"><i class="fa-solid fa-chevron-left"></i></a>
 							<a href="#" class="visu-next"><i class="fa-solid fa-chevron-right"></i></a>
@@ -96,7 +100,7 @@
 						<div class="item-detail-content-text">
 							<div class="item-detail-title">${productSearch.product_title}</div>
 							<div class="item-detail-view">
-								<div class="item-detail-view-count">조회수 50</div>
+								<div class="item-detail-view-count">조회수 ${productSearch.view_count}</div>
 								<div class="item-detail-fav-count">찜 8</div>
 							</div>
 							<div class="item-detail-description">${productSearch.product_intro}</div>
@@ -121,17 +125,20 @@
 									<div class="item-detail-trade-adr">직거래 위치: ${productSearch.product_trade_adr1}</div>
 								</c:if>
 								<input type="button" value="찜하기" class="item-detail-fav">
-								<a href="javascript:void(0)"  onclick="openSlideChat('${productSearch.mem_id}')">
+								<a href="javascript:void(0)"  onclick="openSlideChat('aa1114')">
 									<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
 								</a>
 							</div>
-							<a onclick="modalOpen();" class="item-report">
-								<i class="fa-solid fa-land-mine-on"></i>&nbsp;이 상품 신고하기
-							</a>
+							<c:if test="${not empty sessionScope.sId}">
+								<a href="javascript:void(0)" onclick="modalOpen();" class="item-report">
+									<i class="fa-solid fa-land-mine-on"></i>&nbsp;이 상품 신고하기
+								</a>
+							</c:if>
 						</div>
 					</div>
 					<div class="item-detail-seller-info" onclick="location.href='ProductShop'" style=" cursor: pointer;">
-						<img src="../../resources/img/product_thumb.jpg" class="item-detail-seller-pic">
+						<img src="${productSearch.mem_profile}" class="item-detail-seller-pic">
+						<input type="hidden" name="seller-id" value="${sessionScope.sId}">
 						<div class="item-detail-seller-nick">${productSearch.mem_nick}</div>
 						<div class="item-detail-seller-review">★★★★★</div>
 					</div>

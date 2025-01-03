@@ -40,5 +40,8 @@ public interface ProductMapper {
 	int itemReporting(
 			@Param("product_id")int product_id,
 			@Param("reason")String reason,
-			@Param("id")String id);
+			@Param("reporter_id")String reporter_id);
+
+
+	void plusViewCount(int product_id);
 }

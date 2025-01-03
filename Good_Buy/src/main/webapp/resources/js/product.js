@@ -16,7 +16,6 @@ function onClickUpload3() {
 function modalOpen() {
 	$('.modal-wrap').show();
 	$('.modal-bg').show();
-	console.log();
 }
 
 function modalClose() {
@@ -26,21 +25,23 @@ function modalClose() {
 
 let url = new URL(window.location.href);
 function itemReporting() {
+	let sId = $("input[name=seller-id]").val();
 	$.ajax({
 		url: "ItemReporting",
 		type: "GET",
 		data: {
 			PRODUCT_ID: url.searchParams.get('PRODUCT_ID'),
 			REASON: $("select[name=modal-sb] option:selected").text() === "기타" ? $(".modal-otherReason").val() :
-																				   $("select[name=modal-sb] option:selected").text()
-		}
-	}).done(function(){
-		$('.modal-result').show();
-		$('.modal-content').hide();
-	}).fail(function() {
-		alert("신고에 실패하였습니다\n나중에 다시 시도해주세요.");
+																				   $("select[name=modal-sb] option:selected").text(),
+			REPORTER_ID: sId
+		},
+	}).done(function(response){
+		alert(decodeURIComponent(response).replaceAll("+", " "));
 		modalClose();
-	})
+	}).fail(function() {
+		alert(decodeURIComponent(response).replaceAll("+", " "));
+		modalClose();
+	});
 }
 
 $(document).ready(function(){

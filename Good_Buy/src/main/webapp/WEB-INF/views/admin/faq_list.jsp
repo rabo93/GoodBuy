@@ -52,9 +52,41 @@
                                     <h5 class="m-0 font-weight-bold text-primary">FAQ 관리</h5>
                                 </div>
                                 <div class="card-body">
+                                	<div class="search-wrap border">
+									   	<section class="d-flex search-inner">
+										    <div class="col-6 search-box">
+						                        <div class="input-group">
+						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="제목, 내용 검색" aria-label="Search" aria-describedby="basic-addon2">
+						                            <div class="input-group-append">
+						                                <button class="btn btn-primary" id="searchBtn" type="button">검색</button>
+						                            </div>
+						                        </div>
+					                        </div>
+					                        <div class="col-6 d-flex justify-right">
+												<button class="btn btn-primary ml-auto" type="button" id="btnAddRow" onclick="window.open('FaqWrite')"><i class="fa-regular fa-pen-to-square"></i> 작성하기</button>
+												<button class="btn btn-danger ml-2" type="button" id="btnDeleteRow"><i class="fa-solid fa-trash-can"></i> 선택 삭제</button>
+		                                    </div>
+									   	</section>
+									</div>
+                                
                                 	<div class="table-responsive">
 		                                <table class="table table-bordered compact" id="faqList" width="100%" cellspacing="0">
-		                                    <thead></thead>
+		                                    <thead>
+		                                    	<tr>
+		                                    		<th width="30px">
+		                                            	<div class="custom-control custom-checkbox small">
+			                                            	<input type="checkbox" class="custom-control-input" id="checkAll">
+			                                            	<label class="custom-control-label" for="checkAll"></label>
+		                                            	</div>
+		                                            </th>
+		                                            <th>No.</th>
+		                                            <th>제목</th>
+		                                            <th>내용</th>
+		                                            <th>FAQ 유형</th>
+		                                            <th>사용여부</th>
+		                                            <th>관리</th>
+		                                    	</tr>
+		                                    </thead>
 		                                    <tbody></tbody>
 		                                </table>
 		                          	</div>
@@ -83,11 +115,11 @@
     </a>
     
     <!-- 수정 모달 -->
-    <div class="modal fade" id="updateFaq" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="false">
+    <div class="modal fade" id="updateFaq" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 		    <div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="updateModalLabel">수정</h5>
+					<h5 class="modal-title" id="updateModalLabel">FAQ 수정</h5>
 					<button type="button" class="close" data-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
 				</div>
 				<div class="modal-body">

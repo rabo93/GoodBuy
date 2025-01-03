@@ -140,16 +140,21 @@ public class ProductController {
 		return "product/product_detail";
 	}
 	
+	// 상품 신고
+	@ResponseBody
 	@GetMapping("ItemReporting")
-	public Boolean itemReporting(@RequestParam int PRODUCT_ID, @RequestParam String REASON, HttpSession session) {
-		String id = (String) session.getAttribute("sId");
-		System.out.println(">>>>>>>>>>>" + id);
-		System.out.println(">>>>>>>>>>>" + PRODUCT_ID);
-		System.out.println(">>>>>>>>>>>" + REASON);
-		System.out.println(">>>>>>>>>>>" + session);
-		Boolean result = productService.itemReporting(PRODUCT_ID, REASON, id);
-		System.out.println(result);
-		return result;
+	public String itemReporting(@RequestParam int PRODUCT_ID, @RequestParam String REASON, HttpSession session) {
+		String id = (String) session.getAttribute("userId");
+		System.out.println(">>>>>>>>>>>>>" + id);
+		int result = 0;
+		if (id != null) {
+			result = productService.itemReporting(PRODUCT_ID, REASON, id);
+		}
+		System.out.println(">>>>>>>>>>>>>" + result);
+		if (result < 1) {
+			return "error/error";
+		}
+		return null;
 	}
 	
 	@GetMapping("ProductShop")

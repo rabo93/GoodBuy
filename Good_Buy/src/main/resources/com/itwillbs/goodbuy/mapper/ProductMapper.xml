@@ -91,6 +91,7 @@
 			   , pro.PRODUCT_INTRO
 			   , pro.PRODUCT_SHPPING_FEE
 			   , pro.PRODUCT_PRICE
+			   , pro.PRODUCT_ID
 			   , pro.MEM_ID
 			   , mem.MEM_NICK
 			   , mem.MEM_PROFILE
@@ -104,10 +105,14 @@
 	
 	<!-- 상품 신고 -->
 	<insert id="itemReporting">
+	<selectKey resultType="int" order="BEFORE"  keyProperty="report_id">
+		SELECT MAX(REPORT_ID) + 1
+		FROM PRODUCT_REPORTS
+	</selectKey>
 		INSERT
 		INTO PRODUCT_REPORTS
 		VALUES(
-			MAX(REPORT_ID) + 1 AS REPORT_ID 
+			#{report_id} 
 			, #{id}
 			, #{product_id}
 			, CURRENT_TIMESTAMP

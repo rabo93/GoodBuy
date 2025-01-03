@@ -16,7 +16,9 @@ function onClickUpload3() {
 function modalOpen() {
 	$('.modal-wrap').show();
 	$('.modal-bg').show();
+	console.log();
 }
+
 function modalClose() {
 	$('.modal-wrap').hide();
 	$('.modal-bg').hide();

@@ -112,7 +112,9 @@
 							<c:if test="${productSearch.product_discount_status == 1}">
 								<div class="item-detail-discount">가격제안 가능</div>
 							</c:if>
-								<div class="item-detail-price">${itemPrice.toLocaleString()} 원</div>
+								<div class="item-detail-price">
+									<fmt:formatNumber type="number" maxFractionDigits="3" value="${productSearch.product_price}"/> 원
+								</div>
 							</div>
 							<div class="item-detail-button-group">
 								<c:if test="${productSearch.product_trade_adr1 != '' && productSearch.product_trade_adr1 != undefined}">

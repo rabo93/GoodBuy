@@ -93,7 +93,7 @@
 <%-- 														        type="button" ${product.review_cnt == 1 ? 'disabled' : ''}> --%>
 <%-- 														    ${product.review_cnt == 1 ? '작성완료📩' : '후기 작성하기📮'} --%>
 <!-- 														</button> -->
-<!--                                                     	<input type="hidden" name="product_id" id="hiddenProductId"> -->
+                                                    	<input type="hidden" name="product_id" id="hiddenProductId">
                                                     	<c:choose>
                                                     		<c:when test="${product.review_cnt == 0}">
 	                                                    		 <button class="open-modal-btn"

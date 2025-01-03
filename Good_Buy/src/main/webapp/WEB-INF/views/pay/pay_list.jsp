@@ -78,6 +78,7 @@
 						                <i class="fa-solid fa-arrow-rotate-right"></i>
 						            </div>
 						            <div class="buttons">
+						            	<button class="refund-btn" onclick="openModal">송금</button>
 						                <button class="charge-btn"  onclick="openModal('charge')">+ 충전 </button>
 						                <button class="refund-btn"  onclick="openModal('refund')">- 환불 </button>
 <!-- 						                <button class="transfer-btn" onclick="location.href='PayTransfer'">￦계좌송금</button> -->

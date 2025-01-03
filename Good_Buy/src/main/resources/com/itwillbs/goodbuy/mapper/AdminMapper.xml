@@ -449,7 +449,7 @@
 				<when test="orderColumn == 'FAQ_ID'">FAQ_ID</when>
 				<when test="orderColumn == 'FAQ_SUBJECT'">FAQ_SUBJECT</when>
 				<when test="orderColumn == 'FAQ_CONTENT'">FAQ_CONTENT</when>
-<!-- 				<when test="orderColumn == 'FAQ_CATE'">FAQ_CATE</when> -->
+				<when test="orderColumn == 'FAQ_CATE'">FAQ_CATE</when>
 				<otherwise>FAQ_CATE</otherwise>
 			</choose>
 			<if test="orderDir == 'asc'">ASC</if>

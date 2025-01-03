@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function(){
 				title: "FAQ 유형", 
 				data : "FAQ_CATE", 
 				defaultContent: "운영정책", 
-//				orderable: false,	// 정렬 비활성화
+				orderable: true,	// 정렬 활성화
 				searchable: false, // 검색 비활성화
 				className : "dt-center", 
 				render : function(data, type, row) {

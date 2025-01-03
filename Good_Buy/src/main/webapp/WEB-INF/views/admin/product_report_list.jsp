@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -133,26 +134,26 @@
 					<button type="button" class="close" data-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
 				</div>
 				<div class="modal-body">
-					<form action="AdmMemberModify" id="memberModifyForm" method="post">
-						<input type="hidden" id="adminId" name="ADMIN_ID">
+					<form action="AdmProductReportAction" id="productReportModifyForm" method="post">
+						<input type="hidden" id="reportId" name="REPORT_ID">
+						<input type="hidden" id="adminId" name="ADMIN_ID" value="${sessionScope.sId}">
 						<div class="mb-3">
-							<label class="small mb-1" for="memGrade">조치 상태 변경</label>
-							<select class="custom-select" id="memGrade" name="mem_grade">
+							<label class="small mb-1" for="reportStatus">조치 상태 변경</label>
+							<select class="custom-select" id="reportStatus" name="STATUS">
 								<option value="처리완료">처리완료</option>
 								<option value="기각">기각</option>
 							</select>
 						</div>
 						<div class="mb-3">
-							<label class="small mb-1" for="memStatus">조치 사유</label>
-							<textarea class="form-control">
-								
-							</textarea>
+							<label class="small mb-1" for="actionReason">조치 사유</label>
+							<textarea class="form-control" col="4" id="actionReason" name="ACTION_REASON" placeholder="조치사유를 입력하세요" required></textarea>
+							<small class="text-primary text-right d-block font-weight-bold"><span id="lengthInfo">0</span> / 500자</small>
 						</div>
                     </form>
 				</div>
 				<div class="modal-footer justify-content-center">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="memberModifyForm">수정하기</button>
+					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="productReportModifyForm">수정하기</button>
 				</div>
 			</div>
 		</div>

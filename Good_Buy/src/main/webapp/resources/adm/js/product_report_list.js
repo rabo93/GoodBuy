@@ -80,10 +80,12 @@ document.addEventListener("DOMContentLoaded", function(){
 				className : "dt-center",
 				width: '120px',
 				render : function(data, type, row) {
+					const text = row.STATUS !== "접수" ? "결과보기" : "조치하기";
+					const className = row.STATUS !== "접수" ? "primary" : "warning";
 					return `
-						<button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#updateMemberInfo" data-mem-id=${data.mem_id}'">조치하기</button>
+						<button class="btn btn-${className} edit-btn" data-toggle="modal" data-target="#updateMemberInfo"
+						 data-report-id="${row.REPORT_ID}">${text}</button>
 					`;
-//						<button class="btn btn-success edit-btn" onclick="location.href='AdmMemberDetailForm?mem_id=${data.mem_id}'">상세</button>
 				}
 			}
         ],
@@ -106,6 +108,23 @@ document.addEventListener("DOMContentLoaded", function(){
                 last:     '마지막'
             },
         },
+	});
+	
+	// 신고 조치 팝업 셋팅
+	productReport.on("click", '.edit-btn', function() {
+		const row = $(this).closest('tr');
+		const rowData = productReport.row(row).data();
+
+		const status = rowData.STATUS;
+		const actionReason = rowData.ACTION_REASON != null ? rowData.ACTION_REASON : "";
+		const reportId = document.querySelector("#reportId");
+		const statusSelect = document.querySelector(`#reportStatus option[value="${status}"]`);
+		const reasonTextarea = document.querySelector("#actionReason");
+		
+		reportId.value = rowData.REPORT_ID;
+		reasonTextarea.value = actionReason;
+	    if (statusSelect) statusSelect.selected = true;
+	    
 	});
 	
 	// 기존 검색 숨기기
@@ -170,5 +189,23 @@ document.addEventListener("DOMContentLoaded", function(){
     $("#searchDateBtn").on('click', function() {
 		productReport.draw();
 	});
+	
+	// 조치 사유 작성
+	$("#actionReason").on('keyup', () => {
+		fnChkByte($("#actionReason"), 500);
+	});
+	
+	// 글자수 제한 함수
+	function fnChkByte(item, maxLength){
+		const str = item.val();
+        const strLength = str.length;
+        
+         if (strLength > maxLength) {
+            alert("글자수는 " + maxLength + "자를 초과할 수 없습니다.");
+            $(item).val(str.substr(0, maxLength));      //문자열 자르고 값 넣기
+            fnChkByte(item, maxLength);
+         }
+         $('#lengthInfo').text(strLength);
+    }
 
 });

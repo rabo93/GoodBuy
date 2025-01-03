@@ -84,15 +84,27 @@
                                                     </div>
                                                     
                                                     <!-- 후기 작성하기 버튼 (상품 정보 포함) -->
+<!--                                                     	<input type="hidden" name="product_id" id="hiddenProductId"> -->
+<!-- 	                                                    <button class="open-modal-btn" -->
+<%-- 														        data-product-id="${product.product_id}" --%>
+<%-- 														        data-title="${product.product_title}" --%>
+<%-- 														        data-buyer="${product.mem_nick}" --%>
+<%-- <%-- 														        data-review-cnt="${product.review_cnt}" --%>
+<%-- 														        type="button" ${product.review_cnt == 1 ? 'disabled' : ''}> --%>
+<%-- 														    ${product.review_cnt == 1 ? '작성완료📩' : '후기 작성하기📮'} --%>
+<!-- 														</button> -->
                                                     	<input type="hidden" name="product_id" id="hiddenProductId">
-	                                                    <button class="open-modal-btn"
-														        data-product-id="${product.product_id}"
-														        data-title="${product.product_title}"
-														        data-buyer="${product.mem_nick}"
-<%-- 														        data-review-cnt="${product.review_cnt}" --%>
-														        type="button" ${product.review_cnt == 1 ? 'disabled' : ''}>
-														    ${product.review_cnt == 1 ? '작성완료📩' : '후기 작성하기📮'}
-														</button>
+                                                    	<c:choose>
+                                                    		<c:when test="${product.review_cnt == 1}">
+	                                                    		 <button class="open-modal-btn"
+															        data-product-id="${product.product_id}"
+															        data-title="${product.product_title}"
+															        data-buyer="${product.mem_nick}"
+															        onclick="clickReviewBtn">후기 작성하기📮
+															     </button>
+                                                    		</c:when>
+                                                    		<c:otherwise>작성완료📩</c:otherwise>
+                                                    	</c:choose>
                                                 </div>
                                             </li>
                                         </c:forEach>
@@ -208,7 +220,7 @@
                     $("#review-modal").fadeOut(300);
                     $("#review_content").val("");
 
-                    // 버튼 비활성화 (또는 숨김 처리)
+//                     버튼 비활성화 (또는 숨김 처리)
 //                     $(".clicked-review-btn").prop("disabled", true).text("후기 작성 완료").removeClass("open-modal-btn");
                 },
                 error: function () {
@@ -217,6 +229,11 @@
             });
         });
     });
+
+</script>
+
+<script type="text/javascript">
+	
 
 </script>
 </body>

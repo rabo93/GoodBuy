@@ -58,10 +58,16 @@
 		ON pro.MEM_ID = mem.MEM_ID
 		WHERE 
 			PRODUCT_CATEGORY = #{cate} 
-		<if test="product_status == 0">
-			AND 
-				PRODUCT_STATUS = #{product_status}
-		</if>
+		<choose>
+			<when test="product_status == 0">
+				AND 
+					PRODUCT_STATUS = #{product_status}
+			</when>
+			<otherwise>
+				AND
+					PRODUCT_STATUS BETWEEN 0 AND 3
+			</otherwise>
+		</choose>
 		<if test="price_end != 0">
 			AND 
 				PRODUCT_PRICE <![CDATA[>=]]> #{price_start}
@@ -93,6 +99,12 @@
 		ON pro.MEM_ID = mem.MEM_ID
 		WHERE PRODUCT_ID = #{product_id}
 	</select>
+	
+	<!-- 상품 신고 -->
+	<insert id="itemReporting">
+		INSERT
+		INTO 
+	</insert>
 	
 	<!-- 구매상품 리스트 조회 -->
 	<select id="selectOrderList" resultType="order">

@@ -30,7 +30,6 @@ $(function() {
 		window.close();
 	}
 	
-	
 	console.log("부모창에서 받은 receiver_id : " + receiver_id);
 	console.log("부모창에서 받은 product_id : " + product_id);
 	
@@ -39,51 +38,22 @@ $(function() {
 		console.log("부모창 메세지 : " + e.data);
 		let data = JSON.parse(e.data);
 		
-		if (data.type == TYPE_INIT) {
+		if (data.type == TYPE_INIT) {	//	채팅 윈도우 초기화
 			showChatList(data);
 		}
 		if (data.type == TYPE_START) {
 			startChat(data);
 		}
+		if (data.type == TYPE_REQUEST_CHAT_LIST) {
+			console.log("채팅내역 수신");
+		}
+		if (data.type == TYPE_TALK) {	// 채팅 입력
+			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
+		}
 		
 		
 	};
 	
-	
-//	let wsCheckInterval = setInterval(() => {
-//		if (ws != null && ws != undefined && ws.readyState == ws.OPEN) {
-//			console.log("웹소켓 연결 완료!");
-//			
-//			startChat();
-//			
-//			clearInterval(wsCheckInterval);
-//			
-//		}
-//	}, 1000);
-//	
-//	$(".chat-area").on("click", ".btnSend", function() {
-//		sendInputMessage();
-//	});
-//	
-//	$(".chat-area").on("keypress", ".chatMessage", function(event) {
-//		let keyCode = event.keyCode;
-//		if (keyCode == 13) {
-//			sendInputMessage();
-//		}
-//	});
-	
-	
-//	$(".btnSend").on("click", function() {
-//		sendInputMessage();
-//	});
-	
-//	$(".chatMessage").on("keypress", function(event) {
-//		console.log(event);
-//		let keyCode = event.keyCode;
-//		if (keyCode == 13) {
-//			sendInputMessage();
-//		}
-//	});
 	initChat();
 	
 });
@@ -119,12 +89,14 @@ function showChatList(data) {
 			appendChatRoomList(room);
 		}
 	}
-	//	product_id 임시로 13 메세지 전달
+	
 	sendMessage(TYPE_INIT_COMPLETE, product_id, "", receiver_id, "", "");
 }
 //	채팅방 생성 및 채팅창 목록 추가
 function startChat(data) {
 	console.log("startChat - 채팅방 생성");
+	console.log(data);
+	console.log(JSON.parse(data.message));
 	//	"채팅중인 채팅방 없음" 삭제
 	$(".sidebar-item.empty").remove();
 	
@@ -132,6 +104,7 @@ function startChat(data) {
 }
 //	채팅방 정보 추가
 function appendChatRoomList(room) {
+	console.log("채팅방 정보 추가 - " + room);
 	console.log(room);
 	
 	if(!$(".sidebar-item").hasClass(room.room_id)) {
@@ -153,7 +126,7 @@ function appendChatRoomList(room) {
 }
 //	채팅창 생성
 function showChatRoom(room) {
-	console.log("showChatRoom -  채팅화면 표시 ");
+	console.log("showChatRoom -  채팅화면 표시 - " + room);
 	console.log(room);
 	
 	let divRoom = '<div class="chat-header">'
@@ -169,18 +142,62 @@ function showChatRoom(room) {
 		           	+ '<input type="text" class="chatMessage" placeholder="메시지를 입력하세요...">'
 		            + '<button class="btnSend">전송</button>'
 		           + '</div>';
-		           
+	
+	//	chat-area 영역에 채팅창 div 출력
 	$(".chat-area").html(divRoom);
+		$(".chat-area").on("click", ".btnSend", function() {
+		sendInputMessage();
+	});
+	
+	$(".chat-area").on("keypress", ".chatMessage", function(event) {
+		let keyCode = event.keyCode;
+		if (keyCode == 13) {
+			sendInputMessage();
+		}
+	});
+	
+	$(".btnSend").on("click", function() {
+		sendInputMessage();
+	});
+	
+	$(".chatMessage").on("keypress", function(event) {
+		let keyCode = event.keyCode;
+		if (keyCode == 13) {
+			sendInputMessage();
+		}
+	});
+	
+	//	채팅목록 수신메세지 표시 제거 작업 예정
+	
+	//	기존 채팅 내역 불러오기 작업 예정
+	sendMessage(TYPE_REQUEST_CHAT_LIST, product_id, sId, "", room.room_id, "");
+	
 	
 	
 }
-
-
-
-//	=========================채팅방 목록 작업 끝===========================
-
+//	=========================채팅방 목록 작업 끝===============================
+//	===========================================================================
 //	=========================메세지 보내기 작업 시작===========================
+function appendMessage(type, sender_id, receiver_id, message, send_time) {
+	//	send_time 추가 예정
+	let div_message = "";
+	
+	if(sender_id == sId) {	// 자신이 보낸 메세지(송신자가 자신인 경우)
+		div_message = '<div class="message user">'
+						+ '<div class="bubble">' + message + '</div>'
+					 + '</div>';
+	}
+	
+	if(receiver_id == sId) {	// 자신이 보낸 메세지(송신자가 자신인 경우)
+		div_message = '<div class="message user">'
+						+ '<div class="bubble">' + message + '</div>'
+					 + '</div>';
+	}
 
+	$(".chat-body").append(div_message);
+	
+	
+}
 
 function sendInputMessage() {
 	let message = $(".chatMessage").val();
@@ -189,25 +206,17 @@ function sendInputMessage() {
 		return;
 	}
 	
+	let room_id = $(".chat-footer > #room_id").val();
+	let receiver_id = $(".chat-footer > #receiver_id").val();
+	console.log("TYPE_TALK에서 receiver_id 확인 - " + receiver_id);
+	
+	sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, message);
+	
 	$(".chatMessage").val("");
 	$(".chatMessage").focus();
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//	=========================메세지 보내기 작업 끝============================
 //	===============================================================================
 //	부모창의 sendMessage() 함수 호출
 function sendMessage(type, product_id, sender_id, receiver_id, room_id, message) {

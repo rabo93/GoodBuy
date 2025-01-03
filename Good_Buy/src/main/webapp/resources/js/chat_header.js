@@ -71,16 +71,17 @@ function appendMessage(message, align) {
 							+ "</div>");
 }
 //	전달받은 메세지를 웹소켓 서버측으로 전송하는 함수
-function sendMessage(type, sender_id, receiver_id, room_id, message) {
-	console.log("전송할 메세지(JSON) : " + toJsonString(type, sender_id, receiver_id, room_id, message));
+function sendMessage(type, product_id, sender_id, receiver_id, room_id, message) {
+	console.log("전송할 메세지(JSON) : " + toJsonString(type, product_id, sender_id, receiver_id, room_id, message));
 	
-	ws.send(toJsonString(type, sender_id, receiver_id, room_id, message));
+	ws.send(toJsonString(type, product_id, sender_id, receiver_id, room_id, message));
 }
 //	전달받은 메세지타입과 메세지를 JSON 형식 문자열로 변환하는 함수
-function toJsonString(type, sender_id, receiver_id, room_id, message) {
+function toJsonString(type, product_id, sender_id, receiver_id, room_id, message) {
 	//	전달받은 파라미터들을 하나의 객체로 묶기
 	let data = {
 		type : type,
+		product_id : product_id,
 		sender_id : sender_id,
 		receiver_id : receiver_id,
 		room_id : room_id,

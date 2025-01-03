@@ -62,5 +62,10 @@ public class ProductService {
 	public ProductVO productSearch(int product_id) {
 		return mapper.productSearch(product_id);
 	}
+	
+	// 상품 신고
+	public Boolean itemReporting(int product_id, String reason, String id) {
+		return mapper.itemReporting(product_id, reason, id);
+	}
 
 }

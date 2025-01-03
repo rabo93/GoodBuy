@@ -27,9 +27,9 @@
 
 </head>
 <body>
-	<header>
-		<jsp:include page="/WEB-INF/views/inc/header.jsp"></jsp:include>
-	</header>
+<!-- 	<header> -->
+<%-- 		<jsp:include page="/WEB-INF/views/inc/header.jsp"></jsp:include> --%>
+<!-- 	</header> -->
 	<main>
 		<section class="wrapper">
 			<div class="page-inner">
@@ -62,7 +62,7 @@
 <!-- 			            <div class="chat-header"> -->
 <%-- 			            	<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a> --%>
 <!-- 			                <div class="title">아기 유아 어그부츠 150cm</div> -->
-<!-- 			                <button class="item-button">구매하기</button> -->
+<!-- 			                <button class="item-button" onclick="location.href='PayTransferRequest'">구매하기</button> -->
 <!-- 			            </div> -->
 <!-- 			            <div class="chat-body"> -->
 <!-- 			                <div class="message user"> -->
@@ -85,10 +85,10 @@
 			</div>
 		</section>
 	</main>
-	<footer>
-		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
-	</footer>
-	<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script>
+<!-- 	<footer> -->
+<%-- 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include> --%>
+<!-- 	</footer> -->
+<%-- 	<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script> --%>
 	<script src="${pageContext.request.contextPath}/resources/js/chat_main.js"></script>
 </body>
 </html>

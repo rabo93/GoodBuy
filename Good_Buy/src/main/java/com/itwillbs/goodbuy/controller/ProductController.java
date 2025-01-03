@@ -2,6 +2,8 @@ package com.itwillbs.goodbuy.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,21 +38,17 @@ public class ProductController {
 	
 	// 상품목록 조회
 	@GetMapping("ProductList")
-	public String productList(@RequestParam String PRODUCT_CATEGORY, Model model) {
-		List<Map<String, Object>> listSearch = productService.searchProductList(PRODUCT_CATEGORY);
-		model.addAttribute("searchProductList", listSearch);
-		
+	public String productList() {
 		return "product/product_list";
 	}
 	
 	// 검색필터 AJAX
 	@ResponseBody
 	@GetMapping("SearchPriceFilter")
-	public List<Map<String, Object>> searchPriceFilter(@RequestParam(defaultValue = "5", required=false) int PRODUCT_STATUS,
+	public List<Map<String, Object>> searchPriceFilter(@RequestParam(defaultValue = "99", required=false) int PRODUCT_STATUS,
 													   @RequestParam(required=false) String PRODUCT_PRICE,
 													   @RequestParam(required=false) String PRODUCT_TRADE_ADR1,
 													   @RequestParam String PRODUCT_CATEGORY) {
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>> controller : " + PRODUCT_TRADE_ADR1);
 		List<Map<String, Object>> listSearch = productService.searchFilterList(PRODUCT_STATUS, PRODUCT_PRICE, PRODUCT_TRADE_ADR1, PRODUCT_CATEGORY);
 		return listSearch;
 	}
@@ -135,9 +133,45 @@ public class ProductController {
 		return "MySales";
 	}
 	
+	// 상품 상세 페이지
 	@GetMapping("ProductDetail")
-	public String prodcutDetail() {
+	public String prodcutDetail(@RequestParam int PRODUCT_ID, Model model, HttpSession session) {
+		ProductVO productSearch = productService.productSearch(PRODUCT_ID);
+		productService.plusviewcount(PRODUCT_ID);
+		model.addAttribute("productSearch", productSearch);
+		
 		return "product/product_detail";
+	}
+	
+	// 상품 찜하기
+	@ResponseBody
+	@GetMapping("AddWishlist")
+	public String addWishlist() {
+		
+		return null;
+	}
+	
+	// 상품 신고
+	@ResponseBody
+	@GetMapping("ItemReporting")
+	public String itemReporting(@RequestParam int PRODUCT_ID, @RequestParam String REASON, @RequestParam(required = true) String REPORTER_ID) {
+		int result = productService.itemReporting(PRODUCT_ID, REASON, REPORTER_ID);
+		
+		String msg = "";
+		
+		if (result > 0) {
+			msg = "신고 처리가 접수되었습니다.";
+		} else {
+			msg = "신고 처리가 실패하였습니다.";
+		}
+		
+		try {
+			msg = URLEncoder.encode(msg, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		return msg;
 	}
 	
 	@GetMapping("ProductShop")

@@ -90,7 +90,8 @@ public class PayService {
 		// PayMapper - insertTransactionResult() 로 생성
 	    // => 파라미터 : 출금이체 결과, 거래타입 ("WI": 출금이체)
 //		mapper.insertTransactionResult(withdrawResult, "WI");
-		mapper.insertTransactionResult(new HashMap<>(withdrawResult), "WI"); // Map<String, String>을 Map<String, Object>로 변환
+		mapper.insertTransactionResult(new HashMap<>(withdrawResult), "WI"); 
+		// Map<String, String>을 Map<String, Object>로 변환
 	}
 	
 	// DB - 입금이체 결과 저장 요청
@@ -139,13 +140,6 @@ public class PayService {
 		// BankApiClient - requestWithdrawForTransfer() 메서드 호출하여 출금이체 요청
 		Map<String, String> withdrawResult = payApiClient.requestWithdrawForTransfer(map);
 		log.info(">>>>>>>>>>>  송금(출금)결과" + withdrawResult);
-
-		
-		
-		
-		
-		
-		
 		
 		Map<String, Object> transferResult = new HashMap<String, Object>();
 		transferResult.put("withdrawResult", withdrawResult);
@@ -173,6 +167,16 @@ public class PayService {
 	// DB - 사용자 계좌정보 조회
 	public Map<String, String> getPayAccountInfo(String user_seq_no) {
 		return mapper.selectPayAccountInfo(user_seq_no);
+	}
+	// DB - 입금이체 결과 저장 요청
+	public void registTransferResult(Map<String, Object> transferResult) {
+		mapper.insertTransactionResult(transferResult, "TR");
+		
+	}
+
+	// 충전금액조회
+	public int getPayAmount(String user_seq_no) {
+		return mapper.selectPayAmount(user_seq_no);
 	}
 
 

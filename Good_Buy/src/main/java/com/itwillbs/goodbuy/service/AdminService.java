@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.itwillbs.goodbuy.mapper.AdminMapper;
 import com.itwillbs.goodbuy.vo.FaqVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
+import com.itwillbs.goodbuy.vo.NoticeVO;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -128,16 +129,61 @@ public class AdminService {
 		return mapper.deleteMember(mem_id);
 	}
 	
-	// ============== [ FAQ 관리 ] ==============
-	// FAQ 목록 조회
-	public List<Map<String, Object>> getFaqList(int start, int length, String searchValue) {
-		log.info(">>> admin faq");
-		return mapper.selectFaqList(start, length, searchValue);
+	// ============== [ 공지사항 관리 ] ==============
+	// [ 신고 회원 관리 ]
+	
+	// [ 신고 상품 관리 ]
+	// 신고 상품 목록 전체 컬럼 수 조회
+	public int getProductReportTotal() {
+		return mapper.selectProductReportTotal();
 	}
 	
-	// FAQ 수정
-	public int modifyFaqInfo(FaqVO faq) {
-		return mapper.updateFaqInfo(faq);
+	// 신고 상품 검색 필터링 후 컬럼 수 조회
+	public int getProductReportFiltered(String status, String searchValue, String searchDate) {
+		return mapper.selectProductReportFiltered(status, searchValue, searchDate);
+	}
+	
+	// 필터링 된 신고 상품 목록 가져오기
+	public List<Map<String, Object>> getProductReportList(int start, int length, String status, String searchValue, String searchDate, String orderColumn, String orderDir) {
+		return mapper.selectProductReportList(start, length, status, searchValue, searchDate, orderColumn, orderDir);
+	}
+	
+	// 신고 상품 - 조치 및 수정
+	public int modifyProductReport(Map<String, Object> param) {
+		return mapper.updateProductReport(param);
+	}
+	
+	// ============== [ 공지사항 관리 ] ==============
+	// 공지사항 목록 전체 컬럼 수 조회
+	public int getNoticeListTotal() {
+		return mapper.selectNoticeListTotal();
+	}
+	
+	// 공지사항 필터링 후 컬럼 수 조회
+	public int getNoticeListFiltered(String searchValue) {
+		return mapper.selectNoticeListFiltered(searchValue);
+	}
+	
+	// 공지사항 전체 목록 조회 (필터링, 검색어, 페이징 적용)
+	public List<NoticeVO> getNoticeList(int start, int length, String searchValue, String orderColumn, String orderDir) {
+		return mapper.selectNoticeList(start, length, searchValue, orderColumn, orderDir);
+	}
+	
+	// 공지사항 첨부파일 가져오기
+	public List<NoticeVO> getNoticeBoardFileList(List<Integer> deleteItems) {
+		return mapper.selectNoticeBoardFileList(deleteItems);
+	}
+	
+	// 공지사항 삭제
+	public int removeNotice(List<Integer> deleteItems) {
+		return mapper.deleteNotice(deleteItems);
+	}
+	
+	// ============== [ FAQ 관리 ] ==============
+	// FAQ 목록 조회  (필터링, 검색어, 페이징 적용)
+	public List<Map<String, Object>> getFaqList(int start, int length, String searchValue, int faqCate, int listStatus, String orderColumn, String orderDir) {
+		log.info(">>> admin faq");
+		return mapper.selectFaqList(start, length, searchValue, faqCate, listStatus,  orderColumn, orderDir);
 	}
 	
 	// FAQ 전체 컬럼 수 조회
@@ -146,9 +192,32 @@ public class AdminService {
 	}
 	
 	// FAQ 검색 컬럼 수 조회
-	public int getFaqFiltered(String searchValue) {
-		return mapper.selectFaqFiltered(searchValue);
+	public int getFaqFiltered(int faqCate, int listStatus, String searchValue) {
+		return mapper.selectFaqFiltered(faqCate, listStatus, searchValue);
 	}
+	
+	// FAQ 수정
+	public int modifyFaqInfo(Map<String, Object> param) {
+		return mapper.updateFaqInfo(param);
+	}
+	
+	// FAQ 삭제
+	public int removeFaq(List<Integer> faqIds) {
+		return mapper.deleteFaq(faqIds);
+	}
+
+
+
+
+
+
+
+	
+
+
+	
+
+
 
 
 

@@ -42,7 +42,6 @@
             	<h6 class="collapse-header">Payment Management</h6>
                 <a class="collapse-item" href="AdmPaymentList">전체 구매내역</a>
                 <a class="collapse-item" href="AdmPaymentList2">전체 판매내역</a>
-                <a class="collapse-item" href="AdmPaymentList3">???</a>
             </div>
         </div>
     </li>
@@ -53,8 +52,8 @@
         <div id="menu04" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
             	<h6 class="collapse-header">Report Management</h6>
-                <a class="collapse-item" href="AdmReportMemberList">신고 회원 관리</a>
-                <a class="collapse-item" href="AdmReportProductList">신고 상품 관리</a>
+                <a class="collapse-item" href="AdmProductReportList">신고 상품 관리</a>
+                <a class="collapse-item" href="AdmMemberReportList">신고 회원 관리</a>
             </div>
         </div>
     </li>
@@ -65,26 +64,26 @@
         <div id="menu06" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
             	<h6 class="collapse-header">Customer Management</h6>
-                <a class="collapse-item" href="AdmNoticeList">공지사항 관리</a>
-                <a class="collapse-item" href="AdmSupportList">1:1문의 관리</a>
+                <a class="collapse-item" href="AdmNoticeList" data-sub-page="AdmNoticeModify" data-sub-page2="AdmNoticeRegist">공지사항 관리</a>
+                <a class="collapse-item" href="AdmSupportList">1:1 문의 관리</a>
                 <a class="collapse-item" href="AdmFaqList">FAQ 관리</a>
             </div>
         </div>
     </li>
-    <hr class="sidebar-divider">
-    <div class="sidebar-heading">Marketing</div>
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#menu05" aria-expanded="true" aria-controls="menu05">
-        	<i class="fa-solid fa-rectangle-ad"></i> <span>광고 관리</span>
-        </a>
-        <div id="menu05" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-            	<h6 class="collapse-header">Advertisement</h6>
-                <a class="collapse-item" href="AdmAdList">광고 회원 및 상품 목록</a>
-                <a class="collapse-item" href="AdmAdPayList">광고 서비스 결제내역</a>
-            </div>
-        </div>
-    </li>
+<!--     <hr class="sidebar-divider"> -->
+<!--     <div class="sidebar-heading">Marketing</div> -->
+<!--     <li class="nav-item"> -->
+<!--         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#menu05" aria-expanded="true" aria-controls="menu05"> -->
+<!--         	<i class="fa-solid fa-rectangle-ad"></i> <span>광고 관리</span> -->
+<!--         </a> -->
+<!--         <div id="menu05" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar"> -->
+<!--             <div class="bg-white py-2 collapse-inner rounded"> -->
+<!--             	<h6 class="collapse-header">Advertisement</h6> -->
+<!--                 <a class="collapse-item" href="AdmAdList">광고 회원 및 상품 목록</a> -->
+<!--                 <a class="collapse-item" href="AdmAdPayList">광고 서비스 결제내역</a> -->
+<!--             </div> -->
+<!--         </div> -->
+<!--     </li> -->
     <hr class="sidebar-divider">
     <div class="sidebar-heading">Chart</div>
     <li class="nav-item">
@@ -110,7 +109,7 @@
 		collapseItems.forEach((item) => {
 			item.classList.remove("active");
 			
-			if (pathName == item.getAttribute('href') || pathName == item.getAttribute('data-sub-page')) {
+			if (pathName == item.getAttribute('href') || pathName == item.getAttribute('data-sub-page') || pathName == item.getAttribute('data-sub-page2')) {
 				item.classList.add("active");
 				item.parentElement.parentElement.classList.add("show");
 				item.parentElement.parentElement.parentElement.classList.add("active");

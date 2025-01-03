@@ -11,7 +11,19 @@
 		  FROM 
 		  	PRODUCT P JOIN MEMBER M ON P.MEM_ID = M.MEM_ID
 		 WHERE 
-		 	P.MEM_ID = #{mem_id};
+		 	P.MEM_ID = #{mem_id}
+		ORDER BY PRODUCT_REG_DATE DESC;
+	</select>
+	<!-- 판매상품 상위 4개 조회 -->
+	<select id="selectLimitProductList" resultType="product">
+		SELECT 
+			P.*,M.MEM_NICK
+		  FROM 
+		  	PRODUCT P JOIN MEMBER M ON P.MEM_ID = M.MEM_ID
+		 WHERE 
+		 	P.MEM_ID = #{mem_id}
+		ORDER BY PRODUCT_REG_DATE DESC
+		LIMIT 4
 	</select>
 	
 	<!--판매 상품 리스트 갯수 조회  -->
@@ -38,7 +50,7 @@
 			, #{vo.product_price}
 			, #{vo.product_discount_status}
 			, #{vo.product_category}
-			, DATE_FORMAT(now(), '%y-%m-%d')
+			, CURRENT_TIMESTAMP
 			, #{vo.product_pic1}
 			, #{vo.product_pic2}
 			, #{vo.product_pic3}
@@ -48,31 +60,26 @@
 		)
 	</insert>
 	
-	<!-- 상품목록 카테고리별 조회 -->
-	<select id="searchProductList" resultType="map">
-		SELECT 
-			pro.PRODUCT_PIC1, pro.PRODUCT_CATEGORY, pro.PRODUCT_TRADE_ADR1, pro.PRODUCT_ID,
-			pro.PRODUCT_TITLE, pro.PRODUCT_PRICE, pro.MEM_ID, mem.MEM_NICK, pro.PRODUCT_REG_DATE,
-			pro.PRODUCT_STATUS
-		FROM PRODUCT pro join MEMBER mem
-		ON pro.MEM_ID = mem.MEM_ID
-		WHERE PRODUCT_CATEGORY = #{product_category}
-	</select>
-	
 	<!-- 검색필터별 조회 -->
 	<select id="searchFliterList" resultType="map">
 		SELECT 
 			pro.PRODUCT_PIC1, pro.PRODUCT_CATEGORY, pro.PRODUCT_TRADE_ADR1, pro.PRODUCT_ID,
-			pro.PRODUCT_TITLE, pro.PRODUCT_PRICE, pro.MEM_ID, mem.MEM_NICK, pro.PRODUCT_REG_DATE,
+			pro.PRODUCT_TITLE, pro.PRODUCT_PRICE, mem.MEM_NICK, REPLACE(FORMAT(pro.PRODUCT_REG_DATE, 'yyyyMMddHHmmss'), ',', '') AS PRODUCT_REG_DATE,
 			pro.PRODUCT_STATUS
 		FROM PRODUCT pro join MEMBER mem
 		ON pro.MEM_ID = mem.MEM_ID
 		WHERE 
 			PRODUCT_CATEGORY = #{cate} 
-		<if test="product_status == 0">
-			AND 
-				PRODUCT_STATUS = #{product_status}
-		</if>
+		<choose>
+			<when test="product_status == 0">
+				AND 
+					PRODUCT_STATUS = #{product_status}
+			</when>
+			<otherwise>
+				AND
+					PRODUCT_STATUS BETWEEN 0 AND 3
+			</otherwise>
+		</choose>
 		<if test="price_end != 0">
 			AND 
 				PRODUCT_PRICE <![CDATA[>=]]> #{price_start}
@@ -81,24 +88,82 @@
 		</if>
 		<if test="product_trade_adr1 != null">
 			AND
-				PRODUCT_TRADE_ADR1 like '%'||#{product_trade_adr1}||'%'
+				PRODUCT_TRADE_ADR1 LIKE CONCAT('%', #{product_trade_adr1}, '%')
 		</if>
 	</select>
+	
+	<!-- 상품 상세정보 조회 -->
+	<select id="productSearch" resultType="product">
+		SELECT pro.PRODUCT_PIC1
+			   , pro.PRODUCT_PIC2
+			   , pro.PRODUCT_PIC3
+			   , pro.PRODUCT_TRADE_ADR1
+			   , pro.PRODUCT_TITLE
+			   , pro.PRODUCT_INTRO
+			   , pro.PRODUCT_SHPPING_FEE
+			   , pro.PRODUCT_PRICE
+			   , pro.PRODUCT_ID
+			   , pro.MEM_ID
+			   , mem.MEM_NICK
+			   , mem.MEM_PROFILE
+			   , pro.PRODUCT_REG_DATE
+			   , pro.PRODUCT_STATUS
+			   , pro.PRODUCT_DISCOUNT_STATUS
+			   , pro.VIEW_COUNT
+		FROM PRODUCT pro join MEMBER mem
+		ON pro.MEM_ID = mem.MEM_ID
+		WHERE PRODUCT_ID = #{product_id}
+	</select>
+	
+	<!-- 상품 조회수 증가 -->
+	<select id="plusViewCount">
+		UPDATE PRODUCT
+		SET VIEW_COUNT = PRODUCT.VIEW_COUNT + 1
+		WHERE PRODUCT_ID = #{product_id}
+	</select>
+	
+	<!-- 상품 신고 -->
+	<insert id="itemReporting">
+	<selectKey resultType="int" order="BEFORE"  keyProperty="report_id">
+		SELECT MAX(REPORT_ID) + 1
+		FROM PRODUCT_REPORTS
+	</selectKey>
+		INSERT
+		INTO PRODUCT_REPORTS
+		VALUES(
+			#{report_id} 
+			, #{reporter_id}
+			, #{product_id}
+			, CURRENT_TIMESTAMP
+			, #{reason}
+			, '접수'
+			, null
+			, null
+			, null
+		)
+	</insert>
 	
 	<!-- 구매상품 리스트 조회 -->
 	<select id="selectOrderList" resultType="order">
 		SELECT 
-		  O.ORDER_ID
-		, P.PRODUCT_ID
-		, P.PRODUCT_TITLE 
-		, P.PRODUCT_PRICE
-		, P.PRODUCT_CATEGORY
-		, P.PRODUCT_STATUS
-		, M.MEM_NICK
-		, P.PRODUCT_TRADE_ADR1
-		  FROM PRODUCT P JOIN PRODUCT_ORDER O ON P.PRODUCT_ID = O.PRODUCT_ID
-		  				JOIN MEMBER M ON P.MEM_ID = M.MEM_ID
-	 	 WHERE O.BUYER_ID = #{mem_id};
+			  O.ORDER_ID
+			, O.PRODUCT_ID
+			, P.PRODUCT_TITLE 
+			, P.PRODUCT_PRICE
+			, P.PRODUCT_CATEGORY
+			, P.PRODUCT_STATUS
+			, M.MEM_NICK
+			, P.PRODUCT_TRADE_ADR1
+			, R.REVIEW_CNT
+		FROM PRODUCT_ORDER O 
+		JOIN PRODUCT P ON O.PRODUCT_ID = P.PRODUCT_ID
+		JOIN MEMBER M ON P.MEM_ID = M.MEM_ID
+		LEFT JOIN (SELECT COUNT(REVIEW_ID) AS REVIEW_CNT, PRODUCT_ID
+					 FROM MYREVIEW
+					WHERE MEM_ID = #{mem_id}
+					GROUP BY PRODUCT_ID) R
+		    ON R.PRODUCT_ID = O.PRODUCT_ID
+		WHERE O.BUYER_ID = #{mem_id}
 	</select>
 	
 	<!-- 구매상품 갯수 조회 -->
@@ -122,5 +187,6 @@
 	        GROUP BY P.PRODUCT_ID, M.MEM_ID
 	    ) TEMP
 	</select>
+	
 	
 </mapper>

@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.itwillbs.goodbuy.vo.FaqVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
+import com.itwillbs.goodbuy.vo.NoticeVO;
 
 @Mapper
 public interface AdminMapper {
@@ -41,6 +42,7 @@ public interface AdminMapper {
 	// 사용되지않는 공통코드(상위코드) 삭제
 	int deleteDeprecatedCommonCode();
 
+	//---------------------------------------------------------
 	// 회원 목록 조회 + 검색 조건
 	List<MemberVO> selectMemberList(
 			@Param("start") int start, 
@@ -70,17 +72,83 @@ public interface AdminMapper {
 	int deleteMember(String mem_id);
 	
 	//---------------------------------------------------------
-	// Faq 목록 조회
+	// 신고 상품 목록 전체 컬럼 수 조회
+	int selectProductReportTotal();
+	
+	// 신고 상품 검색 필터링 후 컬럼 수 조회
+	int selectProductReportFiltered(
+			@Param("status") String status,
+			@Param("searchValue") String searchValue,
+			@Param("searchDate") String searchDate);
+
+	// 필터링 된 신고 상품 목록 가져오기
+	List<Map<String, Object>> selectProductReportList(
+			@Param("start") int start,
+			@Param("length") int length, 
+			@Param("status") String status, 
+			@Param("searchValue") String searchValue,
+			@Param("searchDate") String searchDate,
+			@Param("orderColumn") String orderColumn, 
+			@Param("orderDir") String orderDir);
+	
+	// 신고 상품 조치 및 수정
+	int updateProductReport(Map<String, Object> param);
+	
+	//---------------------------------------------------------
+	// 공지사항 전체 목록 컬럼 수 조회
+	int selectNoticeListTotal();
+	
+	// 공지사항 필터링 후 목록 컬럼 수 조회
+	int selectNoticeListFiltered(String searchValue);
+	
+	// 공지사항 전체 목록 조회 (필터링, 검색어, 페이징 적용)
+	List<NoticeVO> selectNoticeList(
+			@Param("start") int start,
+			@Param("length") int length, 
+			@Param("searchValue") String searchValue, 
+			@Param("orderColumn") String orderColumn, 
+			@Param("orderDir") String orderDir);
+	
+	// 공지사항 첨부파일 가져오기
+	List<NoticeVO> selectNoticeBoardFileList(@Param("deleteItems") List<Integer> deleteItems);
+	
+	// 공지사항 삭제
+	int deleteNotice(@Param("deleteItems") List<Integer> deleteItems);
+	
+	//---------------------------------------------------------
+	// Faq 목록 조회 (필터링, 검색어, 페이징 적용) + 검색 조건
 	List<Map<String, Object>> selectFaqList(@Param("start") int start, 
 											@Param("length") int length,
-											@Param("searchValue") String searchValue);
-	// Faq 컬럼 수 조회
+											@Param("searchValue") String searchValue,
+											@Param("faqCate") int faqCate, 
+											@Param("listStatus") int listStatus, 
+											@Param("orderColumn") String orderColumn, 
+											@Param("orderDir") String orderDir);
+	
+	// Faq 전체 컬럼 수 조회
 	int selectFaqTotal();
 	
-	// FAQ 검색 컬럼 수 조회
-	int selectFaqFiltered(String searchValue);
+	// FAQ 검색 후 컬럼 수 조회
+	int selectFaqFiltered(
+			@Param("faqCate") int faqCate, 
+			@Param("listStatus") int listStatus, 		
+			@Param("searchValue") String searchValue);
 
 	// Faq 수정
-	int updateFaqInfo(FaqVO faq);
+	int updateFaqInfo(Map<String, Object> param);
+	
+	// Faq 삭제
+	int deleteFaq(@Param("deleteItems") List<Integer> faqIds);
+
+
+
+
+	
+
+
+
+
+	
+
 
 }

@@ -94,7 +94,7 @@
 										    </div>
 										    <div class="col-5 search-box">
 						                        <div class="input-group">
-						                            <input type="text" class="form-control bg-light border small" name="keyword_search" placeholder="회원 아이디, 이름, 이메일 검색" aria-label="Search" aria-describedby="basic-addon2">
+						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="회원 아이디, 이름, 이메일 검색" aria-label="Search" aria-describedby="basic-addon2">
 						                            <div class="input-group-append">
 						                                <button class="btn btn-primary" id="searchBtn" type="button">검색</button>
 						                            </div>

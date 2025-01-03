@@ -141,11 +141,9 @@ document.addEventListener("DOMContentLoaded", function(){
 			data : JSON.stringify(commonCodes),
 			dataType : "JSON",
 			success: function(response) {
+				alert(response.message);
 				if(response.status == 'success') {
-					alert(response.message);
 					window.location.href = response.redirectURL;
-				} else {
-					alert(response.message);
 				}
 			},
 			error: function() {

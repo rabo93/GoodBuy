@@ -88,71 +88,11 @@
 	<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 </footer>
 </body>
-<script src="${pageContext.request.contextPath}/resources/js/notice.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/notice_main.js"></script>
 <script type="text/javascript">
 	if (performance.navigation.type === 1) {
 		location.href= "NoticeMain";
 	}
-	
-	//	무한스크롤
-// 	let pageNum = "2";
-// 	let lastScroll = 0;
-// 	let isContinue = true;
-// 	$(window).scroll(function(){
-// 		let currentScroll = $(this).scrollTop();
-// 		let documentHeight = $(document).height();
-// 		let windowHeight = $(window).height();
-		
-// 		if(currentScroll > lastScroll) {
-// 			if((currentScroll + windowHeight + 10) > documentHeight && isContinue) {
-// 				load_list();
-// 				isContinue = false;
-// 			}
-// 		}
-// 		lastScroll = currentScroll
-
-// 	});
-	
-	
-// 	function load_list() {
-// 		$.ajax({
-// 			type : "GET",
-// 			url : "NoticeListJson",
-// 			data : {
-// 				pageNum : pageNum
-// 			},
-// 			dataType : "json"
-// 		}).done(function(data){
-// 			for (let notice of data.noticeList) {
-// 				let item = '<tr>'
-// 					 		+ '<td class="nt_id" hidden>' + notice.notice_id + '</td>'
-// 					 		+ '<td class="nt_subject">' + notice.notice_subject + '</td>'
-// 					 		+ '<td>' + notice.mem_id + '</td>'
-// 					 		+ '<td>' + notice.notice_date + '</td>'
-// 				 		+ '</tr>';
-// 				$(".nt-table").append(item);
-// 			}
-			
-// 			if (pageNum < data.pageInfo.maxPage) {
-// 				isContinue = true;
-// 				pageNum++;
-// 			}
-			
-// 		}).fail(function(){
-			
-// 		});
-// 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 </script>
 </html>

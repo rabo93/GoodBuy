@@ -21,7 +21,7 @@ public class MyPageService {
 	}
 
 	//위시리스트 삭제
-	public int cancleMyWish(String wishlist_id) {
+	public int cancleMyWish(int wishlist_id) {
 		return mapper.deleteWish(wishlist_id);
 	}
 

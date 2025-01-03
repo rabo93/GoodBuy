@@ -52,9 +52,92 @@
                                     <h5 class="m-0 font-weight-bold text-primary">FAQ 관리</h5>
                                 </div>
                                 <div class="card-body">
+                                	<div class="search-wrap border">
+									   	<section class="d-flex search-inner">
+									   		<!-- 분류 단추 -->
+									   		<div class="col pl-4 search-box">
+			                                	<div class="search-ttl">FAQ유형별</div>
+											    <div class="category-filter input-group">
+											        <div class="form-check">
+													    <input class="form-check-input" id="reset" type="radio" name="faq_cate"  value="0" checked>
+													    <label class="form-check-label" for="reset">전체</label>
+													</div>
+											        <div class="form-check ml-3">
+													    <input class="form-check-input" id="faqCate1" type="radio" name="faq_cate" value="1">
+													    <label class="form-check-label" for="faqCate1">운영정책</label>
+													</div>
+													<div class="form-check ml-3">
+													    <input class="form-check-input" id="faqCate2" type="radio" name="faq_cate" value="2">
+													    <label class="form-check-label" for="faqCate2">회원/계정</label>
+													</div>
+													<div class="form-check ml-3">
+													    <input class="form-check-input" id="faqCate3" type="radio" name="faq_cate" value="3">
+													    <label class="form-check-label" for="faqCate3">결제/페이</label>
+													</div>
+													<div class="form-check ml-3">
+													    <input class="form-check-input" id="faqCate4" type="radio" name="faq_cate" value="4">
+													    <label class="form-check-label" for="faqCate4">광고서비스</label>
+													</div>
+													<div class="form-check ml-3">
+													    <input class="form-check-input" id="faqCate5" type="radio" name="faq_cate" value="5">
+													    <label class="form-check-label" for="faqCate5">기타</label>
+													</div>
+											    </div>
+										    </div>
+										    <div class="col pl-4 search-box">
+			                                	<div class="search-ttl">사용여부별</div>
+											    <div class="category-filter input-group">
+											    	<div class="form-check">
+													    <input class="form-check-input" id="listStatusAll" type="radio" name="list_status" value="0" checked>
+													    <label class="form-check-label" for="listStatusAll">전체</label>
+													</div>
+											        <div class="form-check ml-3">
+													    <input class="form-check-input" id="listStatus1" type="radio" name="list_status" value="1">
+													    <label class="form-check-label" for="listStatus1">사용함</label>
+													</div>
+													<div class="form-check ml-3">
+													    <input class="form-check-input" id="listStatus2" type="radio" name="list_status" value="2">
+													    <label class="form-check-label" for="listStatus2">사용안함</label>
+													</div>
+											    </div>
+										    </div>
+									   	
+									   		<!-- 검색 -->
+										    <div class="col-6 search-box">
+						                        <div class="input-group">
+						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="제목 또는 내용 검색" aria-label="Search" aria-describedby="basic-addon2">
+						                            <div class="input-group-append">
+						                                <button class="btn btn-primary" id="searchBtn" type="button">검색</button>
+						                            </div>
+						                        </div>
+					                        </div>
+									   	</section>
+									   	
+									</div>
+									<!-- 작성하기/선택삭제 -->
+			                        <div class="col-6 d-flex justify-right">
+										<button class="btn btn-primary ml-auto" type="button" id="btnAddRow" onclick="window.open('FaqMain')"><i class="fa-regular fa-pen-to-square"></i> 작성하기</button>
+										<button class="btn btn-danger ml-2" type="button" id="btnDeleteRow"><i class="fa-solid fa-trash-can"></i> 선택 삭제</button>
+                                    </div>
+                                    <!-- 테이블 -->
                                 	<div class="table-responsive">
 		                                <table class="table table-bordered compact" id="faqList" width="100%" cellspacing="0">
-		                                    <thead></thead>
+		                                    <thead>
+		                                    	<tr>
+		                                    		<th width="30px">
+		                                            	<div class="custom-control custom-checkbox small">
+			                                            	<input type="checkbox" class="custom-control-input" id="checkAll">
+			                                            	<label class="custom-control-label" for="checkAll"></label>
+		                                            	</div>
+		                                            </th>
+		                                            <th>No.</th>
+		                                            <th>제목</th>
+		                                            <th>내용</th>
+		                                            <th>FAQ 유형</th>
+		                                            <th>사용여부</th>
+		                                            <th>관리</th>
+		                                    	</tr>
+		                                    </thead>
 		                                    <tbody></tbody>
 		                                </table>
 		                          	</div>
@@ -83,36 +166,51 @@
     </a>
     
     <!-- 수정 모달 -->
-    <div class="modal fade" id="updateMemberInfo" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal fade" id="updateFaq" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 		    <div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="updateModalLabel">회원 수정</h5>
+					<h5 class="modal-title" id="updateModalLabel">FAQ 수정</h5>
 					<button type="button" class="close" data-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
 				</div>
 				<div class="modal-body">
-					<form action="AdmFaqModify" id="faqModifyForm" method="post">
+					<form action="AdmFaqModify" method="post" id="modifyForm">
+						<!-- faq 아이디 -->
 						<input type="hidden" id="faqId" name="faq_id">
-						<div class="mb-3">
-							<label class="small mb-1" for="memGrade">회원등급</label>
-							<select class="custom-select" id="memGrade" name="mem_grade">
-								<option value="일반">일반</option>
-								<option value="관리자">관리자</option>
+						<div class="mb-1">
+							<label for="updatedFaqSubject" class="col-form-label">제목</label>
+							<input type="text" class="form-control" name="faq_subject" id="updatedFaqSubject" required>
+						</div>
+						<div class="mb-1">
+							<label for="updatedFaqContent" class="col-form-label">내용</label>
+							<input type="text" class="form-control" name="faq_content" id="updatedFaqContent" required>
+						</div>
+						<div class="mb-1">
+							<label class="small mb-1" for="updatedFaqCate">FAQ 유형</label>
+							<select class="custom-select" id="updatedFaqCate" name="faq_cate" >
+								<option value="1">운영정책</option>
+								<option value="2">회원/계정</option>
+								<option value="3">결제/페이</option>
+								<option value="4">광고서비스</option>
+								<option value="5">기타</option>
 							</select>
 						</div>
-						<div class="mb-3">
-							<label class="small mb-1" for="memStatus">회원상태</label>
-							<select class="custom-select" id="memStatus" name="mem_status">
-								<option value="1">정상</option>
-								<option value="2">정지</option>
-								<option value="3">탈퇴</option>
-							</select>
+						
+						<div class="row px-2">
+							<div class="w-50">
+								<label for="updatedListStatus" class="col-form-label">사용여부</label>
+								<div class="form-check form-switch">
+					        		<input type="hidden" id="updatedListStatus" name="list_status">
+									<input class="form-check-input" type="checkbox" role="switch" id="updateFlexSwitchCheckDefault">
+									<label class="form-check-label text-center" style="width:70px" id="updateFlexSwitchCheckDefaultLab" for="updateFlexSwitchCheckDefault"></label>
+								</div>
+							</div>
 						</div>
-                    </form>
+					</form>
 				</div>
 				<div class="modal-footer justify-content-center">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="faqModifyForm">수정하기</button>
+					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="modifyForm">수정하기</button>
 				</div>
 			</div>
 		</div>

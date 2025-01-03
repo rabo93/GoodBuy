@@ -22,7 +22,7 @@
 	
 <!-- 	리뷰작성 -->
 	<insert id="insertReview" parameterType="map">
-	<selectKey resultType="int" order="BEFORE" keyProperty="review_id">
+		<selectKey resultType="int" order="BEFORE" keyProperty="review_id">
 <!-- 			SELECT MAX(REVIEW_ID) + 1 -->
 			SELECT COALESCE(MAX(REVIEW_ID), 0) + 1
 			FROM MYREVIEW;
@@ -47,4 +47,24 @@
 	);
 	
 	</insert>
+	
+	<!-- 내가 쓴 리뷰 -->
+	<select id="selectReviewHistory">
+		SELECT R.* , M.MEM_NICK
+		  FROM MYREVIEW R JOIN MEMBER M ON R.MEM_ID = M.MEM_ID
+		 WHERE R.MEM_ID = #{mem_id}
+	  ORDER BY REVIEW_DATE DESC
+	</select>
+	
+	<!-- 나의 리부 수정 -->
+	<update id="updateReview">
+		UPDATE MYREVIEW
+		SET REVIEW_CONTENT = #{review_content}
+		WHERE PRODUCT_ID = #{product_id}
+	</update>
+	
+	<delete id="deleteReview">
+		DELETE FROM MYREVIEW
+		WHERE REVIEW_ID = #{review_id}
+	</delete>
 </mapper>

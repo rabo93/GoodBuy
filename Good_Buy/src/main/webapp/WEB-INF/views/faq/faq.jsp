@@ -50,7 +50,8 @@
 						<div class="faq-buttons">
 							<button class="faq-button" onclick="showFAQ('policy')">운영정책</button>
 							<button class="faq-button" onclick="showFAQ('memberAccount')">회원/계정</button>
-							<button class="faq-button" onclick="showFAQ('payment')">전용페이</button>
+							<button class="faq-button" onclick="showFAQ('payment')">결제/페이</button>
+							<button class="faq-button" onclick="showFAQ('advertise')">광고서비스</button>
 							<button class="faq-button" onclick="showFAQ('etc')">기타</button>
 						</div>
 						<div class="faq-list" id="policy">
@@ -90,9 +91,21 @@
 								</c:forEach>
 							</ul>
 						</div>
-						<div class="faq-list" id="etc">
+						<div class="faq-list" id="advertise">
 							<ul>
 								<c:forEach items="${faqList4}" var="faqBoard">
+									<li>
+										<button class="faq-item" onclick="toggleAnswer(this)">${faqBoard.faq_subject}</button>
+										<div class="answer">
+											${faqBoard.faq_content}
+										</div>
+									</li>
+								</c:forEach>
+							</ul>
+						</div>
+						<div class="faq-list" id="etc">
+							<ul>
+								<c:forEach items="${faqList5}" var="faqBoard">
 									<li>
 										<button class="faq-item" onclick="toggleAnswer(this)">${faqBoard.faq_subject}</button>
 										<div class="answer">

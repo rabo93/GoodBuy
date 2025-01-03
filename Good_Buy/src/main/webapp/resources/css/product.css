@@ -105,7 +105,7 @@
 .item-regi .item-regi-trade-adr .item-trade-adr-box {margin: 10px 0px 0px 10px;}
 .item-regi .item-regi-trade-adr .item-trade-adr-box .item-trade-adr-main {width: 500px;margin-bottom: 10px;height: 40px;}
 .item-regi .item-regi-trade-adr .item-trade-adr-box .item-trade-adr-sub {width: 400px;height: 40px;}
-.item-regi .item-regi-trade-adr .item-trade-adr-box .item-trade-adr-search {
+.item-trade-adr-search {
 	padding:8px 15px 8px 15px;
 	min-width: 100px;
 	height: 40px;
@@ -194,14 +194,24 @@
 
 .item-detail .item-detail-content {display: flex;width: 100%;}
 
-.item-detail .item-detail-pic {flex: 0 0 500px;height: auto;overflow:hidden;}
-.item-detail .item-detail-pic .thumb-slide {width: 500px;height: 500px;position: relative;z-index: 9999;}
-.item-detail .item-detail-pic .thumb-slide div img {/* object-fit: fill; */border: 1px solid var(--light-gray);border-radius: 1rem;}
+.item-detail .item-detail-pic {flex: 0 0 550px;height: 400px;overflow:hidden;position: relative;}
+.item-detail .item-detail-pic .thumb-slide {width: 100%;position: relative;z-index: 989;overflow: hidden;}
+.item-detail .item-detail-pic .thumb-slide div {width:100%;overflow:hidden;float: left;}
+.item-detail .item-detail-pic .thumb-slide div img {/* object-fit: fill; */border: 1px solid var(--light-gray);border-radius: 1rem;display: block;width: 550px;height: 400px;}
+.item-detail .item-detail-pic .slick-dots {position:absolute;bottom: 14px;width: 100%;text-align: center;}
+.item-detail .item-detail-pic .slick-dots li {display:inline-block;padding:5px;}
+.item-detail .item-detail-pic .slick-dots li button {border:0;background: #828282;width: 10px;height: 10px;font-size:0;border-radius: 100%;}
+.item-detail .item-detail-pic .slick-dots li.slick-active button {background:var(--primary);}
+.item-detail .item-detail-pic .slick-arrow {position:absolute;display:block;width: 50px;height: 50px;top:50%;margin-top: -25px;transition:all 0.2s !important;z-index: 990;text-align: center;line-height: 50px;font-size: 24px;color: var(--dark);}
+.item-detail .item-detail-pic .slick-arrow.visu-prev {left: 0;}
+.item-detail .item-detail-pic .slick-arrow.visu-next {right: 0;}
+.item-detail .item-detail-pic .slick-arrow.visu-prev:hover, .item-detail .item-detail-pic .slick-arrow.visu-next:hover {color: #007730;}
 .item-detail .item-detail-title {font-weight: 900;font-size: 30px;}
 .item-detail .item-detail-content-text {
-    margin-left: 30px;
+    margin-left: auto;
     display: flex;
     flex-direction: column;
+    padding: 1rem 2rem;
 }
 .item-detail .item-detail-view {display: flex;justify-content: flex-end;font-size: 18px;}
 .item-detail .item-detail-view-count {
@@ -213,8 +223,8 @@
 
 .item-detail .item-detail-description {
     margin-top: 30px;
-    width: 500px;
-    height: 180px;
+    width: 650px;
+    height: 200px;
     text-align: left;
     font-size: 18px;
 }
@@ -260,8 +270,42 @@
     border: 2px solid #cccccc;
     color: #ffffff;
     margin-left: auto;
+    cursor: pointer;
 }
-.item-detail .item-detail-button-group .item-detail-contact-seller {width: 160px;height: 50px;padding: 8px 15px 8px 15px;box-sizing: border-box;border-radius: 10px;font-size: 16px;font-weight: 700;background-color: #0dcc5a;border: 2px solid #0dcc5a;color: #ffffff;}
+.item-detail .item-detail-button-group .item-detail-contact-seller {width: 160px;height: 50px;padding: 8px 15px 8px 15px;box-sizing: border-box;border-radius: 10px;font-size: 16px;font-weight: 700;background-color: #0dcc5a;border: 2px solid #0dcc5a;color: #ffffff;cursor: pointer;}
+
+.item-detail .item-report {
+	margin: 10px 0 0 auto;
+	color: #cccccc;
+	cursor: pointer;
+}
+.item-report-modal .modal-bg{
+	display: none;
+	width:100%;
+	height:100%;
+	position:fixed;
+	top:0;left:0;
+	right:0;
+	background: rgba(0, 0, 0, 0.6);
+	z-index:999;
+}
+.item-report-modal .modal-wrap {
+	display: none;
+	position:fixed;
+	top: 50%;
+	left:50%;
+	border-radius: 20px;
+	transform:translate(-50%,-50%);
+	width: 600px;
+	height: 700px;
+	background:#fff;
+	z-index:1000;
+}
+.item-report-modal .modal-wrap .modal-sb {text-align: center;width: 500px;display: flex;}
+.item-report-modal .modal-wrap .modal-otherReason {resize: none;width: 500px;display: flex;}
+.item-report-modal .modal-wrap .model-report-btn {display: flex;}
+.item-report-modal .modal-wrap .model-close-btn {display: flex;}
+.item-report-modal .modal-result {display: none;}
 
 .item-detail .item-detail-seller-info {
     width: 550px;

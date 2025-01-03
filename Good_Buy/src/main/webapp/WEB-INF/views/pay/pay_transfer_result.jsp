@@ -28,9 +28,13 @@
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/product.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/pay.js"></script>
-
-
 </head>
+
+
+<script>
+    // 모달 창 닫기
+    window.close();
+</script>
 <body>
 	<header>
 		<jsp:include page="/WEB-INF/views/inc/header.jsp"></jsp:include>

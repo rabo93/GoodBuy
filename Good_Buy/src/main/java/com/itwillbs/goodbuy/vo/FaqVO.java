@@ -8,4 +8,5 @@ public class FaqVO {
 	private String faq_subject;
 	private String faq_content;
 	private int faq_cate;
+	private int list_status;
 }

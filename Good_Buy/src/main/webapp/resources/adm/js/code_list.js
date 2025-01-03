@@ -137,11 +137,9 @@ $(document).ready(function() {
 					"CODE_ID" : codeId
 				},
 				success: function(response){
+					alert(response.message);
 					if(response.status == 'success') {
-						alert(response.message);
 						window.location.href = response.redirectURL;
-					} else {
-						alert(response.message);
 					}
 				},
 				error : function(res) {

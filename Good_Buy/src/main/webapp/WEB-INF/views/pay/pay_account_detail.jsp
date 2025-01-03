@@ -93,19 +93,6 @@
 							<div align="center">
 								<input type="button" value="돌아가기" onclick="history.back()">
 								<hr>
-								<%-- 2.6. 계좌이체 서비스 - 2.6.1. 출금이체 API 서비스 요청 폼 --%>
-								<%-- 거래 요청 고객(출금계좌 예금주) 정보(핀테크이용번호, 예금주명, 출금금액) 전달 --%>
-								<form action="PayWithdraw" method="post">
-									<%-- 출금 계좌가 복수개일 경우 구분을 위해 핀테크 이용번호도 출금 요청 시 전송 --%>
-									<%-- 만약, 대표계좌 1개만 사용하여 입출금 구현 시 DB 에서 조회를 통해 핀테크 이용번호 조회 --%>
-									<input type="hidden" name="withdraw_client_fintech_use_num" value="${accountDetail.fintech_use_num}">
-									<%-- 예금주명도 핀테크 이용번호와 동일함 --%>
-									<input type="hidden" name="withdraw_client_name" value="${account_holder_name}">
-									<%-- 실제 거래금액은 상품 결정되면 해당 상품의 거래금액을 사용 --%>
-									<%-- 현재는 임시로 거래금액 텍스트박스를 통해 입력(임의의 기본값 입력) --%>
-									거래금액 <input type="text" name="tran_amt" value="5000"> 
-									<input type="submit" value="충전하기">
-								</form>
 								<%-- 2.6. 계좌이체 서비스 - 2.6.2. 입금이체 API 서비스 요청 폼 --%>
 								<%-- 거래 요청 고객(입금계좌 예금주) 정보(핀테크이용번호, 예금주명, 입금금액) 전달 --%>
 								<form action="PayDeposit" method="post">
@@ -117,7 +104,6 @@
 									<input type="submit" value="환불하기">
 								</form>
 								
-								
 								<hr><hr>
 								<%-- 
 									P2P 송금(이체) 요청(출금이체 + 입금이체)사람이 한명 더 필요하므로 가입을 더 해야함. 
@@ -128,6 +114,8 @@
 									거래금액 <input type="text" name="tran_amt" value="2000"> 
 									<input type="submit" value="송금">
 								</form>
+								
+								
 							</div>
 						</div>
 					</div>

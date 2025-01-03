@@ -25,7 +25,8 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/product.css">
 
 <!-- JS for Page -->
-<script src="${pageContext.request.contextPath}/resources/js/product.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/product_search.js"></script>
 
 </head>
 <body>
@@ -58,7 +59,7 @@
 							</section>
 							<section class="sch-box">
 								<h2>지역</h2>
-								<input type="text" class="ip-tt" name="regionSearch">
+								<input type="text" class="ip-tt" name="regionSearch" onkeypress="addAdrEnter(event)">
 								<input type="button" class="item-trade-adr-search" value="주소검색" onclick="addAdr()">
 								<button type="button" class="sch-box-reset" onclick="fliterReset()">
 									<i class="fa-solid fa-arrows-rotate"></i> 초기화
@@ -73,7 +74,7 @@
 								<!-- 8개 -->
 								<c:forEach items="${searchProductList}" var="list">
 									<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.PRODUCT_ID}'">
-										<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1 }" class="card-thumb" alt="thumbnail" />
+										<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" />
 										<div class="card-info">
 											<div class="category">
 												<span>${list.PRODUCT_CATEGORY}</span>
@@ -89,7 +90,7 @@
 											<div class="card-row">
 												<span class="add">${list.PRODUCT_TRADE_ADR1}</span>
 												<span class="name">${list.MEM_NICK}</span>
-												<span class="time">1분 전</span>
+												<span class="time"></span>
 											</div>
 										</div>
 									</li>	
@@ -105,6 +106,6 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
-	<jsp:include page="/WEB-INF/views/product/product_list_script.jsp"></jsp:include>
+<%-- 	<jsp:include page="/WEB-INF/views/product/product_list_script.jsp"></jsp:include> --%>
 </body>
 </html>

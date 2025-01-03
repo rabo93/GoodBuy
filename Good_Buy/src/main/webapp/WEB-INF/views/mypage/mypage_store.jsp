@@ -53,6 +53,7 @@
 						<a href="MyInfo">계정정보</a>
 						<a href="MyWish">관심목록</a>
 						<a href="MyReview">나의 후기</a>
+						<a href="MyReviewHistory">내가 쓴 후기</a>
 						<a href="MySupport">1:1문의내역</a>
 						<a href="">나의 광고</a>
 					</aside>
@@ -89,57 +90,62 @@
 											<h3 class="contents-ttl">등록한 상품목록 <small>(총 <span>${salesCount}</span>건)</small> <a href="MySales"><small> 더보기></small></a></h3>
 										</div>
 										<div class="product-list">
-											<ul class="product-wrap">
-												<!-- 판매 상품영역	-->
-												<li class="product-card">
-													<c:choose>
-														<c:when test="${empty product}">
-															<ul>
-																<li>등록된 상품이 없습니다.</li>
-															</ul>
-														</c:when>
-														<c:otherwise>
-															<c:forEach var="product" items="${product}">
-																<ul>
-																	<li class="product-card">
-																		<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" />
-																		<div class="card-info">
-																			<div class="category">
-																				<span>${product.product_category }</span>
-																				<span class="type">직거래</span>
-																			</div>
-																			<div class="ttl">
-																				<c:choose>
-																					<c:when test="${product.product_status == 1 }">
-																						[거래중]
-																					</c:when>
-																					<c:when test="${product.product_status == 2 }">
-																						[예약중]
-																					</c:when>
-																					<c:when test="${product.product_status == 3 }">
-																						[거래완료]
-																					</c:when>
-																					<c:otherwise> 
-																					<!-- 널스트링 출력 -->
-																					</c:otherwise>
-																				</c:choose>
-																				${product.product_title}
-																			</div>
-																			<div class="price"><fmt:formatNumber type="number" value="${product.product_price}" pattern="#,###"/>원</div>
-																			<div class="card-row">
-																				<span class="add">${product.product_trade_adr1 }</span>
-																				<span class="name">${product.mem_nick }</span>
-																				<span class="time">1분 전</span>
-																			</div>
-																		</div>
-																	</li>
-																</ul>
-															</c:forEach>
-														</c:otherwise>
-													</c:choose>
-												</li>
-											</ul>
+										    <ul class="product-wrap">
+										        <c:choose>
+										            <c:when test="${empty product}">
+										                <li>등록된 상품이 없습니다.</li>
+										            </c:when>
+										            <c:otherwise>
+										                <c:forEach var="product" items="${product}">
+										                    <li class="product-card">
+										                        <img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" 
+										                             class="card-thumb" 
+										                             alt="thumbnail" />
+										                        <div class="card-info">
+										                            <div class="category">
+										                                <span>${product.product_category}</span>
+										                                <span class="type">직거래</span>
+										                            </div>
+										                            <div class="ttl">
+										                                <c:choose>
+										                                    <c:when test="${product.product_status == 1}">
+										                                        [거래중]
+										                                    </c:when>
+										                                    <c:when test="${product.product_status == 2}">
+										                                        [예약중]
+										                                    </c:when>
+										                                    <c:when test="${product.product_status == 3}">
+										                                        [거래완료]
+										                                    </c:when>
+										                                    <c:when test="${product.product_status == 4}">
+										                                    [🚫신고처리된 게시물입니다.]${product.product_title}
+										                                     <div class="price">
+													                            <fmt:formatNumber value="${product.product_price}" type="number" pattern="#,###" />원
+													                        </div>
+													                        <div class="card-row">
+													                            <span class="add">${product.product_trade_adr1}</span>
+													                            <span class="name">${product.mem_nick}</span>
+													                        </div>
+						                            					    </c:when>
+										                                </c:choose>
+										                                ${product.product_title}
+										                            </div>
+										                            <div class="price">
+										                                <fmt:formatNumber type="number" value="${product.product_price}" pattern="#,###"/>원
+										                            </div>
+										                            <div class="card-row">
+										                                <span class="add">${product.product_trade_adr1}</span>
+										                                <span class="name">${product.mem_nick}</span>
+										                                <span class="time">1분 전</span>
+										                            </div>
+										                        </div>
+										                    </li>
+										                </c:forEach>
+										            </c:otherwise>
+										        </c:choose>
+										    </ul>
 										</div>
+										
 									</form>
 									
 									<form action="" class="my-frm">

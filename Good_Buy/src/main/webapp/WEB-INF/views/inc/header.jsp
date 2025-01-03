@@ -7,7 +7,7 @@
 	<section class="hd-top">
 		<div class="hd-logo">
 <!-- 			<a href="/"><h1><i class="fa-solid fa-basket-shopping"></i><br>Good Buy</h1></a> -->
-			<a href="/"><h1><img src="${pageContext.request.contextPath}/resources/img/new_logo.svg" alt="굿바"></h1></a>
+			<a href="/"><h1><img src="${pageContext.request.contextPath}/resources/img/new_logo.svg" alt="굿바이"></h1></a>
 		</div>
 		<div class="hd-sch">
 			<form action="" method="get">

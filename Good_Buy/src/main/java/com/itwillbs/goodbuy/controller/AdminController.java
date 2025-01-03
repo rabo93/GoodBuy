@@ -327,15 +327,16 @@ public class AdminController {
 		int orderColumnKey = Integer.parseInt((String)param.get("order[0][column]"));
 		String orderColumn = param.get("columns[" + orderColumnKey + "][data]").toString();
 		String orderDir = param.get("order[0][dir]").toString();
+		String searchDate = param.get("searchDate").toString();
 		
 		// 신고 상품 목록 전체 컬럼 수 조회
 		int recordsTotal = service.getProductReportTotal();
 		
 		// 신고 상품 검색 필터링 후 컬럼 수 조회
-		int recordsFiltered = service.getProductReportFiltered(status, searchValue);
+		int recordsFiltered = service.getProductReportFiltered(status, searchValue, searchDate);
 		
 		// 필터링 된 신고 상품 목록 가져오기
-		List<Map<String, Object>> productReportList = service.getProductReportList(start, length, status, searchValue, orderColumn, orderDir);
+		List<Map<String, Object>> productReportList = service.getProductReportList(start, length, status, searchValue, searchDate, orderColumn, orderDir);
 		log.info(">>>>> 필터링 된 신고 상품 목록 : " + productReportList);
 		
 		Map<String, Object> response = new HashMap<String, Object>();

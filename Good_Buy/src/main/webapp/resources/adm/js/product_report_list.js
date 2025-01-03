@@ -1,4 +1,3 @@
-// Call the dataTables jQuery plugin
 document.addEventListener("DOMContentLoaded", function(){
 //	const modifyForm = document.querySelector("#modifyForm");
 	const productReport = $('#productReport').DataTable({
@@ -18,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function(){
 			data: function(d) {
                 d.status = $('input[name="status"]:checked').val();
                 d.searchValue = $('input[name="keyword_search"]').val();
+                d.searchDate = $("#schDate").val();
             },
 			dataSrc: function (res) {
 				const data = res.productReportList;
@@ -51,14 +51,17 @@ document.addEventListener("DOMContentLoaded", function(){
            		}
             },
             { title: "상품ID", data : "PRODUCT_ID", defaultContent: "", width: '100px',},
-            { title: "상품명", data : "PRODUCT_TITLE", defaultContent: "", },
+            { title: "상품명", data : "PRODUCT_TITLE", defaultContent: "", 
+            	render : function(data, type, row) {
+					return `<a href="ProductDetail?PRODUCT_ID=${row.PRODUCT_ID}" target="_blank" title="새 창 열기">${data}</a>`;
+				}
+            },
             { title: "신고일시", data : "REPORT_DATE", defaultContent: "", width: '180px',},
             { title: "신고사유", data : "REASON", defaultContent: "", },
             { 
 				title: "처리상태", data : "STATUS", defaultContent: "", width: '100px', className : "dt-center",
 				render : function(data, type, row) {
 					if(!data) return "";
-					
 					switch (data) {
 				        case "접수": return "<span class='status status-01'>접수</span>";
 				        case "처리완료": return "<span class='status status-02'>처리완료</span>";
@@ -75,12 +78,12 @@ document.addEventListener("DOMContentLoaded", function(){
 				data: null,
 				searchable: false,
 				className : "dt-center",
-				width: '160px',
+				width: '120px',
 				render : function(data, type, row) {
 					return `
-						<button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#updateMemberInfo" data-mem-id=${data.mem_id}'">조치</button>
-						<button class="btn btn-success edit-btn" onclick="location.href='AdmMemberDetailForm?mem_id=${data.mem_id}'">상세</button>
+						<button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#updateMemberInfo" data-mem-id=${data.mem_id}'">조치하기</button>
 					`;
+//						<button class="btn btn-success edit-btn" onclick="location.href='AdmMemberDetailForm?mem_id=${data.mem_id}'">상세</button>
 				}
 			}
         ],
@@ -106,53 +109,66 @@ document.addEventListener("DOMContentLoaded", function(){
 	});
 	
 	// 기존 검색 숨기기
-	$("#productReportList_filter").attr("hidden", "hidden");
+	$("#productReport_filter").attr("hidden", "hidden");
 	
 	 // 필터 변경 시 데이터 테이블 다시 로드
-    $('input[name="status"]').on('change', function() {
-        productReport.draw();
-    });
+    $('input[name="status"]').on('change', () => productReport.draw());
 
     // 검색 버튼 클릭 시 테이블 다시 로드
-    $('#searchBtn').on('click', function() {
-        productReport.draw();
-    });
-
+    $('#searchBtn').on('click', () => productReport.draw());
+    
     // 엔터키 입력으로 검색
-    $('#searchKeyword').on('keypress', function(e) {
-        if (e.which == 13) {
-            productReport.draw();
-        }
+    $('#searchKeyword').on('keypress', (e) => {
+        if (e.which == 13)  productReport.draw();
     });
     
-	// 선택한 컬럼 삭제
-//	$(document).on("click", '.delete-btn', function() {
-//		if(confirm("해당 회원을 삭제하시겠습니까?\n삭제 후 복구가 불가능합니다.")) {
-//			const memId = this.dataset.memId;
-//			console.log("삭제할 회원 아이디 : " + memId);
-//			
-//			$.ajax({
-//				url : "AdmMemberDelete",
-//				type : "POST",
-//				data : {
-//					"mem_id" : memId,
-//				},
-//				success: function(response){
-//					alert(response.message);
-//					if(response.status == 'success') {
-//						window.location.href = response.redirectURL;
-//					}
-//				},
-//				error : function(res) {
-//					alert(res.message);
-//				}
-//			});
-//		}
-//	});
+	// 기간별 검색 필터링 제이쿼리
+    $('#schDate').daterangepicker({
+//        startDate: moment().subtract(29, 'days'),
+//        startDate: false,
+//        endDate: moment(),
+        maxDate: moment(),
+        locale: {
+			start: '시작일시',
+			end: '종료일시',
+		    separator: " ~ ", // 시작일시와 종료일시 구분자
+		    format: 'YYYY-MM-DD', // 일시 노출 포맷
+		    applyLabel: "확인", // 확인 버튼 텍스트
+		    cancelLabel: "취소", // 취소 버튼 텍스트
+		    daysOfWeek: ["일", "월", "화", "수", "목", "금", "토"],
+		    monthNames: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+			customRangeLabel: '기간 지정',
+		 },
+		autoUpdateInput: false,
+	    timePicker: false, // 시간 노출 여부
+	    showDropdowns: true, // 년월 수동 설정 여부
+	    autoApply: false, // 확인/취소 버튼 사용여부
+		ranges: {
+            '이번 달': [moment().startOf('month'), moment().endOf('month')], // 이번 달 전체
+            '지난 달': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')], // 지난 달 전체
+            '지난 7일': [moment().subtract(6, 'days'), moment()], // 최근 7일
+            '지난 14일': [moment().subtract(13, 'days'), moment()], // 최근 14일
+            '지난 30일': [moment().subtract(29, 'days'), moment()], // 최근 30일
+            '지난 3개월': [moment().subtract(3, 'months').startOf('month'), moment().endOf('month')], // 최근 3개월
+        },
+    }).on('show.daterangepicker', function (ev, picker) {
+        picker.container.addClass('goodbuyCustomPicker');                            
+    });
+    
+    // 날짜 선택 후에도 placeholder 유지
+    $('#schDate').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(`${picker.startDate.format('YYYY-MM-DD')} ~ ${picker.endDate.format('YYYY-MM-DD')}`);
+    });
+    
+	// 날짜 검색 초기화
+	$("#initDateBtn").on('click', function() {
+		$('#schDate').val('');
+		productReport.draw();
+	});
 	
-});
+    // 기간별 검색 후 테이블 다시 로드
+    $("#searchDateBtn").on('click', function() {
+		productReport.draw();
+	});
 
-// 휴대폰 형식 가공 => DB에서 처리함..
-//function formatPhone(phone) {
-//    return phone.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
-//}
+});

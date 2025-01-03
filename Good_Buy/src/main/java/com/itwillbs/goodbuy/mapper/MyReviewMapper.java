@@ -20,7 +20,9 @@ public interface MyReviewMapper {
 			, @Param("product_title") String productTitle
 			, @Param("product_id") String productId);
 	
-	
 	int selectReviewCountCheck(int product_id);
+	
+	//내가 쓴 리뷰
+	List<MyReviewVO> selectReviewHistory(String id);
 
 }

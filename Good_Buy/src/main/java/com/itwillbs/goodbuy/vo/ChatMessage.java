@@ -14,6 +14,7 @@ public class ChatMessage {
 	private String room_id;
 	private String message;
 	private String send_time;
+	private String product_id;
 	
 	public static final String TYPE_ENTER = "ENTER";
 	public static final String TYPE_LEAVE = "LEAVE";

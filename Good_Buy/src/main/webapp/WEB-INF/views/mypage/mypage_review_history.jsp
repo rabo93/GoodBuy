@@ -46,13 +46,13 @@
 				<h3>나의 정보</h3>
 				<a href="MyInfo">계정정보</a>
 				<a href="MyWish">관심목록</a>
-				<a href="MyReview"  class="active">나의 후기</a>
-				<a href="MyReviewHistory">내가 쓴 후기</a>
+				<a href="MyReview">나의 후기</a>
+				<a href="MyReviewHistory"  class="active">내가 쓴 후기</a>
 				<a href="MySupport">1:1문의내역</a>
 				<a href="">나의 광고</a>
 			</aside>
 			<div class="my-container">
-				<div class="contents-ttl">나의 후기 <small>(총 <span>${reviewCount}</span>건)</small></div>
+				<div class="contents-ttl">내가 쓴 후기</div>
 				<div class="contents">
 					<!-- contents -->
 					<section class="my-rev-wrap">
@@ -72,7 +72,7 @@
 										        <div class="profile-icon"></div>
 										        <div class="user-info">
 										            <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
-										            <div class="name">${review.buyerNick}</div>
+										            <div class="name">${review.mem_nick}</div>
 										            <div class="product">${review.product_title}</div>
 										            <div class="date">${review.review_date}</div>
 										        </div>

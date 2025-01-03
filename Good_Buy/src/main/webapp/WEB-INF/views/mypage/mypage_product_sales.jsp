@@ -52,6 +52,7 @@
 					<a href="MyInfo">계정정보</a>
 					<a href="MyWish">관심목록</a>
 					<a href="MyReview">나의 후기</a>
+					<a href="MyReviewHistory">내가 쓴 후기</a>
 					<a href="MySupport">1:1문의내역</a>
 					<a href="">나의 광고</a>
 				</aside>
@@ -63,6 +64,7 @@
 			                <button class="filter-btn" data-status="1">거래중</button>
 			                <button class="filter-btn" data-status="2">예약중</button>
 			                <button class="filter-btn" data-status="3">거래완료</button>
+			                <button class="filter-btn" data-status="4">신고처리</button>
 						</div>
 					</div>
 				<section>
@@ -93,6 +95,16 @@
 														</c:when>
 														<c:when test="${product.product_status == 3 }">
 															[거래완료]
+														</c:when>
+														<c:when test="${product.product_status == 4 }">
+															[🚫신고처리된 게시물입니다]
+															<div class="">
+																신고사유 적기(join필요)
+															</div>
+															<div class="card-row">
+													            <span class="add">${product.product_trade_adr1}</span>
+													            <span class="name">${product.mem_nick}</span>
+													        </div>
 														</c:when>
 														<c:otherwise>
 														<!-- 판매중 널스트링 -->

@@ -317,9 +317,17 @@ public class PayController {
 	}
 	
 	@LoginCheck(memberRole = MemberRole.USER)
-	@GetMapping("PayTransfer")
-	public String payTransfer() {
+	@GetMapping("PayTransferRequest")
+	public String payTransferRequest(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
+		
+		PayToken senderToken = (PayToken)session.getAttribute("token");
+
+		// 이체에 필요한 사용자 계좌(입금받는 상대방) 관련 정보(토큰) 조회
+		PayToken receiverToken = service.getPayTokenInfo((String)map.get("receiver_id"));
+
 		System.out.println("PayTransfer - get");
+		
+		
 		return "pay/pay_remit";
 	}
 	
@@ -330,7 +338,6 @@ public class PayController {
 	public String payTransfer(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
 		PayToken senderToken = (PayToken)session.getAttribute("token");
 
-		System.out.println("senderToken 토큰에 뭐 들어있나 확인!!" + senderToken);
 		
 		// 이체에 필요한 사용자 계좌(입금받는 상대방) 관련 정보(토큰) 조회
 		PayToken receiverToken = service.getPayTokenInfo((String)map.get("receiver_id"));
@@ -384,8 +391,11 @@ public class PayController {
 		// 사용자번호를 입금이체 결과 객체에 추가
 		transferResult.put("user_seq_no", senderToken.getUser_seq_no());
 						
-		// 송금이체 성공 시 결과를 DB 에 저장
+		// 송금이체 성공 시 결과를 DB (TRANSACTIONINFO) 에 저장
 		service.registTransferResult(transferResult);
+		
+		
+		
 		
 		session.setAttribute("transferResult", transferResult);
 		

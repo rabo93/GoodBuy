@@ -30,6 +30,11 @@ public class MyReviewService {
 		return mapper.selectReviewCountCheck(product_id);
 	}
 	
+	//내가 쓴 리뷰
+	public List<MyReviewVO> getReviewHistory(String id) {
+		return mapper.selectReviewHistory(id);
+	}
+	
 	
 	
 }

@@ -22,6 +22,7 @@
 <link href="${pageContext.request.contextPath}/resources/adm/css/adm.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/daterangepicker.css" rel="stylesheet">
 
 </head>
 <body id="page-top">
@@ -54,7 +55,7 @@
                                 <div class="card-body">
                                 	<div class="search-wrap border">
                                 		<section class="d-flex search-inner">
-	                                		<div class="col-3 pl-4 search-box">
+	                                		<div class="col-3 px-4 search-box">
 			                                	<div class="search-ttl">상태별</div>
 											    <div class="category-filter input-group">
 											        <div class="form-check">
@@ -75,15 +76,15 @@
 													</div>
 											    </div>
 										    </div>
-										    <div class="col-5 pl-4 search-box">
-			                                	<div class="search-ttl">신고일자별</div>
-												<div class="input-group align-items-center justify-content-center">
-												    <input type="date" class="form-control rounded-sm mr-2" id="searchDate1" placeholder="날짜를 선택하세요" />
-													~ 
-												    <input type="date" class="form-control rounded-sm ml-2" id="searchDate2" placeholder="날짜를 선택하세요" />
+										    <div class="col-4 px-4 search-box">
+			                                	<div class="search-ttl">기간별</div>
+												<div class="input-group align-items-center justify-content-center schDate-wrap">
+													<input type="text" class="form-control rounded-sm mr-2" placeholder="날짜 선택" value="" name="schDate" id="schDate"  autocomplete="off"/>
+													<button class="btn btn-primary" id="searchDateBtn" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
+													<button class="btn btn-success ml-2" id="initDateBtn" type="button"><i class="fa-solid fa-rotate"></i></button>
 												</div>
 										    </div>
-										    <div class="col-4 search-box">
+										    <div class="col-5 px-4 search-box">
 						                        <div class="input-group">
 						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="신고자ID, 신고상품, 신고사유, 처리상태 검색" aria-label="Search" aria-describedby="basic-addon2">
 						                            <div class="input-group-append">
@@ -128,30 +129,24 @@
 		<div class="modal-dialog modal-dialog-centered">
 		    <div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="updateModalLabel">회원 상태 변경</h5>
+					<h5 class="modal-title" id="updateModalLabel">신고 상품 조치</h5>
 					<button type="button" class="close" data-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
 				</div>
 				<div class="modal-body">
 					<form action="AdmMemberModify" id="memberModifyForm" method="post">
-						<input type="hidden" id="memId" name="mem_id">
+						<input type="hidden" id="adminId" name="ADMIN_ID">
 						<div class="mb-3">
-							<label for="memId2" class="col-form-label">변경 대상 회원</label>
-							<input type="text" class="form-control" id="memId2" name="mem_id2" readonly>
-						</div>
-						<div class="mb-3">
-							<label class="small mb-1" for="memGrade">회원등급</label>
+							<label class="small mb-1" for="memGrade">조치 상태 변경</label>
 							<select class="custom-select" id="memGrade" name="mem_grade">
-								<option value="일반">일반</option>
-								<option value="관리자">관리자</option>
+								<option value="처리완료">처리완료</option>
+								<option value="기각">기각</option>
 							</select>
 						</div>
 						<div class="mb-3">
-							<label class="small mb-1" for="memStatus">회원상태</label>
-							<select class="custom-select" id="memStatus" name="mem_status">
-								<option value="1">정상</option>
-								<option value="2">정지</option>
-								<option value="3">탈퇴</option>
-							</select>
+							<label class="small mb-1" for="memStatus">조치 사유</label>
+							<textarea class="form-control">
+								
+							</textarea>
 						</div>
                     </form>
 				</div>
@@ -177,6 +172,8 @@
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 <%--     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script> --%> <%-- 반응형 --%>
+    <script src="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/moment.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/daterangepicker.js"></script>
 
     <!-- Page level custom scripts -->
     <script src="${pageContext.request.contextPath}/resources/adm/js/product_report_list.js"></script>

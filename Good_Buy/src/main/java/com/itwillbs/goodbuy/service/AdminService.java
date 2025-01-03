@@ -139,13 +139,13 @@ public class AdminService {
 	}
 	
 	// 신고 상품 검색 필터링 후 컬럼 수 조회
-	public int getProductReportFiltered(String status, String searchValue) {
-		return mapper.selectProductReportFiltered(status, searchValue);
+	public int getProductReportFiltered(String status, String searchValue, String searchDate) {
+		return mapper.selectProductReportFiltered(status, searchValue, searchDate);
 	}
 	
 	// 필터링 된 신고 상품 목록 가져오기
-	public List<Map<String, Object>> getProductReportList(int start, int length, String status, String searchValue, String orderColumn, String orderDir) {
-		return mapper.selectProductReportList(start, length, status, searchValue, orderColumn, orderDir);
+	public List<Map<String, Object>> getProductReportList(int start, int length, String status, String searchValue, String searchDate, String orderColumn, String orderDir) {
+		return mapper.selectProductReportList(start, length, status, searchValue, searchDate, orderColumn, orderDir);
 	}
 	
 	// ============== [ 공지사항 관리 ] ==============

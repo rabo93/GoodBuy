@@ -112,14 +112,16 @@
 							<c:if test="${productSearch.product_discount_status == 1}">
 								<div class="item-detail-discount">가격제안 가능</div>
 							</c:if>
-								<div class="item-detail-price">${itemPrice.toLocaleString()} 원</div>
+								<div class="item-detail-price">
+									<fmt:formatNumber type="number" maxFractionDigits="3" value="${productSearch.product_price}"/> 원
+								</div>
 							</div>
 							<div class="item-detail-button-group">
 								<c:if test="${productSearch.product_trade_adr1 != '' && productSearch.product_trade_adr1 != undefined}">
 									<div class="item-detail-trade-adr">직거래 위치: ${productSearch.product_trade_adr1}</div>
 								</c:if>
 								<input type="button" value="찜하기" class="item-detail-fav">
-								<a href="javascript:void(0)"  onclick="openSlideChat('${productSearch.mem_id}')">
+								<a href="javascript:void(0)"  onclick="openSlideChat('${productSearch.mem_id}','${productSearch.product_id}' )">
 									<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
 								</a>
 							</div>

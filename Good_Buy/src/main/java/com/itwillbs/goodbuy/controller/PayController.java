@@ -323,7 +323,9 @@ public class PayController {
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("PayTransferRequest")
 	public String payTransferRequest(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
-		
+		System.out.println("!@#!@#");
+		System.out.println("receiver_id:" + map.get("receiver_id"));
+		System.out.println("product_id:" + map.get("product_id"));
 		PayToken senderToken = (PayToken)session.getAttribute("token");
 
 		// 이체에 필요한 사용자 계좌(입금받는 상대방) 관련 정보(토큰) 조회

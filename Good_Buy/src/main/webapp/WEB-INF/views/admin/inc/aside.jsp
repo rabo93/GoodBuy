@@ -65,7 +65,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
             	<h6 class="collapse-header">Customer Management</h6>
                 <a class="collapse-item" href="AdmNoticeList" data-sub-page="AdmNoticeModify" data-sub-page2="AdmNoticeRegist">공지사항 관리</a>
-                <a class="collapse-item" href="AdmSupportList">1:1문의 관리</a>
+                <a class="collapse-item" href="AdmSupportList">1:1 문의 관리</a>
                 <a class="collapse-item" href="AdmFaqList">FAQ 관리</a>
             </div>
         </div>

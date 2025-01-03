@@ -334,13 +334,22 @@
      </select>
      
      <!-- 신고 상품 조치 및 수정 - UPDATE -->
-     <!-- {REPORT_ID=2, ADMIN_ID=admin, STATUS=처리완료, ACTION_REASON=ㅎㅎ} -->
+     <!-- {PRODUCT_ID=5, REPORT_ID=9, ADMIN_ID=admin, STATUS=처리완료, ACTION_REASON=신고사유} -->
      <update id="updateProductReport">
-     	UPDATE PRODUCT_REPORTS
-     	   SET STATUS = #{STATUS}
-     	       , ACTION_REASON = #{ACTION_REASON}
-     	       , ADMIN_ID = #{ADMIN_ID}
-     	 WHERE REPORT_ID = #{REPORT_ID}
+     	UPDATE PRODUCT_REPORTS A LEFT JOIN PRODUCT B
+     	    ON A.PRODUCT_ID = B.PRODUCT_ID
+		<set>
+			   A.STATUS = #{STATUS}
+			   , A.ACTION_REASON = #{ACTION_REASON}
+			   , A.ADMIN_ID = #{ADMIN_ID}
+			<if test='STATUS != null or STATUS.equals("처리완료")'>
+     	   	   , B.PRODUCT_STATUS = 4
+			</if>
+		</set>
+     	 WHERE A.REPORT_ID = CAST(#{REPORT_ID} AS UNSIGNED)
+		<if test='STATUS != null or STATUS.equals("처리완료")'>
+     	   AND B.PRODUCT_ID = CAST(#{PRODUCT_ID} AS UNSIGNED)
+		</if>
      </update>
      
      

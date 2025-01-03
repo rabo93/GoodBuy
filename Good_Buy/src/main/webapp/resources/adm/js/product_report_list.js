@@ -117,11 +117,13 @@ document.addEventListener("DOMContentLoaded", function(){
 
 		const status = rowData.STATUS;
 		const actionReason = rowData.ACTION_REASON != null ? rowData.ACTION_REASON : "";
+		const productId = document.querySelector("#productId");
 		const reportId = document.querySelector("#reportId");
 		const statusSelect = document.querySelector(`#reportStatus option[value="${status}"]`);
 		const reasonTextarea = document.querySelector("#actionReason");
 		
 		reportId.value = rowData.REPORT_ID;
+		productId.value = rowData.PRODUCT_ID;
 		reasonTextarea.value = actionReason;
 	    if (statusSelect) statusSelect.selected = true;
 	    

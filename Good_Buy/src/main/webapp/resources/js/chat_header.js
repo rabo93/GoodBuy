@@ -18,13 +18,16 @@ function connect() {
 	ws.onerror = onError;
 }
 
-function openSlideChat(receiver_id) {
+function openSlideChat(receiver_id, product_id) {
 	console.log("receiver_id : " + receiver_id);
+	console.log("product_id : " + product_id);
 	let url = "ChatMain"
 	
 	slideChat = window.open(url, "slide_chat");
 	
 	slideChat.receiver_id = receiver_id;
+	slideChat.product_id = product_id;
+	
 	
 }
 

@@ -59,11 +59,11 @@
 		        
 		        
 			        <div class="chat-area">
-			            <div class="chat-header">
-			            	<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>
-			                <div class="title">아기 유아 어그부츠 150cm</div>
-			                <button class="item-button" onclick="location.href='PayTransferRequest'">구매하기</button>
-			            </div>
+<!-- 			            <div class="chat-header"> -->
+<%-- 			            	<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a> --%>
+<!-- 			                <div class="title">아기 유아 어그부츠 150cm</div> -->
+<!-- 			                <button class="item-button" onclick="location.href='PayTransferRequest'">구매하기</button> -->
+<!-- 			            </div> -->
 <!-- 			            <div class="chat-body"> -->
 <!-- 			                <div class="message user"> -->
 <!-- 			                    <div class="bubble">안녕하세요.</div> -->

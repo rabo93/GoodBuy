@@ -16,6 +16,7 @@ const ALIGN_RIGHT = "user";
 var ws;
 var receiver_id;
 var sId;
+var product_id;
 
 
 $(function() {
@@ -31,6 +32,7 @@ $(function() {
 	
 	
 	console.log("부모창에서 받은 receiver_id : " + receiver_id);
+	console.log("부모창에서 받은 product_id : " + product_id);
 	
 	
 	window.onmessage = function(e) {
@@ -118,7 +120,7 @@ function showChatList(data) {
 		}
 	}
 	//	product_id 임시로 13 메세지 전달
-	sendMessage(TYPE_INIT_COMPLETE, "13", "", receiver_id, "", "");
+	sendMessage(TYPE_INIT_COMPLETE, product_id, "", receiver_id, "", "");
 }
 //	채팅방 생성 및 채팅창 목록 추가
 function startChat(data) {
@@ -153,6 +155,24 @@ function appendChatRoomList(room) {
 function showChatRoom(room) {
 	console.log("showChatRoom -  채팅화면 표시 ");
 	console.log(room);
+	
+	let divRoom = '<div class="chat-header">'
+		           	+ '<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>'
+		           	+ '<div class="title">'+ room.title +' </div>'
+		           	+ '<button class="item-button" onclick="location.href=' + '\'PayTransferRequest?product_id=' + product_id + '&receiver_id=' + receiver_id + '\'' + '">구매하기</button>'
+		           + '</div>'
+		           + '<div class="chat-body">'
+		           + '</div>'
+		           + '<div class="chat-footer">'
+		           	+ '<input type="hidden" id="room_id" value="' + room.room_id +'">'
+		           	+ '<input type="hidden" id="receiver_id" value="' + room.receiver_id +'">'
+		           	+ '<input type="text" class="chatMessage" placeholder="메시지를 입력하세요...">'
+		            + '<button class="btnSend">전송</button>'
+		           + '</div>';
+		           
+	$(".chat-area").html(divRoom);
+	
+	
 }
 
 

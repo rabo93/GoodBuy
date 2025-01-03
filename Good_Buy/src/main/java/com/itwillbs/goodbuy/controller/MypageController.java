@@ -207,7 +207,7 @@ public class MypageController {
 	
 	//[관심목록 삭제] 완
 	@PostMapping("MyWishDel")
-	public String myWishDel(String wishlist_id,HttpServletRequest request,HttpSession session,Model model){
+	public String myWishDel(@RequestParam("wishlist_id") int wishlist_id,HttpServletRequest request,HttpSession session,Model model){
 		System.out.println("위시리스트 아이디 : "+wishlist_id);
 		
 		int deleteCount = myPageService.cancleMyWish(wishlist_id);

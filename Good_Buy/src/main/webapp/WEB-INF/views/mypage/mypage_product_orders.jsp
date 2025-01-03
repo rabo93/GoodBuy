@@ -21,7 +21,6 @@
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/modal.css">
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
 </head>
 
@@ -46,6 +45,7 @@
                         <a href="MyInfo">계정정보</a>
                         <a href="MyWish">관심목록</a>
                         <a href="MyReview">나의 후기</a>
+                        <a href="MyReviewHistory">내가 쓴 후기</a>
                         <a href="MySupport">1:1문의내역</a>
                     </aside>
 
@@ -89,21 +89,21 @@
 <%-- 														        data-product-id="${product.product_id}" --%>
 <%-- 														        data-title="${product.product_title}" --%>
 <%-- 														        data-buyer="${product.mem_nick}" --%>
-<%-- <%-- 														        data-review-cnt="${product.review_cnt}" --%>
+<%--  														        data-review-cnt="${product.review_cnt}" --%>
 <%-- 														        type="button" ${product.review_cnt == 1 ? 'disabled' : ''}> --%>
 <%-- 														    ${product.review_cnt == 1 ? '작성완료📩' : '후기 작성하기📮'} --%>
 <!-- 														</button> -->
-                                                    	<input type="hidden" name="product_id" id="hiddenProductId">
+<!--                                                     	<input type="hidden" name="product_id" id="hiddenProductId"> -->
                                                     	<c:choose>
-                                                    		<c:when test="${product.review_cnt == 1}">
+                                                    		<c:when test="${product.review_cnt == 0}">
 	                                                    		 <button class="open-modal-btn"
 															        data-product-id="${product.product_id}"
 															        data-title="${product.product_title}"
-															        data-buyer="${product.mem_nick}"
-															        onclick="clickReviewBtn">후기 작성하기📮
+															        data-buyer="${product.mem_nick}">
+															        후기 작성하기📮
 															     </button>
                                                     		</c:when>
-                                                    		<c:otherwise>작성완료📩</c:otherwise>
+                                                    		<c:otherwise><a href='MyReviewHistory'>작성완료📩</a></c:otherwise>
                                                     	</c:choose>
                                                 </div>
                                             </li>
@@ -128,30 +128,6 @@
             <h2>
                 <span id="buyerName"></span>님께 구매한 [<span id="productTitle"></span>]<br>후기 보내기📮
             </h2>
-            <!-- 별점 -->
-<!--             <section class="course-rating"> -->
-<!-- 				    <label class="rating-lab rating-lab-full" for="star1"> -->
-<!-- 				        <input type="radio" id="star1" class="rating-input" name="review_score" value="1"> -->
-<!-- 				        <span class="star-icon"></span> -->
-<!-- 				    </label> -->
-<!-- 				    <label class="rating-lab rating-lab-full" for="star2"> -->
-<!-- 				        <input type="radio" id="star2" class="rating-input" name="review_score" value="2"> -->
-<!-- 				        <span class="star-icon"></span> -->
-<!-- 				    </label> -->
-<!-- 				    <label class="rating-lab rating-lab-full" for="star3"> -->
-<!-- 				        <input type="radio" id="star3" class="rating-input" name="review_score" value="3"> -->
-<!-- 				        <span class="star-icon"></span> -->
-<!-- 				    </label> -->
-<!-- 				    <label class="rating-lab rating-lab-full" for="star4"> -->
-<!-- 				        <input type="radio" id="star4" class="rating-input" name="review_score" value="4"> -->
-<!-- 				        <span class="star-icon"></span> -->
-<!-- 				    </label> -->
-<!-- 				    <label class="rating-lab rating-lab-full" for="star5"> -->
-<!-- 				        <input type="radio" id="star5" class="rating-input" name="review_score" value="5"> -->
-<!-- 				        <span class="star-icon"></span> -->
-<!-- 				    </label> -->
-<!-- 	        	</section> -->
-            	<!-- /별점 -->
             <input type="hidden" id="modal_product_id"> <!-- id저장용 -->
 <!--             <input type="hidden" id="modal_review_cnt"> 리뷰 갯수 저장용 -->
             <textarea rows="4" cols="50" id="review_content" placeholder="후기를 작성해주세요."></textarea>

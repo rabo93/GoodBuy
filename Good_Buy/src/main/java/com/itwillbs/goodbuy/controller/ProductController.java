@@ -2,6 +2,8 @@ package com.itwillbs.goodbuy.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -133,19 +135,38 @@ public class ProductController {
 	
 	// 상품 상세 페이지
 	@GetMapping("ProductDetail")
-	public String prodcutDetail(@RequestParam int PRODUCT_ID, Model model) {
+	public String prodcutDetail(@RequestParam int PRODUCT_ID, Model model, HttpSession session) {
+		String id = (String) session.getAttribute("sId");
 		ProductVO productSearch = productService.productSearch(PRODUCT_ID);
 		model.addAttribute("productSearch", productSearch);
+		if (id != null) {
+			productService.plusviewcount(PRODUCT_ID);
+		}
 		
 		return "product/product_detail";
 	}
 	
+	// 상품 신고
+	@ResponseBody
 	@GetMapping("ItemReporting")
-	public Boolean itemReporting(@RequestParam int PRODUCT_ID, @RequestParam String REASON, HttpSession session) {
-		String id = (String) session.getAttribute("sId");
-		Boolean result = productService.itemReporting(PRODUCT_ID, REASON, id);
-		System.out.println(result);
-		return null;
+	public String itemReporting(@RequestParam int PRODUCT_ID, @RequestParam String REASON, @RequestParam(required = true) String REPORTER_ID) {
+		int result = productService.itemReporting(PRODUCT_ID, REASON, REPORTER_ID);
+		
+		String msg = "";
+		
+		if (result > 0) {
+			msg = "신고 처리가 접수되었습니다.";
+		} else {
+			msg = "신고 처리가 실패하였습니다.";
+		}
+		
+		try {
+			msg = URLEncoder.encode(msg, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		return msg;
 	}
 	
 	@GetMapping("ProductShop")

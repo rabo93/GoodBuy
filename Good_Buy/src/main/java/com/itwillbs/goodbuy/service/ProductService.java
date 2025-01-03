@@ -64,8 +64,12 @@ public class ProductService {
 	}
 	
 	// 상품 신고
-	public Boolean itemReporting(int product_id, String reason, String id) {
-		return mapper.itemReporting(product_id, reason, id);
+	public int itemReporting(int product_id, String reason, String reporter_id) {
+		return mapper.itemReporting(product_id, reason, reporter_id);
+	}
+
+	public void plusviewcount(int product_id) {
+		mapper.plusViewCount(product_id);
 	}
 
 }

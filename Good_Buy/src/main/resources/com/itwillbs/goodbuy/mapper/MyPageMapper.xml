@@ -10,7 +10,7 @@
 		FROM WISHLIST
 		WHERE MEM_ID = #{id}
 	</select>
-	
+	<!-- 위시리스트 삭제 -->
 	<delete id="deleteWish" parameterType="int">
 		DELETE FROM WISHLIST
 		WHERE WISHLIST_ID= #{wishlist_id}

@@ -91,20 +91,45 @@
 			   , pro.PRODUCT_INTRO
 			   , pro.PRODUCT_SHPPING_FEE
 			   , pro.PRODUCT_PRICE
+			   , pro.PRODUCT_ID
+			   , pro.MEM_ID
 			   , mem.MEM_NICK
 			   , mem.MEM_PROFILE
 			   , pro.PRODUCT_REG_DATE
 			   , pro.PRODUCT_STATUS
 			   , pro.PRODUCT_DISCOUNT_STATUS
+			   , pro.VIEW_COUNT
 		FROM PRODUCT pro join MEMBER mem
 		ON pro.MEM_ID = mem.MEM_ID
 		WHERE PRODUCT_ID = #{product_id}
 	</select>
 	
+	<!-- 상품 조회수 증가 -->
+	<select id="plusViewCount">
+		UPDATE PRODUCT
+		SET VIEW_COUNT = PRODUCT.VIEW_COUNT + 1
+		WHERE PRODUCT_ID = #{product_id}
+	</select>
+	
 	<!-- 상품 신고 -->
 	<insert id="itemReporting">
+	<selectKey resultType="int" order="BEFORE"  keyProperty="report_id">
+		SELECT MAX(REPORT_ID) + 1
+		FROM PRODUCT_REPORTS
+	</selectKey>
 		INSERT
-		INTO 
+		INTO PRODUCT_REPORTS
+		VALUES(
+			#{report_id} 
+			, #{reporter_id}
+			, #{product_id}
+			, CURRENT_TIMESTAMP
+			, #{reason}
+			, '접수'
+			, null
+			, null
+			, null
+		)
 	</insert>
 	
 	<!-- 구매상품 리스트 조회 -->

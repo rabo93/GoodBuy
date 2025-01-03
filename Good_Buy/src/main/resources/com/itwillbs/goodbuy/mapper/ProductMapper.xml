@@ -14,6 +14,17 @@
 		 	P.MEM_ID = #{mem_id}
 		ORDER BY PRODUCT_REG_DATE DESC;
 	</select>
+	<!-- 판매상품 상위 4개 조회 -->
+	<select id="selectLimitProductList" resultType="product">
+		SELECT 
+			P.*,M.MEM_NICK
+		  FROM 
+		  	PRODUCT P JOIN MEMBER M ON P.MEM_ID = M.MEM_ID
+		 WHERE 
+		 	P.MEM_ID = #{mem_id}
+		ORDER BY PRODUCT_REG_DATE DESC
+		LIMIT 4
+	</select>
 	
 	<!--판매 상품 리스트 갯수 조회  -->
 	<select id="salesListCount" resultType="int">
@@ -98,8 +109,16 @@
 			   , pro.PRODUCT_REG_DATE
 			   , pro.PRODUCT_STATUS
 			   , pro.PRODUCT_DISCOUNT_STATUS
+			   , pro.VIEW_COUNT
 		FROM PRODUCT pro join MEMBER mem
 		ON pro.MEM_ID = mem.MEM_ID
+		WHERE PRODUCT_ID = #{product_id}
+	</select>
+	
+	<!-- 상품 조회수 증가 -->
+	<select id="plusViewCount">
+		UPDATE PRODUCT
+		SET VIEW_COUNT = PRODUCT.VIEW_COUNT + 1
 		WHERE PRODUCT_ID = #{product_id}
 	</select>
 	
@@ -113,7 +132,7 @@
 		INTO PRODUCT_REPORTS
 		VALUES(
 			#{report_id} 
-			, #{id}
+			, #{reporter_id}
 			, #{product_id}
 			, CURRENT_TIMESTAMP
 			, #{reason}

@@ -93,7 +93,7 @@
 <%-- 														        type="button" ${product.review_cnt == 1 ? 'disabled' : ''}> --%>
 <%-- 														    ${product.review_cnt == 1 ? '작성완료📩' : '후기 작성하기📮'} --%>
 <!-- 														</button> -->
-<!--                                                     	<input type="hidden" name="product_id" id="hiddenProductId"> -->
+                                                    	<input type="hidden" name="product_id" id="hiddenProductId">
                                                     	<c:choose>
                                                     		<c:when test="${product.review_cnt == 0}">
 	                                                    		 <button class="open-modal-btn"
@@ -195,6 +195,7 @@
                     alert("후기가 등록되었습니다!");
                     $("#review-modal").fadeOut(300);
                     $("#review_content").val("");
+                    location.reload();
 
 //                     버튼 비활성화 (또는 숨김 처리)
 //                     $(".clicked-review-btn").prop("disabled", true).text("후기 작성 완료").removeClass("open-modal-btn");

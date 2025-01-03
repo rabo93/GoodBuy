@@ -64,8 +64,17 @@ public class ProductService {
 	}
 	
 	// 상품 신고
-	public int itemReporting(int product_id, String reason, String id) {
-		return mapper.itemReporting(product_id, reason, id);
+	public int itemReporting(int product_id, String reason, String reporter_id) {
+		return mapper.itemReporting(product_id, reason, reporter_id);
+	}
+
+	public void plusviewcount(int product_id) {
+		mapper.plusViewCount(product_id);
+	}
+
+	//판매상품 상위 4개 조회
+	public List<ProductVO> getProductListLimit(String id) {
+		return mapper.selectLimitProductList(id);
 	}
 
 }

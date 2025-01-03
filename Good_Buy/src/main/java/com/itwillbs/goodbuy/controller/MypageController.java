@@ -19,14 +19,15 @@ import com.itwillbs.goodbuy.service.MemberService;
 import com.itwillbs.goodbuy.service.MyPageService;
 import com.itwillbs.goodbuy.service.MyReviewService;
 import com.itwillbs.goodbuy.service.ProductService;
+import com.itwillbs.goodbuy.service.SupportService;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.MyReviewVO;
 import com.itwillbs.goodbuy.vo.ProductOrderVO;
 import com.itwillbs.goodbuy.vo.ProductVO;
+import com.itwillbs.goodbuy.vo.SupportVO;
 import com.itwillbs.goodbuy.vo.WishlistVO;
 
 import lombok.extern.log4j.Log4j2;
-import retrofit2.http.POST;
 
 @Log4j2
 @Controller
@@ -35,6 +36,7 @@ public class MypageController {
 	@Autowired MyPageService myPageService;
 	@Autowired ProductService productService;
 	@Autowired MyReviewService reviewService;
+	@Autowired SupportService supportService;
 	
 	//세션에 사용자 ID 저장 
 	private String getSessionUserId(HttpSession session) {
@@ -48,7 +50,7 @@ public class MypageController {
 		member.setMem_id(id);  // 사용자 ID 설정
 		
 		//판매내역 조회
-		List<ProductVO> productlist =(List<ProductVO>) productService.getProductList(id);
+		List<ProductVO> productlist =(List<ProductVO>) productService.getProductListLimit(id);
 		model.addAttribute("product", productlist);
 		System.out.println("상품목록 조회"+productlist);
 		
@@ -238,7 +240,62 @@ public class MypageController {
 		return "mypage/mypage_review_history";
 	}
 	
+	//내가쓴 후기 수정
+	@ResponseBody
+	@PostMapping("MyReviewEdit")
+	public String myReviewEdit(@RequestBody Map<String, String>reviewData,HttpSession session) {
+		String reviewContent = reviewData.get("review"); //모달창에서 입력한 review_content
+		String productId = reviewData.get("product_id");
+		String id = getSessionUserId(session);
+		
+		int result = reviewService.reviewEdit(reviewContent,productId);
+		if(result > 0) {
+			return "result/success";
+		}
+		return"result/fail";
+	}
 	
+	//내가쓴 후기 삭제
+	@ResponseBody
+	@PostMapping("DeleteReview")
+	public String deleteReview(int reviewId, HttpSession session) {
+		int result = reviewService.removeReview(reviewId);
+		if(result > 0) {
+			return "result/success";
+		}
+		return"result/fail";
+	}
+	
+	
+	//[문의내역]
+	@GetMapping("MySupport")
+	public String mySupportList(HttpSession session,Model model,MemberVO member) {
+		String id = getSessionUserId(session);
+		member.setMem_id(id);
+		
+		List<SupportVO> supportList = supportService.getSupporList(id);
+		model.addAttribute("support",supportList);
+		
+		
+		return "mypage/mypage_inquiry_list";
+	}
+	
+	//문의사항 자세히 보기
+	@GetMapping("MySupportDetail")
+	public String mySupportDetail(int support_id, Model model) {
+		SupportVO support = supportService.getSupportDetail(support_id);
+		
+		if(support == null) {
+			model.addAttribute("msg", "존재하지 않는 게시물입니다");
+			return "result/fail";
+		}
+		
+//		addFileToModel(support, model); //첨부파일
+		model.addAttribute("support", support);
+		
+		return "my_page/mypage_inquiry_detail";
+	}
+		
 	// ===========================================================================================
 	// 이전 페이지 이동 저장
 	private void savePreviousUrl(HttpServletRequest request, HttpSession session) {

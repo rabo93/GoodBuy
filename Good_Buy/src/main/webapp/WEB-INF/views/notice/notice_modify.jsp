@@ -102,5 +102,5 @@
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
 </body>
-<%-- <script src="${pageContext.request.contextPath}/resources/js/notice.js"></script> --%>
+<script src="${pageContext.request.contextPath}/resources/js/notice.js"></script>
 </html>

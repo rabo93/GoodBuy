@@ -2,6 +2,8 @@ package com.itwillbs.goodbuy.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -128,33 +130,48 @@ public class ProductController {
 			}
 		}
 		
-		return "mypage/mypage_store";
+		return "MySales";
 	}
 	
 	// 상품 상세 페이지
 	@GetMapping("ProductDetail")
-	public String prodcutDetail(@RequestParam int PRODUCT_ID, Model model) {
+	public String prodcutDetail(@RequestParam int PRODUCT_ID, Model model, HttpSession session) {
 		ProductVO productSearch = productService.productSearch(PRODUCT_ID);
+		productService.plusviewcount(PRODUCT_ID);
 		model.addAttribute("productSearch", productSearch);
 		
 		return "product/product_detail";
 	}
 	
+	// 상품 찜하기
+	@ResponseBody
+	@GetMapping("AddWishlist")
+	public String addWishlist() {
+		
+		return null;
+	}
+	
 	// 상품 신고
 	@ResponseBody
 	@GetMapping("ItemReporting")
-	public String itemReporting(@RequestParam int PRODUCT_ID, @RequestParam String REASON, HttpSession session) {
-		String id = (String) session.getAttribute("userId");
-		System.out.println(">>>>>>>>>>>>>" + id);
-		int result = 0;
-		if (id != null) {
-			result = productService.itemReporting(PRODUCT_ID, REASON, id);
+	public String itemReporting(@RequestParam int PRODUCT_ID, @RequestParam String REASON, @RequestParam(required = true) String REPORTER_ID) {
+		int result = productService.itemReporting(PRODUCT_ID, REASON, REPORTER_ID);
+		
+		String msg = "";
+		
+		if (result > 0) {
+			msg = "신고 처리가 접수되었습니다.";
+		} else {
+			msg = "신고 처리가 실패하였습니다.";
 		}
-		System.out.println(">>>>>>>>>>>>>" + result);
-		if (result < 1) {
-			return "error/error";
+		
+		try {
+			msg = URLEncoder.encode(msg, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
-		return null;
+		
+		return msg;
 	}
 	
 	@GetMapping("ProductShop")

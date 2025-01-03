@@ -78,14 +78,16 @@ public interface AdminMapper {
 	// 신고 상품 검색 필터링 후 컬럼 수 조회
 	int selectProductReportFiltered(
 			@Param("status") String status,
-			@Param("searchValue") String searchValue);
+			@Param("searchValue") String searchValue,
+			@Param("searchDate") String searchDate);
 
 	// 필터링 된 신고 상품 목록 가져오기
 	List<Map<String, Object>> selectProductReportList(
 			@Param("start") int start,
 			@Param("length") int length, 
 			@Param("status") String status, 
-			@Param("searchValue") String searchValue, 
+			@Param("searchValue") String searchValue,
+			@Param("searchDate") String searchDate,
 			@Param("orderColumn") String orderColumn, 
 			@Param("orderDir") String orderDir);
 	//---------------------------------------------------------
@@ -107,10 +109,12 @@ public interface AdminMapper {
 	int deleteNotice(@Param("deleteItems") List<Integer> deleteItems);
 	
 	//---------------------------------------------------------
-	// Faq 목록 조회
+	// Faq 목록 조회 (필터링, 검색어, 페이징 적용)
 	List<Map<String, Object>> selectFaqList(@Param("start") int start, 
 											@Param("length") int length,
-											@Param("searchValue") String searchValue);
+											@Param("searchValue") String searchValue,
+											@Param("orderColumn") String orderColumn, 
+											@Param("orderDir") String orderDir);
 	// Faq 컬럼 수 조회
 	int selectFaqTotal();
 	
@@ -121,7 +125,7 @@ public interface AdminMapper {
 	int updateFaqInfo(Map<String, Object> param);
 	
 	// Faq 삭제
-	int deleteFaq(int faqId);
+	int deleteFaq(@Param("deleteItems") List<Integer> faqIds);
 
 
 	

@@ -49,7 +49,7 @@
                         <div class="col-lg-12">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h5 class="m-0 font-weight-bold text-primary">공지사항 관리</h5>
+                                    <h5 class="m-0 font-weight-bold text-primary">1:1문의 관리</h5>
                                 </div>
                                 <div class="card-body">
                                 	<div class="search-wrap border">
@@ -177,7 +177,7 @@
 <%--     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script> --%> <%-- 반응형 --%>
 
     <!-- Page level custom scripts -->
-    <script src="${pageContext.request.contextPath}/resources/adm/js/notice_list.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/js/support_list.js"></script>
 
 </body>
 

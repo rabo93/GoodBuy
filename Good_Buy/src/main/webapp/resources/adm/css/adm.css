@@ -1,7 +1,7 @@
 @charset "UTF-8";
 @import '../../fonts/pre/pretendard.css';
 
-body {font-family: "Noto Sans KR", "Nunito", serif;}
+body {font-family:'Pretendard', "Nunito", serif;}
 
 .form-check {
   display: block;
@@ -220,3 +220,52 @@ body {font-family: "Noto Sans KR", "Nunito", serif;}
 }
 
 .profile_img_box {max-width:200px; min-height: 200px;margin:10px auto; display:block;width: 100%; height: auto; border-radius: 10px;border: 1px solid #eee;}
+
+
+
+/* DataRangePicker */
+.goodbuyCustomPicker.daterangepicker  {
+	font-family:'Pretendard', "Nunito", serif;
+	font-size:14px;
+}
+.goodbuyCustomPicker.daterangepicker.daterangepicker select.monthselect, 
+.goodbuyCustomPicker.daterangepicker.daterangepicker select.yearselect {
+    font-weight: 400;
+    color: #6e707e;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #d1d3e2;
+    border-radius: 4px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    padding: 5px 2px;
+    font-size: 13px;
+}
+
+.goodbuyCustomPicker.daterangepicker select.monthselect {
+    width:40%;
+}
+.goodbuyCustomPicker.daterangepicker .ranges li {
+	font-size:14px;
+	padding:9px 10px;
+}
+.goodbuyCustomPicker.daterangepicker .ranges li.active {
+  background-color: var(--primary);
+}
+
+.goodbuyCustomPicker.daterangepicker td.active, .goodbuyCustomPicker.daterangepicker td.active:hover {
+  background-color: var(--primary);
+  border-color: transparent;
+  color: #fff;
+}
+.goodbuyCustomPicker.daterangepicker td.in-range {
+  background-color: #edeff5;
+  border-color: transparent;
+  color: #000;
+  border-radius: 0;
+}
+
+
+
+
+
+

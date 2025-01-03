@@ -173,30 +173,19 @@
 						        <!-- 최근 이용 내역 -->
 							        <div class="history">
 							            <h3>최근 이용내역 <a href="pay_use_list.jsp" class="see-all">전체보기 ></a></h3>
-							            <div class="history-item">
-							                <div class="icon"></div>
-							                <div class="details">
-							                    <span>쌀국수</span>
-							                    <span class="date">12.03 12:10 | 송금</span>
-							                </div>
-							                <div class="amount">-5,000원</div>
-							            </div>
-							            <div class="history-item">
-							                <div class="icon"></div>
-							                <div class="details">
-							                    <span>믹스커피</span>
-							                    <span class="date">12.03 12:10 | 송금</span>
-							                </div>
-							                <div class="amount">-15,000원</div>
-							            </div>
-							            <div class="history-item">
-							                <div class="icon"></div>
-							                <div class="details">
-							                    <span>겨울코드</span>
-							                    <span class="date">12.03 12:10 | 송금</span>
-							                </div>
-							                <div class="amount">-50,000원</div>
-							            </div>
+							            <c:choose>
+							            	<c:when test="${withdrawList}">
+							            	withdrawList : ${withdrawList}
+							            	</c:when>
+							            	<c:when test="${depositList}">
+							            	depositList : ${depositList}
+							            	</c:when>
+							            	<c:otherwise>
+							            	내역없음
+							            	</c:otherwise>
+							            </c:choose>
+							            
+							            
 							            <div class="history-item">
 							                <div class="icon"></div>
 							                <div class="details">
@@ -205,6 +194,38 @@
 							                </div>
 							                <div class="amount">+100,000원</div>
 							            </div>
+<!-- 							            <div class="history-item"> -->
+<!-- 							                <div class="icon"></div> -->
+<!-- 							                <div class="details"> -->
+<!-- 							                    <span>쌀국수</span> -->
+<!-- 							                    <span class="date">12.03 12:10 | 송금</span> -->
+<!-- 							                </div> -->
+<!-- 							                <div class="amount">-5,000원</div> -->
+<!-- 							            </div> -->
+<!-- 							            <div class="history-item"> -->
+<!-- 							                <div class="icon"></div> -->
+<!-- 							                <div class="details"> -->
+<!-- 							                    <span>믹스커피</span> -->
+<!-- 							                    <span class="date">12.03 12:10 | 송금</span> -->
+<!-- 							                </div> -->
+<!-- 							                <div class="amount">-15,000원</div> -->
+<!-- 							            </div> -->
+<!-- 							            <div class="history-item"> -->
+<!-- 							                <div class="icon"></div> -->
+<!-- 							                <div class="details"> -->
+<!-- 							                    <span>겨울코드</span> -->
+<!-- 							                    <span class="date">12.03 12:10 | 송금</span> -->
+<!-- 							                </div> -->
+<!-- 							                <div class="amount">-50,000원</div> -->
+<!-- 							            </div> -->
+<!-- 							            <div class="history-item"> -->
+<!-- 							                <div class="icon"></div> -->
+<!-- 							                <div class="details"> -->
+<!-- 							                    <span>우체국 1234</span> -->
+<!-- 							                    <span class="date">12.03 12:10 | 충전</span> -->
+<!-- 							                </div> -->
+<!-- 							                <div class="amount">+100,000원</div> -->
+<!-- 							            </div> -->
 							        </div><!-- history -->
 						    	</div><!-- account-box -->
 							</div><!-- goodpay-container -->	

@@ -54,8 +54,13 @@ public class PayController {
 		
 		// 충전금액 조회
 		int pay_amount = service.getPayAmount(token.getUser_seq_no());
-//		System.out.println("충전금액 조회 : "  + pay_amount);
 		
+		Map<String, String> withdrawList = service.getWithdarwResult(fintech_use_num);
+		Map<String, String> depositList = service.getDepositResult(fintech_use_num);
+		
+		
+		model.addAttribute("withdrawList", withdrawList);
+		model.addAttribute("depositList", depositList);
 		model.addAttribute("pay_amount", pay_amount);
 		model.addAttribute("bankUserInfo", bankUserInfo);
 		model.addAttribute("fintech_use_num", fintech_use_num);
@@ -128,7 +133,6 @@ public class PayController {
 		// 세션에 엑세스토큰 관리 객체(BankToken) 객체 저장
 		session.setAttribute("token", token);
 		model.addAttribute("msg", "계좌 연결 완료!");
-//				model.addAttribute("targetURL", "BankMain");
 		model.addAttribute("isClose", true);
 		return "result/success";
 	}

@@ -401,23 +401,28 @@
      
      <!-- ************************************************************* -->
      <!-- FAQ 목록 가져오기 -->
-	<select id="selectFaqList">
-		SELECT 
-			FAQ_ID
-			,FAQ_SUBJECT
-		    , FAQ_CONTENT
-		    , FAQ_CATE
-		    , LIST_STATUS
-		FROM FAQ
-		WHERE 1 = 1
-		 <if test="searchValue != null">
-		 	AND FAQ_SUBJECT LIKE CONCAT('%', #{searchValue}, '%')
-		 	OR FAQ_CONTENT LIKE CONCAT('%', #{searchValue}, '%')
-		 </if>
-		 LIMIT
-		 	#{start}
-		 	, #{length}
-	</select>
+     <select id="selectFaqList">
+		SELECT *
+		  FROM FAQ
+		 WHERE 1 = 1
+		 	<if test="searchValue != null and searchValue != ''">
+		 	   AND FAQ_SUBJECT LIKE CONCAT('%', #{searchValue}, '%')
+		 		OR FAQ_CONTENT LIKE CONCAT('%', #{searchValue}, '%')
+<!-- 		 		OR FAQ_CATE LIKE CONCAT('%', #{searchValue}, '%') -->
+		 	</if>
+		 ORDER BY 
+			<choose>
+				<when test="orderColumn == 'FAQ_ID'">FAQ_ID</when>
+				<when test="orderColumn == 'FAQ_SUBJECT'">FAQ_SUBJECT</when>
+				<when test="orderColumn == 'FAQ_CONTENT'">FAQ_CONTENT</when>
+				<when test="orderColumn == 'FAQ_CATE'">FAQ_CATE</when>
+			</choose>
+			<if test="orderDir == 'asc'">ASC</if>
+			<if test="orderDir == 'desc'">DESC</if>
+		  LIMIT
+		 	   #{start}
+		 	   , #{length}
+		 </select>
     
      <!-- FAQ 컬럼 수 조회 - SELECT -->
      <select id="selectFaqTotal" resultType="int">
@@ -449,7 +454,13 @@
      <!-- FAQ 삭제 -->
      <delete id="deleteFaq">
 		DELETE FROM FAQ
-		WHERE FAQ_ID = #{faqId}     
+		WHERE 1=1
+		AND FAQ_ID IN
+		<foreach collection="deleteItems" item="FAQ_ID" index="index" open="(" close=")" separator=",">
+			   #{FAQ_ID}
+		</foreach>
+		
+		 
      </delete>
      
 </mapper>

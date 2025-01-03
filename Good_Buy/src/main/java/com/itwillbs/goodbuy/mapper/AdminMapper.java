@@ -109,10 +109,12 @@ public interface AdminMapper {
 	int deleteNotice(@Param("deleteItems") List<Integer> deleteItems);
 	
 	//---------------------------------------------------------
-	// Faq 목록 조회
+	// Faq 목록 조회 (필터링, 검색어, 페이징 적용)
 	List<Map<String, Object>> selectFaqList(@Param("start") int start, 
 											@Param("length") int length,
-											@Param("searchValue") String searchValue);
+											@Param("searchValue") String searchValue,
+											@Param("orderColumn") String orderColumn, 
+											@Param("orderDir") String orderDir);
 	// Faq 컬럼 수 조회
 	int selectFaqTotal();
 	
@@ -123,7 +125,7 @@ public interface AdminMapper {
 	int updateFaqInfo(Map<String, Object> param);
 	
 	// Faq 삭제
-	int deleteFaq(int faqId);
+	int deleteFaq(@Param("deleteItems") List<Integer> faqIds);
 
 
 	

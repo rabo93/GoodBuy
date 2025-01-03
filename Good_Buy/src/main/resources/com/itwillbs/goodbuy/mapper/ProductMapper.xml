@@ -91,6 +91,7 @@
 			   , pro.PRODUCT_INTRO
 			   , pro.PRODUCT_SHPPING_FEE
 			   , pro.PRODUCT_PRICE
+			   , pro.MEM_ID
 			   , mem.MEM_NICK
 			   , mem.MEM_PROFILE
 			   , pro.PRODUCT_REG_DATE
@@ -104,7 +105,18 @@
 	<!-- 상품 신고 -->
 	<insert id="itemReporting">
 		INSERT
-		INTO 
+		INTO PRODUCT_REPORTS
+		VALUES(
+			MAX(REPORT_ID) + 1 AS REPORT_ID 
+			, #{id}
+			, #{product_id}
+			, CURRENT_TIMESTAMP
+			, #{reason}
+			, '접수'
+			, null
+			, null
+			, null
+		)
 	</insert>
 	
 	<!-- 구매상품 리스트 조회 -->

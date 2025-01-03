@@ -23,14 +23,14 @@ function modalClose() {
 }
 
 let url = new URL(window.location.href);
-let sbValue = $("select[name=modal-sb] option:selected");
 function itemReporting() {
 	$.ajax({
 		url: "ItemReporting",
 		type: "GET",
 		data: {
 			PRODUCT_ID: url.searchParams.get('PRODUCT_ID'),
-			REASON: sbValue.text() === "기타" ? $(".modal-otherReason").val() : sbValue.val()
+			REASON: $("select[name=modal-sb] option:selected").text() === "기타" ? $(".modal-otherReason").val() :
+																				   $("select[name=modal-sb] option:selected").text()
 		}
 	}).done(function(){
 		$('.modal-result').show();
@@ -54,5 +54,3 @@ $(document).ready(function(){
 		}
 	});
 })
-
-

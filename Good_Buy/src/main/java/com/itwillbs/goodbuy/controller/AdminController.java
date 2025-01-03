@@ -358,7 +358,9 @@ public class AdminController {
 		return "admin/notice_list";
 	}
 	
-	// 공지사항 목록	
+	// ======================================================
+	// [ 고객지원 관리 ]
+	// - 공지사항 관리	
 	@ResponseBody
 	@PostMapping("AdmNoticeList")
 	public String admNoticeList(@RequestParam Map<String, Object> param) {
@@ -417,9 +419,28 @@ public class AdminController {
 		
 		return response;
 	}
+	//----------------------------------------------------------------------------------------
+	// - 1:1 문의
+	@GetMapping("AdmSupportList")
+	public String admSupportList() {
+		return "admin/support_list";
+	}
 	
-	// ======================================================
-	// [ 고객지원 관리 ]
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//----------------------------------------------------------------------------------------
 	// - FAQ 관리
 	@GetMapping("AdmFaqList")
 	public String admFaqList() {
@@ -431,21 +452,33 @@ public class AdminController {
 	@PostMapping("FaqListForm")
 	public String admFaqListForm(@RequestParam Map<String, String> param) {
 		log.info(">>> AdmFaqListForm param : " + param);
+		//
 		int draw = Integer.parseInt(param.get("draw")); // 요청받은 draw 값
 		int start = Integer.parseInt(param.get("start")); // 페이징 시작 번호
 		int length = Integer.parseInt(param.get("length")); // 한 페이지의 컬럼 개수
-		String searchValue = param.get("search[value]"); // 검색어
+		String searchValue = param.get("searchValue").toString(); // 검색어
 		
-		// FAQ 전체 목록 조회
-		List<Map<String, Object>> faqList = service.getFaqList(start, length, searchValue);
-//		System.out.println("faqList:" + faqList);
+		// 정렬 추가(orderable)
+		// 넘겨받은 데이터 : columns[2][data]=mem_name, order[0][column]=2, order[0][dir]=desc
+		// 컬럼명 추출하려면 columns[order[0][column]][data] 형태로 만들어줘야 함
+		int orderColumnKey = Integer.parseInt((String)param.get("order[0][column]"));
+		System.out.println("orderColumnKey: "+ orderColumnKey); //4
+		
+		String orderColumn = param.get("columns[" + orderColumnKey + "][data]").toString();
+		System.out.println("orderColumn: " + orderColumn); //
+		
+		String orderDir = param.get("order[0][dir]").toString();
+		System.out.println("orderDir: " + orderDir);
 		
 		// FAQ 전체 컬럼 수 조회
 		int recordsTotal = service.getFaqTotal();
-//		System.out.println("recordsTotal: " + recordsTotal);
+		
 		// FAQ 검색 필터링 후 컬럼 수 조회
 		int recordsFiltered = service.getFaqFiltered(searchValue);
-//		System.out.println("recordsFiltered: " + recordsFiltered);
+		
+		// FAQ 전체 목록 조회
+		List<Map<String, Object>> faqList = service.getFaqList(start, length, searchValue, orderColumn, orderDir);
+		System.out.println("faqList:" + faqList);
 		
 		// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
 		Map<String, Object> response = new HashMap<String, Object>();
@@ -456,7 +489,6 @@ public class AdminController {
 		response.put("recordsFiltered", recordsFiltered); // 검색 필터링 후 컬럼 수
 		response.put("faqList", faqList); // 컬럼 데이터
 //		System.out.println("Map: "+ response); 
-		// Map: {recordsFiltered=4, faqList=[{FAQ_CATE=1, FAQ_SUBJECT=test, FAQ_CONTENT=test, FAQ_ID=1}, {FAQ_CATE=2, FAQ_SUBJECT=test_cate(2), FAQ_CONTENT=test_cate(2), FAQ_ID=2}, {FAQ_CATE=3, FAQ_SUBJECT=test_cate(3), FAQ_CONTENT=test_cate(3), FAQ_ID=3}, {FAQ_CATE=4, FAQ_SUBJECT=test_cate(4), FAQ_CONTENT=test_cate(4), FAQ_ID=4}], draw=1, recordsTotal=4}
 		
 		JSONObject jo = new JSONObject(response);
 		return jo.toString();
@@ -466,7 +498,6 @@ public class AdminController {
 	@PostMapping("AdmFaqModify")
 	public String admFaqModify(@RequestParam Map<String, Object> param, Model model) {
 		log.info(">>> 수정할 faq 정보: " + param);
-		// 수정할 faq 정보: {OLD_FAQ_ID=1, CODETYPE_NAME=test, CODETYPE_DESC=test111, LIST_STATUS=}
 		int updateResult = service.modifyFaqInfo(param);
 		
 		if(updateResult > 0) {
@@ -483,16 +514,16 @@ public class AdminController {
 	// [ FAQ 삭제 ]
 	@ResponseBody
 	@PostMapping("AdmFaqDelete")
-	public Map<String, Object> admFaqDelete(@RequestParam("FAQ_ID") int faqId) {
-		log.info(">>>>>>> 전달받은 삭제할 faq_id: " + faqId);
+	public Map<String, Object> admFaqDelete(@RequestBody List<Integer> faqIds) {
+		log.info(">>>>>>> 전달받은 삭제할 faq_id(복수개): " + faqIds);
 		
-		int deleteResult = service.removeFaq(faqId);
+		int deleteResult = service.removeFaq(faqIds);
 		
 		Map<String, Object> response = new HashMap<> ();
 		
 		if(deleteResult > 0) {
 			response.put("status", "success");
-			response.put("message", "선택한 항목이 삭제되었습니다.");
+			response.put("message", "선택한 항목들이 삭제되었습니다.");
 			response.put("redirectURL", "/AdmFaqList");
 		} else {
 			response.put("status", "fail");

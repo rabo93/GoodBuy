@@ -355,13 +355,21 @@ public class PayController {
 	@PostMapping("PayTransfer")
 	public String payTransfer(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
 		PayToken senderToken = (PayToken)session.getAttribute("token");
-
 		
 		// 이체에 필요한 사용자 계좌(입금받는 상대방) 관련 정보(토큰) 조회
 		PayToken receiverToken = service.getPayTokenInfo((String)map.get("receiver_id"));
 		log.info(">>>>>>>> 상대방(입금받는사람) 토큰 정보 : " + receiverToken);
 		log.info(">>>>>>>> 자신(송금하는사람) 토큰 정보 : " + senderToken);
 		
+		String id = (String)session.getAttribute("sId");
+		String receiver_id = (String)map.get("receiver_id");
+		// 상품 조회
+		int product_id = Integer.parseInt((String) map.get("product_id"));
+		ProductVO productSearch = productService.productSearch(product_id);
+		map.put("pay_id", 0);
+		map.put("buyer_id", id);
+		map.put("product_price", productSearch.getProduct_price());
+
 		// 수신자(상대방)의 토큰이 존재하지 않을 경우(= 계좌 등록이 되어있지 않음 등)
 		if(receiverToken == null || receiverToken.getAccess_token() == null) {
 			model.addAttribute("msg", "상대방 계좌 정보가 존재하지 않습니다!");
@@ -411,6 +419,9 @@ public class PayController {
 						
 		// 송금이체 성공 시 결과를 DB (TRANSACTIONINFO) 에 저장
 		service.registTransferResult(transferResult);
+		
+		// DB에 거래내역 저장
+		Map<String, String> payInfo = service.registPayInfo(map);
 		
 		session.setAttribute("transferResult", transferResult);
 		

@@ -494,8 +494,95 @@
 		<foreach collection="deleteItems" item="faq_id" index="index" open="(" close=")" separator=",">
 			   #{faq_id}
 		</foreach>
-		
-		 
      </delete>
+     
+     
+     
+     <!-- ************************************************************* -->
+     <!-- 1:1 문의 전체 컬럼 수 조회 - SELECT -->
+     <select id="selectEnquireTotal" resultType="int">
+     	SELECT COUNT(*)
+     	FROM SUPPORT
+     </select>
+     
+     
+     <!-- 1:1 문의 필터링 후 컬럼 수 조회 - SELECT -->
+     <select id="selectEnquireListFiltered" resultType="int">
+     	SELECT COUNT(*)
+		FROM SUPPORT
+		WHERE 1 = 1
+		<if test="status != null and status != ''">
+		   AND STATUS = #{status}
+		</if>
+		<if test="searchValue != null and !searchValue.equals('')">
+		   AND (MEM_ID LIKE CONCAT('%', #{searchValue}, '%')
+			   OR SUPPORT_SUBJECT LIKE CONCAT('%', #{searchValue}, '%')
+	 	       OR SUPPORT_CONTENT LIKE CONCAT('%', #{searchValue}, '%')
+	 	       OR REPLY_CONTENT LIKE CONCAT('%', #{searchValue}, '%') 
+	 	       OR STATUS LIKE CONCAT('%', #{searchValue}, '%'))
+		</if>
+		<if test="searchDate != null and !searchDate.equals('')">
+		   AND (DATE(SUPPORT_DATE) BETWEEN LEFT(#{searchDate}, 10) AND RIGHT(#{searchDate}, 10)
+		   	OR DATE(REPLY_DATE) BETWEEN LEFT(#{searchDate}, 10) AND RIGHT(#{searchDate}, 10))
+		</if>
+     </select>
+     
+     <!-- 필터링 된 1:1 문의 목록 조회 - SELECT -->
+     <select id="selectEnquireList" resultType="map">
+     	SELECT
+     		SUPPORT_ID 
+     		, SUPPORT_CATEGORY
+		    , DATE_FORMAT(SUPPORT_DATE, '%Y-%m-%d %H:%i:%s') AS SUPPORT_DATE
+     		, MEM_ID
+		    , SUPPORT_SUBJECT
+		    , SUPPORT_CONTENT
+		    , SUPPORT_FILE
+		    , DATE_FORMAT(REPLY_DATE, '%Y-%m-%d %H:%i:%s') AS REPLY_DATE
+		    , REPLY_CONTENT
+		    , STATUS
+		FROM SUPPORT
+		WHERE 1 = 1
+			<if test="status != null and status != ''">
+			   AND STATUS = #{status}
+			</if>
+			<if test="searchValue != null and !searchValue.equals('')">
+			   AND (MEM_ID LIKE CONCAT('%', #{searchValue}, '%')
+				   OR SUPPORT_SUBJECT LIKE CONCAT('%', #{searchValue}, '%')
+		 	       OR SUPPORT_CONTENT LIKE CONCAT('%', #{searchValue}, '%')
+		 	       OR REPLY_CONTENT LIKE CONCAT('%', #{searchValue}, '%') 
+		 	       OR STATUS LIKE CONCAT('%', #{searchValue}, '%'))
+			</if>
+			<if test="searchDate != null and !searchDate.equals('')">
+			   AND (DATE(SUPPORT_DATE) BETWEEN LEFT(#{searchDate}, 10) AND RIGHT(#{searchDate}, 10)
+			   	OR DATE(REPLY_DATE) BETWEEN LEFT(#{searchDate}, 10) AND RIGHT(#{searchDate}, 10))
+			</if>
+		ORDER BY 
+			<choose>
+				<when test='orderColumn.equals("SUPPORT_CATEGORY")'>SUPPORT_CATEGORY</when>
+				<when test='orderColumn.equals("SUPPORT_DATE")'>SUPPORT_DATE</when>
+				<when test='orderColumn.equals("MEM_ID")'>MEM_ID</when>
+				<when test='orderColumn.equals("REPLY_DATE")'>REPLY_DATE</when>
+				<when test='orderColumn.equals("STATUS")'>STATUS</when>
+				<otherwise>SUPPORT_DATE</otherwise>
+			</choose>
+			<if test='orderDir.equals("asc")'>ASC</if>
+			<if test='orderDir.equals("desc")'>DESC</if>
+		  LIMIT
+		 	   #{start}
+		 	   , #{length}
+     </select>
+     
+     <!-- 1:1 문의 답글 등록(수정) - UPDATE -->
+     <update id="updateReplyInfo">
+     	UPDATE SUPPORT
+		<set>
+			   STATUS = #{STATUS}
+			   , REPLY_CONTENT = #{REPLY_CONTENT}
+			   , REPLY_DATE = CURRENT_TIMESTAMP
+<!-- 			   , ADMIN_ID = #{ADMIN_ID} -->
+		</set>
+		WHERE SUPPORT_ID = #{SUPPORT_ID}
+     </update>
+     
      
 </mapper>

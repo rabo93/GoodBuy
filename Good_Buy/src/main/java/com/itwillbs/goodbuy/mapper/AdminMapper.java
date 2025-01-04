@@ -140,6 +140,27 @@ public interface AdminMapper {
 	// Faq 삭제
 	int deleteFaq(@Param("deleteItems") List<Integer> faqIds);
 
+	//---------------------------------------------------------
+	// 1:1 문의 목록 전체 컬럼 수 조회
+	int selectEnquireTotal();
+	// 1:1 문의 검색 필터링 후 컬럼 수 조회
+	int selectEnquireListFiltered(@Param("status") String status, 
+								  @Param("searchValue") String searchValue, 
+								  @Param("searchDate") String searchDate);
+	// 필터링 된 1:1 문의 목록 가져오기
+	List<Map<String, Object>> selectEnquireList(@Param("start") int start,
+												@Param("length") int length, 
+												@Param("status") String status, 
+												@Param("searchValue") String searchValue,
+												@Param("searchDate") String searchDate,
+												@Param("orderColumn") String orderColumn, 
+												@Param("orderDir") String orderDir);
+	
+	// 답글 등록(수정)
+	int updateReplyInfo(Map<String, Object> param);
+	
+	
+
 
 
 

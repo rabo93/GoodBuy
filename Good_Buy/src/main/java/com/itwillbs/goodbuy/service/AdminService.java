@@ -206,6 +206,27 @@ public class AdminService {
 		return mapper.deleteFaq(faqIds);
 	}
 
+	// ============== [ 1:1 문의 관리 ] ==============
+	// 1:1 문의 목록 전체 컬럼 수 조회
+	public int getEnquireListTotal() {
+		return mapper.selectEnquireTotal();
+	}
+	// 1:1 문의 검색 필터링 후 컬럼 수 조회
+	public int getEnquireListFiltered(String status, String searchValue, String searchDate) {
+		return mapper.selectEnquireListFiltered(status, searchValue, searchDate);
+	}
+	// 필터링 된 1:1 문의 목록 가져오기
+	public List<Map<String, Object>> getEnquireList(int start, int length, String status, String searchValue,
+													String searchDate, String orderColumn, String orderDir) {
+		return mapper.selectEnquireList(start, length, status, searchValue, searchDate, orderColumn, orderDir);
+	}
+	
+	
+	// 답글 등록(수정)
+	public int registReplyInfo(Map<String, Object> param) {
+		return mapper.updateReplyInfo(param);
+	}
+
 
 
 

@@ -126,7 +126,8 @@
     </a>
     
     <!-- 답글 모달 -->
-    <div class="modal fade" id="updateMemberInfo" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+<!--     <div class="modal fade" id="updateMemberInfo" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true"> -->
+    <div class="modal fade" id="updateSupportInfo" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 		    <div class="modal-content">
 				<div class="modal-header">
@@ -140,15 +141,15 @@
 						<input type="hidden" id="memId" name="MEM_ID">
 						<input type="hidden" id="adminId" name="ADMIN_ID" value="${sessionScope.sId}">
 						<div class="mb-3">
-							<label class="small mb-1" for="reportStatus">처리 상태 변경</label>
-							<select class="custom-select" id="reportStatus" name="STATUS">
+							<label class="small mb-1" for="supportStatus">처리 상태 변경</label>
+							<select class="custom-select" id="supportStatus" name="STATUS">
 								<option value="처리완료">처리완료</option>
 								<option value="기각">기각</option>
 							</select>
 						</div>
 						<div class="mb-3">
-							<label class="small mb-1" for="inquiryContent">문의 내용</label>
-							<input type="text" class="form-control" name="INQUIRY_CONTENT" id="inquiryContent" required>
+							<label class="small mb-1" for="enquireContent">문의 내용</label>
+							<input type="text" class="form-control" name="SUPPORT_CONTENT" id="enquireContent" readonly required>
 						</div>
 						<div class="mb-3">
 							<label class="small mb-1" for="replyContent">답변 내용</label>
@@ -159,7 +160,7 @@
 				</div>
 				<div class="modal-footer justify-content-center">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="productReportModifyForm">수정하기</button>
+					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="supportModifyForm">등록</button>
 				</div>
 			</div>
 		</div>

@@ -472,7 +472,7 @@ public class AdminController {
 	// - 1:1 문의
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmSupportList")
-	public String admInquiryList() {
+	public String admEnquireList() {
 		return "admin/support_list";
 	}
 	
@@ -481,65 +481,47 @@ public class AdminController {
 	public String admSupportList(@RequestParam Map<String, Object> param) {
 		log.info(">>>> 문의 내역 목록 param : " + param);
 		
+		int draw = Integer.parseInt((String) param.get("draw")); // 요청받은 draw 값
+		int start = Integer.parseInt((String) param.get("start")); // 페이징 시작 번호
+		int length = Integer.parseInt((String) param.get("length")); // 한 페이지의 컬럼 개수
+		String status = param.get("status").toString(); // 검색어
+		String searchValue = param.get("searchValue").toString(); // 검색어
 		
+		int orderColumnKey = Integer.parseInt((String)param.get("order[0][column]"));
+		String orderColumn = param.get("columns[" + orderColumnKey + "][data]").toString();
+		String orderDir = param.get("order[0][dir]").toString();
+		String searchDate = param.get("searchDate").toString();
 		
-		return "";
+		// 1:1 문의 목록 전체 컬럼 수 조회
+		int recordsTotal = service.getEnquireListTotal();
+		
+		// 1:1 문의 검색 필터링 후 컬럼 수 조회
+		int recordsFiltered = service.getEnquireListFiltered(status, searchValue, searchDate);
+		
+		// 필터링 된 1:1 문의 목록 가져오기
+		List<Map<String, Object>> EnquireList = service.getEnquireList(start, length, status, searchValue, searchDate, orderColumn, orderDir);
+		log.info(">>>>> 필터링 된 1:1 문의 목록 : " + EnquireList);
+		// [{MEM_ID=bborara, STATUS=처리완료, SUPPORT_CONTENT=문의내용임니다아아ㅏ, SUPPORT_DATE=2025-01-04 09:00:00, SUPPORT_ID=1, REPLY_CONTENT=답변드립니다아아ㅏ, REPLY_DATE=2025-01-04 12:00:00, SUPPORT_SUBJECT=문의제목, SUPPORT_CATEGORY=1}, {MEM_ID=aa1111, STATUS=접수, SUPPORT_CONTENT=무늬무늬, SUPPORT_DATE=2025-01-04 09:00:00, SUPPORT_ID=2, REPLY_DATE=2025-01-04 14:34:27, SUPPORT_SUBJECT=무늬, SUPPORT_CATEGORY=3}]
+		
+		Map<String, Object> response = new HashMap<String, Object>();
+		response.put("draw", draw);
+		response.put("recordsTotal", recordsTotal);
+		response.put("recordsFiltered", recordsFiltered);
+		response.put("EnquireList", EnquireList);
+		
+		JSONObject jo = new JSONObject(response);
+		return jo.toString();
 	}
-	
-	
-	
-	
-	// 신고 상품 목록 - 필터링 및 검색
-//	@ResponseBody
-//	@PostMapping("AdmProductReportList")
-//	public String admProductReportList(@RequestParam Map<String, Object> param) {
-//		log.info(">>>> 신고 상품 목록 param : " + param);
-//		int draw = Integer.parseInt((String) param.get("draw")); // 요청받은 draw 값
-//		int start = Integer.parseInt((String) param.get("start")); // 페이징 시작 번호
-//		int length = Integer.parseInt((String) param.get("length")); // 한 페이지의 컬럼 개수
-//		String status = param.get("status").toString(); // 검색어
-//		String searchValue = param.get("searchValue").toString(); // 검색어
-//		
-//		int orderColumnKey = Integer.parseInt((String)param.get("order[0][column]"));
-//		String orderColumn = param.get("columns[" + orderColumnKey + "][data]").toString();
-//		String orderDir = param.get("order[0][dir]").toString();
-//		String searchDate = param.get("searchDate").toString();
-//		
-//		// 신고 상품 목록 전체 컬럼 수 조회
-//		int recordsTotal = service.getProductReportTotal();
-//		
-//		// 신고 상품 검색 필터링 후 컬럼 수 조회
-//		int recordsFiltered = service.getProductReportFiltered(status, searchValue, searchDate);
-//		
-//		// 필터링 된 신고 상품 목록 가져오기
-//		List<Map<String, Object>> productReportList = service.getProductReportList(start, length, status, searchValue, searchDate, orderColumn, orderDir);
-//		log.info(">>>>> 필터링 된 신고 상품 목록 : " + productReportList);
-//		
-//		Map<String, Object> response = new HashMap<String, Object>();
-//		
-//		response.put("draw", draw);
-//		response.put("recordsTotal", recordsTotal);
-//		response.put("recordsFiltered", recordsFiltered);
-//		response.put("productReportList", productReportList);
-//		
-//		JSONObject jo = new JSONObject(response);
-//		
-//		return jo.toString();
-//	}
-	
-	
-	
 	
 	//----------------------------------------------------------------------------------------
 	// 1:1 문의 - 답글달기(+ 수정하기)
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmSupportAction")
 	public String ㅁdmSupportAction(@RequestParam Map<String, Object> param, Model model) {
-		log.info(">>> 문의 내역 : " + param);
+		log.info(">>> 답글 정보 : " + param);
 		
-		//임시!!!!!!!!!!!
-		int updateResult = 0;
-//		int updateResult = service.modifySupportList(param);
+		int updateResult = service.registReplyInfo(param);
+		log.info(">>> 업데이트 갯수 : " + updateResult);
 		
 		if(updateResult > 0) {
 			model.addAttribute("msg", "1:1 문의 답글 처리를 완료하였습니다.");
@@ -550,8 +532,6 @@ public class AdminController {
 			return "result/fail";
 		}
 	}
-	
-	
 	
 	
 	//----------------------------------------------------------------------------------------

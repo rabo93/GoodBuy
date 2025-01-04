@@ -16,12 +16,13 @@ document.addEventListener("DOMContentLoaded", function(){
 			type: "POST",
 			dataType : "JSON",
 			data: function(d) {
-                d.status = $('input[name="status"]:checked').val();
-                d.searchValue = $('input[name="keyword_search"]').val();
-                d.searchDate = $("#schDate").val();
+                d.status = $('input[name="status"]:checked').val(); //상태별
+                d.searchDate = $("#schDate").val(); //기간별
+                d.searchValue = $('input[name="keyword_search"]').val(); //키워드 검색
             },
 			dataSrc: function (res) {
-				const data = res.productReportList;
+//				console.log("res: " + JSON.stringify(res));
+				const data = res.EnquireList;
 				const start = $('#supportList').DataTable().page.info().start; 
 				
 				// PK가 아닌 테이블 컬럼 번호 계산(페이징 포함)
@@ -39,6 +40,20 @@ document.addEventListener("DOMContentLoaded", function(){
 			// defaultContent 는 기본값 설정, 데이터 없는 컬럼일 경우 오류나기 때문에 널스트링 처리 해주어야 함
 			// 회원가입 시 유효성 체크를 한다면 defaultContent 값 설정 필요 없음!
             { title: "No.", data: "listIndex", className : "dt-center", width: '30px', },
+            { 
+				title: "문의 유형", 
+				data : "SUPPORT_CATEGORY", 
+				defaultContent: "이용문의", 
+				className : "dt-center", 
+				render : function(data, type, row) {
+					const categories = {
+						1: "이용문의",
+						2: "결제문의",
+						3: "기타",
+					};
+					return `<span class='support-cate' status>${categories[data] || ""}</span>`
+				},
+             },
             { 
 				title: "작성자ID", 
 	            data : "MEM_ID",
@@ -66,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function(){
 				    }
 				}
             },
-            { title: "답변자", data : "ADMIN_ID", defaultContent: "", width: '100px', },
+//            { title: "답변자", data : "ADMIN_ID", defaultContent: "", width: '100px', },
             { title: "답변내용", data : "REPLY_CONTENT", defaultContent: "", orderable: false},
             { title: "답변일시", data : "REPLY_DATE", defaultContent: "", width: '180px', },
             {
@@ -76,11 +91,11 @@ document.addEventListener("DOMContentLoaded", function(){
 				className : "dt-center",
 				width: '120px',
 				render : function(data, type, row) {
-					const text = row.STATUS !== "접수" ? "결과보기" : "답변달기";
+					const text = row.STATUS !== "접수" ? "수정하기" : "답변달기";
 					const className = row.STATUS !== "접수" ? "primary" : "warning";
 					return `
-						<button class="btn btn-${className} edit-btn" data-toggle="modal" data-target="#updateMemberInfo"
-						 data-report-id="${row.REPORT_ID}">${text}</button>
+						<button class="btn btn-${className} edit-btn" data-toggle="modal" data-target="#updateSupportInfo"
+						 data-support-id="${row.SUPPORT_ID}">${text}</button>
 					`;
 				}
 			}
@@ -106,27 +121,30 @@ document.addEventListener("DOMContentLoaded", function(){
         },
 	});
 	
-	// 답글 팝업 셋팅
+	// 답글달기 팝업 셋팅
 	supportList.on("click", '.edit-btn', function() {
 		const row = $(this).closest('tr');
 		const rowData = supportList.row(row).data();
 
-		const status = rowData.STATUS;
-		const actionReason = rowData.ACTION_REASON != null ? rowData.ACTION_REASON : "";
-		const productId = document.querySelector("#productId");
-		const reportId = document.querySelector("#reportId");
-		const statusSelect = document.querySelector(`#reportStatus option[value="${status}"]`);
-		const reasonTextarea = document.querySelector("#actionReason");
-		
 		// 문의내역에 문의내용 보이기
-//		const inquiryContent = document.querySelector("#");
+		const supportContent = rowData.SUPPORT_CONTENT
+		const enquireContent = document.querySelector("#enquireContent");
+        enquireContent.value = rowData.SUPPORT_CONTENT || "";
 		
+		const status = rowData.STATUS;
+		const replyContent = rowData.REPLY_CONTENT != null ? rowData.REPLY_CONTENT : "";
 		
-		reportId.value = rowData.REPORT_ID;
-		productId.value = rowData.PRODUCT_ID;
-		reasonTextarea.value = actionReason;
+		// DB에 저장할 id속성 가져오기
+		const supportId = document.querySelector("#supportId"); //게시글id
+//		const memId = document.querySelector("#memId"); 		//작성자id
+//		const adminId = document.querySelector("#adminId");		//관리자id
+		const statusSelect = document.querySelector(`#supportStatus option[value="${status}"]`);
+		const reasonTextarea = document.querySelector("#replyContent");
+		
+		// DB에 저장할 값 저장
+		supportId.value = rowData.SUPPORT_ID;
 	    if (statusSelect) statusSelect.selected = true;
-	    
+		reasonTextarea.value = replyContent;
 	});
 	
 	// 기존 검색 숨기기
@@ -192,7 +210,7 @@ document.addEventListener("DOMContentLoaded", function(){
 		supportList.draw();
 	});
 	
-	// 조치 사유 작성
+	// 답글 작성
 	$("#replyContent").on('keyup', () => {
 		fnChkByte($("#actionReason"), 500);
 	});

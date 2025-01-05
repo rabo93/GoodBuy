@@ -172,7 +172,7 @@
 				let parent = $(event.target).parent();
 				let board_num = $(parent).find(".board_num");
 				console.log(board_num.text());
-				location.href = "MySupportDetail?support_id=" + board_num.text();
+				location.href = "MySupportDetail?support_id=" + board_num.text()+"&pageNum=" + ${pageNum};
 			});
 	</script>
 

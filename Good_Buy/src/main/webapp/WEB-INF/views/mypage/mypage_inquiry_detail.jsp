@@ -77,7 +77,7 @@
 	                    <div class="com">
 	                    	<label>작성일자</label>
 							<span>
-								${support.support_date}"
+								${support.support_date}
 							</span>
 	                    </div>
 	                    <div class="com">
@@ -136,7 +136,7 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
-
+	<!-- 스크립트 작성해야함 ~~~~~~~~~ -->
 
 
 

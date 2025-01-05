@@ -179,7 +179,7 @@ public class PayService {
 		return mapper.selectPayAmount(user_seq_no);
 	}
 
-	public Map<String, String> registPayInfo(Map<String, Object> map) {
+	public int registPayInfo(Map<String, Object> map) {
 		return mapper.insertPayInfo(map);
 	}
 

@@ -49,7 +49,7 @@ public interface PayMapper {
 
 	int selectPayAmount(String user_seq_no);
 
-	Map<String, String> insertPayInfo(Map<String, Object> map);
+	int insertPayInfo(Map<String, Object> map);
 
 
 }

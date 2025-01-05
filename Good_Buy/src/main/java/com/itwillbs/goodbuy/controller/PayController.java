@@ -203,9 +203,7 @@ public class PayController {
 		model.addAttribute("account_holder_name", map.get("account_holder_name"));
 		model.addAttribute("account_num_masked", map.get("account_num_masked"));
 		
-//		 System.out.println("PayConroller + 출금이체 잔액(wd_limit_remain_amt) 얼마?? " + withdrawResult.get("wd_limit_remain_amt"));
 		
-//		return "redirect:/pay_account_detail";
 		return "pay/pay_account_detail";
 	}
 	
@@ -421,15 +419,17 @@ public class PayController {
 		service.registTransferResult(transferResult);
 		
 		// DB에 거래내역 저장
-		Map<String, String> payInfo = service.registPayInfo(map);
+//		Map<String, String> payInfo = service.registPayInfo(map);
+		int payInfo = service.registPayInfo(map);
 		
 		session.setAttribute("transferResult", transferResult);
 		
-		// 모달창에서 송금완료 시 채팅창으로 되돌아가기
 		return "redirect:/PayTransferResult";
 	}
 	
 	// P2P 송금(이체) 결과 뷰페이지 처리
+	@LoginCheck(memberRole = MemberRole.USER)
+	@PayTokenCheck
 	@GetMapping("PayTransferResult")
 	public String payTransferResult(HttpSession session, Model model) {
 		// 세션에 저장된 이체결과객체 (transferResult) 꺼내기

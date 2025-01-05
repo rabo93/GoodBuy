@@ -59,7 +59,7 @@
 					<!-- contents -->
 					<section class="inq-wrap">
 						<div class="inq-tops">
-							<button class="btn-inq" onclick="location.href='/MySupportWrite'">문의 남기기</button>
+							<button class="btn-inq" onclick="location.href='MySupportWrite'">문의 남기기</button>
 						</div>
 						<div class="tb-wrap">
 							<table class="tb-01 tb-inq">

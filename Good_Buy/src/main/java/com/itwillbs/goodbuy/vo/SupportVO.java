@@ -3,6 +3,8 @@ package com.itwillbs.goodbuy.vo;
 import java.sql.Date;
 import java.time.DateTimeException;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 
 @Data
@@ -18,6 +20,12 @@ public class SupportVO {
     private Date reply_date;     			// 답변 일자 (DATETIME)
     private String reply_content;  			// 답변 글 내용
     private String statsus;					// 처리상태(ENUM) '접수','처리완료','기각'
+
+
+	// 첨부파일
+	private String support_file1; // 파일명
+	private MultipartFile file1; // 실제 파일
+	private String original_file1;
 }
 
 

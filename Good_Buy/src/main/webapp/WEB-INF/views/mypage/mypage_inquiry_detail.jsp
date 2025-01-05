@@ -58,8 +58,7 @@
 				</aside>
 				<div class="my-container">
 					<div class="contents-ttl">1:1문의 게시판</div>
-				</div>
-				</section>
+				
 				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 				<!-- contents -->
 					<section class="inq-wrap">
@@ -129,6 +128,8 @@
 	                    </div>
 					</section>
 					<!-- // contents -->
+					</div>
+				</section>
 		</div>
 		</section>
 	</main>

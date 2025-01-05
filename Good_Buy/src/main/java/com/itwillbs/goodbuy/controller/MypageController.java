@@ -1,7 +1,15 @@
 package com.itwillbs.goodbuy.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -14,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.itwillbs.goodbuy.service.MemberService;
 import com.itwillbs.goodbuy.service.MyPageService;
@@ -38,6 +47,9 @@ public class MypageController {
 	@Autowired ProductService productService;
 	@Autowired MyReviewService reviewService;
 	@Autowired SupportService supportService;
+	
+	// 첨부파일 가상경로
+	private String uploadPath = "/resources/upload";
 	
 	//세션에 사용자 ID 저장 
 	private String getSessionUserId(HttpSession session) {
@@ -345,8 +357,55 @@ public class MypageController {
 //		addFileToModel(support, model); //첨부파일
 		model.addAttribute("support", support);
 		
-		return "my_page/mypage_inquiry_detail";
+		return "mypage/mypage_inquiry_detail";
 	}
+	
+	//문의내역 글쓰기 폼
+	@GetMapping("MySupportWrite")
+	public String mySupportWriteFrom(HttpSession session,Model model) {
+		String id = getSessionUserId(session);
+		
+		return "mypage/mypage_inquiry_wirte";
+	}
+	//문의내역 글쓰기
+	@PostMapping("MySupportWrite")
+	public String mySupportWrite(HttpSession session,Model model,SupportVO support) {
+		String id = getSessionUserId(session);
+		support.setMem_id(id);
+		// 파일 첨부 업로드 경로 처리
+		String realPath = getRealPath(session);
+		
+		// 디렉토리 생성
+		String subDir = createDirectories(realPath);
+		
+		realPath += "/" + subDir;
+		
+		// 실제 파일 처리
+		MultipartFile mFile1 = support.getFile1();
+		System.out.println("원본파일명: " + mFile1);
+		support.setSupport_file1("");
+		
+		String fileName = processDuplicateFileName(support, subDir);
+		
+		System.out.println("------- DB 저장파일" + support.getSupport_file1());
+		System.out.println("-------- 1:1문의 글 작성 최종내용: " + support);
+		
+		// 글쓰기 서비스 요청
+		int insertCount = supportService.registSupport(support);
+		
+		if (insertCount > 0) {
+			completeUpload(support, realPath, fileName);
+			System.out.println();
+			
+			return "redirect:/MySupport";
+		} else {
+			model.addAttribute("msg", "글쓰기 실패!");
+			return "result/fail";
+		}
+		
+	}
+	
+	
 		
 	// ===========================================================================================
 	// 이전 페이지 이동 저장
@@ -362,5 +421,84 @@ public class MypageController {
 		
 		session.setAttribute("prevURL", prevURL);
 	}
-
+	
+	// 첨부파일 - 파일 목록 처리 (첨부파일 단일)
+	private void addFileToModel(SupportVO support, Model model) {
+		String fileName = support.getSupport_file1();
+		String originalFileName = "";
+		
+		if(fileName != null) {
+			originalFileName = fileName.substring(fileName.indexOf("_") + 1);
+		} else {
+			originalFileName = fileName;
+		}
+		
+		model.addAttribute("originalFileName", originalFileName);
+		model.addAttribute("fileName", fileName);
+	}
+	
+	// 첨부파일 - 실제 경로 리턴 처리
+	private String getRealPath(HttpSession session) {
+		String realPath = session.getServletContext().getRealPath(uploadPath);
+		
+		return realPath;
+	}
+	
+	// 첨부파일 - 서브디렉토리 생성 처리
+	private String createDirectories(String realPath) {
+		String subDir = "";
+		
+		// 서브디렉토리명 만들기
+		LocalDate today = LocalDate.now(); // 날짜로 폴더명 생성하기
+//		System.out.println("작성날짜: " + today);
+		String datePattern = "yyyy/MM/dd";
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern(datePattern);
+		
+		subDir = today.format(dtf);
+		realPath += "/" + subDir;
+		System.out.println("실제 파일 업로드 경로: " + realPath);
+		
+		try {
+			Path path = Paths.get(realPath);
+			Files.createDirectories(path);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return subDir;
+	}
+	
+	// 첨부파일 -  첨부파일명 중복 대책 처리
+	private String processDuplicateFileName(SupportVO support, String subDir) {
+		MultipartFile mFile1 = support.getFile1();
+		System.out.println("원본파일명: " + mFile1);
+		support.setSupport_file1("");
+		
+		String fileName = "";
+		
+		if(!mFile1.getOriginalFilename().equals("")) {
+			fileName = UUID.randomUUID().toString().substring(0, 8) + "_" + mFile1.getOriginalFilename();
+			support.setSupport_file1(subDir + "/" + fileName);
+		}
+		
+		return fileName;
+	}
+	
+	// 첨부파일 - 실제 파일 업로드 처리(임시경로 -> 실제경로)
+	private void completeUpload(SupportVO support, String realPath, String fileName) {
+		MultipartFile mFile1 = support.getFile1();
+		
+		try {
+			if(!mFile1.getOriginalFilename().equals("")) {
+				mFile1.transferTo(new File(realPath, fileName));
+				System.out.println("----------- 업로드 실제 처리: " + mFile1);
+			}
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 }

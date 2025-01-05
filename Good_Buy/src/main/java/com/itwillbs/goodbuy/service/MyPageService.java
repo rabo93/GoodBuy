@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.itwillbs.goodbuy.mapper.MypageMapper;
 import com.itwillbs.goodbuy.vo.MemberVO;
+import com.itwillbs.goodbuy.vo.SupportVO;
 import com.itwillbs.goodbuy.vo.WishlistVO;
 
 @Service

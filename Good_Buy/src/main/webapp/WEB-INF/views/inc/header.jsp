@@ -20,7 +20,9 @@
 		<div class="hd-gnb">
 			<div class="gnb-left">
 				<a href="ProductRegist" class="gnb-btn"><i class="fa-solid fa-store"></i> 판매하기</a>
-				<a href="ChatMain" class="gnb-btn"><i class="fa-solid fa-comment-dots"></i> 채팅하기</a>
+				<a href="javascript:void(0)" class="gnb-btn" onclick="startChat()">
+					<i class="fa-solid fa-comment-dots"></i> 채팅하기
+				</a>
 			</div>
 			<div class="gnb-right">
 				<c:choose>
@@ -86,7 +88,9 @@
 							</c:choose>
 								<a href="MyInfo" class="my-info"><span>${sessionScope.sId} </span> 님</a>
 			        			<a href="ProductRegist" class="gnb-btn"><i class="fa-solid fa-store"></i> 판매하기</a>
-								<a href="ChatMain" class="gnb-btn"><i class="fa-solid fa-comment-dots"></i> 채팅하기</a>
+								<a href="javascript:void(0)" class="gnb-btn" onclick="startChat()">
+									<i class="fa-solid fa-comment-dots"></i> 채팅하기
+								</a>
 								<a href="MemberLogout">로그아웃</a>
 								<input type="hidden" id="sId" value="${sessionScope.sId}">
 <%-- 								<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script> --%>

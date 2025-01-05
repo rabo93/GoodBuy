@@ -15,7 +15,7 @@ const ALIGN_RIGHT = "user";
 //	====================================================================
 var ws;
 var receiver_id;
-var sId;
+//var sId;
 var product_id;
 
 
@@ -46,6 +46,10 @@ $(function() {
 		}
 		if (data.type == TYPE_REQUEST_CHAT_LIST) {
 			console.log("채팅내역 수신");
+			console.log(data.message);
+			for(let message of JSON.parse(data.message)) {
+				appendMessage(message.type, message.sender_id, message.receiver_id, message.message, message.send_time);
+			}
 		}
 		if (data.type == TYPE_TALK) {	// 채팅 입력
 			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
@@ -190,7 +194,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 	}
 	
 	if(receiver_id == sId) {	// 자신이 보낸 메세지(송신자가 자신인 경우)
-		div_message = '<div class="message user">'
+		div_message = '<div class="message other">'
 						+ '<div class="bubble">' + message + '</div>'
 					 + '</div>';
 	}

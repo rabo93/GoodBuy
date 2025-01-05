@@ -124,6 +124,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 					chatMessage.setRoom_id(chatRoom.getRoom_id());
 					chatMessage.setType(ChatMessage.TYPE_START);
 					chatMessage.setMessage(gson.toJson(chatRoom));
+					System.out.println("!@#!@#");
+					System.out.println(chatMessage);
 					
 					sendMessage(session, chatMessage);
 				}
@@ -136,12 +138,12 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			System.out.println("기존 대화 요청 조회");
 			
 			//	기존 채팅 내역 조회
-//			List<ChatMessage> chatMessageList = chatService.selectChatMessage(chatMessage);
+			List<ChatMessage> chatMessageList = chatService.selectChatMessage(chatMessage);
 			//	기존 채팅 내역이 존재할 경우만 클라이언트에게 전송
-//			if (chatMessageList != null && chatMessageList.size() > 0) {
-//				chatMessage.setMessage(gson.toJson(chatMessageList));
-//				sendMessage(session, chatMessage);
-//			}
+			if (chatMessageList != null && chatMessageList.size() > 0) {
+				chatMessage.setMessage(gson.toJson(chatMessageList));
+				sendMessage(session, chatMessage);
+			}
 			
 		}
 		
@@ -149,7 +151,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			//	현재 시스템 날짜 시각정보 받아와서 저장
 			chatMessage.setSend_time(getDateTimeNow());
 			//	채팅 메세지 DB 저장 요청
-//			chatService.insertChatMessage(chatMessage);
+			chatService.insertChatMessage(chatMessage);
 			
 			sendMessage(session, chatMessage);
 			

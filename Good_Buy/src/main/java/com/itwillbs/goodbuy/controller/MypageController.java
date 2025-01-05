@@ -22,6 +22,7 @@ import com.itwillbs.goodbuy.service.ProductService;
 import com.itwillbs.goodbuy.service.SupportService;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.MyReviewVO;
+import com.itwillbs.goodbuy.vo.PageInfo;
 import com.itwillbs.goodbuy.vo.ProductOrderVO;
 import com.itwillbs.goodbuy.vo.ProductVO;
 import com.itwillbs.goodbuy.vo.SupportVO;
@@ -267,18 +268,69 @@ public class MypageController {
 	}
 	
 	
+	// 문의내역 목록
+		@GetMapping("MySupport")
+		public String mySupportList(@RequestParam(defaultValue = "1") int pageNum, HttpServletRequest request, HttpSession session, Model model) {
+			System.out.println("페이지번호: " + pageNum);
+			// 세션아이디 체크
+			String id = (String)session.getAttribute("sId");
+			if(id == null) {
+				model.addAttribute("msg", "로그인 필수!\\n 로그인 페이지로 이동합니다!");
+				model.addAttribute("targetURL", "MemberLogin");
+				savePreviousUrl(request, session);
+				
+				return "result/fail";
+			}
+			
+			// 페이징 설정
+			int listLimit = 10; // 한 페이지당 게시물 수
+			int startRow = (pageNum - 1) * listLimit;
+			int listCount = supportService.getSupportListCount(id);
+			
+			int pageListLimit = 5; // 페이징 개수 
+			int maxPage = (listCount / listLimit) + (listCount % listLimit > 0 ? 1 : 0);
+			
+			if(maxPage == 0) {
+				maxPage = 1;
+			}
+			int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
+			System.out.println("maxPage = " + maxPage);
+			int endPage = startPage + pageListLimit - 1;
+			
+			if(endPage > maxPage) {
+				endPage = maxPage;
+			}
+			
+			if(pageNum < 1 || pageNum > maxPage) {
+				model.addAttribute("msg", "해당 페이지는 존재하지 않습니다!");
+				model.addAttribute("targetURL", "MySupport?pageNum=1");
+				return "result/fail";
+			}
+			PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage, endPage);
+			
+			// Model 객체에 페이징 정보 저장
+			model.addAttribute("pageInfo", pageInfo);
+			
+			// 게시물 목록 조회
+			List<SupportVO> supportList = supportService.getSupporList(startRow, listLimit, id);
+			
+			model.addAttribute("supportList", supportList);
+			
+			return "mypage/mypage_inquiry_list";
+		}
+	
 	//[문의내역]
-	@GetMapping("MySupport")
-	public String mySupportList(HttpSession session,Model model,MemberVO member) {
-		String id = getSessionUserId(session);
-		member.setMem_id(id);
-		
-		List<SupportVO> supportList = supportService.getSupporList(id);
-		model.addAttribute("support",supportList);
-		
-		
-		return "mypage/mypage_inquiry_list";
-	}
+//	@GetMapping("MySupport")
+//	public String mySupportList(HttpSession session,Model model,MemberVO member) {
+//		String id = getSessionUserId(session);
+//		member.setMem_id(id);
+//		
+//		List<SupportVO> supportList = supportService.getSupporList(id);
+//		model.addAttribute("support",supportList);
+//		
+//		
+//		return "mypage/mypage_inquiry_list";
+//	}
 	
 	//문의사항 자세히 보기
 	@GetMapping("MySupportDetail")

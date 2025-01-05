@@ -1,17 +1,21 @@
 package com.itwillbs.goodbuy.vo;
 
+import java.sql.Date;
+import java.time.DateTimeException;
+
 import lombok.Data;
 
 @Data
 public class SupportVO {
 	private int support_id;                 // 문의 글 번호
 	private int support_category;           // 문의 카테고리
-    private String support_date;            // 작성 일자 (DATETIME)
+    private Date support_date;            // 작성 일자 (DATETIME)
     private String mem_id;                  // 작성자 ID
     private String support_subject;         // 문의 글 제목
     private String support_content;         // 문의 글 내용
+    private String support_answer_date;     // 문의 글 답변 작성일자
     private String support_file;            // 첨부파일
-    private String reply_date;     			// 답변 일자 (DATETIME)
+    private Date reply_date;     			// 답변 일자 (DATETIME)
     private String reply_content;  			// 답변 글 내용
     private String statsus;					// 처리상태(ENUM) '접수','처리완료','기각'
 }

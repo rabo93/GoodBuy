@@ -88,7 +88,7 @@ public class MemberController {
 		
 		// 로그인 처리
 		MemberVO dbMember = memberService.getMember(mem_id);
-		log.info("DB에 저장된 회원 정보 : " + dbMember);
+		log.info(">>>>>DB에 저장된 회원 정보 : " + dbMember);
 		
 		if(dbMember == null || !passwordEncoder.matches(member.getMem_passwd(), dbMember.getMem_passwd())) {		
 			model.addAttribute("msg", "로그인 실패!\\n아이디와 패스워드를 다시 확인해주세요");
@@ -123,54 +123,7 @@ public class MemberController {
 	}	
 	
 	//=================================================================================================================================
-	// [ 네이버 로그인 ]
-	@GetMapping("NaverCallback")
-	public String naverCallback() {
-		return "member/naver_callback";
-	}
-	
-	@ResponseBody
-	@PostMapping("NaverLogin")
-	public int naverLogin(MemberVO member, HttpSession session) {
-		log.info(">>>>>>>>> 네이버 가입 계정 : " + member);
-		
-		String mem_email = (String)member.getMem_email();
-		
-		MemberVO dbMember = memberService.getMemberEmail(mem_email);
-		
-		log.info(">>>>>>>>>> 네이버 중복계정여부: " + dbMember);
-		
-		// 신규 회원 처리
-	    if (dbMember == null) {
-	        int result = memberService.registNaverMember(member);
-	        log.info(">>>>> 신규 네이버 계정 등록 성공");
-
-	        if (result != 1) {
-	            log.error(">>>>> 네이버 계정 등록 실패");
-	            return 0; // 등록 실패
-	        }
-
-	        setSessionAttributes(session, member); // 세션 설정
-	        return 1; // 신규 회원 등록 성공
-	    }
-
-	    // 기존 회원 처리
-	    setSessionAttributes(session, dbMember); // 세션 설정
-	    log.info(">>>>> 네이버 중복 계정(기존 회원)");
-	    return 2; // 기존 회원
-	}
-	
-	// 세션 설정 메서드 
-	public void setSessionAttributes(HttpSession session, MemberVO member) {
-		session.setAttribute("sId", member.getMem_id());
-		session.setAttribute("sNick", member.getMem_nick());
-		session.setAttribute("sGrade", member.getMem_grade());
-		session.setAttribute("sProfile", member.getMem_profile());
-		session.setMaxInactiveInterval(60 * 120);
-	}
-	
-	//=================================================================================================================================
-	// [ 회원가입 페이지 구현 ]
+	// [ 회원가입 ]
 	@GetMapping("MemberJoin")
 	public String memberJoin() {
 		return"member/member_join";
@@ -178,12 +131,14 @@ public class MemberController {
 	
 	@PostMapping("MemberJoin")
 	public String join(MemberVO member, HttpSession session, BCryptPasswordEncoder passwordEncoder, Model model) {
-	    log.info("member : " + member);
+	    // [ 휴대폰 인증완료 상태 설정 ]
+	    member.setAuth_status(1);
+	    
 	    //-----------------------------------------------------------------------
 	    // [ 비밀번호 암호화 ]
 	    String securePasswd = passwordEncoder.encode(member.getMem_passwd());
 	    member.setMem_passwd(securePasswd);
-
+	    
 	    //-----------------------------------------------------------------------
 	    // [ 회원 가입 처리 ]
 	    int insertCount = memberService.registMember(member);
@@ -193,19 +148,16 @@ public class MemberController {
 	    	model.addAttribute("msg", "회원가입 실패\n항목을 다시 확인해주세요");
 	    	return "result/fail";
 	    }
-	    
 	}
 
 	//=================================================================================================================================
-	// [ 아이디/닉네임 중복체크 ]
+	// [ 아이디/닉네임/이메일 중복체크 ]
 	@ResponseBody
 	@GetMapping("MemberCheckId")
 	public String memberCheckId(String mem_id, MemberVO member) {
-		System.out.println("mem_id : "+mem_id);
-		
 		member = memberService.getMember(mem_id);
-		boolean isDuplicate = false;
 		
+		boolean isDuplicate = false;
 		if(member != null) { //아이디 중복일 경우
 			isDuplicate= true;
 		}
@@ -216,8 +168,8 @@ public class MemberController {
 	@ResponseBody
 	@GetMapping("MemberCheckNick")
 	public String memberCheckNick(String mem_nick, MemberVO member) {
-		System.out.println("mem_nick : "+mem_nick);
 		member = memberService.getMemberNick(member);
+		
 		boolean isDuplicate = false;
 		if(member != null) { //닉네임 중복
 			isDuplicate= true;
@@ -225,6 +177,17 @@ public class MemberController {
 		return isDuplicate + "";
 	}
 	
+	@ResponseBody
+	@PostMapping("MemberCheckEmail")
+	public String memberCheckEmail(String mem_email, MemberVO member) {
+		member = memberService.getMemberEmail(mem_email);
+		
+		boolean isDuplicate = false;
+		if(member != null) { //이메일 중복
+			isDuplicate= true;
+		}
+		return isDuplicate + "";
+	}
 	
 	//=================================================================================================================================
 	// [ 회원가입 성공 페이지로 이동 ]
@@ -241,7 +204,7 @@ public class MemberController {
 		return "redirect:/";
 	}
 	//=================================================================================================================================
-	// [ 아이디 찾기 ]
+	// [ 휴대폰 번호로 아이디 찾기 ]
 	@GetMapping("IDFind")
 	public String inFind(String mem_phone) {
 		return"member/id_finder";
@@ -251,13 +214,12 @@ public class MemberController {
 	@PostMapping("MemberIdFind")
 	public String memberIdFine(@RequestParam("mem_phone") String userPhone) {
 		String mem_id = memberService.getMemberInfo(userPhone);
-		System.out.println("아이디 : " + mem_id);
 		
 		return mem_id;
 	}
 	
 	//-------------------------------------------------------------------------
-	// [ 비밀번호 찾기 ]
+	// [ 휴대폰 번호로 비밀번호 찾기 ]
 	@GetMapping("PWFind")
 	public String pwFind(String mem_phone) {
 		return"member/pw_finder";
@@ -267,7 +229,7 @@ public class MemberController {
 	@PostMapping("MemberPwFind")
 	public Map<String, Object> memberPwFind(String mem_id, String mem_phone, Model model, BCryptPasswordEncoder passwordEncoder) {
 		Map<String, Object> result = new HashMap<>();
-		System.out.println("입력한 id : " + mem_id);
+//		System.out.println("입력한 id : " + mem_id);
 		
 		// 본인인증한 휴대폰 번호로 회원 정보 조회
 		MemberVO member = memberService.getMemInfo(mem_phone);
@@ -280,7 +242,7 @@ public class MemberController {
 	    // 임시 비밀번호 생성
 		String temPasswd = GenerateRandomCode.getRandomCode(8);
         String heshePasswd = passwordEncoder.encode(temPasswd); //임시비밀번호 해싱처리
-		System.out.println("임시비밀번호 : " + heshePasswd);
+//		System.out.println("임시비밀번호 : " + heshePasswd);
 		
 		// 새 임시 비밀번호로 db 업데이트
         int updateCount = memberService.setTempPasswd(heshePasswd, mem_id);
@@ -288,8 +250,7 @@ public class MemberController {
         if (updateCount > 0) {
 	        // 메일 전송
 	        MailAuthInfo mailAuthInfo = mailService.sendPasswdMail(member, temPasswd);
-        	System.out.println("인증정보 : " + mailAuthInfo);
-//        	memberService.registMemberAuthInfo(mailAuthInfo);
+//        	System.out.println("인증정보 : " + mailAuthInfo);
         	result.put("success", true);
         	result.put("message", "임시 비밀번호가 발송되었습니다.");
 	        
@@ -310,6 +271,7 @@ public class MemberController {
 		
 		// 세션아이디로 회원 정보 가져와서 MemberVO에 담기
 		member = memberService.getMember(mem_id);
+		
 		// 뷰페이지에 MemberVO 정보 전달
 		model.addAttribute("member", member);
 		
@@ -331,9 +293,14 @@ public class MemberController {
 		map.put("id", id);
 		
 		// id로 회원 정보 조회하여 기존 패스워드 가져오기
-		String dbpasswd = memberService.getMemberPasswd(id);
+		member = memberService.getMemberPasswd(id);
+		System.out.println("가져온 회원정보" + member);
+		String dbPasswd = member.getMem_passwd();
+		System.out.println("가져온 pw: " + dbPasswd);
+		
+		
 		// 기존 비밀번호와 입력한 비밀번호 비교 검증 
-		if(dbpasswd == null || !passwordEncoder.matches(map.get("old_passwd"),dbpasswd)) {
+		if(dbPasswd == null || !passwordEncoder.matches(map.get("old_passwd"), dbPasswd)) {
 			model.addAttribute("msg", "비밀번호가 일치하지 않습니다.");
 			return "result/fail";
 		}
@@ -403,8 +370,12 @@ public class MemberController {
 	public String memberWithdrawForm (String memPasswd, BCryptPasswordEncoder passwordEncoder, HttpSession session, Model model) {
 		String id = getSessionUserId(session);
 		
-		// 해당 아이디로 DB에 비밀번호 조회
-		String dbPasswd = memberService.getMemberPasswd(id);
+		// 해당 아이디로 DB에 회원정보 조회
+		MemberVO member = memberService.getMemberPasswd(id);
+		System.out.println("가져온 회원정보" + member);
+		String dbPasswd = member.getMem_passwd();
+		System.out.println("가져온 pw: " + dbPasswd);
+		
 		
 		// DB비밀번호와 입력한 비밀번호가 같은지 검증
 		if(dbPasswd == null || !passwordEncoder.matches(memPasswd, dbPasswd)) {
@@ -412,8 +383,17 @@ public class MemberController {
 			return "result/fail";
 		}
 		
-		// 비밀번호가 맞으면 해당 아이디 계정 삭제 처리
-		memberService.removeMemInfo(id, 3); //3:탈퇴
+		System.out.println("탈퇴한 id: " + id);
+		// 탈퇴한 id: kakao@3842610297
+		
+		// 탈퇴할 아이디가 카카오/네이버 아이디이면 삭제 처리
+		if (member.getSns_status() == 1) {
+			memberService.removeSnsInfo(id);
+		} else {
+			// 일반 계정이면 탈퇴(3) 처리
+			memberService.removeMemInfo(id, 3);
+		}
+		
 		session.invalidate();
 		
 		model.addAttribute("msg", "탈퇴 처리가 완료되었습니다.");
@@ -422,7 +402,53 @@ public class MemberController {
 		return "result/success";
 	}
 	
+	//=================================================================================================================================
+	// [ 네이버 로그인 ]
+	@GetMapping("NaverCallback")
+	public String naverCallback() {
+		return "member/naver_callback";
+	}
 	
+	@ResponseBody
+	@PostMapping("NaverLogin")
+	public int naverLogin(MemberVO member, HttpSession session) {
+		log.info(">>>>>>>>> 네이버 가입 계정 : " + member);
+		
+		String mem_email = (String)member.getMem_email();
+		
+		MemberVO dbMember = memberService.getMemberEmail(mem_email);
+		
+		log.info(">>>>>>>>>> 네이버 중복계정여부: " + dbMember);
+		
+		// 신규 회원 처리
+	    if (dbMember == null) {
+	        int result = memberService.registNaverMember(member);
+	        log.info(">>>>> 신규 네이버 계정 등록 성공");
+
+	        if (result != 1) {
+	            log.error(">>>>> 네이버 계정 등록 실패");
+	            return 0; // 등록 실패
+	        }
+
+	        setSessionAttributes(session, member); // 세션 설정
+	        return 1; // 신규 회원 등록 성공
+	    }
+
+	    // 기존 회원 처리
+	    setSessionAttributes(session, dbMember); // 세션 설정
+	    log.info(">>>>> 네이버 중복 계정(기존 회원)");
+	    return 2; // 기존 회원
+	}
+	
+	// 세션 설정 메서드 
+	public void setSessionAttributes(HttpSession session, MemberVO member) {
+		session.setAttribute("sId", member.getMem_id());
+		session.setAttribute("sNick", member.getMem_nick());
+		session.setAttribute("sGrade", member.getMem_grade());
+		session.setAttribute("sProfile", member.getMem_profile());
+		session.setMaxInactiveInterval(60 * 120);
+	}
+		
 
 
 }

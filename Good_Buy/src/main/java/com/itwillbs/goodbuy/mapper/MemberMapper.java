@@ -14,14 +14,15 @@ import com.itwillbs.goodbuy.vo.SmsAuthInfoVO;
 
 @Mapper
 public interface MemberMapper {
+	// 회원가입할 회원정보 등록
+	int insertMember(MemberVO member);
+	
 	//회원 정보 조회
 	MemberVO selectMember(String mem_id);
 
 	//닉네임 조회
 	MemberVO selectMemberNick(MemberVO member);
 
-	//회원 추가
-	int insertMember(MemberVO member);
 
 	//회원정보 수정
 	int updateMember(Map<String, String> map);
@@ -40,16 +41,13 @@ public interface MemberMapper {
 	void deleteMailAuthInfo(MailAuthInfo mailAuthInfo);
 	
 	// 회원 패스워드 조회
-	String selectMemberPasswd(String id);
+	MemberVO selectMemberPasswd(String id);
 	
 
 	//이메일 중복체크
 	MemberVO selectEmailId(MemberVO member);
 	
 	
-	//----------------------------------------------------------
-	// 카카오 로그인 - 이메일 조회 요청
-	MemberVO selectEmail(String mem_email);
 
 	//----------------------------------------------------------
 	//상점소개 저장
@@ -63,6 +61,8 @@ public interface MemberMapper {
 	// [네이버] 회원 정보 저장
 	int insertNaverMember(MemberVO member);
 	//----------------------------------------------------------
+	// [카카오] 로그인 - 이메일 조회 요청
+	MemberVO selectEmail(String mem_email);
 	// [카카오] 회원정보 인서트 
 	int insertMemberInfo(HashMap<String, Object> userInfo);
 	// [카카오] 비밀번호 등록
@@ -87,11 +87,13 @@ public interface MemberMapper {
 //	void deleteMemInfo(String id);
 	// 회원탈퇴(상태값 변경)
 	void updateMemberStatus(@Param("mem_id") String id, @Param("mem_status") int mem_status);
-	
+	// Sns 계정 삭제
+	void deleteSnsInfo(String id);
 	
 	//	-------------------------------------------------------------
 	//	채팅 - MEM_ID 조회
 	String selectMemberId(String mem_id);
+
 
 	
 

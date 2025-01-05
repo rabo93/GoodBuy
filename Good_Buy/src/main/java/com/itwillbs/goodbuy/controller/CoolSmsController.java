@@ -57,11 +57,11 @@ public class CoolSmsController {
 		// 해당 휴대폰 번호로 가입한 회원이 있는지 판별
 		String memId = memberService.getMemberInfo(userPhone);
 		// * 이미 존재할 경우 *
-//		if (memId != null) {
-//			return ResponseEntity.badRequest()
-//					.header("Content-Type", "text/plain; charset=UTF-8")
-//					.body("이미 가입된 휴대폰번호입니다.");
-//		}
+		if (memId != null) {
+			return ResponseEntity.badRequest()
+					.header("Content-Type", "text/plain; charset=UTF-8")
+					.body("이미 가입된 휴대폰번호입니다.");
+		}
 		// * 존재하지 않을 경우 *
         // 1) 랜덤 인증번호 생성 **아래에 랜덤 코드 생성 메서드 호출
 	    String smsCode = RandomNumber();

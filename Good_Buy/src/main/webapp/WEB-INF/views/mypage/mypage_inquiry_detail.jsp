@@ -58,8 +58,7 @@
 				</aside>
 				<div class="my-container">
 					<div class="contents-ttl">1:1문의 게시판</div>
-				</div>
-				</section>
+				
 				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 				<!-- contents -->
 					<section class="inq-wrap">
@@ -78,7 +77,7 @@
 	                    <div class="com">
 	                    	<label>작성일자</label>
 							<span>
-								${support.support_date}"
+								${support.support_date}
 							</span>
 	                    </div>
 	                    <div class="com">
@@ -129,13 +128,15 @@
 	                    </div>
 					</section>
 					<!-- // contents -->
+					</div>
+				</section>
 		</div>
 		</section>
 	</main>
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
-
+	<!-- 스크립트 작성해야함 ~~~~~~~~~ -->
 
 
 

@@ -5,10 +5,30 @@
 <mapper namespace="com.itwillbs.goodbuy.mapper.SupportMapper">
 	<!-- 문의 리스트 조회 -->
 	<select id="selectSupportList" resultType="support">
-		SELECT *
-		FROM SUPPORT
-		WHERE MEM_ID = #{mem_id}
-		ORDER BY SUPPORT_DATE DESC
+		-- 1:1문의 전체 목록
+		SELECT 
+		    S.SUPPORT_ID, 
+		    S.SUPPORT_DATE, 
+		    S.SUPPORT_CATEGORY, 
+		    S.MEM_ID,  -- SUPPORT 테이블의 MEM_ID만 사용
+		    S.SUPPORT_SUBJECT, 
+		    S.SUPPORT_CONTENT, 
+		    S.SUPPORT_FILE AS SUPPORT_FILE1, 
+		    S.REPLY_DATE, 
+		    <!-- S.SUPPORT_SUBJECT,  -->
+		    S.REPLY_CONTENT 
+		FROM SUPPORT S 
+		JOIN MEMBER M 
+		    ON M.MEM_ID = S.MEM_ID 
+		WHERE S.MEM_ID = #{MEM_ID}
+		ORDER BY S.SUPPORT_ID DESC;
+	</select> 
+	
+	<select id="selectSupportListCount" resultType="int">
+		-- 1:1문의 전체 게시글수
+		SELECT COUNT(*)
+		  FROM SUPPORT
+		 WHERE MEM_ID = #{MEM_ID}
 	</select>
 	
 	<select id="selectSupportDetail" resultType="support">
@@ -16,6 +36,26 @@
 		FROM SUPPORT
 		WHERE SUPPORT_ID = #{SUPPORT_ID}
 	</select>
-
+	
+	<insert id="insertSupport">
+		<selectKey keyProperty="support_id" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(SUPPORT_ID), 0)
+			  FROM SUPPORT
+		</selectKey>
+		INSERT INTO SUPPORT
+		VALUES (
+			#{support_id}+1
+			,#{support_category}
+			,now()
+			,#{mem_id}
+			,#{support_subject}
+			,#{support_content}
+			,#{support_file}
+			,null
+			,null
+			,null
+		)
+	
+	</insert>
 
 </mapper>

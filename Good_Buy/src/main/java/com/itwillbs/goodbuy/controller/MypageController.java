@@ -1,7 +1,15 @@
 package com.itwillbs.goodbuy.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -14,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.itwillbs.goodbuy.service.MemberService;
 import com.itwillbs.goodbuy.service.MyPageService;
@@ -22,6 +31,7 @@ import com.itwillbs.goodbuy.service.ProductService;
 import com.itwillbs.goodbuy.service.SupportService;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.MyReviewVO;
+import com.itwillbs.goodbuy.vo.PageInfo;
 import com.itwillbs.goodbuy.vo.ProductOrderVO;
 import com.itwillbs.goodbuy.vo.ProductVO;
 import com.itwillbs.goodbuy.vo.SupportVO;
@@ -37,6 +47,9 @@ public class MypageController {
 	@Autowired ProductService productService;
 	@Autowired MyReviewService reviewService;
 	@Autowired SupportService supportService;
+	
+	// 첨부파일 가상경로
+	private String uploadPath = "/resources/upload";
 	
 	//세션에 사용자 ID 저장 
 	private String getSessionUserId(HttpSession session) {
@@ -267,18 +280,69 @@ public class MypageController {
 	}
 	
 	
+	// 문의내역 목록
+		@GetMapping("MySupport")
+		public String mySupportList(@RequestParam(defaultValue = "1") int pageNum, HttpServletRequest request, HttpSession session, Model model) {
+			System.out.println("페이지번호: " + pageNum);
+			// 세션아이디 체크
+			String id = (String)session.getAttribute("sId");
+			if(id == null) {
+				model.addAttribute("msg", "로그인 필수!\\n 로그인 페이지로 이동합니다!");
+				model.addAttribute("targetURL", "MemberLogin");
+				savePreviousUrl(request, session);
+				
+				return "result/fail";
+			}
+			
+			// 페이징 설정
+			int listLimit = 10; // 한 페이지당 게시물 수
+			int startRow = (pageNum - 1) * listLimit;
+			int listCount = supportService.getSupportListCount(id);
+			
+			int pageListLimit = 5; // 페이징 개수 
+			int maxPage = (listCount / listLimit) + (listCount % listLimit > 0 ? 1 : 0);
+			
+			if(maxPage == 0) {
+				maxPage = 1;
+			}
+			int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
+			System.out.println("maxPage = " + maxPage);
+			int endPage = startPage + pageListLimit - 1;
+			
+			if(endPage > maxPage) {
+				endPage = maxPage;
+			}
+			
+			if(pageNum < 1 || pageNum > maxPage) {
+				model.addAttribute("msg", "해당 페이지는 존재하지 않습니다!");
+				model.addAttribute("targetURL", "MySupport?pageNum=1");
+				return "result/fail";
+			}
+			PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage, endPage);
+			
+			// Model 객체에 페이징 정보 저장
+			model.addAttribute("pageInfo", pageInfo);
+			
+			// 게시물 목록 조회
+			List<SupportVO> supportList = supportService.getSupporList(startRow, listLimit, id);
+			
+			model.addAttribute("supportList", supportList);
+			
+			return "mypage/mypage_inquiry_list";
+		}
+	
 	//[문의내역]
-	@GetMapping("MySupport")
-	public String mySupportList(HttpSession session,Model model,MemberVO member) {
-		String id = getSessionUserId(session);
-		member.setMem_id(id);
-		
-		List<SupportVO> supportList = supportService.getSupporList(id);
-		model.addAttribute("support",supportList);
-		
-		
-		return "mypage/mypage_inquiry_list";
-	}
+//	@GetMapping("MySupport")
+//	public String mySupportList(HttpSession session,Model model,MemberVO member) {
+//		String id = getSessionUserId(session);
+//		member.setMem_id(id);
+//		
+//		List<SupportVO> supportList = supportService.getSupporList(id);
+//		model.addAttribute("support",supportList);
+//		
+//		
+//		return "mypage/mypage_inquiry_list";
+//	}
 	
 	//문의사항 자세히 보기
 	@GetMapping("MySupportDetail")
@@ -293,8 +357,55 @@ public class MypageController {
 //		addFileToModel(support, model); //첨부파일
 		model.addAttribute("support", support);
 		
-		return "my_page/mypage_inquiry_detail";
+		return "mypage/mypage_inquiry_detail";
 	}
+	
+	//문의내역 글쓰기 폼
+	@GetMapping("MySupportWrite")
+	public String mySupportWriteFrom(HttpSession session,Model model) {
+		String id = getSessionUserId(session);
+		
+		return "mypage/mypage_inquiry_wirte";
+	}
+	//문의내역 글쓰기
+	@PostMapping("MySupportWrite")
+	public String mySupportWrite(HttpSession session,Model model,SupportVO support) {
+		String id = getSessionUserId(session);
+		support.setMem_id(id);
+		// 파일 첨부 업로드 경로 처리
+		String realPath = getRealPath(session);
+		
+		// 디렉토리 생성
+		String subDir = createDirectories(realPath);
+		
+		realPath += "/" + subDir;
+		
+		// 실제 파일 처리
+		MultipartFile mFile1 = support.getFile1();
+		System.out.println("원본파일명: " + mFile1);
+		support.setSupport_file1("");
+		
+		String fileName = processDuplicateFileName(support, subDir);
+		
+		System.out.println("------- DB 저장파일" + support.getSupport_file1());
+		System.out.println("-------- 1:1문의 글 작성 최종내용: " + support);
+		
+		// 글쓰기 서비스 요청
+		int insertCount = supportService.registSupport(support);
+		
+		if (insertCount > 0) {
+			completeUpload(support, realPath, fileName);
+			System.out.println();
+			
+			return "redirect:/MySupport";
+		} else {
+			model.addAttribute("msg", "글쓰기 실패!");
+			return "result/fail";
+		}
+		
+	}
+	
+	
 		
 	// ===========================================================================================
 	// 이전 페이지 이동 저장
@@ -310,5 +421,84 @@ public class MypageController {
 		
 		session.setAttribute("prevURL", prevURL);
 	}
-
+	
+	// 첨부파일 - 파일 목록 처리 (첨부파일 단일)
+	private void addFileToModel(SupportVO support, Model model) {
+		String fileName = support.getSupport_file1();
+		String originalFileName = "";
+		
+		if(fileName != null) {
+			originalFileName = fileName.substring(fileName.indexOf("_") + 1);
+		} else {
+			originalFileName = fileName;
+		}
+		
+		model.addAttribute("originalFileName", originalFileName);
+		model.addAttribute("fileName", fileName);
+	}
+	
+	// 첨부파일 - 실제 경로 리턴 처리
+	private String getRealPath(HttpSession session) {
+		String realPath = session.getServletContext().getRealPath(uploadPath);
+		
+		return realPath;
+	}
+	
+	// 첨부파일 - 서브디렉토리 생성 처리
+	private String createDirectories(String realPath) {
+		String subDir = "";
+		
+		// 서브디렉토리명 만들기
+		LocalDate today = LocalDate.now(); // 날짜로 폴더명 생성하기
+//		System.out.println("작성날짜: " + today);
+		String datePattern = "yyyy/MM/dd";
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern(datePattern);
+		
+		subDir = today.format(dtf);
+		realPath += "/" + subDir;
+		System.out.println("실제 파일 업로드 경로: " + realPath);
+		
+		try {
+			Path path = Paths.get(realPath);
+			Files.createDirectories(path);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return subDir;
+	}
+	
+	// 첨부파일 -  첨부파일명 중복 대책 처리
+	private String processDuplicateFileName(SupportVO support, String subDir) {
+		MultipartFile mFile1 = support.getFile1();
+		System.out.println("원본파일명: " + mFile1);
+		support.setSupport_file1("");
+		
+		String fileName = "";
+		
+		if(!mFile1.getOriginalFilename().equals("")) {
+			fileName = UUID.randomUUID().toString().substring(0, 8) + "_" + mFile1.getOriginalFilename();
+			support.setSupport_file1(subDir + "/" + fileName);
+		}
+		
+		return fileName;
+	}
+	
+	// 첨부파일 - 실제 파일 업로드 처리(임시경로 -> 실제경로)
+	private void completeUpload(SupportVO support, String realPath, String fileName) {
+		MultipartFile mFile1 = support.getFile1();
+		
+		try {
+			if(!mFile1.getOriginalFilename().equals("")) {
+				mFile1.transferTo(new File(realPath, fileName));
+				System.out.println("----------- 업로드 실제 처리: " + mFile1);
+			}
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 }

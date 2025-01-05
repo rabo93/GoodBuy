@@ -13,11 +13,26 @@ public class SupportService {
 	@Autowired SupportMapper mapper;
 	
 	//문의사항 리스트 조회
-	public List<SupportVO> getSupporList(String id) {
-		return mapper.selectSupportList(id);
-	}
+//	public List<SupportVO> getSupporList(String id) {
+//		return mapper.selectSupportList(id);
+//	}
 
 	public SupportVO getSupportDetail(int support_id) {
 		return mapper.selectSupportDetail(support_id);
+	}
+
+	public List<SupportVO> getSupporList(int startRow, int listLimit, String id) {
+		// TODO Auto-generated method stub
+		return mapper.selectSupportList(startRow,listLimit,id);
+	}
+
+	public int getSupportListCount(String id) {
+		// TODO Auto-generated method stub
+		return mapper.selectSupportListCount(id);
+	}
+	//1:1 글쓰기
+	public int registSupport(SupportVO support) {
+		// TODO Auto-generated method stub
+		return mapper.insertSupport(support);
 	}
 }

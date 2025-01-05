@@ -7,6 +7,9 @@ let checkPasswd2 = false;
 let checkEmail = false;
 let checkBirthday = false;
 
+
+let oldPasswd = false;
+
 $(document).ready(function() {
 	//---------------------------------------------------------------------
 	// [CoolSMS] 휴대폰 문자 인증 API
@@ -391,12 +394,13 @@ function previewImage(event) {
 
 // [ 수정완료 버튼 ]
 function myInfoModify(){
+	event.preventDefault(); // 조건 만족 전에 폼 제출 되는 것을 막음
+	
 	// 기존 비밀번호 확인
     let oldPasswd = $("#old_passwd").val();
     
     if (!oldPasswd) {
         alert("기존 비밀번호를 입력해주세요.");
-//        console.log("기존 비밀번호 입력 누락");
         return false;
     }
 	
@@ -405,13 +409,11 @@ function myInfoModify(){
     let newPasswd2 = $("#mem_passwd2").val();
     if (!newPasswd1 || !newPasswd2) {
         alert("새 비밀번호를 입력하고 확인해주세요.");
-//        console.log("새 비밀번호 입력 누락");
         return false;
     }
 
     if (newPasswd1 !== newPasswd2) {
         alert("새 비밀번호가 일치하지 않습니다.");
-//        console.log("새 비밀번호 불일치");
         return false;
     }
 
@@ -434,3 +436,5 @@ function myInfoModify(){
 	$("#myInfo").submit();
 };
 
+// 폼의 submit 이벤트 리스너에 checkSubmit 함수 등록
+$("#myInfo").on("submit", checkSubmit);

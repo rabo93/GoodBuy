@@ -1,11 +1,14 @@
 // ************* 변수 초기화 **************
-let checkIdResult = false;
 let checkName = false;
 let checkNic = false;
+let checkIdResult = false;
 let checkPasswd1 = false;
 let checkPasswd2 = false;
+let checkEmail = false;
 let checkBirthday = false;
-let isChecked = false;
+
+
+let oldPasswd = false;
 
 $(document).ready(function() {
 	//---------------------------------------------------------------------
@@ -19,7 +22,6 @@ $(document).ready(function() {
 			alert("휴대폰번호는 '-' 없이 11자리 숫자로 입력해주세요.");
 			return;
 		}
-        
 
         $.ajax({
             type: "POST",
@@ -68,6 +70,9 @@ $(document).ready(function() {
             data: { "authCode": authCode, "userPhone" : userPhone },
             success: function (response) {
                 alert(response || "인증 성공!");
+                // 인증 상태를 1로 변경
+    			$("#auth_status").val(1);
+                
                 // 인증번호 입력창 읽기전용으로 변경
             	$("#auth_code").attr("readonly", true).css("background-color", "#E8F0FE"); 
             	// 인증 성공 시 "인증하기" 버튼 숨기고, "인증완료" 버튼 보이게 하기
@@ -103,7 +108,14 @@ $(document).ready(function() {
 	// 이메일 도메인 셀렉트 박스 선택시 이벤트
 	$("#emaildmain").change(function() {
 		$("#mem_email2").val($("#emaildmain").val());
+		// 이메일 중복 체크 함수 호출
+    	checkEmailDuplicate();
 	});
+	// 이메일1과 이메일2가 변경될 때마다 중복 체크
+	$("#mem_email1, #mem_email2").on("keyup change", function() {
+	    checkEmailDuplicate();
+	});
+	
 	
 	//---------------------------------------------------------------------
 	// 비밀번호 / 비밀번호 재입력 키업시 이벤트
@@ -112,7 +124,7 @@ $(document).ready(function() {
 	});
 	
 	//---------------------------------------------------------------------
-	// 생년월일 옵션
+	// 생년월일 옵션 선택
 	for (let i = 2000; i > 1980; i--) {
 		$('#year').append('<option value="' + i + '">' + i + '</option>');
 	}
@@ -124,9 +136,8 @@ $(document).ready(function() {
 	}
 	
 	//---------------------------------------------------------------------
-//	 "전체동의하기(terms_all)" 체크박스 클릭시 전체 항목 선택/해제 이벤트
+	// "전체동의하기(terms_all)" 체크박스 클릭시 전체 항목 선택/해제 이벤트
 	const checkAll = document.querySelector('#terms_all'); //id 속성 가져와서 변수에 저장
-	
 	if(checkAll) {
 		const checkboxes = document.querySelectorAll('.terms'); //name 속성 전체 가져와서 변수에 저장
 		// 1. 초기 동기화 : 페이지가 처음 로드될 때 'checkAll'의 상태에 따라 다른 체크박스들의 상태를 설정
@@ -152,7 +163,6 @@ $(document).ready(function() {
 				isChecked = (totalCnt === checkedCnt); // isChecked 업데이트
 			});
 		});	
-	
 	}
 	
 	
@@ -186,7 +196,7 @@ function checkId(){
 }
  		
 //---------------------------------------------------------------------
-// 이름 검사
+// 이름 검사 
 function checkNameResult(){
 	let name = $("#mem_name").val();
 	let regex = /^[가-힣]{2,4}$/;
@@ -194,7 +204,7 @@ function checkNameResult(){
 	if(regex.test(name)){
 		$("#checkName").text("");
 		checkName=true;
-	}else {
+	} else {
 		$("#checkName").text("올바른 이름을 입력해주세요.");	
 		$("#checkName").css("color","var(--red)");	
 		checkName=false;
@@ -208,7 +218,7 @@ function ckNick(){
 	let regex = /^[\w가-힣]{2,8}$/;
 	if(regex.exec(nick)){
 		$.ajax({
-			type : "get",
+			type : "Get",
 			url : "MemberCheckNick",
 			data : {
 				mem_nick : nick
@@ -252,85 +262,123 @@ function checkPasswdResult(){
 }
 
 
-//---------------------------------------------------------
+//---------------------------------------------------------------------
+// 이메일 중복 체크 함수
+function checkEmailDuplicate() {
+	let email1 = $("#mem_email1").val();
+	let email2 = $("#mem_email2").val();
+	let email = email1 + "@" + email2;
+	
+    // 이메일이 완전히 입력되지 않으면 중복 체크를 하지 않음
+    if (email1 && email2) {
+        // AJAX로 이메일 중복 체크
+        $.ajax({
+            url: 'MemberCheckEmail',
+            type: 'POST',
+            data: { mem_email: email },
+            success: function(result) {
+                if(result.trim() === "false") {
+                    // 중복되지 않는 이메일
+                    $("#checkMail").text("사용 가능한 이메일입니다.").css("color", "var(--secondary)");
+                    $("#mem_email").val(email); // 이메일 hidden 필드에 값 설정
+                    checkEmail = true;
+                } else {
+                    // 중복된 이메일
+                    $("#checkMail").text("이미 가입된 이메일입니다.").css("color", "var(--red)");
+                    checkEmail = false;
+                }
+            }
+        });
+    } else {
+        $("#checkMail").text(""); // 이메일 입력이 완료되지 않으면 결과를 지운다.
+        checkEmail = false;
+    }
+}
+
+
+//=================================================================================================
 // [ 회원 가입 버튼] 
 function checkSubmit(){
-    // 유효성 검사
-//    if (!checkIdResult || !checkName || !checkNic || !checkPasswd1) {
-//        alert("회원정보를 다시 확인해주세요");
-//        console.log("유효성 검사 실패");
-//        return false; // 폼 제출을 막음
-//    }
+	event.preventDefault(); // 조건 만족 전에 폼 제출 되는 것을 막음
 	
-	
-    //--------------------------------------------
-	// 생년월일 결합
-    let year = $("#year").val();
-    let month = $("#month").val();
-    let day = $("#day").val();
-	console.log(year + ", " + month + ", " + day);
-	
-	if (year === "YEAR" || month === "MONTH" || day === "DAY") {
-//        alert("생년월일을 모두 선택해주세요.");
-        checkBirthday = false; // 유효하지 않은 상태로 설정
-//        return false; // 폼 제출 중단
+	//--------------------------------------------
+    // ********** 필수 기입 항목 확인 *********
+	// 휴대폰 본인확인
+    let authStatus = $("#auth_status").val();
+	if (authStatus !== "1") {
+       alert("휴대폰 인증을 완료해주세요.");
+       return false; // 가입 중단
     }
-	
-    // 생년월일 결합 (YYYY-MM-DD 형식)
-    month = month.padStart(2, '0'); // 2자리로 변환
-    day = day.padStart(2, '0'); // 2자리로 변환
-    let birthday = `${year}-${month}-${day}`;
-	console.log("생년월일:", birthday);
-	
-	// 생년월일 유효한 경우 상태 업데이트
-    checkBirthday = true;
-	console.log("checkBirthday: " + checkBirthday);
-	
-	// 숨겨진 입력 필드에 생년월일 설정
-	$("#mem_birthday").val(birthday);
-	
-    //--------------------------------------------
-    // ********** 유효성 검사 *********
-    // 휴대폰 인증 확인
-    if ($("#auth_code").prop("readonly") !== true) {
-        alert("휴대폰 번호 인증을 완료해주세요.");
-        return false;
-    }
+	//--------------------------------------------
+    // 이름
     if (!checkName) {
         alert("이름을 다시 확인해주세요.");
         return false;
     }
+	//--------------------------------------------
+    // 닉네임
     if (!checkNic) {
         alert("닉네임을 다시 확인해주세요.");
         return false;
     }
+	//--------------------------------------------
+	// 아이디
     if (!checkIdResult) {
     	alert("아이디를 다시 확인해주세요.");
         return false;
     }
+	//--------------------------------------------
+    // 비밀번호
     if (!checkPasswd1) {
         alert("비밀번호를 다시 확인해주세요.");
         return false;
     }
-   
-    // 모든 약관 동의 여부 확인
-    checkedCnt = document.querySelectorAll('.terms:checked').length;
-    totalCnt = checkboxes.length;
-
-    if (checkedCnt !== totalCnt) {
-        alert("모든 약관에 동의해주세요.");
+	//--------------------------------------------
+	// 이메일
+    if (!checkEmail) {
+        alert("이메일을 다시 확인해주세요.");
+        return false;
+    }
+	//--------------------------------------------
+	// 생년월일
+    let year = $("#year").val();
+    let month = $("#month").val();
+    let day = $("#day").val();
+	
+	if (year === "YEAR" || month === "MONTH" || day === "DAY") {
+        alert("생년월일을 모두 선택해주세요.");
         return false;
     }
     
-    //--------------------------------------------
-	// 폼 제출
-	$("#joinForm").submit();
+    // 생년월일 결합 (YYYY-MM-DD 형식)
+    month = month.padStart(2, '0'); // 2자리로 변환
+    day = day.padStart(2, '0'); // 2자리로 변환
+    let birthday = `${year}-${month}-${day}`;
 	
+	// 생년월일 유효한 경우 상태 업데이트
+    checkBirthday = true;
+	
+	// 숨겨진 입력 필드에 생년월일 설정
+	$("#mem_birthday").val(birthday);
+   
+    //--------------------------------------------
+    // 모든 약관 동의 여부 확인
+    const checkAll = $("#terms_all").is(":checked");
+    if (!checkAll) {
+        alert("모든 약관에 동의해야 가입이 가능합니다.");
+        return false;
+    }
+    //--------------------------------------------
+	// 최종 폼 제출!!
+	$("#joinForm").submit();
 }
 
-//==============================================================================
-// >>>>>>>>>>>> MyInfo <<<<<<<<<<<<<<<<<<<
-//==============================================================================
+// 폼의 submit 이벤트 리스너에 checkSubmit 함수 등록
+$("#joinForm").on("submit", checkSubmit);
+
+//=================================================================================================
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> MyInfo 마이페이지 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+//=================================================================================================
 // [ 회원 수정 ]
 // 프로필 사진
 // 파일 선택 시 미리보기 기능
@@ -346,12 +394,13 @@ function previewImage(event) {
 
 // [ 수정완료 버튼 ]
 function myInfoModify(){
+	event.preventDefault(); // 조건 만족 전에 폼 제출 되는 것을 막음
+	
 	// 기존 비밀번호 확인
     let oldPasswd = $("#old_passwd").val();
     
     if (!oldPasswd) {
         alert("기존 비밀번호를 입력해주세요.");
-        console.log("기존 비밀번호 입력 누락");
         return false;
     }
 	
@@ -360,13 +409,11 @@ function myInfoModify(){
     let newPasswd2 = $("#mem_passwd2").val();
     if (!newPasswd1 || !newPasswd2) {
         alert("새 비밀번호를 입력하고 확인해주세요.");
-        console.log("새 비밀번호 입력 누락");
         return false;
     }
 
     if (newPasswd1 !== newPasswd2) {
         alert("새 비밀번호가 일치하지 않습니다.");
-        console.log("새 비밀번호 불일치");
         return false;
     }
 
@@ -380,12 +427,14 @@ function myInfoModify(){
     // 비밀번호 검사 결과 확인
     if (!checkPasswd1) {
         alert("비밀번호가 유효하지 않습니다.");
-        console.log("비밀번호 유효성 검사 실패");
+//        console.log("비밀번호 유효성 검사 실패");
         return false;
     }
 	
     //--------------------------------------------
-	// 폼제출
+	// 수정 폼 제출
 	$("#myInfo").submit();
 };
 
+// 폼의 submit 이벤트 리스너에 checkSubmit 함수 등록
+$("#myInfo").on("submit", checkSubmit);

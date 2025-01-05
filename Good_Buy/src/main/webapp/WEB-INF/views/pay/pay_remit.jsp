@@ -48,7 +48,8 @@
 							<br><br>
 							<div class="balance-info">굿페이 잔액: <strong>${pay_amount} 원</strong></div>
 							<form action="PayTransfer" method="post">
-								<input type="hidden" name="receiver_id" placeholder="상대방 아이디 입력" value="${param.receiver_id}">
+								<input type="hidden" name="receiver_id" value="${param.receiver_id}">
+								<input type="hidden" name="product_id" value="${param.product_id}">
 								<input type="hidden" name="tran_amt" value="2000">
 						        <div class="recharge-button">
 						            <button class="transfer-btn-chat">송금하기</button>

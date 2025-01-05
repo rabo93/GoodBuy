@@ -36,6 +36,26 @@
 		FROM SUPPORT
 		WHERE SUPPORT_ID = #{SUPPORT_ID}
 	</select>
-
+	
+	<insert id="insertSupport">
+		<selectKey keyProperty="support_id" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(SUPPORT_ID), 0)
+			  FROM SUPPORT
+		</selectKey>
+		INSERT INTO SUPPORT
+		VALUES (
+			#{support_id}+1
+			,#{support_category}
+			,now()
+			,#{mem_id}
+			,#{support_subject}
+			,#{support_content}
+			,#{support_file}
+			,null
+			,null
+			,null
+		)
+	
+	</insert>
 
 </mapper>

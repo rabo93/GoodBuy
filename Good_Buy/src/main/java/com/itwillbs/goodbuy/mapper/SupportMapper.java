@@ -18,5 +18,9 @@ public interface SupportMapper {
 									@Param("MEM_ID")String id);
 
 	int selectSupportListCount(String id);
+	//1:1 글쓰기
+	int insertSupport(SupportVO support);
+
+	
 	
 }

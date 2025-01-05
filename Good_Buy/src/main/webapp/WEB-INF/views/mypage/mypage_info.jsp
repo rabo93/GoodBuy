@@ -76,7 +76,14 @@
 							        </c:choose>
 									<br>
 									<!-- 파일 선택 버튼 -->
-									<input type="file" class="btn-frm" name="profile_upload" id="profile_upload" onchange="previewImage(event)"><br>
+<!-- 									<input type="file" class="btn-frm" name="profile_upload" id="profile_upload" onchange="previewImage(event)"><br> -->
+									<div class="row">
+									    <label for="file-upload" class="custom-file-upload">
+									        파일 선택
+									    </label>
+									    <input id="file-upload" type="file" name="profile_upload" class="btn-frm" onchange="previewImage(event)">
+									</div>
+									
 									<br>
 								</div>
 							</section>

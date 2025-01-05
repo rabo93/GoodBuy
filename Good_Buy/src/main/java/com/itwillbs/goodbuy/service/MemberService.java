@@ -21,14 +21,13 @@ public class MemberService {
 	@Autowired
 	private MemberMapper mapper;
 	
-	
-	// 회원가입 시 회원 정보 등록
+	// 회원가입할 회원정보 등록
 	public int registMember(MemberVO member) {
 		return mapper.insertMember(member);
 	}
 
 	// 회원 패스워드 조회
-	public String getMemberPasswd(String id) {
+	public MemberVO getMemberPasswd(String id) {
 		return mapper.selectMemberPasswd(id);
 	}
 
@@ -48,7 +47,7 @@ public class MemberService {
 
 
 	//-------------------------------------------------------------
-	// 카카오 로그인 - 이메일 중복확인 조회 요청
+	// 이메일 중복확인 조회 요청
 	public MemberVO getMemberEmail(String mem_email) {
 		return mapper.selectEmail(mem_email);
 	}
@@ -77,11 +76,6 @@ public class MemberService {
 	public int modifyMember(Map<String, String> map) {
 		return mapper.updateMember(map);
 	}
-	
-	
-	
-	
-	
 	
 	//-------------------------------------------------------------
 	// [CoolSMS] 휴대폰번호 인증 중복 확인
@@ -121,11 +115,18 @@ public class MemberService {
 		mapper.updateMemberStatus(id, mem_status);
 	}
 	
+	// 탈퇴할 아이디가 카카오/네이버 아이디이면 삭제 처리
+	public void removeSnsInfo(String id) {
+		mapper.deleteSnsInfo(id);
+	}
 	//	-------------------------------------------------------------
 	//	채팅 - MEM_ID 조회
 	public String selectMemberId(String mem_id) {
 		return mapper.selectMemberId(mem_id);
 	}
+
+	
+	
 
 
 }

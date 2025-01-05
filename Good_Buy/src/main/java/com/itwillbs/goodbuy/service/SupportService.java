@@ -30,4 +30,9 @@ public class SupportService {
 		// TODO Auto-generated method stub
 		return mapper.selectSupportListCount(id);
 	}
+	//1:1 글쓰기
+	public int registSupport(SupportVO support) {
+		// TODO Auto-generated method stub
+		return mapper.insertSupport(support);
+	}
 }

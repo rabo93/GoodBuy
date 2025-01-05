@@ -30,14 +30,6 @@ function startChat() {
 //	startChat.product_id = product_id;
 }
 
-//function showSlideChat(receiver_id, product_id) {
-//	console.log("receiver_id : " + receiver_id);
-//	console.log("product_id : " + product_id);
-//	
-//	
-//}
-
-
 function onOpen () {
 	console.log("onOpen()");
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.management.RuntimeErrorException;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,8 +51,8 @@ public class AdminService {
 	}
 
 	// 공통코드 - 목록 조회
-	public List<Map<String, Object>> getCommonCodes(int start, int length, String searchValue, String orderColumn, String orderDir) {
-		return mapper.selectCommonCodes(start, length, searchValue, orderColumn, orderDir);
+	public List<Map<String, Object>> getCommonCodes(Map<String, Object> param) {
+		return mapper.selectCommonCodes(param);
 	}
 
 	// 공통코드 전체 컬럼 수 조회
@@ -60,8 +61,8 @@ public class AdminService {
 	}
 
 	// 공통코드 검색 컬럼 수 조회
-	public int getCommonCodesFiltered(String searchValue) {
-		return mapper.selectCommonCodesFiltered(searchValue);
+	public int getCommonCodesFiltered(Map<String, Object> param) {
+		return mapper.selectCommonCodesFiltered(param);
 	}
 
 	// 공통코드 컬럼 수정
@@ -93,15 +94,8 @@ public class AdminService {
 
 	// ============== [ 회원관리 ] ==============
 	// 회원 목록 조회
-	public List<MemberVO> getMemberList(
-			int start, 
-			int length, 
-			String searchValue, 
-			int memStatus, 
-			String memGrade, 
-			String orderColumn, 
-			String orderDir) {
-		return mapper.selectMemberList(start, length, searchValue, memStatus, memGrade, orderColumn, orderDir);
+	public List<MemberVO> getMemberList(Map<String, Object> param) {
+		return mapper.selectMemberList(param);
 	}
 
 	// 회원 상세 조회
@@ -120,8 +114,8 @@ public class AdminService {
 	}
 	
 	// 회원 목록 필터 후 컬럼 수 조회
-	public int getMemberListFiltered(int memStatus, String memGrade, String searchValue) {
-		return mapper.selectMemberListFiltered(memStatus, memGrade, searchValue);
+	public int getMemberListFiltered(Map<String, Object> param) {
+		return mapper.selectMemberListFiltered(param);
 	}
 	
 	// 회원 삭제
@@ -139,13 +133,13 @@ public class AdminService {
 	}
 	
 	// 신고 상품 검색 필터링 후 컬럼 수 조회
-	public int getProductReportFiltered(String status, String searchValue, String searchDate) {
-		return mapper.selectProductReportFiltered(status, searchValue, searchDate);
+	public int getProductReportFiltered(Map<String, Object> param) {
+		return mapper.selectProductReportFiltered(param);
 	}
 	
 	// 필터링 된 신고 상품 목록 가져오기
-	public List<Map<String, Object>> getProductReportList(int start, int length, String status, String searchValue, String searchDate, String orderColumn, String orderDir) {
-		return mapper.selectProductReportList(start, length, status, searchValue, searchDate, orderColumn, orderDir);
+	public List<Map<String, Object>> getProductReportList(Map<String, Object> param) {
+		return mapper.selectProductReportList(param);
 	}
 	
 	// 신고 상품 - 조치 및 수정
@@ -160,13 +154,13 @@ public class AdminService {
 	}
 	
 	// 공지사항 필터링 후 컬럼 수 조회
-	public int getNoticeListFiltered(String searchValue) {
-		return mapper.selectNoticeListFiltered(searchValue);
+	public int getNoticeListFiltered(Map<String, Object> param) {
+		return mapper.selectNoticeListFiltered(param);
 	}
 	
 	// 공지사항 전체 목록 조회 (필터링, 검색어, 페이징 적용)
-	public List<NoticeVO> getNoticeList(int start, int length, String searchValue, String orderColumn, String orderDir) {
-		return mapper.selectNoticeList(start, length, searchValue, orderColumn, orderDir);
+	public List<NoticeVO> getNoticeList(Map<String, Object> param) {
+		return mapper.selectNoticeList(param);
 	}
 	
 	// 공지사항 첨부파일 가져오기
@@ -212,13 +206,12 @@ public class AdminService {
 		return mapper.selectEnquireTotal();
 	}
 	// 1:1 문의 검색 필터링 후 컬럼 수 조회
-	public int getEnquireListFiltered(String status, String searchValue, String searchDate) {
-		return mapper.selectEnquireListFiltered(status, searchValue, searchDate);
+	public int getEnquireListFiltered(Map<String, Object> param) {
+		return mapper.selectEnquireListFiltered(param);
 	}
 	// 필터링 된 1:1 문의 목록 가져오기
-	public List<Map<String, Object>> getEnquireList(int start, int length, String status, String searchValue,
-													String searchDate, String orderColumn, String orderDir) {
-		return mapper.selectEnquireList(start, length, status, searchValue, searchDate, orderColumn, orderDir);
+	public List<Map<String, Object>> getEnquireList(Map<String, Object> param) {
+		return mapper.selectEnquireList(param);
 	}
 	
 	

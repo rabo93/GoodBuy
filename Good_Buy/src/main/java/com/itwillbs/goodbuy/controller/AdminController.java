@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.itwillbs.goodbuy.aop.AdminLog;
 import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.service.AdminService;

@@ -584,5 +584,17 @@
 		WHERE SUPPORT_ID = #{SUPPORT_ID}
      </update>
      
-     
+     <!-- ******** 로그 AOP ******* -->
+     <!-- 로그 저장 - INSERT -->
+     <insert id="insertLog">
+     	INSERT 
+     	  INTO LOG
+     	VALUES (
+     		#{log.ADMIN_ID}
+     		, #{log.MAPPER_ID}
+     		, #{log.PROCESS_TIME}
+     		, #{log.PROCESS_RESULT}
+     		, #{log.IP_ADDRESS}
+     	)
+     </insert>
 </mapper>

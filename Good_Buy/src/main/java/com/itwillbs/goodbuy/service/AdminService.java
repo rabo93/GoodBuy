@@ -227,6 +227,12 @@ public class AdminService {
 		return mapper.updateReplyInfo(param);
 	}
 
+	// =========================================================================
+	// 로그 저장
+	public int registLog(Map<String, Object> result) {
+		return mapper.insertLog(result);
+	}
+
 
 
 

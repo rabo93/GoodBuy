@@ -36,6 +36,22 @@
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 				<div class="container">
 			        <div class="sidebar"> 
+<%-- 			        	<c:forEach items="${chatRoomList}" var="chatRoom"> --%>
+<%-- 				            <div class="sidebar-item ${chatRoom.room_id}"> --%>
+<%-- 				                <a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a> --%>
+<!-- 				                <div class="item-container"> -->
+<%-- 					                <div class="item"><strong>controller ${chatRoom.title}</strong></div> --%>
+<!-- 					                <div class="item-chat">상품 구매하고 싶어요 <span>&nbsp; · &nbsp; 2024.12.30 12:40</span></div> -->
+<!-- 				                </div> -->
+<!-- 				            </div> -->
+<%-- 			        	</c:forEach> --%>
+<!-- 				            <div class="sidebar-item" onclick="testOpenChat(1)"> -->
+<%-- 				                <a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a> --%>
+<!-- 				                <div class="item-container"> -->
+<!-- 					                <div class="item"><strong>아기 유아 어그부츠 150cm</strong></div> -->
+<!-- 					                <div class="item-chat">상품 구매하고 싶어요 <span>&nbsp; · &nbsp; 2024.12.30 12:40</span></div> -->
+<!-- 				                </div> -->
+<!-- 				            </div> -->
 <!-- 				            <div class="sidebar-item" onclick="testOpenChat(1)"> -->
 <%-- 				                <a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a> --%>
 <!-- 				                <div class="item-container"> -->

@@ -76,58 +76,58 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 		}
 		
 		if (chatMessage.getType().equals(ChatMessage.TYPE_INIT_COMPLETE)) {
-			//	상품 조회를 위한 product_id 파싱후 저장
-			int product_id = Integer.parseInt(chatMessage.getProduct_id());
-			//	수신자 아이디 포함 여부 판별
-			if(receiver_id != null && !receiver_id.equals("")) {
-				
-				//	접속여부 판별(현재 접속중?)
-				if(userList.get(receiver_id) == null) {
-					//	접속중이 아닐 때 DB에 상대방 아이디 검색
-					String dbReceiverId = memberService.selectMemberId(receiver_id);
+			if(chatMessage.getProduct_id() != null) {
+				//	상품 조회를 위한 product_id 파싱후 저장
+				int product_id = Integer.parseInt(chatMessage.getProduct_id());
+				//	수신자 아이디 포함 여부 판별
+				if(receiver_id != null && !receiver_id.equals("")) {
+					//	접속여부 판별(현재 접속중?)
+					if(userList.get(receiver_id) == null) {
+						//	접속중이 아닐 때 DB에 상대방 아이디 검색
+						String dbReceiverId = memberService.selectMemberId(receiver_id);
+						//	DB에서 상대방 아이디 존재 여부 판별
+						if(dbReceiverId == null) {
+							ChatMessage errorMessage = new ChatMessage(ChatMessage.TYPE_ERROR, "", sender_id, "", "존재하지 않는 사용자입니다!", "", "");
+							sendMessage(session, errorMessage);
+							return;
+						}
+					}	//	사용자 접속 여부 판별 끝
 					
-					//	DB에서 상대방 아이디 존재 여부 판별
-					if(dbReceiverId == null) {
-						ChatMessage errorMessage = new ChatMessage(ChatMessage.TYPE_ERROR, "", sender_id, "", "존재하지 않는 사용자입니다!", "", "");
-						sendMessage(session, errorMessage);
-						return;
+					ChatRoom chatRoom = chatService.selectChatRoom(sender_id, receiver_id, product_id);
+					if(chatRoom == null) {	// 기존 채팅방 없음
+						System.out.println("새 채팅방 생성");
+						
+						String title = productService.productSearch(product_id).getProduct_title();
+						System.out.println(title);
+						//	새 채팅방 방번호 생성
+						chatMessage.setRoom_id(generateRoomID());
+						
+						//	새 채팅방 정보 DB 저장 요청
+						List<ChatRoom> chatRoomList = new ArrayList<ChatRoom>();
+						//	room_id, product_id, title, sender_id, receiver_id, status
+						chatRoomList.add(new ChatRoom(chatMessage.getRoom_id(), product_id, title, sender_id, receiver_id, 1));
+						chatRoomList.add(new ChatRoom(chatMessage.getRoom_id(), product_id, title, receiver_id, sender_id, 1));
+						//	DB에 채팅방 저장 요청
+						chatService.insertChatRoom(chatRoomList);
+						
+						//	메세지 타입 TYPE_START 지정
+						chatMessage.setType(ChatMessage.TYPE_START);
+						//	채팅방 정보 저장
+						chatRoom = chatRoomList.get(0);
+						//	채팅 메세지 JSON 문자열로 변환하여 저장
+						chatMessage.setMessage(gson.toJson(chatRoom));
+						//	메세지 전송
+						sendMessage(session, chatMessage);
+					} else {
+						chatMessage.setRoom_id(chatRoom.getRoom_id());
+						chatMessage.setType(ChatMessage.TYPE_START);
+						chatMessage.setMessage(gson.toJson(chatRoom));
+						System.out.println("!@#!@#");
+						System.out.println(chatMessage);
+						
+						sendMessage(session, chatMessage);
 					}
-				}	//	사용자 접속 여부 판별 끝
-				
-				
-				ChatRoom chatRoom = chatService.selectChatRoom(sender_id, receiver_id, product_id);
-				if(chatRoom == null) {	// 기존 채팅방 없음
-					System.out.println("새 채팅방 생성");
 					
-					String title = productService.productSearch(product_id).getProduct_title();
-					System.out.println(title);
-					//	새 채팅방 방번호 생성
-					chatMessage.setRoom_id(generateRoomID());
-					
-					//	새 채팅방 정보 DB 저장 요청
-					List<ChatRoom> chatRoomList = new ArrayList<ChatRoom>();
-					//	room_id, product_id, title, sender_id, receiver_id, status
-					chatRoomList.add(new ChatRoom(chatMessage.getRoom_id(), product_id, title, sender_id, receiver_id, 1));
-					chatRoomList.add(new ChatRoom(chatMessage.getRoom_id(), product_id, title, receiver_id, sender_id, 1));
-					//	DB에 채팅방 저장 요청
-					chatService.insertChatRoom(chatRoomList);
-					
-					//	메세지 타입 TYPE_START 지정
-					chatMessage.setType(ChatMessage.TYPE_START);
-					//	채팅방 정보 저장
-					chatRoom = chatRoomList.get(0);
-					//	채팅 메세지 JSON 문자열로 변환하여 저장
-					chatMessage.setMessage(gson.toJson(chatRoom));
-					//	메세지 전송
-					sendMessage(session, chatMessage);
-				} else {
-					chatMessage.setRoom_id(chatRoom.getRoom_id());
-					chatMessage.setType(ChatMessage.TYPE_START);
-					chatMessage.setMessage(gson.toJson(chatRoom));
-					System.out.println("!@#!@#");
-					System.out.println(chatMessage);
-					
-					sendMessage(session, chatMessage);
 				}
 				
 			}

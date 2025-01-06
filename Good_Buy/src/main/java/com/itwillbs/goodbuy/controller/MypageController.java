@@ -441,11 +441,11 @@ public class MypageController {
 		public String requestModifyForm(HttpSession session,Model model,SupportVO support) {
 			String id = getSessionUserId(session);
 
-//			String realPath = getRealPath(session);
-//			String subDir = createDirectories(realPath);
-//			realPath += "/" + subDir;
-//			
-//			String fileName = processDuplicateFileName(support, subDir);
+			String realPath = getRealPath(session);
+			String subDir = createDirectories(realPath);
+			realPath += "/" + subDir;
+			
+			String fileName = processDuplicateFileName(support, subDir);
 
 			int result = supportService.EditSupport(support);
 			if(result > 0 ) {

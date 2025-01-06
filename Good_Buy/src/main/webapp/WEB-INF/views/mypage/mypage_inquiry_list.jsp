@@ -113,7 +113,7 @@
 														</c:if>
 													</td>
 													<td>${support.mem_id}</td>
-													<td><fmt:formatDate value="${support.support_date}" pattern="yy-MM-dd HH:mm" /></td>
+													<td><fmt:formatDate value="${support.support_date}" pattern="yy-MM-dd" /></td>
 												</tr>
 												
 											</c:forEach>

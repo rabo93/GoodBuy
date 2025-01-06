@@ -23,18 +23,13 @@ public interface AdminMapper {
 	int insertCommonCodeType(@Param("subCodes") List<Map<String, Object>> subCodes);
 
 	// 공통코드 목록 조회
-	List<Map<String, Object>> selectCommonCodes(
-			@Param("start") int start, 
-			@Param("length") int length,
-			@Param("searchValue") String searchValue,
-			@Param("orderColumn") String orderColumn,
-			@Param("orderDir") String orderDir);
+	List<Map<String, Object>> selectCommonCodes(@Param("param") Map<String, Object> param);
 	
 	// 공통코드 컬럼 수 조회
 	int selectCommonCodesTotal();
 
 	// 공통코드 검색 컬럼 수 조회
-	int selectCommonCodesFiltered(String searchValue);
+	int selectCommonCodesFiltered(@Param("param") Map<String, Object> param);
 
 	// 공통코드 컬럼 수정
 	@AdminLog
@@ -50,14 +45,7 @@ public interface AdminMapper {
 
 	//---------------------------------------------------------
 	// 회원 목록 조회 + 검색 조건
-	List<MemberVO> selectMemberList(
-			@Param("start") int start, 
-			@Param("length") int length, 
-			@Param("searchValue") String searchValue, 
-			@Param("memStatus") int memStatus, 
-			@Param("memGrade") String memGrade, 
-			@Param("orderColumn") String orderColumn, 
-			@Param("orderDir") String orderDir);
+	List<MemberVO> selectMemberList(@Param("param") Map<String, Object> param);
 
 	// 회원 상세정보 조회
 	MemberVO selectMember(String mem_id);
@@ -70,10 +58,7 @@ public interface AdminMapper {
 	int selectMemberListTotal();
 	
 	// 회원 검색 후 컬럼 수 조회
-	int selectMemberListFiltered(
-			@Param("memStatus") int memStatus, 
-			@Param("memGrade") String memGrade, 
-			@Param("searchValue") String searchValue);
+	int selectMemberListFiltered(@Param("param") Map<String, Object> param);
 	
 	// 회원 삭제
 	@AdminLog
@@ -84,20 +69,10 @@ public interface AdminMapper {
 	int selectProductReportTotal();
 	
 	// 신고 상품 검색 필터링 후 컬럼 수 조회
-	int selectProductReportFiltered(
-			@Param("status") String status,
-			@Param("searchValue") String searchValue,
-			@Param("searchDate") String searchDate);
+	int selectProductReportFiltered(@Param("param") Map<String, Object> param);
 
 	// 필터링 된 신고 상품 목록 가져오기
-	List<Map<String, Object>> selectProductReportList(
-			@Param("start") int start,
-			@Param("length") int length, 
-			@Param("status") String status, 
-			@Param("searchValue") String searchValue,
-			@Param("searchDate") String searchDate,
-			@Param("orderColumn") String orderColumn, 
-			@Param("orderDir") String orderDir);
+	List<Map<String, Object>> selectProductReportList(@Param("param") Map<String, Object> paramr);
 	
 	// 신고 상품 조치 및 수정
 	@AdminLog
@@ -108,15 +83,10 @@ public interface AdminMapper {
 	int selectNoticeListTotal();
 	
 	// 공지사항 필터링 후 목록 컬럼 수 조회
-	int selectNoticeListFiltered(String searchValue);
+	int selectNoticeListFiltered(@Param("param") Map<String, Object> param);
 	
 	// 공지사항 전체 목록 조회 (필터링, 검색어, 페이징 적용)
-	List<NoticeVO> selectNoticeList(
-			@Param("start") int start,
-			@Param("length") int length, 
-			@Param("searchValue") String searchValue, 
-			@Param("orderColumn") String orderColumn, 
-			@Param("orderDir") String orderDir);
+	List<NoticeVO> selectNoticeList(@Param("param") Map<String, Object> param);
 	
 	// 공지사항 첨부파일 가져오기
 	List<NoticeVO> selectNoticeBoardFileList(@Param("deleteItems") List<Integer> deleteItems);
@@ -155,18 +125,12 @@ public interface AdminMapper {
 	//---------------------------------------------------------
 	// 1:1 문의 목록 전체 컬럼 수 조회
 	int selectEnquireTotal();
+	
 	// 1:1 문의 검색 필터링 후 컬럼 수 조회
-	int selectEnquireListFiltered(@Param("status") String status, 
-								  @Param("searchValue") String searchValue, 
-								  @Param("searchDate") String searchDate);
+	int selectEnquireListFiltered(@Param("param") Map<String, Object> param);
+	
 	// 필터링 된 1:1 문의 목록 가져오기
-	List<Map<String, Object>> selectEnquireList(@Param("start") int start,
-												@Param("length") int length, 
-												@Param("status") String status, 
-												@Param("searchValue") String searchValue,
-												@Param("searchDate") String searchDate,
-												@Param("orderColumn") String orderColumn, 
-												@Param("orderDir") String orderDir);
+	List<Map<String, Object>> selectEnquireList(@Param("param") Map<String, Object> param);
 	
 	// 답글 등록(수정)
 	@AdminLog

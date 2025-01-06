@@ -1,6 +1,7 @@
 package com.itwillbs.goodbuy.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -24,6 +25,13 @@ public interface SupportMapper {
 	//1:1 글쓰기 삭제
 	int deleteSupport(int support_id);
 
+	//1:1 글쓰기 수정
+//	int updateSupport(
+//			@Param("support_id") int support_id
+//			,@Param("support_subject") String support_subject
+//			,@Param("support_content") String support_content);
+
+	int updateSupport(SupportVO support);
 	
 	
 }

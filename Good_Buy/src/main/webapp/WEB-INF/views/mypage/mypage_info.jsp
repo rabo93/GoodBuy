@@ -22,7 +22,6 @@
 
 <!-- ******************* 아래 CSS와 JS는 페이지별로 알맞게 Import 해주세요 ****************** -->
 <!-- CSS for Page -->
-<%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css"> --%>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
 
 <!-- JS for Page -->
@@ -63,6 +62,7 @@
 						<form action="MyInfoModify" id="myInfo" name="myInfo" method="post" enctype="multipart/form-data" class="my-frm">
 							<section class="row">
 								<label>프로필 사진</label>
+								
 								<div class="box">
 									<c:choose>
 							            <c:when test="${not empty member.mem_profile}">
@@ -78,13 +78,12 @@
 									<!-- 파일 선택 버튼 -->
 <!-- 									<input type="file" class="btn-frm" name="profile_upload" id="profile_upload" onchange="previewImage(event)"><br> -->
 									<div class="row">
-									    <label for="file-upload" class="custom-file-upload">
+									    <label for="file_upload" class="custom-file-upload">
 									        파일 선택
 									    </label>
-									    <input id="file-upload" type="file" name="profile_upload" class="btn-frm" onchange="previewImage(event)">
+									    <input type="file" id="file_upload" name="profile_upload" class="btn-frm" onchange="previewImage(event)">
 									</div>
 									
-									<br>
 								</div>
 							</section>
 							
@@ -153,6 +152,9 @@
 							</section>
 							
 							<button id="modifyBtn" onclick="myInfoModify()">수정완료</button>
+							
+							
+							
 							<a href="MemberWithdraw" class="withdraw-link">회원탈퇴</a>
 						</form>
 					</section>

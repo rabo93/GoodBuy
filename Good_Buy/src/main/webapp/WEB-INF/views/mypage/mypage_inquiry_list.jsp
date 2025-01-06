@@ -108,11 +108,12 @@
 													<td class="subject">
 														${support.support_subject}
 														<c:if test="${support.reply_date != null}">
-															<span class="inq-reply">답변완료 <i class="fa-solid fa-reply"></i></span>
+<!-- 															<span class="inq-reply">답변완료<i class="fa-solid fa-reply"></i></span> -->
+																<button class="inq-reply" disabled>답변완료 <i class="fa-solid fa-reply"></i></button>
 														</c:if>
 													</td>
 													<td>${support.mem_id}</td>
-													<td><fmt:formatDate value="${support.support_date}" pattern="yy-MM-dd HH:mm" /></td>
+													<td><fmt:formatDate value="${support.support_date}" pattern="yy-MM-dd" /></td>
 												</tr>
 												
 											</c:forEach>

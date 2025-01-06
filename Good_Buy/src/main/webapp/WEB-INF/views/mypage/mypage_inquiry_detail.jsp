@@ -91,7 +91,7 @@
 		                    <div class="com attach">
 		                    	<label>첨부파일</label>
 		                    	<span>
-									<div>${support.support_file1}
+									<div> ${support.support_file1}
 		 								<a href="${pageContext.request.contextPath}/resources/upload/${fileName}" download="${originalFileName}">
 		 									<input type="button" value="다운로드">
 		 								</a>
@@ -99,18 +99,18 @@
 		                    	</span>
 		                    </div>
 						</c:if>
-						<c:if test="${support.support_answer_date != null}">
+						<c:if test="${support.reply_date != null}">
 							<div class="reply-hr"></div>
 							<div class="com reply">
 								<label>답변제목</label>
 								<span class="subject">
-									${support.support_answer_subject}
+									[${support.support_subject}] 답변드립니다😊
 								</span>
 							</div>
 							<div class="com reply">
 								<label>답변내용</label>
 								<span class="contents">
-									${support.support_answer_content}
+									${support.reply_content}
 								</span>
 							</div>
 						</c:if>
@@ -146,19 +146,22 @@
 						support_id : supportId
 					},
 					success : function (response) {
-						console.log("서버 응답>>>>>>>>>>:", response);
-							alert("문의사항이 삭제 되었습니다.");
-							location.href="MySupport";
+						alert("문의사항이 삭제 되었습니다.");
+						location.href="MySupport";
 					},
 					error : function () {
-						alert("삭제실패");
-						
+						alert("삭제실패 \\n다시 시도해주세요!");
 					}
 				})
 			}
 		}
-	
-	
 	</script>
+	
+	<script type="text/javascript">
+	    function requestModify(supportId) {
+	        location.href = "RequestModify?support_id=" + supportId;
+	    }
+	</script>
+	
 </body>
 </html>

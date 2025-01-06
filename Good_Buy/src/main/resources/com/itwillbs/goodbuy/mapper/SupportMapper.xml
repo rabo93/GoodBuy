@@ -15,7 +15,6 @@
 		    S.SUPPORT_CONTENT, 
 		    S.SUPPORT_FILE AS SUPPORT_FILE1, 
 		    S.REPLY_DATE, 
-		    <!-- S.SUPPORT_SUBJECT,  -->
 		    S.REPLY_CONTENT 
 		FROM SUPPORT S 
 		JOIN MEMBER M 
@@ -50,7 +49,7 @@
 			,#{mem_id}
 			,#{support_subject}
 			,#{support_content}
-			,#{support_file}
+			,#{support_file1}
 			,null
 			,null
 			,'접수'
@@ -63,4 +62,11 @@
 		WHERE SUPPORT_ID = #{support_id}
 	</delete>
 
+	<update id="updateSupport">
+		UPDATE SUPPORT
+		SET SUPPORT_SUBJECT = #{support_subject}
+			, SUPPORT_CONTENT = #{support_content}
+			, SUPPORT_FILE = #{support_file1}
+		WHERE SUPPORT_ID = #{support_id}
+	</update>
 </mapper>

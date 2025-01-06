@@ -120,8 +120,8 @@
 									<button type="button">답글</button>
 		                    	</c:if>
 								<c:if test="${sessionScope.sId eq support.mem_id or sessionScope.sId eq 'admin'}">
-									<button onclick="requestModify()">수정</button>
-									<button onclick="confirmDelete()">삭제</button>
+									<button onclick="requestModify(${support.support_id})">수정</button>
+									<button onclick="confirmDelete(${support.support_id})">삭제</button>
 								</c:if>
 							</c:if>
 							<button onclick="location.href='MySupport?pageNum=${param.pageNum}'">목록으로</button>
@@ -136,12 +136,29 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
-	<!-- 스크립트 작성해야함 ~~~~~~~~~ -->
-
-
-
-
-
-
+	<script type="text/javascript">
+		function confirmDelete(supportId) {
+			if(confirm ("정말 삭제하시겠습니까?")){
+				$.ajax({
+					url : "ConfirmDelete",
+					type : "POST",
+					data : {
+						support_id : supportId
+					},
+					success : function (response) {
+						console.log("서버 응답>>>>>>>>>>:", response);
+							alert("문의사항이 삭제 되었습니다.");
+							location.href="MySupport";
+					},
+					error : function () {
+						alert("삭제실패");
+						
+					}
+				})
+			}
+		}
+	
+	
+	</script>
 </body>
 </html>

@@ -53,9 +53,14 @@
 			,#{support_file}
 			,null
 			,null
-			,null
+			,'접수'
 		)
 	
 	</insert>
+	
+	<delete id="deleteSupport">
+		DELETE FROM SUPPORT
+		WHERE SUPPORT_ID = #{support_id}
+	</delete>
 
 </mapper>

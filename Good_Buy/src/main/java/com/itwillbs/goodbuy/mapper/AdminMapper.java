@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.itwillbs.goodbuy.aop.AdminLog;
 import com.itwillbs.goodbuy.vo.FaqVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.NoticeVO;
@@ -14,9 +15,11 @@ import com.itwillbs.goodbuy.vo.NoticeVO;
 public interface AdminMapper {
 
 	// 공통코드 등록 (상위코드)
+	@AdminLog
 	int insertCommonCode(Map<String, Object> mainCode);
 
 	// 공통코드 등록 (하위코드)
+	@AdminLog
 	int insertCommonCodeType(@Param("subCodes") List<Map<String, Object>> subCodes);
 
 	// 공통코드 목록 조회
@@ -34,12 +37,15 @@ public interface AdminMapper {
 	int selectCommonCodesFiltered(String searchValue);
 
 	// 공통코드 컬럼 수정
+	@AdminLog
 	int updateCommonCodes(Map<String, Object> param);
 
 	// 공통코드 컬럼 삭제
+	@AdminLog
 	int deleteCommonCodes(Map<String, Object> param);
 
 	// 사용되지않는 공통코드(상위코드) 삭제
+	@AdminLog
 	int deleteDeprecatedCommonCode();
 
 	//---------------------------------------------------------
@@ -57,6 +63,7 @@ public interface AdminMapper {
 	MemberVO selectMember(String mem_id);
 	
 	// 회원 상태 수정
+	@AdminLog
 	int updateMemberInfo(MemberVO member);
 	
 	// 회원 목록 전체 컬럼 수 조회
@@ -69,6 +76,7 @@ public interface AdminMapper {
 			@Param("searchValue") String searchValue);
 	
 	// 회원 삭제
+	@AdminLog
 	int deleteMember(String mem_id);
 	
 	//---------------------------------------------------------
@@ -92,6 +100,7 @@ public interface AdminMapper {
 			@Param("orderDir") String orderDir);
 	
 	// 신고 상품 조치 및 수정
+	@AdminLog
 	int updateProductReport(Map<String, Object> param);
 	
 	//---------------------------------------------------------
@@ -113,6 +122,7 @@ public interface AdminMapper {
 	List<NoticeVO> selectNoticeBoardFileList(@Param("deleteItems") List<Integer> deleteItems);
 	
 	// 공지사항 삭제
+	@AdminLog
 	int deleteNotice(@Param("deleteItems") List<Integer> deleteItems);
 	
 	//---------------------------------------------------------
@@ -135,9 +145,11 @@ public interface AdminMapper {
 			@Param("searchValue") String searchValue);
 
 	// Faq 수정
+	@AdminLog
 	int updateFaqInfo(Map<String, Object> param);
 	
 	// Faq 삭제
+	@AdminLog
 	int deleteFaq(@Param("deleteItems") List<Integer> faqIds);
 
 	//---------------------------------------------------------
@@ -157,19 +169,12 @@ public interface AdminMapper {
 												@Param("orderDir") String orderDir);
 	
 	// 답글 등록(수정)
+	@AdminLog
 	int updateReplyInfo(Map<String, Object> param);
-	
-	
 
-
-
-
-	
-
-
-
-
-	
+	// =====================================================
+	// 로그 저장
+	int insertLog(@Param("log") Map<String, Object> result);
 
 
 }

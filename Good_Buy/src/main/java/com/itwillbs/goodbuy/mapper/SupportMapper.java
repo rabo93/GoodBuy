@@ -21,6 +21,9 @@ public interface SupportMapper {
 	//1:1 글쓰기
 	int insertSupport(SupportVO support);
 
+	//1:1 글쓰기 삭제
+	int deleteSupport(int support_id);
+
 	
 	
 }

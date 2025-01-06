@@ -55,6 +55,16 @@
     max-height: 60vh;
 }
 
+.extra-header {
+    width: 100%;
+    background-color: white;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;  /* 버튼을 양쪽 끝으로 정렬 */
+    align-items: center;
+    border-bottom: 1px solid #ddd; /* 구분선 추가 */
+}
+
 .chat-header {
     padding: 10px;
     background-color: #fff;

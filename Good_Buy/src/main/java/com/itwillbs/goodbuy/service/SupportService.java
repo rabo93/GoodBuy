@@ -35,4 +35,9 @@ public class SupportService {
 		// TODO Auto-generated method stub
 		return mapper.insertSupport(support);
 	}
+	
+	//1:1 글쓰기 삭제
+	public int removeSupport(int support_id) {
+		return mapper.deleteSupport(support_id);
+	}
 }

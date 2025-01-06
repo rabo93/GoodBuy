@@ -331,19 +331,6 @@ public class MypageController {
 			return "mypage/mypage_inquiry_list";
 		}
 	
-	//[문의내역]
-//	@GetMapping("MySupport")
-//	public String mySupportList(HttpSession session,Model model,MemberVO member) {
-//		String id = getSessionUserId(session);
-//		member.setMem_id(id);
-//		
-//		List<SupportVO> supportList = supportService.getSupporList(id);
-//		model.addAttribute("support",supportList);
-//		
-//		
-//		return "mypage/mypage_inquiry_list";
-//	}
-	
 	//문의사항 자세히 보기
 	@GetMapping("MySupportDetail")
 	public String mySupportDetail(int support_id, Model model) {
@@ -405,8 +392,23 @@ public class MypageController {
 		
 	}
 	
+	//문의사항 삭제
+	@ResponseBody
+	@PostMapping("ConfirmDelete")
+	public String confirmDelete(HttpSession session,Model model,int support_id) {
+		String id = getSessionUserId(session);
+		
+		int result = supportService.removeSupport(support_id);
+		if(result > 0) {
+			return "result/success";
+		}
+		return "result/fail";
+		
+	}
+	
 	
 		
+	// ===========================================================================================
 	// ===========================================================================================
 	// 이전 페이지 이동 저장
 	private void savePreviousUrl(HttpServletRequest request, HttpSession session) {

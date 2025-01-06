@@ -84,7 +84,7 @@ function initChat() {
 function showChatList(data) {
 	console.log("receiver_id : " + receiver_id);
 	console.log(data.message + " : " + typeof(data.message));
-	$(".sidebar").empty();
+//	$(".sidebar").empty();
 	
 	if(data.message == "null") {
 		$(".sidebar").html("<div class='sidebar-item empty'>채팅중인 채팅방 없음</div>")
@@ -113,7 +113,14 @@ function appendChatRoomList(room) {
 	
 	if(!$(".sidebar-item").hasClass(room.room_id)) {
 		let title = room.title;
-		let divRoom = "<div class='sidebar-item " + room.room_id + "'>" + title + "<span class='messageStatus'></span></div>";
+		let divRoom = "<div class='sidebar-item " + room.room_id + "'>"
+							+ '<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>'
+		                + '<div class="item-container">'
+			            	+ '<div class="item"><strong>' + title + '</strong></div>'
+			                + '<div class="item-chat">상품 구매하고 싶어요 <span>&nbsp; · &nbsp; 2024.12.30 12:40</span></div>'
+		                + '</div>'
+		                + "<span class='messageStatus'>3</span>"
+					+ "</div>";
 		$(".sidebar").prepend(divRoom);
 		
 		//	채팅방 더블클릭시 채팅창 활성화
@@ -128,25 +135,36 @@ function appendChatRoomList(room) {
 	}
 	
 }
+
 //	채팅창 생성
 function showChatRoom(room) {
 	console.log("showChatRoom -  채팅화면 표시 - " + room);
 	console.log(room);
-	let divRoom = '<div class="chat-header">'
-		           	+ '<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>'
-		           	+ '<div class="title">'+ room.title +' </div>'
-//		           	+ '<button class="item-button" onclick="location.href=' + '\'PayTransferRequest?product_id=' + product_id + '&receiver_id=' + receiver_id + '\'' + '">구매하기</button>'
-		           	+ '<button class="item-button" onclick="openPayWindow(product_id, receiver_id)">구매하기</button>'
-		           + '</div>'
-		           + '<div class="chat-body">'
-		           + '</div>'
-		           + '<div class="chat-footer">'
-		           	+ '<input type="hidden" id="room_id" value="' + room.room_id +'">'
-		           	+ '<input type="hidden" id="receiver_id" value="' + room.receiver_id +'">'
-		           	+ '<input type="hidden" id="sId" value="' + room.sender_id +'">'
-		           	+ '<input type="text" class="chatMessage" placeholder="메시지를 입력하세요...">'
-		            + '<button class="btnSend">전송</button>'
-		           + '</div>';
+	let url = new URL(location.href);
+	
+	let divRoom = 	  '<div class="extra-header">'
+						+ '<button class="close-chat-button" onclick="closeSlideChat()">'
+							+ '<i class="fa-solid fa-arrow-left"></i>'
+						+ '</button>'
+						+ '<button class="close-chat-button" onclick="reportChat()">'
+							+ '<img src="${pageContext.request.contextPath}/resources/img/siren.png">'
+						+ '</button>'
+					+ '</div>'
+					+ '<div class="chat-header">'
+			           	+ '<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>'
+			           	+ '<div class="title">'+ room.title +' </div>'
+	//		           	+ '<button class="item-button" onclick="location.href=' + '\'PayTransferRequest?product_id=' + product_id + '&receiver_id=' + receiver_id + '\'' + '">구매하기</button>'
+			           	+ '<button class="item-button" onclick="openPayWindow(product_id, receiver_id)">구매하기</button>'
+			           + '</div>'
+			           + '<div class="chat-body">'
+			           + '</div>'
+			           + '<div class="chat-footer">'
+			           	+ '<input type="hidden" id="room_id" value="' + room.room_id +'">'
+			           	+ '<input type="hidden" id="receiver_id" value="' + room.receiver_id +'">'
+			           	+ '<input type="hidden" id="sId" value="' + room.sender_id +'">'
+			           	+ '<input type="text" class="chatMessage" placeholder="메시지를 입력하세요...">'
+			            + '<button class="btnSend">전송</button>'
+		            + '</div>';
 	
 	//	chat-area 영역에 채팅창 div 출력
 	$(".chat-area").html(divRoom);

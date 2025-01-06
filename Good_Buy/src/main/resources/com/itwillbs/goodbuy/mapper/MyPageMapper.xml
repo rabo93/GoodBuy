@@ -28,8 +28,14 @@
 		DELETE FROM WISHLIST
 		WHERE WISHLIST_ID= #{wishlist_id}
 	</delete>
+	
 	<!-- 위시리스트 추가 -->
 	<insert id="insertWishlist">
+	<selectKey order="BEFORE" resultType="int" keyProperty="wishlist_id">
+	
+		SELECT IFNULL(MAX(WISHLIST_ID), 0) + 1 
+		FROM WISHLIST
+	</selectKey>
 		INSERT INTO WISHLIST
 		VALUES (
 			#{wishlist_id} + 1

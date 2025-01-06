@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.itwillbs.goodbuy.vo.ProductOrderVO;
 import com.itwillbs.goodbuy.vo.ProductVO;
+import com.itwillbs.goodbuy.vo.WishlistVO;
 
 @Mapper
 public interface ProductMapper {
@@ -34,16 +35,27 @@ public interface ProductMapper {
 			@Param("product_status")int product_status, 
 			@Param("product_trade_adr1")String product_trade_adr1,
 			@Param("cate")String product_category);
-
+	
+	// 상품 상세페이지 조회
 	ProductVO productSearch(int product_id);
-
+	
+	// 상품 신고
 	int itemReporting(
 			@Param("product_id")int product_id,
 			@Param("reason")String reason,
 			@Param("reporter_id")String reporter_id);
 
 	List<ProductVO> selectLimitProductList(String id);
-
-
+	
+// 상품 조회수 증가
 	void plusViewCount(int product_id);
+	
+	// 상품 찜여부 조회
+	WishlistVO checkWishlist(@Param("product_id")int product_id, @Param("sId")String id);
+	
+	// 상품 상세페이지 같은 판매자 상품 조회
+	List<Map<String, Object>> searchSellerProduct(@Param("mem_id")String mem_id, @Param("product_id")int product_id);
+
+	// 상품 상세페이지 비슷한 상품 조회
+	List<Map<String, Object>> searchSameCategoryProduct(@Param("product_category")String product_category, @Param("product_id")int product_id);
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.itwillbs.goodbuy.mapper.ProductMapper;
 import com.itwillbs.goodbuy.vo.ProductOrderVO;
 import com.itwillbs.goodbuy.vo.ProductVO;
+import com.itwillbs.goodbuy.vo.WishlistVO;
 
 @Service
 public class ProductService {
@@ -67,11 +68,28 @@ public class ProductService {
 	public int itemReporting(int product_id, String reason, String reporter_id) {
 		return mapper.itemReporting(product_id, reason, reporter_id);
 	}
-
+	
+	// 조회수 +1
 	public void plusviewcount(int product_id) {
 		mapper.plusViewCount(product_id);
 	}
-
+	
+	// 상세페이지 조회시 찜여부 확인
+	public WishlistVO checkWishlist(int product_id, String id) {
+		return mapper.checkWishlist(product_id, id);
+		
+	}
+	
+	// 상세페이지 같은 판매자 상품목록
+	public List<Map<String, Object>> searchSellerProduct(String mem_id, int product_id) {
+		return mapper.searchSellerProduct(mem_id, product_id);
+	}
+	
+	// 상세페이지 같은 상품 카테고리 목록
+	public List<Map<String, Object>> searchSameCategoryProduct(String product_category, int product_id) {
+		return mapper.searchSameCategoryProduct(product_category, product_id);
+	}
+		
 	//판매상품 상위 4개 조회
 	public List<ProductVO> getProductListLimit(String id) {
 		return mapper.selectLimitProductList(id);

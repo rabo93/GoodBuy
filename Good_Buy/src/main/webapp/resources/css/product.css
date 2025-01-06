@@ -231,6 +231,7 @@
 .item-detail .item-detail-trade-adr {
     font-size: 18px;
     font-weight: bold;
+    margin: 0 200px 0 0px;
 }
 .item-detail .item-detail-shpping-fee {}
 .item-detail .item-detail-shpping-fee {
@@ -257,6 +258,8 @@
     display: flex;
 }
 .item-detail .item-detail-button-group .item-detail-button-group {}
+.item-detail .item-detail-button-group #removeWish {background-color: #ff4545;border: #ff4545;}
+.item-detail .item-detail-button-group #addWish {background-color: #cccccc;border: 2px solid #cccccc;}
 .item-detail .item-detail-button-group .item-detail-fav {
     width: 100px;
     height: 50px;
@@ -266,13 +269,11 @@
     border-radius: 10px;
     font-size: 16px;
     font-weight: 700;
-    background-color: #cccccc;
-    border: 2px solid #cccccc;
     color: #ffffff;
     margin-left: auto;
     cursor: pointer;
 }
-.item-detail .item-detail-button-group .item-detail-contact-seller {width: 160px;height: 50px;padding: 8px 15px 8px 15px;box-sizing: border-box;border-radius: 10px;font-size: 16px;font-weight: 700;background-color: #0dcc5a;border: 2px solid #0dcc5a;color: #ffffff;cursor: pointer;}
+.item-detail .item-detail-button-group .item-detail-contact-seller {width: 160px;height: 50px;padding: 8px 15px 8px 15px;box-sizing: border-box;border-radius: 10px;font-size: 16px;font-weight: 700;background-color: #0dcc5a;border: 2px solid #0dcc5a;color: #ffffff;cursor: pointer;margin: 0 0 0 auto;}
 
 .item-detail .item-report {
 	margin: 10px 0 0 auto;

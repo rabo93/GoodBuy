@@ -104,22 +104,48 @@
 			   , pro.PRODUCT_PRICE
 			   , pro.PRODUCT_ID
 			   , pro.MEM_ID
+			   , pro.PRODUCT_CATEGORY
 			   , mem.MEM_NICK
 			   , mem.MEM_PROFILE
 			   , pro.PRODUCT_REG_DATE
 			   , pro.PRODUCT_STATUS
 			   , pro.PRODUCT_DISCOUNT_STATUS
 			   , pro.VIEW_COUNT
-		FROM PRODUCT pro join MEMBER mem
+		FROM PRODUCT pro JOIN MEMBER mem
 		ON pro.MEM_ID = mem.MEM_ID
-		WHERE PRODUCT_ID = #{product_id}
+		WHERE pro.PRODUCT_ID = #{product_id}
 	</select>
 	
 	<!-- 상품 조회수 증가 -->
-	<select id="plusViewCount">
+	<update id="plusViewCount">
 		UPDATE PRODUCT
 		SET VIEW_COUNT = PRODUCT.VIEW_COUNT + 1
 		WHERE PRODUCT_ID = #{product_id}
+	</update>
+	
+	<!-- 상품 찜 여부 조회 -->
+	<select id="checkWishlist" resultType="wish">
+		SELECT WISHLIST_ID, COUNT(WISHLIST_ID) AS WISHLIST_COUNT
+		FROM WISHLIST
+		WHERE MEM_ID = #{sId}
+		AND PRODUCT_ID = #{product_id}
+		GROUP BY WISHLIST_ID
+	</select>
+	
+	<!-- 같은 판매자 상품 조회 -->
+	<select id="searchSellerProduct" resultType="map">
+		SELECT *
+		FROM PRODUCT
+		WHERE MEM_ID = #{mem_id}
+		AND PRODUCT_ID NOT IN (#{product_id})
+	</select>
+	
+	<!-- 비슷한 상품 조회 -->
+	<select id="searchSameCategoryProduct" resultType="map">
+		SELECT *
+		FROM PRODUCT
+		WHERE PRODUCT_CATEGORY = #{product_category}
+		AND PRODUCT_ID NOT IN (#{product_id})
 	</select>
 	
 	<!-- 상품 신고 -->

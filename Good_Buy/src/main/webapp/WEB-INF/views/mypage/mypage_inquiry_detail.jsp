@@ -91,7 +91,7 @@
 		                    <div class="com attach">
 		                    	<label>첨부파일</label>
 		                    	<span>
-									<div>${support.support_file1}
+									<div> ${support.support_file1}
 		 								<a href="${pageContext.request.contextPath}/resources/upload/${fileName}" download="${originalFileName}">
 		 									<input type="button" value="다운로드">
 		 								</a>
@@ -99,18 +99,18 @@
 		                    	</span>
 		                    </div>
 						</c:if>
-						<c:if test="${support.support_answer_date != null}">
+						<c:if test="${support.reply_date != null}">
 							<div class="reply-hr"></div>
 							<div class="com reply">
 								<label>답변제목</label>
 								<span class="subject">
-									${support.support_answer_subject}
+									[${support.support_subject}] 답변드립니다😊
 								</span>
 							</div>
 							<div class="com reply">
 								<label>답변내용</label>
 								<span class="contents">
-									${support.support_answer_content}
+									${support.reply_content}
 								</span>
 							</div>
 						</c:if>

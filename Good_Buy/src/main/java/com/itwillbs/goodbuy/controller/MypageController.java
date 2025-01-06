@@ -409,6 +409,7 @@ public class MypageController {
 	//문의사항 수정
 	@GetMapping("RequestModify")
 	public String requestModify(HttpSession session,int support_id,Model model) {
+		
 		String id = getSessionUserId(session);
 		SupportVO support = supportService.getSupportDetail(support_id);
 		model.addAttribute("support",support);
@@ -416,13 +417,20 @@ public class MypageController {
 		return "mypage/mypage_inquiry_update";
 	}
 	
+	//문의사항 수정폼
 	@PostMapping("RequestModifyForm")
 	public String requestModifyForm(HttpSession session,Model model,SupportVO support) {
 		String id = getSessionUserId(session);
 		
+//		String realPath = getRealPath(session);
+//		String subDir = createDirectories(realPath);
+//		realPath += "/" + subDir;
+//		
+//		String fileName = processDuplicateFileName(support, subDir);
+		
 		int result = supportService.EditSupport(support);
 		if(result > 0 ) {
-			return "redirect:/MySupport";
+			return "redirect:/MySupportDetail?support_id="+support.getSupport_id();
 		}
 		return "result/fail";
 	}

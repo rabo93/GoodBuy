@@ -50,7 +50,7 @@
 			,#{mem_id}
 			,#{support_subject}
 			,#{support_content}
-			,#{support_file}
+			,#{support_file1}
 			,null
 			,null
 			,'접수'

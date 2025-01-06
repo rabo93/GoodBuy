@@ -37,6 +37,7 @@ import com.itwillbs.goodbuy.vo.ProductVO;
 import com.itwillbs.goodbuy.vo.SupportVO;
 import com.itwillbs.goodbuy.vo.WishlistVO;
 
+import kotlin.reflect.jvm.internal.impl.descriptors.Visibilities.Public;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -403,11 +404,30 @@ public class MypageController {
 			return "result/success";
 		}
 		return "result/fail";
+	}
 		
+	//문의사항 수정
+	@GetMapping("RequestModify")
+	public String requestModify(HttpSession session,int support_id,Model model) {
+		String id = getSessionUserId(session);
+		SupportVO support = supportService.getSupportDetail(support_id);
+		model.addAttribute("support",support);
+
+		return "mypage/mypage_inquiry_update";
 	}
 	
-	
+	@PostMapping("RequestModifyForm")
+	public String requestModifyForm(HttpSession session,Model model,SupportVO support) {
+		String id = getSessionUserId(session);
 		
+		int result = supportService.EditSupport(support);
+		if(result > 0 ) {
+			return "redirect:/MySupport";
+		}
+		return "result/fail";
+	}
+	
+
 	// ===========================================================================================
 	// ===========================================================================================
 	// 이전 페이지 이동 저장

@@ -146,19 +146,22 @@
 						support_id : supportId
 					},
 					success : function (response) {
-						console.log("서버 응답>>>>>>>>>>:", response);
-							alert("문의사항이 삭제 되었습니다.");
-							location.href="MySupport";
+						alert("문의사항이 삭제 되었습니다.");
+						location.href="MySupport";
 					},
 					error : function () {
-						alert("삭제실패");
-						
+						alert("삭제실패 \\n다시 시도해주세요!");
 					}
 				})
 			}
 		}
-	
-	
 	</script>
+	
+	<script type="text/javascript">
+	    function requestModify(supportId) {
+	        location.href = "RequestModify?support_id=" + supportId;
+	    }
+	</script>
+	
 </body>
 </html>

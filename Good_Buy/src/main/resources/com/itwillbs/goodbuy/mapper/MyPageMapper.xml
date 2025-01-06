@@ -6,9 +6,21 @@
 
 	<!-- 위시리스트 가져오기 -->
 	<select id="selectWishlist" resultType="wish">
-		SELECT *
-		FROM WISHLIST
-		WHERE MEM_ID = #{id}
+			SELECT 
+					P.PRODUCT_TITLE,
+					P.PRODUCT_PRICE,
+					P.PRODUCT_TRADE_ADR1,
+					P.PRODUCT_CATEGORY,
+					W.WISHLIST_ID, 
+			        W.PRODUCT_ID, 
+			        W.MEM_ID,  -- 로그인한 ID
+			        P.PRODUCT_ID,
+			        P.MEM_ID AS SELLER_ID,       -- 판매자 ID (PRODUCT)
+			        M.MEM_NICK AS SELLER_NICKNAME  -- 판매자 닉네임 (MEMBER)
+			FROM WISHLIST W
+			JOIN PRODUCT P ON W.PRODUCT_ID = P.PRODUCT_ID
+			JOIN MEMBER M ON P.MEM_ID = M.MEM_ID  -- PRODUCT 테이블의 MEM_ID는 판매자
+			WHERE W.MEM_ID = #{id};
 	</select>
 	
 	<!-- 위시리스트 삭제 -->
@@ -21,8 +33,9 @@
 		INSERT INTO WISHLIST
 		VALUES (
 			#{wishlist_id} + 1
-			,#{prosuct_title}
 			,#{mem_id}
+			,#{prosuct_id}
+			,#{prosuct_title}
 		)
 	</insert>
 	

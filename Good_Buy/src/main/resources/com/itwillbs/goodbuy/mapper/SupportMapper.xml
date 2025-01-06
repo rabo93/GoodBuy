@@ -67,6 +67,7 @@
 		UPDATE SUPPORT
 		SET SUPPORT_SUBJECT = #{support_subject}
 			, SUPPORT_CONTENT = #{support_content}
+			, SUPPORT_FILE = #{support_file1}
 		WHERE SUPPORT_ID = #{support_id}
 	</update>
 </mapper>

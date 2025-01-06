@@ -63,4 +63,10 @@
 		WHERE SUPPORT_ID = #{support_id}
 	</delete>
 
+	<update id="updateSupport">
+		UPDATE SUPPORT
+		SET SUPPORT_SUBJECT = #{support_subject}
+			, SUPPORT_CONTENT = #{support_content}
+		WHERE SUPPORT_ID = #{support_id}
+	</update>
 </mapper>

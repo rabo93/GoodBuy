@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function(){
 //	const modifyForm = document.querySelector("#modifyForm");
 	const supportList = $('#supportList').DataTable({
 		lengthChange : true, // 건수
-		searching : true, // 검색
+		searching : false, // 검색
 		info : true, // 정보
 		ordering : true, // 정렬
 		paging : true,
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function(){
 				className : "dt-center",
 				width: '120px',
 				render : function(data, type, row) {
-					const text = row.STATUS !== "접수" ? "수정하기" : "답변달기";
+					const text = row.STATUS !== "접수" ? "수정" : "답변달기";
 					const className = row.STATUS !== "접수" ? "primary" : "warning";
 					return `
 						<button class="btn btn-${className} edit-btn" data-toggle="modal" data-target="#updateSupportInfo"
@@ -145,10 +145,15 @@ document.addEventListener("DOMContentLoaded", function(){
 		supportId.value = rowData.SUPPORT_ID;
 	    if (statusSelect) statusSelect.selected = true;
 		reasonTextarea.value = replyContent;
+		
+		// 글자 수 표시
+		const contentLength = rowData.REPLY_CONTENT.length;
+   		$("#lengthInfo").text(contentLength); 
+		
 	});
 	
 	// 기존 검색 숨기기
-	$("#productReport_filter").attr("hidden", "hidden");
+	$("#supportList_filter").attr("hidden", "hidden");
 	
 	 // 필터 변경 시 데이터 테이블 다시 로드
     $('input[name="status"]').on('change', () => supportList.draw());
@@ -212,7 +217,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	
 	// 답글 작성
 	$("#replyContent").on('keyup', () => {
-		fnChkByte($("#actionReason"), 500);
+		fnChkByte($("#replyContent"), 500);
 	});
 	
 	// 글자수 제한 함수

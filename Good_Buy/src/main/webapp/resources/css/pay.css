@@ -136,6 +136,15 @@
     padding: 10px 0;
     border-bottom: 1px solid #eaeaea;
 }
+.history-item.empty-text{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    margin: 30px;
+    border-bottom: none;
+}
+/*
 .history-item .icon {
     width: 35px;
     height: 35px;
@@ -143,6 +152,7 @@
     border-radius: 50%;
     margin-right: 10px;
 }
+*/
 .history-item .details {
     flex: 1;
 }
@@ -470,7 +480,7 @@
     display: flex;
     align-items: center;
 }
-
+/*
 .icon {
     width: 20px;
     height: 20px;
@@ -478,7 +488,7 @@
     margin-right: 10px;
     border-radius: 4px;
 }
-
+*/
 .account-number {
     font-size: 14px;
     color: #333;
@@ -537,7 +547,7 @@
     padding: 10px 0;
     border-bottom: 1px solid #eaeaea;
 }
-
+/*
 .history-item .icon {
     width: 35px;
     height: 35px;
@@ -545,7 +555,7 @@
     border-radius: 50%;
     margin-right: 10px;
 }
-
+*/
 .history-item .details {
     flex: 1;
 }

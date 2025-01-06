@@ -29,6 +29,7 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/product.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/chat_main.js"></script>
 
 </head>
 <body>
@@ -303,7 +304,8 @@
 						<div class="chat-header">
 			            	<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>
 			                <div class="chat-title">${productSearch.product_title}</div>
-			                <button class="chat-item-button" onclick="location.href='PayTransferRequest'">구매하기</button>
+<!-- 			                <button class="chat-item-button" onclick="location.href='PayTransferRequest'">구매하기</button> -->
+			                <button class="chat-item-button" onclick="openPayWindow(product_id, receiver_id)">구매하기</button>
 			            </div>
 			            <div class="chat-body">
 			            </div>

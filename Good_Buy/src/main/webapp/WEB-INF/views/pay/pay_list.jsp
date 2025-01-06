@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>    
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page import="java.text.SimpleDateFormat, java.util.Date, java.time.LocalDateTime, java.time.ZoneId, java.time.format.DateTimeFormatter" %>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,8 +17,6 @@
 <!-- default -->
 <link rel="stylesheet" href="../../resources/css/common.css">
 <link rel="stylesheet" href="../../resources/css/default.css">
-
-
 
 <script src="../../resources/js/jquery-3.7.1.js"></script>
 
@@ -78,7 +78,6 @@
 						                <i class="fa-solid fa-arrow-rotate-right"></i>
 						            </div>
 						            <div class="buttons">
-						            	<button class="refund-btn" onclick="openModal">송금</button>
 						                <button class="charge-btn"  onclick="openModal('charge')">+ 충전 </button>
 						                <button class="refund-btn"  onclick="openModal('refund')">- 환불 </button>
 <!-- 						                <button class="transfer-btn" onclick="location.href='PayTransfer'">￦계좌송금</button> -->
@@ -174,26 +173,42 @@
 							        <div class="history">
 							            <h3>최근 이용내역 <a href="pay_use_list.jsp" class="see-all">전체보기 ></a></h3>
 							            <c:choose>
-							            	<c:when test="${withdrawList}">
-							            	withdrawList : ${withdrawList}
+							            	<c:when test="${empty transactionInfo}">
+								            	<div class="history-item empty-text">
+								            	굿페이 이용내역이 없습니다.
+								            	</div>
 							            	</c:when>
-							            	<c:when test="${depositList}">
-							            	depositList : ${depositList}
-							            	</c:when>
-							            	<c:otherwise>
-							            	내역없음
-							            	</c:otherwise>
+							            
+							            
+								            
+						            	<c:otherwise>
+						            		<c:forEach var="item" items="${transactionInfo}">
+<!-- 						            		<script> -->
+//     var API_TRAN_DTM = "${item.API_TRAN_DTM}";
+//     // Date 객체로 변환
+//     var dateObj = new Date(API_TRAN_DTM);
+//     // 월과 일을 2자리로 포맷팅
+//     var formattedDate = String(dateObj.getMonth() + 1).padStart(2, '0') + '.' + String(dateObj.getDate()).padStart(2, '0');
+//     // 결과 출력
+//     document.getElementById('formatted-date').textContent = formattedDate;
+<!-- </script>  -->
+						            			<c:choose>
+							            			<c:when test="${item.TRANSACTION_TYPE eq 'WI'}">
+							            				<div class="history-item">
+											                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
+											                <div class="details">
+<!-- 											                    <span>우체국 1234</span> -->
+											                    <span class="date" >
+											                    	<p id="formatted-date"></p>| 충전</span>
+											                    	 
+											                </div>
+											                <div class="amount">+ ${item.TRAN_AMT}</div>
+											            </div>
+							            			</c:when>
+							            		</c:choose>
+									    	</c:forEach>
+						            	</c:otherwise>
 							            </c:choose>
-							            
-							            
-							            <div class="history-item">
-							                <div class="icon"></div>
-							                <div class="details">
-							                    <span>우체국 1234</span>
-							                    <span class="date">12.03 12:10 | 충전</span>
-							                </div>
-							                <div class="amount">+100,000원</div>
-							            </div>
 <!-- 							            <div class="history-item"> -->
 <!-- 							                <div class="icon"></div> -->
 <!-- 							                <div class="details"> -->
@@ -244,4 +259,5 @@
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
 </body>
+
 </html>

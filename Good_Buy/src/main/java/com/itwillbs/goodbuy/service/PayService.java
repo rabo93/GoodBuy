@@ -1,6 +1,7 @@
 package com.itwillbs.goodbuy.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,11 +177,18 @@ public class PayService {
 
 	// 충전금액조회
 	public int getPayAmount(String user_seq_no) {
-		return mapper.selectPayAmount(user_seq_no);
+	    Integer amount = mapper.selectPayAmount(user_seq_no);
+	    return amount != null ? amount : 0; // 기본 값 0 반환
 	}
+	
 
 	public int registPayInfo(Map<String, Object> map) {
 		return mapper.insertPayInfo(map);
+	}
+
+	// 거래내역 조회 
+	public List<Map<String, String>> getTransactionDetail(String fintech_use_num) {
+		return mapper.selectTransactionDetail(fintech_use_num);
 	}
 
 

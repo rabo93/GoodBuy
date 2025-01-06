@@ -57,15 +57,16 @@ public class PayController {
 		Map<String, Object> bankUserInfo = service.getPayUserInfo(token);
 		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
 		
-		// 충전금액 조회
-		int pay_amount = service.getPayAmount(token.getUser_seq_no());
+		// 충전금액 조회 : 내역이 없을 수도 있으므로 Integer로 리턴함.
+		Integer pay_amount = service.getPayAmount(token.getUser_seq_no());
 		
-		Map<String, String> withdrawList = service.getWithdarwResult(fintech_use_num);
-		Map<String, String> depositList = service.getDepositResult(fintech_use_num);
+		// 거래내역조회
+		List<Map<String, String>> transactionInfo = service.getTransactionDetail(token.getUser_seq_no());
+		
+		System.out.println("transactionInfo.get(5) : " + transactionInfo.get(5));
 		
 		
-		model.addAttribute("withdrawList", withdrawList);
-		model.addAttribute("depositList", depositList);
+		model.addAttribute("transactionInfo", transactionInfo);
 		model.addAttribute("pay_amount", pay_amount);
 		model.addAttribute("bankUserInfo", bankUserInfo);
 		model.addAttribute("fintech_use_num", fintech_use_num);

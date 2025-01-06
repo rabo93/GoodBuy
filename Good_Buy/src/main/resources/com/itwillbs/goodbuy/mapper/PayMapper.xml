@@ -148,13 +148,22 @@
 		)
 	</insert>
 	
-	<!--  이체(출금, 입금 결과 조회 - select -->
+	<!--  이체(출금, 입금) 결과 조회 - select -->
 	<!--  bank_tran_id 가 일치하는 레코드 조회 -->
 	<select id="selectTransactionResult">
 		SELECT * 
 		FROM TRANSACTIONINFO
 		WHERE  BANK_TRAN_ID = #{bank_tran_id}
 	</select>
+	
+	<!--  이체(출금, 입금) 결과 조회 - select -->
+	<!--  user_seq_no 가 일치하는 레코드 조회 (조회 내역 처리 용도) -->
+	<select id="selectTransactionDetail" >
+		SELECT * 
+		FROM TRANSACTIONINFO
+		WHERE  USER_SEQ_NO = #{user_seq_no}
+	</select>
+	
 	
 	<!-- pay_list에서 토큰이 있는 id인지 조회 - select -->
 	<select id="selectMemIdFromToken" resultType="string">
@@ -173,7 +182,7 @@
 	
 	
 	<!-- 충전금액조회 -->
-	<select id="selectPayAmount">
+	<select id="selectPayAmount"  resultType="int">
 		SELECT SUM(TRAN_AMT)
 		  FROM TRANSACTIONINFO
 		 WHERE TRANSACTION_TYPE = 'WI'

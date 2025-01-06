@@ -36,6 +36,7 @@
 		<jsp:include page="/WEB-INF/views/inc/header.jsp"></jsp:include>
 	</header>
 	<main>
+		<div id="wrapper-bg"></div>
 		<section class="wrapper">
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
@@ -128,9 +129,15 @@
 								<c:if test="${not empty sessionScope.sId}">
 									<c:if test="${productSearch.product_status != 4}">
 										<input type="button" value="찜하기" class="item-detail-fav" onclick="addWishlist()">
-										<a href="javascript:void(0)"  onclick="showSlideChat('${productSearch.mem_id}','${productSearch.product_id}' )">
+<%-- 										<a href="javascript:void(0)"  onclick="showSlideChat('${productSearch.mem_id}','${productSearch.product_id}' )"> --%>
+<!-- 											<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller"> -->
+<!-- 										</a> -->
+										<a href="javascript:void(0)"  onclick="toggleSlideChat()">
 											<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
 										</a>
+										<input type="hidden" id="sId" value="${sessionScope.sId}">
+										<input type="hidden" id="receiver_id" value="${productSearch.mem_id}">
+										<input type="hidden" id="product_id" value="${productSearch.product_id}">
 									</c:if>
 								</c:if>
 							</div>
@@ -293,10 +300,10 @@
 				<div class="chat-container">
 					<div class="chat-area">
 						<div class="extra-header">
-							<button class="close-chat-button" onclick="closeSlideChat()">
+							<button class="close-chat-button" onclick="toggleSlideChat()">
 								<i class="fa-solid fa-arrow-left"></i>
 							</button>
-							<button class="close-chat-button" onclick="reportChat()">
+							<button class="report-chat-button" onclick="reportChat()">
 								<img src="${pageContext.request.contextPath}/resources/img/siren.png">
 							</button>
 						</div>
@@ -308,7 +315,6 @@
 			            <div class="chat-body">
 			            </div>
 			            <div class="chat-footer">
-			            	<input type="hidden" id="sId" value="${sessionScope.sId}">
 			                <input type="text" class="chatMessage" placeholder="메시지를 입력하세요...">
 			                <button class="btnSend">전송</button>
 			            </div>

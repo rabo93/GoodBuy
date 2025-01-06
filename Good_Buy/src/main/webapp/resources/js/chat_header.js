@@ -20,11 +20,14 @@ function connect() {
 }
 
 function startChat() {
-//	console.log("receiver_id : " + receiver_id);
-//	console.log("product_id : " + product_id);
 	let url = "ChatMain"
+	let width = 840;
+	let height = 640;
+	let left = window.innerWidth - width;  // 화면의 오른쪽 끝에서 시작
+	let top = 0;  // 화면의 상단
 	
-	startChat = window.open(url, "slide_chat");
+	
+	startChat = window.open(url, "start_chat", `width=${width},height=${height},left=${left},top=${top}`);
 	
 //	startChat.receiver_id = receiver_id;
 //	startChat.product_id = product_id;
@@ -38,32 +41,8 @@ function onMessage(event) {
 	console.log("onMessage()");
 	let data = JSON.parse(event.data);
 	console.log("data : " + JSON.stringify(data));
-	
 	startChat.postMessage(event.data);
-	
 }
-
-//function testOpenChat(product_id) {
-//	$(".chat-area").empty();
-//	connect();
-//	console.log("product_id : " + product_id);
-//	//	상품리스트와 연동 완료시 AJAX로 활용 예정
-//	$(".chat-area").append(
-//		'<div class="chat-header">'
-//			+ '<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>'
-//			+ '<div class="title">아기 유아 어그부츠 150cm</div>'
-//			+ '<button class="item-button">구매하기</button>'
-//		+ '</div>'
-//		+ '<div class="chat-body">'
-//		+ '</div>'
-//		+ '<div class="chat-footer">'
-//			+ '<input type="text" class="chatMessage" placeholder="메시지를 입력하세요...">'
-//			+ '<button class="btnSend">전송</button>'
-//		+ '</div>'
-//	);
-//	
-//}
-
 
 //	==============================================================================
 //	자신의 채팅창에 메세지를 표시하는 함수

@@ -110,6 +110,7 @@
 			, #{withdrawResult.dps_bank_code_std}
 			, #{withdrawResult.dps_account_num_masked}
 			, ''
+			, ''
 			  </if>
 			  <if test="trnsactionType.equals('DE')">
 			, #{withdrawResult.res_list[0].fintech_use_num}
@@ -125,6 +126,7 @@
 			, #{withdrawResult.res_list[0].bank_rsp_message}
 			, #{withdrawResult.wd_bank_code_std}
 			, #{withdrawResult.wd_account_num_masked} 
+			, ''
 			, ''
 			  </if>
 			  <if test="trnsactionType.equals('TR')">
@@ -144,6 +146,7 @@
 			
 			-- 송금받는 사람 정보 입력
 			, #{withdrawResult.depositResult.res_list[0].fintech_use_num}  
+			, #{withdrawResult.depositResult.res_list[0].fintech_use_num}  
 			  </if>
 		)
 	</insert>
@@ -161,7 +164,12 @@
 	<select id="selectTransactionDetail" >
 		SELECT * 
 		FROM TRANSACTIONINFO
-		WHERE  USER_SEQ_NO = #{user_seq_no}
+		<if test="type.equals('fintech')">
+		WHERE  USER_SEQ_NO = #{fintech_use_num}
+		</if>
+		<if test="type.equals('reciever_fintech')">
+		WHERE  RECEIVER_FINTECH_USE_NUM = #{fintech_use_num}
+		</if>
 	</select>
 	
 	

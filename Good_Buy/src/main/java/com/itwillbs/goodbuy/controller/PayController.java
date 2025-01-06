@@ -1,5 +1,8 @@
 package com.itwillbs.goodbuy.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,9 +66,12 @@ public class PayController {
 		// 거래내역조회
 		List<Map<String, String>> transactionInfo = service.getTransactionDetail(token.getUser_seq_no());
 		
-		System.out.println("transactionInfo.get(5) : " + transactionInfo.get(5));
+		// 거래내역에서 송금일 경우 : 송금받는 사람(RECEIVER_FINTECH_USE_NUM)도 내역 표시. 
+		// 자기자신의 FINTECH_USE_NUM으로 RECEIVER_FINTECH_USE_NUM이 있는지 거래내역 조회 
+		List<Map<String, String>> recieverTransactionInfo = service.getReceiverTransactionDetail(fintech_use_num);
 		
 		
+		model.addAttribute("recieverTransactionInfo", recieverTransactionInfo);
 		model.addAttribute("transactionInfo", transactionInfo);
 		model.addAttribute("pay_amount", pay_amount);
 		model.addAttribute("bankUserInfo", bankUserInfo);

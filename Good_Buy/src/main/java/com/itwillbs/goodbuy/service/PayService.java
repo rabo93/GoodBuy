@@ -188,8 +188,13 @@ public class PayService {
 
 	// 거래내역 조회 
 	public List<Map<String, String>> getTransactionDetail(String fintech_use_num) {
-		return mapper.selectTransactionDetail(fintech_use_num);
+		return mapper.selectTransactionDetail(fintech_use_num, "fintech");
 	}
+
+	public List<Map<String, String>> getReceiverTransactionDetail(String receiver_fintech_use_num) {
+		return mapper.selectTransactionDetail(receiver_fintech_use_num, "reciever_fintech");
+	}
+
 
 
 

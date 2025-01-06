@@ -52,7 +52,9 @@ public interface PayMapper {
 
 	int insertPayInfo(Map<String, Object> map);
 
-	List<Map<String, String>> selectTransactionDetail(String fintech_use_num);
+	List<Map<String, String>> selectTransactionDetail(
+			@Param("fintech_use_num") String fintech_use_num,
+			@Param("type") String type);
 
 
 }

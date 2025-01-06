@@ -153,8 +153,7 @@ function showChatRoom(room) {
 					+ '<div class="chat-header">'
 			           	+ '<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>'
 			           	+ '<div class="title">'+ room.title +' </div>'
-	//		           	+ '<button class="item-button" onclick="location.href=' + '\'PayTransferRequest?product_id=' + product_id + '&receiver_id=' + receiver_id + '\'' + '">구매하기</button>'
-			           	+ '<button class="item-button" onclick="openPayWindow(product_id, receiver_id)">구매하기</button>'
+			           	+ '<button class="item-button" onclick="openPayWindow(' + room.product_id + ', \'' + room.receiver_id + '\')">구매하기</button>'
 			           + '</div>'
 			           + '<div class="chat-body">'
 			           + '</div>'
@@ -246,7 +245,6 @@ function sendMessage(type, product_id, sender_id, receiver_id, room_id, message)
 	opener.sendMessage(type, product_id, sender_id, receiver_id, room_id, message);
 }
 
-
 // ==============================================================================
 // 결제창 열기 - 창을 작게 열려고 함수로 만들었음
 function openPayWindow(product_id, receiver_id) {
@@ -254,5 +252,3 @@ function openPayWindow(product_id, receiver_id) {
               "&receiver_id=" + encodeURIComponent(receiver_id) ;
     payWindow = window.open(url, "chat_window", "width=500,height=500");
 }
-
-

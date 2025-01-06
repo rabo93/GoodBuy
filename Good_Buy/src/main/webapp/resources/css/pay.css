@@ -306,7 +306,7 @@
     margin-top: 20px;
 }
 
-.amount-btn, .use-charge-btn {
+.amount-btn {
     flex: 1;
     margin: 0 5px;
     padding: 10px 0;
@@ -319,7 +319,7 @@
 /*     transition: background-color 0.3s; */
 }
 
-.amount-btn:hover, .use-charge-btn:hover {
+.amount-btn:hover {
     background-color: #e0e0e0;
 }
 
@@ -502,18 +502,17 @@
 
 /* 상단 버튼들 */
 .use-buttons {
-/*     text-align: center; */
     margin-bottom: 20px;
 }
 
 
-.use-buttons button {
+.use-buttons > button {
     background-color: #FF7235;
     color: #fff;
-    border: none;
     border-radius: 5px;
+    boder: none;
     padding: 8px 15px;
-    margin: 5px;
+    margin: 20px 0px;
     cursor: pointer;
 }
 

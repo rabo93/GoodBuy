@@ -64,16 +64,24 @@
 													    <label class="form-check-label" for="reset">전체</label>
 													</div>
 											        <div class="form-check ml-3">
-													    <input class="form-check-input" id="status1" type="radio" name="status" value="접수">
-													    <label class="form-check-label" for="status1">판매전</label>
+													    <input class="form-check-input" id="status1" type="radio" name="status" value="0">
+													    <label class="form-check-label" for="status1">판매중</label>
+													</div>
+											        <div class="form-check ml-3">
+													    <input class="form-check-input" id="status1" type="radio" name="status" value="1">
+													    <label class="form-check-label" for="status1">거래중</label>
 													</div>
 													<div class="form-check ml-3">
-													    <input class="form-check-input" id="status2" type="radio" name="status" value="처리완료">
-													    <label class="form-check-label" for="status2">판매완료</label>
+													    <input class="form-check-input" id="status2" type="radio" name="status" value="2">
+													    <label class="form-check-label" for="status2">예약중</label>
 													</div>
 													<div class="form-check ml-3">
-													    <input class="form-check-input" id="status3" type="radio" name="status" value="기각">
-													    <label class="form-check-label" for="status3">판매중지</label>
+													    <input class="form-check-input" id="status3" type="radio" name="status" value="3">
+													    <label class="form-check-label" for="status3">거래완료</label>
+													</div>
+													<div class="form-check ml-3">
+													    <input class="form-check-input" id="status4" type="radio" name="status" value="4">
+													    <label class="form-check-label" for="status4">신고처리</label>
 													</div>
 											    </div>
 										    </div>

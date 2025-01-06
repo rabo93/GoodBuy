@@ -11,8 +11,7 @@ document.addEventListener("DOMContentLoaded", function(){
 		scrollX: true, 
 		autoWidth: false,
 		ajax : {
-//			url: "AdmProductReportList",
-			url: "AdmorderList",
+			url: "AdmOrderList",
 			type: "POST",
 			dataType : "JSON",
 			data: function(d) {
@@ -21,8 +20,9 @@ document.addEventListener("DOMContentLoaded", function(){
                 d.searchValue = $('input[name="keyword_search"]').val(); //키워드 검색
             },
 			dataSrc: function (res) {
-//				console.log("res: " + JSON.stringify(res));
-				const data = res.EnquireList;
+				console.log("ajax 응답(res): " + JSON.stringify(res));
+				const data = res.OrderList;
+				console.log("data : " + JSON.stringify(data));
 				const start = $('#orderList').DataTable().page.info().start; 
 				
 				// PK가 아닌 테이블 컬럼 번호 계산(페이징 포함)
@@ -32,32 +32,35 @@ document.addEventListener("DOMContentLoaded", function(){
 				return data;
 			},
 		},
-		order: [[4, 'desc']], // 최초 조회 시 신고일시 최신순으로 기본 설정
+		order: [[9, 'desc']], // 최초 조회 시 거래일시 최신순으로 기본 설정
 		columnDefs: [
 			 { targets: [0, 9], orderable: false },
 		],
 		columns: [
+			{	// 체크박스
+				data: null, 
+				className : "dt-center", 
+				width: '60px',
+				render : function(data, type, row, meta) {
+					const rowCount = meta.row + 1; // 현재 페이지에서의 row 번호를 사용
+					const checkboxId = "customCheck" + rowCount;
+					const checkboxName = "pay_id_" + data.pay_id; // 고유한 name 값 설정
+					return `
+						<div class="custom-control custom-checkbox small">
+							<input type="hidden" name="pay_id" value="${data.pay_id}">
+							<input type="checkbox" class="custom-control-input" id="${checkboxId}" name="${checkboxName}">
+							<label class="custom-control-label" for="${checkboxId}"></label>
+						</div>
+					`;
+				}
+			},
 			// defaultContent 는 기본값 설정, 데이터 없는 컬럼일 경우 오류나기 때문에 널스트링 처리 해주어야 함
 			// 회원가입 시 유효성 체크를 한다면 defaultContent 값 설정 필요 없음!
             { title: "No.", data: "listIndex", className : "dt-center", width: '30px', },
             { 
-				title: "문의 유형", 
-				data : "SUPPORT_CATEGORY", 
-				defaultContent: "이용문의", 
-				className : "dt-center", 
-				render : function(data, type, row) {
-					const categories = {
-						1: "이용문의",
-						2: "결제문의",
-						3: "기타",
-					};
-					return `<span class='support-cate' status>${categories[data] || ""}</span>`
-				},
-             },
-            { 
-				title: "작성자ID", 
-	            data : "MEM_ID",
-	            defaultContent: "",
+				title: "판매자ID", 
+				data: "seller_id",
+				defaultContent: "",
 	            width: '120px',
 	            render: function (data, type, row) {
 					if (!data) {
@@ -65,25 +68,41 @@ document.addEventListener("DOMContentLoaded", function(){
 					}
                 	return data.replace(/(.{16})/g, '$1<br>'); // 16자마다 줄바꿈
            		}
-            },
-            { title: "문의 제목", data : "SUPPORT_SUBJECT", defaultContent: "", orderable: false},
-            { title: "문의 내용", data : "SUPPORT_CONTENT", defaultContent: "", orderable: false},
-            { title: "작성일시", data : "SUPPORT_DATE", defaultContent: "", width: '180px',},
+//				className : "dt-center",
+			},
+            { title: "상품유형", data: "product_category", defaultContent: "", className : "dt-center", },
+            { title: "상품명", data: "product_title", defaultContent: "", className : "dt-center",  width: '180px', },
+            { title: "상품금액", data: "product_price", defaultContent: "", className : "dt-center",  },
             { 
-				title: "처리상태", data : "STATUS", defaultContent: "", width: '100px', className : "dt-center",
+				title: "구매자ID", 
+				data: "buyer_id",
+				defaultContent: "",
+	            width: '120px',
+	            render: function (data, type, row) {
+					if (!data) {
+						return "";
+					}
+                	return data.replace(/(.{16})/g, '$1<br>'); // 16자마다 줄바꿈
+           		}
+//				className : "dt-center",
+			},
+            { title: "구매금액", data: "pay_price", defaultContent: "", className : "dt-center", },
+            { title: "구매일시", data: "pay_date", defaultContent: "", className : "dt-center", },
+            { title: "거래장소", data: "pay_address", defaultContent: "", className : "dt-center", },
+            { 
+				title: "거래상태", data : "pay_status", defaultContent: "", width: '100px', className : "dt-center",
 				render : function(data, type, row) {
 					if(!data) return "";
 					switch (data) {
-				        case "접수": return "<span class='status status-01'>접수</span>";
-				        case "처리완료": return "<span class='status status-02'>처리완료</span>";
-				        case "기각": return "<span class='status status-03'>기각</span>";
+				        case 0: return "<span class='status status-01'>판매중</span>";
+				        case 1: return "<span class='status status-01'>거래중</span>";
+				        case 2: return "<span class='status status-02'>예약중</span>";
+				        case 3: return "<span class='status status-03'>거래완료</span>";
+				        case 4: return "<span class='status status-03'>신고처리</span>";
 				        default: return "";
 				    }
 				}
             },
-//            { title: "답변자", data : "ADMIN_ID", defaultContent: "", width: '100px', },
-            { title: "답변내용", data : "REPLY_CONTENT", defaultContent: "", orderable: false},
-            { title: "답변일시", data : "REPLY_DATE", defaultContent: "", width: '180px', },
             {
 				title : "관리",
 				data: null,
@@ -91,11 +110,14 @@ document.addEventListener("DOMContentLoaded", function(){
 				className : "dt-center",
 				width: '120px',
 				render : function(data, type, row) {
-					const text = row.STATUS !== "접수" ? "수정" : "답변달기";
-					const className = row.STATUS !== "접수" ? "primary" : "warning";
 					return `
-						<button class="btn btn-${className} edit-btn" data-toggle="modal" data-target="#updateSupportInfo"
-						 data-support-id="${row.SUPPORT_ID}">${text}</button>
+						<button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#updateOrder"
+								data-pay-id="${data.pay_id}"
+								aria-label="수정 - pay id: ${data.pay_id}" aria-controls="updateOrder">
+								수정</button>
+						<button class="btn btn-danger delete-btn"
+								data-pay-id="${data.pay_id}"
+						 		data-pay-id="${data.pay_id}">삭제</button>
 					`;
 				}
 			}
@@ -232,5 +254,62 @@ document.addEventListener("DOMContentLoaded", function(){
          }
          $('#lengthInfo').text(strLength);
     }
+    
+    //-----------------------------------------------------
+	// 체크박스 전체 선택
+	const checkAll = $("#checkAll");
+	checkAll.on("change", function() {
+		const isChecked = checkAll.is(":checked"); // 전체 체크박스 상태 확인
+		faqList.rows().every(function (index) {
+	       const row = this.node(); // 현재 행
+	       const checkBox = $(row).find(".custom-control-input"); // 체크박스를 jQuery로 선택
+	       checkBox.prop("checked", isChecked); // 체크 상태 업데이트
+	    });
+	});
+	// 개별 체크박스를 클릭할 때 전체 선택 체크박스 상태 업데이트
+	$('#orderList').on('change', 'input[type="checkbox"].custom-control-input', function() {
+	    // 전체 체크박스 상태를 체크하려면 모든 체크박스의 상태 확인
+	    const allChecked = orderList.rows().nodes().to$().find('input[type="checkbox"].custom-control-input').length;
+	    const checkedCount = orderList.rows().nodes().to$().find('input[type="checkbox"].custom-control-input:checked').length;
+	
+	    // 하나라도 체크박스가 해제되면 전체 선택 체크박스 해제
+	    checkAll.prop('checked', allChecked === checkedCount); 
+	});
+	//-----------------------------------------------------
+	// 체크박스 선택 삭제
+	$(document).on("click", '#btnDeleteRow', function() {
+		if(confirm("선택한 게시글을 삭제하시겠습니까?\n삭제 후 복구가 불가능합니다.")) {
+			const deleteItems = [];
+			faqList.rows().every(function (index) {
+				const row = this.node();
+				const checkBox = row.querySelector(".custom-control-input");
+				const checkedId = row.querySelector("input[name='pay_id']");
+				if(checkBox.checked){
+					 deleteItems.push(checkedId.value);
+				}
+			});	
+			console.log(deleteItems);
+			
+			$.ajax({
+				url : "AdmOrderDelete",
+				type : "POST",
+				contentType : 'application/json',
+				data: JSON.stringify(deleteItems),
+				
+				success: function(response){
+					if(response.status == "success") {
+						alert(response.message);
+//						window.location.href = response.redirectURL;
+						orderList.ajax.reload();
+					} else {
+						alert(response.message);
+					}
+				},
+				error : function(res) {
+					alert("삭제할 컬럼을 선택 후 삭제해주세요.");
+				}
+			});
+		}
+	});
 
 });

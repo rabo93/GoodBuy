@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function(){
 		scrollX: true, 
 		autoWidth: false,
 		ajax : {
-//			url: "AdmProductReportList",
 			url: "AdmSupportList",
 			type: "POST",
 			dataType : "JSON",

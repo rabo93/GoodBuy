@@ -16,6 +16,7 @@ import com.itwillbs.goodbuy.mapper.AdminMapper;
 import com.itwillbs.goodbuy.vo.FaqVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.NoticeVO;
+import com.itwillbs.goodbuy.vo.ProductOrderVO;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -123,7 +124,7 @@ public class AdminService {
 		return mapper.deleteMember(mem_id);
 	}
 	
-	// ============== [ 공지사항 관리 ] ==============
+	// ============== [ 신고 관리 ] ==============
 	// [ 신고 회원 관리 ]
 	
 	// [ 신고 상품 관리 ]
@@ -225,7 +226,31 @@ public class AdminService {
 	public int registLog(Map<String, Object> result) {
 		return mapper.insertLog(result);
 	}
+	// =========================================================================
 
+	// ============== [ 결제 관리 ] ==============
+	// 상품 거래 목록 전체 컬럼 수 조회
+	public int getOrderListTotal() {
+		return mapper.selectOrderListTotal();
+	}
+	// 상품 거래 검색 필터링 후 컬럼 수 조회
+	public int getOrderListFiltered(Map<String, Object> convertParam) {
+		return mapper.selectOrderListFiltered(convertParam);
+	}
+	// 필터링 된 상품 거래 목록 가져오기
+	public ProductOrderVO getOrderList(Map<String, Object> convertParam) {
+		return mapper.selectOrderList(convertParam);
+	}
+	
+	
+//	// 답글 등록(수정)
+//	public int registReplyInfo(Map<String, Object> param) {
+//		return mapper.updateReplyInfo(param);
+//	}
+
+	
+
+	
 
 
 

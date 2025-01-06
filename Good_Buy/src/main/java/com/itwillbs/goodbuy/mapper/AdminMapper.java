@@ -10,6 +10,7 @@ import com.itwillbs.goodbuy.aop.AdminLog;
 import com.itwillbs.goodbuy.vo.FaqVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.NoticeVO;
+import com.itwillbs.goodbuy.vo.ProductOrderVO;
 
 @Mapper
 public interface AdminMapper {
@@ -139,6 +140,16 @@ public interface AdminMapper {
 	// =====================================================
 	// 로그 저장
 	int insertLog(@Param("log") Map<String, Object> result);
-
+	// =====================================================
+	
+	//---------------------------------------------------------
+	// 결제 관리
+	// 상품 거래 목록 전체 컬럼 수 조회
+	int selectOrderListTotal();
+	// 상품 거래 검색 필터링 후 컬럼 수 조회
+	int selectOrderListFiltered(Map<String, Object> convertParam);
+	// 필터링 된 상품 거래 목록 가져오기
+	ProductOrderVO selectOrderList(Map<String, Object> convertParam);
+	
 
 }

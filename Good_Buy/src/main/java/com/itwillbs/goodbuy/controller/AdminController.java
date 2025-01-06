@@ -4,15 +4,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,14 +22,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.itwillbs.goodbuy.aop.AdminLog;
 import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.service.AdminService;
 import com.itwillbs.goodbuy.vo.CommonCodeVO;
-import com.itwillbs.goodbuy.vo.FaqVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.NoticeVO;
 
+import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -42,6 +42,9 @@ public class AdminController {
 	
 	// 공지사항 첨부파일 URL
 	String uploadPath = "/resources/upload";
+	
+	// datatables parameter
+	List<String> intColumns = Arrays.asList("draw", "start", "length", "mem_status");
 	
 	// [ 관리자 메인 ]
 	// 관리자 메인
@@ -97,29 +100,22 @@ public class AdminController {
 	@PostMapping("AdmCommoncodeListForm")
 	public String admCommoncodeListForm(@RequestParam Map<String, String> param) {	
 //		log.info(">>>> param: " + param);
-		int draw = Integer.parseInt((String) param.get("draw")); // 요청받은 draw 값
-		int start = Integer.parseInt((String) param.get("start")); // 페이징 시작 번호
-		int length = Integer.parseInt((String) param.get("length")); // 한 페이지의 컬럼 개수
-		String searchValue = param.get("search[value]").toString(); // 검색어
-		
-		int orderColumnKey = Integer.parseInt((String)param.get("order[0][column]"));
-		String orderColumn = param.get("columns[" + orderColumnKey + "][data]").toString();
-		String orderDir = param.get("order[0][dir]").toString();
+		Map<String, Object> convertParam = convertMap(param);
 		
 		// 공통코드 전체 컬럼 수 조회
 		int recordsTotal = service.getCommonCodesTotal();
 		
 		// 공통코드 검색 필터링 후 컬럼 수 조회
-		int recordsFiltered = service.getCommonCodesFiltered(searchValue);
+		int recordsFiltered = service.getCommonCodesFiltered(convertParam);
 		
 		// 공통코드 전체 목록 조회
-		List<Map<String, Object>> commonCodes = service.getCommonCodes(start, length, searchValue, orderColumn, orderDir);
+		List<Map<String, Object>> commonCodes = service.getCommonCodes(convertParam);
 		
 		// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
 		Map<String, Object> response = new HashMap<String, Object>();
 		
 		// draw, recordsTotal, recordsFiltered 값을 돌려주어야 서버사이드 페이징 작동함
-		response.put("draw", draw); // 받은 draw 값 그대로 다시 전달(보안)
+		response.put("draw", convertParam.get("draw")); // 받은 draw 값 그대로 다시 전달(보안)
 		response.put("recordsTotal", recordsTotal); // 전체 컬럼 수
 		response.put("recordsFiltered", recordsFiltered); // 검색 필터링 후 컬럼 수
 		response.put("commonCodes", commonCodes); // 컬럼 데이터
@@ -133,7 +129,7 @@ public class AdminController {
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmCommoncodeModify")
 	public String admCommoncodeModify(@RequestParam Map<String, Object> param, Model model) {
-		log.info(">>> param : " + param);
+//		log.info(">>> param : " + param);
 		
 		int updateResult = service.modifyCommonCode(param);
 		if(updateResult > 0) {
@@ -182,39 +178,24 @@ public class AdminController {
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("AdmMemberListForm")
-	public String admMemberListForm(@RequestParam Map<String, Object> param) {
-//		log.info(">>> param : " + param);
-		int draw = Integer.parseInt((String) param.get("draw")); // 요청받은 draw 값
-		int start = Integer.parseInt((String) param.get("start")); // 페이징 시작 번호
-		int length = Integer.parseInt((String) param.get("length")); // 한 페이지의 컬럼 개수
-		int memStatus = Integer.parseInt((String) param.get("mem_status")); // 검색어
-		String memGrade = param.get("mem_grade").toString(); // 검색어
-		String searchValue = (String)param.get("search_keyword").toString(); // 검색어
-		
-		// 정렬 추가(orderable)
-		// 넘겨받은 데이터 : columns[2][data]=mem_name, order[0][column]=2, order[0][dir]=desc
-		// 컬럼명 추출하려면 columns[order[0][column]][data] 형태로 만들어줘야 함
-		int orderColumnKey = Integer.parseInt((String)param.get("order[0][column]"));
-		String orderColumn = param.get("columns[" + orderColumnKey + "][data]").toString();
-		String orderDir = param.get("order[0][dir]").toString();
-//		System.out.println("orderColumn : " + orderColumn);
-//		System.out.println("orderDir : " + orderDir);
+	public String admMemberListForm(@RequestParam Map<String, String> param) {
+		Map<String, Object> convertParam = convertMap(param);
 		
 		// 회원 목록 전체 컬럼 수 조회
 		int recordsTotal = service.getMemberListTotal();
 		
 		// 회원 검색 필터링 후 컬럼 수 조회
-		int recordsFiltered = service.getMemberListFiltered(memStatus, memGrade, searchValue);
+		int recordsFiltered = service.getMemberListFiltered(convertParam);
 		
 		// 필터링 된 회원 목록 가져오기
-		List<MemberVO> memberList = service.getMemberList(start, length, searchValue, memStatus, memGrade, orderColumn, orderDir);
+		List<MemberVO> memberList = service.getMemberList(convertParam);
 //		log.info(">>>>> 필터링 된 회원 : " + memberList);
 		
 		// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
 		Map<String, Object> response = new HashMap<String, Object>();
 		
 		// draw, recordsTotal, recordsFiltered 값을 돌려주어야 서버사이드 페이징 작동함
-		response.put("draw", draw); // 받은 draw 값 그대로 다시 전달(보안)
+		response.put("draw", convertParam.get("draw")); // 받은 draw 값 그대로 다시 전달(보안)
 		response.put("recordsTotal", recordsTotal); // 전체 컬럼 수
 		response.put("recordsFiltered", recordsFiltered); // 검색 필터링 후 컬럼 수
 		response.put("memberList", memberList); // 컬럼 데이터
@@ -243,33 +224,6 @@ public class AdminController {
 		return "admin/member_modify";
 	}
 	
-	// 회원상태 문자열로 변환
-	public String memberStatusToString(int status) {
-		switch(status) {
-			case 1 : return "정상";
-			case 2 : return "정지";
-			case 3 : return "탈퇴";
-			default: return "정상";
-		}
-	}
-	
-	// SNS 연동상태 문자열로 변환
-	public String snsStatusToString(int status) {
-		switch(status) {
-			case 1 : return "연동완료";
-			case 2 : return "-";
-			default: return "-";
-		}
-	}
-	
-	// 회원인증상태 문자열로 변환
-	public String memberAuthToString(int status) {
-		switch(status) {
-			case 1 : return "인증완료";
-			case 2 : return "-";
-			default: return "-";
-		}
-	}
 	
 	// 회원 상세 정보 - 수정
 	@LoginCheck(memberRole = MemberRole.ADMIN)
@@ -312,8 +266,82 @@ public class AdminController {
 	}
 	
 	// ================================================
+	// ================================================
 	// [ 결제 관리 ]
+	// 상품 거래내역 - 포워딩
+	@LoginCheck(memberRole = MemberRole.ADMIN)
+	@GetMapping("AdmProductOrderList")
+	public String admProductOrderList() {
+		return "admin/order_list";
+	}
+//	
+//	// 1:1 문의 목록
+//	@ResponseBody
+//	@PostMapping("AdmSupportList")
+//	public String admSupportList(@RequestParam Map<String, String> param) {
+////			log.info(">>>> 문의 내역 목록 param : " + param);
+//		Map<String, Object> convertParam = convertMap(param);
+//		
+//		// 1:1 문의 목록 전체 컬럼 수 조회
+//		int recordsTotal = service.getEnquireListTotal();
+//		
+//		// 1:1 문의 검색 필터링 후 컬럼 수 조회
+//		int recordsFiltered = service.getEnquireListFiltered(convertParam);
+//		
+//		// 필터링 된 1:1 문의 목록 가져오기
+//		List<Map<String, Object>> EnquireList = service.getEnquireList(convertParam);
+//		log.info(">>>>> 필터링 된 1:1 문의 목록 : " + EnquireList);
+//		// [{MEM_ID=bborara, STATUS=처리완료, SUPPORT_CONTENT=문의내용임니다아아ㅏ, SUPPORT_DATE=2025-01-04 09:00:00, SUPPORT_ID=1, REPLY_CONTENT=답변드립니다아아ㅏ, REPLY_DATE=2025-01-04 12:00:00, SUPPORT_SUBJECT=문의제목, SUPPORT_CATEGORY=1}, {MEM_ID=aa1111, STATUS=접수, SUPPORT_CONTENT=무늬무늬, SUPPORT_DATE=2025-01-04 09:00:00, SUPPORT_ID=2, REPLY_DATE=2025-01-04 14:34:27, SUPPORT_SUBJECT=무늬, SUPPORT_CATEGORY=3}]
+//		
+//		Map<String, Object> response = new HashMap<String, Object>();
+//		response.put("draw", convertParam.get("draw"));
+//		response.put("recordsTotal", recordsTotal);
+//		response.put("recordsFiltered", recordsFiltered);
+//		response.put("EnquireList", EnquireList);
+//		
+//		JSONObject jo = new JSONObject(response);
+//		return jo.toString();
+//	}
+//	
+//	//----------------------------------------------------------------------------------------
+//	// 1:1 문의 - 답글달기(+ 수정하기)
+//	@AdminLog
+//	@LoginCheck(memberRole = MemberRole.ADMIN)
+//	@PostMapping("AdmSupportAction")
+//	public String admSupportAction(@RequestParam Map<String, Object> param, Model model) {
+//		log.info(">>> 답글 정보 : " + param);
+//		
+//		int updateResult = service.registReplyInfo(param);
+//		log.info(">>> 업데이트 갯수 : " + updateResult);
+//		
+//		if(updateResult > 0) {
+//			model.addAttribute("msg", "1:1 문의 답글 처리를 완료하였습니다.");
+//			model.addAttribute("targetURL", "AdmSupportList");
+//			return "result/success";
+//		} else {
+//			model.addAttribute("msg", "1:1 문의 답글 처리에 실패하였습니다.");
+//			return "result/fail";
+//		}
+//	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// ================================================
+	// ================================================
 	// ================================================
 	// [ 신고 관리 ]
 	// 신고 상품 목록 페이지 포워딩
@@ -326,32 +354,23 @@ public class AdminController {
 	// 신고 상품 목록 - 필터링 및 검색
 	@ResponseBody
 	@PostMapping("AdmProductReportList")
-	public String admProductReportList(@RequestParam Map<String, Object> param) {
+	public String admProductReportList(@RequestParam Map<String, String> param) {
 		log.info(">>>> 신고 상품 목록 param : " + param);
-		int draw = Integer.parseInt((String) param.get("draw")); // 요청받은 draw 값
-		int start = Integer.parseInt((String) param.get("start")); // 페이징 시작 번호
-		int length = Integer.parseInt((String) param.get("length")); // 한 페이지의 컬럼 개수
-		String status = param.get("status").toString(); // 검색어
-		String searchValue = param.get("searchValue").toString(); // 검색어
-		
-		int orderColumnKey = Integer.parseInt((String)param.get("order[0][column]"));
-		String orderColumn = param.get("columns[" + orderColumnKey + "][data]").toString();
-		String orderDir = param.get("order[0][dir]").toString();
-		String searchDate = param.get("searchDate").toString();
+		Map<String, Object> convertParam = convertMap(param);
 		
 		// 신고 상품 목록 전체 컬럼 수 조회
 		int recordsTotal = service.getProductReportTotal();
 		
-		// 신고 상품 검색 필터링 후 컬럼 수 조회
-		int recordsFiltered = service.getProductReportFiltered(status, searchValue, searchDate);
+		// 신고 상품 검색 필터링 후 컬럼 수 조회 (status, searchValue, searchDate)
+		int recordsFiltered = service.getProductReportFiltered(convertParam);
 		
 		// 필터링 된 신고 상품 목록 가져오기
-		List<Map<String, Object>> productReportList = service.getProductReportList(start, length, status, searchValue, searchDate, orderColumn, orderDir);
+		List<Map<String, Object>> productReportList = service.getProductReportList(convertParam);
 		log.info(">>>>> 필터링 된 신고 상품 목록 : " + productReportList);
 		
 		Map<String, Object> response = new HashMap<String, Object>();
 		
-		response.put("draw", draw);
+		response.put("draw", convertParam.get("draw"));
 		response.put("recordsTotal", recordsTotal);
 		response.put("recordsFiltered", recordsFiltered);
 		response.put("productReportList", productReportList);
@@ -379,6 +398,20 @@ public class AdminController {
 		}
 	}
 	
+	// 신고 회원 목록 - 포워딩
+	@LoginCheck(memberRole = MemberRole.ADMIN)
+	@GetMapping("AdmMemberReportList")
+	public String admMemberReportListForm() {
+		return "admin/member_report_list";
+	}
+	
+	@PostMapping("AdmMemberReportList")
+	public String admMemberReportList(@RequestParam Map<String, Object> param) {
+		log.info(">>>> 신고 회원 목록 param : " + param);
+		
+		return "";
+	}
+	
 	// ======================================================
 	// 공지사항 관리
 	@LoginCheck(memberRole = MemberRole.ADMIN)
@@ -392,32 +425,24 @@ public class AdminController {
 	// - 공지사항 관리	
 	@ResponseBody
 	@PostMapping("AdmNoticeList")
-	public String admNoticeList(@RequestParam Map<String, Object> param) {
-//		log.info(">>>> 공지사항 목록 param : " + param);
-		int draw = Integer.parseInt((String) param.get("draw")); // 요청받은 draw 값
-		int start = Integer.parseInt((String) param.get("start")); // 페이징 시작 번호
-		int length = Integer.parseInt((String) param.get("length")); // 한 페이지의 컬럼 개수
-		String searchValue = param.get("searchValue").toString(); // 검색어
+	public String admNoticeList(@RequestParam Map<String, String> param) {
+		Map<String, Object> convertParam = convertMap(param);
 		
-		int orderColumnKey = Integer.parseInt((String)param.get("order[0][column]"));
-		String orderColumn = param.get("columns[" + orderColumnKey + "][data]").toString();
-		String orderDir = param.get("order[0][dir]").toString();
-		
-		// 회원 목록 전체 컬럼 수 조회
+		// 공지사항 목록 전체 컬럼 수 조회
 		int recordsTotal = service.getNoticeListTotal();
 		
-		// 회원 검색 필터링 후 컬럼 수 조회
-		int recordsFiltered = service.getNoticeListFiltered(searchValue);
+		// 공지사항 검색 필터링 후 컬럼 수 조회
+		int recordsFiltered = service.getNoticeListFiltered(convertParam);
 		
-		// 필터링 된 회원 목록 가져오기
-		List<NoticeVO> noticeList = service.getNoticeList(start, length, searchValue, orderColumn, orderDir);
+		// 필터링 된 공지사항 목록 가져오기
+		List<NoticeVO> noticeList = service.getNoticeList(convertParam);
 //		log.info(">>>>> 필터링 된 공지사항 게시글 목록 : " + noticeList);
 		
 		// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
 		Map<String, Object> response = new HashMap<String, Object>();
 		
 		// draw, recordsTotal, recordsFiltered 값을 돌려주어야 서버사이드 페이징 작동함
-		response.put("draw", draw); // 받은 draw 값 그대로 다시 전달(보안)
+		response.put("draw", convertParam.get("draw")); // 받은 draw 값 그대로 다시 전달(보안)
 		response.put("recordsTotal", recordsTotal); // 전체 컬럼 수
 		response.put("recordsFiltered", recordsFiltered); // 검색 필터링 후 컬럼 수
 		response.put("noticeList", noticeList); // 컬럼 데이터
@@ -469,58 +494,113 @@ public class AdminController {
 		
 		return response;
 	}
-	//----------------------------------------------------------------------------------------
-	// - 1:1 문의
+	
+	
+	// ======================================================
+	// [ 고객지원 관리 ]
+	// 1:1문의 목록 - 포워딩
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmSupportList")
-	public String admSupportList() {
+	public String admEnquireList() {
 		return "admin/support_list";
 	}
 	
+	// 1:1 문의 목록
+	@ResponseBody
+	@PostMapping("AdmSupportList")
+	public String admSupportList(@RequestParam Map<String, String> param) {
+//		log.info(">>>> 문의 내역 목록 param : " + param);
+		Map<String, Object> convertParam = convertMap(param);
+		
+		// 1:1 문의 목록 전체 컬럼 수 조회
+		int recordsTotal = service.getEnquireListTotal();
+		
+		// 1:1 문의 검색 필터링 후 컬럼 수 조회
+		int recordsFiltered = service.getEnquireListFiltered(convertParam);
+		
+		// 필터링 된 1:1 문의 목록 가져오기
+		List<Map<String, Object>> EnquireList = service.getEnquireList(convertParam);
+		log.info(">>>>> 필터링 된 1:1 문의 목록 : " + EnquireList);
+		// [{MEM_ID=bborara, STATUS=처리완료, SUPPORT_CONTENT=문의내용임니다아아ㅏ, SUPPORT_DATE=2025-01-04 09:00:00, SUPPORT_ID=1, REPLY_CONTENT=답변드립니다아아ㅏ, REPLY_DATE=2025-01-04 12:00:00, SUPPORT_SUBJECT=문의제목, SUPPORT_CATEGORY=1}, {MEM_ID=aa1111, STATUS=접수, SUPPORT_CONTENT=무늬무늬, SUPPORT_DATE=2025-01-04 09:00:00, SUPPORT_ID=2, REPLY_DATE=2025-01-04 14:34:27, SUPPORT_SUBJECT=무늬, SUPPORT_CATEGORY=3}]
+		
+		Map<String, Object> response = new HashMap<String, Object>();
+		response.put("draw", convertParam.get("draw"));
+		response.put("recordsTotal", recordsTotal);
+		response.put("recordsFiltered", recordsFiltered);
+		response.put("EnquireList", EnquireList);
+		
+		JSONObject jo = new JSONObject(response);
+		return jo.toString();
+	}
+	
+	//----------------------------------------------------------------------------------------
+	// 1:1 문의 - 답글달기(+ 수정하기)
+	@AdminLog
+	@LoginCheck(memberRole = MemberRole.ADMIN)
+	@PostMapping("AdmSupportAction")
+	public String admSupportAction(@RequestParam Map<String, Object> param, Model model) {
+		log.info(">>> 답글 정보 : " + param);
+		
+		int updateResult = service.registReplyInfo(param);
+		log.info(">>> 업데이트 갯수 : " + updateResult);
+		
+		if(updateResult > 0) {
+			model.addAttribute("msg", "1:1 문의 답글 처리를 완료하였습니다.");
+			model.addAttribute("targetURL", "AdmSupportList");
+			return "result/success";
+		} else {
+			model.addAttribute("msg", "1:1 문의 답글 처리에 실패하였습니다.");
+			return "result/fail";
+		}
+	}
+	//----------------------------------------------------------------------------------------
 	//	실제 업로드 경로 메서드
 	public String getRealPath(HttpSession session) {
 		String realPath = session.getServletContext().getRealPath(uploadPath);
 		return realPath;
 	}
-	
 	// ======================================================
 	// [ 고객지원 관리 ]
 	// - FAQ 관리
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmFaqList")
 	public String admFaqList() {
 		return "admin/faq_list";
 	}
 	
 	// [ FAQ 목록 조회 ]
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("FaqListForm")
 	public String admFaqListForm(@RequestParam Map<String, String> param) {
 		log.info(">>> AdmFaqListForm param : " + param);
-		//
+		
 		int draw = Integer.parseInt(param.get("draw")); // 요청받은 draw 값
 		int start = Integer.parseInt(param.get("start")); // 페이징 시작 번호
 		int length = Integer.parseInt(param.get("length")); // 한 페이지의 컬럼 개수
 		String searchValue = param.get("searchValue").toString(); // 검색어
 		
+		int faqCate = Integer.parseInt(param.get("faq_cate")); // faq유형
+		int listStatus = Integer.parseInt(param.get("list_status")); // 사용여부
+		log.info(">>> faqCate : " + faqCate); // 0 
+		log.info(">>> listStatus : " + listStatus); // 0
+		
 		// 정렬 추가(orderable)
 		// 넘겨받은 데이터 : columns[2][data]=mem_name, order[0][column]=2, order[0][dir]=desc
 		// 컬럼명 추출하려면 columns[order[0][column]][data] 형태로 만들어줘야 함
 		int orderColumnKey = Integer.parseInt((String)param.get("order[0][column]"));
-		System.out.println("orderColumnKey: "+ orderColumnKey); //4
-		
 		String orderColumn = param.get("columns[" + orderColumnKey + "][data]").toString();
-		System.out.println("orderColumn: " + orderColumn); //
-		
 		String orderDir = param.get("order[0][dir]").toString();
-		System.out.println("orderDir: " + orderDir);
 		
 		// FAQ 전체 컬럼 수 조회
 		int recordsTotal = service.getFaqTotal();
 		
 		// FAQ 검색 필터링 후 컬럼 수 조회
-		int recordsFiltered = service.getFaqFiltered(searchValue);
+		// => 파라미터 : FAQ유형, 사용여부, 검색어
+		int recordsFiltered = service.getFaqFiltered(faqCate, listStatus, searchValue);
 		
 		// FAQ 전체 목록 조회
-		List<Map<String, Object>> faqList = service.getFaqList(start, length, searchValue, orderColumn, orderDir);
+		List<Map<String, Object>> faqList = service.getFaqList(start, length, searchValue, faqCate, listStatus, orderColumn, orderDir);
 		System.out.println("faqList:" + faqList);
 		
 		// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
@@ -531,13 +611,17 @@ public class AdminController {
 		response.put("recordsTotal", recordsTotal); // 전체 컬럼 수
 		response.put("recordsFiltered", recordsFiltered); // 검색 필터링 후 컬럼 수
 		response.put("faqList", faqList); // 컬럼 데이터
-//		System.out.println("Map: "+ response); 
+		System.out.println("Map: "+ response); 
 		
 		JSONObject jo = new JSONObject(response);
 		return jo.toString();
+		
+//		return null;
 	}
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 수정 ]
+	@AdminLog
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmFaqModify")
 	public String admFaqModify(@RequestParam Map<String, Object> param, Model model) {
 		log.info(">>> 수정할 faq 정보: " + param);
@@ -555,6 +639,8 @@ public class AdminController {
 	
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 삭제 ]
+	@AdminLog
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("AdmFaqDelete")
 	public Map<String, Object> admFaqDelete(@RequestBody List<Integer> faqIds) {
@@ -579,5 +665,79 @@ public class AdminController {
 	
 	// ======================================================
 	// [ 통계 ]
+
+	// ======================================================
+	// ======================================================
+	// ======================================================
+	// Map 형변환 처리 메서드
+	private Map<String, Object> convertMap(Map<String, String> param) {
+//		log.info(">>> param : " + param);
+//		int draw = Integer.parseInt((String) param.get("draw")); // 요청받은 draw 값
+//		int start = Integer.parseInt((String) param.get("start")); // 페이징 시작 번호
+//		int length = Integer.parseInt((String) param.get("length")); // 한 페이지의 컬럼 개수
+//		int mem_status = Integer.parseInt((String) param.get("mem_status")); // 검색어
+//		String mem_grade = param.get("mem_grade").toString(); // 검색어
+//		String searchValue = (String)param.get("search_keyword").toString(); // 검색어
+		
+		// 정렬 추가(orderable)
+		// 넘겨받은 데이터 : columns[2][data]=mem_name, order[0][column]=2, order[0][dir]=desc
+		// 컬럼명 추출하려면 columns[order[0][column]][data] 형태로 만들어줘야 함
+//		int orderColumnKey = Integer.parseInt((String)param.get("order[0][column]"));
+//		String orderColumn = param.get("columns[" + orderColumnKey + "][data]").toString();
+//		String orderDir = param.get("order[0][dir]").toString();
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		// int 변환
+		for(Entry<String, String> entry : param.entrySet()) {
+			String key = entry.getKey();
+			Object value = entry.getValue();
+			
+			if(intColumns.contains(entry.getKey())) {
+				value = Integer.parseInt((String)value);
+			}
+			
+			resultMap.put(key, value);
+		}
+		
+		// 정렬 컬럼 map에 추가
+		int orderColumnKey = Integer.parseInt((String)param.get("order[0][column]"));
+		String orderColumn = param.get("columns[" + orderColumnKey + "][data]").toString();
+		String orderDir = param.get("order[0][dir]").toString();
+		
+		resultMap.put("orderColumn", orderColumn);
+		resultMap.put("orderDir", orderDir);
+		System.out.println("변환된 map : " + resultMap);
+		
+		return resultMap;
+	}
+	
+	// 회원상태 문자열로 변환
+	private String memberStatusToString(int status) {
+		switch(status) {
+			case 1 : return "정상";
+			case 2 : return "정지";
+			case 3 : return "탈퇴";
+			default: return "정상";
+		}
+	}
+	
+	// SNS 연동상태 문자열로 변환
+	private String snsStatusToString(int status) {
+		switch(status) {
+			case 1 : return "연동완료";
+			case 2 : return "-";
+			default: return "-";
+		}
+	}
+	
+	// 회원인증상태 문자열로 변환
+	private String memberAuthToString(int status) {
+		switch(status) {
+			case 1 : return "인증완료";
+			case 2 : return "-";
+			default: return "-";
+		}
+	}
 	
 }

@@ -88,7 +88,7 @@
 			                                	<div class="search-ttl">사용여부별</div>
 											    <div class="category-filter input-group">
 											    	<div class="form-check">
-													    <input class="form-check-input" id="listStatusAll" type="radio" name="list_status" value="전체" checked>
+													    <input class="form-check-input" id="listStatusAll" type="radio" name="list_status" value="0" checked>
 													    <label class="form-check-label" for="listStatusAll">전체</label>
 													</div>
 											        <div class="form-check ml-3">
@@ -176,18 +176,20 @@
 				<div class="modal-body">
 					<form action="AdmFaqModify" method="post" id="modifyForm">
 						<!-- faq 아이디 -->
-						<input type="hidden" id="faqId" name="FAQ_ID">
+						<input type="hidden" id="faqId" name="faq_id">
 						<div class="mb-1">
 							<label for="updatedFaqSubject" class="col-form-label">제목</label>
-							<input type="text" class="form-control" name="FAQ_SUBJECT" id="updatedFaqSubject" required>
+							<input type="text" class="form-control" name="faq_subject" id="updatedFaqSubject" required>
+						</div>
+						
+						<div class="mb-3">
+							<label class="small mb-1" for="updatedFaqContent">내용</label>
+							<textarea class="form-control" col="4" id="updatedFaqContent" name="faq_content"  placeholder="내용을 입력하세요." required></textarea>
+							<small class="text-primary text-right d-block font-weight-bold"><span id="lengthInfo">0</span> / 500자</small>
 						</div>
 						<div class="mb-1">
-							<label for="updatedFaqContent" class="col-form-label">내용</label>
-							<input type="text" class="form-control" name="FAQ_CONTENT" id="updatedFaqContent" required>
-						</div>
-						<div class="mb-1">
-							<label class="small mb-1" for="memStatus">FAQ 유형</label>
-							<select class="custom-select" id=updatedFaqCate name="FAQ_CATE" >
+							<label class="small mb-1" for="updatedFaqCate">FAQ 유형</label>
+							<select class="custom-select" id="updatedFaqCate" name="faq_cate" >
 								<option value="1">운영정책</option>
 								<option value="2">회원/계정</option>
 								<option value="3">결제/페이</option>
@@ -200,7 +202,7 @@
 							<div class="w-50">
 								<label for="updatedListStatus" class="col-form-label">사용여부</label>
 								<div class="form-check form-switch">
-					        		<input type="hidden" id="updatedListStatus" name="LIST_STATUS">
+					        		<input type="hidden" id="updatedListStatus" name="list_status">
 									<input class="form-check-input" type="checkbox" role="switch" id="updateFlexSwitchCheckDefault">
 									<label class="form-check-label text-center" style="width:70px" id="updateFlexSwitchCheckDefaultLab" for="updateFlexSwitchCheckDefault"></label>
 								</div>
@@ -229,7 +231,7 @@
     <!-- Page level plugins -->
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<%--     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script> --%>
+    <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script>
 
     <!-- Page level custom scripts -->
     <script src="${pageContext.request.contextPath}/resources/adm/js/faq_list.js"></script>

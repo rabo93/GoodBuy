@@ -40,8 +40,8 @@
         <div id="menu03" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
             	<h6 class="collapse-header">Payment Management</h6>
-                <a class="collapse-item" href="AdmPaymentList">전체 구매내역</a>
-                <a class="collapse-item" href="AdmPaymentList2">전체 판매내역</a>
+                <a class="collapse-item" href="AdmProductOrderList">상품 거래내역</a>
+                <a class="collapse-item" href="AdmPaymentList">페이 판매내역</a>
             </div>
         </div>
     </li>
@@ -65,7 +65,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
             	<h6 class="collapse-header">Customer Management</h6>
                 <a class="collapse-item" href="AdmNoticeList" data-sub-page="AdmNoticeModify" data-sub-page2="AdmNoticeRegist">공지사항 관리</a>
-                <a class="collapse-item" href="AdmSupportList">1:1문의 관리</a>
+                <a class="collapse-item" href="AdmSupportList">1:1 문의 관리</a>
                 <a class="collapse-item" href="AdmFaqList">FAQ 관리</a>
             </div>
         </div>

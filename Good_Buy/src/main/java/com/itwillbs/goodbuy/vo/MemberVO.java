@@ -24,15 +24,18 @@ public class MemberVO {
 	private String mem_address1;
 	private String mem_address2;
 	//--------------------------
-	private String mem_grade;	// ENUM(일반/관리자)
+	private String mem_grade;		// ENUM(일반/관리자)
 	//--------------------------
 	private int mem_status; 		//회원상태 (1:정상 2:정지 3:탈퇴)
 	private Date mem_reg_date;
 	private Date mem_withdraw_date;  
 	//--------------------------
-	private String mem_profile;	//프로필사진명
-	private String mem_intro;	//상점소개
-	private int sns_status;		//sns연동 여부(1: 연동O /2: 연동X)
-	private int auth_status;		//인증여부(1: 인증O /2: 인증X)
+	private String mem_profile;		//프로필사진명
+	private MultipartFile mem_profile_get;
+	//--------------------------
+	private int sns_status;			//sns연동(카카오/네이버) 여부(1: 연동O /2: 연동X)
+	private int auth_status;		//휴대폰 본인인증 여부(1: 인증O /2: 인증X)
+	//--------------------------
+	private String mem_intro;		//상점소개
 	//--------------------------
 }

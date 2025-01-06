@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	
 	const faqList = $('#faqList').DataTable({
 		lengthChange : true, // 건수
-		searching : true, // 검색
+		searching : false, // 검색
 		info : true, // 정보
 		ordering : true, // 정렬
 		paging : true,
@@ -17,10 +17,9 @@ document.addEventListener("DOMContentLoaded", function(){
 			dataType : "JSON",
 			data: function(d) {
                 d.faq_cate = $('input[name="faq_cate"]:checked').val(); // faq유형별
-				d.list_statu
-				
-				
-				s = $('input[name="list_status"]:checked').val(); // 사용여부별
+                console.log("d.faq_cate : " + d.faq_cate);
+				d.list_status = $('input[name="list_status"]:checked').val(); // 사용여부별
+                console.log("d.list_status : " + d.list_status);
                 d.searchValue = $('input[name="keyword_search"]').val(); // 검색
             },
 			dataSrc: function (res) {
@@ -31,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function(){
 				// FAQ_ID(PK)가 아닌 테이블 컬럼 번호 계산
 				for (let i = 0; i < data.length; i++) {
 					data[i].listIndex = i + 1;
-					data[i].LIST_STATUS = data[i].LIST_STATUS || 1; // 기본값 1로 설정
+					data[i].list_status = data[i].list_status || 1; // 기본값 1로 설정
 //					console.log(data[i]);
 				}
 				return data;
@@ -50,10 +49,10 @@ document.addEventListener("DOMContentLoaded", function(){
 				render : function(data, type, row, meta) {
 					const rowCount = meta.row + 1; // 현재 페이지에서의 row 번호를 사용
 					const checkboxId = "customCheck" + rowCount;
-					const checkboxName = "FAQ_ID_" + data.FAQ_ID; // 고유한 name 값 설정
+					const checkboxName = "faq_id_" + data.FAQ_ID; // 고유한 name 값 설정
 					return `
 						<div class="custom-control custom-checkbox small">
-							<input type="hidden" name="FAQ_ID" value="${data.FAQ_ID}">
+							<input type="hidden" name="faq_id" value="${data.FAQ_ID}">
 							<input type="checkbox" class="custom-control-input" id="${checkboxId}" name="${checkboxName}">
 							<label class="custom-control-label" for="${checkboxId}"></label>
 						</div>
@@ -69,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function(){
 				title: "FAQ 유형", 
 				data : "FAQ_CATE", 
 				defaultContent: "운영정책", 
-//				orderable: false,	// 정렬 비활성화
+				orderable: true,	// 정렬 활성화
 				searchable: false, // 검색 비활성화
 				className : "dt-center", 
 				render : function(data, type, row) {
@@ -113,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function(){
 					return `
 						<button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#updateFaq"
 								data-faq-id="${data.FAQ_ID}"
-								aria-label="수정 - FAQ ID: ${data.FAQ_ID}" aria-controls="updateFaq">
+								aria-label="수정 - faq id: ${data.FAQ_ID}" aria-controls="updateFaq">
 								수정</button>
 					`;
 					
@@ -150,7 +149,6 @@ document.addEventListener("DOMContentLoaded", function(){
         faqList.draw();
     });
 	
-	
 	// 검색 버튼 클릭 시 테이블 다시 로드
     $('#searchBtn').on('click', function() {
         faqList.draw();
@@ -163,6 +161,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     });
     
+	//-----------------------------------------------------
 	// 체크박스 전체 선택
 	const checkAll = $("#checkAll");
 	checkAll.on("change", function() {
@@ -196,32 +195,33 @@ document.addEventListener("DOMContentLoaded", function(){
 		$('#previousElement').focus();
 	});
 	
+	// FAQ 수정 셋팅
 	faqList.on("click", '.edit-btn', function() {
 		const row = $(this).closest('tr');
 		const rowData = faqList.row(row).data();
-//		console.log(rowData);
+		
+		const faqCate = rowData.FAQ_CATE;
 		const listStatus = rowData.LIST_STATUS == 1 ? true : false;
-		const listStatusText = rowData.LIST_STATUS == 1 ? "사용함" : "사용안함";
-//		console.log(listStatus);
-		const memGradeSelect = document.querySelector(`#memGrade option[value="${memGrade}"]`);;
-		const memStatusSelect = document.querySelector(`#memStatus option[value="${memStatus}"]`);;
+		const listStatusText = rowData.list_status == 1 ? "사용함" : "사용안함";
 		
-		
-		
-		// 수정 전 기본 데이터 셋팅
-		$("#faqId").val(rowData.FAQ_ID);
+		// 수정 모달 화면에 기존 데이터 보이게 셋팅
+		$("#faqId").val(rowData.FAQ_ID); //히든속성값
 		$("#updatedFaqSubject").val(rowData.FAQ_SUBJECT);
 		$("#updatedFaqContent").val(rowData.FAQ_CONTENT);
 		$("#updatedFaqCate").val(rowData.FAQ_CATE);
 		$("#updatedListStatus").val(rowData.LIST_STATUS);
 		$("#updateFlexSwitchCheckDefault").prop("checked", listStatus);
 		$("#updateFlexSwitchCheckDefaultLab").text(listStatusText);
+		
+		// 글자 수 표시
+		const contentLength = rowData.FAQ_CONTENT.length;
+   		$("#lengthInfo").text(contentLength); 
 	});
 	
 	// 사용여부 버튼 값 업데이트
 	$(document).on("change", ".form-check-input", function() {
 	    const switchBtn = this;
-	    const hiddenInput = switchBtn.parentElement.querySelector('input[type="hidden"][name="LIST_STATUS"]');
+	    const hiddenInput = switchBtn.parentElement.querySelector('input[type="hidden"][name="list_status"]');
 	    const switchLabel = switchBtn.nextElementSibling;
 	
 	    if (hiddenInput) {
@@ -232,6 +232,25 @@ document.addEventListener("DOMContentLoaded", function(){
 	    }
 	});
 	
+	
+	// 내용 작성
+	$("#updatedFaqContent").on('keyup', () => {
+		fnChkByte($("#updatedFaqContent"), 500);
+	});
+	
+	// 글자수 제한 함수
+	function fnChkByte(item, maxLength){
+		const str = item.val();
+        const strLength = str.length;
+        
+         if (strLength > maxLength) {
+            alert("글자수는 " + maxLength + "자를 초과할 수 없습니다.");
+            $(item).val(str.substr(0, maxLength));      //문자열 자르고 값 넣기
+            fnChkByte(item, maxLength);
+         }
+         $('#lengthInfo').text(strLength);
+    }
+	
 	//-----------------------------------------------------
 	// FAQ 선택 삭제
 	$(document).on("click", '#btnDeleteRow', function() {
@@ -240,7 +259,7 @@ document.addEventListener("DOMContentLoaded", function(){
 			faqList.rows().every(function (index) {
 				const row = this.node();
 				const checkBox = row.querySelector(".custom-control-input");
-				const checkedId = row.querySelector("input[name='FAQ_ID']");
+				const checkedId = row.querySelector("input[name='faq_id']");
 				if(checkBox.checked){
 					 deleteItems.push(checkedId.value);
 				}

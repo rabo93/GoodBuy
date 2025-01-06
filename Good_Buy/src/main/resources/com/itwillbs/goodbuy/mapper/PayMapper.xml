@@ -180,4 +180,23 @@
 		   AND USER_SEQ_NO = #{user_seq_no};
 	</select>
 	
+	<!-- 거래내역 저장 -->
+	<insert id="insertPayInfo">
+		<selectKey keyProperty="pay_id" resultType="int" order="BEFORE">
+		SELECT IFNULL(MAX(PAY_ID),0) + 1 AS pay_id
+		  FROM PAYINFO
+		</selectKey>
+		INSERT
+		  INTO PAYINFO 
+		VALUES ( 
+		       #{pay_id} 
+		  	 , #{buyer_id}
+		  	 , #{receiver_id}
+		  	 , #{product_id}
+		  	 , #{product_price}
+		  	 , #{tran_amt}
+		  	 , now()
+		  	 , 1 
+		  )	
+	</insert>
 </mapper>

@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,6 +16,7 @@
 <link rel="stylesheet" href="../../resources/css/common.css">
 <link rel="stylesheet" href="../../resources/css/default.css">
 <script src="../../resources/js/jquery-3.7.1.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/chat_main.js"></script>
 
 <!-- font-awesome -->
 <link rel="stylesheet" href="../../resources/fontawesome/all.min.css" />
@@ -29,108 +32,51 @@
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/product.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/pay.js"></script>
-
-
-
-<style>
-
-
-
-
-</style>
-
-
-
-
-
-
-
-
-
-
-
 </head>
 <body>
-	<header>
-		<jsp:include page="/WEB-INF/views/inc/header.jsp"></jsp:include>
-	</header>
 	<main>
 		<section class="wrapper">
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
-<!-- 				<div class="goodpay-container"> -->
-			        
-		        <h2 class="page-ttl">마이페이지</h2>
-				<section class="my-wrap">
-					<aside class="my-menu">
-						<h3>거래 정보</h3>
-						<a href="MyStore">나의 상점</a>
-						<a href="GoodPay" class="active">굿페이</a>
-						<a href="MyOrder">구매내역</a>
-						<a href="MySales">판매내역</a>
-						<h3>나의 정보</h3>
-						<a href="MyInfo">계정정보</a>
-						<a href="MyWish">관심목록</a>
-						<a href="MyReview">나의 후기</a>
-						<a href="MySupport">1:1문의내역</a>
-						<a href="">나의 광고</a>
-					</aside>
-		        
-		        
-		        
-		        	<div class="my-container">
-						<div class="contents-ttl">
-							<h3>굿페이 > 계좌송금</h3>
-		        
-		        
-		        
-												
-					        <!-- 입력 안내 -->
-					        <div class="input-section">
-					        	<!-- 판매자의 대표계좌 가지고 와야함. 판매자 핀번호랑 id 가져오기 -->
-					        	
-					        	
-					            <input type="text" class="input-label" placeholder="계좌번호를 입력하세요">
-					            <input type="text" class="input-label" placeholder="은행을 선택하세요">
-					        </div>
-					
-					         <!-- 충전하기 버튼 -->
-					        <div class="recharge-button">
-					            <button class="recharge-btn">다음</button>
-					        </div>
-					        
-					         <!-- 계좌내역 -->
-					        <div class="accounts">
-					            <h3>내 계좌</h3>
-					            <!-- 연결된 계좌 -->
-						        <div class="linked-account">
-						            <div class="account-info">
-						                <div class="icon"></div>
-						                <span class="account-number">우체국 <strong>1234567890123</strong></span>
-						            </div>
-						            <button class="primary-account-btn">주계좌</button>
-						        </div>
-					       </div>
-					        <!-- 추천계좌 버튼 -->
-<!-- 					        <div class="recommend-button"> -->
-<!-- 					            <button class="recommend-btn">우리은행 1234567890123 (으)로 송금 -->
-<!-- 					            	<span><i class="fa-solid fa-x"></i></span> -->
-<!-- 					            </button> -->
-<!-- 					        </div> -->
-		    			</div>
-		    		</div>
-		    	</section>
-			    
-			    
-
-
-			    
+	        	<div class="my-container">
+					<div class="contents-ttl">
+						<h3>굿페이 > 계좌송금</h3><br>
+				        <div class="input-section">
+				        	구매물품 : ${productSearch.product_title}<br>
+							<br>
+							'${param.receiver_id}' 님에게 <fmt:formatNumber pattern="#,###">${productSearch.product_price}</fmt:formatNumber>원을 송금합니다.
+							<br><br>
+							<div class="balance-info">굿페이 잔액: <strong>${pay_amount} 원</strong></div>
+							<form action="PayTransfer" method="post">
+								<input type="hidden" name="receiver_id" value="${param.receiver_id}">
+								<input type="hidden" name="product_id" value="${param.product_id}">
+								<input type="hidden" name="tran_amt" value="2000">
+						        <div class="recharge-button">
+						            <button class="transfer-btn-chat">송금하기</button>
+						        </div> 
+							</form>
+				        </div>
+				        <!-- 계좌내역 -->
+				        <div class="accounts">
+				            <h3>내 계좌</h3>
+				            
+							<select class="account-select"  name="withdraw_client_fintech_use_num">
+								<c:forEach var="account" items="${bankUserInfo.res_list}" varStatus="status">
+									<option value="${account.fintech_use_num}" <c:if test="${account.fintech_use_num eq fintech_use_num}">selected</c:if>>
+							                ${account.bank_name} &nbsp;&nbsp; ${account.account_num_masked}
+						           		<c:if test="${account.fintech_use_num eq fintech_use_num}">
+											( 대표계좌 )
+										</c:if>
+									</option>
+								</c:forEach>
+							</select>
+				            <br>
+				       	</div>
+					</div>
+			    </div>
 				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 			</div>
 		</section>
 	</main>
-	<footer>
-		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
-	</footer>
 </body>
 </html>

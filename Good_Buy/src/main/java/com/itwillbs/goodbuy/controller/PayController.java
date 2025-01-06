@@ -18,7 +18,9 @@ import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.aop.PayTokenCheck;
 import com.itwillbs.goodbuy.service.PayService;
+import com.itwillbs.goodbuy.service.ProductService;
 import com.itwillbs.goodbuy.vo.PayToken;
+import com.itwillbs.goodbuy.vo.ProductVO;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -28,6 +30,9 @@ public class PayController {
 
 	@Autowired
 	PayService service;
+	
+	@Autowired
+	ProductService  productService;
 	
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("GoodPay")
@@ -54,8 +59,13 @@ public class PayController {
 		
 		// 충전금액 조회
 		int pay_amount = service.getPayAmount(token.getUser_seq_no());
-//		System.out.println("충전금액 조회 : "  + pay_amount);
 		
+		Map<String, String> withdrawList = service.getWithdarwResult(fintech_use_num);
+		Map<String, String> depositList = service.getDepositResult(fintech_use_num);
+		
+		
+		model.addAttribute("withdrawList", withdrawList);
+		model.addAttribute("depositList", depositList);
 		model.addAttribute("pay_amount", pay_amount);
 		model.addAttribute("bankUserInfo", bankUserInfo);
 		model.addAttribute("fintech_use_num", fintech_use_num);
@@ -128,7 +138,6 @@ public class PayController {
 		// 세션에 엑세스토큰 관리 객체(BankToken) 객체 저장
 		session.setAttribute("token", token);
 		model.addAttribute("msg", "계좌 연결 완료!");
-//				model.addAttribute("targetURL", "BankMain");
 		model.addAttribute("isClose", true);
 		return "result/success";
 	}
@@ -194,9 +203,7 @@ public class PayController {
 		model.addAttribute("account_holder_name", map.get("account_holder_name"));
 		model.addAttribute("account_num_masked", map.get("account_num_masked"));
 		
-//		 System.out.println("PayConroller + 출금이체 잔액(wd_limit_remain_amt) 얼마?? " + withdrawResult.get("wd_limit_remain_amt"));
 		
-//		return "redirect:/pay_account_detail";
 		return "pay/pay_account_detail";
 	}
 	
@@ -319,16 +326,23 @@ public class PayController {
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("PayTransferRequest")
 	public String payTransferRequest(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
-		System.out.println("!@#!@#");
-		System.out.println("receiver_id:" + map.get("receiver_id"));
-		System.out.println("product_id:" + map.get("product_id"));
-		PayToken senderToken = (PayToken)session.getAttribute("token");
-
-		// 이체에 필요한 사용자 계좌(입금받는 상대방) 관련 정보(토큰) 조회
-		PayToken receiverToken = service.getPayTokenInfo((String)map.get("receiver_id"));
-
-		System.out.println("PayTransfer - get");
+		int product_id = Integer.parseInt((String) map.get("product_id"));
+		PayToken token = (PayToken)session.getAttribute("token");
 		
+		
+		Map<String, Object> bankUserInfo = service.getPayUserInfo(token);
+		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
+		
+		// 충전금액 조회
+		int pay_amount = service.getPayAmount(token.getUser_seq_no());
+		
+		// 상품 조회
+		ProductVO productSearch = productService.productSearch(product_id);
+		
+		model.addAttribute("pay_amount", pay_amount);
+		model.addAttribute("productSearch", productSearch);
+		model.addAttribute("bankUserInfo", bankUserInfo);
+		model.addAttribute("fintech_use_num", fintech_use_num);
 		
 		return "pay/pay_remit";
 	}
@@ -339,13 +353,21 @@ public class PayController {
 	@PostMapping("PayTransfer")
 	public String payTransfer(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
 		PayToken senderToken = (PayToken)session.getAttribute("token");
-
 		
 		// 이체에 필요한 사용자 계좌(입금받는 상대방) 관련 정보(토큰) 조회
 		PayToken receiverToken = service.getPayTokenInfo((String)map.get("receiver_id"));
 		log.info(">>>>>>>> 상대방(입금받는사람) 토큰 정보 : " + receiverToken);
 		log.info(">>>>>>>> 자신(송금하는사람) 토큰 정보 : " + senderToken);
 		
+		String id = (String)session.getAttribute("sId");
+		String receiver_id = (String)map.get("receiver_id");
+		// 상품 조회
+		int product_id = Integer.parseInt((String) map.get("product_id"));
+		ProductVO productSearch = productService.productSearch(product_id);
+		map.put("pay_id", 0);
+		map.put("buyer_id", id);
+		map.put("product_price", productSearch.getProduct_price());
+
 		// 수신자(상대방)의 토큰이 존재하지 않을 경우(= 계좌 등록이 되어있지 않음 등)
 		if(receiverToken == null || receiverToken.getAccess_token() == null) {
 			model.addAttribute("msg", "상대방 계좌 정보가 존재하지 않습니다!");
@@ -396,8 +418,9 @@ public class PayController {
 		// 송금이체 성공 시 결과를 DB (TRANSACTIONINFO) 에 저장
 		service.registTransferResult(transferResult);
 		
-		
-		
+		// DB에 거래내역 저장
+//		Map<String, String> payInfo = service.registPayInfo(map);
+		int payInfo = service.registPayInfo(map);
 		
 		session.setAttribute("transferResult", transferResult);
 		
@@ -405,6 +428,8 @@ public class PayController {
 	}
 	
 	// P2P 송금(이체) 결과 뷰페이지 처리
+	@LoginCheck(memberRole = MemberRole.USER)
+	@PayTokenCheck
 	@GetMapping("PayTransferResult")
 	public String payTransferResult(HttpSession session, Model model) {
 		// 세션에 저장된 이체결과객체 (transferResult) 꺼내기

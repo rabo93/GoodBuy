@@ -35,6 +35,7 @@
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 				<div class="join-wrap">
 					<h3>회원가입</h3>
+					<div id="memo">각 항목 옆 * 표시는 필수 기입 항목 표시 입니다.</div>
 					<div id="form-container">
 						<div id="form-inner-container">
 							<div id="sign-up-container">
@@ -58,7 +59,9 @@
 												<span class="rest-time" id="rest_time">05:00</span>
 											</div>
 											<input type="button" class="before" value="인증하기" id="authChkBtn">
-											<input type="button" class="after" value="인증완료" style="display:none;">
+											<input type="button" class="after" value="인증완료" style="display:none;" required>
+											<!-- 히든속성으로 인증전 기본값 2, 인증완료되면 1값으로 넘기기 -->
+											<input type="hidden" id="auth_status" name="auth_status" value="2">
 										</div>
 										<div id="authCheckResult" class="result"></div>
 									</section>
@@ -106,11 +109,11 @@
 									</section>
 									
 									<section class="row">
-										<label for="mem_email1">이메일</label>
+										<label for="mem_email1">이메일</label> <span class="required"> * </span>
 										<div class="box">
-											<input type="text" name="mem_email1" id="mem_email1" placeholder="Email">
+											<input type="text" name="mem_email1" id="mem_email1" placeholder="Email" required>
 											@
-											<input type="text" size="10" id="mem_email2" name="mem_email2">
+											<input type="text" size="10" id="mem_email2" name="mem_email2" required>
 											<select id="emaildmain" class="form-sel">
 												<option value="">직접입력</option>
 												<option value="naver.com">naver.com</option>
@@ -118,6 +121,8 @@
 												<option value="daum.net">daum.net</option>
 											</select> 
 										</div>
+										<!-- 메일 xxx@xxx.xxx -->
+										<input type="hidden" id="mem_email" name="mem_email" value="" required>
 										<div id="checkMail" class="result"></div>
 									</section>
 									
@@ -136,7 +141,7 @@
 									</section>
 
 									<section class="row">
-										<label for="mem_birthday">생년월일</label>
+										<label for="mem_birthday">생년월일 <span class="required"> * </span> </label> 
 										<select id="year" class="form-sel">
 											<option value="YEAR">연도</option>
 										</select>
@@ -147,7 +152,7 @@
 											<option value="DAY">일</option>
 										</select>
 										<!-- 생년월일(yyyy-MM-dd) -->
-										<input type="hidden" id="mem_birthday" name="mem_birthday" value="">
+										<input type="hidden" id="mem_birthday" name="mem_birthday" value="" required>
 									</section>
 									
 									<section class="row">
@@ -168,17 +173,18 @@
 										<span class="required"> * </span>
 										<div>
 											<label>
-												<input type="checkbox" name="terms" id="terms1" class="terms"><a href="#" class="terms-text">[필수] 굿바이 이용약관 동의</a>
+												<input type="checkbox" name="terms" id="terms1" class="terms"><a href="Policy" class="terms-text">[필수] 굿바이 이용약관 동의</a>
 											</label>
 											<label>
-												<input type="checkbox" name="terms" id="terms2" class="terms"><a href="#" class="terms-text">[필수] 개인정보 수집 이용 동의</a>
+												<input type="checkbox" name="terms" id="terms2" class="terms"><a href="Privacy" class="terms-text">[필수] 개인정보 수집 이용 동의</a>
 											</label>
 											<label>
-												<input type="checkbox" name="terms" id="terms3" class="terms"><a href="#" class="terms-text">[필수] 휴대폰 본인확인 서비스</a>
+												<input type="checkbox" name="terms" id="terms3" class="terms"><a href="Privacy" class="terms-text">[필수] 휴대폰 본인확인 서비스</a>
 											</label>
 										</div>
 									</section>
-																		
+									<!-- sns연동은 hidden값으로 연동안함(2) 넘기기 -->
+									<input type="hidden" id="sns_status" name="sns_status" value="2">
 									<button id="submitBtn" onclick="checkSubmit()">회원 가입하기</button>
 								</form>
 							</div>

@@ -68,62 +68,64 @@
 						</div>
 					</div>
 				<section>
-					<div>
-					
-					<c:choose>
-						<c:when test="${empty product}">
-							<ul>
-								<li>판매내역이 없습니다.</li>
-							</ul>
-						</c:when>
-						<c:otherwise>
-							<c:forEach var="product" items="${product}">
-								<li class="product-card" data-status="${product.product_status}">
-											<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" height="180px"/>
-											<div class="card-info">
-												<div class="category">
-													<span>생활용품</span>
-													<span class="type">직거래</span>
-												</div>
-												<div class="ttl">
-													<c:choose>
-														<c:when test="${product.product_status == 1 }">
-															[거래중]
-														</c:when>
-														<c:when test="${product.product_status == 2 }">
-															[예약중]
-														</c:when>
-														<c:when test="${product.product_status == 3 }">
-															[거래완료]
-														</c:when>
-														<c:when test="${product.product_status == 4 }">
-															[🚫신고처리된 게시물입니다]
-															<div class="">
-																신고사유 적기(join필요)
-															</div>
-															<div class="card-row">
-													            <span class="add">${product.product_trade_adr1}</span>
-													            <span class="name">${product.mem_nick}</span>
-													        </div>
-														</c:when>
-														<c:otherwise>
-														<!-- 판매중 널스트링 -->
-														</c:otherwise>
-													</c:choose>
-													${product.product_title}
-												</div>
-												<div class="price">
-													<fmt:formatNumber  value="${product.product_price}" type="number" pattern="#,###" />원
-												</div>
-												<div class="card-row">
-													<span class="add">${product.product_trade_adr1}</span>
-													<span class="name">${product.mem_nick}</span>
-												</div>
-											</div>
-										</li>
-							</c:forEach>
-						</c:otherwise>
-					</c:choose>
+					   <div class="product-list">
+					    <ul class="product-wrap">
+						    <c:choose>
+						        <c:when test="${empty product}">
+						            <li class="product-card" data-status="none">등록된 상품이 없습니다.</li>
+						        </c:when>
+						        <c:otherwise>
+						            <c:forEach var="product" items="${product}">
+						                <li class="product-card" data-status="${product.product_status}">
+						                    <img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" 
+						                         class="card-thumb" 
+						                         alt="thumbnail" height="180px" />
+						                    <div class="card-info">
+						                        <div class="category">
+						                            <span>${product.product_category}</span>
+						                            <span class="type">직거래</span>
+						                        </div>
+						                        <div class="ttl">
+						                            <c:choose>
+						                                <c:when test="${product.product_status == 1}">
+						                                    [거래중]
+						                                </c:when>
+						                                <c:when test="${product.product_status == 2}">
+						                                    [예약중]
+						                                </c:when>
+						                                <c:when test="${product.product_status == 3}">
+						                                    [거래완료]
+						                                </c:when>
+						                                <c:when test="${product.product_status == 4}">
+						                                    [🚫신고처리된 게시물입니다.]${product.product_title}
+						                                     <div class="price">
+									                            <fmt:formatNumber value="${product.product_price}" type="number" pattern="#,###" />원
+									                        </div>
+									                        <div class="card-row">
+									                            <span class="add">${product.product_trade_adr1}</span>
+									                            <span class="name">${product.mem_nick}</span>
+									                        </div>
+						                                </c:when>
+						                                <c:otherwise>
+						                                    [판매중]
+						                                </c:otherwise>
+						                            </c:choose>
+						                            ${product.product_title}
+						                        </div>
+						                        <div class="price">
+						                            <fmt:formatNumber value="${product.product_price}" type="number" pattern="#,###" />원
+						                        </div>
+						                        <div class="card-row">
+						                            <span class="add">${product.product_trade_adr1}</span>
+						                            <span class="name">${product.mem_nick}</span>
+						                        </div>
+						                    </div>
+						                </li>
+						            </c:forEach>
+						        </c:otherwise>
+						    </c:choose>
+						</ul>
+					    
 					</div>
 				</section>
 				</div>

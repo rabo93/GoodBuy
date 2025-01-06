@@ -44,8 +44,10 @@ public interface ProductMapper {
 			@Param("product_id")int product_id,
 			@Param("reason")String reason,
 			@Param("reporter_id")String reporter_id);
+
+	List<ProductVO> selectLimitProductList(String id);
 	
-	// 상품 조회수 증가
+// 상품 조회수 증가
 	void plusViewCount(int product_id);
 	
 	// 상품 찜여부 조회

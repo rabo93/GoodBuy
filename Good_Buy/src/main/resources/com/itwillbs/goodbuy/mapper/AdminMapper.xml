@@ -48,25 +48,25 @@
 		  JOIN COMMONCODE S
 		    ON M.CODETYPE_ID = S.CODETYPE_ID
 		 WHERE 1 = 1
-		 <if test="searchValue != null">
-		 	  AND M.CODETYPE_NAME LIKE CONCAT('%', #{searchValue}, '%')
-		 	   OR M.CODETYPE_ID LIKE CONCAT('%', #{searchValue}, '%')
-		 	   OR M.DESCRIPTION LIKE CONCAT('%', #{searchValue}, '%')
-		 	   OR S.CODE_ID LIKE CONCAT('%', #{searchValue}, '%')
-		 	   OR S.CODE_NAME LIKE CONCAT('%', #{searchValue}, '%')
-		 	   OR S.DESCRIPTION LIKE CONCAT('%', #{searchValue}, '%')
+		 <if test="param.searchValue != null">
+		 	  AND M.CODETYPE_NAME LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	   OR M.CODETYPE_ID LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	   OR M.DESCRIPTION LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	   OR S.CODE_ID LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	   OR S.CODE_NAME LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	   OR S.DESCRIPTION LIKE CONCAT('%', #{param.searchValue}, '%')
 		 </if>
 		 ORDER BY
 	 	<choose>
-			<when test='orderColumn.equals("CODETYPE_ID")'>M.CODETYPE_ID</when>
-			<when test='orderColumn.equals("CODE_ID")'>S.CODE_ID</when>
+			<when test='param.orderColumn.equals("CODETYPE_ID")'>M.CODETYPE_ID</when>
+			<when test='param.orderColumn.equals("CODE_ID")'>S.CODE_ID</when>
 			<otherwise>CODETYPE_ID</otherwise>
 		</choose>
-		<if test='orderDir.equals("asc")'>ASC</if>
-		<if test='orderDir.equals("desc")'>DESC</if>
+		<if test='param.orderDir.equals("asc")'>ASC</if>
+		<if test='param.orderDir.equals("desc")'>DESC</if>
 		 LIMIT
-		 	   #{start}
-		 	   , #{length}
+		 	   #{param.start}
+		 	   , #{param.length}
      </select>
      
      <!-- 공통코드 컬럼 수 조회 - SELECT -->
@@ -84,13 +84,13 @@
 		  JOIN COMMONCODE S
 		    ON M.CODETYPE_ID = S.CODETYPE_ID
 		 WHERE 1 = 1
-		 <if test="searchValue != null">
-		 	  AND M.CODETYPE_NAME LIKE CONCAT('%', #{searchValue}, '%')
-		 	   OR M.CODETYPE_ID LIKE CONCAT('%', #{searchValue}, '%')
-		 	   OR M.DESCRIPTION LIKE CONCAT('%', #{searchValue}, '%')
-		 	   OR S.CODE_ID LIKE CONCAT('%', #{searchValue}, '%')
-		 	   OR S.CODE_NAME LIKE CONCAT('%', #{searchValue}, '%')
-		 	   OR S.DESCRIPTION LIKE CONCAT('%', #{searchValue}, '%')
+		 <if test="param.searchValue != null">
+		 	  AND M.CODETYPE_NAME LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	   OR M.CODETYPE_ID LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	   OR M.DESCRIPTION LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	   OR S.CODE_ID LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	   OR S.CODE_NAME LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	   OR S.DESCRIPTION LIKE CONCAT('%', #{param.searchValue}, '%')
 		 </if>
      </select>
      
@@ -154,32 +154,32 @@
 		       , AUTH_STATUS
 		  FROM MEMBER
 		 WHERE 1 = 1
-			<if test="memStatus != null and memStatus != 0">
+			<if test="param.mem_status != null and param.mem_status != 0">
 		 	   AND MEM_STATUS = #{memStatus}
 		 	</if>
-		 	<if test='memGrade != null and !memGrade.equals("전체")'>
+		 	<if test='param.mem_grade != null and !param.mem_grade.equals("전체")'>
 		 	   AND MEM_GRADE = #{memGrade}
 		 	</if>
-		 	<if test="searchValue != null and !searchValue.equals('')">
-		 	   AND (MEM_ID LIKE CONCAT('%', #{searchValue}, '%')
-		 	    	OR MEM_NAME LIKE CONCAT('%', #{searchValue}, '%')
-		 	    	OR MEM_NICK LIKE CONCAT('%', #{searchValue}, '%')
-		 	    	OR MEM_EMAIL LIKE CONCAT('%', #{searchValue}, '%')) 
+		 	<if test="param.searchValue != null and !param.searchValue.equals('')">
+		 	   AND (MEM_ID LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	    	OR MEM_NAME LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	    	OR MEM_NICK LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	    	OR MEM_EMAIL LIKE CONCAT('%', #{param.searchValue}, '%')) 
 		 	</if>
 		 ORDER BY 
 			<choose>
-				<when test='orderColumn.equals("mem_id")'>MEM_ID</when>
-				<when test='orderColumn.equals("mem_name")'>MEM_NAME</when>
-				<when test='orderColumn.equals("mem_nick")'>MEM_NICK</when>
-				<when test='orderColumn.equals("mem_email")'>MEM_EMAIL</when>
-				<when test='orderColumn.equals("mem_reg_date")'>MEM_REG_DATE</when>
+				<when test='param.orderColumn.equals("mem_id")'>MEM_ID</when>
+				<when test='param.orderColumn.equals("mem_name")'>MEM_NAME</when>
+				<when test='param.orderColumn.equals("mem_nick")'>MEM_NICK</when>
+				<when test='param.orderColumn.equals("mem_email")'>MEM_EMAIL</when>
+				<when test='param.orderColumn.equals("mem_reg_date")'>MEM_REG_DATE</when>
 				<otherwise>MEM_REG_DATE</otherwise>
 			</choose>
-			<if test='orderDir.equals("asc")'>ASC</if>
-			<if test='orderDir.equals("desc")'>DESC</if>
+			<if test='param.orderDir.equals("asc")'>ASC</if>
+			<if test='param.orderDir.equals("desc")'>DESC</if>
 		  LIMIT
-		 	   #{start}
-		 	   , #{length}
+		 	   #{param.start}
+		 	   , #{param.length}
      </select>
      
      <!-- 회원목록 전체 컬럼 수 조회 - SELECT -->
@@ -193,17 +193,17 @@
      	SELECT COUNT(*)
      	  FROM MEMBER
      	 WHERE 1 = 1
-			<if test="memStatus != null and memStatus != 0">
-		 	   AND MEM_STATUS = #{memStatus}
+			<if test="param.mem_status != null and param.mem_status != 0">
+		 	   AND MEM_STATUS = #{param.mem_status}
 		 	</if>
-		 	<if test='memGrade != null and !memGrade.equals("전체")'>
-		 	   AND MEM_GRADE = #{memGrade}
+		 	<if test='param.mem_grade != null and !param.mem_grade.equals("전체")'>
+		 	   AND MEM_GRADE = #{param.mem_grade}
 		 	</if>
-		 	<if test="searchValue != null and !searchValue.equals('')">
-		 	   AND (MEM_ID LIKE CONCAT('%', #{searchValue}, '%')
-		 	    	OR MEM_NAME LIKE CONCAT('%', #{searchValue}, '%')
-		 	    	OR MEM_NICK LIKE CONCAT('%', #{searchValue}, '%')
-		 	    	OR MEM_EMAIL LIKE CONCAT('%', #{searchValue}, '%')) 
+		 	<if test="param.searchValue != null and !param.searchValue.equals('')">
+		 	   AND (MEM_ID LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	    	OR MEM_NAME LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	    	OR MEM_NICK LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	    	OR MEM_EMAIL LIKE CONCAT('%', #{param.searchValue}, '%')) 
 		 	</if>
      </select>
      
@@ -262,10 +262,10 @@
 		  JOIN PRODUCT P
 		    ON R.PRODUCT_ID = P.PRODUCT_ID
 		 WHERE 1 = 1
-		<if test="status != null and status != ''">
+		<if test="param.status != null and param.status != ''">
 		   AND STATUS = #{status}
 		</if>
-		<if test="searchValue != null and !searchValue.equals('')">
+		<if test="param.searchValue != null and !param.searchValue.equals('')">
 		   AND (R.REPORTER_ID LIKE CONCAT('%', #{searchValue}, '%')
 			   OR R.REPORTER_ID LIKE CONCAT('%', #{searchValue}, '%')
 	 	       OR R.PRODUCT_ID LIKE CONCAT('%', #{searchValue}, '%')
@@ -274,7 +274,7 @@
 	 	       OR R.REASON LIKE CONCAT('%', #{searchValue}, '%') 
 	 	       OR R.ADMIN_ID LIKE CONCAT('%', #{searchValue}, '%'))
 		</if>
-		<if test="searchDate != null and !searchDate.equals('')">
+		<if test="param.searchDate != null and !param.searchDate.equals('')">
 		   AND DATE(R.REPORT_DATE) BETWEEN LEFT(#{searchDate}, 10) AND RIGHT(#{searchDate}, 10)
 		</if>
      </select>
@@ -295,42 +295,42 @@
 		  JOIN PRODUCT P
 		    ON R.PRODUCT_ID = P.PRODUCT_ID
 		 WHERE 1 = 1
-		 <if test="status != null and status != ''">
-		   AND STATUS = #{status}
+		 <if test="param.status != null and param.status != ''">
+		   AND STATUS = #{param.status}
 		</if>
-		<if test="searchValue != null and !searchValue.equals('')">
+		<if test="param.searchValue != null and !param.searchValue.equals('')">
 		   AND 
 		   	  (
-			   R.REPORTER_ID LIKE CONCAT('%', #{searchValue}, '%')
-			   OR R.REPORTER_ID LIKE CONCAT('%', #{searchValue}, '%')
-	 	       OR R.PRODUCT_ID LIKE CONCAT('%', #{searchValue}, '%')
-	 	       OR P.PRODUCT_TITLE LIKE CONCAT('%', #{searchValue}, '%') 
-	 	       OR R.STATUS LIKE CONCAT('%', #{searchValue}, '%') 
-	 	       OR R.REASON LIKE CONCAT('%', #{searchValue}, '%') 
-	 	       OR R.ADMIN_ID LIKE CONCAT('%', #{searchValue}, '%')
+			   R.REPORTER_ID LIKE CONCAT('%', #{param.searchValue}, '%')
+			   OR R.REPORTER_ID LIKE CONCAT('%', #{param.searchValue}, '%')
+	 	       OR R.PRODUCT_ID LIKE CONCAT('%', #{param.searchValue}, '%')
+	 	       OR P.PRODUCT_TITLE LIKE CONCAT('%', #{param.searchValue}, '%') 
+	 	       OR R.STATUS LIKE CONCAT('%', #{param.searchValue}, '%') 
+	 	       OR R.REASON LIKE CONCAT('%', #{param.searchValue}, '%') 
+	 	       OR R.ADMIN_ID LIKE CONCAT('%', #{param.searchValue}, '%')
 	 	      )
 		</if>
-		<if test="searchDate != null and !searchDate.equals('')">
-		   AND DATE(R.REPORT_DATE) BETWEEN LEFT(#{searchDate}, 10) AND RIGHT(#{searchDate}, 10)
+		<if test="param.searchDate != null and !param.searchDate.equals('')">
+		   AND DATE(R.REPORT_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10)
 		</if>
 		 ORDER BY 
 			<choose>
-				<when test='orderColumn.equals("REPORTER_ID")'>R.REPORTER_ID</when>
-				<when test='orderColumn.equals("PRODUCT_ID")'>R.PRODUCT_ID</when>
-				<when test='orderColumn.equals("PRODUCT_TITLE")'>P.PRODUCT_TITLE</when>
-				<when test='orderColumn.equals("REPORT_DATE")'>R.REPORT_DATE</when>
-				<when test='orderColumn.equals("REASON")'>R.REASON</when>
-				<when test='orderColumn.equals("STATUS")'>R.STATUS</when>
-				<when test='orderColumn.equals("ACTION_REASON")'>R.ACTION_REASON</when>
-				<when test='orderColumn.equals("ADMIN_ID")'>R.ADMIN_ID</when>
-				<when test='orderColumn.equals("ACTION_DATE")'>R.ACTION_DATE</when>
+				<when test='param.orderColumn.equals("REPORTER_ID")'>R.REPORTER_ID</when>
+				<when test='param.orderColumn.equals("PRODUCT_ID")'>R.PRODUCT_ID</when>
+				<when test='param.orderColumn.equals("PRODUCT_TITLE")'>P.PRODUCT_TITLE</when>
+				<when test='param.orderColumn.equals("REPORT_DATE")'>R.REPORT_DATE</when>
+				<when test='param.orderColumn.equals("REASON")'>R.REASON</when>
+				<when test='param.orderColumn.equals("STATUS")'>R.STATUS</when>
+				<when test='param.orderColumn.equals("ACTION_REASON")'>R.ACTION_REASON</when>
+				<when test='param.orderColumn.equals("ADMIN_ID")'>R.ADMIN_ID</when>
+				<when test='param.orderColumn.equals("ACTION_DATE")'>R.ACTION_DATE</when>
 				<otherwise>R.REPORT_DATE</otherwise>
 			</choose>
-			<if test='orderDir.equals("asc")'>ASC</if>
-			<if test='orderDir.equals("desc")'>DESC</if>
+			<if test='param.orderDir.equals("asc")'>ASC</if>
+			<if test='param.orderDir.equals("desc")'>DESC</if>
 		  LIMIT
-		 	   #{start}
-		 	   , #{length}
+		 	   #{param.start}
+		 	   , #{param.length}
      </select>
      
      <!-- 신고 상품 조치 및 수정 - UPDATE -->
@@ -365,11 +365,11 @@
      	SELECT COUNT(*)
      	  FROM NOTICE
      	 WHERE 1 = 1
-     	 	<if test="searchValue != null and !searchValue.equals('')">
+     	 	<if test="param.searchValue != null and !param.searchValue.equals('')">
 		 	   AND (
-			 	   	NOTICE_SUBJECT LIKE CONCAT('%', #{searchValue}, '%')
-		 	    	OR NOTICE_CONTENT LIKE CONCAT('%', #{searchValue}, '%')
-		 	    	OR MEM_ID LIKE CONCAT('%', #{searchValue}, '%')
+			 	   	NOTICE_SUBJECT LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	    	OR NOTICE_CONTENT LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	    	OR MEM_ID LIKE CONCAT('%', #{param.searchValue}, '%')
 		 	   		)
 		 	</if>
      </select>
@@ -379,27 +379,27 @@
      	SELECT *
 		  FROM NOTICE
 		 WHERE 1 = 1
-		 	<if test="searchValue != null and !searchValue.equals('')">
+		 	<if test="param.searchValue != null and !param.searchValue.equals('')">
 		 	   AND (
-		 	   		NOTICE_SUBJECT LIKE CONCAT('%', #{searchValue}, '%')
-		 	    	OR NOTICE_CONTENT LIKE CONCAT('%', #{searchValue}, '%')
-		 	    	OR MEM_ID LIKE CONCAT('%', #{searchValue}, '%')
+		 	   		NOTICE_SUBJECT LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	    	OR NOTICE_CONTENT LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	    	OR MEM_ID LIKE CONCAT('%', #{param.searchValue}, '%')
 		 	    	)
 		 	</if>
 		 ORDER BY 
 			<choose>
-				<when test='orderColumn.equals("mem_id")'>MEM_ID</when>
-				<when test='orderColumn.equals("notice_subject")'>NOTICE_SUBJECT</when>
-				<when test='orderColumn.equals("notice_content")'>NOTICE_CONTENT</when>
-				<when test='orderColumn.equals("notice_date")'>NOTICE_DATE</when>
-				<when test='orderColumn.equals("notice_read_count")'>NOTICE_READ_COUNT</when>
+				<when test='param.orderColumn.equals("mem_id")'>MEM_ID</when>
+				<when test='param.orderColumn.equals("notice_subject")'>NOTICE_SUBJECT</when>
+				<when test='param.orderColumn.equals("notice_content")'>NOTICE_CONTENT</when>
+				<when test='param.orderColumn.equals("notice_date")'>NOTICE_DATE</when>
+				<when test='param.orderColumn.equals("notice_read_count")'>NOTICE_READ_COUNT</when>
 				<otherwise>NOTICE_DATE</otherwise>
 			</choose>
-			<if test='orderDir.equals("asc")'>ASC</if>
-			<if test='orderDir.equals("desc")'>DESC</if>
+			<if test='param.orderDir.equals("asc")'>ASC</if>
+			<if test='param.orderDir.equals("desc")'>DESC</if>
 		  LIMIT
-		 	   #{start}
-		 	   , #{length}
+		 	   #{param.start}
+		 	   , #{param.length}
      </select>
      
      <!-- 공지사항 첨부파일 목록 가져오기 - SELECT -->
@@ -434,10 +434,15 @@
 		SELECT *
 		  FROM FAQ
 		 WHERE 1 = 1
+		 	<if test="faqCate != null and faqCate != 0">
+		 	   AND FAQ_CATE = #{faqCate}
+		 	</if>
+		 	<if test="listStatus != null and listStatus != 0">
+		 	   AND LIST_STATUS = #{listStatus}
+		 	</if>
 		 	<if test="searchValue != null and searchValue != ''">
 		 	   AND FAQ_SUBJECT LIKE CONCAT('%', #{searchValue}, '%')
 		 		OR FAQ_CONTENT LIKE CONCAT('%', #{searchValue}, '%')
-<!-- 		 		OR FAQ_CATE LIKE CONCAT('%', #{searchValue}, '%') -->
 		 	</if>
 		 ORDER BY 
 			<choose>
@@ -445,6 +450,7 @@
 				<when test="orderColumn == 'FAQ_SUBJECT'">FAQ_SUBJECT</when>
 				<when test="orderColumn == 'FAQ_CONTENT'">FAQ_CONTENT</when>
 				<when test="orderColumn == 'FAQ_CATE'">FAQ_CATE</when>
+				<otherwise>FAQ_CATE</otherwise>
 			</choose>
 			<if test="orderDir == 'asc'">ASC</if>
 			<if test="orderDir == 'desc'">DESC</if>
@@ -452,7 +458,7 @@
 		 	   #{start}
 		 	   , #{length}
 		 </select>
-    
+    	
      <!-- FAQ 컬럼 수 조회 - SELECT -->
      <select id="selectFaqTotal" resultType="int">
      	SELECT COUNT(*)
@@ -473,11 +479,11 @@
      <!-- FAQ 수정 -->
      <update id="updateFaqInfo">
      	UPDATE FAQ
-     	   SET FAQ_SUBJECT = #{FAQ_SUBJECT}
-     	   	   , FAQ_CONTENT = #{FAQ_CONTENT}
-     	   	   , FAQ_CATE = #{FAQ_CATE}
-     	   	   , LIST_STATUS = #{LIST_STATUS}
-     	 WHERE FAQ_ID = #{FAQ_ID}
+     	   SET FAQ_SUBJECT = #{faq_subject}
+     	   	   , FAQ_CONTENT = #{faq_content}
+     	   	   , FAQ_CATE = #{faq_cate}
+     	   	   , LIST_STATUS = #{list_status}
+     	 WHERE FAQ_ID = #{faq_id}
      </update>
      
      <!-- FAQ 삭제 -->
@@ -485,11 +491,110 @@
 		DELETE FROM FAQ
 		WHERE 1=1
 		AND FAQ_ID IN
-		<foreach collection="deleteItems" item="FAQ_ID" index="index" open="(" close=")" separator=",">
-			   #{FAQ_ID}
+		<foreach collection="deleteItems" item="faq_id" index="index" open="(" close=")" separator=",">
+			   #{faq_id}
 		</foreach>
-		
-		 
      </delete>
      
+     
+     
+     <!-- ************************************************************* -->
+     <!-- 1:1 문의 전체 컬럼 수 조회 - SELECT -->
+     <select id="selectEnquireTotal" resultType="int">
+     	SELECT COUNT(*)
+     	FROM SUPPORT
+     </select>
+     
+     
+     <!-- 1:1 문의 필터링 후 컬럼 수 조회 - SELECT -->
+     <select id="selectEnquireListFiltered" resultType="int">
+     	SELECT COUNT(*)
+		FROM SUPPORT
+		WHERE 1 = 1
+		<if test="param.status != null and param.status != ''">
+		   AND STATUS = #{param.status}
+		</if>
+		<if test="param.searchValue != null and !param.searchValue.equals('')">
+		   AND (MEM_ID LIKE CONCAT('%', #{param.searchValue}, '%')
+			   OR SUPPORT_SUBJECT LIKE CONCAT('%', #{param.searchValue}, '%')
+	 	       OR SUPPORT_CONTENT LIKE CONCAT('%', #{param.searchValue}, '%')
+	 	       OR REPLY_CONTENT LIKE CONCAT('%', #{param.searchValue}, '%') 
+	 	       OR STATUS LIKE CONCAT('%', #{param.searchValue}, '%'))
+		</if>
+		<if test="param.searchDate != null and !param.searchDate.equals('')">
+		   AND (DATE(SUPPORT_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10)
+		   	OR DATE(REPLY_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10))
+		</if>
+     </select>
+     
+     <!-- 필터링 된 1:1 문의 목록 조회 - SELECT -->
+     <select id="selectEnquireList" resultType="map">
+     	SELECT
+     		SUPPORT_ID 
+     		, SUPPORT_CATEGORY
+		    , DATE_FORMAT(SUPPORT_DATE, '%Y-%m-%d %H:%i:%s') AS SUPPORT_DATE
+     		, MEM_ID
+		    , SUPPORT_SUBJECT
+		    , SUPPORT_CONTENT
+		    , SUPPORT_FILE
+		    , DATE_FORMAT(REPLY_DATE, '%Y-%m-%d %H:%i:%s') AS REPLY_DATE
+		    , REPLY_CONTENT
+		    , STATUS
+		FROM SUPPORT
+		WHERE 1 = 1
+			<if test="param.status != null and param.status != ''">
+			   AND STATUS = #{param.status}
+			</if>
+			<if test="param.searchValue != null and !param.searchValue.equals('')">
+			   AND (MEM_ID LIKE CONCAT('%', #{param.searchValue}, '%')
+				   OR SUPPORT_SUBJECT LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	       OR SUPPORT_CONTENT LIKE CONCAT('%', #{param.searchValue}, '%')
+		 	       OR REPLY_CONTENT LIKE CONCAT('%', #{param.searchValue}, '%') 
+		 	       OR STATUS LIKE CONCAT('%', #{param.searchValue}, '%'))
+			</if>
+			<if test="param.searchDate != null and !param.searchDate.equals('')">
+			   AND (DATE(SUPPORT_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10)
+			   	OR DATE(REPLY_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10))
+			</if>
+		ORDER BY 
+			<choose>
+				<when test='param.orderColumn.equals("SUPPORT_CATEGORY")'>SUPPORT_CATEGORY</when>
+				<when test='param.orderColumn.equals("SUPPORT_DATE")'>SUPPORT_DATE</when>
+				<when test='param.orderColumn.equals("MEM_ID")'>MEM_ID</when>
+				<when test='param.orderColumn.equals("REPLY_DATE")'>REPLY_DATE</when>
+				<when test='param.orderColumn.equals("STATUS")'>STATUS</when>
+				<otherwise>SUPPORT_DATE</otherwise>
+			</choose>
+			<if test='param.orderDir.equals("asc")'>ASC</if>
+			<if test='param.orderDir.equals("desc")'>DESC</if>
+		  LIMIT
+		 	   #{param.start}
+		 	   , #{param.length}
+     </select>
+     
+     <!-- 1:1 문의 답글 등록(수정) - UPDATE -->
+     <update id="updateReplyInfo">
+     	UPDATE SUPPORT
+		<set>
+			   STATUS = #{STATUS}
+			   , REPLY_CONTENT = #{REPLY_CONTENT}
+			   , REPLY_DATE = CURRENT_TIMESTAMP
+<!-- 			   , ADMIN_ID = #{ADMIN_ID} -->
+		</set>
+		WHERE SUPPORT_ID = #{SUPPORT_ID}
+     </update>
+     
+     <!-- ******** 로그 AOP ******* -->
+     <!-- 로그 저장 - INSERT -->
+     <insert id="insertLog">
+     	INSERT 
+     	  INTO LOG
+     	VALUES (
+     		#{log.ADMIN_ID}
+     		, #{log.MAPPER_ID}
+     		, #{log.PROCESS_TIME}
+     		, #{log.PROCESS_RESULT}
+     		, #{log.IP_ADDRESS}
+     	)
+     </insert>
 </mapper>

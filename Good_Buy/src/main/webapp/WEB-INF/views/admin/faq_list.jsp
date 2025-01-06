@@ -181,9 +181,11 @@
 							<label for="updatedFaqSubject" class="col-form-label">제목</label>
 							<input type="text" class="form-control" name="faq_subject" id="updatedFaqSubject" required>
 						</div>
-						<div class="mb-1">
-							<label for="updatedFaqContent" class="col-form-label">내용</label>
-							<input type="text" class="form-control" name="faq_content" id="updatedFaqContent" required>
+						
+						<div class="mb-3">
+							<label class="small mb-1" for="updatedFaqContent">내용</label>
+							<textarea class="form-control" col="4" id="updatedFaqContent" name="faq_content"  placeholder="내용을 입력하세요." required></textarea>
+							<small class="text-primary text-right d-block font-weight-bold"><span id="lengthInfo">0</span> / 500자</small>
 						</div>
 						<div class="mb-1">
 							<label class="small mb-1" for="updatedFaqCate">FAQ 유형</label>

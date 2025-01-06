@@ -30,6 +30,7 @@ import com.itwillbs.goodbuy.vo.CommonCodeVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.NoticeVO;
 
+import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -265,8 +266,82 @@ public class AdminController {
 	}
 	
 	// ================================================
+	// ================================================
 	// [ 결제 관리 ]
+	// 상품 거래내역 - 포워딩
+	@LoginCheck(memberRole = MemberRole.ADMIN)
+	@GetMapping("AdmProductOrderList")
+	public String admProductOrderList() {
+		return "admin/order_list";
+	}
+//	
+//	// 1:1 문의 목록
+//	@ResponseBody
+//	@PostMapping("AdmSupportList")
+//	public String admSupportList(@RequestParam Map<String, String> param) {
+////			log.info(">>>> 문의 내역 목록 param : " + param);
+//		Map<String, Object> convertParam = convertMap(param);
+//		
+//		// 1:1 문의 목록 전체 컬럼 수 조회
+//		int recordsTotal = service.getEnquireListTotal();
+//		
+//		// 1:1 문의 검색 필터링 후 컬럼 수 조회
+//		int recordsFiltered = service.getEnquireListFiltered(convertParam);
+//		
+//		// 필터링 된 1:1 문의 목록 가져오기
+//		List<Map<String, Object>> EnquireList = service.getEnquireList(convertParam);
+//		log.info(">>>>> 필터링 된 1:1 문의 목록 : " + EnquireList);
+//		// [{MEM_ID=bborara, STATUS=처리완료, SUPPORT_CONTENT=문의내용임니다아아ㅏ, SUPPORT_DATE=2025-01-04 09:00:00, SUPPORT_ID=1, REPLY_CONTENT=답변드립니다아아ㅏ, REPLY_DATE=2025-01-04 12:00:00, SUPPORT_SUBJECT=문의제목, SUPPORT_CATEGORY=1}, {MEM_ID=aa1111, STATUS=접수, SUPPORT_CONTENT=무늬무늬, SUPPORT_DATE=2025-01-04 09:00:00, SUPPORT_ID=2, REPLY_DATE=2025-01-04 14:34:27, SUPPORT_SUBJECT=무늬, SUPPORT_CATEGORY=3}]
+//		
+//		Map<String, Object> response = new HashMap<String, Object>();
+//		response.put("draw", convertParam.get("draw"));
+//		response.put("recordsTotal", recordsTotal);
+//		response.put("recordsFiltered", recordsFiltered);
+//		response.put("EnquireList", EnquireList);
+//		
+//		JSONObject jo = new JSONObject(response);
+//		return jo.toString();
+//	}
+//	
+//	//----------------------------------------------------------------------------------------
+//	// 1:1 문의 - 답글달기(+ 수정하기)
+//	@AdminLog
+//	@LoginCheck(memberRole = MemberRole.ADMIN)
+//	@PostMapping("AdmSupportAction")
+//	public String admSupportAction(@RequestParam Map<String, Object> param, Model model) {
+//		log.info(">>> 답글 정보 : " + param);
+//		
+//		int updateResult = service.registReplyInfo(param);
+//		log.info(">>> 업데이트 갯수 : " + updateResult);
+//		
+//		if(updateResult > 0) {
+//			model.addAttribute("msg", "1:1 문의 답글 처리를 완료하였습니다.");
+//			model.addAttribute("targetURL", "AdmSupportList");
+//			return "result/success";
+//		} else {
+//			model.addAttribute("msg", "1:1 문의 답글 처리에 실패하였습니다.");
+//			return "result/fail";
+//		}
+//	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// ================================================
+	// ================================================
 	// ================================================
 	// [ 신고 관리 ]
 	// 신고 상품 목록 페이지 포워딩
@@ -460,6 +535,7 @@ public class AdminController {
 	
 	//----------------------------------------------------------------------------------------
 	// 1:1 문의 - 답글달기(+ 수정하기)
+	@AdminLog
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmSupportAction")
 	public String admSupportAction(@RequestParam Map<String, Object> param, Model model) {
@@ -477,8 +553,6 @@ public class AdminController {
 			return "result/fail";
 		}
 	}
-	
-	
 	//----------------------------------------------------------------------------------------
 	//	실제 업로드 경로 메서드
 	public String getRealPath(HttpSession session) {
@@ -546,6 +620,7 @@ public class AdminController {
 	}
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 수정 ]
+	@AdminLog
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmFaqModify")
 	public String admFaqModify(@RequestParam Map<String, Object> param, Model model) {
@@ -564,6 +639,7 @@ public class AdminController {
 	
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 삭제 ]
+	@AdminLog
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("AdmFaqDelete")

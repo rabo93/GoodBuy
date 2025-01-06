@@ -13,7 +13,8 @@
        <li class="nav-item dropdown no-arrow">
            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                <span class="mr-2 d-none d-lg-inline text-gray-600 small">관리자</span>
-               <img class="img-profile rounded-circle" src="../../resources/adm/img/undraw_profile.svg">
+               <img class="img-profile rounded-circle" src="../../resources/adm/img/admin_profile.png">
+<!--                <img class="img-profile rounded-circle" src="../../resources/adm/img/undraw_profile.svg"> -->
            </a>
            <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

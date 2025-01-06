@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	
 	const faqList = $('#faqList').DataTable({
 		lengthChange : true, // 건수
-		searching : true, // 검색
+		searching : false, // 검색
 		info : true, // 정보
 		ordering : true, // 정렬
 		paging : true,
@@ -199,34 +199,10 @@ document.addEventListener("DOMContentLoaded", function(){
 	faqList.on("click", '.edit-btn', function() {
 		const row = $(this).closest('tr');
 		const rowData = faqList.row(row).data();
-//		console.log("rowData: ", JSON.stringify(rowData, null, 2));
-//		rowData:  {
-//		  "FAQ_SUBJECT": "중고거래 시 안전한 거래 방법은 무엇인가요?",
-//		  "FAQ_CONTENT": "안전한 거래를 위해 사이트 내 결제 시스템을 사용하시길 권장합니다. 또한, 만나서 거래 시 공공장소에서 진행하고, 큰 금액은 계좌 이체보다는 안전결제를 이용하세요.",
-//		  "FAQ_ID": 1,
-//		  "FAQ_CATE": 1,
-//		  "LIST_STATUS": "1",
-//		  "listIndex": 1,
-//		  "list_status": 1
-//		}
 		
 		const faqCate = rowData.FAQ_CATE;
-		console.log("faqCate: " + faqCate); //1
 		const listStatus = rowData.LIST_STATUS == 1 ? true : false;
-		console.log("listStatus: " + listStatus); //true
 		const listStatusText = rowData.list_status == 1 ? "사용함" : "사용안함";
-		
-//		const faqCateSelect = document.querySelector('input[name="faq_cate"]:checked');
-////		const faqCateSelect = document.querySelector(`#faqCate option[value="${faqCate}"]`);;
-//		console.log("faqCateSelect: " + faqCateSelect); //null
-//		
-//		const listStatusSelect = document.querySelector('input[name="list_status"]:checked');
-////		const listStatusSelect = document.querySelector(`#listStatus option[value="${listStatus}"]`);;
-//		console.log("listStatusSelect: " + listStatusSelect); //null
-//		
-//		// 선택 상태 설정
-//	    if (faqCateSelect) faqCateSelect.selected = true;
-//	    if (listStatusSelect) listStatusSelect.selected = true;
 		
 		// 수정 모달 화면에 기존 데이터 보이게 셋팅
 		$("#faqId").val(rowData.FAQ_ID); //히든속성값
@@ -236,6 +212,9 @@ document.addEventListener("DOMContentLoaded", function(){
 		$("#updatedListStatus").val(rowData.LIST_STATUS);
 		$("#updateFlexSwitchCheckDefault").prop("checked", listStatus);
 		$("#updateFlexSwitchCheckDefaultLab").text(listStatusText);
+		
+		const contentLength = rowData.FAQ_CONTENT.length;
+   		$("#lengthInfo").text(contentLength); // 글자 수 표시
 	});
 	
 	// 사용여부 버튼 값 업데이트
@@ -251,6 +230,25 @@ document.addEventListener("DOMContentLoaded", function(){
 	        console.warn("사용여부 버튼이 존재하지 않습니다.");
 	    }
 	});
+	
+	
+	// 내용 작성
+	$("#updatedFaqContent").on('keyup', () => {
+		fnChkByte($("#updatedFaqContent"), 500);
+	});
+	
+	// 글자수 제한 함수
+	function fnChkByte(item, maxLength){
+		const str = item.val();
+        const strLength = str.length;
+        
+         if (strLength > maxLength) {
+            alert("글자수는 " + maxLength + "자를 초과할 수 없습니다.");
+            $(item).val(str.substr(0, maxLength));      //문자열 자르고 값 넣기
+            fnChkByte(item, maxLength);
+         }
+         $('#lengthInfo').text(strLength);
+    }
 	
 	//-----------------------------------------------------
 	// FAQ 선택 삭제

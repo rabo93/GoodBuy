@@ -17,7 +17,6 @@
 /* ********************************************************************** */
 /* 계정정보 */
 .my-frm .row {
-    margin: 1rem 0; /* 기존보다 더 넓은 간격 */
     padding: 1rem;
     border-bottom: 1px solid var(--light-gray);
 }
@@ -27,7 +26,6 @@
     font-size: 1rem;
     font-weight: bold;
     color: var(--dark-blue);
-    margin-top: 1.2rem;
     margin-bottom: 0.5rem;
     display: block;
 }

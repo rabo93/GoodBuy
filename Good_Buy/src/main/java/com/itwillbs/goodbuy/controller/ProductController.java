@@ -26,6 +26,7 @@ import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.service.ProductService;
 import com.itwillbs.goodbuy.vo.ProductVO;
+import com.itwillbs.goodbuy.vo.WishlistVO;
 
 import retrofit2.http.GET;
 
@@ -136,19 +137,19 @@ public class ProductController {
 	// 상품 상세 페이지
 	@GetMapping("ProductDetail")
 	public String prodcutDetail(@RequestParam int PRODUCT_ID, Model model, HttpSession session) {
+		String id = (String) session.getAttribute("sId");
 		ProductVO productSearch = productService.productSearch(PRODUCT_ID);
+		List<Map<String, Object>> searchSellerProduct = productService.searchSellerProduct(productSearch.getMem_id(), PRODUCT_ID);
+		List<Map<String, Object>> searchSameCategoryProduct = productService.searchSameCategoryProduct(productSearch.getProduct_category(), PRODUCT_ID);
+		WishlistVO wishSearch = productService.checkWishlist(PRODUCT_ID, id);
+		
 		productService.plusviewcount(PRODUCT_ID);
+		model.addAttribute("searchSellerProduct", searchSellerProduct);
+		model.addAttribute("searchSameCategoryProduct", searchSameCategoryProduct);
+		model.addAttribute("wishSearch", wishSearch);
 		model.addAttribute("productSearch", productSearch);
 		
 		return "product/product_detail";
-	}
-	
-	// 상품 찜하기
-	@ResponseBody
-	@GetMapping("AddWishlist")
-	public String addWishlist() {
-		
-		return null;
 	}
 	
 	// 상품 신고

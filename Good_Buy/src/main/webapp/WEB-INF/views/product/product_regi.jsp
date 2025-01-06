@@ -23,7 +23,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/product.css">
 
 <!-- JS for Page -->
-<script src="${pageContext.request.contextPath}/resources/js/product.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/product_regi.js"></script>
 
 </head>
 <body>
@@ -42,20 +42,20 @@
 								<h2 class="item-regi-name">상품이미지</h2>
 								<div class="item-thumb">
 										<i class="fa-light fa-image"></i>
-									<button class="item-thumb-upload" type="button" onclick="onClickUpload1()">
+									<button class="item-thumb-upload" type="button">
 										<img id="item-thumb-preview1">
 									</button>
 									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn1" name="pic1">
 								</div>
 								<div class="item-thumb">
-									<button class="item-thumb-upload" type="button" onclick="onClickUpload2()">
+									<button class="item-thumb-upload" type="button">
 										<img id="item-thumb-preview2">
 										
 									</button>
 									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn2" name="pic2">
 								</div>
 								<div class="item-thumb">
-									<button class="item-thumb-upload" type="button" onclick="onClickUpload3()">
+									<button class="item-thumb-upload" type="button">
 										<img id="item-thumb-preview3">
 									</button>
 									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn3" name="pic3">
@@ -129,72 +129,7 @@
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
 </body>
-
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-<script type="text/javascript">
-	// 썸네일 미리보기
-	$("#item-thumb-upload-btn1").on("change", function(event) {
-	    var file = event.target.files[0];
-	    var reader = new FileReader(); 
-	    reader.onload = function(e) {
-	        $("#item-thumb-preview1").attr("src", e.target.result);
-	    }
-	    reader.readAsDataURL(file);
-	});
-	$("#item-thumb-upload-btn2").on("change", function(event) {
-	    var file = event.target.files[0];
-	    var reader = new FileReader(); 
-	    reader.onload = function(e) {
-	        $("#item-thumb-preview2").attr("src", e.target.result);
-	    }
-	    reader.readAsDataURL(file);
-	});
-	$("#item-thumb-upload-btn3").on("change", function(event) {
-	    var file = event.target.files[0];
-	    var reader = new FileReader(); 
-	    reader.onload = function(e) {
-	        $("#item-thumb-preview3").attr("src", e.target.result);
-	    }
-	    reader.readAsDataURL(file);
-	});
-	
-	// 직거래 주소 입력박스
-	$("#trade-enable").change(function() {
-		$("#item-trade-adr-box").show();
-	})
-	$("#trade-disable").change(function() {
-		$("#item-trade-adr-box").hide();
-	})
-	
-	// 배송비 입력박스
-	$("#shipping-fee-enable").change(function() {
-		$("#shipping-fee-price").show();
-	})
-	$("#shipping-fee-disable").change(function() {
-		$("#shipping-fee-price").hide();
-	})
-	
-	// 글자수 체크
-	$("#item-regi-title-text").keyup(function(e) {
-		var content = $(this).val();
-		$("#item-regi-name-byte").text("(" + content.length + " / 100)");
-		if (content.length > 100) {
-			alert("최대 100자까지 입력 가능합니다.");
-			$(this).val(content.substring(0, 100));
-			$('#item-regi-name-byte').text("(100 / 100)");
-		}
-	});
-	$("#item-regi-description-text").keyup(function(e) {
-		var content = $(this).val();
-		$("#item-regi-description-byte").text("(" + content.length + " / 2000)");
-		if (content.length > 2000) {
-			alert("최대 2000자까지 입력 가능합니다.");
-			$(this).val(content.substring(0, 2000));
-			$('#item-regi-description-byte').text("(2000 / 2000)");
-		}
-	});
-</script>
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
     function searchAdr() {

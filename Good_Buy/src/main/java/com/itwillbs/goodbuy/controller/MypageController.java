@@ -1,5 +1,7 @@
 package com.itwillbs.goodbuy.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -189,20 +191,37 @@ public class MypageController {
 	
 	
 	//[관심목록 추가]
+	@ResponseBody
 	@GetMapping("MyWishAdd")
-	public String myWishAdd(WishlistVO wishlist,HttpServletRequest request,HttpSession session ,Model model) {
-		String id = getSessionUserId(session);
-		wishlist.setMem_id(id);
+	public String myWishAdd(@RequestParam String MEM_ID,
+							@RequestParam int PRODUCT_ID,
+							@RequestParam String PRODUCT_TITLE,
+							WishlistVO wishlist, Model model) {
+		System.out.println(">>>>>>>>>>>>>>" + MEM_ID);
+		System.out.println(">>>>>>>>>>>>>>" + PRODUCT_ID);
+		System.out.println(">>>>>>>>>>>>>>" + PRODUCT_TITLE);
+		
+		wishlist.setMem_id(MEM_ID);
+		wishlist.setProduct_id(PRODUCT_ID);
+		wishlist.setProduct_title(PRODUCT_TITLE);
 		
 		int insertCount = myPageService.addWishlist(wishlist);
-		if(insertCount > 0) {
 			
-		}else {
-			model.addAttribute("msg", "위시리스트 등록 실패!");
-			return "result/fail";
+		String msg = "";
+		
+		if (insertCount > 0) {
+			msg = "찜목록에 추가되었습니다!";
+		} else {
+			msg = "찜하기가 실패하였습니다.\n나중에 다시 시도해주세요.";
 		}
 		
-		return "";
+		try {
+			msg = URLEncoder.encode(msg, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		return msg;
 	}
 	
 	//[관심목록 삭제] 완

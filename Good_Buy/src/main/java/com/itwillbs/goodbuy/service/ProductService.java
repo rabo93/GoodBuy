@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.itwillbs.goodbuy.mapper.ProductMapper;
 import com.itwillbs.goodbuy.vo.ProductOrderVO;
 import com.itwillbs.goodbuy.vo.ProductVO;
+import com.itwillbs.goodbuy.vo.WishlistVO;
 
 @Service
 public class ProductService {
@@ -70,6 +71,19 @@ public class ProductService {
 
 	public void plusviewcount(int product_id) {
 		mapper.plusViewCount(product_id);
+	}
+
+	public WishlistVO checkWishlist(int product_id, String id) {
+		return mapper.checkWishlist(product_id, id);
+		
+	}
+
+	public List<Map<String, Object>> searchSellerProduct(String mem_id, int product_id) {
+		return mapper.searchSellerProduct(mem_id, product_id);
+	}
+
+	public List<Map<String, Object>> searchSameCategoryProduct(String product_category, int product_id) {
+		return mapper.searchSameCategoryProduct(product_category, product_id);
 	}
 
 }

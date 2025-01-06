@@ -23,7 +23,6 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/product.css">
 
 <!-- JS for Page -->
-<script src="${pageContext.request.contextPath}/resources/js/product.js"></script>
 
 </head>
 <body>

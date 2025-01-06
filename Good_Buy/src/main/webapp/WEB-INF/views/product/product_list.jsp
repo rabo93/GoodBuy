@@ -106,6 +106,5 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
-<%-- 	<jsp:include page="/WEB-INF/views/product/product_list_script.jsp"></jsp:include> --%>
 </body>
 </html>

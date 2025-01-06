@@ -1,43 +1,49 @@
 let url = new URL(window.location.href);
-let sId = $("input[name=seller-id]").val();
-
-// product_regi.jsp
-function onClickUpload1() {
-	let myInput = document.getElementById("item-thumb-upload-btn1");
-	myInput.click();
-}
-function onClickUpload2() {
-	let myInput = document.getElementById("item-thumb-upload-btn2");
-	myInput.click();
-}
-function onClickUpload3() {
-	let myInput = document.getElementById("item-thumb-upload-btn3");
-	myInput.click();
-}
 
 // product_detail.jsp
-function modalOpen() {
-	$('.modal-wrap').show();
-	$('.modal-bg').show();
+function toggleModal(action) {
+    if (action === 'open') {
+        $('.modal-wrap').show();
+        $('.modal-bg').show();
+    } else if (action === 'close') {
+        $('.modal-wrap').hide();
+        $('.modal-bg').hide();
+    }
 }
 
-function modalClose() {
-	$('.modal-wrap').hide();
-	$('.modal-bg').hide();
+function removeWishlist() {
+	$.ajax({
+		url: "MyWishDel",
+		type: "POST",
+		data: {
+			wishlist_id: $("input[name=wishlistCheck]").val()
+		}
+	}).done(function() {
+		$("#removeWish").hide();
+		$("#addWish").show();
+		location.reload();
+	}).fail(function() {
+		alert("찜 삭제실패!\n나중에 다시 시도해주세요.");
+		modalClose();
+	});
 }
 
 function addWishlist() {
 	$.ajax({
-		url: "AddWishlist",
+		url: "MyWishAdd",
 		type: "GET",
 		data: {
-			MEM_ID: sId,
-			PRODUCT_ID: url.searchParams.get('PRODUCT_ID')
+			MEM_ID: $("input[name=seller-id]").val(),
+			PRODUCT_ID: url.searchParams.get('PRODUCT_ID'),
+			PRODUCT_TITLE: $("#product-title").text()
 		},
-	}).done(function() {
-		
+	}).done(function(){
+		$("#removeWish").show();
+		$("#addWish").hide();
+		location.reload();
 	}).fail(function() {
-		alert("찜하기 실패\n나중에 다시 시도해주세요.");
+		alert("찜 등록실패!\n나중에 다시 시도해주세요.");
+		modalClose();
 	});
 }
 
@@ -49,7 +55,7 @@ function itemReporting() {
 			PRODUCT_ID: url.searchParams.get('PRODUCT_ID'),
 			REASON: $("select[name=modal-sb] option:selected").text() === "기타" ? $(".modal-otherReason").val() :
 																				   $("select[name=modal-sb] option:selected").text(),
-			REPORTER_ID: sId
+			REPORTER_ID: $("input[name=seller-id]").val()
 		},
 	}).done(function(response){
 		alert(decodeURIComponent(response).replaceAll("+", " "));

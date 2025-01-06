@@ -422,6 +422,7 @@ public class MypageController {
 		session.setAttribute("prevURL", prevURL);
 	}
 	
+	// ===========================================================================================
 	// 첨부파일 - 파일 목록 처리 (첨부파일 단일)
 	private void addFileToModel(SupportVO support, Model model) {
 		String fileName = support.getSupport_file1();
@@ -440,7 +441,6 @@ public class MypageController {
 	// 첨부파일 - 실제 경로 리턴 처리
 	private String getRealPath(HttpSession session) {
 		String realPath = session.getServletContext().getRealPath(uploadPath);
-		
 		return realPath;
 	}
 	

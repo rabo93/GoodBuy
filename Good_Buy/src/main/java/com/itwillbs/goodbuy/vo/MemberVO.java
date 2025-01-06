@@ -31,8 +31,11 @@ public class MemberVO {
 	private Date mem_withdraw_date;  
 	//--------------------------
 	private String mem_profile;		//프로필사진명
-	private String mem_intro;		//상점소개
+	private MultipartFile mem_profile_get;
+	//--------------------------
 	private int sns_status;			//sns연동(카카오/네이버) 여부(1: 연동O /2: 연동X)
 	private int auth_status;		//휴대폰 본인인증 여부(1: 인증O /2: 인증X)
+	//--------------------------
+	private String mem_intro;		//상점소개
 	//--------------------------
 }

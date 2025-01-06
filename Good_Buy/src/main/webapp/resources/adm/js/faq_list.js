@@ -213,8 +213,9 @@ document.addEventListener("DOMContentLoaded", function(){
 		$("#updateFlexSwitchCheckDefault").prop("checked", listStatus);
 		$("#updateFlexSwitchCheckDefaultLab").text(listStatusText);
 		
+		// 글자 수 표시
 		const contentLength = rowData.FAQ_CONTENT.length;
-   		$("#lengthInfo").text(contentLength); // 글자 수 표시
+   		$("#lengthInfo").text(contentLength); 
 	});
 	
 	// 사용여부 버튼 값 업데이트

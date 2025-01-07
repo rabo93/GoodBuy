@@ -49,8 +49,12 @@ public class SupportService {
 //	}
 
 	public int EditSupport(SupportVO support) {
-		// TODO Auto-generated method stub
 		return mapper.updateSupport(support);
+	}
+	//문의사항 첨부파일 삭제
+	public int removeSupportFile(Map<String, String> map) {
+		// TODO Auto-generated method stub
+		return mapper.deleteSupportFile(map);
 	}
 
 }

@@ -47,9 +47,14 @@ public interface PayMapper {
 
 	Map<String, String> selectPayAccountInfo(String user_seq_no);
 
-	int selectPayAmount(String user_seq_no);
+//	int selectPayAmount(String user_seq_no);
+	Integer selectPayAmount(String user_seq_no);
 
 	int insertPayInfo(Map<String, Object> map);
+
+	List<Map<String, String>> selectTransactionDetail(
+			@Param("fintech_use_num") String fintech_use_num,
+			@Param("type") String type);
 
 
 }

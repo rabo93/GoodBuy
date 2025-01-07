@@ -17,9 +17,7 @@ document.addEventListener("DOMContentLoaded", function(){
 			dataType : "JSON",
 			data: function(d) {
                 d.faq_cate = $('input[name="faq_cate"]:checked').val(); // faq유형별
-                console.log("d.faq_cate : " + d.faq_cate);
 				d.list_status = $('input[name="list_status"]:checked').val(); // 사용여부별
-                console.log("d.list_status : " + d.list_status);
                 d.searchValue = $('input[name="keyword_search"]').val(); // 검색
             },
 			dataSrc: function (res) {

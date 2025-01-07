@@ -720,4 +720,97 @@
      		, #{log.IP_ADDRESS}
      	)
      </insert>
+     
+     
+     <!-- ************************************************************* -->
+     <!-- 거래내역 전체 컬럼 수 조회 - SELECT -->
+     <select id="selectOrderListTotal" resultType="int">
+     	SELECT COUNT(*)
+		FROM PAYINFO pi JOIN PRODUCT pr
+		on pi.PRODUCT_ID = pr.PRODUCT_ID
+     </select>
+     
+     <!-- 거래내역 필터링 후 컬럼 수 조회 - SELECT -->
+     <select id="selectOrderListFiltered" resultType="int">
+     	SELECT COUNT(*)
+		FROM PAYINFO pi JOIN PRODUCT pr
+		on pi.PRODUCT_ID = pr.PRODUCT_ID
+		WHERE 1=1
+		<if test="param['status'] != null and param['status'] != ''">
+        AND pr.PRODUCT_STATUS = #{param['status']}
+	    </if>
+	    <if test="param['searchValue'] != null and param['searchValue'] != ''">
+	        AND (pi.SELLER_ID LIKE CONCAT('%', #{param['searchValue']}, '%')
+	             OR pi.BUYER_ID LIKE CONCAT('%', #{param['searchValue']}, '%')
+	             OR pr.PRODUCT_CATEGORY LIKE CONCAT('%', #{param['searchValue']}, '%')
+	             OR pr.PRODUCT_TITLE LIKE CONCAT('%', #{param['searchValue']}, '%'))
+	    </if>
+	    <if test="param['searchDate'] != null and param['searchDate'] != ''">
+	        AND DATE(pi.PAY_DATE) BETWEEN LEFT(#{param['searchDate']}, 10) 
+	                                   AND RIGHT(#{param['searchDate']}, 10)
+	    </if>
+		
+		
+<!-- 		<if test="param.status != null and param.status != ''"> -->
+<!-- 		   AND pr.PRODUCT_STATUS = #{param.status} -->
+<!-- 		</if> -->
+<!-- 		<if test="param.searchValue != null and !param.searchValue.equals('')"> -->
+<!-- 		   AND (pi.SELLER_ID LIKE CONCAT('%', #{param.searchValue}, '%') -->
+<!-- 		   	   OR pi.BUYER_ID LIKE CONCAT('%', #{param.searchValue}, '%') -->
+<!-- 		   	   OR pr.PRODUCT_CATEGORY LIKE CONCAT('%', #{param.searchValue}, '%') -->
+<!-- 		   	   OR pr.PRODUCT_TITLE LIKE CONCAT('%', #{param.searchValue}, '%') -->
+<!-- 		</if> -->
+<!-- 		<if test="param.searchDate != null and !param.searchDate.equals('')"> -->
+<!-- 		   AND (DATE(pi.PAY_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10) -->
+<!-- 		</if> -->
+     </select>
+     
+     <!-- 필터링 된 거래내역 목록 조회 - SELECT -->
+<!--      <select id="selectEnquireList" resultType="order"> -->
+<!--      	SELECT pi.PAY_ID -->
+<!-- 			,pi.SELLER_ID -->
+<!-- 			 ,pi.PRODUCT_ID -->
+<!-- 		    ,pr.PRODUCT_CATEGORY -->
+<!-- 			,pr.PRODUCT_TITLE -->
+<!-- 			,pr.PRODUCT_PRICE -->
+<!-- 			,pi.BUYER_ID -->
+<!-- 			,pi.PAY_PRICE -->
+<!-- 			,pi.PAY_DATE -->
+<!-- 			,pr.PRODUCT_TRADE_ADR1 AS PAY_ADDRESS -->
+<!-- 			,pr.PRODUCT_STATUS AS PAY_STATUS -->
+<!-- 		FROM PAYINFO pi JOIN PRODUCT pr -->
+<!-- 		ON pi.PRODUCT_ID = pr.PRODUCT_ID; -->
+<!-- 		WHERE 1 = 1 -->
+<!-- 			<if test="param.status != null and param.status != ''"> -->
+<!-- 			   AND pr.PRODUCT_STATUS = #{param.status} -->
+<!-- 			</if> -->
+<!-- 			<if test="param.searchValue != null and !param.searchValue.equals('')"> -->
+<!-- 			   AND (MEM_ID LIKE CONCAT('%', #{param.searchValue}, '%') -->
+<!-- 				   OR SUPPORT_SUBJECT LIKE CONCAT('%', #{param.searchValue}, '%') -->
+<!-- 		 	       OR SUPPORT_CONTENT LIKE CONCAT('%', #{param.searchValue}, '%') -->
+<!-- 		 	       OR REPLY_CONTENT LIKE CONCAT('%', #{param.searchValue}, '%')  -->
+<!-- 		 	       OR STATUS LIKE CONCAT('%', #{param.searchValue}, '%')) -->
+<!-- 			</if> -->
+<!-- 			<if test="param.searchDate != null and !param.searchDate.equals('')"> -->
+<!-- 			   AND (DATE(SUPPORT_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10) -->
+<!-- 			   	OR DATE(REPLY_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10)) -->
+<!-- 			</if> -->
+<!-- 		ORDER BY  -->
+<!-- 			<choose> -->
+<!-- 				<when test='param.orderColumn.equals("SUPPORT_CATEGORY")'>SUPPORT_CATEGORY</when> -->
+<!-- 				<when test='param.orderColumn.equals("SUPPORT_DATE")'>SUPPORT_DATE</when> -->
+<!-- 				<when test='param.orderColumn.equals("MEM_ID")'>MEM_ID</when> -->
+<!-- 				<when test='param.orderColumn.equals("REPLY_DATE")'>REPLY_DATE</when> -->
+<!-- 				<when test='param.orderColumn.equals("STATUS")'>STATUS</when> -->
+<!-- 				<otherwise>SUPPORT_DATE</otherwise> -->
+<!-- 			</choose> -->
+<!-- 			<if test='param.orderDir.equals("asc")'>ASC</if> -->
+<!-- 			<if test='param.orderDir.equals("desc")'>DESC</if> -->
+<!-- 		  LIMIT -->
+<!-- 		 	   #{param.start} -->
+<!-- 		 	   , #{param.length} -->
+<!--      </select> -->
+     
+     
+     
 </mapper>

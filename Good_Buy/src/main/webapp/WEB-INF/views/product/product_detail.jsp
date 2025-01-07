@@ -28,7 +28,7 @@
 <!-- JS for Page -->
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/product.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/product_detail.js"></script>
 
 </head>
 <body>
@@ -36,12 +36,13 @@
 		<jsp:include page="/WEB-INF/views/inc/header.jsp"></jsp:include>
 	</header>
 	<main>
+		<div id="wrapper-bg"></div>
 		<section class="wrapper">
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 				<!-- 신고 모달창 -->
 				<section class="item-report-modal">
-					<div class="modal-bg" onclick="modalClose();"></div>
+					<div class="modal-bg" onclick="toggleModal(close)"></div>
 					<div class="modal-wrap">
 						<div class="modal-content">
 							<select class="modal-sb" name="modal-sb">
@@ -57,7 +58,7 @@
 								신고하기
 							</button>
 						</div>
-						<button class="model-close-btn" type="button" onclick="modalClose()">
+						<button class="model-close-btn" type="button" onclick="toggleModal(close)">
 							닫기
 						</button>
 					</div>	
@@ -99,10 +100,10 @@
 							<c:if test="${productSearch.product_status == 4}">
 								<div class="reporting-item">이 상품은 신고처리되었습니다.</div>
 							</c:if>
-							<div class="item-detail-title">${productSearch.product_title}</div>
+							<div class="item-detail-title" id="product-title">${productSearch.product_title}</div>
 							<div class="item-detail-view">
 								<div class="item-detail-view-count">조회수 ${productSearch.view_count}</div>
-								<div class="item-detail-fav-count">찜 8</div>
+								<div class="item-detail-fav-count">찜 <c:choose><c:when test="${wishSearch != null}">${wishSearch.wishlist_count}</c:when><c:otherwise>0</c:otherwise></c:choose></div>
 							</div>
 							<div class="item-detail-description">${productSearch.product_intro}</div>
 							<c:choose>
@@ -127,15 +128,25 @@
 								</c:if>
 								<c:if test="${not empty sessionScope.sId}">
 									<c:if test="${productSearch.product_status != 4}">
-										<input type="button" value="찜하기" class="item-detail-fav" onclick="addWishlist()">
-										<a href="javascript:void(0)"  onclick="showSlideChat('${productSearch.mem_id}','${productSearch.product_id}' )">
+										<c:choose>
+											<c:when test="${wishSearch.wishlist_id != '' && wishSearch.wishlist_id != undefined}">
+												<input type="button" value="찜 삭제하기" class="item-detail-fav" id="removeWish" onclick="removeWishlist()">
+											</c:when>
+											<c:otherwise>
+												<input type="button" value="찜 하기" class="item-detail-fav" id="addWish" onclick="addWishlist()">
+											</c:otherwise>
+										</c:choose>
+										<a href="javascript:void(0)"  onclick="toggleSlideChat()">
 											<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
 										</a>
+										<input type="hidden" id="sId" value="${sessionScope.sId}">
+										<input type="hidden" id="receiver_id" value="${productSearch.mem_id}">
+										<input type="hidden" id="product_id" value="${productSearch.product_id}">
 									</c:if>
 								</c:if>
 							</div>
 							<c:if test="${not empty sessionScope.sId}">
-								<a href="javascript:void(0)" onclick="modalOpen();" class="item-report">
+								<a href="javascript:void(0)" onclick="toggleModal(open)" class="item-report">
 									<i class="fa-solid fa-land-mine-on"></i>&nbsp;이 상품 신고하기
 								</a>
 							</c:if>
@@ -144,6 +155,7 @@
 					<div class="item-detail-seller-info" onclick="location.href='ProductShop'" style=" cursor: pointer;">
 						<img src="${productSearch.mem_profile}" class="item-detail-seller-pic">
 						<input type="hidden" name="seller-id" value="${sessionScope.sId}">
+						<input type="hidden" name="wishlistCheck" value="${wishSearch.wishlist_id}">
 						<div class="item-detail-seller-nick">${productSearch.mem_nick}</div>
 						<div class="item-detail-seller-review">★★★★★</div>
 					</div>
@@ -155,67 +167,29 @@
 						<div class="product-list">
 							<ul class="product-wrap">
 								<!-- 8개 -->
-								<li class="product-card">
-									<img src="/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail">
-									<div class="card-info">
-										<div class="category">
-											<span>생활용품</span>
-											<span class="type">직거래</span>
+								<c:forEach items="${searchSellerProduct}" var="list" step="1" end="3">
+									<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.PRODUCT_ID}'">
+										<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" />
+										<div class="card-info">
+											<div class="category">
+												<span>${list.PRODUCT_CATEGORY}</span>
+												<c:if test="${list.PRODUCT_TRADE_ADR1 != ''}">
+													<span class="type">직거래</span>
+												</c:if>
+											</div>
+											<div class="ttl">${list.PRODUCT_TITLE}</div>
+											<div class="price">
+											 	<fmt:formatNumber var="price" value="${list.PRODUCT_PRICE}" type="number"/>
+											 	${price} 원
+											 </div>
+											<div class="card-row">
+												<span class="add">${list.PRODUCT_TRADE_ADR1}</span>
+												<span class="name">${list.MEM_NICK}</span>
+												<span class="time"></span>
+											</div>
 										</div>
-										<div class="ttl">젠하이저 H3PRO 팝니다 제목은 두줄까지 가능합니다 젠하이저 H3PRO 팝니다 제목은 두줄까지 가능합니다</div>
-										<div class="price">55,000 원</div>
-										<div class="card-row">
-											<span class="add">부산 해운대구</span>
-											<span class="name">홍길동동이</span>
-											<span class="time">1분 전</span>
-										</div>
-									</div>
-								</li>
-								<li class="product-card">
-									<img src="/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail">
-									<div class="card-info">
-										<div class="category">
-											<span>생활용품</span>
-											<span class="type">직거래</span>
-										</div>
-										<div class="ttl">젠하이저 H3PRO 팝니다</div>
-										<div class="price">55,000 원</div>
-										<div class="card-row">
-											<span class="name">홍길동동이</span>
-											<span class="time">1분 전</span>
-										</div>
-									</div>
-								</li>
-								<li class="product-card">
-									<img src="/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail">
-									<div class="card-info">
-										<div class="category">
-											<span>생활용품</span>
-											<span class="type">직거래</span>
-										</div>
-										<div class="ttl">젠하이저 H3PRO 팝니다</div>
-										<div class="price">55,000 원</div>
-										<div class="card-row">
-											<span class="name">홍길동동이</span>
-											<span class="time">1분 전</span>
-										</div>
-									</div>
-								</li>
-								<li class="product-card">
-									<img src="/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail">
-									<div class="card-info">
-										<div class="category">
-											<span>생활용품</span>
-											<span class="type">직거래</span>
-										</div>
-										<div class="ttl">젠하이저 H3PRO 팝니다</div>
-										<div class="price">55,000 원</div>
-										<div class="card-row">
-											<span class="name">홍길동동이</span>
-											<span class="time">1분 전</span>
-										</div>
-									</div>
-								</li>
+									</li>	
+								</c:forEach>
 							</ul>
 						</div>
 						<h1 class="sec-ttl">
@@ -225,67 +199,29 @@
 						<div class="product-list">
 							<ul class="product-wrap">
 								<!-- 8개 -->
-								<li class="product-card">
-									<img src="/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail">
-									<div class="card-info">
-										<div class="category">
-											<span>생활용품</span>
-											<span class="type">직거래</span>
+								<c:forEach items="${searchSameCategoryProduct}" var="list" step="1" end="3">
+									<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.PRODUCT_ID}'">
+										<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" />
+										<div class="card-info">
+											<div class="category">
+												<span>${list.PRODUCT_CATEGORY}</span>
+												<c:if test="${list.PRODUCT_TRADE_ADR1 != ''}">
+													<span class="type">직거래</span>
+												</c:if>
+											</div>
+											<div class="ttl">${list.PRODUCT_TITLE}</div>
+											<div class="price">
+											 	<fmt:formatNumber var="price" value="${list.PRODUCT_PRICE}" type="number"/>
+											 	${price} 원
+											 </div>
+											<div class="card-row">
+												<span class="add">${list.PRODUCT_TRADE_ADR1}</span>
+												<span class="name">${list.MEM_NICK}</span>
+												<span class="time"></span>
+											</div>
 										</div>
-										<div class="ttl">젠하이저 H3PRO 팝니다 제목은 두줄까지 가능합니다 젠하이저 H3PRO 팝니다 제목은 두줄까지 가능합니다</div>
-										<div class="price">55,000 원</div>
-										<div class="card-row">
-											<span class="add">부산 해운대구</span>
-											<span class="name">홍길동동이</span>
-											<span class="time">1분 전</span>
-										</div>
-									</div>
-								</li>
-								<li class="product-card">
-									<img src="/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail">
-									<div class="card-info">
-										<div class="category">
-											<span>생활용품</span>
-											<span class="type">직거래</span>
-										</div>
-										<div class="ttl">젠하이저 H3PRO 팝니다</div>
-										<div class="price">55,000 원</div>
-										<div class="card-row">
-											<span class="name">홍길동동이</span>
-											<span class="time">1분 전</span>
-										</div>
-									</div>
-								</li>
-								<li class="product-card">
-									<img src="/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail">
-									<div class="card-info">
-										<div class="category">
-											<span>생활용품</span>
-											<span class="type">직거래</span>
-										</div>
-										<div class="ttl">젠하이저 H3PRO 팝니다</div>
-										<div class="price">55,000 원</div>
-										<div class="card-row">
-											<span class="name">홍길동동이</span>
-											<span class="time">1분 전</span>
-										</div>
-									</div>
-								</li>
-								<li class="product-card">
-									<img src="/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail">
-									<div class="card-info">
-										<div class="category">
-											<span>생활용품</span>
-											<span class="type">직거래</span>
-										</div>
-										<div class="ttl">젠하이저 H3PRO 팝니다</div>
-										<div class="price">55,000 원</div>
-										<div class="card-row">
-											<span class="name">홍길동동이</span>
-											<span class="time">1분 전</span>
-										</div>
-									</div>
-								</li>
+									</li>	
+								</c:forEach>
 							</ul>
 						</div>
 					</div>
@@ -293,22 +229,22 @@
 				<div class="chat-container">
 					<div class="chat-area">
 						<div class="extra-header">
-							<button class="close-chat-button" onclick="closeSlideChat()">
+							<button class="close-chat-button" onclick="toggleSlideChat()">
 								<i class="fa-solid fa-arrow-left"></i>
 							</button>
-							<button class="close-chat-button" onclick="reportChat()">
+							<button class="report-chat-button" onclick="reportChat()">
 								<img src="${pageContext.request.contextPath}/resources/img/siren.png">
 							</button>
 						</div>
 						<div class="chat-header">
 			            	<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>
 			                <div class="chat-title">${productSearch.product_title}</div>
-			                <button class="chat-item-button" onclick="location.href='PayTransferRequest'">구매하기</button>
+			                <button class="chat-item-button" onclick="openPayWindow('${productSearch.product_id}' , '${productSearch.mem_id}')">구매하기</button>
+			                
 			            </div>
 			            <div class="chat-body">
 			            </div>
 			            <div class="chat-footer">
-			            	<input type="hidden" id="sId" value="${sessionScope.sId}">
 			                <input type="text" class="chatMessage" placeholder="메시지를 입력하세요...">
 			                <button class="btnSend">전송</button>
 			            </div>

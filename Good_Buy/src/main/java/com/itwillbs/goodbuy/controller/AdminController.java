@@ -29,6 +29,7 @@ import com.itwillbs.goodbuy.service.AdminService;
 import com.itwillbs.goodbuy.vo.CommonCodeVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.NoticeVO;
+import com.itwillbs.goodbuy.vo.ProductOrderVO;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -265,8 +266,82 @@ public class AdminController {
 	}
 	
 	// ================================================
+	// ================================================
 	// [ 결제 관리 ]
+	// 상품 거래내역 - 포워딩
+	@LoginCheck(memberRole = MemberRole.ADMIN)
+	@GetMapping("AdmProductOrderList")
+	public String admProductOrderList() {
+		return "admin/order_list";
+	}
 	
+	// 상품 거래내역 테이블
+	@ResponseBody
+	@PostMapping("AdmOrderList")
+	public String admOrderList(@RequestParam Map<String, String> param) {
+		log.info(">>>> 거래 내역 목록 param : " + param);
+		log.info(">>>> status : " + param.get("status"));
+		Map<String, Object> convertParam = convertMap(param);
+		System.out.println(convertParam);
+		//{columns[8][search][regex]=false, search[value]=, columns[5][search][regex]=false, columns[10][search][regex]=false, columns[0][data]=, columns[1][data]=listIndex, columns[2][data]=seller_id, columns[3][data]=product_category, columns[11][searchable]=false, columns[5][search][value]=, columns[2][search][value]=, columns[2][search][regex]=false, columns[10][search][value]=, columns[8][name]=, columns[8][search][value]=, columns[7][name]=, columns[9][name]=, columns[6][name]=, columns[9][searchable]=true, order[0][dir]=desc, columns[7][searchable]=true, columns[8][searchable]=true, columns[4][name]=, columns[6][searchable]=true, columns[3][searchable]=true, columns[2][searchable]=true, columns[7][data]=pay_price, columns[5][data]=product_price, columns[9][data]=pay_address, columns[4][searchable]=true, columns[5][searchable]=true, columns[11][data]=, columns[6][search][value]=, columns[9][search][value]=, search[regex]=false, columns[0][searchable]=true, columns[7][search][regex]=false, columns[10][name]=, columns[1][searchable]=true, columns[1][search][regex]=false, columns[4][search][regex]=false, order[0][column]=9, status=0, columns[0][search][value]=, columns[6][orderable]=true, columns[7][orderable]=true, columns[10][orderable]=true, columns[3][search][value]=, columns[11][orderable]=true, columns[3][orderable]=true, columns[0][search][regex]=false, columns[3][search][regex]=false, columns[11][search][value]=, columns[4][orderable]=true, columns[5][orderable]=true, orderDir=desc, columns[6][search][regex]=false, columns[0][name]=, columns[1][name]=, columns[2][name]=, columns[11][search][regex]=false, columns[8][orderable]=true, columns[9][orderable]=false, orderColumn=pay_address, columns[7][search][value]=, columns[5][name]=, columns[3][name]=, start=0, length=10, searchDate=, columns[9][search][regex]=false, draw=3, columns[4][search][value]=, columns[1][search][value]=, columns[4][data]=product_title, columns[6][data]=buyer_id, columns[8][data]=pay_date, columns[10][searchable]=true, columns[2][orderable]=true, columns[10][data]=pay_status, columns[11][name]=, columns[0][orderable]=false, columns[1][orderable]=true, searchValue=fff}
+
+		// 거래내역 목록 전체 컬럼 수 조회
+		int recordsTotal = service.getOrderListTotal();
+		
+		// 거래내역 검색 필터링 후 컬럼 수 조회
+		int recordsFiltered = service.getOrderListFiltered(convertParam);
+		System.out.println(recordsFiltered);
+		
+		// 필터링 된 회원 목록 가져오기
+//		List<MemberVO> memberList = service.getMemberList(convertParam);
+//		log.info(">>>>> 필터링 된 회원 : " + memberList);
+		
+		
+		// 필터링 된 거래내역 목록 가져오기
+//		List<Map<String, Object>> OrderList = service.getOrderList(convertParam);
+//		ProductOrderVO OrderList = service.getOrderList(convertParam);
+//		log.info(">>>>> 필터링 된 거래 목록 : " + OrderList);
+//		
+//		Map<String, Object> response = new HashMap<String, Object>();
+//		response.put("draw", convertParam.get("draw"));
+//		response.put("recordsTotal", recordsTotal);
+//		response.put("recordsFiltered", recordsFiltered);
+//		response.put("OrderList", OrderList);
+//		
+//		JSONObject jo = new JSONObject(response);
+//		return jo.toString();
+		return "";
+	}
+	
+	//----------------------------------------------------------------------------------------
+	// 1:1 문의 - 답글달기(+ 수정하기)
+//	@AdminLog
+//	@LoginCheck(memberRole = MemberRole.ADMIN)
+//	@PostMapping("AdmSupportAction")
+//	public String admSupportAction(@RequestParam Map<String, Object> param, Model model) {
+//		log.info(">>> 답글 정보 : " + param);
+//		
+//		int updateResult = service.registReplyInfo(param);
+//		log.info(">>> 업데이트 갯수 : " + updateResult);
+//		
+//		if(updateResult > 0) {
+//			model.addAttribute("msg", "1:1 문의 답글 처리를 완료하였습니다.");
+//			model.addAttribute("targetURL", "AdmSupportList");
+//			return "result/success";
+//		} else {
+//			model.addAttribute("msg", "1:1 문의 답글 처리에 실패하였습니다.");
+//			return "result/fail";
+//		}
+//	}
+//	
+	
+	
+	
+	
+	
+	
+	// ================================================
+	// ================================================
 	// ================================================
 	// [ 신고 관리 ]
 	// 신고 상품 목록 페이지 포워딩
@@ -493,6 +568,7 @@ public class AdminController {
 	
 	//----------------------------------------------------------------------------------------
 	// 1:1 문의 - 답글달기(+ 수정하기)
+	@AdminLog
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmSupportAction")
 	public String admSupportAction(@RequestParam Map<String, Object> param, Model model) {
@@ -510,8 +586,6 @@ public class AdminController {
 			return "result/fail";
 		}
 	}
-	
-	
 	//----------------------------------------------------------------------------------------
 	//	실제 업로드 경로 메서드
 	public String getRealPath(HttpSession session) {
@@ -560,6 +634,7 @@ public class AdminController {
 	}
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 수정 ]
+	@AdminLog
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmFaqModify")
 	public String admFaqModify(@RequestParam Map<String, Object> param, Model model) {
@@ -578,6 +653,7 @@ public class AdminController {
 	
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 삭제 ]
+	@AdminLog
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("AdmFaqDelete")

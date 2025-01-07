@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -417,19 +418,13 @@ public class MemberController {
 		
 		// 해당 아이디로 DB에 회원정보 조회
 		MemberVO member = memberService.getMemberPasswd(id);
-		System.out.println("가져온 회원정보" + member);
 		String dbPasswd = member.getMem_passwd();
-		System.out.println("가져온 pw: " + dbPasswd);
-		
 		
 		// DB비밀번호와 입력한 비밀번호가 같은지 검증
 		if(dbPasswd == null || !passwordEncoder.matches(memPasswd, dbPasswd)) {
 			model.addAttribute("msg", "권한이 없습니다./n비밀번호를 다시 확인해주세요.");
 			return "result/fail";
 		}
-		
-		System.out.println("탈퇴한 id: " + id);
-		// 탈퇴한 id: kakao@3842610297
 		
 		// 탈퇴할 아이디가 카카오/네이버 아이디이면 삭제 처리
 		if (member.getSns_status() == 1) {
@@ -439,6 +434,16 @@ public class MemberController {
 			memberService.removeMemInfo(id, 3);
 		}
 		
+		// 회원 탈퇴 성공 시 첨부파일 제거 작업
+		String realPath = getRealPath(session);
+		Path path = Paths.get(realPath, member.getMem_profile());
+		try {
+			Files.delete(path);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		// 세션 제거
 		session.invalidate();
 		
 		model.addAttribute("msg", "탈퇴 처리가 완료되었습니다.");

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -95,14 +96,16 @@
 											</form>
 											<div class="card-info">
 												<div class="category">
-													<span>생활용품</span>
+													<span>${wish.product_category}</span>
 													<span class="type">직거래</span>
 												</div>
 												<div class="ttl">${wish.product_title}</div>
-												<div class="price">55,000 원</div>
+												<div class="price">
+													<fmt:formatNumber value="${wish.product_price}" type="number" pattern="#,###" />원
+												</div>
 												<div class="card-row">
-													<span class="add">부산 해운대구</span>
-													<span class="name">홍길동동이</span>
+													<span class="add">${wish.product_trade_adr1}</span>
+													<span class="name">${wish.seller_nickname}</span>
 												</div>
 											</div>
 										</li>

@@ -110,6 +110,7 @@
 			, #{withdrawResult.dps_bank_code_std}
 			, #{withdrawResult.dps_account_num_masked}
 			, ''
+			, ''
 			  </if>
 			  <if test="trnsactionType.equals('DE')">
 			, #{withdrawResult.res_list[0].fintech_use_num}
@@ -125,6 +126,7 @@
 			, #{withdrawResult.res_list[0].bank_rsp_message}
 			, #{withdrawResult.wd_bank_code_std}
 			, #{withdrawResult.wd_account_num_masked} 
+			, ''
 			, ''
 			  </if>
 			  <if test="trnsactionType.equals('TR')">
@@ -144,17 +146,32 @@
 			
 			-- 송금받는 사람 정보 입력
 			, #{withdrawResult.depositResult.res_list[0].fintech_use_num}  
+			, #{withdrawResult.depositResult.res_list[0].fintech_use_num}  
 			  </if>
 		)
 	</insert>
 	
-	<!--  이체(출금, 입금 결과 조회 - select -->
+	<!--  이체(출금, 입금) 결과 조회 - select -->
 	<!--  bank_tran_id 가 일치하는 레코드 조회 -->
 	<select id="selectTransactionResult">
 		SELECT * 
 		FROM TRANSACTIONINFO
 		WHERE  BANK_TRAN_ID = #{bank_tran_id}
 	</select>
+	
+	<!--  이체(출금, 입금) 결과 조회 - select -->
+	<!--  user_seq_no 가 일치하는 레코드 조회 (조회 내역 처리 용도) -->
+	<select id="selectTransactionDetail" >
+		SELECT * 
+		FROM TRANSACTIONINFO
+		<if test="type.equals('fintech')">
+		WHERE  USER_SEQ_NO = #{fintech_use_num}
+		</if>
+		<if test="type.equals('reciever_fintech')">
+		WHERE  RECEIVER_FINTECH_USE_NUM = #{fintech_use_num}
+		</if>
+	</select>
+	
 	
 	<!-- pay_list에서 토큰이 있는 id인지 조회 - select -->
 	<select id="selectMemIdFromToken" resultType="string">
@@ -173,7 +190,7 @@
 	
 	
 	<!-- 충전금액조회 -->
-	<select id="selectPayAmount">
+	<select id="selectPayAmount"  resultType="int">
 		SELECT SUM(TRAN_AMT)
 		  FROM TRANSACTIONINFO
 		 WHERE TRANSACTION_TYPE = 'WI'

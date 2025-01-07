@@ -1,18 +1,20 @@
 @charset "UTF-8";
 
+.page-inner {min-height:auto;}
 .container {
             display: flex;
             width: 100%;
         }
+        
+.chat-list {
+	height:calc(100vh - 2rem);
+}
 
 .sidebar {
     width: 40%;
     background-color: #fff;
     border-right: 1px solid #ddd;
     overflow-y: auto;
-    height: 60vh;
-/*     min-height: 40vh; */
-/*     max-height: 60vh; */
 }
 
 .sidebar-item {
@@ -52,7 +54,6 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    max-height: 60vh;
 }
 
 .extra-header {
@@ -64,6 +65,29 @@
     align-items: center;
     border-bottom: 1px solid #ddd; /* 구분선 추가 */
 }
+
+.close-chat-button {
+    background-color: #fff;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: gray;
+    cursor: pointer;
+    padding: 0;
+    margin-right: 10px;
+}
+
+.report-chat-button {
+    background-color: #fff;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    color: red;
+    cursor: pointer;
+    padding: 0;
+    margin-right: 10px;
+}
+
 
 .chat-header {
     padding: 10px;

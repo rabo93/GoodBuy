@@ -1,7 +1,9 @@
+<%@page import="java.util.Map"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>    
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,8 +17,6 @@
 <!-- default -->
 <link rel="stylesheet" href="../../resources/css/common.css">
 <link rel="stylesheet" href="../../resources/css/default.css">
-
-
 
 <script src="../../resources/js/jquery-3.7.1.js"></script>
 
@@ -78,7 +78,6 @@
 						                <i class="fa-solid fa-arrow-rotate-right"></i>
 						            </div>
 						            <div class="buttons">
-						            	<button class="refund-btn" onclick="openModal">송금</button>
 						                <button class="charge-btn"  onclick="openModal('charge')">+ 충전 </button>
 						                <button class="refund-btn"  onclick="openModal('refund')">- 환불 </button>
 <!-- 						                <button class="transfer-btn" onclick="location.href='PayTransfer'">￦계좌송금</button> -->
@@ -172,60 +171,101 @@
 						
 						        <!-- 최근 이용 내역 -->
 							        <div class="history">
+<<<<<<< HEAD
+							        
 							            <h3>최근 이용내역 <a href="pay_use_list.jsp" class="see-all">전체보기 ></a></h3>
+							            ${empty recieverTransactionInfo }
+							            ${empty transactionInfo }
+=======
+							            <h3>최근 이용내역 <a href="AllPayList" class="see-all">전체보기 ></a></h3>
+>>>>>>> branch 'main' of https://github.com/jhk727/good_buy.git
 							            <c:choose>
-							            	<c:when test="${withdrawList}">
-							            	withdrawList : ${withdrawList}
+							            	<c:when test="${empty transactionInfo and empty recieverTransactionInfo}">
+								            	<div class="history-item empty-text">
+								            	굿페이 이용내역이 없습니다.
+								            	</div>
 							            	</c:when>
-							            	<c:when test="${depositList}">
-							            	depositList : ${depositList}
-							            	</c:when>
+							            	
+							            	
+							            	
+							            	
+							            	
+							            	
+							            	
+							            	
+							            	
+							            	
+							            	
+							            	
+							            	
+							            	
+							            	
 							            	<c:otherwise>
-							            	내역없음
-							            	</c:otherwise>
+							            	
+							            	
+							            	
+							            	
+							            	
+							            	
+							            	
+							            	
+							            	여기가안됨!!!!!!!!!
+								            		<c:forEach var="item" items="${recieverTransactionInfo}">
+									            		<c:if test="${recieverTransactionInfo}">
+										            			${item }
+									            		</c:if>
+							            			</c:forEach>	
+							            			
+							            			
+							            			
+							            			
+							            			
+							            			
+							            			
+							            			
+							            			
+							            			
+							            			
+							            			
+							            			
+							            			
+							            			
+							            			
+							            			
+							            			
+							            			
+							            		<c:forEach var="item" items="${transactionInfo}">
+							            			<c:if test="${item.TRANSACTION_TYPE eq 'WI'}">
+							            				<c:set var="classify" value="충전"/>
+							            				<c:set var="symbol" value="+"/>
+							            			</c:if>
+							            			<c:if test="${item.TRANSACTION_TYPE eq 'TR'}">
+							            				<c:set var="classify" value="송금"/>
+							            				<c:set var="symbol" value="-"/>
+							            			</c:if>
+							            			<c:if test="${item.TRANSACTION_TYPE eq 'DE'}">
+							            				<c:set var="classify" value="환불"/>
+							            				<c:set var="symbol" value="-"/>
+							            			</c:if>
+<%-- 							            			receiver_fintech_use_num : ${receiver_fintech_use_num eq fintech_use_num } --%>
+							            			<div class="history-item">
+										                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
+										                <div class="details">
+										                    <span>산업 ${item.FINTECH_USE_NUM }</span>
+										                    <span class="date" >
+										                    	<fmt:parseDate var="parsedReplyRegDate"
+																					value="${item.API_TRAN_DTM}" 
+																					pattern="yyyy-MM-dd'T'HH:mm:ss" 
+																					type="both" /> 
+																	<fmt:formatDate value="${parsedReplyRegDate}" pattern="yy.MM.dd" /> 
+																| ${classify}
+										                    </span>
+										                </div>
+										                <div class="amount">${symbol} <fmt:formatNumber pattern="#,###">${item.TRAN_AMT}</fmt:formatNumber></div>
+										            </div>
+							            		</c:forEach>
+								            </c:otherwise>
 							            </c:choose>
-							            
-							            
-							            <div class="history-item">
-							                <div class="icon"></div>
-							                <div class="details">
-							                    <span>우체국 1234</span>
-							                    <span class="date">12.03 12:10 | 충전</span>
-							                </div>
-							                <div class="amount">+100,000원</div>
-							            </div>
-<!-- 							            <div class="history-item"> -->
-<!-- 							                <div class="icon"></div> -->
-<!-- 							                <div class="details"> -->
-<!-- 							                    <span>쌀국수</span> -->
-<!-- 							                    <span class="date">12.03 12:10 | 송금</span> -->
-<!-- 							                </div> -->
-<!-- 							                <div class="amount">-5,000원</div> -->
-<!-- 							            </div> -->
-<!-- 							            <div class="history-item"> -->
-<!-- 							                <div class="icon"></div> -->
-<!-- 							                <div class="details"> -->
-<!-- 							                    <span>믹스커피</span> -->
-<!-- 							                    <span class="date">12.03 12:10 | 송금</span> -->
-<!-- 							                </div> -->
-<!-- 							                <div class="amount">-15,000원</div> -->
-<!-- 							            </div> -->
-<!-- 							            <div class="history-item"> -->
-<!-- 							                <div class="icon"></div> -->
-<!-- 							                <div class="details"> -->
-<!-- 							                    <span>겨울코드</span> -->
-<!-- 							                    <span class="date">12.03 12:10 | 송금</span> -->
-<!-- 							                </div> -->
-<!-- 							                <div class="amount">-50,000원</div> -->
-<!-- 							            </div> -->
-<!-- 							            <div class="history-item"> -->
-<!-- 							                <div class="icon"></div> -->
-<!-- 							                <div class="details"> -->
-<!-- 							                    <span>우체국 1234</span> -->
-<!-- 							                    <span class="date">12.03 12:10 | 충전</span> -->
-<!-- 							                </div> -->
-<!-- 							                <div class="amount">+100,000원</div> -->
-<!-- 							            </div> -->
 							        </div><!-- history -->
 						    	</div><!-- account-box -->
 							</div><!-- goodpay-container -->	
@@ -244,4 +284,5 @@
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
 </body>
+
 </html>

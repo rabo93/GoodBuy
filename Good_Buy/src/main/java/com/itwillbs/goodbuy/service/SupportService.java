@@ -1,9 +1,11 @@
 package com.itwillbs.goodbuy.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.itwillbs.goodbuy.mapper.SupportMapper;
 import com.itwillbs.goodbuy.vo.SupportVO;
@@ -40,4 +42,19 @@ public class SupportService {
 	public int removeSupport(int support_id) {
 		return mapper.deleteSupport(support_id);
 	}
+
+	//1:1 글쓰기 수정
+//	public int EditSupport(int support_id, String support_subject, String support_content) {
+//		return mapper.updateSupport(support_id,support_subject,support_content);
+//	}
+
+	public int EditSupport(SupportVO support) {
+		return mapper.updateSupport(support);
+	}
+	//문의사항 첨부파일 삭제
+	public int removeSupportFile(Map<String, String> map) {
+		// TODO Auto-generated method stub
+		return mapper.deleteSupportFile(map);
+	}
+
 }

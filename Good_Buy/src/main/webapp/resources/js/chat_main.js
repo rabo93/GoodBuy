@@ -23,17 +23,22 @@ $(".sidebar-item").on("dblclick", function() {
 	let room_id = $("#room_id" + index).val();
 	let title = $("#title" + index).val();
 	let receiver_id = $("#receiver_id" + index).val();
+	product_id = $("#product_id" + index).val();
+	
 	console.log("index =" + index);
 	console.log("room_id =" + room_id);
 	console.log("title =" + title);
 	console.log("receiver_id =" + receiver_id);
 	console.log("sender_id =" + sId);
+	console.log("product_id =" + product_id);
+	
 	//	room_id, title, sender_id, receive_id
 	let room = {
 		room_id : room_id,
 		title : title,
 		receiver_id : receiver_id,
-		sender_id : sId
+		sender_id : sId,
+		product_id : product_id
 	}
 	
 	showChatRoom(room);

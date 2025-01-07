@@ -126,7 +126,7 @@
     </a>
     
     <!-- 수정 모달 -->
-    <div class="modal fade" id="updateMemberInfo" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal fade" id="updateReportInfo" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 		    <div class="modal-content">
 				<div class="modal-header">
@@ -134,9 +134,11 @@
 					<button type="button" class="close" data-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
 				</div>
 				<div class="modal-body">
-					<form action="AdmProductReportAction" id="productReportModifyForm" method="post">
-						<input type="hidden" id="productId" name="PRODUCT_ID">
+					<form action="AdmUserReportModify" id="userReportModifyForm" method="post">
+						<input type="hidden" id="roomId" name="ROOM_ID">
 						<input type="hidden" id="reportId" name="REPORT_ID">
+						<input type="hidden" id="reporterId" name="REPORTER_ID">
+						<input type="hidden" id="reportedId" name="REPORTED_ID">
 						<input type="hidden" id="adminId" name="ADMIN_ID" value="${sessionScope.sId}">
 						<div class="mb-3">
 							<label class="small mb-1" for="reportStatus">조치 상태 변경</label>
@@ -154,7 +156,7 @@
 				</div>
 				<div class="modal-footer justify-content-center">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="productReportModifyForm">수정하기</button>
+					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="userReportModifyForm">수정하기</button>
 				</div>
 			</div>
 		</div>

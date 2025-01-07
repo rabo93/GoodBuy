@@ -19,10 +19,9 @@ document.addEventListener("DOMContentLoaded", function(){
                 d.searchDate = $("#schDate").val();
             },
 			dataSrc: function (res) {
-				const data = res.memberReportList;
+				const data = res.userReportList;
 				const start = $('#memberReport').DataTable().page.info().start; 
 				
-				// 회원번호(PK)가 아닌 테이블 컬럼 번호 계산(페이징 포함)
 				for (let i = 0; i < data.length; i++) {
 					data[i].listIndex = start + i + 1;
 				}
@@ -34,14 +33,12 @@ document.addEventListener("DOMContentLoaded", function(){
 			 { targets: [0, 9], orderable: false },
 		],
 		columns: [
-			// defaultContent 는 기본값 설정, 데이터 없는 컬럼일 경우 오류나기 때문에 널스트링 처리 해주어야 함
-			// 회원가입 시 유효성 체크를 한다면 defaultContent 값 설정 필요 없음!
             { title: "No.", data: "listIndex", className : "dt-center", width: '30px', },
             { 
 				title: "신고자ID", 
 	            data : "REPORTER_ID", 
 	            defaultContent: "",
-	            width: '120px',
+	            width: '130px',
 	            render: function (data, type, row) {
 					if (!data) {
 						return "";
@@ -49,11 +46,30 @@ document.addEventListener("DOMContentLoaded", function(){
                 	return data.replace(/(.{16})/g, '$1<br>'); // 16자마다 줄바꿈
            		}
             },
-            { title: "상품ID", data : "PRODUCT_ID", defaultContent: "", width: '100px',},
-            { title: "상품명", data : "PRODUCT_TITLE", defaultContent: "", 
-            	render : function(data, type, row) {
-					return `<a href="ProductDetail?PRODUCT_ID=${row.PRODUCT_ID}" target="_blank" title="새 창 열기">${data}</a>`;
-				}
+            { 
+				title: "신고대상자ID", 
+	            data : "REPORTED_ID", 
+	            defaultContent: "",
+	            width: '130px',
+	            render: function (data, type, row) {
+					if (!data) {
+						return "";
+					}
+                	return data.replace(/(.{16})/g, '$1<br>'); // 16자마다 줄바꿈
+           		}
+            },
+            { 
+				title: "채팅방ID", 
+	            data : "ROOM_ID", 
+	            defaultContent: "",
+	            orderable : false,
+	            width: '150px',
+	            render: function (data, type, row) {
+					if (!data) {
+						return "";
+					}
+                	return data.replace(/(.{16})/g, '$1<br>'); // 16자마다 줄바꿈
+           		}
             },
             { title: "신고일시", data : "REPORT_DATE", defaultContent: "", width: '180px',},
             { title: "신고사유", data : "REASON", defaultContent: "", },
@@ -82,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function(){
 					const text = row.STATUS !== "접수" ? "결과보기" : "조치하기";
 					const className = row.STATUS !== "접수" ? "primary" : "warning";
 					return `
-						<button class="btn btn-${className} edit-btn" data-toggle="modal" data-target="#updateMemberInfo"
+						<button class="btn btn-${className} edit-btn" data-toggle="modal" data-target="#updateReportInfo"
 						 data-report-id="${row.REPORT_ID}">${text}</button>
 					`;
 				}
@@ -112,34 +128,39 @@ document.addEventListener("DOMContentLoaded", function(){
 	// 신고 조치 팝업 셋팅
 	memberReport.on("click", '.edit-btn', function() {
 		const row = $(this).closest('tr');
-		const rowData = productReport.row(row).data();
+		const rowData = memberReport.row(row).data();
+		
+		console.log(rowData);
 
 		const status = rowData.STATUS;
 		const actionReason = rowData.ACTION_REASON != null ? rowData.ACTION_REASON : "";
-		const productId = document.querySelector("#productId");
+		const roomId = document.querySelector("#roomId");
 		const reportId = document.querySelector("#reportId");
+		const reporterId = document.querySelector("#reporterId");
+		const reportedId = document.querySelector("#reportedId");
 		const statusSelect = document.querySelector(`#reportStatus option[value="${status}"]`);
 		const reasonTextarea = document.querySelector("#actionReason");
 		
 		reportId.value = rowData.REPORT_ID;
-		productId.value = rowData.PRODUCT_ID;
+		reporterId.value = rowData.REPORTER_ID;
+		reportedId.value = rowData.REPORTED_ID;
+		roomId.value = rowData.ROOM_ID;
 		reasonTextarea.value = actionReason;
 	    if (statusSelect) statusSelect.selected = true;
-	    
 	});
 	
 	// 기존 검색 숨기기
 	$("#memberReport_filter").attr("hidden", "hidden");
 	
 	 // 필터 변경 시 데이터 테이블 다시 로드
-    $('input[name="status"]').on('change', () => productReport.draw());
+    $('input[name="status"]').on('change', () => memberReport.draw());
 
     // 검색 버튼 클릭 시 테이블 다시 로드
-    $('#searchBtn').on('click', () => productReport.draw());
+    $('#searchBtn').on('click', () => memberReport.draw());
     
     // 엔터키 입력으로 검색
     $('#searchKeyword').on('keypress', (e) => {
-        if (e.which == 13)  productReport.draw();
+        if (e.which == 13)  memberReport.draw();
     });
     
 	// 기간별 검색 필터링 제이쿼리
@@ -164,6 +185,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	    showDropdowns: true, // 년월 수동 설정 여부
 	    autoApply: false, // 확인/취소 버튼 사용여부
 		ranges: {
+			'오늘': [moment()], // 오늘
             '이번 달': [moment().startOf('month'), moment().endOf('month')], // 이번 달 전체
             '지난 달': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')], // 지난 달 전체
             '지난 7일': [moment().subtract(6, 'days'), moment()], // 최근 7일
@@ -183,16 +205,16 @@ document.addEventListener("DOMContentLoaded", function(){
 	// 날짜 검색 초기화
 	$("#initDateBtn").on('click', function() {
 		$('#schDate').val('');
-		productReport.draw();
+		memberReport.draw();
 	});
 	
     // 기간별 검색 후 테이블 다시 로드
     $("#searchDateBtn").on('click', function() {
-		productReport.draw();
+		memberReport.draw();
 	});
 	
 	// 조치 사유 작성
-	$("#actionReason").on('keyup', () => {
+	$("#actionReason").on('keydown', () => {
 		fnChkByte($("#actionReason"), 500);
 	});
 	

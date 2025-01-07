@@ -79,9 +79,24 @@
 		                    	<textarea name="support_content" rows="15" cols="40" required="required">${support.support_content}</textarea>
 		                     	<input type="hidden" name="support_id" value="${support.support_id}">
 		                    </div>
-		                    <!-- 파일 첨부 -->
-		                    <div class="row">
-		                    	<input type="file" name="file1">
+		                   <!-- 파일 첨부 -->
+		                    <div class="row attach">
+								<c:choose>
+									<c:when test="${not empty support.support_file1}">
+										<i class="fa-solid fa-paperclip"></i>
+										${originalFileName}
+		 								<a href="${pageContext.request.contextPath}/resources/upload/${fileName}" download="${originalFileName}" class="dw">
+		 									<i class="fa-solid fa-download"></i>
+		 								</a>
+		 								<a href="javascript:deleteFile(${support.support_id}, '${fileName}')" class="del">
+		 									<i class="fa-solid fa-trash-can"></i>
+		 								</a>
+										<input type="file" name="file1" hidden>
+									</c:when>
+									<c:otherwise>
+										<input type="file" name="file1">
+									</c:otherwise>
+								</c:choose>
 		                    </div>
 		                     <div class="btns">
 		                    	<button type="button" onclick="history.back()">취소</button>
@@ -96,27 +111,32 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
-<!-- 	<script type="text/javascript"> -->
-// 	function requestModify(supportId) {
-// 		$.ajax({
-// 			url : "RequestModifyForm",
-// 			type : "POST",
-// 			contentType: "application/json",
-// 			data : JSON.stringify({
-// 				support_id: supportId,
-// 			    support_subject: "${support.support_subject}",
-// 			    support_content: "${support.support_content}"
-// 			}),
-// 			success : function (response) {
-// 				if(response == "success"){
-// 					alert("문의사항이 수정되었습니다");
-// 					location.href="MySupport";
-// 				}
-// 			}
-// 		})
-// 	}
-	
-	
-<!-- 	</script> -->
+<script>
+		// 수정 화면에서 첨부파일 삭제
+		function deleteFile(support_id, file) {
+			console.log(support_id + ", " + file);
+			if(confirm("삭제하시겠습니까?")) {
+				$.ajax({
+					type : "post",
+					url : "MySupportDeleteFile",
+					data : {
+						support_id : support_id,
+						file : file
+					}
+				}).done(function(result){
+					console.log(result);
+					if(result.trim() == "true"){
+						let fileElem = $("input[name=file1]");
+						$(fileElem).parent().html(fileElem);
+						$(fileElem).prop("hidden", false);
+						return;
+					}
+					alert("파일 삭제 실패!\n다시 시도해주시기 바랍니다.");
+				}).fail(function(){
+					alert("오류 발생");
+				});
+			}
+		}
+	</script>
 </body>
 </html>

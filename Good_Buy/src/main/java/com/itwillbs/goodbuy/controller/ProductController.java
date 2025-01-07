@@ -175,10 +175,17 @@ public class ProductController {
 		return msg;
 	}
 	
+	// 개인상점페이지 매핑
+	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("ProductShop")
-	public String productShop() {
+	public String productShop(@RequestParam String MEM_ID, Model model) {
+		Map<String, Object> sellerList = productService.searchSellerList(MEM_ID);
+		System.out.println(">>>>>>>>>>>>> " + sellerList);
+		model.addAttribute("sellerList", sellerList);
 		return "product/product_shop";
 	}
+	
+	// 상품수정 매핑
 	
 	
 	

@@ -93,7 +93,6 @@
 								</a>
 								<a href="MemberLogout">로그아웃</a>
 								<input type="hidden" id="sId" value="${sessionScope.sId}">
-<%-- 								<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script> --%>
 						</c:otherwise>				
 					</c:choose>
         		</div>

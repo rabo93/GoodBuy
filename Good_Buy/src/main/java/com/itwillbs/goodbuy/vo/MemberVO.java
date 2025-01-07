@@ -38,4 +38,5 @@ public class MemberVO {
 	//--------------------------
 	private String mem_intro;		//상점소개
 	//--------------------------
+	private int report_cnt; // 신고 경고 누적 횟수
 }

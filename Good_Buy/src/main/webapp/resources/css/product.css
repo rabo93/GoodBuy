@@ -260,6 +260,20 @@
 .item-detail .item-detail-button-group .item-detail-button-group {}
 .item-detail .item-detail-button-group #removeWish {background-color: #ff4545;border: #ff4545;}
 .item-detail .item-detail-button-group #addWish {background-color: #cccccc;border: 2px solid #cccccc;}
+.item-detail .item-detail-button-group .item-detail-editItem {
+	width: 120px;
+    height: 50px;
+    padding: 8px 15px 8px 15px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    background-color: #cccccc;
+    border: 2px solid #cccccc;
+    color: #ffffff;
+    cursor: pointer;
+    margin: 0px 0px 0px 10px;
+}
 .item-detail .item-detail-button-group .item-detail-fav {
     width: 100px;
     height: 50px;
@@ -273,12 +287,26 @@
     margin-left: auto;
     cursor: pointer;
 }
-.item-detail .item-detail-button-group .item-detail-contact-seller {width: 160px;height: 50px;padding: 8px 15px 8px 15px;box-sizing: border-box;border-radius: 10px;font-size: 16px;font-weight: 700;background-color: #0dcc5a;border: 2px solid #0dcc5a;color: #ffffff;cursor: pointer;margin: 0 0 0 auto;}
+.item-detail .item-detail-button-group .item-detail-contact-seller {
+	width: 160px;
+	height: 50px;
+	padding: 8px 15px 8px 15px;
+	box-sizing: border-box;
+	border-radius: 10px;
+	font-size: 16px;
+	font-weight: 700;
+	background-color: #0dcc5a;
+	border: 2px solid #0dcc5a;
+	color: #ffffff;
+	cursor: pointer;
+	margin: 0 0 0 auto;}
 
 .item-detail .item-report {
 	margin: 10px 0 0 auto;
-	color: #cccccc;
+	color: var(--red);
 	cursor: pointer;
+	font-weight: 700;
+	background: transparent;
 }
 .item-report-modal .modal-bg{
 	display: none;

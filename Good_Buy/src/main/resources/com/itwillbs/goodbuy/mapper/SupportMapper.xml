@@ -31,7 +31,7 @@
 	</select>
 	
 	<select id="selectSupportDetail" resultType="support">
-		SELECT *
+		SELECT *,SUPPORT_FILE AS SUPPORT_FILE1
 		FROM SUPPORT
 		WHERE SUPPORT_ID = #{SUPPORT_ID}
 	</select>
@@ -68,5 +68,13 @@
 			, SUPPORT_CONTENT = #{support_content}
 			, SUPPORT_FILE = #{support_file1}
 		WHERE SUPPORT_ID = #{support_id}
+	</update>
+	
+	<!-- 1:1문의사항 첨부파일 삭제 -->
+	<update id="deleteSupportFile">
+		UPDATE SUPPORT
+		SET SUPPORT_FILE = CASE WHEN SUPPORT_FILE = #{file} THEN '' ELSE SUPPORT_FILE END
+		WHERE
+			SUPPORT_ID = #{support_id}
 	</update>
 </mapper>

@@ -16,11 +16,9 @@ import com.itwillbs.goodbuy.vo.ProductOrderVO;
 public interface AdminMapper {
 
 	// 공통코드 등록 (상위코드)
-	@AdminLog
 	int insertCommonCode(Map<String, Object> mainCode);
 
 	// 공통코드 등록 (하위코드)
-	@AdminLog
 	int insertCommonCodeType(@Param("subCodes") List<Map<String, Object>> subCodes);
 
 	// 공통코드 목록 조회
@@ -52,7 +50,6 @@ public interface AdminMapper {
 	MemberVO selectMember(String mem_id);
 	
 	// 회원 상태 수정
-	@AdminLog
 	int updateMemberInfo(MemberVO member);
 	
 	// 회원 목록 전체 컬럼 수 조회
@@ -62,10 +59,24 @@ public interface AdminMapper {
 	int selectMemberListFiltered(@Param("param") Map<String, Object> param);
 	
 	// 회원 삭제
-	@AdminLog
 	int deleteMember(String mem_id);
 	
 	//---------------------------------------------------------
+	// 신고 회원 목록 전체 컬럼 수 조회
+	int selectUserReportTotal();
+
+	// 신고 회원 검색 필터링 후 컬럼 수 조회
+	int selectUserReportFiltered(@Param("param") Map<String, Object> param);
+
+	// 필터링 된 신고 회원 목록 가져오기
+	List<Map<String, Object>> selectUserReportList(@Param("param") Map<String, Object> param);
+	
+	// 신고 회원 조치 및 수정
+	int updateUserReport(Map<String, Object> param);
+
+	// 회원 신고 횟수 누적
+	int updateUserReportCount(Map<String, Object> param);
+	
 	// 신고 상품 목록 전체 컬럼 수 조회
 	int selectProductReportTotal();
 	
@@ -76,7 +87,6 @@ public interface AdminMapper {
 	List<Map<String, Object>> selectProductReportList(@Param("param") Map<String, Object> paramr);
 	
 	// 신고 상품 조치 및 수정
-	@AdminLog
 	int updateProductReport(Map<String, Object> param);
 	
 	//---------------------------------------------------------
@@ -98,29 +108,18 @@ public interface AdminMapper {
 	
 	//---------------------------------------------------------
 	// Faq 목록 조회 (필터링, 검색어, 페이징 적용) + 검색 조건
-	List<Map<String, Object>> selectFaqList(@Param("start") int start, 
-											@Param("length") int length,
-											@Param("searchValue") String searchValue,
-											@Param("faqCate") int faqCate, 
-											@Param("listStatus") int listStatus, 
-											@Param("orderColumn") String orderColumn, 
-											@Param("orderDir") String orderDir);
+	List<Map<String, Object>> selectFaqList(@Param("param") Map<String, Object> param);
 	
 	// Faq 전체 컬럼 수 조회
 	int selectFaqTotal();
 	
 	// FAQ 검색 후 컬럼 수 조회
-	int selectFaqFiltered(
-			@Param("faqCate") int faqCate, 
-			@Param("listStatus") int listStatus, 		
-			@Param("searchValue") String searchValue);
+	int selectFaqFiltered(@Param("param") Map<String, Object> param);
 
 	// Faq 수정
-	@AdminLog
 	int updateFaqInfo(Map<String, Object> param);
 	
 	// Faq 삭제
-	@AdminLog
 	int deleteFaq(@Param("deleteItems") List<Integer> faqIds);
 
 	//---------------------------------------------------------
@@ -134,7 +133,6 @@ public interface AdminMapper {
 	List<Map<String, Object>> selectEnquireList(@Param("param") Map<String, Object> param);
 	
 	// 답글 등록(수정)
-	@AdminLog
 	int updateReplyInfo(Map<String, Object> param);
 
 	// =====================================================
@@ -151,5 +149,6 @@ public interface AdminMapper {
 	// 필터링 된 상품 거래 목록 가져오기
 	ProductOrderVO selectOrderList(Map<String, Object> convertParam);
 	
+
 
 }

@@ -60,7 +60,7 @@ public class PayController {
 		Map<String, Object> bankUserInfo = service.getPayUserInfo(token);
 		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
 		
-		// 충전금액 조회 : 내역이 없을 수도 있으므로 Integer로 리턴함.
+		// 충전금액 조회(송금, 충전 본인) : 내역이 없을 수도 있으므로 Integer로 리턴함.
 		Integer pay_amount = service.getPayAmount(token.getUser_seq_no());
 		
 		// 거래내역조회
@@ -69,11 +69,14 @@ public class PayController {
 		// 거래내역에서 송금일 경우 : 송금받는 사람(RECEIVER_FINTECH_USE_NUM)도 내역 표시. 
 		// 자기자신의 FINTECH_USE_NUM으로 RECEIVER_FINTECH_USE_NUM이 있는지 거래내역 조회 
 		List<Map<String, String>> recieverTransactionInfo = service.getReceiverTransactionDetail(fintech_use_num);
+		// 충전금액 조회(송금, 충전 본인) : 내역이 없을 수도 있으므로 Integer로 리턴함.
+		Integer pay_amount_receive = service.getReceiverPayAmount(fintech_use_num);
 		
 		
 		model.addAttribute("recieverTransactionInfo", recieverTransactionInfo);
 		model.addAttribute("transactionInfo", transactionInfo);
 		model.addAttribute("pay_amount", pay_amount);
+		model.addAttribute("pay_amount_receive", pay_amount_receive);
 		model.addAttribute("bankUserInfo", bankUserInfo);
 		model.addAttribute("fintech_use_num", fintech_use_num);
 		
@@ -374,6 +377,8 @@ public class PayController {
 		map.put("pay_id", 0);
 		map.put("buyer_id", id);
 		map.put("product_price", productSearch.getProduct_price());
+		map.put("product_trade_adr1", productSearch.getProduct_trade_adr1());
+		System.out.println("판매자 주소 알아보기 : " + productSearch);
 
 		// 수신자(상대방)의 토큰이 존재하지 않을 경우(= 계좌 등록이 되어있지 않음 등)
 		if(receiverToken == null || receiverToken.getAccess_token() == null) {
@@ -426,7 +431,6 @@ public class PayController {
 		service.registTransferResult(transferResult);
 		
 		// DB에 거래내역 저장
-//		Map<String, String> payInfo = service.registPayInfo(map);
 		int payInfo = service.registPayInfo(map);
 		
 		session.setAttribute("transferResult", transferResult);

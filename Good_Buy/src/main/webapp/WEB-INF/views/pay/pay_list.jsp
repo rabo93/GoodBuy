@@ -67,14 +67,21 @@
 						<div class="contents-ttl">
 							<h3>굿페이 메인</h3>
 							<div class="goodpay-container">
+								<c:if test="${empty recieverTransactionInfo }">
+									<c:set var="payAmount" value="${pay_amount}"/>
+								</c:if>
+								<c:if test="${empty transactionInfo }">
+									<c:set var="payAmount" value="${pay_amount_receive}"/>
+								</c:if>
 						        <!-- 상단: 계좌 정보 -->
 						        <div class="account-box">
 						        	<div class="info">
 							        	<h1><i class="fa-solid fa-money-bill"></i>&nbsp;&nbsp;굿페이</h1>
 						            	<button class="my-account" onclick="location.href='MyAccount'">내 계좌</button>
 						        	</div>
+									
 						            <div class="balance">
-						                <h1><fmt:formatNumber pattern="#,###">${pay_amount}</fmt:formatNumber> 원</h1>
+						                <h1><fmt:formatNumber pattern="#,###">${payAmount}</fmt:formatNumber> 원</h1>
 						                <i class="fa-solid fa-arrow-rotate-right"></i>
 						            </div>
 						            <div class="buttons">
@@ -154,7 +161,7 @@
 <!-- 															거래금액 <input type="text" name="tran_amt" value="5000">  -->
 											            	<input type="text" class="input-label" placeholder="금액을 입력해 주세요" id="total-amount">
 										        		</div>
-											            <div class="balance-info">굿페이 잔액: <strong>${pay_amount} 원</strong></div>
+											            <div class="balance-info">굿페이 잔액: <strong>${payAmount} 원</strong></div>
 											            <div class="amount-btns">
 												            <input type="button" class="amount-btn" onclick="addAmount(10000)" value="+ 1만원">
 												            <input type="button" class="amount-btn" onclick="addAmount(50000)" value="+ 5만원">
@@ -168,72 +175,34 @@
 											</div><!-- pay-account-modal-CONTENT -->
 						            	</div><%-- 충전버튼 모달창 끝 --%>
 						       		 </div><!-- buttons -->
-						
 						        <!-- 최근 이용 내역 -->
 							        <div class="history">
-<<<<<<< HEAD
-							        
-							            <h3>최근 이용내역 <a href="pay_use_list.jsp" class="see-all">전체보기 ></a></h3>
-							            ${empty recieverTransactionInfo }
-							            ${empty transactionInfo }
-=======
 							            <h3>최근 이용내역 <a href="AllPayList" class="see-all">전체보기 ></a></h3>
->>>>>>> branch 'main' of https://github.com/jhk727/good_buy.git
 							            <c:choose>
 							            	<c:when test="${empty transactionInfo and empty recieverTransactionInfo}">
 								            	<div class="history-item empty-text">
 								            	굿페이 이용내역이 없습니다.
 								            	</div>
 							            	</c:when>
-							            	
-							            	
-							            	
-							            	
-							            	
-							            	
-							            	
-							            	
-							            	
-							            	
-							            	
-							            	
-							            	
-							            	
-							            	
 							            	<c:otherwise>
 							            	
-							            	
-							            	
-							            	
-							            	
-							            	
-							            	
-							            	
-							            	여기가안됨!!!!!!!!!
-								            		<c:forEach var="item" items="${recieverTransactionInfo}">
-									            		<c:if test="${recieverTransactionInfo}">
-										            			${item }
-									            		</c:if>
-							            			</c:forEach>	
-							            			
-							            			
-							            			
-							            			
-							            			
-							            			
-							            			
-							            			
-							            			
-							            			
-							            			
-							            			
-							            			
-							            			
-							            			
-							            			
-							            			
-							            			
-							            			
+							            		<c:forEach var="item" items="${recieverTransactionInfo}">
+							            			<div class="history-item">
+							            				<div class="icon"><i class="fa-solid fa-building-columns"></i></div>
+										                <div class="details">
+										                    <span>산업 ${item.RECEIVER_FINTECH_USE_NUM }</span>
+										                    <span class="date" >
+										                    	<fmt:parseDate var="parsedReplyRegDate"
+																					value="${item.API_TRAN_DTM}" 
+																					pattern="yyyy-MM-dd'T'HH:mm:ss" 
+																					type="both" /> 
+																	<fmt:formatDate value="${parsedReplyRegDate}" pattern="yy.MM.dd" /> 
+																| 송금
+										                    </span>
+										                </div>
+										                <div class="amount">+ <fmt:formatNumber pattern="#,###">${item.TRAN_AMT}</fmt:formatNumber></div>
+							            			</div>	
+						            			</c:forEach>	
 							            		<c:forEach var="item" items="${transactionInfo}">
 							            			<c:if test="${item.TRANSACTION_TYPE eq 'WI'}">
 							            				<c:set var="classify" value="충전"/>

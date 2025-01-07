@@ -232,9 +232,6 @@ public class MypageController {
 							@RequestParam int PRODUCT_ID,
 							@RequestParam String PRODUCT_TITLE,
 							WishlistVO wishlist, Model model) {
-		System.out.println(">>>>>>>>>>>>>>" + MEM_ID);
-		System.out.println(">>>>>>>>>>>>>>" + PRODUCT_ID);
-		System.out.println(">>>>>>>>>>>>>>" + PRODUCT_TITLE);
 		
 		wishlist.setMem_id(MEM_ID);
 		wishlist.setProduct_id(PRODUCT_ID);
@@ -265,10 +262,8 @@ public class MypageController {
 		String id = getSessionUserId(session);
 		member.setMem_id(id);
 		
-		
 		List<MyReviewVO> reviewHistory = reviewService.getReviewHistory(id);
 		model.addAttribute("review",reviewHistory);
-		
 		
 		return "mypage/mypage_review_history";
 	}

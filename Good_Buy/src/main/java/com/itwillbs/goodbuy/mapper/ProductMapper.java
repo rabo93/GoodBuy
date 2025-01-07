@@ -58,4 +58,7 @@ public interface ProductMapper {
 
 	// 상품 상세페이지 비슷한 상품 조회
 	List<Map<String, Object>> searchSameCategoryProduct(@Param("product_category")String product_category, @Param("product_id")int product_id);
+
+	// 상점페이지 조회
+	List<Map<String, Object>> searchSellerList(String mem_id);
 }

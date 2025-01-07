@@ -54,7 +54,7 @@
 								<option value="기타 사유를 입력해주세요.">기타</option>
 							</select>
 							<textarea class="modal-otherReason" readonly textho></textarea>
-							<button class="model-report-btn" type="button" onclick="itemReporting()">
+							<button class="model-report-btn" type="button" id="itemReporting">
 								신고하기
 							</button>
 						</div>
@@ -130,15 +130,18 @@
 									<c:if test="${productSearch.product_status != 4}">
 										<c:choose>
 											<c:when test="${wishSearch.wishlist_id != '' && wishSearch.wishlist_id != undefined}">
-												<input type="button" value="찜 삭제하기" class="item-detail-fav" id="removeWish" onclick="removeWishlist()">
+												<input type="button" value="찜 삭제하기" class="item-detail-fav" id="removeWish">
 											</c:when>
 											<c:otherwise>
-												<input type="button" value="찜 하기" class="item-detail-fav" id="addWish" onclick="addWishlist()">
+												<input type="button" value="찜 하기" class="item-detail-fav" id="addWish">
 											</c:otherwise>
 										</c:choose>
 										<a href="javascript:void(0)"  onclick="toggleSlideChat()">
 											<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
 										</a>
+										<c:if test="${sessionScope.sId eq productSearch.mem_id}">
+											<input type="button" value="상품 수정하기" class="item-detail-editItem" id="editItem">
+										</c:if>
 										<input type="hidden" id="sId" value="${sessionScope.sId}">
 										<input type="hidden" id="receiver_id" value="${productSearch.mem_id}">
 										<input type="hidden" id="product_id" value="${productSearch.product_id}">
@@ -152,11 +155,11 @@
 							</c:if>
 						</div>
 					</div>
-					<div class="item-detail-seller-info" onclick="location.href='ProductShop'" style=" cursor: pointer;">
+					<div class="item-detail-seller-info" id="shop-detail" style=" cursor: pointer;">
 						<img src="${productSearch.mem_profile}" class="item-detail-seller-pic">
-						<input type="hidden" name="seller-id" value="${sessionScope.sId}">
+						<input type="hidden" name="viewer-id" value="${sessionScope.sId}">
 						<input type="hidden" name="wishlistCheck" value="${wishSearch.wishlist_id}">
-						<div class="item-detail-seller-nick">${productSearch.mem_nick}</div>
+						<div class="item-detail-seller-nick" id="item-seller-nick">${productSearch.mem_nick}</div>
 						<div class="item-detail-seller-review">★★★★★</div>
 					</div>
 					<div class="item-detail-more-item">

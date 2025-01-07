@@ -36,8 +36,8 @@
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 				<section class="item-shop-section">
 					<div class="item-shop-seller-info">
-						<img src="../../resources/img/product_thumb.jpg" class="item-shop-seller-pic">
-						<div class="item-shop-seller-nick">홍길동동이</div>
+						<img src="${sellerList}" class="item-shop-seller-pic">
+						<div class="item-shop-seller-nick">${sellerList}</div>
 						<div class="item-shop-seller-review">
 							<div class="item-shop-seller-review-title">셀러평점</div>
 							<div class="item-shop-seller-review-star">★★★★★</div>
@@ -151,9 +151,4 @@
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
 </body>
-
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-<script type="text/javascript">
-	
-</script>
 </html>

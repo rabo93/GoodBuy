@@ -147,9 +147,10 @@ public interface AdminMapper {
 	// 상품 거래 목록 전체 컬럼 수 조회
 	int selectOrderListTotal();
 	// 상품 거래 검색 필터링 후 컬럼 수 조회
-	int selectOrderListFiltered(Map<String, Object> convertParam);
+	int selectOrderListFiltered(@Param("param") Map<String, Object> param);
+	
 	// 필터링 된 상품 거래 목록 가져오기
-	ProductOrderVO selectOrderList(Map<String, Object> convertParam);
+	List<ProductOrderVO> selectOrderList(@Param("param") Map<String, Object> param);
 	
 
 }

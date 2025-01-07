@@ -282,6 +282,21 @@ public class AdminService {
 	public ProductOrderVO getOrderList(Map<String, Object> convertParam) {
 		return mapper.selectOrderList(convertParam);
 	}
+
+	// 로그 목록 전체 컬럼 수 조회
+	public int getLogListTotal() {
+		return mapper.selectLogListTotal();
+	}
+
+	// 로그 필터링 후 컬럼 수 조회
+	public int getLogListFiltered(Map<String, Object> param) {
+		return mapper.selectLogListFiltered(param);
+	}
+
+	// 필터링 된 로그 목록 조회
+	public List<MemberVO> getLogList(Map<String, Object> param) {
+		return mapper.selectLogList(param);
+	}
 	
 	
 //	// 답글 등록(수정)

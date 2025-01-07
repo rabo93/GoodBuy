@@ -812,5 +812,54 @@
 <!--      </select> -->
      
      
+     <!-- [ 로그 목록 ] -->
+     <!-- 로그 전체 컬럼 수 조회 -->
+     <select id="selectLogListTotal" resultType="int">
+    	 SELECT COUNT(*)
+		   FROM LOG
+     </select>
      
+      <!-- 로그 필터링 후 컬럼 수 조회 -->
+     <select id="selectLogListFiltered" resultType="int">
+     	SELECT COUNT(*)
+		  FROM LOG
+		 WHERE 1 = 1
+		<if test="param.searchValue != null and !param.searchValue.equals('')">
+		   AND (ADMIN_ID LIKE CONCAT('%', #{param.searchValue}, '%')
+			   OR PROCESS_DETAIL LIKE CONCAT('%', #{param.searchValue}, '%')
+	 	       OR PROCESS_RESULT LIKE CONCAT('%', #{param.searchValue}, '%')
+	 	       OR IP_ADDRESS LIKE CONCAT('%', #{param.searchValue}, '%') 
+		</if>
+     </select>
+     
+      <!-- 필터링 된 로그 목록 조회 -->
+     <select id="selectLogList" resultType="map">
+     	SELECT ADMIN_ID
+     		   , PROCESS_DETAIL
+     		   , DATE_FORMAT(PROCESS_TIME, '%Y-%m-%d %H:%i:%s') AS PROCESS_TIME
+     		   , PROCESS_RESULT
+     		   , IP_ADDRESS
+		  FROM LOG
+		 WHERE 1 = 1
+		<if test="param.searchValue != null and !param.searchValue.equals('')">
+		   AND (ADMIN_ID LIKE CONCAT('%', #{param.searchValue}, '%')
+			   OR PROCESS_DETAIL LIKE CONCAT('%', #{param.searchValue}, '%')
+	 	       OR PROCESS_RESULT LIKE CONCAT('%', #{param.searchValue}, '%')
+	 	       OR IP_ADDRESS LIKE CONCAT('%', #{param.searchValue}, '%') 
+		</if>
+		ORDER BY 
+			<choose>
+				<when test='param.orderColumn.equals("ADMIN_ID")'>ADMIN_ID</when>
+				<when test='param.orderColumn.equals("PROCESS_DETAIL")'>PROCESS_DETAIL</when>
+				<when test='param.orderColumn.equals("PROCESS_TIME")'>PROCESS_TIME</when>
+				<when test='param.orderColumn.equals("PROCESS_RESULT")'>PROCESS_RESULT</when>
+				<when test='param.orderColumn.equals("IP_ADDRESS")'>IP_ADDRESS</when>
+				<otherwise>PROCESS_TIME</otherwise>
+			</choose>
+			<if test='param.orderDir.equals("asc")'>ASC</if>
+			<if test='param.orderDir.equals("desc")'>DESC</if>
+		  LIMIT
+		 	   #{param.start}
+		 	   , #{param.length}
+     </select>
 </mapper>

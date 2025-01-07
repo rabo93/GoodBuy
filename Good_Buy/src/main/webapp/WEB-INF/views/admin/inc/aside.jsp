@@ -58,10 +58,10 @@
         </div>
     </li>
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#menu06" aria-expanded="true" aria-controls="menu06">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#menu05" aria-expanded="true" aria-controls="menu05">
         	<i class="fa-solid fa-newspaper"></i> <span>고객지원 관리</span>
         </a>
-        <div id="menu06" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+        <div id="menu05" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
             	<h6 class="collapse-header">Customer Management</h6>
                 <a class="collapse-item" href="AdmNoticeList" data-sub-page="AdmNoticeModify" data-sub-page2="AdmNoticeRegist">공지사항 관리</a>
@@ -70,6 +70,20 @@
             </div>
         </div>
     </li>
+    <hr class="sidebar-divider">
+    <div class="sidebar-heading">Chart</div>
+    <li class="nav-item">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#menu06" aria-expanded="true" aria-controls="menu06">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>통계 및 로그</span>
+        </a>
+        <div id="menu06" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+            	<h6 class="collapse-header">ADMIN</h6>
+                <a class="collapse-item" href="AdmChartList">통계</a>
+                <a class="collapse-item" href="AdmLogList">로그 기록</a>
+            </div>
+        </div>
 <!--     <hr class="sidebar-divider"> -->
 <!--     <div class="sidebar-heading">Marketing</div> -->
 <!--     <li class="nav-item"> -->
@@ -84,13 +98,6 @@
 <!--             </div> -->
 <!--         </div> -->
 <!--     </li> -->
-    <hr class="sidebar-divider">
-    <div class="sidebar-heading">Chart</div>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>통계</span>
-        </a>
     </li>
     <hr class="sidebar-divider d-none d-md-block">
     <div class="text-center d-none d-md-inline">

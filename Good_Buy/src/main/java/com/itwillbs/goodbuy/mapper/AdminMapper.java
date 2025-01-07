@@ -148,6 +148,15 @@ public interface AdminMapper {
 	int selectOrderListFiltered(Map<String, Object> convertParam);
 	// 필터링 된 상품 거래 목록 가져오기
 	ProductOrderVO selectOrderList(Map<String, Object> convertParam);
+
+	// --------------------------------------------------------
+	// [ 로그 ]
+	// 로그 목록 전체 컬럼 수 조회
+	int selectLogListTotal();
+	// 로그 필터링 후 컬럼 수 조회
+	int selectLogListFiltered(@Param("param") Map<String, Object> param);
+	// 필터링 된 로그 목록 조회
+	List<MemberVO> selectLogList(@Param("param")Map<String, Object> param);
 	
 
 

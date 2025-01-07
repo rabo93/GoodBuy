@@ -361,7 +361,7 @@ public class MypageController {
 				return "result/fail";
 			}
 
-//			addFileToModel(support, model); //첨부파일
+			addFileToModel(support, model); //첨부파일
 			model.addAttribute("support", support);
 
 			return "mypage/mypage_inquiry_detail";
@@ -381,7 +381,7 @@ public class MypageController {
 			support.setMem_id(id);
 			// 파일 첨부 업로드 경로 처리
 			String realPath = getRealPath(session);
-
+			System.out.println(">>>>>>>>>>>>>>>>>"+realPath);
 			// 디렉토리 생성
 			String subDir = createDirectories(realPath);
 
@@ -432,7 +432,7 @@ public class MypageController {
 			String id = getSessionUserId(session);
 			SupportVO support = supportService.getSupportDetail(support_id);
 			model.addAttribute("support",support);
-
+			addFileToModel(support, model);
 			return "mypage/mypage_inquiry_update";
 		}
 
@@ -452,6 +452,29 @@ public class MypageController {
 				return "redirect:/MySupportDetail?support_id="+support.getSupport_id();
 			}
 			return "result/fail";
+		}
+		
+		// 문의내역 수정 시 첨부파일 삭제
+		@ResponseBody
+		@PostMapping("MySupportDeleteFile")
+		public String mySupportDeleteFile(@RequestParam Map<String, String> map, HttpSession session) {
+			
+			int deleteCount = supportService.removeSupportFile(map);
+			
+			if(deleteCount > 0) {
+				String realPath = session.getServletContext().getRealPath(uploadPath);
+				System.out.println(realPath);
+				
+				if(!map.get("file").equals("")) {
+					Path path = Paths.get(realPath, map.get("file"));
+					try {
+						Files.deleteIfExists(path);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			return "true";
 		}
 
 	// ===========================================================================================

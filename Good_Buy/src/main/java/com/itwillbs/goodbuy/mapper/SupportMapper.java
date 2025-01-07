@@ -32,6 +32,8 @@ public interface SupportMapper {
 //			,@Param("support_content") String support_content);
 
 	int updateSupport(SupportVO support);
+	//// 1:1 문의글 수정 - 첨부파일 삭제
+	int deleteSupportFile(Map<String, String> map);
 	
 	
 }

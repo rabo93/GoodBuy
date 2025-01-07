@@ -42,7 +42,6 @@ $(function() {
 	
 })
 
-
 function toggleSlideChat() {
 	//	슬라이드 메뉴를 열 때
 	console.log(sId);
@@ -123,6 +122,12 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 	
 }
 
+function test(data) {
+	let x = JSON.parse(data);
+	console.log("모달창에서 데이터 확인");
+	console.log(x);
+}
+
 function sendInputMessage() {
 	let message = $(".chatMessage").val();
 	
@@ -130,20 +135,26 @@ function sendInputMessage() {
 		return;
 	}
 	
-	$.ajax({
-		url : "ChatRoomAjax",
-		type : "POST",
-		dataType : "JSON",
-		data : {
-			sender_id : sId,
-			receiver_id : receiver_id,
-			product_id : product_id
-		}
-	}).done(function(result){
-		let room_id = result.room_id;
-		console.log("TYPE_TALK에서 receiver_id 확인 - " + receiver_id);
-		sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, message);
-	});
+	let room_id = $(".chat-footer > #room_id").val();
+	let receiver_id = $(".chat-footer > #receiver_id").val();
+	console.log("TYPE_TALK에서 receiver_id 확인 - " + receiver_id);
+	
+	sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, message);
+	
+//	$.ajax({
+//		url : "ChatRoomAjax",
+//		type : "POST",
+//		dataType : "JSON",
+//		data : {
+//			sender_id : sId,
+//			receiver_id : receiver_id,
+//			product_id : product_id
+//		}
+//	}).done(function(result){
+//		let room_id = result.room_id;
+//		console.log("TYPE_TALK에서 receiver_id 확인 - " + receiver_id);
+//		sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, message);
+//	});
 	
 	$(".chatMessage").val("");
 	$(".chatMessage").focus();

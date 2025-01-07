@@ -41,9 +41,7 @@ document.addEventListener("DOMContentLoaded", function(){
       	],
 		columns: [
 			{
-				data: null, 
-				className : "dt-center", 
-				width: '60px',
+				data: null, className : "dt-center", width: '60px',
 				render : function(data, type, row, meta) {
 					const rowCount = meta.row + 1; // 현재 페이지에서의 row 번호를 사용
 					const checkboxId = "customCheck" + rowCount;

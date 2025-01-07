@@ -1,5 +1,5 @@
 let url = new URL(window.location.href);
-let sId = $("input[name=seller-id]").val();
+let sId = $("input[name=viewer-id]").val();
 
 // product_regi.jsp
 function onClickUpload1() {

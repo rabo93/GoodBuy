@@ -64,8 +64,8 @@
 													    <label class="form-check-label" for="reset">전체</label>
 													</div>
 											        <div class="form-check ml-3">
-													    <input class="form-check-input" id="status1" type="radio" name="status" value="0">
-													    <label class="form-check-label" for="status1">판매중</label>
+													    <input class="form-check-input" id="status0" type="radio" name="status" value="0">
+													    <label class="form-check-label" for="status0">판매중</label>
 													</div>
 											        <div class="form-check ml-3">
 													    <input class="form-check-input" id="status1" type="radio" name="status" value="1">
@@ -95,7 +95,7 @@
 										    </div>
 										    <div class="col-5 px-4 search-box">
 						                        <div class="input-group">
-						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="회원ID, 상품명, 상품카테고리  검색" aria-label="Search" aria-describedby="basic-addon2">
+						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="회원ID, 상품명, 상품카테고리, 거래장소 검색" aria-label="Search" aria-describedby="basic-addon2">
 						                            <div class="input-group-append">
 						                                <button class="btn btn-primary" id="searchBtn" type="button">검색</button>
 						                            </div>
@@ -132,47 +132,6 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-    
-    <!-- 답글 모달 -->
-<!--     <div class="modal fade" id="updateMemberInfo" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true"> -->
-    <div class="modal fade" id="updateSupportInfo" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-		    <div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="updateModalLabel">1:1문의 답글달기</h5>
-					<button type="button" class="close" data-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
-				</div>
-				<div class="modal-body">
-<!-- 					<form action="AdmProductReportAction" id="productReportModifyForm" method="post"> -->
-					<form action="AdmSupportAction" id="supportModifyForm" method="post">
-						<input type="hidden" id="supportId" name="SUPPORT_ID">
-						<input type="hidden" id="memId" name="MEM_ID">
-						<input type="hidden" id="adminId" name="ADMIN_ID" value="${sessionScope.sId}">
-						<div class="mb-3">
-							<label class="small mb-1" for="supportStatus">처리 상태 변경</label>
-							<select class="custom-select" id="supportStatus" name="STATUS">
-								<option value="처리완료">처리완료</option>
-								<option value="기각">기각</option>
-							</select>
-						</div>
-						<div class="mb-3">
-							<label class="small mb-1" for="enquireContent">문의 내용</label>
-							<input type="text" class="form-control" name="SUPPORT_CONTENT" id="enquireContent" readonly required>
-						</div>
-						<div class="mb-3">
-							<label class="small mb-1" for="replyContent">답변 내용</label>
-							<textarea class="form-control" col="4" id="replyContent" name="REPLY_CONTENT" placeholder="답글을 입력하세요" required></textarea>
-							<small class="text-primary text-right d-block font-weight-bold"><span id="lengthInfo">0</span> / 500자</small>
-						</div>
-                    </form>
-				</div>
-				<div class="modal-footer justify-content-center">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="supportModifyForm">등록</button>
-				</div>
-			</div>
-		</div>
-	</div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/jquery/jquery.min.js"></script>

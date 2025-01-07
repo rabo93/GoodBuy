@@ -203,6 +203,7 @@ function sendInputMessage() {
 	console.log("TYPE_TALK에서 receiver_id 확인 - " + receiver_id);
 	
 	sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, message);
+
 	
 	$(".chatMessage").val("");
 	$(".chatMessage").focus();

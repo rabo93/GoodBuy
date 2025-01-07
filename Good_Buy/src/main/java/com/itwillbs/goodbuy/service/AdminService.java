@@ -275,12 +275,12 @@ public class AdminService {
 		return mapper.selectOrderListTotal();
 	}
 	// 상품 거래 검색 필터링 후 컬럼 수 조회
-	public int getOrderListFiltered(Map<String, Object> convertParam) {
-		return mapper.selectOrderListFiltered(convertParam);
+	public int getOrderListFiltered(Map<String, Object> param) {
+		return mapper.selectOrderListFiltered(param);
 	}
 	// 필터링 된 상품 거래 목록 가져오기
-	public ProductOrderVO getOrderList(Map<String, Object> convertParam) {
-		return mapper.selectOrderList(convertParam);
+	public List<ProductOrderVO> getOrderList(Map<String, Object> param) {
+		return mapper.selectOrderList(param);
 	}
 
 	// 로그 목록 전체 컬럼 수 조회

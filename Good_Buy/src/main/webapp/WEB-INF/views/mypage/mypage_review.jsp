@@ -72,14 +72,14 @@
 										        <div class="profile-icon"></div>
 										        <div class="user-info">
 										            <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
-										            <div class="name">${review.buyerNick}</div>
+										            <div class="name">${review.buyerNick} | ${review.review_date}</div>
+<%-- 										            <div class="date"></div> --%>
 										            <div class="product">${review.product_title}</div>
-										            <div class="date">${review.review_date}</div>
 										        </div>
 										    </div>
 								            <div class=rating>
-												<i class="fa-solid fa-star" ></i>
-												<span><b>${review.review_score}</b></span>
+<!-- 												<i class="fa-solid fa-star" ></i> -->
+<%-- 												<span><b>${review.review_score}</b></span> --%>
 											</div>
 										    <div class="review-text">${review.review_content}</div>
 										</div>

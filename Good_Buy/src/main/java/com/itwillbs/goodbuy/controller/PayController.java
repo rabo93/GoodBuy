@@ -279,9 +279,17 @@ public class PayController {
 	
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("PayWithdrawResult")
-	public String payWithdrawResult(String bank_tran_id, Model model) {
+	public String payWithdrawResult(String bank_tran_id, HttpSession session, Model model) {
+		PayToken token = (PayToken)session.getAttribute("token");
+
 		Map<String, String> withdrawResult = service.getWithdarwResult(bank_tran_id);
+		Map<String, String> userAccount = service.getPayAccountInfo(token.getUser_seq_no());
+		// 충전금액 조회
+		int pay_amount = service.getPayAmount(token.getUser_seq_no());
+				
 		model.addAttribute("withdrawResult", withdrawResult);
+		model.addAttribute("userAccount", userAccount);
+		model.addAttribute("pay_amount", pay_amount);
 
 		return "pay/pay_withdraw_result";
 	}
@@ -325,10 +333,18 @@ public class PayController {
 	@LoginCheck(memberRole = MemberRole.USER)
 	@PayTokenCheck
 	@GetMapping("PayDepositResult")
-	public String payDepositResult(String bank_tran_id, Model model) {
+	public String payDepositResult(String bank_tran_id, HttpSession session, Model model) {
+		PayToken token = (PayToken)session.getAttribute("token");
 		
 		Map<String, String> depositResult = service.getDepositResult(bank_tran_id);
+		Map<String, String> userAccount = service.getPayAccountInfo(token.getUser_seq_no());
+		// 충전금액 조회
+		int pay_amount = service.getPayAmount(token.getUser_seq_no());
+				
+		
 		model.addAttribute("depositResult", depositResult);
+		model.addAttribute("userAccount", userAccount);
+		model.addAttribute("pay_amount", pay_amount);
 		
 		return "pay/pay_deposit_result";
 	}
@@ -456,10 +472,22 @@ public class PayController {
 		return "pay/pay_transfer_result";
 		
 	}
-	
+
+	@LoginCheck(memberRole = MemberRole.USER)
+	@PayTokenCheck
 	@GetMapping("AllPayList")
-	public String allPayList() {
-		System.out.println("AllPayList");
+	public String allPayList(HttpSession session, Model model) {
+		PayToken token = (PayToken)session.getAttribute("token");
+		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
+		// 거래내역조회 - 로그인 유저
+		List<Map<String, String>> transactionInfo = service.getTransactionDetail(token.getUser_seq_no());
+		// 거래내역조회 - 송금받은 유저
+		List<Map<String, String>> recieverTransactionInfo = service.getReceiverTransactionDetail(fintech_use_num);
+		
+		model.addAttribute("transactionInfo", transactionInfo);
+		model.addAttribute("recieverTransactionInfo", recieverTransactionInfo);
+		
+
 		return "pay/pay_use_list";
 	}
     

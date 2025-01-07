@@ -183,18 +183,18 @@
 		FROM ACCOUNTINFO
 		WHERE USER_SEQ_NO = #{user_seq_no}
 	</select>
-	
-	
-	
-	
-	
-	
+
 	<!-- 충전금액조회(송금하는자) -->
 	<select id="selectPayAmount"  resultType="int">
-		SELECT SUM(TRAN_AMT)
-		  FROM TRANSACTIONINFO
-		 WHERE TRANSACTION_TYPE = 'WI'
-		   AND USER_SEQ_NO = #{user_seq_no};
+	  SELECT 
+			   SUM(CASE 
+			            WHEN TRANSACTION_TYPE = 'WI' THEN tran_amt 
+			            WHEN TRANSACTION_TYPE = 'TR' THEN -tran_amt 
+			            WHEN TRANSACTION_TYPE = 'DE' THEN -tran_amt 
+			            ELSE 0 
+			        END) AS total_amount
+		FROM TRANSACTIONINFO
+	   WHERE USER_SEQ_NO = #{user_seq_no};
 	</select>
 	
 	

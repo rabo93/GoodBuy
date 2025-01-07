@@ -96,39 +96,36 @@
 													<h2>굿페이 환불</h2>
 												</div>
 												<div class="pay-account-modal-body">
-													어느계좌로 환불하시겠습니까?
-													<c:forEach var="account" items="${bankUserInfo.res_list}" varStatus="status">
-														<form action="PayAccountDetail" method="POST" id="PayAccountDetail-${account.fintech_use_num}">
-														        <input type="hidden" name="fintech_use_num" value="${account.fintech_use_num}">
-														        <input type="hidden" name="account_holder_name" value="${account.account_holder_name}">
-														        <input type="hidden" name="account_num_masked" value="${account.account_num_masked}">
-														</form>
-														<a href="#" 
-															       title="${account.account_num_masked}계좌의 상세정보 보기" 
-															       data-form-id="PayAccountDetail-${account.fintech_use_num}" 
-															       onclick="submitForm(this);">
-													        <div class="linked-account">
-													            <div class="account-info">
-													                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
-													                <span class="account-number">${account.bank_name}<strong>${account.account_num_masked}</strong></span>
-													            </div>
-													            <c:choose>
-								  										<c:when test="${account.fintech_use_num eq fintech_use_num}">
-														            	<button class="primary-account-btn">대표계좌</button>
-															        </c:when>
-															        <c:otherwise>
-															    		<form action="PayRegistRepresentAccount" method="POST" id="PayRegistRepresentAccount">
-																			<input type="hidden" name="fintech_use_num" value="${account.fintech_use_num}">
-																			<input type="hidden" name="account_holder_name" value="${account.account_holder_name}">
-																			<input type="hidden" name="account_num_masked" value="${account.account_num_masked}">
-																		</form>    
-															        </c:otherwise>
-															    </c:choose>
-													        </div>
-													    </a>
-											        </c:forEach>
+													<form action="PayDeposit" method="post">
+														<select class="account-select"  name="deposit_client_fintech_use_num">
+															<c:forEach var="account" items="${bankUserInfo.res_list}" varStatus="status">
+																<option value="${account.fintech_use_num}" <c:if test="${account.fintech_use_num eq fintech_use_num}">selected</c:if>>
+														                ${account.bank_name} &nbsp;&nbsp; ${account.account_num_masked}
+													           		<c:if test="${account.fintech_use_num eq fintech_use_num}">
+																		( 대표계좌 )
+																	</c:if>
+																	<c:set var="deposit_client_name" value="${account.account_holder_name}" />
+																</option>
+															</c:forEach>
+														</select>
+														<input type="hidden" name="deposit_client_name" value="${deposit_client_name}">
+														<input type="hidden" name="tran_amt" value="10000"> 
 													
-												</div>
+														<div class="input-section">
+<!-- 															거래금액 <input type="text" name="tran_amt" value="5000">  -->
+											            	<input type="text" class="input-label" placeholder="금액을 입력해 주세요" id="total-amount">
+										        		</div>
+											            <div class="balance-info">굿페이 잔액: <strong>${payAmount} 원</strong></div>
+											            <div class="amount-btns">
+												            <input type="button" class="amount-btn" onclick="addAmount(10000)" value="+ 1만원">
+												            <input type="button" class="amount-btn" onclick="addAmount(50000)" value="+ 5만원">
+												            <input type="button" class="amount-btn" onclick="addAmount(100000)" value="+ 10만원">
+												        </div>
+												        <div class="recharge-button">
+												            <button class="recharge-btn">환불하기</button>
+												        </div>
+													</form>
+												</div><!-- pay-account-modal-body -->
 											</div>
 										</div>
 										<%-- 환불버튼 모달창 끝 --%>
@@ -185,7 +182,6 @@
 								            	</div>
 							            	</c:when>
 							            	<c:otherwise>
-							            	
 							            		<c:forEach var="item" items="${recieverTransactionInfo}">
 							            			<div class="history-item">
 							            				<div class="icon"><i class="fa-solid fa-building-columns"></i></div>
@@ -203,7 +199,7 @@
 										                <div class="amount">+ <fmt:formatNumber pattern="#,###">${item.TRAN_AMT}</fmt:formatNumber></div>
 							            			</div>	
 						            			</c:forEach>	
-							            		<c:forEach var="item" items="${transactionInfo}">
+							            		<c:forEach var="item" items="${transactionInfo}" varStatus="status">
 							            			<c:if test="${item.TRANSACTION_TYPE eq 'WI'}">
 							            				<c:set var="classify" value="충전"/>
 							            				<c:set var="symbol" value="+"/>
@@ -216,22 +212,24 @@
 							            				<c:set var="classify" value="환불"/>
 							            				<c:set var="symbol" value="-"/>
 							            			</c:if>
-<%-- 							            			receiver_fintech_use_num : ${receiver_fintech_use_num eq fintech_use_num } --%>
-							            			<div class="history-item">
-										                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
-										                <div class="details">
-										                    <span>산업 ${item.FINTECH_USE_NUM }</span>
-										                    <span class="date" >
-										                    	<fmt:parseDate var="parsedReplyRegDate"
-																					value="${item.API_TRAN_DTM}" 
-																					pattern="yyyy-MM-dd'T'HH:mm:ss" 
-																					type="both" /> 
-																	<fmt:formatDate value="${parsedReplyRegDate}" pattern="yy.MM.dd" /> 
-																| ${classify}
-										                    </span>
-										                </div>
-										                <div class="amount">${symbol} <fmt:formatNumber pattern="#,###">${item.TRAN_AMT}</fmt:formatNumber></div>
-										            </div>
+							            			<c:if test="${status.index < 5}">
+		
+								            			<div class="history-item">
+											                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
+											                <div class="details">
+											                    <span>산업 ${item.FINTECH_USE_NUM }</span>
+											                    <span class="date" >
+											                    	<fmt:parseDate var="parsedReplyRegDate"
+																						value="${item.API_TRAN_DTM}" 
+																						pattern="yyyy-MM-dd'T'HH:mm:ss" 
+																						type="both" /> 
+																		<fmt:formatDate value="${parsedReplyRegDate}" pattern="yy.MM.dd" /> 
+																	| ${classify}
+											                    </span>
+											                </div>
+											                <div class="amount">${symbol} <fmt:formatNumber pattern="#,###">${item.TRAN_AMT}</fmt:formatNumber></div>
+											            </div>
+										            </c:if>
 							            		</c:forEach>
 								            </c:otherwise>
 							            </c:choose>

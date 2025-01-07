@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -77,34 +79,81 @@
 						                <button class="use-transfer-btn">송금</button>
 						                <button class="use-charge-btn">충전</button>
 						            </div>
+						            <c:forEach var="item" items="${recieverTransactionInfo}">
+				            			<div class="history-item">
+				            				<div class="icon"><i class="fa-solid fa-building-columns"></i></div>
+							                <div class="details">
+							                    <span>산업 ${item.RECEIVER_FINTECH_USE_NUM }</span>
+							                    <span class="date" >
+							                    	<fmt:parseDate var="parsedReplyRegDate"
+																		value="${item.API_TRAN_DTM}" 
+																		pattern="yyyy-MM-dd'T'HH:mm:ss" 
+																		type="both" /> 
+														<fmt:formatDate value="${parsedReplyRegDate}" pattern="yy.MM.dd" /> 
+													| 송금
+							                    </span>
+							                </div>
+							                <div class="amount">+ <fmt:formatNumber pattern="#,###">${item.TRAN_AMT}</fmt:formatNumber></div>
+				            			</div>	
+			            			</c:forEach>	
+				            		<c:forEach var="item" items="${transactionInfo}" varStatus="status">
+				            			<c:if test="${item.TRANSACTION_TYPE eq 'WI'}">
+				            				<c:set var="classify" value="충전"/>
+				            				<c:set var="symbol" value="+"/>
+				            			</c:if>
+				            			<c:if test="${item.TRANSACTION_TYPE eq 'TR'}">
+				            				<c:set var="classify" value="송금"/>
+				            				<c:set var="symbol" value="-"/>
+				            			</c:if>
+				            			<c:if test="${item.TRANSACTION_TYPE eq 'DE'}">
+				            				<c:set var="classify" value="환불"/>
+				            				<c:set var="symbol" value="-"/>
+				            			</c:if>
+
+				            			<div class="history-item">
+							                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
+							                <div class="details">
+							                    <span>산업 ${item.FINTECH_USE_NUM }</span>
+							                    <span class="date" >
+							                    	<fmt:parseDate var="parsedReplyRegDate"
+																		value="${item.API_TRAN_DTM}" 
+																		pattern="yyyy-MM-dd'T'HH:mm:ss" 
+																		type="both" /> 
+														<fmt:formatDate value="${parsedReplyRegDate}" pattern="yy.MM.dd" /> 
+													| ${classify}
+							                    </span>
+							                </div>
+							                <div class="amount">${symbol} <fmt:formatNumber pattern="#,###">${item.TRAN_AMT}</fmt:formatNumber></div>
+							            </div>
+				            		</c:forEach>
 						            <!-- 굿페이 이용 내역 -->
-							        <div class="history">
-							            <h3>2024년 12월</h3>
-							            <div class="history-item">
-							                <div class="icon"></div>
-							                <div class="details">
-							                    <span>쌀국수</span>
-							                    <span class="date">12.03 12:10 | 송금</span>
-							                </div>
-							                <div class="amount">-5,000원</div>
-							            </div>
-							            <div class="history-item">
-							                <div class="icon"></div>
-							                <div class="details">
-							                    <span>믹스커피</span>
-							                    <span class="date">12.03 12:10 | 송금</span>
-							                </div>
-							                <div class="amount">-15,000원</div>
-							            </div>
-							            <div class="history-item">
-							                <div class="icon"></div>
-							                <div class="details">
-							                    <span>우체국 1234</span>
-							                    <span class="date">12.03 12:10 | 충전</span>
-							                </div>
-							                <div class="amount">+100,000원</div>
-								    	</div>        
-							        </div><!-- history -->  
+<!-- 							        <div class="history"> -->
+<!-- 							            <h3>2024년 12월</h3> -->
+<!-- 							            <div class="history-item"> -->
+<!-- 							                <div class="icon"></div> -->
+<!-- 							                <div class="details"> -->
+<!-- 							                    <span>쌀국수</span> -->
+<!-- 							                    <span class="date">12.03 12:10 | 송금</span> -->
+<!-- 							                </div> -->
+<!-- 							                <div class="amount">-5,000원</div> -->
+<!-- 							            </div> -->
+<!-- 							            <div class="history-item"> -->
+<!-- 							                <div class="icon"></div> -->
+<!-- 							                <div class="details"> -->
+<!-- 							                    <span>믹스커피</span> -->
+<!-- 							                    <span class="date">12.03 12:10 | 송금</span> -->
+<!-- 							                </div> -->
+<!-- 							                <div class="amount">-15,000원</div> -->
+<!-- 							            </div> -->
+<!-- 							            <div class="history-item"> -->
+<!-- 							                <div class="icon"></div> -->
+<!-- 							                <div class="details"> -->
+<!-- 							                    <span>우체국 1234</span> -->
+<!-- 							                    <span class="date">12.03 12:10 | 충전</span> -->
+<!-- 							                </div> -->
+<!-- 							                <div class="amount">+100,000원</div> -->
+<!-- 								    	</div>         -->
+<!-- 							        </div>history   -->
 							 	</div>
 						    </div>
 						</div>

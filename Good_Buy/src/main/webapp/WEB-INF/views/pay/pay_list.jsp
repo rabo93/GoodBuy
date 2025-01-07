@@ -66,6 +66,12 @@
                 	<div class="my-container">
 						<div class="contents-ttl">
 							<h3>굿페이 메인</h3>
+							
+							송금은 계좌번호가 떠야되는 것이 아니고 물건 산 내역이 떠야함
+							전체 이용 내역에도 마찬가지 임
+							
+							페이 결제하면 무조건 여기에 뜨니까 맞춰야 id와 내역을 맞춰야 함.
+							
 							<div class="goodpay-container">
 								<c:if test="${empty recieverTransactionInfo }">
 									<c:set var="payAmount" value="${pay_amount}"/>
@@ -201,15 +207,18 @@
 						            			</c:forEach>	
 							            		<c:forEach var="item" items="${transactionInfo}" varStatus="status">
 							            			<c:if test="${item.TRANSACTION_TYPE eq 'WI'}">
+							            				<c:set var="detail" value="KDB산업은행 202407222***"/>
 							            				<c:set var="classify" value="충전"/>
 							            				<c:set var="symbol" value="+"/>
 							            			</c:if>
-							            			<c:if test="${item.TRANSACTION_TYPE eq 'TR'}">
-							            				<c:set var="classify" value="송금"/>
+							            			<c:if test="${item.TRANSACTION_TYPE eq 'DE'}">
+							            				<c:set var="detail" value="KDB산업은행 202407222***"/>
+							            				<c:set var="classify" value="환불"/>
 							            				<c:set var="symbol" value="-"/>
 							            			</c:if>
-							            			<c:if test="${item.TRANSACTION_TYPE eq 'DE'}">
-							            				<c:set var="classify" value="환불"/>
+							            			<c:if test="${item.TRANSACTION_TYPE eq 'TR'}">
+							            				<c:set var="detail" value="${productName }"/>
+							            				<c:set var="classify" value="송금"/>
 							            				<c:set var="symbol" value="-"/>
 							            			</c:if>
 							            			<c:if test="${status.index < 5}">
@@ -217,7 +226,7 @@
 								            			<div class="history-item">
 											                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
 											                <div class="details">
-											                    <span>산업 ${item.FINTECH_USE_NUM }</span>
+											                    <span>${detail }</span>
 											                    <span class="date" >
 											                    	<fmt:parseDate var="parsedReplyRegDate"
 																						value="${item.API_TRAN_DTM}" 

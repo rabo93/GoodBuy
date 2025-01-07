@@ -60,4 +60,6 @@ public interface PayMapper {
 	// 충전금액조회(송금받는사람 : 핀테크no로 조회)
 	Integer selectReceiverPayAmount(String fintech_use_num);
 
+	Map<String, String> selectPayInfo(String id);
+
 }

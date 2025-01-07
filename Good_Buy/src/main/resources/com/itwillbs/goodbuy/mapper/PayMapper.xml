@@ -166,6 +166,7 @@
 		<if test="type.equals('reciever_fintech')">
 		WHERE  RECEIVER_FINTECH_USE_NUM = #{fintech_use_num}
 		</if>
+		ORDER BY API_TRAN_DTM DESC
 	</select>
 	
 	
@@ -208,14 +209,6 @@
 	</select>
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
 	<!-- 거래내역 저장 -->
 	<insert id="insertPayInfo">
 		<selectKey keyProperty="pay_id" resultType="int" order="BEFORE">
@@ -236,4 +229,11 @@
 		  	 , 1 
 		  )	
 	</insert>
+	
+	<!-- 거래내역 조회 -->
+	<select id="selectPayInfo" resultType="map">
+		SELECT * 
+		  FROM PAYINFO
+		 WHERE BUYER_ID = #{id} 
+	</select>
 </mapper>

@@ -70,6 +70,7 @@
 						<div class="contents-ttl">
 							<h3>굿페이 > 이용내역</h3>
 							
+							송금은 계좌번호가 떠야되는 것이 아니고 물건 산 내역이 떠야함
 							
 							
 							<div class="goodpay-container">

@@ -61,8 +61,6 @@
 		        	<div class="my-container">
 						<div class="contents-ttl">
 							<h3>굿페이 > 굿페이 환불</h3>
-                
-                
                 			<div class="goodpay-container">
 							 	<div class="account-box">
 						        	<div class="info">
@@ -108,37 +106,6 @@
 						            </div>
 								</div><!-- account-box -->
 						    </div><!-- goodpay-container -->
-                
-<!-- 							 <div class="goodpay-container"> -->
-<!-- 							 	<h1>굿페이 환불 결과</h1> -->
-<%-- 								<h3>${account_holder_name} 고객님의 정보</h3> --%>
-<!-- 								<table border="1"> -->
-<!-- 									<tr> -->
-<%-- 										<th>사용자번호</th> 세션의 token 객체에 저장되어 있음 --%>
-<%-- 										<td>${token.user_seq_no}</td> --%>
-<!-- 									</tr> -->
-<!-- 									<tr> -->
-<!-- 										<th>핀테크이용번호</th> -->
-<%-- 										<td>${depositResult.FINTECH_USE_NUM}</td> --%>
-<!-- 									</tr> -->
-<!-- 									<tr> -->
-<!-- 										<th>상대방 계좌번호</th>사실 지금은 핀테크이용번호로 이체해서 상대방 계좌번호는 의미가 없다. -->
-<%-- 										핀테크 이용번호로 출금했으므로 임의의 계좌번호가 출력됨 --%>
-<%-- 										<td>${depositResult.DPS_ACCOUNT_NUM_MASKED}</td> --%>
-<!-- 									</tr> -->
-<!-- 									<tr> -->
-<!-- 										<th>출금금액</th> -->
-<%-- 										<td>￦ ${depositResult.TRAN_AMT}</td> --%>
-<!-- 									</tr> -->
-<!-- 									<tr> -->
-<!-- 										<th>출금일시</th> -->
-<%-- 										<td>${depositResult.API_TRAN_DTM}</td> --%>
-<!-- 									</tr> -->
-<!-- 									<tr> -->
-<!-- 										<th colspan="2"><input type="button" value="돌아가기" onclick="history.back()"></th> -->
-<!-- 									</tr> -->
-<!-- 								</table> -->
-<!-- 						    </div> -->
 						</div>
 					</div>
 				</section>

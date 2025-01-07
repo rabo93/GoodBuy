@@ -55,7 +55,7 @@ public class PayController {
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("GoodPayAuth")
 	public String goodPayAuth(HttpSession session, Model model) {
-		
+		String id = (String)session.getAttribute("sId");
 		PayToken token = (PayToken)session.getAttribute("token");
 		Map<String, Object> bankUserInfo = service.getPayUserInfo(token);
 		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
@@ -72,7 +72,22 @@ public class PayController {
 		// 충전금액 조회(송금, 충전 본인) : 내역이 없을 수도 있으므로 Integer로 리턴함.
 		Integer pay_amount_receive = service.getReceiverPayAmount(fintech_use_num);
 		
+		Map<String, String> userAccount = service.getPayAccountInfo(token.getUser_seq_no());
+
+		// 거래내역 조회 
+		Map<String, String> getPayInfo = service.getPayInfo(id);
+		Object productId = getPayInfo.get("PRODUCT_ID");
 		
+		int product_id = Integer.parseInt(productId.toString());
+		// 상품조회
+		ProductVO product = productService.productSearch(product_id);
+		String productName = product.getProduct_title();
+		model.addAttribute("productName", productName);
+		
+		
+		
+		
+		model.addAttribute("userAccount", userAccount);
 		model.addAttribute("recieverTransactionInfo", recieverTransactionInfo);
 		model.addAttribute("transactionInfo", transactionInfo);
 		model.addAttribute("pay_amount", pay_amount);

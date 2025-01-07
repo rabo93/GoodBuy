@@ -10,8 +10,10 @@ import javax.management.RuntimeErrorException;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.itwillbs.goodbuy.aop.AdminLog;
 import com.itwillbs.goodbuy.mapper.AdminMapper;
 import com.itwillbs.goodbuy.vo.FaqVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
@@ -28,6 +30,7 @@ public class AdminService {
 
 	// ============== [ 공통코드 ] ==============
 	// 공통코드 - 등록
+	@AdminLog
 	@Transactional
 	public int registCommonCode(Map<String, Object> mainCode, List<Map<String, Object>> subCodes) {
 		// 상위코드 등록
@@ -66,30 +69,26 @@ public class AdminService {
 	}
 
 	// 공통코드 컬럼 수정
+	@AdminLog
 	public int modifyCommonCode(Map<String, Object> param) {
 		return mapper.updateCommonCodes(param);
 	}
 
 	// 공통코드 컬럼 삭제
+	@AdminLog
 	@Transactional
 	public int removeCommonCode(Map<String, Object> param) {
 		// 상위코드 삭제
 		int deleteCommonCodeResult = mapper.deleteCommonCodes(param);
 		if(deleteCommonCodeResult == 0) {
+			log.info(">>> 삭제할 상위코드가 없습니다.");
 			throw new RuntimeException("공통코드 삭제에 실패했습니다.");
 		}
 		
 		// 하위코드 삭제
-		if(deleteCommonCodeResult > 0) {
-			// 하위코드 삭제
-			int deleteDeprecatedCommonCodeResult = mapper.deleteDeprecatedCommonCode();
-			
-	        return deleteCommonCodeResult + deleteDeprecatedCommonCodeResult;
-		} else {
-			log.info(">>> 삭제할 상위코드가 없습니다.");
-		}
+		int deleteDeprecatedCommonCodeResult = mapper.deleteDeprecatedCommonCode();
 		
-		return deleteCommonCodeResult;
+        return deleteCommonCodeResult + deleteDeprecatedCommonCodeResult;
 	}
 
 	// ============== [ 회원관리 ] ==============
@@ -104,6 +103,7 @@ public class AdminService {
 	}
 
 	// 회원 상태 수정
+	@AdminLog
 	public int modifyMemberInfo(MemberVO member) {
 		return mapper.updateMemberInfo(member);
 	}
@@ -119,12 +119,44 @@ public class AdminService {
 	}
 	
 	// 회원 삭제
+	@AdminLog
 	public int removeMember(String mem_id) {
 		return mapper.deleteMember(mem_id);
 	}
 	
-	// ============== [ 공지사항 관리 ] ==============
+	// ============== [ 신고 관리 ] ==============
 	// [ 신고 회원 관리 ]
+	// 신고 회원 목록 전체 컬럼 수 조회
+	public int getUserReportTotal() {
+		return mapper.selectUserReportTotal();
+	}
+	
+	// 신고 회원 검색 필터링 후 컬럼 수 조회
+	public int getUserReportFiltered(Map<String, Object> param) {
+		return mapper.selectUserReportFiltered(param);
+	}
+	
+	// 필터링 된 신고 회원 목록 가져오기
+	public List<Map<String, Object>> getUserReportList(Map<String, Object> param) {
+		return mapper.selectUserReportList(param);
+	}
+	
+
+	// 신고 회원 - 조치 및 수정
+	@AdminLog
+	@Transactional
+	public int modifyUserReport(Map<String, Object> param) {
+		// 회원 신고 횟수 누적
+		int updateReportCount = mapper.updateUserReportCount(param);
+		System.out.println("회원신고 누적횟수 결과 : " + updateReportCount);
+		
+		int updateUserReport = mapper.updateUserReport(param);
+		if(updateUserReport == 0) {
+			throw new RuntimeException("신고 조치 작업에 실패했습니다.");
+		}
+		
+        return updateReportCount + updateUserReport;
+	}
 	
 	// [ 신고 상품 관리 ]
 	// 신고 상품 목록 전체 컬럼 수 조회
@@ -143,6 +175,7 @@ public class AdminService {
 	}
 	
 	// 신고 상품 - 조치 및 수정
+	@AdminLog
 	public int modifyProductReport(Map<String, Object> param) {
 		return mapper.updateProductReport(param);
 	}
@@ -169,15 +202,16 @@ public class AdminService {
 	}
 	
 	// 공지사항 삭제
+	@AdminLog
 	public int removeNotice(List<Integer> deleteItems) {
 		return mapper.deleteNotice(deleteItems);
 	}
 	
 	// ============== [ FAQ 관리 ] ==============
 	// FAQ 목록 조회  (필터링, 검색어, 페이징 적용)
-	public List<Map<String, Object>> getFaqList(int start, int length, String searchValue, int faqCate, int listStatus, String orderColumn, String orderDir) {
+	public List<Map<String, Object>> getFaqList(Map<String, Object> param) {
 		log.info(">>> admin faq");
-		return mapper.selectFaqList(start, length, searchValue, faqCate, listStatus,  orderColumn, orderDir);
+		return mapper.selectFaqList(param);
 	}
 	
 	// FAQ 전체 컬럼 수 조회
@@ -186,16 +220,18 @@ public class AdminService {
 	}
 	
 	// FAQ 검색 컬럼 수 조회
-	public int getFaqFiltered(int faqCate, int listStatus, String searchValue) {
-		return mapper.selectFaqFiltered(faqCate, listStatus, searchValue);
+	public int getFaqFiltered(Map<String, Object> param) {
+		return mapper.selectFaqFiltered(param);
 	}
 	
 	// FAQ 수정
+	@AdminLog
 	public int modifyFaqInfo(Map<String, Object> param) {
 		return mapper.updateFaqInfo(param);
 	}
 	
 	// FAQ 삭제
+	@AdminLog
 	public int removeFaq(List<Integer> faqIds) {
 		return mapper.deleteFaq(faqIds);
 	}
@@ -216,33 +252,20 @@ public class AdminService {
 	
 	
 	// 답글 등록(수정)
+	@AdminLog
 	public int registReplyInfo(Map<String, Object> param) {
 		return mapper.updateReplyInfo(param);
 	}
 
 	// =========================================================================
 	// 로그 저장
+	// @Transactional(propagation = Propagation.REQUIRES_NEW)
+	// => Spring 트랜잭션 관리에서 트랜잭션의 전파 속성(Propagation)을 설정하는 옵션 중 하나
+	//    새로운 트랜잭션 생성, 독립적인 트랜잭션, 롤백 및 커밋의 독립성 특성을 지님
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public int registLog(Map<String, Object> result) {
 		return mapper.insertLog(result);
 	}
-
-
-
-
-
-
-
-	
-
-
-	
-
-
-
-
-
-
-
 
 	
 }

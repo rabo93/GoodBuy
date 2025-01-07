@@ -165,6 +165,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	    showDropdowns: true, // 년월 수동 설정 여부
 	    autoApply: false, // 확인/취소 버튼 사용여부
 		ranges: {
+            '오늘': [moment()], // 오늘
             '이번 달': [moment().startOf('month'), moment().endOf('month')], // 이번 달 전체
             '지난 달': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')], // 지난 달 전체
             '지난 7일': [moment().subtract(6, 'days'), moment()], // 최근 7일
@@ -193,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	});
 	
 	// 조치 사유 작성
-	$("#actionReason").on('keyup', () => {
+	$("#actionReason").on('keydown', () => {
 		fnChkByte($("#actionReason"), 500);
 	});
 	

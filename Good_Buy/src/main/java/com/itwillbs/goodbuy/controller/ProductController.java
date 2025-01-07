@@ -179,7 +179,7 @@ public class ProductController {
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("ProductShop")
 	public String productShop(@RequestParam String MEM_ID, Model model) {
-		List<Map<String, Object>> sellerList = productService.searchSellerList(MEM_ID);
+		Map<String, Object> sellerList = productService.searchSellerList(MEM_ID);
 		System.out.println(">>>>>>>>>>>>> " + sellerList);
 		model.addAttribute("sellerList", sellerList);
 		return "product/product_shop";

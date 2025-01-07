@@ -173,7 +173,8 @@
 	<select id="searchSellerList" resultType="map">
 		SELECT mem.MEM_PROFILE
 		     , mem.MEM_NICK
-		     , TRUNCATE(AVG(rev.REVIEW_SCORE)) AS AVG_SCORE
+		     , ROUND(AVG(rev.REVIEW_SCORE)) AS AVG_SCORE
+		     , ROUND(AVG(rev.REVIEW_SCORE)) / 5.0 * 100 AS PER_AVG_SCORE
 		FROM MEMBER mem
 		JOIN PRODUCT pro ON mem.MEM_ID = pro.MEM_ID
 		JOIN MYREVIEW rev ON pro.PRODUCT_ID = rev.PRODUCT_ID

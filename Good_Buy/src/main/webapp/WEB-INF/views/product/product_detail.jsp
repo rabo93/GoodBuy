@@ -42,7 +42,7 @@
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 				<!-- 신고 모달창 -->
 				<section class="item-report-modal">
-					<div class="modal-bg" onclick="toggleModal(close)"></div>
+					<div class="modal-bg" onclick="toggleModal('close')"></div>
 					<div class="modal-wrap">
 						<div class="modal-content">
 							<select class="modal-sb" name="modal-sb">
@@ -58,7 +58,7 @@
 								신고하기
 							</button>
 						</div>
-						<button class="model-close-btn" type="button" onclick="toggleModal(close)">
+						<button class="model-close-btn" type="button" onclick="toggleModal('close')">
 							닫기
 						</button>
 					</div>	
@@ -149,9 +149,9 @@
 								</c:if>
 							</div>
 							<c:if test="${not empty sessionScope.sId}">
-								<a href="javascript:void(0)" onclick="toggleModal(open)" class="item-report">
+								<button type="button" onclick="toggleModal('open')" class="item-report">
 									<i class="fa-solid fa-land-mine-on"></i>&nbsp;이 상품 신고하기
-								</a>
+								</button>
 							</c:if>
 						</div>
 					</div>

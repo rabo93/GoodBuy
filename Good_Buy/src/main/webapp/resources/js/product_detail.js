@@ -2,10 +2,10 @@ let url = new URL(window.location.href);
 
 // product_detail.jsp
 function toggleModal(action) {
-    if (action === 'open') {
+    if (action == 'open') {
         $('.modal-wrap').show();
         $('.modal-bg').show();
-    } else if (action === 'close') {
+    } else if (action == 'close') {
         $('.modal-wrap').hide();
         $('.modal-bg').hide();
     }

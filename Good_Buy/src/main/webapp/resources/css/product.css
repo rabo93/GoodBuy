@@ -303,8 +303,10 @@
 
 .item-detail .item-report {
 	margin: 10px 0 0 auto;
-	color: #cccccc;
+	color: var(--red);
 	cursor: pointer;
+	font-weight: 700;
+	background: transparent;
 }
 .item-report-modal .modal-bg{
 	display: none;

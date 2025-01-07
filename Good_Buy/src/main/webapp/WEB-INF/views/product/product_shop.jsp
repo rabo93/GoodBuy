@@ -36,8 +36,8 @@
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 				<section class="item-shop-section">
 					<div class="item-shop-seller-info">
-						<img src="${sellerList}" class="item-shop-seller-pic">
-						<div class="item-shop-seller-nick">${sellerList}</div>
+						<img src="${sellerList.MEM_PROFILE}" class="item-shop-seller-pic">
+						<div class="item-shop-seller-nick">${sellerList.MEM_NICK}</div>
 						<div class="item-shop-seller-review">
 							<div class="item-shop-seller-review-title">셀러평점</div>
 							<div class="item-shop-seller-review-star">★★★★★</div>

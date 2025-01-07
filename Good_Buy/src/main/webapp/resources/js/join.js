@@ -383,15 +383,34 @@ $("#joinForm").on("submit", checkSubmit);
 // 프로필 사진
 // 파일 선택 시 미리보기 기능
 function previewImage(event) {
-	let file = event.target.files[0]; // 사용자가 업로드한 파일 가져오기
-	let reader = new FileReader();
+	const input = event.target;
+//	let file = event.target.files[0]; // 사용자가 업로드한 파일 가져오기
+	const reader = new FileReader();
+	
 	reader.onload = function(e) {
-		document.getElementById('profile_preview').src = e.target.result;
+		const preview = document.getElementById('profile_preview');
+		preview.src = reader.result; // 선택한 이미지로 업데이트
+//		document.getElementById('profile_preview').src = e.target.result;
      };
-     reader.readAsDataURL(file);
+     
+     if (input.files && input.files[0]) {
+        reader.readAsDataURL(input.files[0]); // 파일 읽기
+    }
+//     reader.readAsDataURL(file);
 }
 
 
+
+
+
+
+
+
+
+
+
+
+//-----------------------------------------------------------------------
 // [ 수정완료 버튼 ]
 function myInfoModify(){
 	event.preventDefault(); // 조건 만족 전에 폼 제출 되는 것을 막음

@@ -43,6 +43,18 @@
     margin-right: 10px;
 }
 
+/* 신고하기 버튼 */
+.report-chat-button {
+    background-color: #fff;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    color: red;
+    cursor: pointer;
+    padding: 0;
+    margin-right: 10px;
+}
+
 .chat-header {
     padding: 10px;
     background-color: #fff;

@@ -452,6 +452,12 @@ public class PayController {
 		return "pay/pay_transfer_result";
 		
 	}
+	
+	@GetMapping("AllPayList")
+	public String allPayList() {
+		System.out.println("AllPayList");
+		return "pay/pay_use_list";
+	}
     
 	
 	

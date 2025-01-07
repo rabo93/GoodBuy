@@ -64,13 +64,20 @@
 							<section class="my-rev-wrap">
 								<div>
 									<form action="MyStore" class="my-frm" method="post">
-										<div>
-										
-										</div>
-										
 										<div class="set">
 											<div>
-												<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
+												<div class="box">
+													<c:choose>
+											            <c:when test="${not empty sessionScope.sProfile}">
+											            	<img src="${sessionScope.sProfile}?${System.currentTimeMillis()}" id="profile_preview"><br>
+<%-- 											            	<img src="${member.mem_profile}?${System.currentTimeMillis()}" id="profile_preview"><br> --%>
+											            </c:when>
+											            <c:otherwise>
+											                <!-- member.memProfile이 비어 있으면 기본 이미지 출력 -->
+											                <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview"><br>
+											            </c:otherwise>
+											        </c:choose>
+												</div>
 												<h3>${sessionScope.sNick}의 상점</h3><br> 
 											</div>
 										</div>

@@ -18,27 +18,6 @@ var receiver_id;
 //var sId;
 var product_id;
 
-$(".sidebar-item").on("dblclick", function() {
-	let index = $(this).data("index");
-	let room_id = $("#room_id" + index).val();
-	let title = $("#title" + index).val();
-	let receiver_id = $("#receiver_id" + index).val();
-	console.log("index =" + index);
-	console.log("room_id =" + room_id);
-	console.log("title =" + title);
-	console.log("receiver_id =" + receiver_id);
-	console.log("sender_id =" + sId);
-	//	room_id, title, sender_id, receive_id
-	let room = {
-		room_id : room_id,
-		title : title,
-		receiver_id : receiver_id,
-		sender_id : sId
-	}
-	
-	showChatRoom(room);
-})
-
 
 $(function() {
 	
@@ -62,6 +41,9 @@ $(function() {
 		if (data.type == TYPE_INIT) {	//	채팅 윈도우 초기화
 			showChatList(data);
 		}
+		if (data.type == TYPE_START) {
+			startChat(data);
+		}
 		if (data.type == TYPE_REQUEST_CHAT_LIST) {
 			console.log("채팅내역 수신");
 			console.log(data.message);
@@ -72,6 +54,7 @@ $(function() {
 		if (data.type == TYPE_TALK) {	// 채팅 입력
 			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
 		}
+		
 		
 	};
 	
@@ -99,7 +82,58 @@ function initChat() {
 }
 //	채팅방 목록 표시
 function showChatList(data) {
+	console.log("receiver_id : " + receiver_id);
+	console.log(data.message + " : " + typeof(data.message));
+//	$(".sidebar").empty();
+	
+	if(data.message == "null") {
+		$(".sidebar").html("<div class='sidebar-item empty'>채팅중인 채팅방 없음</div>")
+	} else {
+		for(let room of JSON.parse(data.message)) {
+			appendChatRoomList(room);
+		}
+	}
+	
 	sendMessage(TYPE_INIT_COMPLETE, product_id, "", receiver_id, "", "");
+}
+//	채팅방 생성 및 채팅창 목록 추가
+function startChat(data) {
+	console.log("startChat - 채팅방 생성");
+	console.log(data);
+	console.log(JSON.parse(data.message));
+	//	"채팅중인 채팅방 없음" 삭제
+	$(".sidebar-item.empty").remove();
+	
+	appendChatRoomList(JSON.parse(data.message));
+}
+//	채팅방 정보 추가
+function appendChatRoomList(room) {
+	console.log("채팅방 정보 추가 - " + room);
+	console.log(room);
+	
+	if(!$(".sidebar-item").hasClass(room.room_id)) {
+		let title = room.title;
+		let divRoom = "<div class='sidebar-item " + room.room_id + "'>"
+							+ '<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>'
+		                + '<div class="item-container">'
+			            	+ '<div class="item"><strong>' + title + '</strong></div>'
+			                + '<div class="item-chat">상품 구매하고 싶어요 <span>&nbsp; · &nbsp; 2024.12.30 12:40</span></div>'
+		                + '</div>'
+		                + "<span class='messageStatus'>3</span>"
+					+ "</div>";
+		$(".sidebar").prepend(divRoom);
+		
+		//	채팅방 더블클릭시 채팅창 활성화
+		$(".sidebar-item." + room.room_id).on("dblclick", function() {
+//			if($(".chat-area").length == 1 && $(".sidebar-item .room_id").val() != room.room_id) {
+//				closeRoom();
+//				showChatRoom(room);
+//			}
+			showChatRoom(room);
+		})
+		
+	}
+	
 }
 
 //	채팅창 생성
@@ -109,22 +143,22 @@ function showChatRoom(room) {
 	let url = new URL(location.href);
 	
 	let divRoom = 	  '<div class="extra-header">'
-						+ '<button class="close-chat-button" onclick="closeChat()">'
+						+ '<button class="close-chat-button" onclick="closeSlideChat()">'
 							+ '<i class="fa-solid fa-arrow-left"></i>'
 						+ '</button>'
-						+ '<button class="report-chat-button" onclick="reportChat()">'
-//							+ '<img src="${pageContext.request.contextPath}/resources/img/siren.png">'
-							+ '<i class="fa-solid fa-land-mine-on"></i>&nbsp;신고하기'
+						+ '<button class="close-chat-button" onclick="reportChat()">'
+							+ '<img src="${pageContext.request.contextPath}/resources/img/siren.png">'
 						+ '</button>'
 					+ '</div>'
 					+ '<div class="chat-header">'
 			           	+ '<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>'
 			           	+ '<div class="title">'+ room.title +' </div>'
-			           	+ '<button class="item-button" onclick="openPayWindow(' + room.product_id + ', \'' + room.receiver_id + '\')">구매하기</button>'
+	//		           	+ '<button class="item-button" onclick="location.href=' + '\'PayTransferRequest?product_id=' + product_id + '&receiver_id=' + receiver_id + '\'' + '">구매하기</button>'
+			           	+ '<button class="item-button" onclick="openPayWindow(product_id, receiver_id)">구매하기</button>'
 			           + '</div>'
 			           + '<div class="chat-body">'
 			           + '</div>'
-		           + '<div class="chat-footer">'
+			           + '<div class="chat-footer">'
 			           	+ '<input type="hidden" id="room_id" value="' + room.room_id +'">'
 			           	+ '<input type="hidden" id="receiver_id" value="' + room.receiver_id +'">'
 			           	+ '<input type="hidden" id="sId" value="' + room.sender_id +'">'
@@ -160,6 +194,8 @@ function showChatRoom(room) {
 	
 	//	기존 채팅 내역 불러오기 작업 예정
 	sendMessage(TYPE_REQUEST_CHAT_LIST, product_id, sId, "", room.room_id, "");
+	
+	
 	
 }
 //	=========================채팅방 목록 작업 끝===============================
@@ -209,9 +245,8 @@ function sendInputMessage() {
 function sendMessage(type, product_id, sender_id, receiver_id, room_id, message) {
 	opener.sendMessage(type, product_id, sender_id, receiver_id, room_id, message);
 }
-function closeChat() {
-	$(".chat-area").empty();
-}
+
+
 // ==============================================================================
 // 결제창 열기 - 창을 작게 열려고 함수로 만들었음
 function openPayWindow(product_id, receiver_id) {
@@ -219,3 +254,5 @@ function openPayWindow(product_id, receiver_id) {
               "&receiver_id=" + encodeURIComponent(receiver_id) ;
     payWindow = window.open(url, "chat_window", "width=500,height=500");
 }
+
+

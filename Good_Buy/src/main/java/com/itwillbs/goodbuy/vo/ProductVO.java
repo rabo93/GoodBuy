@@ -5,14 +5,17 @@ import java.sql.Timestamp;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class ProductVO {
 	private int product_id;
 	private String product_title;	//	상품명
 	private String mem_id;
 	private String mem_nick;
 	private String mem_profile;
+	private int wishlist_id;
 	private String product_intro; //상품소개
 	private int product_shpping_fee;
 	private int product_price;

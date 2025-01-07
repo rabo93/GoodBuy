@@ -34,17 +34,20 @@
 		<section class="wrapper">
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
-				<div class="container">
+				<div class="container chat-list">
 			        <div class="sidebar"> 
-<%-- 			        	<c:forEach items="${chatRoomList}" var="chatRoom"> --%>
-<%-- 				            <div class="sidebar-item ${chatRoom.room_id}"> --%>
-<%-- 				                <a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a> --%>
-<!-- 				                <div class="item-container"> -->
-<%-- 					                <div class="item"><strong>controller ${chatRoom.title}</strong></div> --%>
-<!-- 					                <div class="item-chat">상품 구매하고 싶어요 <span>&nbsp; · &nbsp; 2024.12.30 12:40</span></div> -->
-<!-- 				                </div> -->
-<!-- 				            </div> -->
-<%-- 			        	</c:forEach> --%>
+			        	<c:forEach items="${chatRoomList}" var="chatRoom" varStatus="status">
+				            <div class="sidebar-item ${chatRoom.room_id}" data-index="${status.index}">
+				                <a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>
+				                <div class="item-container">
+				                	<input type="hidden" id="room_id${status.index}" value="${chatRoom.room_id}">
+				                	<input type="hidden" id="title${status.index}" value="${chatRoom.title}">
+				                	<input type="hidden" id="receiver_id${status.index}" value="${chatRoom.receiver_id}">
+					                <div class="item"><strong>${chatRoom.title}</strong></div>
+					                <div class="item-chat">상품 구매하고 싶어요 <span>&nbsp; · &nbsp; 2024.12.30 12:40</span></div>
+				                </div>
+				            </div>
+			        	</c:forEach>
 <!-- 				            <div class="sidebar-item" onclick="testOpenChat(1)"> -->
 <%-- 				                <a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a> --%>
 <!-- 				                <div class="item-container"> -->
@@ -106,5 +109,9 @@
 <!-- 	</footer> -->
 <%-- 	<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script> --%>
 	<script src="${pageContext.request.contextPath}/resources/js/chat_main.js"></script>
+	<script>
+		const imgURL = ${pageContext.request.contextPath} + "/resources/img/testPicture.png";
+		
+	</script>
 </body>
 </html>

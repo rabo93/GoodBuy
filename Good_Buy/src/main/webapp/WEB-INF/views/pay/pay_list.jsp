@@ -171,10 +171,14 @@
 						
 						        <!-- 최근 이용 내역 -->
 							        <div class="history">
+<<<<<<< HEAD
 							        
 							            <h3>최근 이용내역 <a href="pay_use_list.jsp" class="see-all">전체보기 ></a></h3>
 							            ${empty recieverTransactionInfo }
 							            ${empty transactionInfo }
+=======
+							            <h3>최근 이용내역 <a href="AllPayList" class="see-all">전체보기 ></a></h3>
+>>>>>>> branch 'main' of https://github.com/jhk727/good_buy.git
 							            <c:choose>
 							            	<c:when test="${empty transactionInfo and empty recieverTransactionInfo}">
 								            	<div class="history-item empty-text">

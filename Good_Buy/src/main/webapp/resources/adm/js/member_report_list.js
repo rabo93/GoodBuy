@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", function(){
-//	const modifyForm = document.querySelector("#modifyForm");
-	const supportList = $('#supportList').DataTable({
+	const memberReport = $('#memberReport').DataTable({
 		lengthChange : true, // 건수
-		searching : false, // 검색
+		searching : true, // 검색
 		info : true, // 정보
 		ordering : true, // 정렬
 		paging : true,
@@ -11,20 +10,19 @@ document.addEventListener("DOMContentLoaded", function(){
 		scrollX: true, 
 		autoWidth: false,
 		ajax : {
-			url: "AdmSupportList",
+			url: "AdmMemberReportList",
 			type: "POST",
 			dataType : "JSON",
 			data: function(d) {
-                d.status = $('input[name="status"]:checked').val(); //상태별
-                d.searchDate = $("#schDate").val(); //기간별
-                d.searchValue = $('input[name="keyword_search"]').val(); //키워드 검색
+                d.status = $('input[name="status"]:checked').val();
+                d.searchValue = $('input[name="keyword_search"]').val();
+                d.searchDate = $("#schDate").val();
             },
 			dataSrc: function (res) {
-//				console.log("res: " + JSON.stringify(res));
-				const data = res.EnquireList;
-				const start = $('#supportList').DataTable().page.info().start; 
+				const data = res.memberReportList;
+				const start = $('#memberReport').DataTable().page.info().start; 
 				
-				// PK가 아닌 테이블 컬럼 번호 계산(페이징 포함)
+				// 회원번호(PK)가 아닌 테이블 컬럼 번호 계산(페이징 포함)
 				for (let i = 0; i < data.length; i++) {
 					data[i].listIndex = start + i + 1;
 				}
@@ -40,22 +38,8 @@ document.addEventListener("DOMContentLoaded", function(){
 			// 회원가입 시 유효성 체크를 한다면 defaultContent 값 설정 필요 없음!
             { title: "No.", data: "listIndex", className : "dt-center", width: '30px', },
             { 
-				title: "문의 유형", 
-				data : "SUPPORT_CATEGORY", 
-				defaultContent: "이용문의", 
-				className : "dt-center", 
-				render : function(data, type, row) {
-					const categories = {
-						1: "이용문의",
-						2: "결제문의",
-						3: "기타",
-					};
-					return `<span class='support-cate' status>${categories[data] || ""}</span>`
-				},
-             },
-            { 
-				title: "작성자ID", 
-	            data : "MEM_ID",
+				title: "신고자ID", 
+	            data : "REPORTER_ID", 
 	            defaultContent: "",
 	            width: '120px',
 	            render: function (data, type, row) {
@@ -65,9 +49,14 @@ document.addEventListener("DOMContentLoaded", function(){
                 	return data.replace(/(.{16})/g, '$1<br>'); // 16자마다 줄바꿈
            		}
             },
-            { title: "문의 제목", data : "SUPPORT_SUBJECT", defaultContent: "", orderable: false},
-            { title: "문의 내용", data : "SUPPORT_CONTENT", defaultContent: "", orderable: false},
-            { title: "작성일시", data : "SUPPORT_DATE", defaultContent: "", width: '180px',},
+            { title: "상품ID", data : "PRODUCT_ID", defaultContent: "", width: '100px',},
+            { title: "상품명", data : "PRODUCT_TITLE", defaultContent: "", 
+            	render : function(data, type, row) {
+					return `<a href="ProductDetail?PRODUCT_ID=${row.PRODUCT_ID}" target="_blank" title="새 창 열기">${data}</a>`;
+				}
+            },
+            { title: "신고일시", data : "REPORT_DATE", defaultContent: "", width: '180px',},
+            { title: "신고사유", data : "REASON", defaultContent: "", },
             { 
 				title: "처리상태", data : "STATUS", defaultContent: "", width: '100px', className : "dt-center",
 				render : function(data, type, row) {
@@ -80,9 +69,9 @@ document.addEventListener("DOMContentLoaded", function(){
 				    }
 				}
             },
-//            { title: "답변자", data : "ADMIN_ID", defaultContent: "", width: '100px', },
-            { title: "답변내용", data : "REPLY_CONTENT", defaultContent: "", orderable: false},
-            { title: "답변일시", data : "REPLY_DATE", defaultContent: "", width: '180px', },
+            { title: "조치사유", data : "ACTION_REASON", defaultContent: "", },
+            { title: "조치자", data : "ADMIN_ID", defaultContent: "", width: '100px', },
+            { title: "조치일시", data : "ACTION_DATE", defaultContent: "", width: '180px', },
             {
 				title : "관리",
 				data: null,
@@ -90,11 +79,11 @@ document.addEventListener("DOMContentLoaded", function(){
 				className : "dt-center",
 				width: '120px',
 				render : function(data, type, row) {
-					const text = row.STATUS !== "접수" ? "수정" : "답변달기";
+					const text = row.STATUS !== "접수" ? "결과보기" : "조치하기";
 					const className = row.STATUS !== "접수" ? "primary" : "warning";
 					return `
-						<button class="btn btn-${className} edit-btn" data-toggle="modal" data-target="#updateSupportInfo"
-						 data-support-id="${row.SUPPORT_ID}">${text}</button>
+						<button class="btn btn-${className} edit-btn" data-toggle="modal" data-target="#updateMemberInfo"
+						 data-report-id="${row.REPORT_ID}">${text}</button>
 					`;
 				}
 			}
@@ -120,49 +109,37 @@ document.addEventListener("DOMContentLoaded", function(){
         },
 	});
 	
-	// 답글달기 팝업 셋팅
-	supportList.on("click", '.edit-btn', function() {
+	// 신고 조치 팝업 셋팅
+	memberReport.on("click", '.edit-btn', function() {
 		const row = $(this).closest('tr');
-		const rowData = supportList.row(row).data();
+		const rowData = productReport.row(row).data();
 
-		// 문의내역에 문의내용 보이기
-		const supportContent = rowData.SUPPORT_CONTENT
-		const enquireContent = document.querySelector("#enquireContent");
-        enquireContent.value = rowData.SUPPORT_CONTENT || "";
-		
 		const status = rowData.STATUS;
-		const replyContent = rowData.REPLY_CONTENT != null ? rowData.REPLY_CONTENT : "";
+		const actionReason = rowData.ACTION_REASON != null ? rowData.ACTION_REASON : "";
+		const productId = document.querySelector("#productId");
+		const reportId = document.querySelector("#reportId");
+		const statusSelect = document.querySelector(`#reportStatus option[value="${status}"]`);
+		const reasonTextarea = document.querySelector("#actionReason");
 		
-		// DB에 저장할 id속성 가져오기
-		const supportId = document.querySelector("#supportId"); //게시글id
-//		const memId = document.querySelector("#memId"); 		//작성자id
-//		const adminId = document.querySelector("#adminId");		//관리자id
-		const statusSelect = document.querySelector(`#supportStatus option[value="${status}"]`);
-		const reasonTextarea = document.querySelector("#replyContent");
-		
-		// DB에 저장할 값 저장
-		supportId.value = rowData.SUPPORT_ID;
+		reportId.value = rowData.REPORT_ID;
+		productId.value = rowData.PRODUCT_ID;
+		reasonTextarea.value = actionReason;
 	    if (statusSelect) statusSelect.selected = true;
-		reasonTextarea.value = replyContent;
-		
-		// 글자 수 표시
-		const contentLength = rowData.REPLY_CONTENT.length;
-   		$("#lengthInfo").text(contentLength); 
-		
+	    
 	});
 	
 	// 기존 검색 숨기기
-	$("#supportList_filter").attr("hidden", "hidden");
+	$("#memberReport_filter").attr("hidden", "hidden");
 	
 	 // 필터 변경 시 데이터 테이블 다시 로드
-    $('input[name="status"]').on('change', () => supportList.draw());
+    $('input[name="status"]').on('change', () => productReport.draw());
 
     // 검색 버튼 클릭 시 테이블 다시 로드
-    $('#searchBtn').on('click', () => supportList.draw());
+    $('#searchBtn').on('click', () => productReport.draw());
     
     // 엔터키 입력으로 검색
     $('#searchKeyword').on('keypress', (e) => {
-        if (e.which == 13)  supportList.draw();
+        if (e.which == 13)  productReport.draw();
     });
     
 	// 기간별 검색 필터링 제이쿼리
@@ -206,17 +183,17 @@ document.addEventListener("DOMContentLoaded", function(){
 	// 날짜 검색 초기화
 	$("#initDateBtn").on('click', function() {
 		$('#schDate').val('');
-		supportList.draw();
+		productReport.draw();
 	});
 	
     // 기간별 검색 후 테이블 다시 로드
     $("#searchDateBtn").on('click', function() {
-		supportList.draw();
+		productReport.draw();
 	});
 	
-	// 답글 작성
-	$("#replyContent").on('keyup', () => {
-		fnChkByte($("#replyContent"), 500);
+	// 조치 사유 작성
+	$("#actionReason").on('keyup', () => {
+		fnChkByte($("#actionReason"), 500);
 	});
 	
 	// 글자수 제한 함수

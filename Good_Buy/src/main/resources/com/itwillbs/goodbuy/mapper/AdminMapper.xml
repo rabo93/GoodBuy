@@ -754,16 +754,17 @@
      <!-- 필터링 된 거래내역 목록 조회 - SELECT -->
      <select id="selectOrderList" resultType="order">
      	SELECT pi.PAY_ID
-			,pi.SELLER_ID
-			 ,pi.PRODUCT_ID
-		    ,pr.PRODUCT_CATEGORY
-			,pr.PRODUCT_TITLE
-			,pr.PRODUCT_PRICE
-			,pi.BUYER_ID
-			,pi.PAY_PRICE
-			,pi.PAY_DATE
-			,pi.PAY_ADDRESS
-			,pi.PAY_STATUS 
+			, pi.SELLER_ID
+			, pi.PRODUCT_ID
+		    , pr.PRODUCT_CATEGORY
+			, pr.PRODUCT_TITLE
+			, pr.PRODUCT_PRICE
+			, pi.BUYER_ID
+			, pi.PAY_PRICE
+			, pi.PAY_DATE
+<!-- 			, DATE_FORMAT(pi.PAY_DATE, '%Y-%m-%d %H:%i:%s') -->
+			, pi.PAY_ADDRESS
+			, pi.PAY_STATUS 
 		FROM PAYINFO pi JOIN PRODUCT pr
 		ON pi.PRODUCT_ID = pr.PRODUCT_ID
 		WHERE 1 = 1

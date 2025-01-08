@@ -1,8 +1,5 @@
 package com.itwillbs.goodbuy.controller;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +74,6 @@ public class PayController {
 		// 거래내역 조회 
 		Map<String, String> getPayInfo = service.getPayInfo(id);
 		Object productId = getPayInfo.get("PRODUCT_ID");
-		
 		int product_id = Integer.parseInt(productId.toString());
 		// 상품조회
 		ProductVO product = productService.productSearch(product_id);
@@ -498,6 +494,16 @@ public class PayController {
 		List<Map<String, String>> transactionInfo = service.getTransactionDetail(token.getUser_seq_no());
 		// 거래내역조회 - 송금받은 유저
 		List<Map<String, String>> recieverTransactionInfo = service.getReceiverTransactionDetail(fintech_use_num);
+		
+		String id = (String)session.getAttribute("sId");
+		// 거래내역 조회 
+		Map<String, String> getPayInfo = service.getPayInfo(id);
+		Object productId = getPayInfo.get("PRODUCT_ID");
+		int product_id = Integer.parseInt(productId.toString());
+		// 상품조회
+		ProductVO product = productService.productSearch(product_id);
+		String productName = product.getProduct_title();
+		model.addAttribute("productName", productName);
 		
 		model.addAttribute("transactionInfo", transactionInfo);
 		model.addAttribute("recieverTransactionInfo", recieverTransactionInfo);

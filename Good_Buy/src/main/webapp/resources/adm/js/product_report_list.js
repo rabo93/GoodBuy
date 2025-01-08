@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function(){
 		},
 		order: [[4, 'desc']], // 최초 조회 시 신고일시 최신순으로 기본 설정
 		columnDefs: [
-			 { targets: [0, 9], orderable: false },
+			 { targets: [0, 10], orderable: false },
 		],
 		columns: [
 			// defaultContent 는 기본값 설정, 데이터 없는 컬럼일 경우 오류나기 때문에 널스트링 처리 해주어야 함

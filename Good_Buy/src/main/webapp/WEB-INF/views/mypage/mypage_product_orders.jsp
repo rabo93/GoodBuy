@@ -128,8 +128,20 @@
             <h2>
                 <span id="buyerName"></span>님께 구매한 [<span id="productTitle"></span>]<br>후기 보내기📮
             </h2>
+	        <br>
+           	<label><input type="radio" name="score" value="2">최고예요👍</label>
+          	<label><input type="radio" name="score" value="1">좋아요💕</label>
+           	<label><input type="radio" name="score" value="0">별로예요🥲</label>
             <input type="hidden" id="modal_product_id"> <!-- id저장용 -->
 <!--             <input type="hidden" id="modal_review_cnt"> 리뷰 갯수 저장용 -->
+			<!-- 추가 리뷰 옵션 (중복 선택 가능) -->
+	        <br><br>
+	        <h3>추가로 만족한 부분을 선택해 주세요 (복수 선택 가능)</h3>
+	        <label><input type="checkbox" name="reviewOptions" value="1"> 배송이 빨라요🚚</label>
+	        <label><input type="checkbox" name="reviewOptions" value="2"> 친절해요😊</label><br>
+	        <label><input type="checkbox" name="reviewOptions" value="3"> 물건상태가 좋아요✨</label>
+	        <label><input type="checkbox" name="reviewOptions" value="4"> 또 거래하고 싶어요💰</label>
+	        <br><br>
             <textarea rows="4" cols="50" id="review_content" placeholder="후기를 작성해주세요."></textarea>
             <br>
             <button id="close-modal">닫기</button>
@@ -166,6 +178,12 @@
             const reviewText = $("#review_content").val();
             const productId = $("#modal_product_id").val();
             const productTitle = $("#productTitle").text();
+            const score = $("input[name='score']:checked").val();
+         // 여러 개의 체크된 옵션을 수집
+            const reviewOptions = $("input[name='reviewOptions']:checked").map(function () {
+                return this.value;  // 체크된 모든 값을 가져와 배열로 반환
+            }).get().join(",");  // 콤마(,)로 구분된 문자열로 변환
+
 // 			const review_cnt = $("#modal_review_cnt").val();
 
             if (!reviewText.trim()) {
@@ -177,6 +195,8 @@
             console.log("리뷰 내용: " + reviewText);
             console.log("상품 ID: " + productId);
             console.log("상품 제목: " + productTitle);
+            console.log("평점: " + score);
+            console.log(">>>추가평점: " + reviewOptions);
 // 			console.log(">>>>>>>>>>>>"+review_cnt);
 			  
 
@@ -189,6 +209,8 @@
                     review: reviewText,
                     product_title: productTitle,
                     product_id: productId,
+                    score: score,
+                    reviewOptions:reviewOptions
 //                     review_cnt : review_cnt
                 }),
                 success: function () {

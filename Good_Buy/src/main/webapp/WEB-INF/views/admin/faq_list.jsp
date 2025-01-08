@@ -55,7 +55,7 @@
                                 	<div class="search-wrap border">
 									   	<section class="d-flex search-inner">
 									   		<!-- 분류 단추 -->
-									   		<div class="col pl-4 search-box">
+									   		<div class="col-5 pl-4 search-box">
 			                                	<div class="search-ttl">FAQ유형별</div>
 											    <div class="category-filter input-group">
 											        <div class="form-check">
@@ -84,7 +84,7 @@
 													</div>
 											    </div>
 										    </div>
-										    <div class="col pl-4 search-box">
+										    <div class="col-3 pl-4 search-box">
 			                                	<div class="search-ttl">사용여부별</div>
 											    <div class="category-filter input-group">
 											    	<div class="form-check">
@@ -101,9 +101,7 @@
 													</div>
 											    </div>
 										    </div>
-									   	
-									   		<!-- 검색 -->
-										    <div class="col-6 search-box">
+										    <div class="col-4 search-box">
 						                        <div class="input-group">
 						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="제목 또는 내용 검색" aria-label="Search" aria-describedby="basic-addon2">
 						                            <div class="input-group-append">
@@ -115,7 +113,7 @@
 									   	
 									</div>
 									<!-- 작성하기/선택삭제 -->
-			                        <div class="col-6 d-flex justify-right">
+			                        <div class="w-100 d-flex justify-right">
 										<button class="btn btn-primary ml-auto" type="button" id="btnAddRow" onclick="window.open('FaqMain')"><i class="fa-regular fa-pen-to-square"></i> 작성하기</button>
 										<button class="btn btn-danger ml-2" type="button" id="btnDeleteRow"><i class="fa-solid fa-trash-can"></i> 선택 삭제</button>
                                     </div>

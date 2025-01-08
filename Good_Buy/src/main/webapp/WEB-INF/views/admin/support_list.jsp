@@ -56,7 +56,7 @@
                                 <div class="card-body">
                                 	<div class="search-wrap border">
                                 		<section class="d-flex search-inner">
-	                                		<div class="col-3 px-4 search-box">
+	                                		<div class="col-4 px-4 search-box">
 			                                	<div class="search-ttl">상태별</div>
 											    <div class="category-filter input-group">
 											        <div class="form-check">
@@ -85,7 +85,7 @@
 													<button class="btn btn-success ml-2" id="initDateBtn" type="button"><i class="fa-solid fa-rotate"></i></button>
 												</div>
 										    </div>
-										    <div class="col-5 px-4 search-box">
+										    <div class="col-4 px-4 search-box">
 						                        <div class="input-group">
 						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="회원ID, 문의제목, 문의내용, 처리상태 검색" aria-label="Search" aria-describedby="basic-addon2">
 						                            <div class="input-group-append">
@@ -126,7 +126,6 @@
     </a>
     
     <!-- 답글 모달 -->
-<!--     <div class="modal fade" id="updateMemberInfo" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true"> -->
     <div class="modal fade" id="updateSupportInfo" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 		    <div class="modal-content">
@@ -151,6 +150,12 @@
 							<label class="small mb-1" for="enquireContent">문의 내용</label>
 							<input type="text" class="form-control" name="SUPPORT_CONTENT" id="enquireContent" readonly required>
 						</div>
+						
+						<div class="mb-3">
+							<label class="small mb-1" for="supportFile">첨부파일 확인</label>
+	                        <div id="supportFile"></div>
+						</div>
+						
 						<div class="mb-3">
 							<label class="small mb-1" for="replyContent">답변 내용</label>
 							<textarea class="form-control" col="4" id="replyContent" name="REPLY_CONTENT" placeholder="답글을 입력하세요" required></textarea>
@@ -185,7 +190,10 @@
 
     <!-- Page level custom scripts -->
     <script src="${pageContext.request.contextPath}/resources/adm/js/support_list.js"></script>
-
+	<!-- contextPath 변수 설정 -->
+	<script type="text/javascript">
+	 	const contextPath = "${pageContext.request.contextPath}";
+	</script>
 </body>
 
 

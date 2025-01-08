@@ -28,6 +28,7 @@
 <!-- JS for Page -->
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/product_detail.js"></script>
 
 </head>
@@ -212,7 +213,12 @@
 											<div class="card-row">
 												<span class="add">${list.PRODUCT_TRADE_ADR1}</span>
 												<span class="name">${list.MEM_NICK}</span>
-												<span class="time"></span>
+												<span class="time">
+													<script type="text/javascript">
+														moment.locale('ko')
+														$(".time").text(moment(`${list.PRODUCT_REG_DATE}`, "YYYYMMDDhhmmss").fromNow())
+													</script>
+												</span>
 											</div>
 										</div>
 									</li>	
@@ -244,7 +250,12 @@
 											<div class="card-row">
 												<span class="add">${list.PRODUCT_TRADE_ADR1}</span>
 												<span class="name">${list.MEM_NICK}</span>
-												<span class="time"></span>
+												<span class="time">
+													<script type="text/javascript">
+														moment.locale('ko')
+														$(".time").text(moment(`${list.PRODUCT_REG_DATE}`, "YYYYMMDDhhmmss").fromNow())
+													</script>
+												</span>
 											</div>
 										</div>
 									</li>	

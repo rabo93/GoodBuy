@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +25,8 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/product.css">
 
 <!-- JS for Page -->
-<script src="${pageContext.request.contextPath}/resources/js/product.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/product_shop.js"></script>
 
 </head>
 <body>
@@ -36,111 +39,62 @@
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 				<section class="item-shop-section">
 					<div class="item-shop-seller-info">
-						<img src="${sellerList.MEM_PROFILE}" class="item-shop-seller-pic">
-						<div class="item-shop-seller-nick">${sellerList.MEM_NICK}</div>
+						<img src="${searchSeller.MEM_PROFILE}" class="item-shop-seller-pic">
+						<div class="item-shop-seller-nick">${searchSeller.MEM_NICK}</div>
 						<div class="item-shop-seller-review">
 							<div class="item-shop-seller-review-title">셀러평점</div>
 							<div class="item-shop-seller-review-star">★★★★★</div>
 						</div>
 					</div>
 					<h1 class="sec-ttl">
-					이 판매자가 판매하는 다른 물품
+					이 판매자가 판매하는 물품
 					<button class="more"><svg class="svg-inline--fa fa-chevron-right" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" data-fa-i2svg=""><path fill="currentColor" d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"></path></svg><!-- <i class="fa-solid fa-chevron-right"></i> Font Awesome fontawesome.com --></button>
 					</h1>
 					<div class="product-list" style="margin-bottom: 20px">
 						<ul class="product-wrap">
 							<!-- 8개 -->
-							<li class="product-card">
-								<img src="/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail">
-								<div class="card-info">
-									<div class="category">
-										<span>생활용품</span>
-										<span class="type">직거래</span>
+							<c:forEach items="${searchSellerProduct}" var="list" step="1" end="3">
+								<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.product_id}'">
+									<img src="${pageContext.request.contextPath}/resources/upload/${list.product_pic1}" class="card-thumb" alt="thumbnail" />
+									<div class="card-info">
+										<div class="category">
+											<span>${list.product_category}</span>
+											<c:if test="${list.product_trade_adr1 != ''}">
+												<span class="type">직거래</span>
+											</c:if>
+										</div>
+										<div class="ttl">${list.product_title}</div>
+										<div class="price">
+										 	<fmt:formatNumber var="price" value="${list.product_price}" type="number"/>
+										 	${price} 원
+										 </div>
+										<div class="card-row">
+											<span class="add">${list.product_trade_adr1}</span>
+											<span class="name">${list.mem_nick}</span>
+											<span class="time">
+												<script type="text/javascript">
+													moment.locale('ko')
+													$(".time").text(moment(`${list.product_reg_date}`, "YYYYMMDDhhmmss").fromNow())
+												</script>
+											</span>
+										</div>
 									</div>
-									<div class="ttl">젠하이저 H3PRO 팝니다 제목은 두줄까지 가능합니다 젠하이저 H3PRO 팝니다 제목은 두줄까지 가능합니다</div>
-									<div class="price">55,000 원</div>
-									<div class="card-row">
-										<span class="add">부산 해운대구</span>
-										<span class="name">홍길동동이</span>
-										<span class="time">1분 전</span>
-									</div>
-								</div>
-							</li>
-							<li class="product-card">
-								<img src="/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail">
-								<div class="card-info">
-									<div class="category">
-										<span>생활용품</span>
-										<span class="type">직거래</span>
-									</div>
-									<div class="ttl">젠하이저 H3PRO 팝니다</div>
-									<div class="price">55,000 원</div>
-									<div class="card-row">
-										<span class="name">홍길동동이</span>
-										<span class="time">1분 전</span>
-									</div>
-								</div>
-							</li>
-							<li class="product-card">
-								<img src="/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail">
-								<div class="card-info">
-									<div class="category">
-										<span>생활용품</span>
-										<span class="type">직거래</span>
-									</div>
-									<div class="ttl">젠하이저 H3PRO 팝니다</div>
-									<div class="price">55,000 원</div>
-									<div class="card-row">
-										<span class="name">홍길동동이</span>
-										<span class="time">1분 전</span>
-									</div>
-								</div>
-							</li>
-							<li class="product-card">
-								<img src="/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail">
-								<div class="card-info">
-									<div class="category">
-										<span>생활용품</span>
-										<span class="type">직거래</span>
-									</div>
-									<div class="ttl">젠하이저 H3PRO 팝니다</div>
-									<div class="price">55,000 원</div>
-									<div class="card-row">
-										<span class="name">홍길동동이</span>
-										<span class="time">1분 전</span>
-									</div>
-								</div>
-							</li>
+								</li>	
+							</c:forEach>
 						</ul>
 					</div>
 					<div class="item-shop-review-list-area">
-						<div class="item-shop-review-list">
-							<img src="../../resources/img/product_thumb.jpg" class="item-shop-review-pic">
-							<div class="item-shop-review-content-box">
-								<div class="item-shop-review-content">배송도 빠르고 좋아요</div>
-								<div class="item-shopreview-product">젠하이저 H3PRO HYBRID ANC</div>
+						<c:forEach items="${searchSellerReview}" var="review" step="1" end="4">
+							<div class="item-shop-review-list">
+								<img src="${pageContext.request.contextPath}/resources/upload/${review.PRODUCT_PIC1}" class="item-shop-review-pic">
+								<div class="item-shop-review-content-box">
+									<div class="item-shop-review-content">${review.REVIEW_CONTENT}</div>
+									<div class="item-shopreview-product">${review.PRODUCT_TITLE}</div>
+								</div>
+								<div class="item-shop-review-writer">${review.REVIEWER}</div>
+								<div class="item-shop-review-list-star">★★★★★</div>
 							</div>
-							<div class="item-shop-review-writer">홍길동동이</div>
-							<div class="item-shop-review-list-star">★★★★★</div>
-						</div>
-						<div class="item-shop-review-list">
-							<img src="../../resources/img/product_thumb.jpg" class="item-shop-review-pic">
-							<div class="item-shop-review-content-box">
-								<div class="item-shop-review-content">배송도 빠르고 좋아요</div>
-								<div class="item-shopreview-product">젠하이저 H3PRO HYBRID ANC</div>
-							</div>
-							<div class="item-shop-review-writer">홍길동동이</div>
-							<div class="item-shop-review-list-star">★★★★★</div>
-						</div>
-						<div class="item-shop-review-list">
-							<img src="../../resources/img/product_thumb.jpg" class="item-shop-review-pic">
-							<div class="item-shop-review-content-box">
-								<div class="item-shop-review-content">배송도 빠르고 좋아요</div>
-								<div class="item-shopreview-product">젠하이저 H3PRO HYBRID ANC</div>
-							</div>
-							<div class="item-shop-review-writer">홍길동동이</div>
-							<div class="item-shop-review-list-star">★★★★★</div>
-						</div>
+						</c:forEach>
 					</div>
 				</section>
 				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->

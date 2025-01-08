@@ -27,33 +27,47 @@
 			SELECT COALESCE(MAX(REVIEW_ID), 0) + 1
 			FROM MYREVIEW;
 		</selectKey>
-	INSERT INTO MYREVIEW (
-	    REVIEW_ID
-	   , MEM_ID
-	   , REVIEW_CONTENT
-	   , REVIEW_DATE
-	   , PRODUCT_TITLE
-	   , REVIEW_SCORE
-	   , PRODUCT_ID
-	) VALUES (
-	    #{review_id}             -- 리뷰 ID
-	    , #{mem_id}             -- 회원 ID
-	    , #{review_content}   -- 리뷰 내용
-	    , now() -- 리뷰 날짜
-	    , #{product_title}
-	    , null
-	    , #{product_id}            
-	    
-	);
+		INSERT INTO MYREVIEW (
+		    REVIEW_ID
+		   , MEM_ID
+		   , REVIEW_CONTENT
+		   , REVIEW_DATE
+		   , PRODUCT_TITLE
+		   , REVIEW_SCORE
+		   , PRODUCT_ID
+		   , REVIEW_OPTIONS 
+		) VALUES (
+		    #{review_id}             -- 리뷰 ID
+		    , #{mem_id}             -- 회원 ID
+		    , #{review_content}   -- 리뷰 내용
+		    , now() -- 리뷰 날짜
+		    , #{product_title}
+		    , #{review_score}
+		    , #{product_id}            
+		    , #{review_options}
+		);
 	
 	</insert>
 	
 	<!-- 내가 쓴 리뷰 -->
-	<select id="selectReviewHistory">
-		SELECT R.* , M.MEM_NICK
-		  FROM MYREVIEW R JOIN MEMBER M ON R.MEM_ID = M.MEM_ID
-		 WHERE R.MEM_ID = #{mem_id}
-	  ORDER BY REVIEW_DATE DESC
+	<select id="selectReviewHistory" resultType="review">
+        SELECT 
+        	R.review_options,
+		    R.review_id,
+		    R.mem_id,
+		    R.review_content,
+		    R.review_date,
+		    R.product_title,
+		    R.review_score,
+		    R.product_id,
+		    M.MEM_NICK AS buyerNick,
+		    M1.MEM_NICK AS sellerNick
+		FROM MYREVIEW R
+		JOIN MEMBER M ON R.MEM_ID = M.MEM_ID
+		JOIN PRODUCT P ON R.PRODUCT_ID = P.PRODUCT_ID
+		JOIN MEMBER M1 ON P.MEM_ID = M1.MEM_ID
+		WHERE R.MEM_ID = #{mem_id}
+		ORDER BY R.REVIEW_DATE DESC;
 	</select>
 	
 	<!-- 나의 리부 수정 -->
@@ -67,4 +81,12 @@
 		DELETE FROM MYREVIEW
 		WHERE REVIEW_ID = #{review_id}
 	</delete>
+	
+	<select id="selectScoreCount" resultType="map">
+		SELECT REVIEW_SCORE, COUNT(*) AS count
+		FROM MYREVIEW
+		WHERE MEM_ID = #{mem_id}
+		GROUP BY REVIEW_SCORE
+		ORDER BY REVIEW_SCORE DESC
+	</select>
 </mapper>

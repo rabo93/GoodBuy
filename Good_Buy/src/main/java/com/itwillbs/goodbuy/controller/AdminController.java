@@ -30,6 +30,7 @@ import com.itwillbs.goodbuy.vo.CommonCodeVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.NoticeVO;
 import com.itwillbs.goodbuy.vo.ProductOrderVO;
+import com.itwillbs.goodbuy.vo.SupportVO;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -216,10 +217,14 @@ public class AdminController {
 		String snsStatus = snsStatusToString(dbMember.getSns_status());
 		String authStatus = memberAuthToString(dbMember.getAuth_status());
 		
+		// 신고 기록 추가
+		List<Map<String, Object>> reportHistory = service.getReportHistory(mem_id);
+		log.info("reportHistory" + reportHistory);
 		model.addAttribute("dbMember", dbMember);
 		model.addAttribute("memStatus", memStatus);
 		model.addAttribute("snsStatus", snsStatus);
 		model.addAttribute("authStatus", authStatus);
+		model.addAttribute("reportHistory", reportHistory);
 		
 		return "admin/member_modify";
 	}
@@ -412,6 +417,18 @@ public class AdminController {
 		}
 	}
 	
+	// 신고 채팅방 목록 페이지 포워딩
+	@GetMapping("AdmReportedChatHistory")
+	public String admReportedChatHistory(String room_id, Model model, HttpSession session) {
+		System.out.println("신고 채팅방ID : " + room_id);
+		Map<String, Object> chatDetail = service.getChatDetail(room_id);
+		List<Map<String, Object>> chatHistory = service.getReportedChatHistory(room_id);
+		
+		model.addAttribute("chatDetail", chatDetail);
+		model.addAttribute("chatHistory", chatHistory);
+		
+		return "admin/reported_chat_history";
+	}
 	// ======================================================
 	// 공지사항 관리
 	@LoginCheck(memberRole = MemberRole.ADMIN)
@@ -521,7 +538,20 @@ public class AdminController {
 		// 필터링 된 1:1 문의 목록 가져오기
 		List<Map<String, Object>> EnquireList = service.getEnquireList(convertParam);
 		log.info(">>>>> 필터링 된 1:1 문의 목록 : " + EnquireList);
-		// [{MEM_ID=bborara, STATUS=처리완료, SUPPORT_CONTENT=문의내용임니다아아ㅏ, SUPPORT_DATE=2025-01-04 09:00:00, SUPPORT_ID=1, REPLY_CONTENT=답변드립니다아아ㅏ, REPLY_DATE=2025-01-04 12:00:00, SUPPORT_SUBJECT=문의제목, SUPPORT_CATEGORY=1}, {MEM_ID=aa1111, STATUS=접수, SUPPORT_CONTENT=무늬무늬, SUPPORT_DATE=2025-01-04 09:00:00, SUPPORT_ID=2, REPLY_DATE=2025-01-04 14:34:27, SUPPORT_SUBJECT=무늬, SUPPORT_CATEGORY=3}]
+		
+		
+		// 첨부파일 정보 저장 (전체회원)
+//		for(Map<String, Object> support : EnquireList) {
+//			System.out.println("suport_file: " + support.get("SUPPORT_FILE"));
+//			String originalFileName = "";
+//			if(support.get("SUPPORT_FILE") != null) {
+////				originalFileName = support.get("SUPPORT_FILE").substring(support.get("SUPPORT_FILE").indexOf("_") + 1);
+//				originalFileName = support.get("SUPPORT_FILE").toString();
+//			} else {
+//				originalFileName = null;
+//			}
+//			support.put("originalFileName", originalFileName);
+//		}
 		
 		Map<String, Object> response = new HashMap<String, Object>();
 		response.put("draw", convertParam.get("draw"));
@@ -538,7 +568,7 @@ public class AdminController {
 	@AdminLog
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmSupportAction")
-	public String admSupportAction(@RequestParam Map<String, Object> param, Model model) {
+	public String admSupportAction(@RequestParam Map<String, Object> param,  Model model) {
 		log.info(">>> 답글 정보 : " + param);
 		
 		int updateResult = service.registReplyInfo(param);
@@ -641,6 +671,13 @@ public class AdminController {
 	
 	// ======================================================
 	// [ 통계 ]
+	// 통계 차트 페이지
+	@GetMapping("AdmChartList")
+	public String admChartList() {
+		return "admin/chart_list";
+	}
+	
+	
 	// ======================================================
 	// [ 로그 ]
 	// 로그 기록 페이지 포워딩

@@ -1,6 +1,7 @@
 package com.itwillbs.goodbuy.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -18,7 +19,9 @@ public interface MyReviewMapper {
 	int insertReview(@Param("mem_id") String id
 			, @Param("review_content") String review
 			, @Param("product_title") String productTitle
-			, @Param("product_id") String productId);
+			, @Param("product_id") String productId
+			, @Param("review_score") String score
+			, @Param("review_options") String reviewOptions);
 	
 	int selectReviewCountCheck(int product_id);
 	
@@ -30,5 +33,7 @@ public interface MyReviewMapper {
 			,@Param("product_id") String productId);
 	//리뷰삭제
 	int deleteReview(int reviewId);
+	//별점조회
+	List<Map<String, String>> selectScoreCount(String id);
 
 }

@@ -31,10 +31,16 @@ public class MemberService {
 		return mapper.selectMemberPasswd(id);
 	}
 
-	// 로그인
+	
+	// 아이디로 회원 정보 가져오기
 	public MemberVO getMember(String mem_id) {
 		return mapper.selectMember(mem_id);
 		
+	}
+	
+	// 암호화 관련 로그인
+	public MemberVO getMemberLogin(MemberVO member) {
+		return mapper.selectMemberinfo(member);
 	}
 	
 	public MemberVO getMemberNick(MemberVO member) {
@@ -124,6 +130,7 @@ public class MemberService {
 	public String selectMemberId(String mem_id) {
 		return mapper.selectMemberId(mem_id);
 	}
+	
 
 	
 	

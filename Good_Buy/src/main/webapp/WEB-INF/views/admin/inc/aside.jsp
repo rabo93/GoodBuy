@@ -41,7 +41,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
             	<h6 class="collapse-header">Payment Management</h6>
                 <a class="collapse-item" href="AdmProductOrderList">상품 거래내역</a>
-                <a class="collapse-item" href="AdmPaymentList">페이 판매내역</a>
+<!--                 <a class="collapse-item" href="AdmPaymentList">페이 판매내역</a> -->
             </div>
         </div>
     </li>

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -51,64 +52,56 @@
                         <div class="col-lg-12">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h5 class="m-0 font-weight-bold text-primary">상품 거래내역</h5>
+                                    <h5 class="m-0 font-weight-bold text-primary">신고된 채팅 내역</h5>
                                 </div>
                                 <div class="card-body">
-                                	<div class="search-wrap border">
-                                		<section class="d-flex search-inner">
-	                                		<div class="col-4 px-3 search-box">
-			                                	<div class="search-ttl">거래상태별</div>
-											    <div class="category-filter input-group">
-											        <div class="form-check">
-													    <input class="form-check-input" id="reset" type="radio" name="status"  value="" checked>
-													    <label class="form-check-label" for="reset">전체</label>
-													</div>
-											        <div class="form-check ml-3">
-													    <input class="form-check-input" id="status0" type="radio" name="status" value="0">
-													    <label class="form-check-label" for="status0">판매중</label>
-													</div>
-											        <div class="form-check ml-3">
-													    <input class="form-check-input" id="status1" type="radio" name="status" value="1">
-													    <label class="form-check-label" for="status1">거래중</label>
-													</div>
-													<div class="form-check ml-3">
-													    <input class="form-check-input" id="status2" type="radio" name="status" value="2">
-													    <label class="form-check-label" for="status2">예약중</label>
-													</div>
-													<div class="form-check ml-3">
-													    <input class="form-check-input" id="status3" type="radio" name="status" value="3">
-													    <label class="form-check-label" for="status3">거래완료</label>
-													</div>
-													<div class="form-check ml-3">
-													    <input class="form-check-input" id="status4" type="radio" name="status" value="4">
-													    <label class="form-check-label" for="status4">신고처리</label>
-													</div>
-											    </div>
-										    </div>
-										    <div class="col-4 px-4 search-box">
-			                                	<div class="search-ttl">기간별</div>
-												<div class="input-group align-items-center justify-content-center schDate-wrap">
-													<input type="text" class="form-control rounded-sm mr-2" placeholder="날짜 선택" value="" name="schDate" id="schDate"  autocomplete="off"/>
-													<button class="btn btn-primary" id="searchDateBtn" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
-													<button class="btn btn-success ml-2" id="initDateBtn" type="button"><i class="fa-solid fa-rotate"></i></button>
-												</div>
-										    </div>
-										    <div class="col-4 px-4 search-box">
-						                        <div class="input-group">
-						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="회원ID, 상품명, 상품카테고리, 거래장소 검색" aria-label="Search" aria-describedby="basic-addon2">
-						                            <div class="input-group-append">
-						                                <button class="btn btn-primary" id="searchBtn" type="button">검색</button>
-						                            </div>
-						                        </div>
-					                        </div>
-									   	</section>
-									</div>
-                                	<div class="table-responsive">
-		                                <table class="table table-bordered compact" id="orderList" width="100%" cellspacing="0">
-		                                    <thead></thead>
-		                                    <tbody></tbody>
-		                                </table>
-		                          	</div>
+                                	<div class="room_info mb-1">
+                            			<c:if test="${chatDetail != null}">
+	                                		<div>채팅방 번호 : <b>${param.room_id}</b>
+                                				<b class="chat_cate">
+                                					${chatDetail.STATUS}
+                                				</b>
+                                				<c:if test="${chatDetail.STATUS.equals('대화종료')}">
+                                					<script>
+                                						$(".chat_cate").addClass("cate02");
+                                					</script>
+                                				</c:if>
+	                                		</div>
+	                                		<div>채팅방 제목 : <b>${chatDetail.TITLE}</b></div>
+                               			</c:if>
+                                		<div>참여자 : <b>${chatHistory[0].SENDER_ID}</b>, <b>${chatHistory[0].RECEIVER_ID}</b></div>
+                                	</div>
+                                	<ul class="list-group mt-1" id="reported_chat_list">
+                                		<c:forEach items="${chatHistory}" var="chat">
+                                			<li class="list-group-item">
+	                               				<div class="user_info">
+	                               					<c:choose>
+	                               						<c:when test="${chat.type.equals('TALK')}">
+				                                			<span class="chat_type type01">TALK</span>
+	                               						</c:when>
+	                               						<c:when test="${chat.type.equals('FILE')}">
+	                               							<span class="chat_type type02">FILE</span>
+	                               						</c:when>
+	                               					</c:choose>
+	                               					<span class="id">${chat.SENDER_ID}</span>
+	                               					<span class="time">${chat.SEND_TIME}</span>
+		                               				<span class="read <c:if test="${chat.READ_STATE == 1}">no</c:if>"><i class="fa-solid fa-circle-check"></i></span>
+	                               				</div>
+	                               				<div class="message">
+	                               					<c:choose>
+	                               						<c:when test="${chat.TYPE.equals('TALK')}">
+				                                			${chat.MESSAGE}
+	                               						</c:when>
+	                               						<c:when test="${chat.TYPE.equals('FILE')}">
+	                               							<a href="${pageContext.request.contextPath}/resources/upload/${fn:split(chat.MESSAGE, ':')[0]}" target="_blank">
+	                               								<img src="${pageContext.request.contextPath}/resources/upload/${fn:split(chat.MESSAGE, ':')[1]}">
+	                               							</a>
+	                               						</c:when>
+	                               					</c:choose>
+	                               				</div>
+	                                		</li>
+                                		</c:forEach>
+                                	</ul>
                                 </div>
                             </div>
                         </div>
@@ -132,7 +125,8 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
+    
+	
     <!-- Bootstrap core JavaScript-->
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/jquery/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -151,7 +145,7 @@
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/daterangepicker.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="${pageContext.request.contextPath}/resources/adm/js/order_list.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/js/reported_chat_history.js"></script>
 
 </body>
 

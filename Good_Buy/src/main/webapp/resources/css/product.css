@@ -137,7 +137,7 @@
 .item-regi .item-regi-price .item-regi-price-number .shipping-fee-price::-webkit-inner-spin-button {-webkit-appearance:none;}
 .item-regi .item-regi-price .item-regi-price-number .item-price::-webkit-inner-spin-button {-webkit-appearance:none;}
 .item-regi .item-regi-price .item-regi-price-number {margin: 10px 0px 0px 10px;}
-.item-regi .item-regi-price {display: flex;border-top: 1px solid lightgray;}
+.item-regi .item-regi-price {display: flex;margin-bottom: 10px;border-top: 1px solid lightgray;}
 .item-regi .item-regi-price label [type="radio"]:checked {border: 0.4em solid #0dcc5a;}
 .item-regi .item-regi-price label [type="radio"]:hover {box-shadow: 0 0 0 max(2px, 0.2em) #dadee5;cursor: pointer;}
 .item-regi .item-regi-price label [type="radio"] {
@@ -231,7 +231,7 @@
 .item-detail .item-detail-trade-adr {
     font-size: 18px;
     font-weight: bold;
-    margin: 0 200px 0 0px;
+    margin: 0 55px 0 0px;
 }
 .item-detail .item-detail-shpping-fee {}
 .item-detail .item-detail-shpping-fee {
@@ -365,9 +365,9 @@
     height: 220px;
     padding: 0px 10px 30px 10px;
     margin-top: 10px;
-    border-bottom: 2px solid;
+    border-bottom: 1px solid;
 }
-.item-shop-section .item-shop-seller-info .item-shop-seller-pic {width: 180px;height: 180px;border-radius: 100%;margin-right: 20px;}
+.item-shop-section .item-shop-seller-info .item-shop-seller-pic {width: 180px;height: 180px;border-radius: 100%;margin-right: 20px;border: 1px solid #ddd;}
 .item-shop-section .item-shop-seller-info .item-shop-seller-nick {
     font-size: 25px;
     font-weight: 500;
@@ -388,7 +388,7 @@
 .item-shop-section .item-shop-review-list-area {
     display: block;
     padding: 30px 10px 50px 10px;
-    border-top: 2px solid;
+    border-top: 1px solid;
 }
 .item-shop-section .item-shop-review-list-area .item-shop-review-list {
     display: flex;
@@ -397,8 +397,8 @@
     border-bottom: 1px solid;
 }
 .item-shop-section .item-shop-review-list-area .item-shop-review-list .item-shop-review-pic {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     border-radius: 20%;
 }
 .item-shop-section .item-shop-review-list-area .item-shop-review-list .item-shop-review-content-box {
@@ -424,7 +424,25 @@
     color: #0dcc5a;
 }
 
+/* ================================================================================ */
+/* =============================== product_edit.jsp =============================== */
+/* ================================================================================ */
 
+.item-regi .item-regi-status {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    border-top: 1px solid lightgray;
+}
+.item-regi .item-regi-status .status-selectbox {
+    width: 200px;
+    height: 40px;
+    align-self: center;
+    margin: 0px 0px 0px 10px;
+    text-align: center;
+}
 
 
 

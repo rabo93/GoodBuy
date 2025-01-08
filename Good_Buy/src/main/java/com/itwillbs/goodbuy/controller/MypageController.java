@@ -82,6 +82,10 @@ public class MypageController {
 		int reviewCount = reviewService.myReviewCount(id);
 		model.addAttribute("reviewCount", reviewCount);
 		
+		//나의 별점조회
+		List<Map<String, String>> scoreCount = reviewService.getScoreCount(id);
+		model.addAttribute("scoreCount",scoreCount);
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+scoreCount);
 		//기존 상점소개문구
 		 MemberVO storeIntro = memberService.getStoreIntro(member);
 		 model.addAttribute("storeIntro",storeIntro);
@@ -188,11 +192,14 @@ public class MypageController {
 		String review = reviewData.get("review"); // JSON에서 'review' 키로 데이터 받기
 		String productTitle = reviewData.get("product_title");
 		String productId = reviewData.get("product_id");
+		String score = reviewData.get("score");
+		String reviewOptions  = reviewData.get("reviewOptions");
 //		String review_cnt = reviewData.get("review_cnt");
 		String id = getSessionUserId(session);
 		
-		System.out.println("@@@@@@@@@@@"+review+productId + productTitle);
-		int result = reviewService.saveReviewData(id,review,productTitle,productId);
+		System.out.println("@@@@@@@@@@@"+review+productId + productTitle+score);
+		System.out.println(">>>>>>>>>>>>>>>>>"+reviewOptions);
+		int result = reviewService.saveReviewData(id,review,productTitle,productId,score,reviewOptions);
 		if(result > 0) {
 			return "result/success";
 		} else {
@@ -271,7 +278,19 @@ public class MypageController {
 	//내가쓴 후기 수정
 		@ResponseBody
 		@PostMapping("MyReviewEdit")
-		public String myReviewEdit(@RequestBody Map<String, String>reviewData,HttpSession session) {
+		public String myReviewEdit(SupportVO support,Model model,@RequestBody Map<String, String>reviewData,HttpSession session) {
+			
+			String realPath = getRealPath(session);
+			String subDir = createDirectories(realPath);
+			realPath += "/" + subDir;
+			
+			String fileName = processDuplicateFileName(support, subDir);
+			
+			
+			model.addAttribute("support", support);
+			
+			addFileToModel(support, model);
+			
 			String reviewContent = reviewData.get("review"); //모달창에서 입력한 review_content
 			String productId = reviewData.get("product_id");
 			String id = getSessionUserId(session);

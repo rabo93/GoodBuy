@@ -31,15 +31,12 @@ public interface AdminMapper {
 	int selectCommonCodesFiltered(@Param("param") Map<String, Object> param);
 
 	// 공통코드 컬럼 수정
-	@AdminLog
 	int updateCommonCodes(Map<String, Object> param);
 
 	// 공통코드 컬럼 삭제
-	@AdminLog
 	int deleteCommonCodes(Map<String, Object> param);
 
 	// 사용되지않는 공통코드(상위코드) 삭제
-	@AdminLog
 	int deleteDeprecatedCommonCode();
 
 	//---------------------------------------------------------
@@ -77,6 +74,13 @@ public interface AdminMapper {
 	// 회원 신고 횟수 누적
 	int updateUserReportCount(Map<String, Object> param);
 	
+	// 회원 목록에서 경고횟수, 현재 상태(등급) 조회
+	Map<String, Object> selectUserReportInfo(String memId);
+
+	// 회원 경고횟수에 따른 계정 상태(등급) 업데이트
+	int updateUserStatus(String memId);
+	
+	//---------------------------------------------------------
 	// 신고 상품 목록 전체 컬럼 수 조회
 	int selectProductReportTotal();
 	
@@ -103,7 +107,6 @@ public interface AdminMapper {
 	List<NoticeVO> selectNoticeBoardFileList(@Param("deleteItems") List<Integer> deleteItems);
 	
 	// 공지사항 삭제
-	@AdminLog
 	int deleteNotice(@Param("deleteItems") List<Integer> deleteItems);
 	
 	//---------------------------------------------------------
@@ -160,7 +163,9 @@ public interface AdminMapper {
 	
 	// 필터링 된 로그 목록 조회
 	List<MemberVO> selectLogList(@Param("param")Map<String, Object> param);
-	
+
+	// 회원 신고 기록 목록 조회
+	List<Map<String, Object>> selectReportHistory(String mem_id);
 
 
 }

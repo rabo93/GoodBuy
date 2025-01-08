@@ -216,10 +216,14 @@ public class AdminController {
 		String snsStatus = snsStatusToString(dbMember.getSns_status());
 		String authStatus = memberAuthToString(dbMember.getAuth_status());
 		
+		// 신고 기록 추가
+		List<Map<String, Object>> reportHistory = service.getReportHistory(mem_id);
+		log.info("reportHistory" + reportHistory);
 		model.addAttribute("dbMember", dbMember);
 		model.addAttribute("memStatus", memStatus);
 		model.addAttribute("snsStatus", snsStatus);
 		model.addAttribute("authStatus", authStatus);
+		model.addAttribute("reportHistory", reportHistory);
 		
 		return "admin/member_modify";
 	}

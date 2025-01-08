@@ -85,7 +85,12 @@ document.addEventListener("DOMContentLoaded", function(){
 				    }
 				}
             },
-            { title: "조치사유", data : "ACTION_REASON", defaultContent: "", },
+            { 
+				title: "조치사유", data : "ACTION_REASON", defaultContent: "", 
+            	render : function(data, type, row) {
+					
+				}
+            },
             { title: "조치자", data : "ADMIN_ID", defaultContent: "", width: '100px', },
             { title: "조치일시", data : "ACTION_DATE", defaultContent: "", width: '180px', },
             {

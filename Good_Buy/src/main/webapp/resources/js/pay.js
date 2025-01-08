@@ -55,7 +55,38 @@ function addAmount(amount) {
 }
 
 
-function listToggleButton(button) { // 디버깅 중 
+
+function listToggleButton(type) {
+	const buttons = document.querySelectorAll('.use-buttons > button');
+	// 목록 활성화 상태 업데이트
+	const lists = document.querySelectorAll('.use-history-item');
+	buttons.forEach(button => {
+	    // 모든 버튼에서 selected 클래스 제거
+	    buttons.forEach(btn => btn.classList.remove('selected'));
+	    buttons.forEach(btn => {
+			if (type === 'all') {
+				$(".all-btn").addClass('selected');
+			} else if(type === 'transfer') {
+				$(".use-transfer-btn").addClass('selected');
+			} else if(type === 'charge') {
+				$(".use-charge-btn").addClass('selected');
+			} else if(type === 'refund') {
+				$(".use-refund-btn").addClass('selected');
+			}
+		});
+	    
+		 lists.forEach(list => {
+            if (list.dataset.type === type || type === 'all') {
+                list.classList.add('active');
+            } else {
+                list.classList.remove('active');
+            }
+		});
+	});
+}
+
+/* 
+function listToggleButton(button) { // 디버깅 중
 	debugger;
 	const buttons = document.querySelectorAll('.use-buttons > button');
 	// 목록 활성화 상태 업데이트
@@ -64,7 +95,12 @@ function listToggleButton(button) { // 디버깅 중
 			console.log(button);
 	    }); 
 	});
-}
+}	
+*/
+
+
+
+	
 // 이용내역 전체의 토글버튼 - 클릭하면 해당 항목이 보이기는 함. 전체내역이 기본설정이 안됨.
 //function listToggleButton(button, type) {
 //	debugger;

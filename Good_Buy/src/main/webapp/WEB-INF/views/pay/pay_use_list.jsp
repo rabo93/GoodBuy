@@ -75,10 +75,10 @@
 							<div class="goodpay-container">
 							 	<div class="account-box">
 							 		<div class="use-buttons">
-						                <button class="all-btn selected" onclick="listToggleButton(this)">전체</button>
-						                <button class="use-transfer-btn" onclick="listToggleButton(this)">송금</button>
-						                <button class="use-charge-btn" onclick="listToggleButton(this)">충전</button>
-						                <button class="use-refund-btn" onclick="listToggleButton(this)">환불</button>
+						                <button class="all-btn selected" onclick="listToggleButton('all')">전체</button>
+						                <button class="use-transfer-btn" onclick="listToggleButton('transfer')">송금</button>
+						                <button class="use-charge-btn" onclick="listToggleButton('charge')">충전</button>
+						                <button class="use-refund-btn" onclick="listToggleButton('refund')">환불</button>
 						            </div>
 						            <c:forEach var="item" items="${recieverTransactionInfo}">
 				            			<div class="use-history-item active" data-type="transfer">

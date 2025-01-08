@@ -13,8 +13,8 @@
 <link rel="icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
 
 <!-- default -->
-<link rel="stylesheet" href="../../resources/css/common.css">
-<link rel="stylesheet" href="../../resources/css/default.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/default.css">
 <script src="../../resources/js/jquery-3.7.1.js"></script>
 
 <!-- font-awesome -->
@@ -71,20 +71,22 @@
 							<h3>굿페이 > 이용내역</h3>
 							
 							송금은 계좌번호가 떠야되는 것이 아니고 물건 산 내역이 떠야함
-							
-							
+						</div>
+						<div class="contents">
 							<div class="goodpay-container">
 							 	<div class="account-box">
 							 		<div class="use-buttons">
-						                <button class="all-btn">전체</button>
-						                <button class="use-transfer-btn">송금</button>
-						                <button class="use-charge-btn">충전</button>
+<!-- 						                <button class="all-btn selected" onclick="listToggleButton(this, 'all')">전체</button> -->
+						                <button class="all-btn selected" onclick="listToggleButton(this, 'all')">전체</button>
+						                <button class="use-transfer-btn" onclick="listToggleButton(this, 'transfer')">송금</button>
+						                <button class="use-charge-btn" onclick="listToggleButton(this, 'charge')">충전</button>
+						                <button class="use-refund-btn" onclick="listToggleButton(this, 'refund')">환불</button>
 						            </div>
 						            <c:forEach var="item" items="${recieverTransactionInfo}">
-				            			<div class="history-item">
-				            				<div class="icon"><i class="fa-solid fa-building-columns"></i></div>
+				            			<div class="use-history-item active" data-type="transfer">
+<!-- 				            				<div class="icon"><i class="fa-solid fa-building-columns"></i></div> -->
 							                <div class="details">
-							                    <span>산업 ${item.RECEIVER_FINTECH_USE_NUM }</span>
+							                    <span class="his-ttl">산업 ${item.RECEIVER_FINTECH_USE_NUM }</span>
 							                    <span class="date" >
 							                    	<fmt:parseDate var="parsedReplyRegDate"
 																		value="${item.API_TRAN_DTM}" 
@@ -98,23 +100,30 @@
 				            			</div>	
 			            			</c:forEach>	
 				            		<c:forEach var="item" items="${transactionInfo}" varStatus="status">
+				            			<c:set var="dataType" value="all"/>
 				            			<c:if test="${item.TRANSACTION_TYPE eq 'WI'}">
+				            				<c:set var="dataType" value="charge"/>
+				            				<c:set var="detail" value="KDB산업은행 202407222***"/>
 				            				<c:set var="classify" value="충전"/>
 				            				<c:set var="symbol" value="+"/>
 				            			</c:if>
-				            			<c:if test="${item.TRANSACTION_TYPE eq 'TR'}">
-				            				<c:set var="classify" value="송금"/>
-				            				<c:set var="symbol" value="-"/>
-				            			</c:if>
 				            			<c:if test="${item.TRANSACTION_TYPE eq 'DE'}">
+				            				<c:set var="dataType" value="refund"/>
+				            				<c:set var="detail" value="KDB산업은행 202407222***"/>
 				            				<c:set var="classify" value="환불"/>
 				            				<c:set var="symbol" value="-"/>
 				            			</c:if>
-
-				            			<div class="history-item">
-							                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
+				            			<c:if test="${item.TRANSACTION_TYPE eq 'TR'}">
+				            				<c:set var="dataType" value="transfer"/>
+				            				<c:set var="detail" value="${productName }"/>
+				            				<c:set var="classify" value="송금"/>
+				            				<c:set var="symbol" value="-"/>
+				            			</c:if>
+				            			
+				            			<div class="use-history-item active" data-type="${dataType}">
+<!-- 							                <div class="icon"><i class="fa-solid fa-building-columns"></i></div> -->
 							                <div class="details">
-							                    <span>산업 ${item.FINTECH_USE_NUM }</span>
+							                    <span class="his-ttl">${detail }</span>
 							                    <span class="date" >
 							                    	<fmt:parseDate var="parsedReplyRegDate"
 																		value="${item.API_TRAN_DTM}" 
@@ -127,34 +136,6 @@
 							                <div class="amount">${symbol} <fmt:formatNumber pattern="#,###">${item.TRAN_AMT}</fmt:formatNumber></div>
 							            </div>
 				            		</c:forEach>
-						            <!-- 굿페이 이용 내역 -->
-<!-- 							        <div class="history"> -->
-<!-- 							            <h3>2024년 12월</h3> -->
-<!-- 							            <div class="history-item"> -->
-<!-- 							                <div class="icon"></div> -->
-<!-- 							                <div class="details"> -->
-<!-- 							                    <span>쌀국수</span> -->
-<!-- 							                    <span class="date">12.03 12:10 | 송금</span> -->
-<!-- 							                </div> -->
-<!-- 							                <div class="amount">-5,000원</div> -->
-<!-- 							            </div> -->
-<!-- 							            <div class="history-item"> -->
-<!-- 							                <div class="icon"></div> -->
-<!-- 							                <div class="details"> -->
-<!-- 							                    <span>믹스커피</span> -->
-<!-- 							                    <span class="date">12.03 12:10 | 송금</span> -->
-<!-- 							                </div> -->
-<!-- 							                <div class="amount">-15,000원</div> -->
-<!-- 							            </div> -->
-<!-- 							            <div class="history-item"> -->
-<!-- 							                <div class="icon"></div> -->
-<!-- 							                <div class="details"> -->
-<!-- 							                    <span>우체국 1234</span> -->
-<!-- 							                    <span class="date">12.03 12:10 | 충전</span> -->
-<!-- 							                </div> -->
-<!-- 							                <div class="amount">+100,000원</div> -->
-<!-- 								    	</div>         -->
-<!-- 							        </div>history   -->
 							 	</div>
 						    </div>
 						</div>

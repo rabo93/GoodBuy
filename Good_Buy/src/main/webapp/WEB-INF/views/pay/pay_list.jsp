@@ -66,7 +66,8 @@
                 	<div class="my-container">
 						<div class="contents-ttl">
 							<h3>굿페이 메인</h3>
-							
+						</div>
+						<div class="contents">
 							송금은 계좌번호가 떠야되는 것이 아니고 물건 산 내역이 떠야함
 							전체 이용 내역에도 마찬가지 임
 							
@@ -91,8 +92,8 @@
 						                <i class="fa-solid fa-arrow-rotate-right"></i>
 						            </div>
 						            <div class="buttons">
-						                <button class="charge-btn"  onclick="openModal('charge')">+ 충전 </button>
-						                <button class="refund-btn"  onclick="openModal('refund')">- 환불 </button>
+						                <button class="charge-btn"  onclick="openModal('charge')"><i class="fa-solid fa-won-sign"></i> 충전 </button>
+						                <button class="refund-btn"  onclick="openModal('refund')"><i class="fa-solid fa-minus"></i> 환불 </button>
 <!-- 						                <button class="transfer-btn" onclick="location.href='PayTransfer'">￦계좌송금</button> -->
 						                <%-- 환불버튼 모달창 시작 --%>
 						                <div id="pay-refund-modal" class="pay-account-modal">
@@ -195,10 +196,10 @@
 										                    <span>산업 ${item.RECEIVER_FINTECH_USE_NUM }</span>
 										                    <span class="date" >
 										                    	<fmt:parseDate var="parsedReplyRegDate"
-																					value="${item.API_TRAN_DTM}" 
-																					pattern="yyyy-MM-dd'T'HH:mm:ss" 
-																					type="both" /> 
-																	<fmt:formatDate value="${parsedReplyRegDate}" pattern="yy.MM.dd" /> 
+																				value="${item.API_TRAN_DTM}" 
+																				pattern="yyyy-MM-dd'T'HH:mm:ss" 
+																				type="both" /> 
+																<fmt:formatDate value="${parsedReplyRegDate}" pattern="yyyy-MM-dd" /> 
 																| 송금
 										                    </span>
 										                </div>
@@ -232,7 +233,7 @@
 																						value="${item.API_TRAN_DTM}" 
 																						pattern="yyyy-MM-dd'T'HH:mm:ss" 
 																						type="both" /> 
-																		<fmt:formatDate value="${parsedReplyRegDate}" pattern="yy.MM.dd" /> 
+																		<fmt:formatDate value="${parsedReplyRegDate}" pattern="yyyy-MM-dd" /> 
 																	| ${classify}
 											                    </span>
 											                </div>

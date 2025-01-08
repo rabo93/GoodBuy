@@ -95,8 +95,16 @@ public class ProductService {
 		return mapper.selectLimitProductList(id);
 	}
 
-	public Map<String, Object> searchSellerList(String mem_id) {
-		return mapper.searchSellerList(mem_id);
+	public Map<String, Object> searchSellerShop(String mem_nick) {
+		return mapper.searchSellerShop(mem_nick);
+	}
+
+	public List<Map<String, Object>> searchSellerReview(String mem_id) {
+		return mapper.searchSellerReview(mem_id);
+	}
+
+	public Map<String, Object> productContent(int product_ID) {
+		return mapper.productContent(product_ID);
 	}
 
 }

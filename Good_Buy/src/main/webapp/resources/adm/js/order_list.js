@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 	return data.replace(/(.{16})/g, '$1<br>'); // 16자마다 줄바꿈
            		}
 			},
-            { title: "상품유형", data: "product_category", defaultContent: "", className : "dt-center", },
+            { title: "상품유형", data: "product_category", defaultContent: "", className : "dt-center", width: '120px',},
             { title: "상품명", data: "product_title", defaultContent: "", className : "dt-center",  width: '200px', },
             { title: "상품금액", data: "product_price", defaultContent: "", className : "dt-center", width: '150px', },
             { 

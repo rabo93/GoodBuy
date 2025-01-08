@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -72,10 +73,36 @@
 										        <div class="profile-icon"></div>
 										        <div class="user-info">
 										            <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
-										            <div class="name">${review.mem_nick} | ${review.review_date}</div>
+										            <div class="date">[${review.sellerNick} 상점]에서 구매한 [${review.product_title}]</div>
+										            <div class="name">${review.buyerNick} | ${review.review_date}</div>
 <%-- 										            <div class="product">${review.product_title}</div> --%>
-										            <div class="date">${review.product_title}</div>
 										        </div>
+										        <div>
+									            	<c:if test="${review.review_score == '2'}">
+										            	<input type="button" id="score" name="score" value="최고예요👍">
+										            </c:if>
+										            <c:if test="${review.review_score == '1'}">
+										            	<input type="button" id="score"  name="score" value="좋아요💕">
+										            </c:if>
+										            <c:if test="${review.review_score == '0'}">
+										           		<input type="button" id="score"  name="score" value="별로예요🥲">
+									           	 	</c:if>
+									            </div>
+									            <div>
+									            	<%-- 리뷰 옵션 --%>
+													<c:if test="${fn:contains(review.review_options, '1')}">
+														<input type="button" id="score" name="score" value="배송이 빨라요🚚">
+													</c:if>
+													<c:if test="${fn:contains(review.review_options, '2')}">
+														<input type="button" id="score" name="score" value="친절해요😊">
+													</c:if>
+													<c:if test="${fn:contains(review.review_options, '3')}">
+														<input type="button" id="score" name="score" value="물건상태가 좋아요✨">
+													</c:if>
+													<c:if test="${fn:contains(review.review_options, '4')}">
+														<input type="button" id="score" name="score" value="또 거래하고 싶어요💰">
+													</c:if>
+									            </div>
 										    </div>
 								            <div class=rating>
 <!-- 												<i class="fa-solid fa-star" ></i> -->
@@ -86,7 +113,7 @@
 											<button class="open-modal-btn"
 										        data-product-id="${review.product_id}"
 										        data-title="${review.product_title}"
-										        data-buyer="${review.mem_nick}">
+										        data-buyer="${review.sellerNick}">
 										        수정
 										    </button>
 										<button onclick="deleteReview(${review.review_id})">삭제</button>

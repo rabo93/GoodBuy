@@ -32,7 +32,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Aspect
 @Component
-//@Order(value = Ordered.LOWEST_PRECEDENCE) // AOP 빈들간의 우선순위 설정(값이 낮을수록 우선순위 높음. 기본값 : Ordered.LOWEST_PRECEDENCE)
 public class AdminLogAspect {
 	
 	@Autowired
@@ -69,7 +68,6 @@ public class AdminLogAspect {
 			return null;
 		}
 		HttpServletRequest request = ((ServletRequestAttributes)attrs).getRequest();
-		HttpServletResponse response = ((ServletRequestAttributes)attrs).getResponse();
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("sId");
 		

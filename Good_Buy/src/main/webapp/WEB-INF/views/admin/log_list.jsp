@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -51,32 +50,11 @@
                         <div class="col-lg-12">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h5 class="m-0 font-weight-bold text-primary">1:1 문의 관리</h5>
+                                    <h5 class="m-0 font-weight-bold text-primary">관리자 로그 기록</h5>
                                 </div>
                                 <div class="card-body">
                                 	<div class="search-wrap border">
-                                		<section class="d-flex search-inner">
-	                                		<div class="col-4 px-4 search-box">
-			                                	<div class="search-ttl">상태별</div>
-											    <div class="category-filter input-group">
-											        <div class="form-check">
-													    <input class="form-check-input" id="reset" type="radio" name="status"  value="" checked>
-													    <label class="form-check-label" for="reset">전체</label>
-													</div>
-											        <div class="form-check ml-3">
-													    <input class="form-check-input" id="status1" type="radio" name="status" value="접수">
-													    <label class="form-check-label" for="status1">접수</label>
-													</div>
-													<div class="form-check ml-3">
-													    <input class="form-check-input" id="status2" type="radio" name="status" value="처리완료">
-													    <label class="form-check-label" for="status2">처리완료</label>
-													</div>
-													<div class="form-check ml-3">
-													    <input class="form-check-input" id="status3" type="radio" name="status" value="기각">
-													    <label class="form-check-label" for="status3">기각</label>
-													</div>
-											    </div>
-										    </div>
+									   	<section class="d-flex search-inner">
 										    <div class="col-4 px-4 search-box">
 			                                	<div class="search-ttl">기간별</div>
 												<div class="input-group align-items-center justify-content-center schDate-wrap">
@@ -86,8 +64,11 @@
 												</div>
 										    </div>
 										    <div class="col-4 px-4 search-box">
+										    	<div class="input-group"></div>
+					                        </div>
+										    <div class="col-4 px-4 search-box">
 						                        <div class="input-group">
-						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="회원ID, 문의제목, 문의내용, 처리상태 검색" aria-label="Search" aria-describedby="basic-addon2">
+						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="관리자ID, 작업사항, 작업결과, IP주소 검색" aria-label="Search" aria-describedby="basic-addon2">
 						                            <div class="input-group-append">
 						                                <button class="btn btn-primary" id="searchBtn" type="button">검색</button>
 						                            </div>
@@ -96,7 +77,7 @@
 									   	</section>
 									</div>
                                 	<div class="table-responsive">
-		                                <table class="table table-bordered compact" id="supportList" width="100%" cellspacing="0">
+		                                <table class="table table-bordered compact" id="logList" width="100%" cellspacing="0">
 		                                    <thead></thead>
 		                                    <tbody></tbody>
 		                                </table>
@@ -125,47 +106,6 @@
         <i class="fas fa-angle-up"></i>
     </a>
     
-    <!-- 답글 모달 -->
-<!--     <div class="modal fade" id="updateMemberInfo" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true"> -->
-    <div class="modal fade" id="updateSupportInfo" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-		    <div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="updateModalLabel">1:1문의 답글달기</h5>
-					<button type="button" class="close" data-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
-				</div>
-				<div class="modal-body">
-<!-- 					<form action="AdmProductReportAction" id="productReportModifyForm" method="post"> -->
-					<form action="AdmSupportAction" id="supportModifyForm" method="post">
-						<input type="hidden" id="supportId" name="SUPPORT_ID">
-						<input type="hidden" id="memId" name="MEM_ID">
-						<input type="hidden" id="adminId" name="ADMIN_ID" value="${sessionScope.sId}">
-						<div class="mb-3">
-							<label class="small mb-1" for="supportStatus">처리 상태 변경</label>
-							<select class="custom-select" id="supportStatus" name="STATUS">
-								<option value="처리완료">처리완료</option>
-								<option value="기각">기각</option>
-							</select>
-						</div>
-						<div class="mb-3">
-							<label class="small mb-1" for="enquireContent">문의 내용</label>
-							<input type="text" class="form-control" name="SUPPORT_CONTENT" id="enquireContent" readonly required>
-						</div>
-						<div class="mb-3">
-							<label class="small mb-1" for="replyContent">답변 내용</label>
-							<textarea class="form-control" col="4" id="replyContent" name="REPLY_CONTENT" placeholder="답글을 입력하세요" required></textarea>
-							<small class="text-primary text-right d-block font-weight-bold"><span id="lengthInfo">0</span> / 500자</small>
-						</div>
-                    </form>
-				</div>
-				<div class="modal-footer justify-content-center">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="supportModifyForm">등록</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
     <!-- Bootstrap core JavaScript-->
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/jquery/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -180,11 +120,11 @@
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 <%--     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script> --%> <%-- 반응형 --%>
-    <script src="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/moment.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/moment.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/daterangepicker.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="${pageContext.request.contextPath}/resources/adm/js/support_list.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/js/log_list.js"></script>
 
 </body>
 

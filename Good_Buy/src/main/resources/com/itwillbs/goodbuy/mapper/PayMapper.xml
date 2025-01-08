@@ -110,7 +110,6 @@
 			, #{withdrawResult.dps_bank_code_std}
 			, #{withdrawResult.dps_account_num_masked}
 			, ''
-			, ''
 			  </if>
 			  <if test="trnsactionType.equals('DE')">
 			, #{withdrawResult.res_list[0].fintech_use_num}
@@ -126,7 +125,6 @@
 			, #{withdrawResult.res_list[0].bank_rsp_message}
 			, #{withdrawResult.wd_bank_code_std}
 			, #{withdrawResult.wd_account_num_masked} 
-			, ''
 			, ''
 			  </if>
 			  <if test="trnsactionType.equals('TR')">
@@ -144,8 +142,6 @@
 			, #{withdrawResult.withdrawResult.dps_bank_code_std}
 			, #{withdrawResult.withdrawResult.dps_account_num_masked}
 			
-			-- 송금받는 사람 정보 입력
-			, #{withdrawResult.depositResult.res_list[0].fintech_use_num}  
 			, #{withdrawResult.depositResult.res_list[0].fintech_use_num}  
 			  </if>
 		)
@@ -170,6 +166,7 @@
 		<if test="type.equals('reciever_fintech')">
 		WHERE  RECEIVER_FINTECH_USE_NUM = #{fintech_use_num}
 		</if>
+		ORDER BY API_TRAN_DTM DESC
 	</select>
 	
 	
@@ -187,15 +184,30 @@
 		FROM ACCOUNTINFO
 		WHERE USER_SEQ_NO = #{user_seq_no}
 	</select>
-	
-	
-	<!-- 충전금액조회 -->
+
+	<!-- 충전금액조회(송금하는자) -->
 	<select id="selectPayAmount"  resultType="int">
+	  SELECT 
+			   SUM(CASE 
+			            WHEN TRANSACTION_TYPE = 'WI' THEN tran_amt 
+			            WHEN TRANSACTION_TYPE = 'TR' THEN -tran_amt 
+			            WHEN TRANSACTION_TYPE = 'DE' THEN -tran_amt 
+			            ELSE 0 
+			        END) AS total_amount
+		FROM TRANSACTIONINFO
+	   WHERE USER_SEQ_NO = #{user_seq_no};
+	</select>
+	
+	
+	
+	<!-- 충전금액조회(받는자) -->
+	<select id="selectReceiverPayAmount"  resultType="int">
 		SELECT SUM(TRAN_AMT)
 		  FROM TRANSACTIONINFO
-		 WHERE TRANSACTION_TYPE = 'WI'
-		   AND USER_SEQ_NO = #{user_seq_no};
+		 WHERE TRANSACTION_TYPE = 'TR'
+		   AND RECEIVER_FINTECH_USE_NUM = #{fintech_use_num};
 	</select>
+	
 	
 	<!-- 거래내역 저장 -->
 	<insert id="insertPayInfo">
@@ -213,7 +225,15 @@
 		  	 , #{product_price}
 		  	 , #{tran_amt}
 		  	 , now()
+		  	 , #{product_trade_adr1}
 		  	 , 1 
 		  )	
 	</insert>
+	
+	<!-- 거래내역 조회 -->
+	<select id="selectPayInfo" resultType="map">
+		SELECT * 
+		  FROM PAYINFO
+		 WHERE BUYER_ID = #{id} 
+	</select>
 </mapper>

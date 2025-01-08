@@ -99,8 +99,11 @@ public class MemberController {
 		if(dbMember == null || !passwordEncoder.matches(member.getMem_passwd(), dbMember.getMem_passwd())) {		
 			model.addAttribute("msg", "로그인 실패!\\n아이디와 패스워드를 다시 확인해주세요");
 			return "result/fail";
+		} else if(dbMember.getMem_status() == 2) { // 로그인 성공이지만, 정지 회원일 경우
+			model.addAttribute("msg", "신고 누적 3번으로 인해 계정이 정지되었습니다.\\n관리자에게 문의하세요.");
+			return "result/fail";
 		} else if(dbMember.getMem_status() == 3) { // 로그인 성공이지만, 탈퇴 회원일 경우
-			model.addAttribute("msg", "탈퇴한 회원입니다!");
+			model.addAttribute("msg", "탈퇴한 회원입니다!\\n다시 회원가입 해주세요. ");
 			return "result/fail";
 		} else { //로그인 성공
 			session.setAttribute("sId", dbMember.getMem_id());

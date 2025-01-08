@@ -175,11 +175,7 @@ public class PayService {
 		
 	}
 
-	// 충전금액조회
-	public int getPayAmount(String user_seq_no) {
-	    Integer amount = mapper.selectPayAmount(user_seq_no);
-	    return amount != null ? amount : 0; // 기본 값 0 반환
-	}
+	
 	
 
 	public int registPayInfo(Map<String, Object> map) {
@@ -193,6 +189,21 @@ public class PayService {
 
 	public List<Map<String, String>> getReceiverTransactionDetail(String receiver_fintech_use_num) {
 		return mapper.selectTransactionDetail(receiver_fintech_use_num, "reciever_fintech");
+	}
+
+	// 충전금액조회(송금하는 사람)
+	public int getPayAmount(String user_seq_no) {
+	    Integer amount = mapper.selectPayAmount(user_seq_no);
+	    return amount != null ? amount : 0; 
+	}
+	// 충전금액조회(송금받는 사람)
+	public Integer getReceiverPayAmount(String fintech_use_num) {
+		Integer amount = mapper.selectReceiverPayAmount(fintech_use_num);
+		return amount != null ? amount : 0; 
+	}
+
+	public Map<String, String> getPayInfo(String id) {
+		return mapper.selectPayInfo(id);
 	}
 
 

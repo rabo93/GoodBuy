@@ -43,6 +43,7 @@
 				                	<input type="hidden" id="room_id${status.index}" value="${chatRoom.room_id}">
 				                	<input type="hidden" id="title${status.index}" value="${chatRoom.title}">
 				                	<input type="hidden" id="receiver_id${status.index}" value="${chatRoom.receiver_id}">
+				                	<input type="hidden" id="product_id${status.index}" value="${chatRoom.product_id}">
 					                <div class="item"><strong>${chatRoom.title}</strong></div>
 					                <div class="item-chat">상품 구매하고 싶어요 <span>&nbsp; · &nbsp; 2024.12.30 12:40</span></div>
 				                </div>

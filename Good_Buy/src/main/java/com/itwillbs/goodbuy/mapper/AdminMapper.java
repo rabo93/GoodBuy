@@ -16,11 +16,9 @@ import com.itwillbs.goodbuy.vo.ProductOrderVO;
 public interface AdminMapper {
 
 	// 공통코드 등록 (상위코드)
-	@AdminLog
 	int insertCommonCode(Map<String, Object> mainCode);
 
 	// 공통코드 등록 (하위코드)
-	@AdminLog
 	int insertCommonCodeType(@Param("subCodes") List<Map<String, Object>> subCodes);
 
 	// 공통코드 목록 조회
@@ -33,15 +31,12 @@ public interface AdminMapper {
 	int selectCommonCodesFiltered(@Param("param") Map<String, Object> param);
 
 	// 공통코드 컬럼 수정
-	@AdminLog
 	int updateCommonCodes(Map<String, Object> param);
 
 	// 공통코드 컬럼 삭제
-	@AdminLog
 	int deleteCommonCodes(Map<String, Object> param);
 
 	// 사용되지않는 공통코드(상위코드) 삭제
-	@AdminLog
 	int deleteDeprecatedCommonCode();
 
 	//---------------------------------------------------------
@@ -52,7 +47,6 @@ public interface AdminMapper {
 	MemberVO selectMember(String mem_id);
 	
 	// 회원 상태 수정
-	@AdminLog
 	int updateMemberInfo(MemberVO member);
 	
 	// 회원 목록 전체 컬럼 수 조회
@@ -62,8 +56,29 @@ public interface AdminMapper {
 	int selectMemberListFiltered(@Param("param") Map<String, Object> param);
 	
 	// 회원 삭제
-	@AdminLog
 	int deleteMember(String mem_id);
+	
+	//---------------------------------------------------------
+	// 신고 회원 목록 전체 컬럼 수 조회
+	int selectUserReportTotal();
+
+	// 신고 회원 검색 필터링 후 컬럼 수 조회
+	int selectUserReportFiltered(@Param("param") Map<String, Object> param);
+
+	// 필터링 된 신고 회원 목록 가져오기
+	List<Map<String, Object>> selectUserReportList(@Param("param") Map<String, Object> param);
+	
+	// 신고 회원 조치 및 수정
+	int updateUserReport(Map<String, Object> param);
+
+	// 회원 신고 횟수 누적
+	int updateUserReportCount(Map<String, Object> param);
+	
+	// 회원 목록에서 경고횟수, 현재 상태(등급) 조회
+	Map<String, Object> selectUserReportInfo(String memId);
+
+	// 회원 경고횟수에 따른 계정 상태(등급) 업데이트
+	int updateUserStatus(String memId);
 	
 	//---------------------------------------------------------
 	// 신고 상품 목록 전체 컬럼 수 조회
@@ -76,7 +91,6 @@ public interface AdminMapper {
 	List<Map<String, Object>> selectProductReportList(@Param("param") Map<String, Object> paramr);
 	
 	// 신고 상품 조치 및 수정
-	@AdminLog
 	int updateProductReport(Map<String, Object> param);
 	
 	//---------------------------------------------------------
@@ -93,34 +107,22 @@ public interface AdminMapper {
 	List<NoticeVO> selectNoticeBoardFileList(@Param("deleteItems") List<Integer> deleteItems);
 	
 	// 공지사항 삭제
-	@AdminLog
 	int deleteNotice(@Param("deleteItems") List<Integer> deleteItems);
 	
 	//---------------------------------------------------------
 	// Faq 목록 조회 (필터링, 검색어, 페이징 적용) + 검색 조건
-	List<Map<String, Object>> selectFaqList(@Param("start") int start, 
-											@Param("length") int length,
-											@Param("searchValue") String searchValue,
-											@Param("faqCate") int faqCate, 
-											@Param("listStatus") int listStatus, 
-											@Param("orderColumn") String orderColumn, 
-											@Param("orderDir") String orderDir);
+	List<Map<String, Object>> selectFaqList(@Param("param") Map<String, Object> param);
 	
 	// Faq 전체 컬럼 수 조회
 	int selectFaqTotal();
 	
 	// FAQ 검색 후 컬럼 수 조회
-	int selectFaqFiltered(
-			@Param("faqCate") int faqCate, 
-			@Param("listStatus") int listStatus, 		
-			@Param("searchValue") String searchValue);
+	int selectFaqFiltered(@Param("param") Map<String, Object> param);
 
 	// Faq 수정
-	@AdminLog
 	int updateFaqInfo(Map<String, Object> param);
 	
 	// Faq 삭제
-	@AdminLog
 	int deleteFaq(@Param("deleteItems") List<Integer> faqIds);
 
 	//---------------------------------------------------------
@@ -134,7 +136,6 @@ public interface AdminMapper {
 	List<Map<String, Object>> selectEnquireList(@Param("param") Map<String, Object> param);
 	
 	// 답글 등록(수정)
-	@AdminLog
 	int updateReplyInfo(Map<String, Object> param);
 
 	// =====================================================
@@ -147,9 +148,24 @@ public interface AdminMapper {
 	// 상품 거래 목록 전체 컬럼 수 조회
 	int selectOrderListTotal();
 	// 상품 거래 검색 필터링 후 컬럼 수 조회
-	int selectOrderListFiltered(Map<String, Object> convertParam);
-	// 필터링 된 상품 거래 목록 가져오기
-	ProductOrderVO selectOrderList(Map<String, Object> convertParam);
+	int selectOrderListFiltered(@Param("param") Map<String, Object> param);
 	
+	// 필터링 된 상품 거래 목록 가져오기
+	List<ProductOrderVO> selectOrderList(@Param("param") Map<String, Object> param);
+
+	// --------------------------------------------------------
+	// [ 로그 ]
+	// 로그 목록 전체 컬럼 수 조회
+	int selectLogListTotal();
+	
+	// 로그 필터링 후 컬럼 수 조회
+	int selectLogListFiltered(@Param("param") Map<String, Object> param);
+	
+	// 필터링 된 로그 목록 조회
+	List<MemberVO> selectLogList(@Param("param")Map<String, Object> param);
+
+	// 회원 신고 기록 목록 조회
+	List<Map<String, Object>> selectReportHistory(String mem_id);
+
 
 }

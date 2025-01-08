@@ -54,21 +54,17 @@ function addAmount(amount) {
     inputField.value = currentValue + amount;  // 금액 추가
 }
 
-const allBtn = $('.all-btn').val();
-console.log("allBtn : " + allBtn);
-console.log($('.all-btn').text());
 // 이용내역 전체의 토글버튼 - 클릭하면 해당 항목이 보이기는 함. 전체내역이 기본설정이 안됨.
 function listToggleButton(button, type) {
-	
-	// all-btn selected <- 이렇게 시작할 수는 없는가?
-	
-	
+	console.log('1');
 	const buttons = document.querySelectorAll('button');
 	// 목록 활성화 상태 업데이트
 	const lists = document.querySelectorAll('.use-history-item');
 	buttons.forEach(button => {
+		console.log('2');
 		
 		button.addEventListener('click', () => {
+			console.log('3');
 		    // 모든 버튼에서 selected 클래스 제거
 		    buttons.forEach(btn => btn.classList.remove('selected'));
 		    

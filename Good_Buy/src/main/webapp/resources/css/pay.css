@@ -354,7 +354,6 @@ html.fixed {overflow-y:hidden;}
     border-radius: 8px;
     cursor: pointer;
     font-weight: 700;
-    );
     border: 1px solid var(--primary);
 }
 

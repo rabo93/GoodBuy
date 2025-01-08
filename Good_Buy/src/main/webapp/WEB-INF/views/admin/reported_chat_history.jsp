@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -51,10 +52,56 @@
                         <div class="col-lg-12">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h5 class="m-0 font-weight-bold text-primary">통계</h5>
+                                    <h5 class="m-0 font-weight-bold text-primary">신고된 채팅 내역</h5>
                                 </div>
                                 <div class="card-body">
-                                	음..
+                                	<div class="room_info mb-1">
+                            			<c:if test="${chatDetail != null}">
+	                                		<div>채팅방 번호 : <b>${param.room_id}</b>
+                                				<b class="chat_cate">
+                                					${chatDetail.STATUS}
+                                				</b>
+                                				<c:if test="${chatDetail.STATUS.equals('대화종료')}">
+                                					<script>
+                                						$(".chat_cate").addClass("cate02");
+                                					</script>
+                                				</c:if>
+	                                		</div>
+	                                		<div>채팅방 제목 : <b>${chatDetail.TITLE}</b></div>
+                               			</c:if>
+                                		<div>참여자 : <b>${chatHistory[0].SENDER_ID}</b>, <b>${chatHistory[0].RECEIVER_ID}</b></div>
+                                	</div>
+                                	<ul class="list-group mt-1" id="reported_chat_list">
+                                		<c:forEach items="${chatHistory}" var="chat">
+                                			<li class="list-group-item">
+	                               				<div class="user_info">
+	                               					<c:choose>
+	                               						<c:when test="${chat.type.equals('TALK')}">
+				                                			<span class="chat_type type01">TALK</span>
+	                               						</c:when>
+	                               						<c:when test="${chat.type.equals('FILE')}">
+	                               							<span class="chat_type type02">FILE</span>
+	                               						</c:when>
+	                               					</c:choose>
+	                               					<span class="id">${chat.SENDER_ID}</span>
+	                               					<span class="time">${chat.SEND_TIME}</span>
+		                               				<span class="read <c:if test="${chat.READ_STATE == 1}">no</c:if>"><i class="fa-solid fa-circle-check"></i></span>
+	                               				</div>
+	                               				<div class="message">
+	                               					<c:choose>
+	                               						<c:when test="${chat.type.equals('TALK')}">
+				                                			${chat.MESSAGE}
+	                               						</c:when>
+	                               						<c:when test="${chat.type.equals('FILE')}">
+	                               							<a href="${pageContext.request.contextPath}/resources/upload/${fn:split(chat.MESSAGE, ':')[0]}" target="_blank">
+	                               								<img src="${pageContext.request.contextPath}/resources/upload/${fn:split(chat.MESSAGE, ':')[1]}">
+	                               							</a>
+	                               						</c:when>
+	                               					</c:choose>
+	                               				</div>
+	                                		</li>
+                                		</c:forEach>
+                                	</ul>
                                 </div>
                             </div>
                         </div>
@@ -79,6 +126,7 @@
         <i class="fas fa-angle-up"></i>
     </a>
     
+	
     <!-- Bootstrap core JavaScript-->
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/jquery/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -97,7 +145,7 @@
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/daterangepicker.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="${pageContext.request.contextPath}/resources/adm/js/member_report_list.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/js/reported_chat_history.js"></script>
 
 </body>
 

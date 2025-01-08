@@ -324,6 +324,16 @@ public class AdminService {
 	public List<Map<String, Object>> getReportHistory(String mem_id) {
 		return mapper.selectReportHistory(mem_id);
 	}
+
+	// 회원 신고 채팅방 대화내역 조회
+	public List<Map<String, Object>> getReportedChatHistory(String room_id) {
+		return mapper.selectReportChatHistory(room_id);
+	}
+
+	// 신고 채팅방 상세
+	public Map<String, Object> getChatDetail(String room_id) {
+		return mapper.selectChatDetail(room_id);
+	}
 	
 	
 //	// 답글 등록(수정)

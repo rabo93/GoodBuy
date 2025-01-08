@@ -416,6 +416,18 @@ public class AdminController {
 		}
 	}
 	
+	// 신고 채팅방 목록 페이지 포워딩
+	@GetMapping("AdmReportedChatHistory")
+	public String admReportedChatHistory(String room_id, Model model, HttpSession session) {
+		System.out.println("신고 채팅방ID : " + room_id);
+		Map<String, Object> chatDetail = service.getChatDetail(room_id);
+		List<Map<String, Object>> chatHistory = service.getReportedChatHistory(room_id);
+		
+		model.addAttribute("chatDetail", chatDetail);
+		model.addAttribute("chatHistory", chatHistory);
+		
+		return "admin/reported_chat_history";
+	}
 	// ======================================================
 	// 공지사항 관리
 	@LoginCheck(memberRole = MemberRole.ADMIN)
@@ -645,6 +657,13 @@ public class AdminController {
 	
 	// ======================================================
 	// [ 통계 ]
+	// 통계 차트 페이지
+	@GetMapping("AdmChartList")
+	public String admChartList() {
+		return "admin/chart_list";
+	}
+	
+	
 	// ======================================================
 	// [ 로그 ]
 	// 로그 기록 페이지 포워딩

@@ -76,6 +76,40 @@
 		 WHERE room_id = #{room_id}
 	</select>
 	
+<!--
+REPORT_ID
+REPORTER_ID
+REPORTED_ID
+REPORT_DATE
+REASON
+STATUS
+ACTION_REASON
+ADMIN_ID
+ACTION_DATE
+ROOM_ID
+-->
+	<insert id="insertChatReport">
+		<selectKey keyProperty="report_id" resultType="int" order="BEFORE">
+		SELECT MAX(REPORT_ID) + 1
+		  FROM USER_REPORTS
+		</selectKey>
+		INSERT
+		  INTO USER_REPORTS
+		VALUES (
+			   #{report_id}
+			 , #{reporter_id}
+			 , #{reported_id}
+			 , CURRENT_TIMESTAMP
+			 , #{reason}
+			 , '접수'
+			 , NULL
+			 , NULL
+			 , NULL
+			 , #{room_id}
+			 )
+	</insert>
+	
+	
 </mapper>
 
 

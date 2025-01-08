@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -16,6 +15,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -30,12 +30,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.handler.GenerateRandomCode;
+import com.itwillbs.goodbuy.handler.RsaKeyGenerator;
 import com.itwillbs.goodbuy.service.MailService;
 import com.itwillbs.goodbuy.service.MemberService;
 import com.itwillbs.goodbuy.service.PayService;
 import com.itwillbs.goodbuy.vo.MailAuthInfo;
 import com.itwillbs.goodbuy.vo.MemberVO;
-import com.itwillbs.goodbuy.vo.NoticeVO;
 import com.itwillbs.goodbuy.vo.PayToken;
 
 import lombok.extern.log4j.Log4j2;
@@ -67,14 +67,27 @@ public class MemberController {
 		return "member/sns_login";
 	}
 	
+	
+	// 로그인 폼 요청 시 공개키 전송하는 기능 추가
 	@GetMapping("MemberLogin")
-	public String memberLoginForm() {
+	public String memberLoginForm(HttpSession session, Model model) {
+		// RSA 알고리즘을 사용항 공개키/개인키 생성
+		Map<String, String> rsaKey = RsaKeyGenerator.generateKey();
+//		System.out.println("공개키 : " + rsaKey.get("publicKey"));
+//		System.out.println("개인키 : " + rsaKey.get("privateKey"));
+		
+		// 개인키/공개키 셋은 세션에 저장해 두고(현재 실제로는 개인키만 저장해도 무관함)
+		// 공개키는 클라이언트측에 전송할 수 있도록 Model 객체에 추가
+		session.setAttribute("rsaKey", rsaKey);
+		model.addAttribute("publicKey", rsaKey.get("publicKey"));
+		
 		return "member/member_login";
 	}
 	
 	@PostMapping("MemberLogin")
 	public String login(MemberVO member, Model model, HttpSession session,
-						BCryptPasswordEncoder passwordEncoder, 
+						BCryptPasswordEncoder passwordEncoder,
+						String encryptedData, // 아이디&패스워드를 JSON 으로 묶어서 암호화했을 경우
 						@RequestParam(value = "rememberId", required = false) String rememberId,
 						@CookieValue(value="userId",required=false) String cookieId,
 						HttpServletResponse response) {
@@ -82,41 +95,65 @@ public class MemberController {
 	    String mem_id = (member.getMem_id() != null && !member.getMem_id().isEmpty()) 
 	                    ? member.getMem_id() 
 	                    : cookieId;
+	    
+	    //------------------------------------------------------------------
+		// [ 암호화 된 데이터 복호화 ] *2025/01/08 추가됨*
+		Map<String, String> rsaKey = (Map<String, String>) session.getAttribute("rsaKey");
+		System.out.println("rsaKey: " + rsaKey);
 		
-		// 아이디 기억하기 체크박스 처리
-		Cookie cookie = new Cookie("userId", member.getMem_id()); //쿠키설정
-		if(rememberId != null) { //체크 시
-			cookie.setMaxAge(60*60*24*1); // 쿠키 유효기간 1일
-		} else {
-			cookie.setMaxAge(0); // 쿠키 삭제
-		}
-		response.addCookie(cookie);
+		// RsaKeyGenerator.decrypt() 메서드 호출하여 복호화 후 결과값 리턴받기
+		// => 파라미터 : 개인키, 암호문   리턴타입 : String
+		//------------------------------
+		// id 와 passwd 값을 JSON 으로 묶어서 전송했을 경우
+		String decryptedData = RsaKeyGenerator.decrypt(rsaKey.get("privateKey"), encryptedData);
+		System.out.println("복호화 된 데이터 : " + decryptedData); 
 		
-		// 로그인 처리
-		MemberVO dbMember = memberService.getMember(mem_id);
+		// JSONObject 또는 Gson 의 JsonObject 등을 활용하여 파싱을 통해 id 와 passwd 추출
+		JSONObject jo = new JSONObject(decryptedData); // JSON 문자열 파싱
+		// 파싱된 각각의 아이디와 패스워드를 MemberVO 객체에 저장
+		member.setMem_id(jo.getString("id"));
+		member.setMem_passwd(jo.getString("passwd"));
+		
+		//------------------------------------------------------------------
+		// [ 로그인 처리 ]
+		MemberVO dbMember = memberService.getMemberLogin(member);
+//		MemberVO dbMember = memberService.getMember(mem_id);
 		log.info(">>>>>DB에 저장된 회원 정보 : " + dbMember);
 		
 		if(dbMember == null || !passwordEncoder.matches(member.getMem_passwd(), dbMember.getMem_passwd())) {		
 			model.addAttribute("msg", "로그인 실패!\\n아이디와 패스워드를 다시 확인해주세요");
 			return "result/fail";
-		} else if(dbMember.getMem_status() == 3) { // 로그인 성공이지만, 탈퇴 회원일 경우
-			model.addAttribute("msg", "탈퇴한 회원입니다!");
+		} else if(dbMember.getMem_status() == 2) { // 로그인 성공이지만, 정지 회원일 경우
+			model.addAttribute("msg", "신고 누적 3번으로 인해 계정이 정지되었습니다.\\n관리자에게 문의하세요.");
 			return "result/fail";
-		} else { //로그인 성공
+		} else if(dbMember.getMem_status() == 3) { // 로그인 성공이지만, 탈퇴 회원일 경우
+			model.addAttribute("msg", "탈퇴한 회원입니다!\\n다시 회원가입 해주세요. ");
+			return "result/fail";
+		} else { 
+			// !!!!!!!!!!!!!!!!!!!로그인 성공!!!!!!!!!!!!!!!!!!!
 			session.setAttribute("sId", dbMember.getMem_id());
 			session.setAttribute("sNick", dbMember.getMem_nick());
 			session.setAttribute("sGrade", dbMember.getMem_grade());
 			session.setAttribute("sProfile", dbMember.getMem_profile());
-//			session.setAttribute("sStore", dbMember.getMem_intro()); //상점소개
-			session.setMaxInactiveInterval(60 * 120);
+			session.setMaxInactiveInterval(60 * 120); // 세션 타이머 설정: 2시간
 			
+			//--------------------------------------------------------------
 			// [ 핀테크 엑세스토큰 정보 조회하여 세션에 저장하는 기능 추가 ]
 			PayToken token = payService.getPayTokenInfo(dbMember.getMem_id());
 //			System.out.println("member 토큰 확인 : " + token);
 			session.setAttribute("token", token);
+			//--------------------------------------------------------------
+			// [ 쿠키 설정 ]
+			// 아이디 기억하기 체크박스 처리
+			Cookie cookie = new Cookie("userId", member.getMem_id()); //쿠키설정
+			if(rememberId != null) { //체크 시
+				cookie.setMaxAge(60*60*24*1); // 쿠키 유효기간 1일
+			} else {
+				cookie.setMaxAge(0); // 쿠키 삭제
+			}
+			response.addCookie(cookie);
 			
-			
-			// 이전 페이지 저장 후 로그인 시 리다이렉트처리
+			// [ 특정 페이지 로그인 필수 처리를 위한 로그인 완료 시 원래 페이지로 이동 처리 ]
 			if(session.getAttribute("prevURL") == null) {
 				return "redirect:/";
 			} else {
@@ -125,7 +162,6 @@ public class MemberController {
 				return "redirect:" + session.getAttribute("prevURL");
 			}
 		}
-		
 	}	
 	
 	//=================================================================================================================================

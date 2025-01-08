@@ -1,6 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+ <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -114,7 +115,25 @@
 	                                    	<div class="col-4">
 	                                    		<div class="mb-3">
 		                                            <label class="small mb-1" for="mem_profile">프로필사진</label>
-		                                            <img src="${dbMember.mem_profile}" alt="프로필사진" class="profile_img_box"> 
+		                                            <c:choose>
+		                                            	<c:when test="${dbMember.mem_profile != null and fn:contains(dbMember.mem_profile, 'resources')}">
+			                                           		<img src="${pageContext.request.contextPath}${dbMember.mem_profile}" alt="프로필사진" class="profile_img_box"> 
+		                                            	</c:when>
+		                                            	<c:when test="${dbMember.mem_profile != null and not fn:contains(dbMember.mem_profile, 'resources')}">
+				                                            <img src="${dbMember.mem_profile}" alt="프로필사진" class="profile_img_box"> 
+		                                            	</c:when>
+		                                            	<c:otherwise>
+				                                            <img src="${pageContext.request.contextPath}/resources/adm/img/no-thumb.jpg" alt="프로필사진" class="profile_img_box"> 
+		                                            	</c:otherwise>
+		                                            </c:choose>
+		                                        </div>
+		                                        <div class="mb-3">
+		                                            <label class="small mb-1" for="mem_nick">SNS 연동상태</label>
+		                                            <input class="form-control" name="mem_email" type="text" value="${snsStatus}" readonly> 
+		                                        </div>
+		                                        <div class="mb-3">
+		                                            <label class="small mb-1" for="mem_nick">회원 인증상태</label>
+		                                            <input class="form-control" name="mem_email" type="text" value="${authStatus}" readonly> 
 		                                        </div>
 	                                    		<div class="mb-3">
 		                                            <label class="small mb-1" for="mem_nick">회원등급</label>
@@ -125,15 +144,61 @@
 		                                            <input class="form-control" name="mem_email" type="text" value="${memStatus}" readonly> 
 		                                        </div>
 		                                        <div class="mb-3">
-		                                            <label class="small mb-1" for="mem_nick">SNS 연동상태</label>
-		                                            <input class="form-control" name="mem_email" type="text" value="${snsStatus}" readonly> 
-		                                        </div>
-		                                        <div class="mb-3">
-		                                            <label class="small mb-1" for="mem_nick">회원 인증상태</label>
-		                                            <input class="form-control" name="mem_email" type="text" value="${authStatus}" readonly> 
+		                                            <label class="small mb-1" for="report_cnt">경고 누적 횟수 
+		                                            </label>
+		                                            <input class="form-control" name="report_cnt" type="text" value="${dbMember.report_cnt}" readonly> 
 		                                        </div>
 	                                    	</div>
 										</section>
+										
+                                        <c:if test="${reportHistory != null}">
+											<section class="row">
+												<div class="col-12 mt-3">
+						                            <div class="card shadow mb-4">
+						                                <div class="card-header py-3">
+						                                    <h6 class="m-0 font-weight-bold text-primary">신고 기록</h6>
+						                                </div>
+						                                <div class="card-body">
+						                                	<div class="table-responsive">
+								                                <table class="table table-bordered compact" width="100%" cellspacing="0">
+								                                    <thead>
+								                                    	<tr>
+								                                    		<th width="50">No.</th>
+								                                    		<th>신고자</th>
+								                                    		<th>신고대상자</th>
+								                                    		<th>신고일시</th>
+								                                    		<th>신고사유</th>
+								                                    		<th>조치상태</th>
+								                                    		<th>조치사유</th>
+								                                    		<th>조치자</th>
+								                                    		<th>조치일시</th>
+								                                    		<th>채팅방 번호</th>
+								                                    	</tr>
+								                                    </thead>
+								                                    <tbody>
+								                                    	<c:forEach var="history" items="${reportHistory}">
+								                                    		<tr>
+								                                    			<td>${history.REPORT_ID}</td>
+								                                    			<td>${history.REPORTER_ID}</td>
+								                                    			<td>${history.REPORTED_ID}</td>
+								                                    			<td>${history.REPORT_DATE}</td>
+								                                    			<td>${history.REASON}</td>
+								                                    			<td>${history.STATUS}</td>
+								                                    			<td>${history.ACTION_REASON}</td>
+								                                    			<td>${history.ADMIN_ID}</td>
+								                                    			<td>${history.ACTION_DATE}</td>
+								                                    			<td>${history.ROOM_ID}</td>
+								                                    		</tr>
+								                                    	</c:forEach>
+								                                    </tbody>
+								                                </table>
+								                          	</div>
+						                                </div>
+						                            </div>
+												</div>
+											</section>
+										</c:if>
+										
                                     </form>
                                 </div>
                             </div>
@@ -194,8 +259,6 @@
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="${pageContext.request.contextPath}/resources/adm/js/code_regist.js"></script>
 
 </body>
 

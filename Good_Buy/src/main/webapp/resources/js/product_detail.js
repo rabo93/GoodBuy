@@ -87,7 +87,7 @@ $(function(){
 	
 	$("#shop-detail").on('click', onClickShopDetail)
 	function onClickShopDetail() {
-		location.href='ProductShop?MEM_ID=' + $("#item-seller-nick").text();
+		location.href='ProductShop?MEM_NICK=' + $("#item-seller-nick").text();
 	}
 	
 	$("#editItem").on('click', onClickItemEdit)

@@ -19,4 +19,5 @@
 		<typeAlias type="com.itwillbs.goodbuy.vo.ChatMessage" alias="chatMessage"/>
 		<typeAlias type="com.itwillbs.goodbuy.vo.SupportVO" alias="support"/>
 	</typeAliases>
+	
 </configuration>

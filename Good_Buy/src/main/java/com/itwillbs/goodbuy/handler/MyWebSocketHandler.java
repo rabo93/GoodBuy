@@ -157,6 +157,17 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			
 		}
 		
+		if (chatMessage.getType().equals(ChatMessage.TYPE_FILE_UPLOAD_COMPLETE)) {
+			//	현재 시스템 날짜 시각정보 받아와서 저장
+			chatMessage.setType(ChatMessage.TYPE_FILE);;
+			chatMessage.setSend_time(getDateTimeNow());
+			//	채팅 메세지 DB 저장 요청
+			chatService.insertChatMessage(chatMessage);
+			
+			sendMessage(session, chatMessage);
+			
+		}
+		
 	}
 	
 	// 3. afterConnectionClosed - 웹소켓 연결 해제 시 자동으로 호출되는 메서드

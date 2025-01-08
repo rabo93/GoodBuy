@@ -56,6 +56,15 @@
 		 WHERE MEM_NICK = #{mem_nick}
 	</select>
 	
+	<!-- 회원 아이디에 대한 상세정보 조회 - SELECT  -->
+	<select id="selectMemberinfo" resultType="member">
+		SELECT *
+		  FROM MEMBER
+		 WHERE MEM_ID = #{mem_id}
+	</select>
+	
+	
+	
 	<!-- ************************************************************** -->
 	<!-- 비밀번호 조회 -->
 	<select id="selectMemberPasswd" resultType="member">
@@ -262,6 +271,7 @@
 	     WHERE AUTH_CODE = #{authCode}
 	       AND STATUS = 0 
 	</update>
+	
 	
 
 	<!-- ************************************************************** -->

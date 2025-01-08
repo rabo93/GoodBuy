@@ -152,13 +152,14 @@
 		       , MEM_INTRO
 		       , SNS_STATUS
 		       , AUTH_STATUS
+		       , REPORT_CNT
 		  FROM MEMBER
 		 WHERE 1 = 1
 			<if test="param.mem_status != null and param.mem_status != 0">
-		 	   AND MEM_STATUS = #{memStatus}
+		 	   AND MEM_STATUS = #{param.mem_status}
 		 	</if>
 		 	<if test='param.mem_grade != null and !param.mem_grade.equals("전체")'>
-		 	   AND MEM_GRADE = #{memGrade}
+		 	   AND MEM_GRADE = #{param.mem_grade}
 		 	</if>
 		 	<if test="param.searchValue != null and !param.searchValue.equals('')">
 		 	   AND (MEM_ID LIKE CONCAT('%', #{param.searchValue}, '%')
@@ -230,8 +231,25 @@
 		       , MEM_INTRO
 		       , SNS_STATUS
 		       , AUTH_STATUS
+		       , REPORT_CNT
 		FROM MEMBER
 		WHERE MEM_ID = #{mem_id}
+     </select>
+     
+     <!-- 회원 신고기록 목록 조회 - SELECT -->
+     <select id="selectReportHistory" resultType="map">
+     	SELECT REPORT_ID
+     		   , REPORTER_ID
+     		   , REPORTED_ID
+     		   , DATE_FORMAT(REPORT_DATE, '%Y-%m-%d %H:%i:%s') AS REPORT_DATE
+     		   , REASON
+     		   , STATUS
+     		   , ACTION_REASON
+     		   , ADMIN_ID
+     		   , DATE_FORMAT(ACTION_DATE, '%Y-%m-%d %H:%i:%s') AS ACTION_DATE
+     		   , ROOM_ID
+		  FROM USER_REPORTS
+		 WHERE REPORTED_ID = #{mem_id}
      </select>
      
      <!-- 회원 상태 수정 - UPDATE -->
@@ -275,7 +293,7 @@
 	 	       OR R.ADMIN_ID LIKE CONCAT('%', #{param.searchValue}, '%'))
 		</if>
 		<if test="param.searchDate != null and !param.searchDate.equals('')">
-		   AND DATE(R.REPORT_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10)
+		   AND (DATE(R.REPORT_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1))
 		</if>
      </select>
      
@@ -310,7 +328,7 @@
 	 	      )
 		</if>
 		<if test="param.searchDate != null and !param.searchDate.equals('')">
-		   AND DATE(R.REPORT_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10)
+		   AND (DATE(R.REPORT_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1))
 		</if>
 		 ORDER BY 
 			<choose>
@@ -341,6 +359,7 @@
 			   A.STATUS = #{STATUS}
 			   , A.ACTION_REASON = #{ACTION_REASON}
 			   , A.ADMIN_ID = #{ADMIN_ID}
+			   , A.ACTION_DATE = NOW()
 			<if test='STATUS != null or STATUS.equals("처리완료")'>
      	   	   , B.PRODUCT_STATUS = 4
 			</if>
@@ -377,7 +396,7 @@
 	 	       OR ADMIN_ID LIKE CONCAT('%', #{param.searchValue}, '%'))
 		</if>
 		<if test="param.searchDate != null and !param.searchDate.equals('')">
-		   AND DATE(REPORT_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10)
+		   AND (DATE(REPORT_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1))
 		</if>
      </select>
      
@@ -409,7 +428,7 @@
 	 	      )
 		</if>
 		<if test="param.searchDate != null and !param.searchDate.equals('')">
-		   AND DATE(REPORT_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10)
+		   AND (DATE(REPORT_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1))
 		</if>
 		 ORDER BY 
 			<choose>
@@ -430,6 +449,31 @@
 		 	   , #{param.length}
      </select>
      
+     <!-- 회원 신고 채팅방 대화내역 조회 - SELECT -->
+     <select id="selectReportChatHistory" resultType="map">
+     	SELECT ROOM_ID
+     		   , SENDER_ID
+     		   , RECEIVER_ID
+     		   , MESSAGE
+     		   , TYPE
+		       , DATE_FORMAT(SEND_TIME, '%Y-%m-%d %H:%i:%s') AS SEND_TIME
+     		   , READ_STATE
+     	  FROM CHATTING
+     	 WHERE ROOM_ID = #{room_id}
+     </select>
+     
+     <!-- 신고 채팅방 상세 -->
+     <select id="selectChatDetail" resultType="map">
+     	SELECT ROOM_ID
+     		   , PRODUCT_ID
+     		   , TITLE
+     		   , (CASE WHEN STATUS = 1 THEN "대화중"
+					   WHEN STATUS = 2 THEN "대화종료" END) AS STATUS
+     	  FROM CHATROOM
+     	 WHERE ROOM_ID = #{room_id}
+     	 LIMIT 1
+     </select>
+     
      <!-- 신고 회원 조치 및 수정 - UPDATE -->
      <!-- {ROOM_ID=, REPORT_ID=2, REPORTER_ID=, REPORTED_ID=, ADMIN_ID=admin, STATUS=처리완료, ACTION_REASON=신고사유} -->
      <update id="updateUserReport">
@@ -437,6 +481,7 @@
 		   SET STATUS = #{STATUS}
 				, ACTION_REASON = #{ACTION_REASON}
 				, ADMIN_ID = #{ADMIN_ID}
+				, ACTION_DATE = NOW()
 		 WHERE REPORT_ID = #{REPORT_ID}
 		   AND ROOM_ID = #{ROOM_ID}
 		   AND REPORTED_ID = #{REPORTED_ID}
@@ -476,6 +521,28 @@
 		WHERE A.MEM_ID = #{REPORTED_ID};
      </update>
      
+     <!-- 회원 목록에서 경고횟수, 현재 상태(등급) 조회 -->
+     <select id="selectUserReportInfo" resultType="map">
+     	SELECT MEM_STATUS
+			   , REPORT_CNT
+		  FROM MEMBER
+		 WHERE MEM_ID = #{memId}
+     </select>
+     
+     <!-- 회원 경고횟수에 따른 계정 상태(등급) 업데이트 -->
+     <update id="updateUserStatus">
+     	UPDATE MEMBER
+		   SET MEM_STATUS = 2
+		 WHERE MEM_ID = #{memId}
+		   AND REPORT_CNT > 3
+     </update>
+     
+     
+     
+     
+     
+     
+          
      <!-- [ 공지사항 관리 ] -->
      <!-- 공지사항 목록 전체 컬럼 수 조회 - SELECT -->
      <select id="selectNoticeListTotal" resultType="int">
@@ -547,9 +614,6 @@
 			   #{notice_id}
 		</foreach>
      </delete>
-     
-     
-     
      
      <!-- ************************************************************* -->
      <!-- FAQ 목록 가져오기 -->
@@ -645,8 +709,8 @@
 	 	       OR STATUS LIKE CONCAT('%', #{param.searchValue}, '%'))
 		</if>
 		<if test="param.searchDate != null and !param.searchDate.equals('')">
-		   AND (DATE(SUPPORT_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10)
-		   	OR DATE(REPLY_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10))
+		   AND (DATE(SUPPORT_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1)
+		   	OR DATE(REPLY_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1))
 		</if>
      </select>
      
@@ -676,8 +740,8 @@
 		 	       OR STATUS LIKE CONCAT('%', #{param.searchValue}, '%'))
 			</if>
 			<if test="param.searchDate != null and !param.searchDate.equals('')">
-			   AND (DATE(SUPPORT_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10)
-			   	OR DATE(REPLY_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10))
+			   AND (DATE(SUPPORT_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1)
+			   	OR DATE(REPLY_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1))
 			</if>
 		ORDER BY 
 			<choose>
@@ -706,20 +770,6 @@
 		</set>
 		WHERE SUPPORT_ID = #{SUPPORT_ID}
      </update>
-     
-     <!-- ******** 로그 AOP ******* -->
-     <!-- 로그 저장 - INSERT -->
-     <insert id="insertLog">
-     	INSERT 
-     	  INTO LOG
-     	VALUES (
-     		#{log.ADMIN_ID}
-     		, #{log.MAPPER_ID}
-     		, #{log.PROCESS_TIME}
-     		, #{log.PROCESS_RESULT}
-     		, #{log.IP_ADDRESS}
-     	)
-     </insert>
      
      
      <!-- ************************************************************* -->
@@ -754,16 +804,17 @@
      <!-- 필터링 된 거래내역 목록 조회 - SELECT -->
      <select id="selectOrderList" resultType="order">
      	SELECT pi.PAY_ID
-			,pi.SELLER_ID
-			 ,pi.PRODUCT_ID
-		    ,pr.PRODUCT_CATEGORY
-			,pr.PRODUCT_TITLE
-			,pr.PRODUCT_PRICE
-			,pi.BUYER_ID
-			,pi.PAY_PRICE
-			,pi.PAY_DATE
-			,pi.PAY_ADDRESS
-			,pi.PAY_STATUS 
+			, pi.SELLER_ID
+			, pi.PRODUCT_ID
+		    , pr.PRODUCT_CATEGORY
+			, pr.PRODUCT_TITLE
+			, pr.PRODUCT_PRICE
+			, pi.BUYER_ID
+			, pi.PAY_PRICE
+			, pi.PAY_DATE
+<!-- 			, DATE_FORMAT(pi.PAY_DATE, '%Y-%m-%d %H:%i:%s') -->
+			, pi.PAY_ADDRESS
+			, pi.PAY_STATUS 
 		FROM PAYINFO pi JOIN PRODUCT pr
 		ON pi.PRODUCT_ID = pr.PRODUCT_ID
 		WHERE 1 = 1
@@ -796,7 +847,7 @@
 		 	   , #{param.length}
      </select>
      
-     
+     <!-- ******************** 로그 목록 ********************* -->
      <!-- [ 로그 목록 ] -->
      <!-- 로그 전체 컬럼 수 조회 -->
      <select id="selectLogListTotal" resultType="int">
@@ -813,7 +864,10 @@
 		   AND (ADMIN_ID LIKE CONCAT('%', #{param.searchValue}, '%')
 			   OR PROCESS_DETAIL LIKE CONCAT('%', #{param.searchValue}, '%')
 	 	       OR PROCESS_RESULT LIKE CONCAT('%', #{param.searchValue}, '%')
-	 	       OR IP_ADDRESS LIKE CONCAT('%', #{param.searchValue}, '%') 
+	 	       OR IP_ADDRESS LIKE CONCAT('%', #{param.searchValue}, '%') )
+		</if>
+		<if test="param.searchDate != null and !param.searchDate.equals('')">
+	        AND (DATE(PROCESS_TIME) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1))
 		</if>
      </select>
      
@@ -830,7 +884,10 @@
 		   AND (ADMIN_ID LIKE CONCAT('%', #{param.searchValue}, '%')
 			   OR PROCESS_DETAIL LIKE CONCAT('%', #{param.searchValue}, '%')
 	 	       OR PROCESS_RESULT LIKE CONCAT('%', #{param.searchValue}, '%')
-	 	       OR IP_ADDRESS LIKE CONCAT('%', #{param.searchValue}, '%') 
+	 	       OR IP_ADDRESS LIKE CONCAT('%', #{param.searchValue}, '%'))
+		</if>
+		<if test="param.searchDate != null and !param.searchDate.equals('')">
+	        AND (DATE(PROCESS_TIME) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1))
 		</if>
 		ORDER BY 
 			<choose>
@@ -847,4 +904,19 @@
 		 	   #{param.start}
 		 	   , #{param.length}
      </select>
+     
+       
+     <!-- ******** 로그 AOP ******* -->
+     <!-- 로그 저장 - INSERT -->
+     <insert id="insertLog">
+     	INSERT 
+     	  INTO LOG
+     	VALUES (
+     		#{log.ADMIN_ID}
+     		, #{log.MAPPER_ID}
+     		, #{log.PROCESS_TIME}
+     		, #{log.PROCESS_RESULT}
+     		, #{log.IP_ADDRESS}
+     	)
+     </insert>
 </mapper>

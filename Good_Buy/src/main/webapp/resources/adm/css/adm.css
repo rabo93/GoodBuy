@@ -1,7 +1,7 @@
 @charset "UTF-8";
 @import '../../fonts/pre/pretendard.css';
 
-body {font-family:'Pretendard', "Nunito", serif;}
+body {font-family: "Nunito", 'Pretendard', serif;}
 
 .form-check {
   display: block;
@@ -197,7 +197,7 @@ body {font-family:'Pretendard', "Nunito", serif;}
 .status {background: var(--orange);color: var(--white);display: inline-block;padding: 2px 10px;border-radius: 50px;font-size: 14px;font-weight: 500;}
 .status-01 {background: var(--primary);}
 .status-02 {background: var(--danger);}
-.status-03 {}
+.status-03 {background: var(--dark);}
 
 
 .search-wrap {
@@ -264,8 +264,68 @@ body {font-family:'Pretendard', "Nunito", serif;}
   border-radius: 0;
 }
 
+/* 채팅 히스토리 */
+#reported_chat_list li {}
+#reported_chat_list .chat_type {
+    font-weight: 900;
+    background: var(--gray);
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 6px;
+    color: var(--white);
+    font-size: 12px;
+    margin-right: 6px;
+}
+#reported_chat_list .user_info {
+    padding: 5px 0;
+}
+#reported_chat_list .user_info .chat_type.type01 {
+    background: var(--warning);
+}
+#reported_chat_list .user_info .chat_type.type02 {
+    background: var(--cyan);
+}
+#reported_chat_list .user_info .id {
+    font-size: 16px;
+    font-weight: 700;
+    margin-right: 6px;
+}
+#reported_chat_list .user_info .time {
+    font-size: 14px;
+    font-weight: 500;
+    margin-right: 6px;
+}
+#reported_chat_list .user_info .read {
+    color: var(--blue);
+}
+#reported_chat_list .user_info .read.no {
+    color: #a6a6a6;
+}
+#reported_chat_list .message {
+    background: #e4eafa;
+    padding: 6px 12px;
+    border-radius: 10px;
+    color: #2b2d3b;
+    font-weight: 500;
+    font-size: 15px;
+}
 
+.room_info {background:#eff2f8;padding:10px;border-radius:4px;}
 
+.room_info .chat_cate {
+    padding: 2px 10px;
+    border-radius: 50px;
+    display: inline-block;
+    font-size: 14px;
+    color: var(--white);
+    background: var(--success);
+}
+.room_info .chat_cate.cate01 {
+    background: var(--success);
+}
+.room_info .chat_cate.cate02 {
+    background: var(--gray-dark);
+}
 
 
 

@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function(){
 			dataSrc: function (res) {
 				const data = res.OrderList;
 				const start = $('#orderList').DataTable().page.info().start; 
-				
+//				console.log(data);
 				// PK가 아닌 테이블 컬럼 번호 계산(페이징 포함)
 				for (let i = 0; i < data.length; i++) {
 					data[i].listIndex = start + i + 1;
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function(){
 				title: "판매자ID", 
 				data: "seller_id",
 				defaultContent: "",
-	            width: '120px',
+	            width: '150px',
 				className : "dt-center",
 	            render: function (data, type, row) {
 					if (!data) {
@@ -48,14 +48,14 @@ document.addEventListener("DOMContentLoaded", function(){
                 	return data.replace(/(.{16})/g, '$1<br>'); // 16자마다 줄바꿈
            		}
 			},
-            { title: "상품유형", data: "product_category", defaultContent: "", className : "dt-center",  },
-            { title: "상품명", data: "product_title", defaultContent: "", className : "dt-center",  width: '180px', },
-            { title: "상품금액", data: "product_price", defaultContent: "", className : "dt-center",  },
+            { title: "상품유형", data: "product_category", defaultContent: "", className : "dt-center", width: '120px',},
+            { title: "상품명", data: "product_title", defaultContent: "", className : "dt-center",  width: '200px', },
+            { title: "상품금액", data: "product_price", defaultContent: "", className : "dt-center", width: '150px', },
             { 
 				title: "구매자ID", 
 				data: "buyer_id",
 				defaultContent: "",
-	            width: '120px',
+	            width: '150px',
 				className : "dt-center",
 	            render: function (data, type, row) {
 					if (!data) {
@@ -64,11 +64,11 @@ document.addEventListener("DOMContentLoaded", function(){
                 	return data.replace(/(.{16})/g, '$1<br>'); // 16자마다 줄바꿈
            		}
 			},
-            { title: "구매금액", data: "pay_price", defaultContent: "", className : "dt-center", },
-            { title: "거래일시", data: "pay_date", defaultContent: "", className : "dt-center", },
-            { title: "거래장소", data: "pay_address", defaultContent: "", className : "dt-center", },
+            { title: "구매금액", data: "pay_price", defaultContent: "", className : "dt-center", width: '150px',},
+            { title: "거래일시", data: "pay_date", defaultContent: "", className : "dt-center", width: '200px',},
+            { title: "거래장소", data: "pay_address", defaultContent: "", className : "dt-center", width: '150px',},
             { 
-				title: "거래상태", data : "pay_status", defaultContent: "", width: '100px', className : "dt-center",
+				title: "거래상태", data : "pay_status", defaultContent: "", width: '100px', className : "dt-center",  width: '180px',
 				render : function(data, type, row) {
 					if(!data) return "";
 					switch (data) {

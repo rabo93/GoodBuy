@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function(){
 		},
 		order: [[4, 'desc']], // 최초 조회 시 신고일시 최신순으로 기본 설정
 		columnDefs: [
-			 { targets: [0, 9], orderable: false },
+			 { targets: [0, 10], orderable: false },
 		],
 		columns: [
             { title: "No.", data: "listIndex", className : "dt-center", width: '30px', },
@@ -59,16 +59,14 @@ document.addEventListener("DOMContentLoaded", function(){
            		}
             },
             { 
-				title: "채팅방ID", 
+				title: "신고된채팅", 
 	            data : "ROOM_ID", 
 	            defaultContent: "",
 	            orderable : false,
 	            width: '150px',
+	            className: 'dt-center',
 	            render: function (data, type, row) {
-					if (!data) {
-						return "";
-					}
-                	return data.replace(/(.{16})/g, '$1<br>'); // 16자마다 줄바꿈
+					return `<button type="button" class="btn btn-primary" onclick="location.href='AdmReportedChatHistory?room_id=${data}'">내역보기</button>`;
            		}
             },
             { title: "신고일시", data : "REPORT_DATE", defaultContent: "", width: '180px',},
@@ -85,7 +83,9 @@ document.addEventListener("DOMContentLoaded", function(){
 				    }
 				}
             },
-            { title: "조치사유", data : "ACTION_REASON", defaultContent: "", },
+            { 
+				title: "조치사유", data : "ACTION_REASON", defaultContent: "", 
+            },
             { title: "조치자", data : "ADMIN_ID", defaultContent: "", width: '100px', },
             { title: "조치일시", data : "ACTION_DATE", defaultContent: "", width: '180px', },
             {
@@ -218,17 +218,4 @@ document.addEventListener("DOMContentLoaded", function(){
 		fnChkByte($("#actionReason"), 500);
 	});
 	
-	// 글자수 제한 함수
-	function fnChkByte(item, maxLength){
-		const str = item.val();
-        const strLength = str.length;
-        
-         if (strLength > maxLength) {
-            alert("글자수는 " + maxLength + "자를 초과할 수 없습니다.");
-            $(item).val(str.substr(0, maxLength));      //문자열 자르고 값 넣기
-            fnChkByte(item, maxLength);
-         }
-         $('#lengthInfo').text(strLength);
-    }
-
 });

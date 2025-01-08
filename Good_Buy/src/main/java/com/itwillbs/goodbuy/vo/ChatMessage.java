@@ -24,4 +24,6 @@ public class ChatMessage {
 	public static final String TYPE_ERROR = "ERROR";
 	public static final String TYPE_START = "START";
 	public static final String TYPE_REQUEST_CHAT_LIST = "REQUEST_CHAT_LIST";
+	public static final String TYPE_FILE_UPLOAD_COMPLETE = "FILE_UPLOAD_COMPLETE";
+	public static final String TYPE_FILE = "FILE";
 }

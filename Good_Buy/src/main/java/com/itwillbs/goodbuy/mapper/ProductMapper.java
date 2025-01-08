@@ -60,5 +60,11 @@ public interface ProductMapper {
 	List<Map<String, Object>> searchSameCategoryProduct(@Param("product_category")String product_category, @Param("product_id")int product_id);
 
 	// 상점페이지 조회
-	Map<String, Object> searchSellerList(String mem_id);
+	Map<String, Object> searchSellerShop(String mem_nick);
+	
+	// 셀러리뷰 목록 조회
+	List<Map<String, Object>> searchSellerReview(String mem_id);
+
+	// 상품수정페이지 상품정보 조회
+	Map<String, Object> productContent(int product_ID);
 }

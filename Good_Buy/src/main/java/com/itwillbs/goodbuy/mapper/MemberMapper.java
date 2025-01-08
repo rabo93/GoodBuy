@@ -22,7 +22,7 @@ public interface MemberMapper {
 
 	//닉네임 조회
 	MemberVO selectMemberNick(MemberVO member);
-
+	
 
 	//회원정보 수정
 	int updateMember(Map<String, String> map);
@@ -47,7 +47,8 @@ public interface MemberMapper {
 	//이메일 중복체크
 	MemberVO selectEmailId(MemberVO member);
 	
-	
+	// 암호화 로그인 
+	MemberVO selectMemberinfo(MemberVO member);
 
 	//----------------------------------------------------------
 	//상점소개 저장
@@ -93,6 +94,8 @@ public interface MemberMapper {
 	//	-------------------------------------------------------------
 	//	채팅 - MEM_ID 조회
 	String selectMemberId(String mem_id);
+
+	
 
 
 	

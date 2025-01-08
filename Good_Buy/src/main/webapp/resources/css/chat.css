@@ -182,3 +182,14 @@
     background-color: #0056b3;
 }
 
+.chat-footer .fileArea #chatFile {
+	display: none;
+}
+
+.chat-footer .fileArea label{
+	font-size: 1.5em;
+	margin-left: 5px;
+	margin-right: 10px;
+	background-color: #fff;
+	color: var(--primary);
+}

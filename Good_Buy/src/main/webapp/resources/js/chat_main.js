@@ -7,6 +7,8 @@ const TYPE_INIT_COMPLETE = "INIT_COMPLETE";
 const TYPE_START = "START";
 const TYPE_REQUEST_CHAT_ROOM_LIST = "REQUEST_CHAT_ROOM_LIST";
 const TYPE_REQUEST_CHAT_LIST = "REQUEST_CHAT_LIST";
+const TYPE_FILE_UPLOAD_COMPLETE = "FILE_UPLOAD_COMPLETE";
+const TYPE_FILE = "FILE";
 
 //	채팅 메세지 정렬 위치
 const ALIGN_CENTER = "center";
@@ -17,6 +19,9 @@ var ws;
 var receiver_id;
 //var sId;
 var product_id;
+const childUrl = location.href;
+var baseUrl = childUrl.substring(0, childUrl.lastIndexOf('/ChatMain'));
+
 
 $(".sidebar-item").on("dblclick", function() {
 	let index = $(this).data("index");
@@ -74,7 +79,7 @@ $(function() {
 				appendMessage(message.type, message.sender_id, message.receiver_id, message.message, message.send_time);
 			}
 		}
-		if (data.type == TYPE_TALK) {	// 채팅 입력
+		if (data.type == TYPE_TALK || data.type == TYPE_FILE) {	// 채팅 입력
 			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
 		}
 		
@@ -111,8 +116,6 @@ function showChatList(data) {
 function showChatRoom(room) {
 	console.log("showChatRoom -  채팅화면 표시 - " + room);
 	console.log(room);
-	let url = new URL(location.href);
-	
 	let divRoom = 	  '<div class="extra-header">'
 						+ '<button class="close-chat-button" onclick="closeChat()">'
 							+ '<i class="fa-solid fa-arrow-left"></i>'
@@ -133,6 +136,10 @@ function showChatRoom(room) {
 			           	+ '<input type="hidden" id="room_id" value="' + room.room_id +'">'
 			           	+ '<input type="hidden" id="receiver_id" value="' + room.receiver_id +'">'
 			           	+ '<input type="hidden" id="sId" value="' + room.sender_id +'">'
+			           	+ '<span class="fileArea">'
+			           	+ '<label for="chatFile"><i class="fa-solid fa-circle-plus"></i></label>'
+			           	+ '<input type="file" id="chatFile" onchange="sendFile()" accept="image/*">'
+			           	+ '</span>'
 			           	+ '<input type="text" class="chatMessage" placeholder="메시지를 입력하세요...">'
 			            + '<button class="btnSend">전송</button>'
 		            + '</div>';
@@ -172,22 +179,39 @@ function showChatRoom(room) {
 //	=========================메세지 보내기 작업 시작===========================
 function appendMessage(type, sender_id, receiver_id, message, send_time) {
 	//	send_time 추가 예정
+	let bubble_message = "";
 	let div_message = "";
 	
-	if(sender_id == sId) {	// 자신이 보낸 메세지(송신자가 자신인 경우)
-		div_message = '<div class="message user">'
+	if(type != TYPE_TALK && type != TYPE_FILE) {
+		div_message = '<div class="message center">'
 						+ '<div class="bubble">' + message + '</div>'
 					 + '</div>';
+	}
+	
+	if(type == TYPE_TALK) {	// 채팅메세지
+		bubble_message = '<div class="bubble">' + message + '</div>';
+	}
+	
+	if(type == TYPE_FILE) {
+		let hrefUrl = baseUrl + "/resources/upload/chat/" + message.split(":")[0];
+		let imgUrl = baseUrl + "/resources/upload/chat/" + message.split(":")[1];
+		bubble_message = '<div class="bubble"><a href="' + hrefUrl + '" target="_blank"><img class="img" src="' + imgUrl + '"</div>'
+	}
+	
+	if(sender_id == sId) {	// 자신이 보낸 메세지(송신자가 자신인 경우)
+		div_message = '<div class="message user">' + bubble_message + '</div>';
+//						+ '<div class="bubble">' + bubble_message + '</div>'
+//					 + '</div>';
 	}
 	
 	if(receiver_id == sId) {	// 자신이 보낸 메세지(송신자가 자신인 경우)
-		div_message = '<div class="message other">'
-						+ '<div class="bubble">' + message + '</div>'
-					 + '</div>';
+		div_message = '<div class="message other">' + bubble_message + '</div>';
+//						+ '<div class="bubble">' + bubble_message + '</div>'
+//					 + '</div>';
 	}
 
 	$(".chat-body").append(div_message);
-	
+	$(".chat-body").scrollTop($(".chat-body")[0].scrollHeight);
 	
 }
 
@@ -209,6 +233,36 @@ function sendInputMessage() {
 	$(".chatMessage").focus();
 	
 }
+//	파일전송 메서드
+function sendFile() {
+	let file = $("#chatFile")[0].files[0];
+	
+	let formData = new FormData();
+	formData.append("file", file);
+	$.ajax({
+		type : "POST",
+		url : "ChatFileUpload",
+		data : formData,
+		dataType : "JSON",
+		processData : false,
+		contentType : false
+	}).done(function(response) {
+		console.log("업로드 성공 후 AJAX 응답");
+		console.log(response);
+		
+		if(response.result == "fail") {
+			alert(response.message);
+			return;
+		}
+		
+		if(response.fileName != "" && response.thumbnailFileName != "") {
+			sendMessage(TYPE_FILE_UPLOAD_COMPLETE, product_id, sId, $("#receiver_id").val(), $("#room_id").val(), response.fileName + ":" + response.thumbnailFileName);
+		}
+		
+	});
+	
+}
+
 //	=========================메세지 보내기 작업 끝============================
 //	===============================================================================
 //	부모창의 sendMessage() 함수 호출
@@ -218,6 +272,7 @@ function sendMessage(type, product_id, sender_id, receiver_id, room_id, message)
 function closeChat() {
 	$(".chat-area").empty();
 }
+
 // ==============================================================================
 // 결제창 열기 - 창을 작게 열려고 함수로 만들었음
 function openPayWindow(product_id, receiver_id) {

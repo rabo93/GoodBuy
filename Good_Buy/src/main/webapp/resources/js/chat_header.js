@@ -1,5 +1,5 @@
 var ws;
-var startChat;
+var childChat;
 
 $(function() {
 	connect();
@@ -47,10 +47,8 @@ function startChat() {
 	let top = 0;  // 화면의 상단
 	
 	
-	startChat = window.open(url, "start_chat", `width=${width},height=${height},left=${left},top=${top}`);
-	
-//	startChat.receiver_id = receiver_id;
-//	startChat.product_id = product_id;
+	childChat = window.open(url, "start_chat", `width=${width},height=${height},left=${left},top=${top}`);
+	window.childChat = childChat;
 }
 
 function onOpen () {
@@ -59,8 +57,12 @@ function onOpen () {
 
 function onMessage(event) {
 	console.log("onMessage()");
-	startChat.postMessage(event.data);
-	test(event.data);
+	if(childChat && !childChat.closed) {
+		childChat.postMessage(event.data);
+	} else {
+		chatProduct(event.data);
+	}
+	
 }
 
 //	==============================================================================

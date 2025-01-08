@@ -27,5 +27,11 @@ public interface ChatMapper {
 	//	기존 채팅 내역 조회
 	List<ChatMessage> selectChatMessage(ChatMessage chatMessage);
 
+	//	채팅방 회원 신고
+	int insertChatReport(@Param("reporter_id") String reporter_id,
+						 @Param("reported_id") String reported_id,
+						 @Param("reason") String reason,
+						 @Param("room_id") String room_id);
+
 
 }

@@ -147,3 +147,50 @@
     background-color: #0056b3;
 }
 
+.chat-footer .fileArea #chatFile {
+	display: none;
+}
+
+.chat-footer .fileArea label{
+	font-size: 1.5em;
+	margin-left: 5px;
+	margin-right: 10px;
+	background-color: #fff;
+	color: var(--primary);
+}
+
+
+
+/* == 신고 모달창 == */
+.ch-report-modal .ch-modal-bg{
+	display: none;
+	width:100%;
+	height:100%;
+	position:fixed;
+	top:0;left:0;
+	right:0;
+	background: rgba(0, 0, 0, 0.6);
+	z-index:9991;
+}
+.ch-report-modal .ch-modal-wrap {
+	display: none;
+	position:fixed;
+	top: 50%;
+	left:50%;
+	border-radius: 20px;
+	transform:translate(-50%,-50%);
+	width: 600px;
+	height: 700px;
+	background:#fff;
+	z-index:9992;
+}
+
+.ch-report-modal .ch-modal-wrap .ch-modal-content {margin-bottom: 20px;}
+.ch-report-modal .ch-modal-wrap .ch-modal-sb {text-align: center;width: 500px;display: flex;}
+.ch-report-modal .ch-modal-wrap .ch-modal-otherReason {resize: none;width: 500px;display: flex;}
+.ch-report-modal .ch-modal-wrap .ch-model-report-btn {display: flex;}
+.ch-report-modal .ch-modal-wrap .ch-model-close-btn {display: flex;}
+.ch-report-modal .ch-modal-result {display: none;}
+
+
+

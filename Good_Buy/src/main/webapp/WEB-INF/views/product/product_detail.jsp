@@ -63,6 +63,30 @@
 						</button>
 					</div>	
 				</section>
+				<section class="ch-report-modal">
+					<div class="ch-modal-bg" onclick="toggleChatModal('close')"></div>
+					<div class="ch-modal-wrap">
+						<div class="ch-modal-content">
+							<select class="ch-modal-sb" name="ch-modal-sb">
+								<option value="다른 회원에게 욕설, 비방, 또는 부적절한 언어를 사용한 경우.">욕설 및 비방</option>
+								<option value="거래 중 금전적 피해를 입히거나 사기 행위를 시도한 경우.">사기 의심</option>
+								<option value="반복적으로 광고성 메시지를 보내거나 스팸 활동을 한 경우.">스팸 또는 홍보</option>
+								<option value="회원 프로필 사진 또는 정보에 음란물, 폭력적인 이미지 등이 포함된 경우.">부적절한 프로필</option>
+								<option value="다른 회원의 개인정보를 동의 없이 공개하거나 유포한 경우.">타인의 개인정보 노출</option>
+								<option value="기타 사유를 입력해주세요.">기타</option>
+							</select>
+							<textarea class="ch-modal-otherReason" readonly ></textarea>
+							<textarea class="ch-modal-detail" placeholder="사유를 입력해주세요"></textarea>
+							<input type="file" class="ch-modal-file">
+							<button class="ch-model-report-btn" type="button" id="chatReporting">
+								신고하기
+							</button>
+						</div>
+						<button class="ch-model-close-btn" type="button" onclick="toggleChatModal('close')">
+							닫기
+						</button>
+					</div>
+				</section>
 				<!-- 상품 페이지 -->
 				<section class="item-detail">
 					<div class="item-detail-content">
@@ -235,8 +259,9 @@
 							<button class="close-chat-button" onclick="toggleSlideChat()">
 								<i class="fa-solid fa-arrow-left"></i>
 							</button>
-							<button class="report-chat-button" onclick="reportChat()">
-								<img src="${pageContext.request.contextPath}/resources/img/siren.png">
+							<button class="report-chat-button" onclick="toggleChatModal('open')">
+<%-- 								<img src="${pageContext.request.contextPath}/resources/img/siren.png"> --%>
+								<i class="fa-solid fa-land-mine-on"></i>&nbsp;신고하기
 							</button>
 						</div>
 						<div class="chat-header">
@@ -247,6 +272,11 @@
 			            <div class="chat-body">
 			            </div>
 			            <div class="chat-footer">
+			            	<!-- hidden 작업 생각중 -->
+			            	<span class="fileArea">
+					           	<label for="chatFile"><i class="fa-solid fa-circle-plus"></i></label>
+					           	<input type="file" id="chatFile" onchange="sendFile()" accept="image/*">
+				           	</span>
 			                <input type="text" class="chatMessage" placeholder="메시지를 입력하세요...">
 			                <button class="btnSend">전송</button>
 			            </div>

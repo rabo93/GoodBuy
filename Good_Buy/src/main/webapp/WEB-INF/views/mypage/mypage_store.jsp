@@ -78,7 +78,25 @@
 											            </c:otherwise>
 											        </c:choose>
 												</div>
-												<h3>${sessionScope.sNick}의 상점</h3><br> 
+												<h3>${sessionScope.sNick}의 상점</h3><br>
+												<div class="scoreCount">
+												<c:choose>
+													<c:when test="${empty scoreCount}">카운터없다	</c:when>
+													<c:otherwise>
+														<c:forEach var="score" items="${scoreCount}">
+														    <c:if test="${score['REVIEW_SCORE'] == 2}">
+														        최고예요👍 +${score['count']}<br>
+														    </c:if>
+														    <c:if test="${score['REVIEW_SCORE'] == 1}">
+														        좋아요💕 +${score['count']}<br>
+														    </c:if>
+														    <c:if test="${score['REVIEW_SCORE'] == 0}">
+														        별로예요🥲 +${score['count']}<br>
+														    </c:if>
+														</c:forEach>
+													</c:otherwise>
+												</c:choose>
+												</div>
 											</div>
 										</div>
 											

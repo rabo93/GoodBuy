@@ -151,12 +151,34 @@ public class AdminService {
 		int updateReportCount = mapper.updateUserReportCount(param);
 		System.out.println("회원신고 누적횟수 결과 : " + updateReportCount);
 		
+		// 회원 신고 횟수 확인 후 계정 상태 변경
+		checkMemStatusToReportCount(param);
+		
+		// 회원 신고 처리 업데이트
 		int updateUserReport = mapper.updateUserReport(param);
 		if(updateUserReport == 0) {
 			throw new RuntimeException("신고 조치 작업에 실패했습니다.");
 		}
 		
         return updateReportCount + updateUserReport;
+	}
+	
+	private void checkMemStatusToReportCount(Map<String, Object> param) {
+		String memId = (String)param.get("REPORTED_ID");
+		Map<String, Object> userReportInfo = mapper.selectUserReportInfo(memId);
+		
+		int userStatus = (int)userReportInfo.get("MEM_STATUS");
+		int userReportCnt = (int)userReportInfo.get("REPORT_CNT");
+		System.out.println(memId + "의 경고 누적횟수 : " + userReportCnt);
+		
+		if(userStatus >= 2) {
+			return;
+		}
+		
+		if(userStatus == 1 && userReportCnt > 3) {
+			int updateStatus = mapper.updateUserStatus(memId); // 계정 상태 정지로 업데이트
+			System.out.println("계정 상태 변경 : " + updateStatus);
+		}
 	}
 	
 	// [ 신고 상품 관리 ]
@@ -296,6 +318,11 @@ public class AdminService {
 	// 필터링 된 로그 목록 조회
 	public List<MemberVO> getLogList(Map<String, Object> param) {
 		return mapper.selectLogList(param);
+	}
+
+	// 회원 신고 기록 목록
+	public List<Map<String, Object>> getReportHistory(String mem_id) {
+		return mapper.selectReportHistory(mem_id);
 	}
 	
 	

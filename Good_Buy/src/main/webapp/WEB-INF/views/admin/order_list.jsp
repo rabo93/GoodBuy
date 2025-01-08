@@ -56,7 +56,7 @@
                                 <div class="card-body">
                                 	<div class="search-wrap border">
                                 		<section class="d-flex search-inner">
-	                                		<div class="col-3 px-4 search-box">
+	                                		<div class="col-4 px-3 search-box">
 			                                	<div class="search-ttl">거래상태별</div>
 											    <div class="category-filter input-group">
 											        <div class="form-check">
@@ -93,7 +93,7 @@
 													<button class="btn btn-success ml-2" id="initDateBtn" type="button"><i class="fa-solid fa-rotate"></i></button>
 												</div>
 										    </div>
-										    <div class="col-5 px-4 search-box">
+										    <div class="col-4 px-4 search-box">
 						                        <div class="input-group">
 						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="회원ID, 상품명, 상품카테고리, 거래장소 검색" aria-label="Search" aria-describedby="basic-addon2">
 						                            <div class="input-group-append">

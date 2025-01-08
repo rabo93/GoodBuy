@@ -23,8 +23,6 @@ document.addEventListener("DOMContentLoaded", function(){
 				const data = res.EnquireList;
 				const start = $('#supportList').DataTable().page.info().start; 
 				
-				console.log("data:" + JSON.stringify(data));
-				console.log("data.SUPPORT_FILE:" + data.SUPPORT_FILE);
 				// PK가 아닌 테이블 컬럼 번호 계산(페이징 포함)
 				for (let i = 0; i < data.length; i++) {
 					data[i].listIndex = start + i + 1;
@@ -131,13 +129,10 @@ document.addEventListener("DOMContentLoaded", function(){
 		const enquireContent = document.querySelector("#enquireContent");
         enquireContent.value = supportContent || "";
 		
-		const status = rowData.STATUS;
-		const replyContent = rowData.REPLY_CONTENT != null ? rowData.REPLY_CONTENT : "";
 		
 		// 첨부파일 보이기
 		const supportFileName = rowData.SUPPORT_FILE;
 		const supportFileDiv = document.querySelector("#supportFile");
-		
 		if (supportFileName) {
 	        // 파일이 있는 경우 다운로드 링크 생성
 		    const originalFileName = supportFileName.split('/').pop(); // 파일명 추출
@@ -151,13 +146,15 @@ document.addEventListener("DOMContentLoaded", function(){
 	        // 첨부파일이 없을 경우 메시지 표시
 	        supportFileDiv.innerHTML = "첨부된 파일 없음";
 	    }
-		
+	    
 		
 		// DB에 저장할 id속성 가져오기
 		const supportId = document.querySelector("#supportId"); //게시글id
 //		const memId = document.querySelector("#memId"); 		//작성자id
 //		const adminId = document.querySelector("#adminId");		//관리자id
+		const status = rowData.STATUS;
 		const statusSelect = document.querySelector(`#supportStatus option[value="${status}"]`);
+		const replyContent = rowData.REPLY_CONTENT != null ? rowData.REPLY_CONTENT : "";
 		const reasonTextarea = document.querySelector("#replyContent");
 		
 		// DB에 저장할 값 저장

@@ -89,10 +89,10 @@
 	                               				</div>
 	                               				<div class="message">
 	                               					<c:choose>
-	                               						<c:when test="${chat.type.equals('TALK')}">
+	                               						<c:when test="${chat.TYPE.equals('TALK')}">
 				                                			${chat.MESSAGE}
 	                               						</c:when>
-	                               						<c:when test="${chat.type.equals('FILE')}">
+	                               						<c:when test="${chat.TYPE.equals('FILE')}">
 	                               							<a href="${pageContext.request.contextPath}/resources/upload/${fn:split(chat.MESSAGE, ':')[0]}" target="_blank">
 	                               								<img src="${pageContext.request.contextPath}/resources/upload/${fn:split(chat.MESSAGE, ':')[1]}">
 	                               							</a>

@@ -56,20 +56,19 @@ function addAmount(amount) {
 
 // 이용내역 전체의 토글버튼 - 클릭하면 해당 항목이 보이기는 함. 전체내역이 기본설정이 안됨.
 function listToggleButton(button, type) {
-	console.log('1');
 	const buttons = document.querySelectorAll('button');
 	// 목록 활성화 상태 업데이트
 	const lists = document.querySelectorAll('.use-history-item');
 	buttons.forEach(button => {
-		console.log('2');
 		
 		button.addEventListener('click', () => {
-			console.log('3');
 		    // 모든 버튼에서 selected 클래스 제거
 		    buttons.forEach(btn => btn.classList.remove('selected'));
 		    
 		    // 클릭된 버튼만 선택 상태로 설정
 	        button.classList.add('selected');
+	        console.log(button.classList[0]);
+	        console.log(button.classList[1]);
 	        
 			 lists.forEach(list => {
 	            if (list.dataset.type === type || type === 'all') {

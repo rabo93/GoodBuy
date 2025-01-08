@@ -73,6 +73,17 @@
 										        <div class="user-info">
 										            <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
 										            <div class="name">${review.buyerNick} | ${review.review_date}</div>
+										            <div>
+										            	<c:if test="${review.review_score == '2'}">
+											            	<input type="button" id="score" name="score" value="최고예요👍">
+											            </c:if>
+											            <c:if test="${review.review_score == '1'}">
+											            	<input type="button" id="score"  name="score" value="좋아요💕">
+											            </c:if>
+											            <c:if test="${review.review_score == '0'}">
+											           		<input type="button" id="score"  name="score" value="별로예요🥲">
+										           	 	</c:if>
+										            </div>
 <%-- 										            <div class="date"></div> --%>
 										            <div class="product">${review.product_title}</div>
 										        </div>

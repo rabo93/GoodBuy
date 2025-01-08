@@ -30,7 +30,7 @@ public class ProductOrderVO {
     private int product_price;			// 상품가격 - FK TO PRODUCT
     private String buyer_id;			// 구매자ID
     private int pay_price;				// 구매가격
-    private Date pay_date;				// 구매일시
+    private String pay_date;				// 구매일시
     private String pay_address;			// 거래장소 - FK TO PRODUCT
     private int pay_status;				// 거래상태(0: 판매중 /1: 거래중 / 2 : 예약중 / 3: 거래완료 / 4: 신고처리)
     									// - FK TO PRODUCT

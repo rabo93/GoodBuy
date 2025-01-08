@@ -144,15 +144,7 @@
     margin: 30px;
     border-bottom: none;
 }
-/*
-.history-item .icon {
-    width: 35px;
-    height: 35px;
-    background-color: #ccc;
-    border-radius: 50%;
-    margin-right: 10px;
-}
-*/
+
 .history-item .details {
     flex: 1;
 }
@@ -228,6 +220,18 @@
     padding: 5px 10px;
     color: #FFFFFF;
     pointer-events: none
+}
+
+.pay-account-modal-body .primary-account-btn-refund {
+	margin: 0px;
+	border: 1px solid #ccc;
+    background-color: var(--primary);
+    border-radius: 15px;
+    font-size: 12px;
+    padding: 2px;
+    color: #FFFFFF;
+    pointer-events: none
+	
 }
 /* 대표계좌 등록버튼 */
 .PayRegistRepresentAccount {
@@ -497,18 +501,6 @@
 .account-number strong {
     font-weight: bold;
 }
-/*
-.primary-account-btn {
-    border: 1px solid #ccc;
-    background-color: #f0f0f0;
-    border-radius: 15px;
-    font-size: 12px;
-    padding: 5px 10px;
-    color: #555;
-    cursor: pointer;
-}
-*/
-/* pay_use_list.jsp */
 
 /* 상단 버튼들 */
 .use-buttons {
@@ -539,27 +531,19 @@
     color: #555;
 }
 
-.history-item {
+.history-item, .account-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px 0;
     border-bottom: 1px solid #eaeaea;
 }
-/*
-.history-item .icon {
-    width: 35px;
-    height: 35px;
-    background-color: #ccc;
-    border-radius: 50%;
-    margin-right: 10px;
-}
-*/
-.history-item .details {
+
+.history-item .details, .account-header .details{
     flex: 1;
 }
 
-.history-item .details span {
+.history-item .details span , .account-header .details span {
     display: block;
     font-size: 14px;
 }
@@ -574,6 +558,22 @@
     font-weight: bold;
 }
 
+.account-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eaeaea;
+}
+
+
+.account-item {
+	display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+    margin: 10px;
+    color: gray;
+}
 
 
 
@@ -601,8 +601,8 @@
 .pay-account-modal-header {
 }
 .pay-account-modal-body button{
-/*   margin: 0; */
-/*   padding: 1px */
+/*   	margin: 0; */
+/*   	padding: 1px; */
 	background-color: var(--primary);
 }
 

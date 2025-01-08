@@ -202,6 +202,10 @@ public class PayService {
 		return amount != null ? amount : 0; 
 	}
 
+	public Map<String, String> getPayInfo(String id) {
+		return mapper.selectPayInfo(id);
+	}
+
 
 
 

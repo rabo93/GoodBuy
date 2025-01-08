@@ -139,15 +139,16 @@ public class ProductController {
 	public String prodcutDetail(@RequestParam int PRODUCT_ID, Model model, HttpSession session) {
 		String id = (String) session.getAttribute("sId");
 		ProductVO productSearch = productService.productSearch(PRODUCT_ID);
-		List<Map<String, Object>> searchSellerProduct = productService.searchSellerProduct(productSearch.getMem_id(), PRODUCT_ID);
-		List<Map<String, Object>> searchSameCategoryProduct = productService.searchSameCategoryProduct(productSearch.getProduct_category(), PRODUCT_ID);
 		WishlistVO wishSearch = productService.checkWishlist(PRODUCT_ID, id);
 		
+		List<Map<String, Object>> searchSellerProduct = productService.searchSellerProduct(productSearch.getMem_id(), PRODUCT_ID);
+		List<Map<String, Object>> searchSameCategoryProduct = productService.searchSameCategoryProduct(productSearch.getProduct_category(), PRODUCT_ID);
+		
 		productService.plusviewcount(PRODUCT_ID);
+		model.addAttribute("productSearch", productSearch);
+		model.addAttribute("wishSearch", wishSearch);
 		model.addAttribute("searchSellerProduct", searchSellerProduct);
 		model.addAttribute("searchSameCategoryProduct", searchSameCategoryProduct);
-		model.addAttribute("wishSearch", wishSearch);
-		model.addAttribute("productSearch", productSearch);
 		
 		return "product/product_detail";
 	}
@@ -178,15 +179,38 @@ public class ProductController {
 	// 개인상점페이지 매핑
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("ProductShop")
-	public String productShop(@RequestParam String MEM_ID, Model model) {
-		Map<String, Object> sellerList = productService.searchSellerList(MEM_ID);
-		System.out.println(">>>>>>>>>>>>> " + sellerList);
-		model.addAttribute("sellerList", sellerList);
+	public String productShop(@RequestParam String MEM_NICK, Model model) {
+		Map<String, Object> searchSeller = productService.searchSellerShop(MEM_NICK);
+		List<ProductVO> searchSellerProduct = (List<ProductVO>) productService.getProductListLimit(searchSeller.get("MEM_ID").toString());
+		List<Map<String, Object>> searchSellerReview = productService.searchSellerReview(searchSeller.get("MEM_ID").toString());
+		model.addAttribute("searchSeller", searchSeller);
+		model.addAttribute("searchSellerProduct", searchSellerProduct);
+		model.addAttribute("searchSellerReview", searchSellerReview);
 		return "product/product_shop";
 	}
 	
 	// 상품수정 매핑
+	@LoginCheck(memberRole = MemberRole.USER)
+	@GetMapping("ProductEdit")
+	public String ProductEdit(@RequestParam("Product_ID")int product_ID, HttpSession session, Model model) {
+		Map<String, Object> productContent = productService.productContent(product_ID);
+		String sId = (String) session.getAttribute("sId");
+		
+		if (sId.equals(productContent.get("MEM_ID").toString())) {
+			model.addAttribute("productContent", productContent);
+			return "product/product_edit";
+		} else {
+			model.addAttribute("msg", "접근권한이 없습니다!");
+			return "result/fail";
+		}
+	}
 	
+	@PostMapping("ProductEditing")
+	public String productEditing(ProductVO product, HttpSession session) {
+		String id = (String) session.getAttribute("sId");
+		
+		return "MySales";
+	}
 	
 	
 	

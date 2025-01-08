@@ -22,6 +22,7 @@
 <link href="${pageContext.request.contextPath}/resources/adm/css/adm.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/daterangepicker.css" rel="stylesheet">
 
 </head>
 <body id="page-top">
@@ -62,12 +63,12 @@
 													<button class="btn btn-success ml-2" id="initDateBtn" type="button"><i class="fa-solid fa-rotate"></i></button>
 												</div>
 										    </div>
-										    <div class="col-3 px-4 search-box">
+										    <div class="col-4 px-4 search-box">
 										    	<div class="input-group"></div>
 					                        </div>
-										    <div class="col-5 px-4 search-box">
+										    <div class="col-4 px-4 search-box">
 						                        <div class="input-group">
-						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="신고자ID, 신고상품, 신고사유, 처리상태 검색" aria-label="Search" aria-describedby="basic-addon2">
+						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="관리자ID, 작업사항, 작업결과, IP주소 검색" aria-label="Search" aria-describedby="basic-addon2">
 						                            <div class="input-group-append">
 						                                <button class="btn btn-primary" id="searchBtn" type="button">검색</button>
 						                            </div>
@@ -105,46 +106,6 @@
         <i class="fas fa-angle-up"></i>
     </a>
     
-    <!-- 수정 모달 -->
-    <div class="modal fade" id="updateMemberInfo" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-		    <div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="updateModalLabel">회원 상태 변경</h5>
-					<button type="button" class="close" data-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
-				</div>
-				<div class="modal-body">
-					<form action="AdmMemberModify" id="memberModifyForm" method="post">
-						<input type="hidden" id="memId" name="mem_id">
-						<div class="mb-3">
-							<label for="memId2" class="col-form-label">변경 대상 회원</label>
-							<input type="text" class="form-control" id="memId2" name="mem_id2" readonly>
-						</div>
-						<div class="mb-3">
-							<label class="small mb-1" for="memGrade">회원등급</label>
-							<select class="custom-select" id="memGrade" name="mem_grade">
-								<option value="일반">일반</option>
-								<option value="관리자">관리자</option>
-							</select>
-						</div>
-						<div class="mb-3">
-							<label class="small mb-1" for="memStatus">회원상태</label>
-							<select class="custom-select" id="memStatus" name="mem_status">
-								<option value="1">정상</option>
-								<option value="2">정지</option>
-								<option value="3">탈퇴</option>
-							</select>
-						</div>
-                    </form>
-				</div>
-				<div class="modal-footer justify-content-center">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-					<button type="submit" class="btn btn-primary" id="btnModifyForm" form="memberModifyForm">수정하기</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
     <!-- Bootstrap core JavaScript-->
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/jquery/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -159,6 +120,8 @@
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 <%--     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script> --%> <%-- 반응형 --%>
+	<script src="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/moment.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/daterangepicker.js"></script>
 
     <!-- Page level custom scripts -->
     <script src="${pageContext.request.contextPath}/resources/adm/js/log_list.js"></script>

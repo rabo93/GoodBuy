@@ -275,7 +275,7 @@
 	 	       OR R.ADMIN_ID LIKE CONCAT('%', #{param.searchValue}, '%'))
 		</if>
 		<if test="param.searchDate != null and !param.searchDate.equals('')">
-		   AND DATE(R.REPORT_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10)
+		   AND (DATE(R.REPORT_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1))
 		</if>
      </select>
      
@@ -310,7 +310,7 @@
 	 	      )
 		</if>
 		<if test="param.searchDate != null and !param.searchDate.equals('')">
-		   AND DATE(R.REPORT_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10)
+		   AND (DATE(R.REPORT_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1))
 		</if>
 		 ORDER BY 
 			<choose>
@@ -377,7 +377,7 @@
 	 	       OR ADMIN_ID LIKE CONCAT('%', #{param.searchValue}, '%'))
 		</if>
 		<if test="param.searchDate != null and !param.searchDate.equals('')">
-		   AND DATE(REPORT_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10)
+		   AND (DATE(REPORT_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1))
 		</if>
      </select>
      
@@ -409,7 +409,7 @@
 	 	      )
 		</if>
 		<if test="param.searchDate != null and !param.searchDate.equals('')">
-		   AND DATE(REPORT_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10)
+		   AND (DATE(REPORT_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1))
 		</if>
 		 ORDER BY 
 			<choose>
@@ -645,8 +645,8 @@
 	 	       OR STATUS LIKE CONCAT('%', #{param.searchValue}, '%'))
 		</if>
 		<if test="param.searchDate != null and !param.searchDate.equals('')">
-		   AND (DATE(SUPPORT_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10)
-		   	OR DATE(REPLY_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10))
+		   AND (DATE(SUPPORT_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1)
+		   	OR DATE(REPLY_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1))
 		</if>
      </select>
      
@@ -676,8 +676,8 @@
 		 	       OR STATUS LIKE CONCAT('%', #{param.searchValue}, '%'))
 			</if>
 			<if test="param.searchDate != null and !param.searchDate.equals('')">
-			   AND (DATE(SUPPORT_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10)
-			   	OR DATE(REPLY_DATE) BETWEEN LEFT(#{param.searchDate}, 10) AND RIGHT(#{param.searchDate}, 10))
+			   AND (DATE(SUPPORT_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1)
+			   	OR DATE(REPLY_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1))
 			</if>
 		ORDER BY 
 			<choose>
@@ -706,20 +706,6 @@
 		</set>
 		WHERE SUPPORT_ID = #{SUPPORT_ID}
      </update>
-     
-     <!-- ******** 로그 AOP ******* -->
-     <!-- 로그 저장 - INSERT -->
-     <insert id="insertLog">
-     	INSERT 
-     	  INTO LOG
-     	VALUES (
-     		#{log.ADMIN_ID}
-     		, #{log.MAPPER_ID}
-     		, #{log.PROCESS_TIME}
-     		, #{log.PROCESS_RESULT}
-     		, #{log.IP_ADDRESS}
-     	)
-     </insert>
      
      
      <!-- ************************************************************* -->
@@ -797,7 +783,7 @@
 		 	   , #{param.length}
      </select>
      
-     
+     <!-- ******************** 로그 목록 ********************* -->
      <!-- [ 로그 목록 ] -->
      <!-- 로그 전체 컬럼 수 조회 -->
      <select id="selectLogListTotal" resultType="int">
@@ -814,7 +800,10 @@
 		   AND (ADMIN_ID LIKE CONCAT('%', #{param.searchValue}, '%')
 			   OR PROCESS_DETAIL LIKE CONCAT('%', #{param.searchValue}, '%')
 	 	       OR PROCESS_RESULT LIKE CONCAT('%', #{param.searchValue}, '%')
-	 	       OR IP_ADDRESS LIKE CONCAT('%', #{param.searchValue}, '%') 
+	 	       OR IP_ADDRESS LIKE CONCAT('%', #{param.searchValue}, '%') )
+		</if>
+		<if test="param.searchDate != null and !param.searchDate.equals('')">
+	        AND (DATE(PROCESS_TIME) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1))
 		</if>
      </select>
      
@@ -831,7 +820,10 @@
 		   AND (ADMIN_ID LIKE CONCAT('%', #{param.searchValue}, '%')
 			   OR PROCESS_DETAIL LIKE CONCAT('%', #{param.searchValue}, '%')
 	 	       OR PROCESS_RESULT LIKE CONCAT('%', #{param.searchValue}, '%')
-	 	       OR IP_ADDRESS LIKE CONCAT('%', #{param.searchValue}, '%') 
+	 	       OR IP_ADDRESS LIKE CONCAT('%', #{param.searchValue}, '%'))
+		</if>
+		<if test="param.searchDate != null and !param.searchDate.equals('')">
+	        AND (DATE(PROCESS_TIME) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1))
 		</if>
 		ORDER BY 
 			<choose>
@@ -848,4 +840,19 @@
 		 	   #{param.start}
 		 	   , #{param.length}
      </select>
+     
+       
+     <!-- ******** 로그 AOP ******* -->
+     <!-- 로그 저장 - INSERT -->
+     <insert id="insertLog">
+     	INSERT 
+     	  INTO LOG
+     	VALUES (
+     		#{log.ADMIN_ID}
+     		, #{log.MAPPER_ID}
+     		, #{log.PROCESS_TIME}
+     		, #{log.PROCESS_RESULT}
+     		, #{log.IP_ADDRESS}
+     	)
+     </insert>
 </mapper>

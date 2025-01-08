@@ -553,12 +553,7 @@ public class AdminController {
 			return "result/fail";
 		}
 	}
-	//----------------------------------------------------------------------------------------
-	//	실제 업로드 경로 메서드
-	public String getRealPath(HttpSession session) {
-		String realPath = session.getServletContext().getRealPath(uploadPath);
-		return realPath;
-	}
+
 	// ======================================================
 	// [ 고객지원 관리 ]
 	// - FAQ 관리
@@ -649,24 +644,24 @@ public class AdminController {
 	// ======================================================
 	// [ 로그 ]
 	// 로그 기록 페이지 포워딩
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmLogList")
 	public String admLogListForm() {
 		return "admin/log_list";
 	}
 	
 	// 로그 기록 조회
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("AdmLogList")
 	public String admLogList(@RequestParam Map<String, String> param) {
 		Map<String, Object> convertParam = convertMap(param);
 		
 		int recordsTotal = service.getLogListTotal();
-		
 		int recordsFiltered = service.getLogListFiltered(convertParam);
 		
 		List<MemberVO> logList = service.getLogList(convertParam);
 		
-		// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
 		Map<String, Object> response = new HashMap<String, Object>();
 		response.put("draw", convertParam.get("draw")); // 받은 draw 값 그대로 다시 전달(보안)
 		response.put("recordsTotal", recordsTotal); // 전체 컬럼 수
@@ -682,6 +677,11 @@ public class AdminController {
 	// ======================================================
 	// ======================================================
 	// ======================================================
+	//	실제 업로드 경로 메서드
+	public String getRealPath(HttpSession session) {
+		String realPath = session.getServletContext().getRealPath(uploadPath);
+		return realPath;
+	}
 	// Map 형변환 처리 메서드
 	private Map<String, Object> convertMap(Map<String, String> param) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();

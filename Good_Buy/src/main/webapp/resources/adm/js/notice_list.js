@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function(){
 				width: '120px',
 				render : function(data, type, row) {
 					return `
-						<button class="btn btn-primary edit-btn" onclick="location.href='AdmNoticeModify?notice_id="${row.notice_id}">수정</button>
+						<button type="button" class="btn btn-primary edit-btn" onclick="location.href='AdmNoticeModify?notice_id=${row.notice_id}'">수정</button>
 					`;
 				}
 			}

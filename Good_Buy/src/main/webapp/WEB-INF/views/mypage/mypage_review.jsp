@@ -74,40 +74,43 @@
 										        <div class="user-info">
 										            <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
 										            <div class="name">${review.buyerNick} | ${review.review_date}</div>
-										            <div>
+										            <div class="review-score">
 										            	<c:if test="${review.review_score == '2'}">
-											            	<input type="button" id="score" name="score" value="최고예요👍">
-											            </c:if>
+										            		<span id="score" name="score">최고예요👍</span>
+											            	<!-- <input type="button" id="score" name="score" value="최고예요👍">
+	 -->										            </c:if>
 											            <c:if test="${review.review_score == '1'}">
-											            	<input type="button" id="score"  name="score" value="좋아요💕">
+										            		<span id="score" name="score">좋아요💕</span>
+											            	<!-- <input type="button" id="score"  name="score" value="좋아요💕"> -->
 											            </c:if>
 											            <c:if test="${review.review_score == '0'}">
-											           		<input type="button" id="score"  name="score" value="별로예요🥲">
+										            		<span id="score" name="score">별로예요🥲</span>
+											           		<!-- <input type="button" id="score"  name="score" value="별로예요🥲"> -->
 										           	 	</c:if>
 										            </div>
-										             <div>
-									            	<%-- 리뷰 옵션 --%>
-													<c:if test="${fn:contains(review.review_options, '1')}">
-														<input type="button" id="score" name="score" value="배송이 빨라요🚚">
-													</c:if>
-													<c:if test="${fn:contains(review.review_options, '2')}">
-														<input type="button" id="score" name="score" value="친절해요😊">
-													</c:if>
-													<c:if test="${fn:contains(review.review_options, '3')}">
-														<input type="button" id="score" name="score" value="물건상태가 좋아요✨">
-													</c:if>
-													<c:if test="${fn:contains(review.review_options, '4')}">
-														<input type="button" id="score" name="score" value="또 거래하고 싶어요💰">
-													</c:if>
-									            </div>
+										            <div class="review-score-option">
+										            	<%-- 리뷰 옵션 --%>
+														<c:if test="${fn:contains(review.review_options, '1')}">
+															<span id="score" name="score">배송이 빨라요🚚</span>
+															<!-- <input type="button" id="score" name="score" value="배송이 빨라요🚚"> -->
+														</c:if>
+														<c:if test="${fn:contains(review.review_options, '2')}">
+															<span id="score" name="score">친절해요😊</span>
+															<!-- <input type="button" id="score" name="score" value="친절해요😊"> -->
+														</c:if>
+														<c:if test="${fn:contains(review.review_options, '3')}">
+															<span id="score" name="score">물건상태가 좋아요✨</span>
+															<!-- <input type="button" id="score" name="score" value="물건상태가 좋아요✨"> -->
+														</c:if>
+														<c:if test="${fn:contains(review.review_options, '4')}">
+															<span id="score" name="score">또 거래하고 싶어요💰</span>
+															<!-- <input type="button" id="score" name="score" value="또 거래하고 싶어요💰"> -->
+														</c:if>
+										            </div>
 <%-- 										            <div class="date"></div> --%>
 										            <div class="product">${review.product_title}</div>
 										        </div>
 										    </div>
-								            <div class=rating>
-<!-- 												<i class="fa-solid fa-star" ></i> -->
-<%-- 												<span><b>${review.review_score}</b></span> --%>
-											</div>
 										    <div class="review-text">${review.review_content}</div>
 										</div>
 										

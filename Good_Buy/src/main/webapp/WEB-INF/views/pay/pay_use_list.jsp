@@ -32,7 +32,6 @@
 <script src="${pageContext.request.contextPath}/resources/js/pay.js"></script>
 
 
-
 </head>
 <body>
 	<header>
@@ -76,11 +75,10 @@
 							<div class="goodpay-container">
 							 	<div class="account-box">
 							 		<div class="use-buttons">
-<!-- 						                <button class="all-btn selected" onclick="listToggleButton(this, 'all')">전체</button> -->
-						                <button class="all-btn selected" onclick="listToggleButton(this, 'all')">전체</button>
-						                <button class="use-transfer-btn" onclick="listToggleButton(this, 'transfer')">송금</button>
-						                <button class="use-charge-btn" onclick="listToggleButton(this, 'charge')">충전</button>
-						                <button class="use-refund-btn" onclick="listToggleButton(this, 'refund')">환불</button>
+						                <button class="all-btn selected" onclick="listToggleButton(this)">전체</button>
+						                <button class="use-transfer-btn" onclick="listToggleButton(this)">송금</button>
+						                <button class="use-charge-btn" onclick="listToggleButton(this)">충전</button>
+						                <button class="use-refund-btn" onclick="listToggleButton(this)">환불</button>
 						            </div>
 						            <c:forEach var="item" items="${recieverTransactionInfo}">
 				            			<div class="use-history-item active" data-type="transfer">
@@ -149,7 +147,36 @@
 			
 				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 			</div>
-		</section>
+		</section>		
+		
+		
+		
+		
+		
+		
+		
+	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	</main>
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>

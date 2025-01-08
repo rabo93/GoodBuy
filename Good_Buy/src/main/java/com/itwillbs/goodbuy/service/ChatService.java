@@ -43,8 +43,8 @@ public class ChatService {
 
 	//	채팅방 회원 신고
 	public int insertChatReport(String reporter_id, String reported_id, String reason, String room_id) {
-		return 0;
-//		return mapper.insertChatReport(reporter_id, reported_id, reason, room_id);
+//		return 0;
+		return mapper.insertChatReport(reporter_id, reported_id, reason, room_id);
 	}
 
 }

@@ -94,6 +94,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 					}	//	사용자 접속 여부 판별 끝
 					
 					ChatRoom chatRoom = chatService.selectChatRoom(sender_id, receiver_id, product_id);
+					System.out.println("!@#!@#!@#");
+					System.out.println(chatRoom);
 					if(chatRoom == null) {	// 기존 채팅방 없음
 						System.out.println("새 채팅방 생성");
 						

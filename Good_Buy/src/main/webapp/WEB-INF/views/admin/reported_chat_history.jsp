@@ -93,8 +93,8 @@
 				                                			${chat.MESSAGE}
 	                               						</c:when>
 	                               						<c:when test="${chat.TYPE.equals('FILE')}">
-	                               							<a href="${pageContext.request.contextPath}/resources/upload/${fn:split(chat.MESSAGE, ':')[0]}" target="_blank">
-	                               								<img src="${pageContext.request.contextPath}/resources/upload/${fn:split(chat.MESSAGE, ':')[1]}">
+	                               							<a href="${pageContext.request.contextPath}/resources/upload/chat/${fn:split(chat.MESSAGE, ':')[0]}" target="_blank">
+	                               								<img src="${pageContext.request.contextPath}/resources/upload/chat/${fn:split(chat.MESSAGE, ':')[1]}">
 	                               							</a>
 	                               						</c:when>
 	                               					</c:choose>

@@ -130,11 +130,12 @@ function toggleSlideChat() {
 			product_id : product_id
 		}
 	}).done(function(result){
-		if(result.room_id == null) {
+		
+		if(result == null) {
 			showChatList(receiver_id, product_id);
 			return;
 		} else {
-			window.room_id = result.room_id
+			window.room_id = result.room_id;
 			$.ajax({
 				url : "ChatListAjax",
 				type : "POST",

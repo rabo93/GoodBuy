@@ -51,14 +51,16 @@ public class ChatController {
 	
 	@ResponseBody
 	@PostMapping("ChatRoomAjax")
-	public ChatRoom chatRoomAjax(@RequestParam Map<String, String> map) {
-		
+	public String chatRoomAjax(@RequestParam Map<String, String> map) {
+		System.out.println("asdfasdfasdf");
+		System.out.println("ChatRoomAjax");
+		System.out.println(map);
 		String sender_id = map.get("sender_id");
 		String receiver_id = map.get("receiver_id");
 		int product_id = Integer.parseInt(map.get("product_id"));
 		ChatRoom chatRoom = chatService.selectChatRoom(sender_id, receiver_id, product_id);
 		
-		return chatRoom;
+		return new Gson().toJson(chatRoom);
 	}
 	
 	@ResponseBody

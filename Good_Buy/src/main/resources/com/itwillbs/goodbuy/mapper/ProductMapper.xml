@@ -57,15 +57,23 @@
 			, #{vo.product_trade_adr1}
 			, #{vo.advertisement_status}
 			, 0
+			, 0
 		)
 	</insert>
 	
 	<!-- 검색필터별 조회 -->
 	<select id="searchFliterList" resultType="map">
 		SELECT 
-			pro.PRODUCT_PIC1, pro.PRODUCT_CATEGORY, pro.PRODUCT_TRADE_ADR1, pro.PRODUCT_ID,
-			pro.PRODUCT_TITLE, pro.PRODUCT_PRICE, mem.MEM_NICK, REPLACE(FORMAT(pro.PRODUCT_REG_DATE, 'yyyyMMddHHmmss'), ',', '') AS PRODUCT_REG_DATE,
-			pro.PRODUCT_STATUS
+			pro.PRODUCT_PIC1
+			, pro.PRODUCT_CATEGORY
+			, pro.PRODUCT_TRADE_ADR1
+			, pro.PRODUCT_ID
+			, pro.PRODUCT_TITLE
+			, pro.PRODUCT_PRICE
+			, mem.MEM_NICK
+			, REPLACE(FORMAT(pro.PRODUCT_REG_DATE, 'yyyyMMddHHmmss'), ',', '') AS PRODUCT_REG_DATE
+			, pro.PRODUCT_REG_DATE
+			, pro.PRODUCT_STATUS
 		FROM PRODUCT pro join MEMBER mem
 		ON pro.MEM_ID = mem.MEM_ID
 		WHERE 
@@ -134,18 +142,41 @@
 	
 	<!-- 같은 판매자 상품 조회 -->
 	<select id="searchSellerProduct" resultType="map">
-		SELECT *
-		FROM PRODUCT
-		WHERE MEM_ID = #{mem_id}
-		AND PRODUCT_ID NOT IN (#{product_id})
+		SELECT pro.PRODUCT_PIC1
+				, pro.PRODUCT_CATEGORY
+				, pro.PRODUCT_TRADE_ADR1
+				, pro.PRODUCT_ID
+				, pro.PRODUCT_TITLE
+				, pro.PRODUCT_PRICE
+				, mem.MEM_NICK
+				, REPLACE(FORMAT(pro.PRODUCT_REG_DATE, 'yyyyMMddHHmmss'), ',', '') AS PRODUCT_REG_DATE
+				, pro.PRODUCT_STATUS
+		FROM PRODUCT pro
+		JOIN MEMBER mem
+		ON pro.MEM_ID = mem.MEM_ID
+		WHERE pro.MEM_ID = #{mem_id}
+		<if test="product_id != 0">
+			AND pro.PRODUCT_ID NOT IN (#{product_id})
+		</if>
+		ORDER BY pro.PRODUCT_REG_DATE DESC
 	</select>
 	
 	<!-- 비슷한 상품 조회 -->
 	<select id="searchSameCategoryProduct" resultType="map">
-		SELECT *
-		FROM PRODUCT
-		WHERE PRODUCT_CATEGORY = #{product_category}
-		AND PRODUCT_ID NOT IN (#{product_id})
+		SELECT pro.PRODUCT_PIC1
+				, pro.PRODUCT_CATEGORY
+				, pro.PRODUCT_TRADE_ADR1
+				, pro.PRODUCT_ID
+				, pro.PRODUCT_TITLE
+				, pro.PRODUCT_PRICE
+				, mem.MEM_NICK
+				, REPLACE(FORMAT(pro.PRODUCT_REG_DATE, 'yyyyMMddHHmmss'), ',', '') AS PRODUCT_REG_DATE
+				, pro.PRODUCT_STATUS
+		FROM PRODUCT pro
+		JOIN MEMBER mem
+		ON pro.MEM_ID = mem.MEM_ID
+		WHERE pro.PRODUCT_CATEGORY = #{product_category}
+		AND pro.PRODUCT_ID NOT IN (#{product_id})
 	</select>
 	
 	<!-- 상품 신고 -->
@@ -170,17 +201,39 @@
 	</insert>
 	
 	<!-- 상점페이지 조회 -->
-	<select id="searchSellerList" resultType="map">
+	<select id="searchSellerShop" resultType="map">
 		SELECT mem.MEM_PROFILE
-		     , mem.MEM_NICK
-		     , ROUND(AVG(rev.REVIEW_SCORE)) AS AVG_SCORE
-		     , ROUND(AVG(rev.REVIEW_SCORE)) / 5.0 * 100 AS PER_AVG_SCORE
+				 , mem.MEM_NICK
+		         , mem.MEM_ID
+				 , ROUND(IFNULL(AVG(rev.REVIEW_SCORE), 0)) AS AVG_SCORE
+				 , ROUND(IFNULL(AVG(rev.REVIEW_SCORE), 0)) / 5.0 * 100 AS PER_AVG_SCORE
 		FROM MEMBER mem
-		JOIN PRODUCT pro ON mem.MEM_ID = pro.MEM_ID
-		JOIN MYREVIEW rev ON pro.PRODUCT_ID = rev.PRODUCT_ID
-		WHERE mem.MEM_NICK = #{mem_id}
+		LEFT OUTER JOIN PRODUCT pro ON mem.MEM_ID = pro.MEM_ID
+		LEFT OUTER JOIN MYREVIEW rev ON pro.PRODUCT_ID = rev.PRODUCT_ID
+		WHERE mem.MEM_NICK = 'Mit'
 		GROUP BY mem.MEM_PROFILE
-		       , mem.MEM_NICK;
+					, mem.MEM_NICK
+					, mem.MEM_ID;
+	</select>
+	
+	<!-- 상점페이지 셀러 리뷰목록 조회 -->
+	<select id="searchSellerReview" resultType="map">
+		SELECT rev.MEM_ID AS REVIEWER
+				, rev.REVIEW_CONTENT
+		        , rev.PRODUCT_TITLE
+		        , rev.REVIEW_SCORE
+		        , pro.MEM_ID AS SELLER
+		        , pro.PRODUCT_PIC1
+		FROM MYREVIEW rev
+		JOIN PRODUCT pro
+		ON rev.PRODUCT_ID = pro.PRODUCT_ID
+		WHERE pro.MEM_ID = #{mem_id}
+	</select>
+	
+	<select id="productContent" resultType="map">
+		SELECT *
+		FROM PRODUCT
+		WHERE PRODUCT_ID = #{product_ID};
 	</select>
 	
 	<!-- 구매상품 리스트 조회 -->

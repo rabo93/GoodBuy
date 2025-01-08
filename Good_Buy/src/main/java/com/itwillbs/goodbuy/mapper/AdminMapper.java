@@ -167,5 +167,11 @@ public interface AdminMapper {
 	// 회원 신고 기록 목록 조회
 	List<Map<String, Object>> selectReportHistory(String mem_id);
 
+	// 회원 신고 채팅방 대화내역 조회
+	List<Map<String, Object>> selectReportChatHistory(String room_id);
+
+	// 신고 채팅방 상세
+	Map<String, Object> selectChatDetail(String room_id);
+
 
 }

@@ -161,7 +161,7 @@
 			</div>
 		</div>
 	</div>
-
+	
     <!-- Bootstrap core JavaScript-->
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/jquery/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

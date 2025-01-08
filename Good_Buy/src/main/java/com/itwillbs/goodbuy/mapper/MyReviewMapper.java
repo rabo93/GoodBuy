@@ -20,7 +20,8 @@ public interface MyReviewMapper {
 			, @Param("review_content") String review
 			, @Param("product_title") String productTitle
 			, @Param("product_id") String productId
-			, @Param("review_score") String score);
+			, @Param("review_score") String score
+			, @Param("review_options") String reviewOptions);
 	
 	int selectReviewCountCheck(int product_id);
 	

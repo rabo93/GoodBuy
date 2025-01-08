@@ -193,11 +193,13 @@ public class MypageController {
 		String productTitle = reviewData.get("product_title");
 		String productId = reviewData.get("product_id");
 		String score = reviewData.get("score");
+		String reviewOptions  = reviewData.get("reviewOptions");
 //		String review_cnt = reviewData.get("review_cnt");
 		String id = getSessionUserId(session);
 		
 		System.out.println("@@@@@@@@@@@"+review+productId + productTitle+score);
-		int result = reviewService.saveReviewData(id,review,productTitle,productId,score);
+		System.out.println(">>>>>>>>>>>>>>>>>"+reviewOptions);
+		int result = reviewService.saveReviewData(id,review,productTitle,productId,score,reviewOptions);
 		if(result > 0) {
 			return "result/success";
 		} else {

@@ -359,6 +359,7 @@
 			   A.STATUS = #{STATUS}
 			   , A.ACTION_REASON = #{ACTION_REASON}
 			   , A.ADMIN_ID = #{ADMIN_ID}
+			   , A.ACTION_DATE = NOW()
 			<if test='STATUS != null or STATUS.equals("처리완료")'>
      	   	   , B.PRODUCT_STATUS = 4
 			</if>
@@ -446,6 +447,31 @@
 		  LIMIT
 		 	   #{param.start}
 		 	   , #{param.length}
+     </select>
+     
+     <!-- 회원 신고 채팅방 대화내역 조회 - SELECT -->
+     <select id="selectReportChatHistory" resultType="map">
+     	SELECT ROOM_ID
+     		   , SENDER_ID
+     		   , RECEIVER_ID
+     		   , MESSAGE
+     		   , TYPE
+		       , DATE_FORMAT(SEND_TIME, '%Y-%m-%d %H:%i:%s') AS SEND_TIME
+     		   , READ_STATE
+     	  FROM CHATTING
+     	 WHERE ROOM_ID = #{room_id}
+     </select>
+     
+     <!-- 신고 채팅방 상세 -->
+     <select id="selectChatDetail" resultType="map">
+     	SELECT ROOM_ID
+     		   , PRODUCT_ID
+     		   , TITLE
+     		   , (CASE WHEN STATUS = 1 THEN "대화중"
+					   WHEN STATUS = 2 THEN "대화종료" END) AS STATUS
+     	  FROM CHATROOM
+     	 WHERE ROOM_ID = #{room_id}
+     	 LIMIT 1
      </select>
      
      <!-- 신고 회원 조치 및 수정 - UPDATE -->

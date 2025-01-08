@@ -23,8 +23,8 @@ public class MyReviewService {
 	}
 	
 	//리뷰 등록 저장
-	public int saveReviewData(String id, String review, String productTitle, String productId,String score) {
-		return mapper.insertReview(id,review,productTitle,productId,score);
+	public int saveReviewData(String id, String review, String productTitle, String productId,String score, String reviewOptions) {
+		return mapper.insertReview(id,review,productTitle,productId,score,reviewOptions );
 	}
 	//리뷰 갯수확인(후기버튼 비활성화)
 	public int reviewCountCheck(int product_id) {

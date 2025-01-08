@@ -1,6 +1,7 @@
 package com.itwillbs.goodbuy.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,8 @@ public class MyReviewService {
 	}
 	
 	//리뷰 등록 저장
-	public int saveReviewData(String id, String review, String productTitle, String productId) {
-		return mapper.insertReview(id,review,productTitle,productId);
+	public int saveReviewData(String id, String review, String productTitle, String productId,String score) {
+		return mapper.insertReview(id,review,productTitle,productId,score);
 	}
 	//리뷰 갯수확인(후기버튼 비활성화)
 	public int reviewCountCheck(int product_id) {
@@ -39,8 +40,12 @@ public class MyReviewService {
 		return mapper.updateReview(reviewContent,productId);
 	}
 	public int removeReview(int reviewId) {
-		// TODO Auto-generated method stub
 		return mapper.deleteReview(reviewId);
+	}
+	
+	//나의 별점조회
+	public List<Map<String, String>> getScoreCount(String id) {
+		return mapper.selectScoreCount(id);
 	}
 	
 	

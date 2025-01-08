@@ -128,6 +128,9 @@
             <h2>
                 <span id="buyerName"></span>님께 구매한 [<span id="productTitle"></span>]<br>후기 보내기📮
             </h2>
+           	<label><input type="radio" name="score" value="2">최고에요!</label>
+          	<label><input type="radio" name="score" value="1">좋아요!</label>
+           	<label><input type="radio" name="score" value="0">별로에요!!!!!!!!!!!!!!🤬🤬</label>
             <input type="hidden" id="modal_product_id"> <!-- id저장용 -->
 <!--             <input type="hidden" id="modal_review_cnt"> 리뷰 갯수 저장용 -->
             <textarea rows="4" cols="50" id="review_content" placeholder="후기를 작성해주세요."></textarea>
@@ -166,6 +169,7 @@
             const reviewText = $("#review_content").val();
             const productId = $("#modal_product_id").val();
             const productTitle = $("#productTitle").text();
+            const score = $("input[name='score']:checked").val();
 // 			const review_cnt = $("#modal_review_cnt").val();
 
             if (!reviewText.trim()) {
@@ -177,6 +181,7 @@
             console.log("리뷰 내용: " + reviewText);
             console.log("상품 ID: " + productId);
             console.log("상품 제목: " + productTitle);
+            console.log("평점: " + score);
 // 			console.log(">>>>>>>>>>>>"+review_cnt);
 			  
 
@@ -189,6 +194,7 @@
                     review: reviewText,
                     product_title: productTitle,
                     product_id: productId,
+                    score: score
 //                     review_cnt : review_cnt
                 }),
                 success: function () {

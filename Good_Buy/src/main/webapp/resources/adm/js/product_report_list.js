@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 d.searchDate = $("#schDate").val();
             },
 			dataSrc: function (res) {
+				console.log(res);
 				const data = res.productReportList;
 				const start = $('#productReport').DataTable().page.info().start; 
 				

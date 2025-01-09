@@ -94,8 +94,6 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 					}	//	사용자 접속 여부 판별 끝
 					
 					ChatRoom chatRoom = chatService.selectChatRoom(sender_id, receiver_id, product_id);
-					System.out.println("!@#!@#!@#");
-					System.out.println(chatRoom);
 					if(chatRoom == null) {	// 기존 채팅방 없음
 						System.out.println("새 채팅방 생성");
 						
@@ -124,8 +122,6 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 						chatMessage.setRoom_id(chatRoom.getRoom_id());
 						chatMessage.setType(ChatMessage.TYPE_START);
 						chatMessage.setMessage(gson.toJson(chatRoom));
-						System.out.println("!@#!@#");
-						System.out.println(chatMessage);
 						
 						sendMessage(session, chatMessage);
 					}
@@ -136,14 +132,13 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			
 		}
 		if (chatMessage.getType().equals(ChatMessage.TYPE_REQUEST_CHAT_LIST)) {
-			System.out.println("!@#!@#");
-			System.out.println("기존 대화 요청 조회");
-			
 			//	기존 채팅 내역 조회
 			List<ChatMessage> chatMessageList = chatService.selectChatMessage(chatMessage);
 			//	기존 채팅 내역이 존재할 경우만 클라이언트에게 전송
 			if (chatMessageList != null && chatMessageList.size() > 0) {
 				chatMessage.setMessage(gson.toJson(chatMessageList));
+				System.out.println("!@#!@#");
+				System.out.println(chatMessage);
 				sendMessage(session, chatMessage);
 			}
 			

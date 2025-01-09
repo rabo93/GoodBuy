@@ -22,7 +22,6 @@ var product_id;
 const childUrl = location.href;
 var baseUrl = childUrl.substring(0, childUrl.lastIndexOf('/ChatMain'));
 
-
 $(".sidebar-item").on("dblclick", function() {
 	let index = $(this).data("index");
 	let room_id = $("#room_id" + index).val();
@@ -78,6 +77,7 @@ $(function() {
 			for(let message of JSON.parse(data.message)) {
 				appendMessage(message.type, message.sender_id, message.receiver_id, message.message, message.send_time);
 			}
+			
 		}
 		if (data.type == TYPE_TALK || data.type == TYPE_FILE) {	// 채팅 입력
 			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
@@ -120,7 +120,7 @@ function showChatRoom(room) {
 						+ '<button class="close-chat-button" onclick="closeChat()">'
 							+ '<i class="fa-solid fa-arrow-left"></i>'
 						+ '</button>'
-						+ '<button class="report-chat-button" onclick="reportChat()">'
+						+ '<button class="report-chat-button" onclick="toggleChatModal(\'open\')">'
 //							+ '<img src="${pageContext.request.contextPath}/resources/img/siren.png">'
 							+ '<i class="fa-solid fa-land-mine-on"></i>&nbsp;신고하기'
 						+ '</button>'
@@ -170,7 +170,7 @@ function showChatRoom(room) {
 	
 	//	채팅목록 수신메세지 표시 제거 작업 예정
 	
-	//	기존 채팅 내역 불러오기 작업 예정
+	//	기존 채팅 내역 불러오기 작업
 	sendMessage(TYPE_REQUEST_CHAT_LIST, product_id, sId, "", room.room_id, "");
 	
 }
@@ -272,6 +272,62 @@ function sendMessage(type, product_id, sender_id, receiver_id, room_id, message)
 function closeChat() {
 	$(".chat-area").empty();
 }
+
+//	===============================================================================
+//	[ 모달창 ]
+//	모달창 띄우기
+function toggleChatModal(action) {
+    if (action == 'open') {
+        $('.ch-modal-wrap').show();
+        $('.ch-modal-bg').show();
+    } else if (action == 'close') {
+        $('.ch-modal-wrap').hide();
+        $('.ch-modal-bg').hide();
+    }
+}
+
+$("#chatReporting").on("click", function() {
+	let reason = $("select[name=ch-modal-sb] option:selected").text() == "기타" ? $(".ch-modal-otherReason").val() : 
+																				  $("select[name=ch-modal-sb] option:selected").text();
+	console.log(product_id);
+	let reported_id = $("#receiver_id").val();
+	console.log(reported_id);
+	console.log(reason);
+	console.log(sId);
+	
+	$.ajax({
+		url: "ChatReport",
+		type: "POST",
+		data: {
+			reporter_id : sId,
+			reported_id : reported_id,
+			product_id : product_id,
+			reason : reason,
+		},
+		dataType: "JSON"
+	}).done(function(response){
+		console.log(response);
+		alert(response);
+		window.location.reload();
+	}).fail(function() {
+		console.log("실패");
+	});
+})
+
+$(document).ready(function(){
+	$(".ch-modal-otherReason").text($("select[name=ch-modal-sb] option:selected").val());
+	$("select[name=ch-modal-sb]").change(function(){
+		if ($("select[name=ch-modal-sb] option:selected").text() == "기타") {
+			$(".ch-modal-otherReason").removeAttr("readonly");
+			$(".ch-modal-otherReason").val("");
+			$(".ch-modal-otherReason").attr("placeholder", "기타 사유를 입력해주세요.");
+		} else {
+			$(".ch-modal-otherReason").attr("readonly", "readonly");
+			$(".ch-modal-otherReason").val($("select[name=ch-modal-sb] option:selected").val());
+		}
+	});
+})
+
 
 // ==============================================================================
 // 결제창 열기 - 창을 작게 열려고 함수로 만들었음

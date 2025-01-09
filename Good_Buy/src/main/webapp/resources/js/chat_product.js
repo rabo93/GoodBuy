@@ -45,22 +45,15 @@ $(function() {
 	$("#chatReporting").on("click", function() {
 		let reason = $("select[name=ch-modal-sb] option:selected").text() == "기타" ? $(".ch-modal-otherReason").val() : 
 																					  $("select[name=ch-modal-sb] option:selected").text();
-		let reason_detail = $(".ch-modal-detail").val();
-		let reportFile = $(".ch-modal-file")[0].files[0];
 		console.log(product_id);
 		console.log(receiver_id);
 		console.log(reason);
 		console.log(reason_detail);
 		console.log(sId);
 		console.log(reportFile);
-//		PRODUCT_ID: product_id,
-//				REASON: $("select[name=ch-modal-sb] option:selected").text() === "기타" ? $(".modal-otherReason").val() :
-//																					   $("select[name=modal-sb] option:selected").text(),
-//				REPORTER_ID: sId
 		if (reportFile) {
 			console.log("파일 첨부!")
 		}
-		//	첨부파일 넣어서 하는거 물어보고 작업 예정
 		
 		$.ajax({
 			url: "ChatReport",
@@ -74,14 +67,10 @@ $(function() {
 			},
 			dataType: "JSON"
 		}).done(function(response){
-//			alert(decodeURIComponent(response).replaceAll("+", " "));
-//			modalClose();
 			console.log(response);
 			alert(response);
 			window.location.reload();
 		}).fail(function() {
-//			alert(decodeURIComponent(response).replaceAll("+", " "));
-//			modalClose();
 			console.log("실패");
 		});
 	})
@@ -90,9 +79,9 @@ $(function() {
 		$(".ch-modal-otherReason").text($("select[name=ch-modal-sb] option:selected").val());
 		$("select[name=ch-modal-sb]").change(function(){
 			if ($("select[name=ch-modal-sb] option:selected").text() == "기타") {
-//				$(".ch-modal-otherReason").removeAttr("readonly");
-				$(".ch-modal-otherReason").val("기타사유");
-//				$(".ch-modal-detail").attr("placeholder", "기타 사유를 입력해주세요.");
+				$(".ch-modal-otherReason").removeAttr("readonly");
+				$(".ch-modal-otherReason").val("");
+				$(".ch-modal-otherReason").attr("placeholder", "기타 사유를 입력해주세요.");
 			} else {
 				$(".ch-modal-otherReason").attr("readonly", "readonly");
 				$(".ch-modal-otherReason").val($("select[name=ch-modal-sb] option:selected").val());
@@ -105,6 +94,12 @@ $(function() {
 function chatProduct(e) {
 	let chatData = JSON.parse(e);
 	console.log(chatData.type);
+	if(chatData.type == TYPE_START) {
+		console.log("room_id : " + chatData.room_id);
+		window.room_id = chatData.room_id;
+		console.log("window.room_id : " + window.room_id);
+	}
+	
 	if (chatData.type == TYPE_TALK || chatData.type == TYPE_FILE) {
 		appendMessage(chatData.type, chatData.sender_id, chatData.receiver_id, chatData.message, chatData.send_time);
 	}
@@ -120,6 +115,7 @@ function toggleSlideChat() {
 	console.log("receiver_id : " + receiver_id);
 	console.log("product_id : " + product_id);
 	
+	//	AJAX로 기존 채팅방 존재여부 판단
 	$.ajax({
 		url : "ChatRoomAjax",
 		type : "POST",
@@ -130,7 +126,7 @@ function toggleSlideChat() {
 			product_id : product_id
 		}
 	}).done(function(result){
-		
+		console.log(result);
 		if(result == null) {
 			showChatList(receiver_id, product_id);
 			return;
@@ -148,8 +144,7 @@ function toggleSlideChat() {
 				for(let message of response) {
 					appendMessage(message.type, message.sender_id, message.receiver_id, message.message, message.send_time);
 				}
-				console.log("!@#!@#");
-				console.log(response);
+				
 			});
 		}
 	});
@@ -157,6 +152,7 @@ function toggleSlideChat() {
 	//	슬라이드로 보이기
 	$("html").toggleClass("fixed");
 	$('.chat-container').toggleClass('open');
+	$(".chat-body").scrollTop($(".chat-body")[0].scrollHeight);
 }
 
 $("#wrapper-bg").on("click", () => {
@@ -190,18 +186,14 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 	
 	if(sender_id == sId) {	// 자신이 보낸 메세지(송신자가 자신인 경우)
 		div_message = '<div class="message user">' + bubble_message + '</div>';
-//						+ '<div class="bubble">' + bubble_message + '</div>'
-//					 + '</div>';
 	}
 	
 	if(receiver_id == sId) {	// 자신이 보낸 메세지(송신자가 자신인 경우)
 		div_message = '<div class="message other">' + bubble_message + '</div>';
-//						+ '<div class="bubble">' + bubble_message + '</div>'
-//					 + '</div>';
 	}
 
 	$(".chat-body").append(div_message);
-	$(".chat-body").scrollTop($(".chat-body")[0].scrollHeight);
+//	$(".chat-body").scrollTop($(".chat-body")[0].scrollHeight);
 	
 }
 
@@ -255,7 +247,7 @@ function sendFile() {
 		}
 		
 		if(response.fileName != "" && response.thumbnailFileName != "") {
-			sendMessage(TYPE_FILE_UPLOAD_COMPLETE, product_id, sId, receiver_id, room_id , response.fileName + ":" + response.thumbnailFileName);
+			sendMessage(TYPE_FILE_UPLOAD_COMPLETE, product_id, sId, receiver_id, window.room_id , response.fileName + ":" + response.thumbnailFileName);
 		}
 		
 	});

@@ -30,7 +30,6 @@ import com.itwillbs.goodbuy.vo.CommonCodeVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.NoticeVO;
 import com.itwillbs.goodbuy.vo.ProductOrderVO;
-import com.itwillbs.goodbuy.vo.SupportVO;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -459,6 +458,7 @@ public class AdminController {
 	}
 	
 	// 신고 회원 목록 - 조치하기(+ 수정하기)
+	@AdminLog
 	@PostMapping("AdmUserReportModify")
 	public String admUserReportModify(@RequestParam Map<String, Object> param, Model model) {
 		log.info(">>> 신고 조치 : " + param);
@@ -644,7 +644,7 @@ public class AdminController {
 
 	// ======================================================
 	// [ 고객지원 관리 ]
-	// - FAQ 관리
+	// - FAQ 관리 페이지 - 포워딩
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmFaqList")
 	public String admFaqList() {
@@ -652,7 +652,6 @@ public class AdminController {
 	}
 	
 	// [ FAQ 목록 조회 ]
-	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("FaqListForm")
 	public String admFaqListForm(@RequestParam Map<String, String> param) {
@@ -667,7 +666,6 @@ public class AdminController {
 		
 		// FAQ 전체 목록 조회
 		List<Map<String, Object>> faqList = service.getFaqList(convertParam); // start, length, searchValue, faqCate, listStatus, orderColumn, orderDir
-		System.out.println("faqList:" + faqList);
 		
 		// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
 		Map<String, Object> response = new HashMap<String, Object>();
@@ -677,7 +675,7 @@ public class AdminController {
 		response.put("recordsTotal", recordsTotal); // 전체 컬럼 수
 		response.put("recordsFiltered", recordsFiltered); // 검색 필터링 후 컬럼 수
 		response.put("faqList", faqList); // 컬럼 데이터
-		System.out.println("Map: "+ response); 
+//		System.out.println("Map: "+ response); 
 		
 		JSONObject jo = new JSONObject(response);
 		return jo.toString();
@@ -685,18 +683,18 @@ public class AdminController {
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 수정 ]
 	@AdminLog
-	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmFaqModify")
 	public String admFaqModify(@RequestParam Map<String, Object> param, Model model) {
-		log.info(">>> 수정할 faq 정보: " + param);
+//		log.info(">>> 수정할 faq 정보: " + param);
+		
 		int updateResult = service.modifyFaqInfo(param);
 		
 		if(updateResult > 0) {
-			model.addAttribute("msg", "FAQ 수정하였습니다.");
+			model.addAttribute("msg", "FAQ 수정 완료 되었습니다.");
 			model.addAttribute("targetURL", "AdmFaqList");
 			return "result/success";
 		} else {
-			model.addAttribute("msg", "FAQ 수정에 실패하였습니다.");
+			model.addAttribute("msg", "FAQ 수정 실패하였습니다.");
 			return "result/fail";
 		}
 	}
@@ -704,7 +702,6 @@ public class AdminController {
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 삭제 ]
 	@AdminLog
-	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("AdmFaqDelete")
 	public Map<String, Object> admFaqDelete(@RequestBody List<Integer> faqIds) {
@@ -726,14 +723,59 @@ public class AdminController {
 		return response;
 	}
 	
+	//-------------------------------------------------------------------------------------
+	// [ FAQ 사용여부 실시간 업데이트 ]
+	@AdminLog
+	@ResponseBody
+	@PostMapping("UpdateFaqStatus")
+	public Map<String, Object> updateFaqStatus(@RequestParam Map<String, String> param) {
+//		System.out.println("FAQ UpdateFaqStatus param: " + param);
+		//{FAQ_ID=1, LIST_STATUS=1}
+		
+		int updateResult = service.modifyFaqStatus(param);
+		
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		if(updateResult > 0) {
+			response.put("status", "success");
+			response.put("message", "사용여부가 변경되었습니다.");
+			response.put("redirectURL", "/AdmFaqList");
+		} else {
+			response.put("status", "fail");
+			response.put("message", "변경에 실패했습니다. 변경할 데이터를 확인하세요.");
+		}
+		return response;
+	}
+	
 	
 	// ======================================================
 	// [ 통계 ]
 	// 통계 차트 페이지
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmChartList")
 	public String admChartList() {
 		return "admin/chart_list";
 	}
+	
+	
+	
+	//-----------------------------------------------------
+	// 기간별 통계 페이지
+	@LoginCheck(memberRole = MemberRole.ADMIN)
+	@GetMapping("PeriodAnalysis")
+	public String periodAnalysis() {
+		return "admin/period_analysis";
+	}
+	
+	@ResponseBody
+	@PostMapping("PeriodAanalysis")
+	public String periodAanalysis() {
+		
+		
+		return "";
+	}
+	
+	
 	
 	
 	// ======================================================

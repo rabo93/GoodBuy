@@ -30,7 +30,12 @@
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/product_detail.js"></script>
-
+<script>
+	// 자식 창에서 호출될 리로드 함수
+// 	function reloadParent() {
+// 		location.reload();
+// 	}
+</script>
 </head>
 <body>
 	<header>
@@ -77,8 +82,6 @@
 								<option value="기타 사유를 입력해주세요.">기타</option>
 							</select>
 							<textarea class="ch-modal-otherReason" readonly ></textarea>
-							<textarea class="ch-modal-detail" placeholder="사유를 입력해주세요"></textarea>
-							<input type="file" class="ch-modal-file">
 							<button class="ch-model-report-btn" type="button" id="chatReporting">
 								신고하기
 							</button>
@@ -132,8 +135,8 @@
 							</div>
 							<div class="item-detail-description">${productSearch.product_intro}</div>
 							<c:choose>
-								<c:when test="${productSearch.product_shpping_fee != '' && productSearch.product_shpping_fee != undefined}">
-									<div class="item-detail-shpping-fee">배송비:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${productSearch.product_shpping_fee} 원</div>
+								<c:when test="${productSearch.product_shipping_fee != '' && productSearch.product_shipping_fee != undefined}">
+									<div class="item-detail-shpping-fee">배송비:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${productSearch.product_shipping_fee} 원</div>
 								</c:when>
 								<c:otherwise>
 									<div class="item-detail-shpping-fee">배송비 포함</div>

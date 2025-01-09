@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
 import com.itwillbs.goodbuy.service.MemberService;
 import com.itwillbs.goodbuy.service.MyPageService;
 import com.itwillbs.goodbuy.service.MyReviewService;
@@ -93,25 +94,27 @@ public class MypageController {
 		return "mypage/mypage_store";
 		
 	}
-	@PostMapping("MyStore")
-	public String myStoreIntro(Model model, HttpSession session, MemberVO member,HttpServletRequest request) {
+	
+	@ResponseBody
+	@PostMapping("MyStoreIntro")
+		public String myStoreIntro(@RequestParam String mem_intro,Model model, HttpSession session, MemberVO member,HttpServletRequest request) {
+		
+		String msg = "";
 		savePreviousUrl(request, session);
-		
 		String id = (String) session.getAttribute("sId");
-		member.setMem_id(id);  // 사용자 ID 설정
 		
+		member.setMem_id(id);  // 사용자 ID 설정
+//		member.setMem_intro(map.get("mem_intro"));
+		member.setMem_intro(mem_intro);
+//		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>"+mem_intro);
 		int storeIntroCount = memberService.registStoreIntro(member);  // MemberVO 전달
 		
-		if (storeIntroCount > 0) {
-			model.addAttribute("member", member);
-			model.addAttribute("msg", "상점소개가 변경되었습니다.");
-			System.out.println(member.getMem_intro());
-			
-			return "result/success";
-		} else {
-			model.addAttribute("msg", "상점소개 변경 실패!");
-			return "result/fail";
+		if (storeIntroCount > 0) { // 저장 성공
+			msg = "상점소개가 수정되었습니다!";
+		} else { // 저장 실패
+			msg = "상점소개 변경에 오류가 발생했습니다.\n다시 시도해주세요";
 		}
+		return new Gson().toJson(msg);
 	}
 	//[나의 구매내역]
 	@GetMapping("MyOrder")
@@ -119,9 +122,9 @@ public class MypageController {
 		String id = getSessionUserId(session);
 
 		//구매내역 조회
-		List<ProductOrderVO> orderList = productService.getOrderList(id);
+		List<Map<String, String>> orderList = productService.getOrderList(id);
 		model.addAttribute("order", orderList);
-		System.out.println("구매내역 조회"+orderList);
+		System.out.println("구매내역 조회 : "+orderList);
 		
 
 		//구매내역 갯수조회
@@ -140,17 +143,27 @@ public class MypageController {
 		System.out.println("위시리스트 아이디 : "+wishlist_id);
 		
 		int deleteCount = myPageService.cancleMyWish(wishlist_id);
+		String prevURL = (String) session.getAttribute("prevURL");
+		String red = "redirect:";
 		
-		if(deleteCount > 0) {
-			if(session.getAttribute("prevURL") == null) {
-				return "redirect:/";
-			} else {
-				return "redirect:" + session.getAttribute("prevURL");
-			}
-		} else {
+		if(deleteCount <= 0) {
 			model.addAttribute("msg", "삭제 실패!");
-			return "result/fail";
+			return red;
 		}
+		
+		 red += (prevURL == null) ? "/" : prevURL;
+		    return red;
+				
+//		if(deleteCount > 0) {
+//			if(prevURL == null) {
+//				return "redirect:/";
+//			} else {
+//				return "redirect:" + prevURL;
+//			}
+//		} else {
+//			model.addAttribute("msg", "삭제 실패!");
+//			return "result/fail";
+//		}
 	}
 	
 	//[나의 판매내역] 완
@@ -189,17 +202,19 @@ public class MypageController {
 	@ResponseBody
 	@PostMapping("MyReviewText")
 	public String myReviewText(@RequestBody Map<String, String>reviewData,HttpSession session) {
-		String review = reviewData.get("review"); // JSON에서 'review' 키로 데이터 받기
-		String productTitle = reviewData.get("product_title");
-		String productId = reviewData.get("product_id");
-		String score = reviewData.get("score");
-		String reviewOptions  = reviewData.get("reviewOptions");
+//		String review = reviewData.get("review"); // JSON에서 'review' 키로 데이터 받기
+//		String productTitle = reviewData.get("product_title");
+//		String productId = reviewData.get("product_id");
+//		String score = reviewData.get("score");
+//		String reviewOptions  = reviewData.get("reviewOptions");
 //		String review_cnt = reviewData.get("review_cnt");
 		String id = getSessionUserId(session);
+		reviewData.put("mem_id", id);
+//		System.out.println("@@@@@@@@@@@"+review+productId + productTitle+score);
+//		System.out.println(">>>>>>>>>>>>>>>>>"+reviewOptions);
 		
-		System.out.println("@@@@@@@@@@@"+review+productId + productTitle+score);
-		System.out.println(">>>>>>>>>>>>>>>>>"+reviewOptions);
-		int result = reviewService.saveReviewData(id,review,productTitle,productId,score,reviewOptions);
+//		int result = reviewService.saveReviewData(id,review,productTitle,productId,score,reviewOptions);
+		int result = reviewService.saveReviewData(reviewData);
 		if(result > 0) {
 			return "result/success";
 		} else {
@@ -280,17 +295,9 @@ public class MypageController {
 		@PostMapping("MyReviewEdit")
 		public String myReviewEdit(SupportVO support,Model model,@RequestBody Map<String, String>reviewData,HttpSession session) {
 			
-			String realPath = getRealPath(session);
-			String subDir = createDirectories(realPath);
-			realPath += "/" + subDir;
-			
-			String fileName = processDuplicateFileName(support, subDir);
-			
-			
 			model.addAttribute("support", support);
 			
 			addFileToModel(support, model);
-			
 			String reviewContent = reviewData.get("review"); //모달창에서 입력한 review_content
 			String productId = reviewData.get("product_id");
 			String id = getSessionUserId(session);

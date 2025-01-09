@@ -50,7 +50,6 @@
 				<a href="MyReview">나의 후기</a>
 				<a href="MyReviewHistory"  class="active">내가 쓴 후기</a>
 				<a href="MySupport">1:1문의내역</a>
-				<a href="">나의 광고</a>
 			</aside>
 			<div class="my-container">
 				<div class="contents-ttl">내가 쓴 후기</div>
@@ -69,61 +68,59 @@
 <!-- 						            </div> -->
 						            <c:forEach var="review" items="${review}" varStatus="status">
 						            	<div class="review-box">
-										    <div class="r_header">
-										        <div class="profile-icon"></div>
-										        <div class="user-info">
-										            <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
-										            <div class="date">[${review.sellerNick} 상점]에서 구매한 [${review.product_title}]</div>
-										            <div class="name">${review.buyerNick} | ${review.review_date}</div>
-<%-- 										            <div class="product">${review.product_title}</div> --%>
+									        <div class="user-info">
+									            <div class="seller"><span>${review.sellerNick} 상점</span> / <b>${review.product_title}</b></div>
+									        	<div class="user-thumb">
+										            <c:choose>
+											            <c:when test="${not empty member.mem_profile}">
+											            	<img src="${member.mem_profile}?${System.currentTimeMillis()}" id="profile_preview"><br>
+											            </c:when>
+											            <c:otherwise>
+											                <!-- member.memProfile이 비어 있으면 기본 이미지 출력 -->
+											                <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview"><br>
+											            </c:otherwise>
+											        </c:choose>
 										        </div>
-										        <div class="review-score">
-									            	<c:if test="${review.review_score == '2'}">
-									            		<span id="score" name="score">최고예요👍</span>
-										            	<!-- <input type="button" id="score" name="score" value="최고예요👍">
- -->										            </c:if>
-										            <c:if test="${review.review_score == '1'}">
-									            		<span id="score" name="score">좋아요💕</span>
-										            	<!-- <input type="button" id="score"  name="score" value="좋아요💕"> -->
+									        <!-- /프로필사진 -->
+									            <div class="name">${review.buyerNick} <span class="date">${review.review_date}</span></div>
+									        </div>
+									        <div class="review-score">
+								            	<c:if test="${review.review_score == '2'}">
+								            		<span id="score" name="score">최고예요🥳</span>
 										            </c:if>
-										            <c:if test="${review.review_score == '0'}">
-									            		<span id="score" name="score">별로예요🥲</span>
-										           		<!-- <input type="button" id="score"  name="score" value="별로예요🥲"> -->
-									           	 	</c:if>
-									            </div>
-									            <div class="review-score-option">
-									            	<%-- 리뷰 옵션 --%>
-													<c:if test="${fn:contains(review.review_options, '1')}">
-														<span id="score" name="score">배송이 빨라요🚚</span>
-														<!-- <input type="button" id="score" name="score" value="배송이 빨라요🚚"> -->
-													</c:if>
-													<c:if test="${fn:contains(review.review_options, '2')}">
-														<span id="score" name="score">친절해요😊</span>
-														<!-- <input type="button" id="score" name="score" value="친절해요😊"> -->
-													</c:if>
-													<c:if test="${fn:contains(review.review_options, '3')}">
-														<span id="score" name="score">물건상태가 좋아요✨</span>
-														<!-- <input type="button" id="score" name="score" value="물건상태가 좋아요✨"> -->
-													</c:if>
-													<c:if test="${fn:contains(review.review_options, '4')}">
-														<span id="score" name="score">또 거래하고 싶어요💰</span>
-														<!-- <input type="button" id="score" name="score" value="또 거래하고 싶어요💰"> -->
-													</c:if>
-									            </div>
-										    </div>
-								            <div class=rating>
-<!-- 												<i class="fa-solid fa-star" ></i> -->
-<%-- 												<span><b>${review.review_score}</b></span> --%>
-											</div>
+									            <c:if test="${review.review_score == '1'}">
+								            		<span id="score" name="score">좋아요💕</span>
+									            </c:if>
+									            <c:if test="${review.review_score == '0'}">
+								            		<span id="score" name="score">별로예요👿</span>
+								           	 	</c:if>
+								            </div>
 										    <div class="review-text">${review.review_content}</div>
-										    <input type="hidden" name="product_id" id="hiddenProductId">
-											<button class="open-modal-btn"
-										        data-product-id="${review.product_id}"
-										        data-title="${review.product_title}"
-										        data-buyer="${review.sellerNick}">
-										        수정
-										    </button>
-										<button onclick="deleteReview(${review.review_id})">삭제</button>
+								            <div class="review-score-option">
+								            	<%-- 리뷰 옵션 --%>
+												<c:if test="${fn:contains(review.review_options, '1')}">
+													<span id="score" name="score">배송이 빨라요🚚</span>
+												</c:if>
+												<c:if test="${fn:contains(review.review_options, '2')}">
+													<span id="score" name="score">친절해요💖</span>
+												</c:if>
+												<c:if test="${fn:contains(review.review_options, '3')}">
+													<span id="score" name="score">물건상태가 좋아요✨</span>
+												</c:if>
+												<c:if test="${fn:contains(review.review_options, '4')}">
+													<span id="score" name="score">또 거래하고 싶어요💰</span>
+												</c:if>
+								            </div>
+								            <div class="btns">
+											    <input type="hidden" name="product_id" id="hiddenProductId">
+												<button class="open-modal-btn my-btn"
+											        data-product-id="${review.product_id}"
+											        data-title="${review.product_title}"
+											        data-buyer="${review.sellerNick}">
+											        수정
+											    </button>
+												<button class="my-btn del" onclick="deleteReview(${review.review_id})">삭제</button>
+								            </div>
 										</div>
 						            </c:forEach>
 								</c:otherwise>
@@ -155,7 +152,7 @@
     
     <script type="text/javascript">
     $(document).ready(function () {
-        // 후기 작성하기 버튼 클릭 이벤트
+        // 후기 수정하기 버튼 클릭 이벤트
         $(".open-modal-btn").click(function () {
             const productId = $(this).data("product-id");
             const productTitle = $(this).data("title");
@@ -207,14 +204,14 @@
                     product_id: productId,
 //                     review_cnt : review_cnt
                 }),
-                success: function () {
+                success: function (response) {
                     alert("후기가 수정되었습니다!");
                     $("#review-modal").fadeOut(300);
                     $("#review_content").val("");
                     location.reload();
                 },
-                error: function () {
-                    alert("후기 등록에 실패했습니다.");
+                error: function (error) {
+                	 alert("후기수정 중 오류가 발생했습니다.//n다시 시도해주세요.");
                 }
             });
         });

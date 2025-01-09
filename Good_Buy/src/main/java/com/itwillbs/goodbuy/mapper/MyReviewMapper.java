@@ -16,12 +16,13 @@ public interface MyReviewMapper {
 	//리뷰 갯수조회
 	int selectReviewCount(String id);
 	//리뷰저장
-	int insertReview(@Param("mem_id") String id
-			, @Param("review_content") String review
-			, @Param("product_title") String productTitle
-			, @Param("product_id") String productId
-			, @Param("review_score") String score
-			, @Param("review_options") String reviewOptions);
+	int insertReview(Map<String, String> reviewData);
+//	int insertReview(@Param("mem_id") String id
+//			, @Param("review_content") String review
+//			, @Param("product_title") String productTitle
+//			, @Param("product_id") String productId
+//			, @Param("review_score") String score
+//			, @Param("review_options") String reviewOptions);
 	
 	int selectReviewCountCheck(int product_id);
 	

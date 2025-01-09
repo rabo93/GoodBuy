@@ -46,7 +46,7 @@
 			, #{vo.product_title}
 			, #{id}
 			, #{vo.product_intro}
-			, #{vo.product_shpping_fee}
+			, #{vo.product_shipping_fee}
 			, #{vo.product_price}
 			, #{vo.product_discount_status}
 			, #{vo.product_category}
@@ -108,7 +108,7 @@
 			   , pro.PRODUCT_TRADE_ADR1
 			   , pro.PRODUCT_TITLE
 			   , pro.PRODUCT_INTRO
-			   , pro.PRODUCT_SHPPING_FEE
+			   , pro.product_shipping_fee
 			   , pro.PRODUCT_PRICE
 			   , pro.PRODUCT_ID
 			   , pro.MEM_ID
@@ -210,7 +210,7 @@
 		FROM MEMBER mem
 		LEFT OUTER JOIN PRODUCT pro ON mem.MEM_ID = pro.MEM_ID
 		LEFT OUTER JOIN MYREVIEW rev ON pro.PRODUCT_ID = rev.PRODUCT_ID
-		WHERE mem.MEM_NICK = 'Mit'
+		WHERE mem.MEM_NICK = #{mem_nick}
 		GROUP BY mem.MEM_PROFILE
 					, mem.MEM_NICK
 					, mem.MEM_ID;
@@ -237,9 +237,9 @@
 	</select>
 	
 	<!-- 구매상품 리스트 조회 -->
-	<select id="selectOrderList" resultType="order">
+	<select id="selectOrderList">
 		SELECT 
-			  O.ORDER_ID
+			  O.PAY_ID
 			, O.PRODUCT_ID
 			, P.PRODUCT_TITLE 
 			, P.PRODUCT_PRICE
@@ -249,7 +249,7 @@
 			, P.PRODUCT_TRADE_ADR1
 			, R.REVIEW_CNT
 			, R.REVIEW_SCORE
-		FROM PRODUCT_ORDER O 
+		FROM PAYINFO O 
 		JOIN PRODUCT P ON O.PRODUCT_ID = P.PRODUCT_ID
 		JOIN MEMBER M ON P.MEM_ID = M.MEM_ID
 		LEFT JOIN (SELECT COUNT(REVIEW_ID) AS REVIEW_CNT, PRODUCT_ID ,REVIEW_SCORE
@@ -258,6 +258,31 @@
 					GROUP BY PRODUCT_ID,REVIEW_SCORE) R
 		    ON R.PRODUCT_ID = O.PRODUCT_ID
 		WHERE O.BUYER_ID = #{mem_id}
+	</select>
+	
+	<!-- 상품수정시 원본 이미지 가져오기 -->
+	<select id="getProductPic">
+		SELECT PRODUCT_PIC1, PRODUCT_PIC2, PRODUCT_PIC3
+		FROM PRODUCT
+		WHERE  PRODUCT_ID = #{product_id}
+	</select>
+	
+	<!-- 상품수정 로직 -->
+	<select id="productUpdate">
+		UPDATE PRODUCT
+		SET
+			PRODUCT_TITLE = #{product_title}
+			, PRODUCT_INTRO = #{product_intro}
+			, PRODUCT_SHIPPING_FEE = #{product_shipping_fee}
+			, PRODUCT_PRICE = #{product_price}
+			, PRODUCT_DISCOUNT_STATUS = #{product_discount_status}
+			, PRODUCT_CATEGORY = #{product_category}
+			, PRODUCT_PIC1 = #{product_pic1}
+			, PRODUCT_PIC2 = #{product_pic2}
+			, PRODUCT_PIC3 = #{product_pic3}
+			, PRODUCT_TRADE_ADR1 = #{product_trade_adr1}
+			, PRODUCT_STATUS = #{product_status}
+		WHERE PRODUCT_ID = #{product_id}
 	</select>
 	
 	<!-- 구매상품 갯수 조회 -->
@@ -274,7 +299,7 @@
 	    SELECT COALESCE(COUNT(*), 0)
 	    FROM (
 	        SELECT COALESCE(COUNT(*), 0) as ORDERCOUNT
-	        FROM PRODUCT_ORDER O 
+	        FROM PAYINFO O 
 	        	JOIN PRODUCT P ON O.PRODUCT_ID = P.PRODUCT_ID 
 	        	JOIN MEMBER M ON M.MEM_ID = P.MEM_ID 
 	        WHERE O.BUYER_ID = #{mem_id}

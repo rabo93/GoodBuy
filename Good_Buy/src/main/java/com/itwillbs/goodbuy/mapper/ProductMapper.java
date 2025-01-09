@@ -21,7 +21,7 @@ public interface ProductMapper {
 	// 구매내역 조회
 	List<ProductVO> selectProductList(String id);
 	
-	List<ProductOrderVO> selectOrderList(String id);
+	List<Map<String, String>> selectOrderList(String id);
 	// 구매내역 갯수 조회
 	int selectOrderCount(String id);
 	
@@ -67,4 +67,10 @@ public interface ProductMapper {
 
 	// 상품수정페이지 상품정보 조회
 	Map<String, Object> productContent(int product_ID);
+
+	// 상품수정 로직
+	int productUpdate(ProductVO product);
+
+	// 상품수정시 원본 이미지 가져오기
+	ProductVO getProductPic(int product_ID);
 }

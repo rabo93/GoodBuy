@@ -48,12 +48,7 @@ $(function() {
 		console.log(product_id);
 		console.log(receiver_id);
 		console.log(reason);
-		console.log(reason_detail);
 		console.log(sId);
-		console.log(reportFile);
-		if (reportFile) {
-			console.log("파일 첨부!")
-		}
 		
 		$.ajax({
 			url: "ChatReport",
@@ -63,15 +58,12 @@ $(function() {
 				reported_id : receiver_id,
 				product_id : product_id,
 				reason : reason,
-				reason_detail : reason_detail
 			},
 			dataType: "JSON"
 		}).done(function(response){
 			console.log(response);
 			alert(response);
 			window.location.reload();
-		}).fail(function() {
-			console.log("실패");
 		});
 	})
 	
@@ -89,7 +81,7 @@ $(function() {
 		});
 	})
 	
-})
+});
 
 function chatProduct(e) {
 	let chatData = JSON.parse(e);

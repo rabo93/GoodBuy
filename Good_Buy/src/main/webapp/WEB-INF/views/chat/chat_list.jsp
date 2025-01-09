@@ -67,7 +67,14 @@
 				                	<input type="hidden" id="receiver_id${status.index}" value="${chatRoom.receiver_id}">
 				                	<input type="hidden" id="product_id${status.index}" value="${chatRoom.product_id}">
 					                <div class="item"><strong>${chatRoom.title}</strong></div>
-					                <div class="item-chat">상품 구매하고 싶어요 <span>&nbsp; · &nbsp; 2024.12.30 12:40</span></div>
+					                <c:forEach items="${chatMessageList}" var="chatMessage">
+					                	<c:if test="${chatRoom.room_id eq chatMessage.room_id}">
+							                <div class="item-chat item-chat${status.index}" data-message="${chatMessage.message}">
+							                	${chatMessage.message}
+							                	<span class="item-send-time${status.index}">&nbsp; · &nbsp; ${chatMessage.send_time}</span>
+							                </div>
+					                	</c:if>
+					                </c:forEach>
 				                </div>
 				            </div>
 			        	</c:forEach>

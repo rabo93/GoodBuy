@@ -24,17 +24,19 @@ var baseUrl = childUrl.substring(0, childUrl.lastIndexOf('/ChatMain'));
 
 $(".sidebar-item").on("dblclick", function() {
 	let index = $(this).data("index");
+	let recentMessage = $(".item-chat" + index).data("message");
 	let room_id = $("#room_id" + index).val();
 	let title = $("#title" + index).val();
 	let receiver_id = $("#receiver_id" + index).val();
 	product_id = $("#product_id" + index).val();
-	
+	window.index = index;
 	console.log("index =" + index);
 	console.log("room_id =" + room_id);
 	console.log("title =" + title);
 	console.log("receiver_id =" + receiver_id);
 	console.log("sender_id =" + sId);
 	console.log("product_id =" + product_id);
+	console.log("lastMessage =" + recentMessage);
 	
 	//	room_id, title, sender_id, receive_id
 	let room = {
@@ -79,9 +81,22 @@ $(function() {
 			}
 			
 		}
-		if (data.type == TYPE_TALK || data.type == TYPE_FILE) {	// 채팅 입력
+		if (data.type == TYPE_TALK) {	// 채팅 입력
 			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
+			console.log("채팅리스트 덮어쓰기 작업");
+			let recent_div = `${data.message}<span class="item-send-time${index}">&nbsp; · &nbsp; ${data.send_time}</span>`;
+			$(".item-chat" + index).empty();
+			$(".item-chat" + index).append(recent_div);
+			
 		}
+		
+		if(data.type == TYPE_FILE) {	// 파일 전송
+			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
+			data.message = "사진을 보냈습니다.";
+			let recent_div = `${data.message}<span class="item-send-time${index}">&nbsp; · &nbsp; ${data.send_time}</span>`
+			$(".item-chat" + index).empty();
+			$(".item-chat" + index).append(recent_div);
+		} 
 		
 	};
 	
@@ -272,7 +287,6 @@ function sendMessage(type, product_id, sender_id, receiver_id, room_id, message)
 function closeChat() {
 	$(".chat-area").empty();
 }
-
 //	===============================================================================
 //	[ 모달창 ]
 //	모달창 띄우기
@@ -309,8 +323,6 @@ $("#chatReporting").on("click", function() {
 		console.log(response);
 		alert(response);
 		window.location.reload();
-	}).fail(function() {
-		console.log("실패");
 	});
 })
 

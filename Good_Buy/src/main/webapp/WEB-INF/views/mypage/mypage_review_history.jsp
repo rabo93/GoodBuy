@@ -50,7 +50,6 @@
 				<a href="MyReview">나의 후기</a>
 				<a href="MyReviewHistory"  class="active">내가 쓴 후기</a>
 				<a href="MySupport">1:1문의내역</a>
-				<a href="">나의 광고</a>
 			</aside>
 			<div class="my-container">
 				<div class="contents-ttl">내가 쓴 후기</div>
@@ -70,7 +69,7 @@
 						            <c:forEach var="review" items="${review}" varStatus="status">
 						            	<div class="review-box">
 									        <div class="user-info">
-									            <div class="seller"><span>${review.sellerNick} 상점</span>에서 구매한 <b>${review.product_title}</b></div>
+									            <div class="seller"><span>${review.sellerNick} 상점</span> / <b>${review.product_title}</b></div>
 									        	<div class="user-thumb">
 										            <c:choose>
 											            <c:when test="${not empty member.mem_profile}">

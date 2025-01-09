@@ -461,4 +461,21 @@ textarea {
     display: block;
     text-align: center;
     margin-top: 10px;
+    
+}
+.review-write-btn {
+	 background: var(--ivory);
+    color: var(--primary);
+    padding: 0 1rem;
+    border-radius: 4px;
+    font-size: 15px;
+    border: 1px solid #ddd;
+    font-weight: 600;
+    line-height: 34px;
+    margin: 4px auto;
+    width: 100%;
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+	
 }

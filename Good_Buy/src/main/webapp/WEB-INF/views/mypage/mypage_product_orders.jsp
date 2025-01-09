@@ -95,16 +95,17 @@
 <!-- 														</button> -->
                                                     	<input type="hidden" name="product_id" id="hiddenProductId">
                                                     	<c:choose>
-                                                    		<c:when test="${product.review_cnt == 0}">
-	                                                    		 <button class="open-modal-btn"
-															        data-product-id="${product.product_id}"
-															        data-title="${product.product_title}"
-															        data-buyer="${product.mem_nick}">
-															        후기 작성하기📮
-															     </button>
-                                                    		</c:when>
+	                                                    		<c:when test="${product.review_cnt == 0}">
+		                                                    		 <span class="review-write-btn"><button class="open-modal-btn"
+																        data-product-id="${product.product_id}"
+																        data-title="${product.product_title}"
+																        data-buyer="${product.mem_nick}">
+																        후기 작성하기📮
+																     </button></span>
+	                                                    		</c:when>
                                                     		<c:otherwise><a class="review-done-btn" href='MyReviewHistory'><i class="fa-regular fa-envelope"></i> 작성완료</a></c:otherwise>
                                                     	</c:choose>
+														
                                                 </div>
                                             </li>
                                         </c:forEach>

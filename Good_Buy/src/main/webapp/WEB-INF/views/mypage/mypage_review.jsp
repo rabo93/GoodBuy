@@ -72,11 +72,20 @@
 										    <div class="r_header">
 										        <div class="profile-icon"></div>
 										        <div class="user-info">
-										            <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
+										            <c:choose>
+											            <c:when test="${not empty member.mem_profile}">
+											            	<img src="${member.mem_profile}?${System.currentTimeMillis()}" id="profile_preview"><br>
+				<%-- 							                <img src="${member.mem_profile}" id="profile_preview"><br> --%>
+											            </c:when>
+											            <c:otherwise>
+											                <!-- member.memProfile이 비어 있으면 기본 이미지 출력 -->
+											                <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview"><br>
+											            </c:otherwise>
+											        </c:choose>
 										            <div class="name">${review.buyerNick} | ${review.review_date}</div>
 										            <div class="review-score">
 										            	<c:if test="${review.review_score == '2'}">
-										            		<span id="score" name="score">최고예요👍</span>
+										            		<span id="score" name="score">최고예요🥳</span>
 											            	<!-- <input type="button" id="score" name="score" value="최고예요👍">
 	 -->										            </c:if>
 											            <c:if test="${review.review_score == '1'}">
@@ -84,7 +93,7 @@
 											            	<!-- <input type="button" id="score"  name="score" value="좋아요💕"> -->
 											            </c:if>
 											            <c:if test="${review.review_score == '0'}">
-										            		<span id="score" name="score">별로예요🥲</span>
+										            		<span id="score" name="score">별로예요👿</span>
 											           		<!-- <input type="button" id="score"  name="score" value="별로예요🥲"> -->
 										           	 	</c:if>
 										            </div>
@@ -95,7 +104,7 @@
 															<!-- <input type="button" id="score" name="score" value="배송이 빨라요🚚"> -->
 														</c:if>
 														<c:if test="${fn:contains(review.review_options, '2')}">
-															<span id="score" name="score">친절해요😊</span>
+															<span id="score" name="score">친절해요💖</span>
 															<!-- <input type="button" id="score" name="score" value="친절해요😊"> -->
 														</c:if>
 														<c:if test="${fn:contains(review.review_options, '3')}">

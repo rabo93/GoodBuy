@@ -237,9 +237,9 @@
 	</select>
 	
 	<!-- 구매상품 리스트 조회 -->
-	<select id="selectOrderList" resultType="order">
+	<select id="selectOrderList">
 		SELECT 
-			  O.ORDER_ID
+			  O.PAY_ID
 			, O.PRODUCT_ID
 			, P.PRODUCT_TITLE 
 			, P.PRODUCT_PRICE
@@ -249,7 +249,7 @@
 			, P.PRODUCT_TRADE_ADR1
 			, R.REVIEW_CNT
 			, R.REVIEW_SCORE
-		FROM PRODUCT_ORDER O 
+		FROM PAYINFO O 
 		JOIN PRODUCT P ON O.PRODUCT_ID = P.PRODUCT_ID
 		JOIN MEMBER M ON P.MEM_ID = M.MEM_ID
 		LEFT JOIN (SELECT COUNT(REVIEW_ID) AS REVIEW_CNT, PRODUCT_ID ,REVIEW_SCORE
@@ -299,7 +299,7 @@
 	    SELECT COALESCE(COUNT(*), 0)
 	    FROM (
 	        SELECT COALESCE(COUNT(*), 0) as ORDERCOUNT
-	        FROM PRODUCT_ORDER O 
+	        FROM PAYINFO O 
 	        	JOIN PRODUCT P ON O.PRODUCT_ID = P.PRODUCT_ID 
 	        	JOIN MEMBER M ON M.MEM_ID = P.MEM_ID 
 	        WHERE O.BUYER_ID = #{mem_id}

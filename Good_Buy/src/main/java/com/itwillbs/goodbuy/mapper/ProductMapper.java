@@ -21,7 +21,7 @@ public interface ProductMapper {
 	// 구매내역 조회
 	List<ProductVO> selectProductList(String id);
 	
-	List<ProductOrderVO> selectOrderList(String id);
+	List<Map<String, String>> selectOrderList(String id);
 	// 구매내역 갯수 조회
 	int selectOrderCount(String id);
 	

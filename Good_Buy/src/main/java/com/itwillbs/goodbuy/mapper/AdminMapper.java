@@ -39,6 +39,8 @@ public interface AdminMapper {
 	// 사용되지않는 공통코드(상위코드) 삭제
 	int deleteDeprecatedCommonCode();
 
+	// 공통코드 사용여부 실시간 변경
+	int updateCommonCodeStatus(@Param("param") Map<String, String> param);
 	//---------------------------------------------------------
 	// 회원 목록 조회 + 검색 조건
 	List<MemberVO> selectMemberList(@Param("param") Map<String, Object> param);
@@ -172,6 +174,7 @@ public interface AdminMapper {
 
 	// 신고 채팅방 상세
 	Map<String, Object> selectChatDetail(String room_id);
+
 
 
 }

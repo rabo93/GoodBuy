@@ -92,6 +92,12 @@ public class AdminService {
         return deleteCommonCodeResult + deleteDeprecatedCommonCodeResult;
 	}
 
+	// 공통코드 사용여부 실시간 변경
+	@AdminLog
+	public int modifyCommonCodeStatus(Map<String, String> param) {
+		return mapper.updateCommonCodeStatus(param);
+	}
+
 	// ============== [ 회원관리 ] ==============
 	// 회원 목록 조회
 	public List<MemberVO> getMemberList(Map<String, Object> param) {
@@ -163,6 +169,7 @@ public class AdminService {
         return updateReportCount + updateUserReport;
 	}
 	
+	// 회원 신고 횟수 확인하여 상태 변경하는 메서드
 	private void checkMemStatusToReportCount(Map<String, Object> param) {
 		String memId = (String)param.get("REPORTED_ID");
 		Map<String, Object> userReportInfo = mapper.selectUserReportInfo(memId);
@@ -171,10 +178,12 @@ public class AdminService {
 		int userReportCnt = (int)userReportInfo.get("REPORT_CNT");
 		System.out.println(memId + "의 경고 누적횟수 : " + userReportCnt);
 		
+		// 이미 정지상태이거나, 탈퇴상태이면 리턴
 		if(userStatus >= 2) {
 			return;
 		}
 		
+		// 정상 계정이고 경고 누적 횟수가 3회 초과이면 계정상태를 정지로 업데이트
 		if(userStatus == 1 && userReportCnt > 3) {
 			int updateStatus = mapper.updateUserStatus(memId); // 계정 상태 정지로 업데이트
 			System.out.println("계정 상태 변경 : " + updateStatus);

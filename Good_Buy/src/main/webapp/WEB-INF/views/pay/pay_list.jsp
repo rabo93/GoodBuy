@@ -124,9 +124,9 @@
 										        		</div>
 											            <div class="balance-info">굿페이 잔액: <strong>${payAmount} 원</strong></div>
 											            <div class="amount-btns">
-												            <input type="button" class="amount-btn" onclick="addAmount(10000)" value="+ 1만원">
-												            <input type="button" class="amount-btn" onclick="addAmount(50000)" value="+ 5만원">
-												            <input type="button" class="amount-btn" onclick="addAmount(100000)" value="+ 10만원">
+												            <input type="button" class="amount-btn" onclick="addAmount(10000, 're')" value="+ 1만원">
+												            <input type="button" class="amount-btn" onclick="addAmount(50000, 're')" value="+ 5만원">
+												            <input type="button" class="amount-btn" onclick="addAmount(100000, 're')" value="+ 10만원">
 												        </div>
 												        <div class="recharge-button">
 												            <button class="recharge-btn">환불하기</button>
@@ -163,13 +163,13 @@
 													
 														<div class="input-section">
 <!-- 															거래금액 <input type="text" name="tran_amt" value="5000">  -->
-											            	<input type="text" class="input-label" placeholder="금액을 입력해 주세요" id="total-amount">
+											            	<input type="text" class="input-label" placeholder="금액을 입력해 주세요" id="total-amount-charge">
 										        		</div>
 											            <div class="balance-info">굿페이 잔액: <strong>${payAmount} 원</strong></div>
 											            <div class="amount-btns">
-												            <input type="button" class="amount-btn" onclick="addAmount(10000)" value="+ 1만원">
-												            <input type="button" class="amount-btn" onclick="addAmount(50000)" value="+ 5만원">
-												            <input type="button" class="amount-btn" onclick="addAmount(100000)" value="+ 10만원">
+												            <input type="button" class="amount-btn" onclick="addAmount(10000,ch)" value="+ 1만원">
+												            <input type="button" class="amount-btn" onclick="addAmount(50000,ch)" value="+ 5만원">
+												            <input type="button" class="amount-btn" onclick="addAmount(100000,ch)" value="+ 10만원">
 												        </div>
 												        <div class="recharge-button">
 												            <button class="recharge-btn">충전하기</button>

@@ -104,7 +104,7 @@
 															        후기 작성하기📮
 															     </button>
                                                     		</c:when>
-                                                    		<c:otherwise><a href='MyReviewHistory'>작성완료📩</a></c:otherwise>
+                                                    		<c:otherwise><a class="review-done-btn" href='MyReviewHistory'><i class="fa-regular fa-envelope"></i> 작성완료</a></c:otherwise>
                                                     	</c:choose>
                                                 </div>
                                             </li>
@@ -130,16 +130,16 @@
                 <span id="buyerName"></span>님께 구매한 [<span id="productTitle"></span>]<br>후기 보내기📮
             </h2>
 	        <br>
-           	<label><input type="radio" name="score" value="2">최고예요👍</label>
+           	<label><input type="radio" name="score" value="2">최고예요🥳</label>
           	<label><input type="radio" name="score" value="1">좋아요💕</label>
-           	<label><input type="radio" name="score" value="0">별로예요🥲</label>
+           	<label><input type="radio" name="score" value="0">별로예요👿</label>
             <input type="hidden" id="modal_product_id"> <!-- id저장용 -->
 <!--             <input type="hidden" id="modal_review_cnt"> 리뷰 갯수 저장용 -->
 			<!-- 추가 리뷰 옵션 (중복 선택 가능) -->
 	        <br><br>
 	        <h3>추가로 만족한 부분을 선택해 주세요 (복수 선택 가능)</h3>
 	        <label><input type="checkbox" name="reviewOptions" value="1"> 배송이 빨라요🚚</label>
-	        <label><input type="checkbox" name="reviewOptions" value="2"> 친절해요😊</label><br>
+	        <label><input type="checkbox" name="reviewOptions" value="2"> 친절해요💖</label><br>
 	        <label><input type="checkbox" name="reviewOptions" value="3"> 물건상태가 좋아요✨</label>
 	        <label><input type="checkbox" name="reviewOptions" value="4"> 또 거래하고 싶어요💰</label>
 	        <br><br>

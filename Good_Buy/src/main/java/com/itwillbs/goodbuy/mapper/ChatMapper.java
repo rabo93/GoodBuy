@@ -12,7 +12,10 @@ import com.itwillbs.goodbuy.vo.ChatRoom;
 public interface ChatMapper {
 	//	기존 자신의 채팅방 목록 조회요청
 	List<ChatRoom> selectChatRoomList(String sender_id);
-
+	
+	//	해당 채팅방 제일 마지막 대화 조회
+	ChatMessage selectLastMessage(String room_id);
+	
 	//	기존의 상대방과의 채팅방 조회 요청
 	ChatRoom selectChatRoom(@Param("sender_id") String sender_id,
 							@Param("receiver_id") String receiver_id,
@@ -32,6 +35,8 @@ public interface ChatMapper {
 						 @Param("reported_id") String reported_id,
 						 @Param("reason") String reason,
 						 @Param("room_id") String room_id);
+
+	
 
 
 }

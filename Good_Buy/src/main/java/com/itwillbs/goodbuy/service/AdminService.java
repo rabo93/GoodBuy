@@ -1,13 +1,8 @@
 package com.itwillbs.goodbuy.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.management.RuntimeErrorException;
-
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.itwillbs.goodbuy.aop.AdminLog;
 import com.itwillbs.goodbuy.mapper.AdminMapper;
-import com.itwillbs.goodbuy.vo.FaqVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.NoticeVO;
 import com.itwillbs.goodbuy.vo.ProductOrderVO;
@@ -258,6 +252,11 @@ public class AdminService {
 	public int removeFaq(List<Integer> faqIds) {
 		return mapper.deleteFaq(faqIds);
 	}
+	
+	// FAQ 사용여부 업데이트
+	public int modifyFaqStatus(Map<String, String> param) {
+		return mapper.UpdateFaqStatus(param);
+	}
 
 	// ============== [ 1:1 문의 관리 ] ==============
 	// 1:1 문의 목록 전체 컬럼 수 조회
@@ -339,6 +338,8 @@ public class AdminService {
 	public int modifyCommonCodeStatus(Map<String, String> param) {
 		return mapper.updateCommonCodeStatus(param);
 	}
+
+
 	
 	
 //	// 답글 등록(수정)

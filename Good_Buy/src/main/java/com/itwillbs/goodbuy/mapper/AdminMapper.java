@@ -6,8 +6,6 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.itwillbs.goodbuy.aop.AdminLog;
-import com.itwillbs.goodbuy.vo.FaqVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.NoticeVO;
 import com.itwillbs.goodbuy.vo.ProductOrderVO;
@@ -124,7 +122,11 @@ public interface AdminMapper {
 	
 	// Faq 삭제
 	int deleteFaq(@Param("deleteItems") List<Integer> faqIds);
-
+	
+	// Faq 사용여부 수정
+	int UpdateFaqStatus(@Param("param") Map<String, String> param);
+	
+	
 	//---------------------------------------------------------
 	// 1:1 문의 목록 전체 컬럼 수 조회
 	int selectEnquireTotal();
@@ -175,6 +177,8 @@ public interface AdminMapper {
 
 	// 공통코드 사용여부 변경
 	int updateCommonCodeStatus(@Param("param") Map<String, String> param);
+
+	
 
 
 }

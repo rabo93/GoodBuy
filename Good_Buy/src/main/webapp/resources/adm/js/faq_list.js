@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function(){
 	const modifyForm = document.querySelector("#modifyForm");
-	
 	const faqList = $('#faqList').DataTable({
 		lengthChange : true, // 건수
 		searching : false, // 검색
@@ -29,16 +28,12 @@ document.addEventListener("DOMContentLoaded", function(){
 				for (let i = 0; i < data.length; i++) {
 					data[i].listIndex = i + 1;
 					data[i].list_status = data[i].list_status || 1; // 기본값 1로 설정
-//					console.log(data[i]);
 				}
 				return data;
 			},
 		},
-		order: [[4, 'asc']], // 최초 조회시 카테고리(4번째 컬럼)별로 조회
-		columnDefs: [ { targets: 0, orderable: false }
-//		columnDefs: [ { targets: [0, 1, 6], orderable: false },
-//		columnDefs: [ 
-      	],
+		order: [[4, 'asc']], // 최초 조회시 카테고리(5번째 컬럼)별로 조회
+		columnDefs: [ { targets: [0, 1, 6], orderable: false } ],
 		columns: [
 			{
 				data: null, className : "dt-center", width: '60px',
@@ -57,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function(){
 			},
 			// defaultContent 는 기본값 설정, 데이터 없는 컬럼일 경우 오류나기 때문에 널스트링 처리 해주어야 함
 			// 등록 시 유효성 체크를 한다면 defaultContent 값 설정 필요 없음!
-            { title: "No.", data: "listIndex" , className : "dt-center",  width: '60px', orderable: false},
+            { title: "No.", data: "listIndex" , className : "dt-center",  width: '60px', },
             { title: "제목", data : "FAQ_SUBJECT", className : "dt-center", defaultContent: "", orderable: false, searchable: true, },
             { title: "내용", data : "FAQ_CONTENT", className : "dt-center", defaultContent: "", orderable: false, searchable: true, },
             { 
@@ -84,23 +79,21 @@ document.addEventListener("DOMContentLoaded", function(){
 				orderable: false, // 정렬 비활성화
             	searchable: false, // 검색 비활성화
             	className : "dt-center", 
-//				render: function(data) {
 				render: function(data, type, row) {
 					let isChecked = data == 1 ? "checked" : "";
 					let isUsed = data == 1 ? "사용함" : "사용안함";
                	 return `
                	 	<div class="form-check form-switch">
-		        		<input type="hidden" value="${data}" name="LIST_STATUS">
-						<input class="form-check-input" type="checkbox" role="switch" ${isChecked} data-id="${data.FAQ_ID}">
-						<label class="form-check-label">${isUsed}</label>
+               	 		<input class="form-check-input" type="checkbox" role="switch" 
+               	 		id="mainFlexSwitchCheckDefault" data-faq-id="${row.FAQ_ID}" ${isChecked}>
+    					<label class="form-check-label" for="mainFlexSwitchCheckDefault" >${isUsed}</label>
 					</div>
-               	 `;
+               	 	`;
             	},
             },
             {
 				title : "관리",
 				data: null,
-				orderable : false,
 				searchable: false,
 				className : "dt-center",
 				width: '160px',
@@ -180,6 +173,39 @@ document.addEventListener("DOMContentLoaded", function(){
 	
 	
 	//-----------------------------------------------------
+	// FAQ 관리 페이지에서 사용여부 실시간 업데이트
+	$(document).on("change", "#mainFlexSwitchCheckDefault", function() {
+		const faqId = $(this).data('faq-id');  // 각 FAQ의 ID
+		const isChecked = $(this).is(':checked');  // 체크 여부
+		const statusValue = isChecked ? 1 : 2;  // 서버에 전송할 상태 값 (1: 사용, 2: 사용안함)
+		console.log("faqId: " + faqId + ", isChecked:" + isChecked + ", statusValue:" + statusValue);
+		// faqId: 1, isChecked:false, statusValue:2
+		
+		$.ajax({
+			url : "UpdateFaqStatus",
+			type : "POST",
+			data : {
+				FAQ_ID : faqId,
+				LIST_STATUS : statusValue
+			},
+			success: function(response){
+				console.log("response:", response);
+				//{redirectURL: '/AdmFaqList', message: '사용여부가 변경되었습니다.', status: 'success'}
+				console.log(response.message); // 굳이 얼럿창 메세지 띄울 필요 없을 거 같음
+	            if (response.status == "success") {
+//					faqList.ajax.reload(); 
+					//=> 전체 목록 리로드 (전체 목록 불러오는데 시간이 많이 소요될 수 있으니 아래 코드 사용)
+
+					// 사용 여부 텍스트만 업데이트
+					const isUsed = statusValue == 1 ? "사용함" : "사용안함";
+					$(".form-check-label").text(isUsed);
+	            }
+	        }
+		});
+	});
+	
+	
+	//-----------------------------------------------------
 	//Faq 수정 팝업 설정
 	$('#updateFaq').on('shown.bs.modal', function () {
 		// 모달이 열리면 첫 번째 입력 필드에 포커스
@@ -193,70 +219,47 @@ document.addEventListener("DOMContentLoaded", function(){
 		$(this).find('form').trigger('reset');
 	});
 	
-	// FAQ 수정 셋팅
+	// FAQ 수정하기 버튼 클릭시 폼제출 처리
+	// 1) 수정 버튼 클릭시 모달창 팝업(기존값 가져오기)
 	faqList.on("click", '.edit-btn', function() {
 		const row = $(this).closest('tr');
 		const rowData = faqList.row(row).data();
 		
-		const faqCate = rowData.FAQ_CATE;
+		// 수정 모달 화면에 기존 데이터 보이게 셋팅
+		$("#faqId").val(rowData.FAQ_ID); 					// 문의아이디(히든속성값)
+		$("#updatedFaqSubject").val(rowData.FAQ_SUBJECT);	// 문의제목
+		$("#updatedFaqContent").val(rowData.FAQ_CONTENT);	// 문의내용
+		$("#updatedFaqCate").val(rowData.FAQ_CATE);			// 문의유형
+		$("#updatedListStatus").val(rowData.LIST_STATUS);	// 사용여부 값
+		
 		const listStatus = rowData.LIST_STATUS == 1 ? true : false;
 		const listStatusText = rowData.list_status == 1 ? "사용함" : "사용안함";
+		$("#updateFlexSwitchCheckDefault").prop("checked", listStatus); // 사용여부 버튼
+		$("#updateFlexSwitchCheckDefaultLab").text(listStatusText); 	// 사용여부 텍스트
 		
-		// 수정 모달 화면에 기존 데이터 보이게 셋팅
-		$("#faqId").val(rowData.FAQ_ID); //히든속성값
-		$("#updatedFaqSubject").val(rowData.FAQ_SUBJECT);
-		$("#updatedFaqContent").val(rowData.FAQ_CONTENT);
-		$("#updatedFaqCate").val(rowData.FAQ_CATE);
-		$("#updatedListStatus").val(rowData.LIST_STATUS);
-		$("#updateFlexSwitchCheckDefault").prop("checked", listStatus);
-		$("#updateFlexSwitchCheckDefaultLab").text(listStatusText);
-		
-		// 글자 수 표시
-		const contentLength = rowData.FAQ_CONTENT.length;
-   		$("#lengthInfo").text(contentLength); 
+		const contentLength = rowData.FAQ_CONTENT ? rowData.FAQ_CONTENT.length : 0;
+   		$("#lengthInfo").text(contentLength); 	// 글자수 표시
 	});
 	
-	// 사용여부 버튼 값 업데이트
-	$(document).on("change", ".form-check-input", function() {
-	    const switchBtn = this;
-	    const hiddenInput = switchBtn.parentElement.querySelector('input[type="hidden"][name="list_status"]');
-	    const switchLabel = switchBtn.nextElementSibling;
+	// 2) 폼 제출전 변경된 사용여부 상태값 저장하기
+	$(document).on("change", "#updateFlexSwitchCheckDefault", function() {
+		const isChecked = $(this).is(':checked');  // 체크 여부
+		const statusValue = isChecked ? 1 : 2;  // 상태 값 (1: 사용, 2: 사용안함)
 		
-//		const faqId = $(switchBtn).data("id");
-//		const newStatus = switchBtn.checked?1:2; // 새 상태 (1: 사용함, 2: 사용안함)
-//		
-//		if (!faqId) {
-//			console.log("FAQ ID가 누락되었습니다.");
-//	        return;
-//        }
-//		
-//		$.ajax({
-//			type: "POST",
-//			url: "UpdateFaqStatus",
-//			data: {
-//				faqId : faqId,
-//				listStatus : newStatus
-//			}
-//		}).done(function(result) {
-//			console.log("ajax 응답 : " + JSON.stringify(result));
-//			if(result.trim() == "true") {
-//				hiddenInput.value = newStatus;
-//				switchLabel.innerText = newStatus == 1 ? "사용함" : "사용안함";
-//				alert("사용여부가 성공적으로 업데이트되었습니다.");
-//			} else {
-//				switchBtn.checked = !switchBtn.checked;
-//				alert("사용여부 업데이트에 실패했습니다.");
-//			}
-//			
-//		});
+		// 업데이트된 상태값을 hidden 필드에 저장
+		$("#updatedListStatus").val(statusValue);  // hidden 필드에 상태값 저장
 		
+	});
+	
+	// 3) 수정 완료 버튼 클릭 시 폼 제출
+	$('#updateFaqSubmitBtn').on('click', function(e) {
+    	e.preventDefault(); // 폼 기본 제출 방지
 		
-	    if (hiddenInput) {
-	        hiddenInput.value = switchBtn.checked ? 1 : 2;
-		    switchLabel.innerText =  switchBtn.checked ? "사용함" : "사용안함";
-	    } else {
-	        console.log("사용여부 버튼이 존재하지 않습니다.");
-	    }
+		const isChecked = $("#updateFlexSwitchCheckDefault").is(':checked');
+		$("#updatedListStatus").val(isChecked ? 1 : 2);
+		
+		// 폼제출
+		$("#modifyForm").submit();
 	});
 	
 	
@@ -313,7 +316,6 @@ document.addEventListener("DOMContentLoaded", function(){
 		}
 	});
 	
-	//-----------------------------------------------------
 	
 });
 

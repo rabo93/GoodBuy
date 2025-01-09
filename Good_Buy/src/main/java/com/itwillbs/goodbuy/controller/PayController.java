@@ -78,11 +78,13 @@ public class PayController {
 		// 상품조회
 		ProductVO product = productService.productSearch(product_id);
 		String productName = product.getProduct_title();
+		
+		
+		
+		
+		
+		
 		model.addAttribute("productName", productName);
-		
-		
-		
-		
 		model.addAttribute("userAccount", userAccount);
 		model.addAttribute("recieverTransactionInfo", recieverTransactionInfo);
 		model.addAttribute("transactionInfo", transactionInfo);
@@ -401,11 +403,14 @@ public class PayController {
 		// 상품 조회
 		int product_id = Integer.parseInt((String) map.get("product_id"));
 		ProductVO productSearch = productService.productSearch(product_id);
+		
+		
+		
+		
 		map.put("pay_id", 0);
 		map.put("buyer_id", id);
 		map.put("product_price", productSearch.getProduct_price());
 		map.put("product_trade_adr1", productSearch.getProduct_trade_adr1());
-		System.out.println("판매자 주소 알아보기 : " + productSearch);
 
 		// 수신자(상대방)의 토큰이 존재하지 않을 경우(= 계좌 등록이 되어있지 않음 등)
 		if(receiverToken == null || receiverToken.getAccess_token() == null) {
@@ -457,6 +462,8 @@ public class PayController {
 		// 송금이체 성공 시 결과를 DB (TRANSACTIONINFO) 에 저장
 		service.registTransferResult(transferResult);
 		
+		
+		System.out.println("PayController - payTransfer에 product_id 보려고 !!! : " + map);
 		// DB에 거래내역 저장
 		int payInfo = service.registPayInfo(map);
 		

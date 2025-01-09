@@ -218,15 +218,15 @@
 		INSERT
 		  INTO PAYINFO 
 		VALUES ( 
-		       #{pay_id} 
-		  	 , #{buyer_id}
-		  	 , #{receiver_id}
-		  	 , #{product_id}
-		  	 , #{product_price}
-		  	 , #{tran_amt}
-		  	 , now()
-		  	 , #{product_trade_adr1}
-		  	 , 1 
+		        #{pay_id} 
+			  , #{receiver_id}
+			  , #{product_id}
+			  , #{product_price}
+			  , #{buyer_id}
+			  , #{tran_amt}
+			  , now()
+			  , #{product_trade_adr1}
+			  , 1 
 		  )	
 	</insert>
 	

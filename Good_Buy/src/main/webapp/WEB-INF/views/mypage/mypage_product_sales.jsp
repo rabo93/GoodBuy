@@ -59,7 +59,7 @@
 				<div class="my-container">
 					<div class="contents-ttl"><h3>판매내역 <small>(총 <span>${salesCount}</span>건)</small></h3>
 						<div class="my-tabs">
-							<button class="filter-btn" data-status="all">전체</button>
+							<button class="filter-btn active" data-status="all">전체</button>
 							<button class="filter-btn" data-status="0">판매중</button>
 			                <button class="filter-btn" data-status="1">거래중</button>
 			                <button class="filter-btn" data-status="2">예약중</button>
@@ -143,6 +143,8 @@
 	$(document).ready(function () {
 	    // 필터 버튼 클릭 이벤트
 	    $(".filter-btn").click(function () {
+	    	$(".filter-btn").removeClass('active');
+	    	$(this).addClass('active');
 	        const status = $(this).data("status");  // 클릭된 버튼의 data-status 값
 
 	        // 상품 카드 필터링

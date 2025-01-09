@@ -47,8 +47,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 		//	HttpSession 객체에 저장된 사용자 아이디와 WebSocketSession 객체의 아이디를 userList에 저장
 		userList.put(getHttpSessionId(session), getWebSocketSessionId(session));
 		
-//		System.out.println("클라이언트 세션 목록(" + userSessionList.keySet().size() + " 명) : " + userSessionList);
-//		System.out.println("사용자 목록(" + userList.keySet().size() + " 명) : " + userList);
+		System.out.println("클라이언트 세션 목록(" + userSessionList.keySet().size() + " 명) : " + userSessionList);
+		System.out.println("사용자 목록(" + userList.keySet().size() + " 명) : " + userList);
 	}
 	
 	// 2. handleTextMessage - 클라이언트로부터 메세지를 수신할 경우 자동으로 호출되는 메서드
@@ -94,8 +94,6 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 					}	//	사용자 접속 여부 판별 끝
 					
 					ChatRoom chatRoom = chatService.selectChatRoom(sender_id, receiver_id, product_id);
-					System.out.println("!@#!@#!@#");
-					System.out.println(chatRoom);
 					if(chatRoom == null) {	// 기존 채팅방 없음
 						System.out.println("새 채팅방 생성");
 						
@@ -124,8 +122,6 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 						chatMessage.setRoom_id(chatRoom.getRoom_id());
 						chatMessage.setType(ChatMessage.TYPE_START);
 						chatMessage.setMessage(gson.toJson(chatRoom));
-						System.out.println("!@#!@#");
-						System.out.println(chatMessage);
 						
 						sendMessage(session, chatMessage);
 					}
@@ -136,35 +132,42 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			
 		}
 		if (chatMessage.getType().equals(ChatMessage.TYPE_REQUEST_CHAT_LIST)) {
-			System.out.println("!@#!@#");
-			System.out.println("기존 대화 요청 조회");
-			
 			//	기존 채팅 내역 조회
 			List<ChatMessage> chatMessageList = chatService.selectChatMessage(chatMessage);
 			//	기존 채팅 내역이 존재할 경우만 클라이언트에게 전송
 			if (chatMessageList != null && chatMessageList.size() > 0) {
 				chatMessage.setMessage(gson.toJson(chatMessageList));
+				System.out.println("!@#!@#");
+				System.out.println(chatMessage);
 				sendMessage(session, chatMessage);
 			}
 			
 		}
-		
 		if (chatMessage.getType().equals(ChatMessage.TYPE_TALK)) {
 			//	현재 시스템 날짜 시각정보 받아와서 저장
 			chatMessage.setSend_time(getDateTimeNow());
 			//	채팅 메세지 DB 저장 요청
 			chatService.insertChatMessage(chatMessage);
 			
+			if (userList.get(receiver_id) != null) { //	접속중일 경우
+				WebSocketSession receiver_session = userSessionList.get(userList.get(receiver_id));
+				sendMessage(receiver_session, chatMessage);
+			}
+			
 			sendMessage(session, chatMessage);
 			
 		}
-		
 		if (chatMessage.getType().equals(ChatMessage.TYPE_FILE_UPLOAD_COMPLETE)) {
 			//	현재 시스템 날짜 시각정보 받아와서 저장
-			chatMessage.setType(ChatMessage.TYPE_FILE);;
+			chatMessage.setType(ChatMessage.TYPE_FILE);
 			chatMessage.setSend_time(getDateTimeNow());
 			//	채팅 메세지 DB 저장 요청
 			chatService.insertChatMessage(chatMessage);
+			
+			if (userList.get(receiver_id) != null) { //	접속중일 경우
+				WebSocketSession receiver_session = userSessionList.get(userList.get(receiver_id));
+				sendMessage(receiver_session, chatMessage);
+			}
 			
 			sendMessage(session, chatMessage);
 			

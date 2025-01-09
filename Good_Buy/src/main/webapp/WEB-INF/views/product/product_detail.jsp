@@ -77,8 +77,6 @@
 								<option value="기타 사유를 입력해주세요.">기타</option>
 							</select>
 							<textarea class="ch-modal-otherReason" readonly ></textarea>
-							<textarea class="ch-modal-detail" placeholder="사유를 입력해주세요"></textarea>
-							<input type="file" class="ch-modal-file">
 							<button class="ch-model-report-btn" type="button" id="chatReporting">
 								신고하기
 							</button>

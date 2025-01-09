@@ -19,6 +19,15 @@ public class ChatService {
 		return mapper.selectChatRoomList(sender_id);
 	}
 	
+	//	해당 채팅방 제일 마지막 대화 조회
+	public ChatMessage selectLastMessage(String room_id) {
+		ChatMessage chatMessage = mapper.selectLastMessage(room_id);
+		if(chatMessage.getType().equals("FILE")) {
+			chatMessage.setMessage("사진을 보냈습니다");
+		}
+		return chatMessage;
+	}
+	
 	//	기존의 상대방과의 채팅방 조회 요청
 	public ChatRoom selectChatRoom(String sender_id, String receiver_id, int product_id) {
 		ChatRoom chatRoom = mapper.selectChatRoom(sender_id, receiver_id, product_id);
@@ -46,5 +55,7 @@ public class ChatService {
 //		return 0;
 		return mapper.insertChatReport(reporter_id, reported_id, reason, room_id);
 	}
+
+	
 
 }

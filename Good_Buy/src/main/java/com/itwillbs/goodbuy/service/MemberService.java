@@ -21,67 +21,61 @@ public class MemberService {
 	@Autowired
 	private MemberMapper mapper;
 	
-	// 회원가입할 회원정보 등록
-	public int registMember(MemberVO member) {
-		return mapper.insertMember(member);
+	// memberVO로 회원정보 조회
+	public MemberVO getMemberLogin(MemberVO member) {
+		return mapper.selectMemberinfo(member);
 	}
-
-	// 회원 패스워드 조회
-	public MemberVO getMemberPasswd(String id) {
-		return mapper.selectMemberPasswd(id);
-	}
-
-	
-	// 아이디로 회원 정보 가져오기
+	//-------------------------------------------------------------
+	// 아이디로 회원정보 조회
 	public MemberVO getMember(String mem_id) {
 		return mapper.selectMember(mem_id);
 		
 	}
-	
-	// 암호화 관련 로그인
-	public MemberVO getMemberLogin(MemberVO member) {
-		return mapper.selectMemberinfo(member);
+	//-------------------------------------------------------------
+	// 회원가입 - 회원정보 DB 저장
+	public int registMember(MemberVO member) {
+		return mapper.insertMember(member);
 	}
-	
-	public MemberVO getMemberNick(MemberVO member) {
-		return mapper.selectMemberNick(member);
-	}
-
-	public MemberVO getMemberMail(MemberVO member) {
-		return mapper.selectEmailId(member);
-	}
-
-
 	//-------------------------------------------------------------
 	// 이메일 중복확인 조회 요청
 	public MemberVO getMemberEmail(String mem_email) {
 		return mapper.selectEmail(mem_email);
 	}
-
-
+	//-------------------------------------------------------------
+	// 닉네임 중복확인 조회 요청
+	public MemberVO getMemberNick(MemberVO member) {
+		return mapper.selectMemberNick(member);
+	}
+	
 	//-------------------------------------------------------------
 	// 네이버 로그인 회원 저장
 	public int registNaverMember(MemberVO member) {
 		return mapper.insertNaverMember(member);
 	}
-
+	
 	//-------------------------------------------------------------
 	//상점소개 들고오기
 	public MemberVO getStoreIntro(MemberVO member) {
 		return mapper.selectStoreIntro(member);
 	}
-
+	
 	//상점 소개 변경
 	public int registStoreIntro(MemberVO member) {
 		return mapper.updateStoreIntro(member);
 	}
-
-	
 	//-------------------------------------------------------------
 	// 회원 수정
 	public int modifyMember(Map<String, String> map) {
 		return mapper.updateMember(map);
 	}
+	
+	//----------중복제거---------
+	// 회원 패스워드 조회
+//	public MemberVO getMemberPasswd(String id) {
+//		return mapper.selectMemberPasswd(id);
+//	}
+	
+	
 	
 	//-------------------------------------------------------------
 	// [CoolSMS] 휴대폰번호 인증 중복 확인
@@ -103,6 +97,8 @@ public class MemberService {
 	public void updateAuthStatus(String authCode) {
 		mapper.updateAuthStatus(authCode);
 	}
+	
+	
 	//-------------------------------------------------------------
 	// 비밀번호 찾기 - 회원정보 찾기
 	public MemberVO getMemInfo(String mem_phone) {
@@ -125,14 +121,12 @@ public class MemberService {
 	public void removeSnsInfo(String id) {
 		mapper.deleteSnsInfo(id);
 	}
-	//	-------------------------------------------------------------
+	
+	// -------------------------------------------------------------
 	//	채팅 - MEM_ID 조회
 	public String selectMemberId(String mem_id) {
 		return mapper.selectMemberId(mem_id);
 	}
-	
-
-	
 	
 
 

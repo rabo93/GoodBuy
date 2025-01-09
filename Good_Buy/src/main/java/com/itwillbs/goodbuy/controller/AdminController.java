@@ -51,9 +51,45 @@ public class AdminController {
 	// 관리자 메인
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmMain")
-	public String admMain() {
+	public String admMain(Model model) {
+		
+		 // 등록된 상품 건수
+		int totalProducts = service.getTotalProducts();
+		// 진행중인 거래 건수
+		int activeTrades = service.getActiveTrades();
+		// 완료된 거래 건수
+		int completeTrades = service.getCompleteTrades();
+		// 미처리 된 신고 건수 (모든 신고 합쳐서)
+		int pendingReports = service.getPendingReports();
+		// 신규 가입자 수
+		int newUsers = service.getNewUsers();
+		// 전체 회원 수
+		int totalUsers = service.getTotalUsers();
+		// 가격대별 상품 분포
+//		Map<String, Object> priceRange = service.getPriceRange();
+		// 카테고리별 통계
+//		List<Map<String, String>> categoryStats = service.getCategoryStatus();
+		// 최근 7일간 거래 통계
+		
+		model.addAttribute("totalProducts", totalProducts);
+		model.addAttribute("activeTrades", activeTrades);
+		model.addAttribute("completeTrades", completeTrades);
+		model.addAttribute("pendingReports", pendingReports);
+		model.addAttribute("newUsers", newUsers);
+		model.addAttribute("totalUsers", totalUsers);
+//		model.addAttribute("priceRange", priceRange);
+//		model.addAttribute("categoryStats", categoryStats);
+		
 		return "admin/index";
 	}
+	
+	@ResponseBody
+	@GetMapping("MainChart")
+	public String mainChart() {
+		return "";
+	}
+	
+	
 	// ======================================================
 	// [ 공통코드 관리 ]
 	// 공통코드 관리 - 등록 폼 요청
@@ -731,6 +767,8 @@ public class AdminController {
 		
 		return jo.toString();
 	}
+	
+	
 	
 	
 	// ======================================================

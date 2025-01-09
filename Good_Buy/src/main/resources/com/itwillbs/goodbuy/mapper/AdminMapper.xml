@@ -933,4 +933,53 @@
      		, #{log.IP_ADDRESS}
      	)
      </insert>
+     
+	<!-- 통계 메인 -->
+	<select id="selectTotalProducts" resultType="int">
+		SELECT COUNT(*) 
+		  FROM PRODUCT
+	</select>
+	<select id="selectActiveTrades" resultType="int">
+		SELECT COUNT(*) 
+		  FROM PRODUCT 
+		 WHERE PRODUCT_STATUS <![CDATA[<]]> 3
+	</select>
+	<select id="selectCompleteTrades" resultType="int">
+		SELECT COUNT(*) 
+		  FROM PRODUCT 
+		 WHERE PRODUCT_STATUS = 3
+	</select>
+	<select id="selectPendingReports" resultType="int">
+		SELECT 
+			(SELECT COUNT(*) 
+			   FROM PRODUCT_REPORTS 
+			  WHERE STATUS = '접수') 
+			+ (SELECT COUNT(*) 
+			     FROM USER_REPORTS 
+			    WHERE STATUS = '접수') AS TOTAL
+	</select>
+	<select id="selectNewUsers" resultType="int">
+		SELECT COUNT(MEM_IDX) 
+		  FROM MEMBER 
+		 WHERE DATE_FORMAT(MEM_REG_DATE, "%Y-%m-%d") = CURDATE()
+	</select>
+	<select id="selectTotalUsers" resultType="int">
+		SELECT COUNT(*) 
+		  FROM MEMBER
+	</select>
+	<select id="selectPriceRange" resultType="map">
+		SELECT IFNULL(SUM(CASE WHEN PRODUCT_PRICE <![CDATA[<]]> 10000 THEN 1 END), 0) AS PRICE1,
+			   IFNULL(SUM(CASE WHEN PRODUCT_PRICE BETWEEN 10000 AND 50000 THEN 1 END), 0) AS PRICE2,
+			   IFNULL(SUM(CASE WHEN PRODUCT_PRICE BETWEEN 50000 AND 100000 THEN 1 END), 0) AS PRICE3,
+			   IFNULL(SUM(CASE WHEN PRODUCT_PRICE BETWEEN 100000 AND 500000 THEN 1 END), 0) AS PRICE4,
+			   IFNULL(SUM(CASE WHEN PRODUCT_PRICE <![CDATA[>]]> 500000 THEN 1 END), 0) AS PRICE5
+		FROM PRODUCT
+	</select>
+	<select id="selectCategoryStatus" resultType="map">
+		SELECT CONCAT('"', PRODUCT_CATEGORY, '"') AS PRODUCT_CATEGORY
+			 , COUNT(PRODUCT_ID) AS COUNT
+		  FROM PRODUCT
+		 GROUP BY PRODUCT_CATEGORY
+	</select>
+     
 </mapper>

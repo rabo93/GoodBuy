@@ -175,6 +175,22 @@ public interface AdminMapper {
 	// 신고 채팅방 상세
 	Map<String, Object> selectChatDetail(String room_id);
 
+	int selectTotalProducts();
+
+	int selectActiveTrades();
+
+	int selectCompleteTrades();
+
+	int selectPendingReports();
+
+	int selectNewUsers();
+
+	int selectTotalUsers();
+
+	Map<String, Object> selectPriceRange();
+
+	List<Map<String, String>> selectCategoryStatus();
+
 
 
 }

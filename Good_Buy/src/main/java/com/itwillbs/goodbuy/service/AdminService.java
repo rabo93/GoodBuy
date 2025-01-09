@@ -334,6 +334,11 @@ public class AdminService {
 	public Map<String, Object> getChatDetail(String room_id) {
 		return mapper.selectChatDetail(room_id);
 	}
+
+	// 공통코드 사용여부 변경
+	public int modifyCommonCodeStatus(Map<String, String> param) {
+		return mapper.updateCommonCodeStatus(param);
+	}
 	
 	
 //	// 답글 등록(수정)

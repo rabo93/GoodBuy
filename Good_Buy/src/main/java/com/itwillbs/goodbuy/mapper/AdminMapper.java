@@ -173,5 +173,8 @@ public interface AdminMapper {
 	// 신고 채팅방 상세
 	Map<String, Object> selectChatDetail(String room_id);
 
+	// 공통코드 사용여부 변경
+	int updateCommonCodeStatus(@Param("param") Map<String, String> param);
+
 
 }

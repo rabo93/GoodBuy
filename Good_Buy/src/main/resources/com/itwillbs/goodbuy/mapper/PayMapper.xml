@@ -93,7 +93,8 @@
 		INSERT 
 		INTO TRANSACTIONINFO
 		VALUES (
-		  #{withdrawResult.user_seq_no}
+		      #{withdrawResult.id}
+		    , #{withdrawResult.user_seq_no}
 		     <if test="trnsactionType.equals('WI')">
 			, #{withdrawResult.fintech_use_num}
 			, #{trnsactionType} 
@@ -109,6 +110,7 @@
 			, #{withdrawResult.bank_rsp_message}
 			, #{withdrawResult.dps_bank_code_std}
 			, #{withdrawResult.dps_account_num_masked}
+			, ''
 			, ''
 			  </if>
 			  <if test="trnsactionType.equals('DE')">
@@ -126,6 +128,7 @@
 			, #{withdrawResult.wd_bank_code_std}
 			, #{withdrawResult.wd_account_num_masked} 
 			, ''
+			, ''
 			  </if>
 			  <if test="trnsactionType.equals('TR')">
 			, #{withdrawResult.withdrawResult.fintech_use_num}
@@ -141,8 +144,8 @@
 			, #{withdrawResult.withdrawResult.bank_rsp_message}
 			, #{withdrawResult.withdrawResult.dps_bank_code_std}
 			, #{withdrawResult.withdrawResult.dps_account_num_masked}
-			
-			, #{withdrawResult.depositResult.res_list[0].fintech_use_num}  
+			, #{withdrawResult.depositResult.res_list[0].fintech_use_num}
+			, #{withdrawResult.withdrawResult.dps_print_content}
 			  </if>
 		)
 	</insert>
@@ -188,14 +191,22 @@
 	<!-- 충전금액조회(송금하는자) -->
 	<select id="selectPayAmount"  resultType="int">
 	  SELECT 
-			   SUM(CASE 
-			            WHEN TRANSACTION_TYPE = 'WI' THEN tran_amt 
-			            WHEN TRANSACTION_TYPE = 'TR' THEN -tran_amt 
-			            WHEN TRANSACTION_TYPE = 'DE' THEN -tran_amt 
-			            ELSE 0 
-			        END) AS total_amount
+		   SUM(CASE 
+		            WHEN TRANSACTION_TYPE = 'WI' THEN tran_amt 
+		            WHEN TRANSACTION_TYPE = 'TR' THEN -tran_amt 
+		            WHEN TRANSACTION_TYPE = 'DE' THEN -tran_amt 
+		            ELSE 0 
+		        END) AS total_amount
 		FROM TRANSACTIONINFO
-	   WHERE USER_SEQ_NO = #{user_seq_no};
+	   WHERE USER_SEQ_NO = #{user_seq_no}
+	 HAVING SUM(
+		        CASE 
+		            WHEN TRANSACTION_TYPE = 'WI' THEN tran_amt 
+		            WHEN TRANSACTION_TYPE = 'TR' THEN -tran_amt 
+		            WHEN TRANSACTION_TYPE = 'DE' THEN -tran_amt 
+		            ELSE 0 
+		        END
+		    ) >= 0;
 	</select>
 	
 	

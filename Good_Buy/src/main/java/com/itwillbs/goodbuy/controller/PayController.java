@@ -56,6 +56,17 @@ public class PayController {
 		PayToken token = (PayToken)session.getAttribute("token");
 		Map<String, Object> bankUserInfo = service.getPayUserInfo(token);
 		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
+		Map<String, String> userAccount = service.getPayAccountInfo(token.getUser_seq_no());
+
+		
+		
+		
+		
+		
+		
+		
+		
+		/* 이 부분은 SQL로 해서 뽑아 내야 됨.   */
 		
 		// 충전금액 조회(송금, 충전 본인) : 내역이 없을 수도 있으므로 Integer로 리턴함.
 		Integer pay_amount = service.getPayAmount(token.getUser_seq_no());
@@ -68,23 +79,36 @@ public class PayController {
 		List<Map<String, String>> recieverTransactionInfo = service.getReceiverTransactionDetail(fintech_use_num);
 		// 충전금액 조회(송금, 충전 본인) : 내역이 없을 수도 있으므로 Integer로 리턴함.
 		Integer pay_amount_receive = service.getReceiverPayAmount(fintech_use_num);
+		// 모든 거래내역 조회 
+		List<Map<String, String>> getPayInfo = service.getPayInfo(id);
 		
-		Map<String, String> userAccount = service.getPayAccountInfo(token.getUser_seq_no());
-
-		// 거래내역 조회 
-		Map<String, String> getPayInfo = service.getPayInfo(id);
-		Object productId = getPayInfo.get("PRODUCT_ID");
+		
+		Object productId = getPayInfo.get(0).get("PRODUCT_ID");
+//		System.out.println("productId 잘불러오나? : " + productId);
+		/*
+		=====> 결과가 첫번째 PRODUCT_ID만 뽑아와서 거래내역 전체를 못 불러옴.
+		 */
+		
 		int product_id = Integer.parseInt(productId.toString());
 		// 상품조회
 		ProductVO product = productService.productSearch(product_id);
-		String productName = product.getProduct_title();
 		
 		
 		
 		
 		
 		
-		model.addAttribute("productName", productName);
+		
+		
+		
+//		String productName = product.getProduct_title();
+//		model.addAttribute("productName", productName);
+		
+		
+		
+		
+		
+		
 		model.addAttribute("userAccount", userAccount);
 		model.addAttribute("recieverTransactionInfo", recieverTransactionInfo);
 		model.addAttribute("transactionInfo", transactionInfo);
@@ -409,8 +433,12 @@ public class PayController {
 		
 		map.put("pay_id", 0);
 		map.put("buyer_id", id);
+		map.put("receiver_id", receiver_id);
+		
+		
 		map.put("product_price", productSearch.getProduct_price());
 		map.put("product_trade_adr1", productSearch.getProduct_trade_adr1());
+		System.out.println("판매자 주소 알아보기 : " + productSearch);
 
 		// 수신자(상대방)의 토큰이 존재하지 않을 경우(= 계좌 등록이 되어있지 않음 등)
 		if(receiverToken == null || receiverToken.getAccess_token() == null) {
@@ -454,16 +482,15 @@ public class PayController {
 		}
 		
 		log.info(">>>>> 이체결과 : " + transferResult);
-		// 송금결과 DB 저장
 		
+		transferResult.put("id", id);
+		// 송금결과 DB 저장
 		// 사용자번호를 입금이체 결과 객체에 추가
 		transferResult.put("user_seq_no", senderToken.getUser_seq_no());
-						
 		// 송금이체 성공 시 결과를 DB (TRANSACTIONINFO) 에 저장
 		service.registTransferResult(transferResult);
 		
 		
-		System.out.println("PayController - payTransfer에 product_id 보려고 !!! : " + map);
 		// DB에 거래내역 저장
 		int payInfo = service.registPayInfo(map);
 		
@@ -503,14 +530,15 @@ public class PayController {
 		List<Map<String, String>> recieverTransactionInfo = service.getReceiverTransactionDetail(fintech_use_num);
 		
 		String id = (String)session.getAttribute("sId");
-		// 거래내역 조회 
-		Map<String, String> getPayInfo = service.getPayInfo(id);
-		Object productId = getPayInfo.get("PRODUCT_ID");
-		int product_id = Integer.parseInt(productId.toString());
-		// 상품조회
-		ProductVO product = productService.productSearch(product_id);
-		String productName = product.getProduct_title();
-		model.addAttribute("productName", productName);
+		
+		// 내 id로 거래한 모든 거래내역 조회 
+		List<Map<String, String>> getPayInfo = service.getPayInfo(id);
+//		Object productId = getPayInfo.get("PRODUCT_ID");
+//		int product_id = Integer.parseInt(productId.toString());
+//		// 상품조회
+//		ProductVO product = productService.productSearch(product_id);
+//		String productName = product.getProduct_title();
+//		model.addAttribute("productName", productName);
 		
 		model.addAttribute("transactionInfo", transactionInfo);
 		model.addAttribute("recieverTransactionInfo", recieverTransactionInfo);

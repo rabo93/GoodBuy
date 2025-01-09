@@ -30,7 +30,12 @@
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/product_detail.js"></script>
-
+<script>
+	// 자식 창에서 호출될 리로드 함수
+// 	function reloadParent() {
+// 		location.reload();
+// 	}
+</script>
 </head>
 <body>
 	<header>

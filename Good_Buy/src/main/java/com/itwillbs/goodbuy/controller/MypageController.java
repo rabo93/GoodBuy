@@ -119,9 +119,9 @@ public class MypageController {
 		String id = getSessionUserId(session);
 
 		//구매내역 조회
-		List<ProductOrderVO> orderList = productService.getOrderList(id);
+		List<Map<String, String>> orderList = productService.getOrderList(id);
 		model.addAttribute("order", orderList);
-		System.out.println("구매내역 조회"+orderList);
+		System.out.println("구매내역 조회 : "+orderList);
 		
 
 		//구매내역 갯수조회

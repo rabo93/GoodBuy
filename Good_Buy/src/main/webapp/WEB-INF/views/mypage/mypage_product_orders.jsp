@@ -66,21 +66,22 @@
                                                      class="card-thumb" alt="thumbnail" height="180px"/>
                                                 <div class="card-info">
                                                     <div class="category">
-                                                        <span>${product.product_category}</span>
+                                                    
+                                                        <span>${product.PRODUCT_CATEGORY}</span>
                                                         <span class="type">직거래</span>
                                                     </div>
                                                     <div class="ttl">
-                                                        <c:if test="${product.product_status == 3}">
+                                                        <c:if test="${product.PRODUCT_STATUS == 3}">
                                                             [거래완료]
                                                         </c:if>
-                                                        ${product.product_title}
+                                                        ${product.PRODUCT_TITLE}
                                                     </div>
                                                     <div class="price">
-                                                        <fmt:formatNumber value="${product.product_price}" type="number" pattern="#,###" />원
+                                                        <fmt:formatNumber value="${product.PRODUCT_PRICE}" type="number" pattern="#,###" />원
                                                     </div>
                                                     <div class="card-row">
-                                                        <span class="add">${product.product_trade_adr1}</span>
-                                                        <span class="name">${product.mem_nick}</span>
+                                                        <span class="add">${product.PRODUCT_TRADE_ADR1}</span>
+                                                        <span class="name">${product.MEM_NICK}</span>
                                                     </div>
                                                     
                                                     <!-- 후기 작성하기 버튼 (상품 정보 포함) -->
@@ -95,11 +96,11 @@
 <!-- 														</button> -->
                                                     	<input type="hidden" name="product_id" id="hiddenProductId">
                                                     	<c:choose>
-                                                    		<c:when test="${product.review_cnt == 0}">
+                                                    		<c:when test="${product.REVIEW_CNT == 0}">
 	                                                    		 <button class="open-modal-btn"
-															        data-product-id="${product.product_id}"
-															        data-title="${product.product_title}"
-															        data-buyer="${product.mem_nick}">
+															        data-product-id="${product.PRODUCT_ID}"
+															        data-title="${product.PRODUCT_TITLE}"
+															        data-buyer="${product.MEM_NICK}">
 															        후기 작성하기📮
 															     </button>
                                                     		</c:when>

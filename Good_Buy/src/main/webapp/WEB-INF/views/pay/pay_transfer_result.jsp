@@ -29,6 +29,14 @@
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/product.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/pay.js"></script>
+<script>
+	// 창이 닫히기 전에 부모 창 함수 호출
+	window.onbeforeunload = function () {
+		if (window.opener && !window.opener.closed) {
+			window.opener.reloadParent(); // 부모 창의 함수 호출
+		}
+	};
+</script>
 </head>
 
 

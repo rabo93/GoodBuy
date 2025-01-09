@@ -35,8 +35,8 @@ $(document).ready(function() {
                	 return `
                	 	<div class="form-check form-switch">
 		        		<input type="hidden" value="${data}" name="CODE_STATUS">
-						<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" ${isChecked} onClick="return false;">
-						<label class="form-check-label" for="flexSwitchCheckDefault">${isUsed}</label>
+						<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault_${row.CODE_ID}" ${isChecked} onchange="changeStatus('${row.CODETYPE_ID}', '${row.CODE_ID}', '${row.CODE_STATUS}')">
+						<label class="form-check-label" for="flexSwitchCheckDefault_${row.CODE_ID}">${isUsed}</label>
 					</div>
                	 `;
             	},
@@ -85,8 +85,10 @@ $(document).ready(function() {
 	codeList.on("click", '.edit-btn', function() {
 		const row = $(this).closest('tr');
 		const rowData = codeList.row(row).data();
-		let codeStatus = rowData.CODE_STATUS == 1 ? true : false;
-		let codeStatusText = rowData.CODE_STATUS == 1 ? "사용함" : "사용안함";
+//		let codeStatus = rowData.CODE_STATUS == 1 ? true : false;
+//		let codeStatusText = rowData.CODE_STATUS == 1 ? "사용함" : "사용안함";
+		let codeStatus = $(`#flexSwitchCheckDefault_${rowData.CODE_ID}`).is(':checked') ? true : false;
+		let codeStatusText = $(`#flexSwitchCheckDefault_${rowData.CODE_ID}`).is(':checked') ? "사용함" : "사용안함";
 //		console.log(rowData);
 		console.log(codeStatus);
 		
@@ -149,4 +151,30 @@ $(document).ready(function() {
 		}
 	});
 	
+	
 });
+
+// 사용여부 실시간 업데이트
+function changeStatus(codetypeId, codeId, status) {
+	let isChecked = status == 1 ? true : false;
+	let checkedText = isChecked ? "사용안함" : "사용함";
+	
+	$.ajax({
+		url : "AdmCommonCodeChangeStatus",
+		type : "POST",
+		data : {
+			"CODETYPE_ID" : codetypeId,
+			"CODE_ID" : codeId,
+			"ISCHECKED" : !isChecked
+		},
+		success: function(response){
+			alert(response.message);
+			if(response.status == 'success') {
+//				window.location.href = response.redirectURL;
+			}
+		},
+		error : function(res) {
+			alert(res.message);
+		}
+	});
+}

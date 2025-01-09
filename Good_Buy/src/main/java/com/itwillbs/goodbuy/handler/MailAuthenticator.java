@@ -17,7 +17,7 @@ public class MailAuthenticator extends Authenticator {
 	private PasswordAuthentication passwordAuthentication;
 	
 	public MailAuthenticator() {
-		System.out.println("MailAuthenticator()");
+//		System.out.println("MailAuthenticator()");
 	}
 	@Override
 	protected PasswordAuthentication getPasswordAuthentication() {

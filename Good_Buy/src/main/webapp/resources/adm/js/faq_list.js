@@ -84,14 +84,14 @@ document.addEventListener("DOMContentLoaded", function(){
 				orderable: false, // 정렬 비활성화
             	searchable: false, // 검색 비활성화
             	className : "dt-center", 
-				render: function(data) {
-//				render: function(data, type, row) {
+//				render: function(data) {
+				render: function(data, type, row) {
 					let isChecked = data == 1 ? "checked" : "";
 					let isUsed = data == 1 ? "사용함" : "사용안함";
                	 return `
                	 	<div class="form-check form-switch">
 		        		<input type="hidden" value="${data}" name="LIST_STATUS">
-						<input class="form-check-input" type="checkbox" role="switch" ${isChecked} onClick="return false;">
+						<input class="form-check-input" type="checkbox" role="switch" ${isChecked} data-id="${data.FAQ_ID}">
 						<label class="form-check-label">${isUsed}</label>
 					</div>
                	 `;
@@ -150,11 +150,11 @@ document.addEventListener("DOMContentLoaded", function(){
         faqList.draw();
     });
     
-	// 엔터키 입력으로 검색
+	// 엔터키 입력으로 검색 (* 검색 필드에 포커스가 있을 때만 동작하도록 조건 추가)
     $('#searchKeyword').on('keypress', function(e) {
-        if (e.which == 13) {
-            faqList.draw();
-        }
+		if (e.which === 13 && $(this).is(':focus')) { 
+	        faqList.draw();
+	    }
     });
     
 	//-----------------------------------------------------
@@ -189,6 +189,8 @@ document.addEventListener("DOMContentLoaded", function(){
 	$('#updateFaq').on('hidden.bs.modal', function () {
 		// 모달이 닫히면 이전에 포커스가 있었던 요소로 돌아가게 처리
 		$('#previousElement').focus();
+		// 모달이 닫힐 때 폼 데이터도 초기화
+		$(this).find('form').trigger('reset');
 	});
 	
 	// FAQ 수정 셋팅
@@ -219,12 +221,41 @@ document.addEventListener("DOMContentLoaded", function(){
 	    const switchBtn = this;
 	    const hiddenInput = switchBtn.parentElement.querySelector('input[type="hidden"][name="list_status"]');
 	    const switchLabel = switchBtn.nextElementSibling;
-	
+		
+//		const faqId = $(switchBtn).data("id");
+//		const newStatus = switchBtn.checked?1:2; // 새 상태 (1: 사용함, 2: 사용안함)
+//		
+//		if (!faqId) {
+//			console.log("FAQ ID가 누락되었습니다.");
+//	        return;
+//        }
+//		
+//		$.ajax({
+//			type: "POST",
+//			url: "UpdateFaqStatus",
+//			data: {
+//				faqId : faqId,
+//				listStatus : newStatus
+//			}
+//		}).done(function(result) {
+//			console.log("ajax 응답 : " + JSON.stringify(result));
+//			if(result.trim() == "true") {
+//				hiddenInput.value = newStatus;
+//				switchLabel.innerText = newStatus == 1 ? "사용함" : "사용안함";
+//				alert("사용여부가 성공적으로 업데이트되었습니다.");
+//			} else {
+//				switchBtn.checked = !switchBtn.checked;
+//				alert("사용여부 업데이트에 실패했습니다.");
+//			}
+//			
+//		});
+		
+		
 	    if (hiddenInput) {
 	        hiddenInput.value = switchBtn.checked ? 1 : 2;
 		    switchLabel.innerText =  switchBtn.checked ? "사용함" : "사용안함";
 	    } else {
-	        console.warn("사용여부 버튼이 존재하지 않습니다.");
+	        console.log("사용여부 버튼이 존재하지 않습니다.");
 	    }
 	});
 	
@@ -237,14 +268,12 @@ document.addEventListener("DOMContentLoaded", function(){
 	// 글자수 제한 함수
 	function fnChkByte(item, maxLength){
 		const str = item.val();
-        const strLength = str.length;
         
-         if (strLength > maxLength) {
+         if (str.length > maxLength) {
             alert("글자수는 " + maxLength + "자를 초과할 수 없습니다.");
-            $(item).val(str.substr(0, maxLength));      //문자열 자르고 값 넣기
-            fnChkByte(item, maxLength);
+            item.val(str.substring(0, maxLength)); //문자열 자르고 값 넣기
          }
-         $('#lengthInfo').text(strLength);
+         $('#lengthInfo').text(item.val().length);
     }
 	
 	//-----------------------------------------------------
@@ -283,6 +312,8 @@ document.addEventListener("DOMContentLoaded", function(){
 			});
 		}
 	});
+	
+	//-----------------------------------------------------
 	
 });
 

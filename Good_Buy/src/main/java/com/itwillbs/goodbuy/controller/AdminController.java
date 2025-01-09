@@ -667,6 +667,20 @@ public class AdminController {
 		
 		return response;
 	}
+	//-------------------------------------------------------------------------------------
+	// [ FAQ 사용여부 토글 업데이트 ]
+//	@ResponseBody
+//	@PostMapping("UpdateFaqStatus")
+//	public String updateFaqStatus
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	// ======================================================

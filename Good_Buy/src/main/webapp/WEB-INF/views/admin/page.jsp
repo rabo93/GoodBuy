@@ -8,19 +8,19 @@
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
 <!-- default -->
-<script src="../../resources/js/jquery-3.7.1.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/jquery-3.7.1.js"></script>
 
 <!-- font-awesome -->
-<link rel="stylesheet" href="../../resources/fontawesome/all.min.css" />
-<script src="../../resources/fontawesome/all.min.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/fontawesome/all.min.css" />
+<script src="${pageContext.request.contextPath}/resources/fontawesome/all.min.js"></script>
 
 <!-- ******************* 아래 CSS와 JS는 페이지별로 알맞게 Import 해주세요 ****************** -->
 <!-- CSS for Page -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Nunito:wght@200..1000&display=swap" rel="stylesheet">
-<link href="../../resources/adm/css/sb-admin-2.css" rel="stylesheet">
-<link href="../../resources/adm/css/adm.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/adm/css/sb-admin-2.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/adm/css/adm.css" rel="stylesheet">
 
 </head>
 <body id="page-top">
@@ -225,14 +225,14 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="../../resources/adm/vendor/jquery/jquery.min.js"></script>
-    <script src="../../resources/adm/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/vendor/jquery/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="../../resources/adm/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="../../resources/adm/js/sb-admin-2.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/js/sb-admin-2.min.js"></script>
 
 </body>
 

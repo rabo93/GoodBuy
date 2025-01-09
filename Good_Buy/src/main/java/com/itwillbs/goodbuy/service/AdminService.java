@@ -342,6 +342,52 @@ public class AdminService {
 	public Map<String, Object> getChatDetail(String room_id) {
 		return mapper.selectChatDetail(room_id);
 	}
+
+	// ======================== 메인 통계
+	
+	// 등록된 상품 건수
+	public int getTotalProducts() {
+		return mapper.selectTotalProducts();
+	}
+
+	// 진행중인 거래 건수
+	public int getActiveTrades() {
+		return mapper.selectActiveTrades();
+	}
+
+	// 완료된 거래 건수
+	public int getCompleteTrades() {
+		return mapper.selectCompleteTrades();
+	}
+
+	// 미처리 된 신고 건수 (모든 신고 합쳐서)
+	public int getPendingReports() {
+		return mapper.selectPendingReports();
+	}
+
+	// 신규 가입자 수
+	public int getNewUsers() {
+		return mapper.selectNewUsers();
+	}
+
+	// 전체 회원 수
+	public int getTotalUsers() {
+		return mapper.selectTotalUsers();
+	}
+	
+	// 가격대별 상품 분포
+	public Map<String, Object> getPriceRange() {
+		return mapper.selectPriceRange();
+	}
+	
+	// 카테고리별 통계
+	public List<Map<String, String>> getCategoryStatus() {
+		return mapper.selectCategoryStatus();
+	}
+	
+	
+	
+	// 최근 7일간 거래 통계
 	
 	
 //	// 답글 등록(수정)

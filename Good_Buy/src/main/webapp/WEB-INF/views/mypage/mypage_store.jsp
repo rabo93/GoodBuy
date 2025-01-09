@@ -64,53 +64,50 @@
 							<!-- contents -->
 							<section class="my-rev-wrap">
 								<div>
-									<form action="MyStore" class="my-frm" method="post">
-										<div class="set">
-											<div>
-												<div class="box">
-													<c:choose>
-											            <c:when test="${not empty sessionScope.sProfile}">
-											            	<img src="${sessionScope.sProfile}?${System.currentTimeMillis()}" id="profile_preview"><br>
-<%-- 											            	<img src="${member.mem_profile}?${System.currentTimeMillis()}" id="profile_preview"><br> --%>
-											            </c:when>
-											            <c:otherwise>
-											                <!-- member.memProfile이 비어 있으면 기본 이미지 출력 -->
-											                <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview"><br>
-											            </c:otherwise>
-											        </c:choose>
-												</div>
-												<h3 class="my-store">${sessionScope.sNick}의 상점</h3><br>
-												<div class="main-review-score">
+									<div class="set">
+										<div>
+											<div class="box">
 												<c:choose>
-													<c:when test="${empty scoreCount}"></c:when>
-													<c:otherwise>
-														<c:forEach var="score" items="${scoreCount}">
-														    <c:if test="${score['REVIEW_SCORE'] == 2}">
-														       최고예요👍+${score['count']} 
-														    </c:if>
-														    <c:if test="${score['REVIEW_SCORE'] == 1}">
-														        좋아요💕+${score['count']} 
-														    </c:if>
-														    <c:if test="${score['REVIEW_SCORE'] == 0}">
-														        별로예요🥲+${score['count']} 
-														    </c:if>
-														</c:forEach>
-													</c:otherwise>
-												</c:choose>
-												</div>
+										            <c:when test="${not empty sessionScope.sProfile}">
+										            	<img src="${sessionScope.sProfile}?${System.currentTimeMillis()}" id="profile_preview"><br>
+<%-- 											            	<img src="${member.mem_profile}?${System.currentTimeMillis()}" id="profile_preview"><br> --%>
+										            </c:when>
+										            <c:otherwise>
+										                <!-- member.memProfile이 비어 있으면 기본 이미지 출력 -->
+										                <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview"><br>
+										            </c:otherwise>
+										        </c:choose>
+											</div>
+											<h3 class="my-store">${sessionScope.sNick}의 상점</h3><br>
+											<div class="main-review-score">
+											<c:choose>
+												<c:when test="${empty scoreCount}"></c:when>
+												<c:otherwise>
+													<c:forEach var="score" items="${scoreCount}">
+													    <c:if test="${score['REVIEW_SCORE'] == 2}">
+													       최고예요🥳+${score['count']} 
+													    </c:if>
+													    <c:if test="${score['REVIEW_SCORE'] == 1}">
+													        좋아요❤️‍🔥+${score['count']} 
+													    </c:if>
+													    <c:if test="${score['REVIEW_SCORE'] == 0}">
+													        별로예요👿+${score['count']} 
+													    </c:if>
+													</c:forEach>
+												</c:otherwise>
+											</c:choose>
 											</div>
 										</div>
+									</div>
 											
-										<div class="set">
-											<label>상점 소개</label>
-											<input type="hidden" id = "mem_id" value="${member.mem_id}"> 
-		<%-- 									<input type="text" name="mem_intro" id="mem_intro" value="${member.mem_intro}"> --%>
-													<textarea rows="5" cols="50" name="mem_intro" id="mem_intro">${storeIntro.mem_intro}</textarea>
-											<div>
-												<input type="submit" value="저장"> 
-											</div>
+									<div class="set">
+										<label>상점 소개</label>
+										<input type="hidden" id = "mem_id" value="${member.mem_id}">
+										<div class="store-intro"> 
+											<textarea rows="5" cols="50" name="mem_intro" id="mem_intro">${storeIntro.mem_intro}</textarea>
+											<button id="submitBtn">저장</button>
 										</div>
-									</form>
+									</div>
 									<form action="" class="my-frm" method="get">
 										<div>
 											<h3 class="contents-ttl">등록한 상품목록 <small>(총 <span>${salesCount}</span>건)</small> <a href="MySales"><small> 더보기></small></a></h3>
@@ -185,51 +182,49 @@
 															<div class="empty">작성된 후기가 없습니다.</div>
 														</c:when>
 														<c:otherwise>	
-						<!-- 									<div class="review-rating"> -->
-						<%-- 						                <span class="rating-score">${course[0].review_score}</span><br> --%>
-						<!-- 						                <span class="stars"><i class="fa-solid fa-star"></i></span> -->
-						<!-- 						            </div> -->
 												            <c:forEach var="review" items="${review}" varStatus="status">
 												            	<div class="review-box">
 																    <div class="r_header">
 																        <div class="profile-icon"></div>
 																        <div class="user-info">
-																            <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview" height="60px"><br>
+																            <c:choose>
+																	            <c:when test="${not empty member.mem_profile}">
+																	            	<img src="${member.mem_profile}?${System.currentTimeMillis()}" id="profile_preview"><br>
+										<%-- 							                <img src="${member.mem_profile}" id="profile_preview"><br> --%>
+																	            </c:when>
+																	            <c:otherwise>
+																	                <!-- member.memProfile이 비어 있으면 기본 이미지 출력 -->
+																	                <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview"><br>
+																	            </c:otherwise>
+																	        </c:choose>
 																            <div class="name">${review.buyerNick} | ${review.review_date}</div>
 																            <div class="product">${review.product_title}</div>
 																        </div>
 																    </div>
 																	<div class="review-score">
 														            	<c:if test="${review.review_score == '2'}">
-														            		<span id="score" name="score">최고예요👍</span>
-															            	<!-- <input type="button" id="score" name="score" value="최고예요👍">
-					 -->										            </c:if>
+														            		<span id="score" name="score">최고예요🥳</span>
+					 										            </c:if>
 															            <c:if test="${review.review_score == '1'}">
 														            		<span id="score" name="score">좋아요💕</span>
-															            	<!-- <input type="button" id="score"  name="score" value="좋아요💕"> -->
 															            </c:if>
 															            <c:if test="${review.review_score == '0'}">
-														            		<span id="score" name="score">별로예요🥲</span>
-															           		<!-- <input type="button" id="score"  name="score" value="별로예요🥲"> -->
+														            		<span id="score" name="score">별로예요👿</span>
 														           	 	</c:if>
 														            </div>
 														            <div class="review-score-option">
 														            	<%-- 리뷰 옵션 --%>
 																		<c:if test="${fn:contains(review.review_options, '1')}">
 																			<span id="score" name="score">배송이 빨라요🚚</span>
-																			<!-- <input type="button" id="score" name="score" value="배송이 빨라요🚚"> -->
 																		</c:if>
 																		<c:if test="${fn:contains(review.review_options, '2')}">
-																			<span id="score" name="score">친절해요😊</span>
-																			<!-- <input type="button" id="score" name="score" value="친절해요😊"> -->
+																			<span id="score" name="score">친절해요💖</span>
 																		</c:if>
 																		<c:if test="${fn:contains(review.review_options, '3')}">
 																			<span id="score" name="score">물건상태가 좋아요✨</span>
-																			<!-- <input type="button" id="score" name="score" value="물건상태가 좋아요✨"> -->
 																		</c:if>
 																		<c:if test="${fn:contains(review.review_options, '4')}">
 																			<span id="score" name="score">또 거래하고 싶어요💰</span>
-																			<!-- <input type="button" id="score" name="score" value="또 거래하고 싶어요💰"> -->
 																		</c:if>
 														            </div>
 																    <div class="review-text">${review.review_content}</div>
@@ -256,5 +251,26 @@
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
 	</footer>
+	<script type="text/javascript">
+	$(document).ready(function () {
+		$("#submitBtn").click(function () {
+			//debugger;
+			//상점소개 변경하기
+			let mem_intro = $("#mem_intro").val();
+			console.log(">>>>>>>>>>>"+mem_intro);
+			$.ajax({
+				url : "MyStoreIntro",
+				type : "post",
+				dataType : "json",
+				data :{mem_intro : mem_intro},
+				success: function (response) {
+					alert(response);
+					// location.reload();
+				},
+			});
+		});
+	});
+	
+	</script>
 </body>
 </html>

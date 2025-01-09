@@ -22,7 +22,6 @@ public interface MemberMapper {
 
 	//닉네임 조회
 	MemberVO selectMemberNick(MemberVO member);
-	
 
 	//회원정보 수정
 	int updateMember(Map<String, String> map);
@@ -40,10 +39,6 @@ public interface MemberMapper {
 	//메일 인증 후 mail_auth_info 테이블 데이터 삭제
 	void deleteMailAuthInfo(MailAuthInfo mailAuthInfo);
 	
-	// 회원 패스워드 조회
-	MemberVO selectMemberPasswd(String id);
-	
-
 	//이메일 중복체크
 	MemberVO selectEmailId(MemberVO member);
 	

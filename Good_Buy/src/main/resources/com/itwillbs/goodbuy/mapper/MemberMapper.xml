@@ -26,14 +26,15 @@
 			   , #{mem_address1}
 			   , #{mem_address2}
 			   , '일반'
-			   , 1						-- 회원상태(1.정상/ 2. 정지 /3.탈퇴)
+			   , 1						-- 회원상태(기본값1)
 			   , now()
 			   , null
 			   , null
 			   , null
 			   , #{sns_status}			-- SNS연동 상태(1:연동 / 2:연동안함)
 			   , #{auth_status}			-- 회원인증여부(1:인증함 / 2:안함)
-		)
+			   , 0						-- 신고 횟수(기본값0)
+			   )
 	</insert>
 	
 	<!-- ************************************************************** -->
@@ -63,15 +64,6 @@
 		 WHERE MEM_ID = #{mem_id}
 	</select>
 	
-	
-	
-	<!-- ************************************************************** -->
-	<!-- 비밀번호 조회 -->
-	<select id="selectMemberPasswd" resultType="member">
-		SELECT *
-		  FROM MEMBER
-		 WHERE MEM_ID = #{mem_id}
-	</select>
 	<!-- ************************************************************** -->
 	<!-- 패스워드 찾기로 비번변경 -->
 	<update id="updateTempPasswd">
@@ -298,8 +290,6 @@
 		 WHERE MEM_ID = #{mem_id}
 		 AND MEM_STATUS = 1
 	</select>
-	
-	
 	
 	
 </mapper>

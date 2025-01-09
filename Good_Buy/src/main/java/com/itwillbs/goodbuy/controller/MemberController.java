@@ -59,14 +59,12 @@ public class MemberController {
 	// 첨부파일 가상경로
 	private String uploadPath = "/resources/upload";
 		
-	
 	//=================================================================================================================================
 	// [ 로그인 페이지 구현 ]
 	@GetMapping("SNSLogin")
 	public String snsLoginForm() {
 		return "member/sns_login";
 	}
-	
 	
 	// 로그인 폼 요청 시 공개키 전송하는 기능 추가
 	@GetMapping("MemberLogin")
@@ -116,52 +114,51 @@ public class MemberController {
 		
 		//------------------------------------------------------------------
 		// [ 로그인 처리 ]
+		// memberVO 파라미터로 회원 정보 조회
 		MemberVO dbMember = memberService.getMemberLogin(member);
 //		MemberVO dbMember = memberService.getMember(mem_id);
 		log.info(">>>>>DB에 저장된 회원 정보 : " + dbMember);
 		
+		String failURL = "result/fail";
+		
 		if(dbMember == null || !passwordEncoder.matches(member.getMem_passwd(), dbMember.getMem_passwd())) {		
 			model.addAttribute("msg", "로그인 실패!\\n아이디와 패스워드를 다시 확인해주세요");
-			return "result/fail";
+			return failURL;
 		} else if(dbMember.getMem_status() == 2) { // 로그인 성공이지만, 정지 회원일 경우
 			model.addAttribute("msg", "신고 누적 3번으로 인해 계정이 정지되었습니다.\\n관리자에게 문의하세요.");
-			return "result/fail";
+			return failURL;
 		} else if(dbMember.getMem_status() == 3) { // 로그인 성공이지만, 탈퇴 회원일 경우
 			model.addAttribute("msg", "탈퇴한 회원입니다!\\n다시 회원가입 해주세요. ");
-			return "result/fail";
-		} else { 
-			// !!!!!!!!!!!!!!!!!!!로그인 성공!!!!!!!!!!!!!!!!!!!
-			session.setAttribute("sId", dbMember.getMem_id());
-			session.setAttribute("sNick", dbMember.getMem_nick());
-			session.setAttribute("sGrade", dbMember.getMem_grade());
-			session.setAttribute("sProfile", dbMember.getMem_profile());
-			session.setMaxInactiveInterval(60 * 120); // 세션 타이머 설정: 2시간
-			
-			//--------------------------------------------------------------
-			// [ 핀테크 엑세스토큰 정보 조회하여 세션에 저장하는 기능 추가 ]
-			PayToken token = payService.getPayTokenInfo(dbMember.getMem_id());
-//			System.out.println("member 토큰 확인 : " + token);
-			session.setAttribute("token", token);
-			//--------------------------------------------------------------
-			// [ 쿠키 설정 ]
-			// 아이디 기억하기 체크박스 처리
-			Cookie cookie = new Cookie("userId", member.getMem_id()); //쿠키설정
-			if(rememberId != null) { //체크 시
-				cookie.setMaxAge(60*60*24*1); // 쿠키 유효기간 1일
-			} else {
-				cookie.setMaxAge(0); // 쿠키 삭제
-			}
-			response.addCookie(cookie);
-			
-			// [ 특정 페이지 로그인 필수 처리를 위한 로그인 완료 시 원래 페이지로 이동 처리 ]
-			if(session.getAttribute("prevURL") == null) {
-				return "redirect:/";
-			} else {
-				// request.getServletPath() 메서드를 통해 이전 요청 URL 을 저장할 경우
-				// "/요청URL" 형식으로 저장되므로 redirect:/ 에서 / 제외하고 결합하여 사용
-				return "redirect:" + session.getAttribute("prevURL");
-			}
+			return failURL;
+		} 
+		
+		// !!!!!!!!!!!!!!!!!!!로그인 성공!!!!!!!!!!!!!!!!!!!
+		session.setAttribute("sId", dbMember.getMem_id());
+		session.setAttribute("sNick", dbMember.getMem_nick());
+		session.setAttribute("sGrade", dbMember.getMem_grade());
+		session.setAttribute("sProfile", dbMember.getMem_profile());
+		session.setMaxInactiveInterval(60 * 120); // 세션 타이머 설정: 2시간
+		
+		//--------------------------------------------------------------
+		// [ 핀테크 엑세스토큰 정보 조회하여 세션에 저장하는 기능 추가 ]
+		PayToken token = payService.getPayTokenInfo(dbMember.getMem_id());
+//					System.out.println("member 토큰 확인 : " + token);
+		session.setAttribute("token", token);
+		//--------------------------------------------------------------
+		// [ 쿠키 설정 ]
+		// 아이디 기억하기 체크박스 처리
+		Cookie cookie = new Cookie("userId", member.getMem_id()); //쿠키설정
+		if(rememberId != null) { //체크 시
+			cookie.setMaxAge(60*60*24*1); // 쿠키 유효기간 1일
+		} else {
+			cookie.setMaxAge(0); // 쿠키 삭제
 		}
+		response.addCookie(cookie);
+		
+		// [ 특정 페이지 로그인 필수 처리를 위한 로그인 완료 시 원래 페이지로 이동 처리 ]
+		String prevURL = (String) session.getAttribute("prevURL");
+		String redir = "redirect:";
+		return ( prevURL == null ) ? redir + "/" : redir + prevURL;
 	}	
 	
 	//=================================================================================================================================
@@ -184,6 +181,7 @@ public class MemberController {
 	    //-----------------------------------------------------------------------
 	    // [ 회원 가입 처리 ]
 	    int insertCount = memberService.registMember(member);
+	    
 	    if (insertCount > 0) {
 	    	return "redirect:/MemberJoinSuccess";
 	    } else {
@@ -203,7 +201,6 @@ public class MemberController {
 		if(member != null) { //아이디 중복일 경우
 			isDuplicate= true;
 		}
-		
 		return isDuplicate+"";
 	}
 	
@@ -334,7 +331,7 @@ public class MemberController {
 		//-------------------------------------------------
 		// [비밀번호 검증]
 		// id로 회원 정보 조회하여 기존 패스워드 가져오기
-		member = memberService.getMemberPasswd(mem_id);
+		member = memberService.getMember(mem_id);
 		String dbPasswd = member.getMem_passwd();
 		// 기존 비밀번호와 입력한 비밀번호 비교 검증 
 		if(dbPasswd == null || !passwordEncoder.matches(map.get("old_passwd"), dbPasswd)) {
@@ -453,7 +450,7 @@ public class MemberController {
 		String id = getSessionUserId(session);
 		
 		// 해당 아이디로 DB에 회원정보 조회
-		MemberVO member = memberService.getMemberPasswd(id);
+		MemberVO member = memberService.getMember(id);
 		String dbPasswd = member.getMem_passwd();
 		
 		// DB비밀번호와 입력한 비밀번호가 같은지 검증

@@ -107,4 +107,12 @@ public class ProductService {
 		return mapper.productContent(product_ID);
 	}
 
+	public int productUpdate(ProductVO product) {
+		return mapper.productUpdate(product);
+	}
+
+	public ProductVO getProductPic(int product_ID) {
+		return mapper.getProductPic(product_ID);
+	}
+
 }

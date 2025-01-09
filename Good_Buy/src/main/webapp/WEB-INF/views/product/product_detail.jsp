@@ -132,8 +132,8 @@
 							</div>
 							<div class="item-detail-description">${productSearch.product_intro}</div>
 							<c:choose>
-								<c:when test="${productSearch.product_shpping_fee != '' && productSearch.product_shpping_fee != undefined}">
-									<div class="item-detail-shpping-fee">배송비:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${productSearch.product_shpping_fee} 원</div>
+								<c:when test="${productSearch.product_shipping_fee != '' && productSearch.product_shipping_fee != undefined}">
+									<div class="item-detail-shpping-fee">배송비:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${productSearch.product_shipping_fee} 원</div>
 								</c:when>
 								<c:otherwise>
 									<div class="item-detail-shpping-fee">배송비 포함</div>

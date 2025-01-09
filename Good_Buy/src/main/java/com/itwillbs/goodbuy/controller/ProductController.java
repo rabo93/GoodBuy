@@ -84,51 +84,39 @@ public class ProductController {
 			e.printStackTrace();
 		}
 		
-		MultipartFile mFile1 = product.getPic1();
-		MultipartFile mFile2 = product.getPic2();
-		MultipartFile mFile3 = product.getPic3();
-		
+		MultipartFile[] mFiles = {product.getPic1(), product.getPic2(), product.getPic3()};
+		String[] fileNames = {"", "", ""};
+		String[] productPics = {"", "", ""};
+
 		product.setProduct_pic1("");
 		product.setProduct_pic2("");
 		product.setProduct_pic3("");
-		
-		String fileName1 = "";
-		String fileName2 = "";
-		String fileName3 = "";
-		
-		if(!mFile1.getOriginalFilename().equals("")) {
-			fileName1 = UUID.randomUUID().toString().substring(0, 8) + "_" + mFile1.getOriginalFilename();
-			product.setProduct_pic1(subDir + "/" + fileName1);;
+
+		for (int i = 0; i < mFiles.length; i++) {
+		    if (!mFiles[i].getOriginalFilename().equals("")) {
+		        fileNames[i] = UUID.randomUUID().toString().substring(0, 8) + "_" + mFiles[i].getOriginalFilename();
+		        productPics[i] = subDir + "/" + fileNames[i];
+		    }
 		}
-		if(!mFile2.getOriginalFilename().equals("")) {
-			fileName2 = UUID.randomUUID().toString().substring(0, 8) + "_" + mFile2.getOriginalFilename();
-			product.setProduct_pic2(subDir + "/" + fileName2);;
-		}
-		if(!mFile3.getOriginalFilename().equals("")) {
-			fileName3 = UUID.randomUUID().toString().substring(0, 8) + "_" + mFile3.getOriginalFilename();
-			product.setProduct_pic3(subDir + "/" + fileName3);;
-		}
+
+		product.setProduct_pic1(productPics[0]);
+		product.setProduct_pic2(productPics[1]);
+		product.setProduct_pic3(productPics[2]);
 		
 		int insertCount = productService.registProduct(product, id);
 		
-		if(insertCount > 0) {
-			try {
-				if(!mFile1.getOriginalFilename().equals("")) {
-					mFile1.transferTo(new File(realPath, fileName1));
-				}
-				
-				if(!mFile2.getOriginalFilename().equals("")) {
-					mFile2.transferTo(new File(realPath, fileName2));
-				}
-				
-				if(!mFile3.getOriginalFilename().equals("")) {
-					mFile3.transferTo(new File(realPath, fileName3));
-				}
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		if (insertCount > 0) {
+		    try {
+		        for (int i = 0; i < mFiles.length; i++) {
+		            if (!mFiles[i].getOriginalFilename().equals("")) {
+		                mFiles[i].transferTo(new File(realPath, fileNames[i]));
+		            }
+		        }
+		    } catch (IllegalStateException e) {
+		        e.printStackTrace();
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		    }
 		}
 		
 		return "MySales";
@@ -206,20 +194,81 @@ public class ProductController {
 	}
 	
 	@PostMapping("ProductEditing")
-	public String productEditing(ProductVO product, HttpSession session) {
+	public String productEditing(HttpSession session, ProductVO product, Model model,
+								 @RequestParam("pic1") MultipartFile pic1,
+								 @RequestParam("pic2") MultipartFile pic2,
+								 @RequestParam("pic3") MultipartFile pic3,
+								 @RequestParam("Product_ID")int product_ID) {
 		String id = (String) session.getAttribute("sId");
+		String realPath = session.getServletContext().getRealPath(uploadPath);
+		String subDir = id + "/" + UUID.randomUUID().toString().substring(0, 6);
+		
+		realPath += "/" + subDir;
+
+	    try {
+	        // 기존 파일 경로 가져오기
+	    	ProductVO getProductPic = productService.getProductPic(product_ID);
+	        String oldFileName1 = getProductPic.getProduct_pic1();
+	        String oldFileName2 = getProductPic.getProduct_pic2();
+	        String oldFileName3 = getProductPic.getProduct_pic3();
+	        
+	        if (!pic1.isEmpty()) {
+	            // 기존 파일 삭제 로직
+	            if (oldFileName1 != null && !oldFileName1.isEmpty()) {
+	                File oldFile = new File(realPath, oldFileName1);
+	                if (oldFile.exists()) {
+	                    oldFile.delete();
+	                }
+	            }
+	            if (oldFileName2 != null && !oldFileName2.isEmpty()) {
+	            	File oldFile = new File(realPath, oldFileName2);
+	            	if (oldFile.exists()) {
+	            		oldFile.delete();
+	            	}
+	            }
+	            if (oldFileName3 != null && !oldFileName3.isEmpty()) {
+	            	File oldFile = new File(realPath, oldFileName3);
+	            	if (oldFile.exists()) {
+	            		oldFile.delete();
+	            	}
+	            }
+	            
+	            // 새 파일 저장 로직
+	            String newFileName1 = UUID.randomUUID().toString().substring(0, 8) + "_" + pic1.getOriginalFilename();
+	            String newFileName2 = UUID.randomUUID().toString().substring(0, 8) + "_" + pic2.getOriginalFilename();
+	            String newFileName3 = UUID.randomUUID().toString().substring(0, 8) + "_" + pic3.getOriginalFilename();
+	            
+	            String newFilePath1 = subDir + "/" + newFileName1;
+	            String newFilePath2 = subDir + "/" + newFileName2;
+	            String newFilePath3 = subDir + "/" + newFileName3;
+	            
+	            pic1.transferTo(new File(realPath, newFilePath1));
+	            pic2.transferTo(new File(realPath, newFilePath2));
+	            pic3.transferTo(new File(realPath, newFilePath3));
+	            
+	            product.setProduct_pic1(newFilePath1);
+	            product.setProduct_pic2(newFilePath2);
+	            product.setProduct_pic3(newFilePath3);
+	        } else {
+	            // 새로운 파일이 없는 경우 기존 파일 경로 유지
+	            product.setProduct_pic1(oldFileName1);
+	            product.setProduct_pic1(oldFileName2);
+	            product.setProduct_pic1(oldFileName3);
+	        }
+	    } catch (IllegalStateException | IOException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    int updateStatus = productService.productUpdate(product);
+	    
+	    if (updateStatus < 0) {
+			model.addAttribute("msg", "클래스 수정 실패!");
+			return "admin/fail";
+		}
 		
 		return "MySales";
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 }
+

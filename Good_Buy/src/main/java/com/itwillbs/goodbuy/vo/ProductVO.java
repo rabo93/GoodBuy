@@ -17,7 +17,7 @@ public class ProductVO {
 	private String mem_profile;
 	private int wishlist_id;
 	private String product_intro; //상품소개
-	private int product_shpping_fee;
+	private int product_shipping_fee;
 	private int product_price;
 	private int product_discount_status;
 	private String product_category;

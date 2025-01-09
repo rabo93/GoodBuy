@@ -106,6 +106,7 @@
                                                     		</c:when>
                                                     		<c:otherwise><a class="review-done-btn" href='MyReviewHistory'><i class="fa-regular fa-envelope"></i> 작성완료</a></c:otherwise>
                                                     	</c:choose>
+														
                                                 </div>
                                             </li>
                                         </c:forEach>

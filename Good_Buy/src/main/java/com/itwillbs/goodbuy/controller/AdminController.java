@@ -422,6 +422,7 @@ public class AdminController {
 	}
 	
 	// 신고 회원 목록 - 조치하기(+ 수정하기)
+	@AdminLog
 	@PostMapping("AdmUserReportModify")
 	public String admUserReportModify(@RequestParam Map<String, Object> param, Model model) {
 		log.info(">>> 신고 조치 : " + param);
@@ -615,7 +616,6 @@ public class AdminController {
 	}
 	
 	// [ FAQ 목록 조회 ]
-	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("FaqListForm")
 	public String admFaqListForm(@RequestParam Map<String, String> param) {
@@ -647,7 +647,6 @@ public class AdminController {
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 수정 ]
 	@AdminLog
-	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmFaqModify")
 	public String admFaqModify(@RequestParam Map<String, Object> param, Model model) {
 //		log.info(">>> 수정할 faq 정보: " + param);
@@ -667,7 +666,6 @@ public class AdminController {
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 삭제 ]
 	@AdminLog
-	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("AdmFaqDelete")
 	public Map<String, Object> admFaqDelete(@RequestBody List<Integer> faqIds) {
@@ -691,6 +689,7 @@ public class AdminController {
 	
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 사용여부 실시간 업데이트 ]
+	@AdminLog
 	@ResponseBody
 	@PostMapping("UpdateFaqStatus")
 	public Map<String, Object> updateFaqStatus(@RequestParam Map<String, String> param) {
@@ -716,10 +715,31 @@ public class AdminController {
 	// ======================================================
 	// [ 통계 ]
 	// 통계 차트 페이지
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmChartList")
 	public String admChartList() {
 		return "admin/chart_list";
 	}
+	
+	
+	
+	//-----------------------------------------------------
+	// 기간별 통계 페이지
+	@LoginCheck(memberRole = MemberRole.ADMIN)
+	@GetMapping("PeriodAnalysis")
+	public String periodAnalysis() {
+		return "admin/period_analysis";
+	}
+	
+	@ResponseBody
+	@PostMapping("PeriodAanalysis")
+	public String periodAanalysis() {
+		
+		
+		return "";
+	}
+	
+	
 	
 	
 	// ======================================================

@@ -57,6 +57,7 @@
 					</div>
 				</section>
 				<div class="container chat-list">
+				<%-- 채팅방 리스트 영역 --%>
 			        <div class="sidebar"> 
 			        	<c:forEach items="${chatRoomList}" var="chatRoom" varStatus="status">
 				            <div class="sidebar-item ${chatRoom.room_id}" data-index="${status.index}">
@@ -66,7 +67,9 @@
 				                	<input type="hidden" id="title${status.index}" value="${chatRoom.title}">
 				                	<input type="hidden" id="receiver_id${status.index}" value="${chatRoom.receiver_id}">
 				                	<input type="hidden" id="product_id${status.index}" value="${chatRoom.product_id}">
-					                <div class="item"><strong>${chatRoom.title}</strong></div>
+					                <div class="item"><strong>${chatRoom.title}</strong>
+					                	<span class="messageStatus${status.index}">${chatMessageCnt[status.index]}</span>
+					                </div>
 					                <c:forEach items="${chatMessageList}" var="chatMessage">
 					                	<c:if test="${chatRoom.room_id eq chatMessage.room_id}">
 							                <div class="item-chat item-chat${status.index}" data-message="${chatMessage.message}">
@@ -78,56 +81,9 @@
 				                </div>
 				            </div>
 			        	</c:forEach>
-<!-- 				            <div class="sidebar-item" onclick="testOpenChat(1)"> -->
-<%-- 				                <a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a> --%>
-<!-- 				                <div class="item-container"> -->
-<!-- 					                <div class="item"><strong>아기 유아 어그부츠 150cm</strong></div> -->
-<!-- 					                <div class="item-chat">상품 구매하고 싶어요 <span>&nbsp; · &nbsp; 2024.12.30 12:40</span></div> -->
-<!-- 				                </div> -->
-<!-- 				            </div> -->
-<!-- 				            <div class="sidebar-item" onclick="testOpenChat(1)"> -->
-<%-- 				                <a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a> --%>
-<!-- 				                <div class="item-container"> -->
-<!-- 					                <div class="item"><strong>아기 유아 어그부츠 150cm</strong></div> -->
-<!-- 					                <div class="item-chat">상품 구매하고 싶어요 <span>&nbsp; · &nbsp; 2024.12.30 12:40</span></div> -->
-<!-- 				                </div> -->
-<!-- 				            </div> -->
-<!-- 				            <div class="sidebar-item"> -->
-<%-- 				                <img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"> --%>
-<!-- 				                컨버스 소형 더플백 -->
-<!-- 				            </div> -->
-<!-- 				            <div class="sidebar-item"> -->
-<%-- 				                <img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"> --%>
-<!-- 				                파워레인저 정글포스 -->
-<!-- 				            </div> -->
-<!-- 				            <div class="sidebar-item"> -->
-<%-- 				                <img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"> --%>
-<!-- 				                백팩 인형 백팩 -->
-<!-- 				            </div> -->
 			        </div>
-		        
-		        
 			        <div class="chat-area">
-<!-- 			            <div class="chat-header"> -->
-<%-- 			            	<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a> --%>
-<!-- 			                <div class="title">아기 유아 어그부츠 150cm</div> -->
-<!-- 			                <button class="item-button" onclick="location.href='PayTransferRequest'">구매하기</button> -->
-<!-- 			            </div> -->
-<!-- 			            <div class="chat-body"> -->
-<!-- 			                <div class="message user"> -->
-<!-- 			                    <div class="bubble">안녕하세요.</div> -->
-<!-- 			                </div> -->
-<!-- 			                <div class="message other"> -->
-<!-- 			                    <div class="bubble">안녕하세요.</div> -->
-<!-- 			                </div> -->
-<!-- 			                <div class="message user"> -->
-<!-- 			                    <div class="bubble">상품 구매하고 싶어요</div> -->
-<!-- 			                </div> -->
-<!-- 			            </div> -->
-<!-- 			            <div class="chat-footer"> -->
-<!-- 			                <input type="text" class="chatMessage" placeholder="메시지를 입력하세요..."> -->
-<!-- 			                <button class="btnSend">전송</button> -->
-<!-- 			            </div> -->
+		        	<%-- 채팅창 영역 --%>
 			        </div>
 		    	</div>
 				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->

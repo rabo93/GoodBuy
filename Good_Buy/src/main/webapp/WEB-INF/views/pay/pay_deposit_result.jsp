@@ -73,7 +73,7 @@
 						                    <span class="account-num">${userAccount.ACCOUNT_NUM}</span>
 						                </div>
 							            <div class="amount">+ <fmt:formatNumber pattern="#,###">${depositResult.TRAN_AMT}</fmt:formatNumber>원</div>
-						            </div><!-- history-item -->
+						            </div><!-- account-header -->
 						            <div class="account-item">
 						            	<div class="details">
 						                    <span>거래구분</span>
@@ -104,6 +104,7 @@
 						                </div>
 	                    				<div class="amount"><fmt:formatNumber pattern="#,###">${pay_amount}</fmt:formatNumber>원</div>
 						            </div>
+									<div class="return-btn"><button onclick="location.href = document.referrer">돌아가기</button></div>
 								</div><!-- account-box -->
 						    </div><!-- goodpay-container -->
 						</div>

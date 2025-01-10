@@ -97,6 +97,7 @@
 						                </div>
 	                    				<div class="amount">${transferResult.depositResult.res_list[0].bank_name} ${transferResult.depositResult.res_list[0].account_num_masked}</div>
 						            </div>
+						            <div class="return-btn"><button onclick="location.href = document.referrer">돌아가기</button></div>
 								</div><!-- account-box -->
 						    </div>
                 		</div>

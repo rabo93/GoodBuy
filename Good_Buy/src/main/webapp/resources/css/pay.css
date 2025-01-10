@@ -201,6 +201,7 @@ html.fixed {overflow-y:hidden;}
 
 
 /* 연결된 계좌 */
+/*
 .linked-account {
     display: flex;
     justify-content: space-between;
@@ -211,7 +212,7 @@ html.fixed {overflow-y:hidden;}
     border-radius: 8px;
     margin-bottom: 20px;
 }
-
+*/
 .account-info {
     display: flex;
     align-items: center;
@@ -698,4 +699,17 @@ button.all-btn.selected, button.use-transfer-btn.selected, button.use-charge-btn
 /* pay_transfer_result */
 .account-user-type {
 	
+}
+.return-btn {
+	display: flex;
+}
+.return-btn button{
+    background-color: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    padding: 10px;
+    margin: 0 auto;
+    cursor: pointer;
+    font-weight: 600;
 }

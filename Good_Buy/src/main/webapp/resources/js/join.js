@@ -399,25 +399,52 @@ function previewImage(event) {
 //     reader.readAsDataURL(file);
 }
 
-
-
-
-
-
-
-
-
-
-
+//-----------------------------------------------------------------------
+// 닉네임 변경시 중복 검사(기존 닉네임과 같을 경우에는 유지)
+function ckReNick() {
+	let newNick = $("#mem_nick").val();
+	const originalNick = $("#mem_nick").data("original-nick"); //data-* 속성에서 값 가져오기
+//	console.log("입력한 닉네임 : " + newNick + ", 기존 닉네임 : " + originalNick);
+	
+	if(newNick !== originalNick) { // 닉네임이 변경되었을 때만 서버로 요청
+		$.ajax({
+			type: "GET",
+			url: "MemberCheckNick",
+			data: { mem_nick: newNick },
+			success: function (result) {
+				if (result.trim() === "false") {
+					$("#checkNic").text("사용가능한 닉네임입니다.").css("color", "var(--secondary)");
+					checkNic = true;
+				} else {
+					$("#checkNic").text("이미 사용중인 닉네임입니다.").css("color", "var(--red)");
+					checkNic = false;
+				}
+			}
+		});  
+	} else { // 닉네임이 변경되지 않았으면 확인 성공 처리
+		$("#checkNic").text("").css("color", "black");
+		checkNic = true; // 중복 검사 생략
+	}
+}
 
 //-----------------------------------------------------------------------
 // [ 수정완료 버튼 ]
 function myInfoModify(){
 	event.preventDefault(); // 조건 만족 전에 폼 제출 되는 것을 막음
 	
-	// 기존 비밀번호 확인
-    let oldPasswd = $("#old_passwd").val();
+    //--------------------------------------------
+    // 닉네임 변경시 중복 검사(기존 닉네임과 같을 경우에는 유지) 함수 호출
+	// 비동기 처리이므로, 반드시 ckReNick이 true인 상태에서만 폼을 제출하도록 해야 함
+    ckReNick();
     
+    if (!checkNic) {
+        alert("닉네임 중복 여부를 확인해주세요.");
+        console.log("닉네임 중복 확인 실패");
+        return false;
+    }
+    
+	// 기존 비밀번호 필수 입력 확인
+    let oldPasswd = $("#old_passwd").val().trim(); // 공백제거
     if (!oldPasswd) {
         alert("기존 비밀번호를 입력해주세요.");
         return false;
@@ -426,34 +453,21 @@ function myInfoModify(){
     // 새 비밀번호와 확인 비밀번호의 유효성 검사
     let newPasswd1 = $("#mem_passwd1").val();
     let newPasswd2 = $("#mem_passwd2").val();
-    if (!newPasswd1 || !newPasswd2) {
-        alert("새 비밀번호를 입력하고 확인해주세요.");
-        return false;
+    if (newPasswd1 || newPasswd2) {
+		if(!newPasswd1 || !newPasswd2){
+	        alert("새 비밀번호를 입력하고 확인해주세요.");
+	        return false;
+			
+		}
+		if (newPasswd1 !== newPasswd2) {
+            alert("새 비밀번호가 일치하지 않습니다.");
+            return false;
+        }
     }
 
-    if (newPasswd1 !== newPasswd2) {
-        alert("새 비밀번호가 일치하지 않습니다.");
-        return false;
-    }
-
-    // 닉네임 중복 검사 결과 확인
-//    if (!checkNic) {
-//        alert("닉네임 중복 여부를 확인해주세요.");
-//        console.log("닉네임 중복 확인 실패");
-//        return false;
-//    }
-
-    // 비밀번호 검사 결과 확인
-    if (!checkPasswd1) {
-        alert("비밀번호가 유효하지 않습니다.");
-//        console.log("비밀번호 유효성 검사 실패");
-        return false;
-    }
-	
     //--------------------------------------------
 	// 수정 폼 제출
 	$("#myInfo").submit();
+	
 };
 
-// 폼의 submit 이벤트 리스너에 checkSubmit 함수 등록
-$("#myInfo").on("submit", checkSubmit);

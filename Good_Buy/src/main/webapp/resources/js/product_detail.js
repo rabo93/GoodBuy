@@ -27,7 +27,7 @@ $(function(){
 			location.reload();
 		}).fail(function() {
 			alert("찜 삭제실패!\n나중에 다시 시도해주세요.");
-			modalClose();
+			location.reload();
 		});
 	}
 	
@@ -47,7 +47,7 @@ $(function(){
 			location.reload();
 		}).fail(function() {
 			alert("찜 등록실패!\n나중에 다시 시도해주세요.");
-			modalClose();
+			location.reload();
 		});
 	}
 	
@@ -64,10 +64,10 @@ $(function(){
 			},
 		}).done(function(response){
 			alert(decodeURIComponent(response).replaceAll("+", " "));
-			modalClose();
+			location.reload();
 		}).fail(function() {
 			alert(decodeURIComponent(response).replaceAll("+", " "));
-			modalClose();
+			location.reload();
 		});
 	}
 	
@@ -101,10 +101,10 @@ $(function(){
 			},
 		}).done(function(response){
 			alert(decodeURIComponent(response).replaceAll("+", " "));
-			modalClose();
+			location.reload();
 		}).fail(function() {
 			alert(decodeURIComponent(response).replaceAll("+", " "));
-			modalClose();
+			location.reload();
 		});
 	})
 	

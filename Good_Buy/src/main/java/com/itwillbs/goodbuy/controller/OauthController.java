@@ -30,7 +30,8 @@ public class OauthController {
 	private MemberService memberService;
 	//-----------------------------------------------------
 	// [카카오 로그인 -> callback]
-	// RedirectURI : http://localhost:8081/kakaologin
+	// RedirectURI : http://localhost:8081/kakaologin 
+	// RedirectURI : http://c3d2407t1p2.itwillbs.com//kakaologin
 	// REST API 키 : 6a7a7bde7898c6d7f7c08a7a14bad8e9
 	@RequestMapping("/kakaologin")
 	public String kakaoAuth(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception{
@@ -80,7 +81,7 @@ public class OauthController {
 	}  
 	
 	// ===========================================================================================
-	// [ 최초 1회 비밀번호 등록 ]
+	// [ 최초 1회 비밀번호 등록 => 회원수정/탈퇴를 위해]
 	@LoginCheck(memberRole = MemberRole.USER)
 	@PostMapping("PwRegist")
 	public String pwRegist(String mem_passwd, HttpSession session, BCryptPasswordEncoder passwordEncoder,Model model) {

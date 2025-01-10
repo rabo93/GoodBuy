@@ -54,7 +54,6 @@
 					<a href="MyReview">나의 후기</a>
 					<a href="MyReviewHistory">내가 쓴 후기</a>
 					<a href="MySupport"  class="active">1:1문의내용</a>
-					<a href="">나의 광고</a>
 				</aside>
 				<div class="my-container">
 					<div class="contents-ttl">1:1문의 게시판</div>

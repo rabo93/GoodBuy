@@ -34,7 +34,7 @@ public class ProductService {
 		return mapper.searchProductList(product_category);
 	}
 		
-	public List<ProductOrderVO> getOrderList(String id) {
+	public List<Map<String, String>> getOrderList(String id) {
 		return mapper.selectOrderList(id);
 	}
 

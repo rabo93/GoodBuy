@@ -44,14 +44,14 @@
                         <h3>거래 정보</h3>
                         <a href="MyStore">나의 상점</a>
                         <a href="GoodPay">굿페이</a>
-                        <a href="MyOrder" class="active">구매내역</a>
+                        <a href="MyOrder">구매내역</a>
                         <a href="MySales">판매내역</a>
                         <h3>나의 정보</h3>
                         <a href="MyInfo">계정정보</a>
                         <a href="MyWish">관심목록</a>
                         <a href="MyReview">나의 후기</a>
                         <a href="MyReviewHistory">내가 쓴 후기</a>
-                        <a href="MySupport">1:1문의내역</a>
+                        <a href="MySupport" class="active">1:1문의내역</a>
                     </aside>
 			<div class="my-container">
 				<div class="contents-ttl">1:1 문의</div>

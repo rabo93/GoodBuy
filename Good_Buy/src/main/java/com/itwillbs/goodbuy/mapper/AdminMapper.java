@@ -80,6 +80,15 @@ public interface AdminMapper {
 	// 회원 경고횟수에 따른 계정 상태(등급) 업데이트
 	int updateUserStatus(String memId);
 	
+	// 회원 신고 기록 목록 조회
+	List<Map<String, Object>> selectReportHistory(String mem_id);
+
+	// 회원 신고 채팅방 대화내역 조회
+	List<Map<String, Object>> selectReportChatHistory(String room_id);
+
+	// 신고 채팅방 상세
+	Map<String, Object> selectChatDetail(String room_id);
+	
 	//---------------------------------------------------------
 	// 신고 상품 목록 전체 컬럼 수 조회
 	int selectProductReportTotal();
@@ -142,10 +151,6 @@ public interface AdminMapper {
 	// 답글 등록(수정)
 	int updateReplyInfo(Map<String, Object> param);
 
-	// =====================================================
-	// 로그 저장
-	int insertLog(@Param("log") Map<String, Object> result);
-	// =====================================================
 	
 	//---------------------------------------------------------
 	// 결제 관리
@@ -156,7 +161,6 @@ public interface AdminMapper {
 	
 	// 필터링 된 상품 거래 목록 가져오기
 	List<ProductOrderVO> selectOrderList(@Param("param") Map<String, Object> param);
-
 	// --------------------------------------------------------
 	// [ 로그 ]
 	// 로그 목록 전체 컬럼 수 조회
@@ -167,15 +171,37 @@ public interface AdminMapper {
 	
 	// 필터링 된 로그 목록 조회
 	List<MemberVO> selectLogList(@Param("param")Map<String, Object> param);
+	// ========================================================
+	// 로그 저장
+	int insertLog(@Param("log") Map<String, Object> result);
+	// ========================================================
+	// [ 통계 ]
+	// 등록된 상품 건수
+	int selectTotalProducts();
 
-	// 회원 신고 기록 목록 조회
-	List<Map<String, Object>> selectReportHistory(String mem_id);
+	// 진행중인 거래 건수
+	int selectActiveTrades();
 
-	// 회원 신고 채팅방 대화내역 조회
-	List<Map<String, Object>> selectReportChatHistory(String room_id);
+	// 완료된 거래 건수
+	int selectCompleteTrades();
 
-	// 신고 채팅방 상세
-	Map<String, Object> selectChatDetail(String room_id);
+	// 미처리 된 신고 건수 (모든 신고 합쳐서)
+	int selectPendingReports();
+
+	// 신규 가입자 수
+	int selectNewUsers();
+
+	// 전체 회원 수
+	int selectTotalUsers();
+
+	// 가격대별 상품 분포
+	Map<String, Object> selectPriceRange();
+	
+	// 카테고리별 통계
+	List<Map<String, String>> selectCategoryStatus();
+
+	// 최근 7일간 거래 목록
+	List<Map<String, Object>> selectTransactionList();
 
 
 	

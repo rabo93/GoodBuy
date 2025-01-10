@@ -183,6 +183,21 @@ public class AdminService {
 			System.out.println("계정 상태 변경 : " + updateStatus);
 		}
 	}
+
+	// 회원 신고 기록 목록
+	public List<Map<String, Object>> getReportHistory(String mem_id) {
+		return mapper.selectReportHistory(mem_id);
+	}
+
+	// 회원 신고 채팅방 대화내역 조회
+	public List<Map<String, Object>> getReportedChatHistory(String room_id) {
+		return mapper.selectReportChatHistory(room_id);
+	}
+
+	// 신고 채팅방 상세
+	public Map<String, Object> getChatDetail(String room_id) {
+		return mapper.selectChatDetail(room_id);
+	}
 	
 	// [ 신고 상품 관리 ]
 	// 신고 상품 목록 전체 컬럼 수 조회
@@ -288,17 +303,6 @@ public class AdminService {
 		return mapper.updateReplyInfo(param);
 	}
 
-	// =========================================================================
-	// 로그 저장
-	// @Transactional(propagation = Propagation.REQUIRES_NEW)
-	// => Spring 트랜잭션 관리에서 트랜잭션의 전파 속성(Propagation)을 설정하는 옵션 중 하나
-	//    새로운 트랜잭션 생성, 독립적인 트랜잭션, 롤백 및 커밋의 독립성 특성을 지님
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public int registLog(Map<String, Object> result) {
-		return mapper.insertLog(result);
-	}
-	// =========================================================================
-
 	// ============== [ 결제 관리 ] ==============
 	// 상품 거래 목록 전체 컬럼 수 조회
 	public int getOrderListTotal() {
@@ -328,27 +332,64 @@ public class AdminService {
 		return mapper.selectLogList(param);
 	}
 
-	// 회원 신고 기록 목록
-	public List<Map<String, Object>> getReportHistory(String mem_id) {
-		return mapper.selectReportHistory(mem_id);
+	
+
+	// =========================================================================
+	// 로그 저장
+	// @Transactional(propagation = Propagation.REQUIRES_NEW)
+	// => Spring 트랜잭션 관리에서 트랜잭션의 전파 속성(Propagation)을 설정하는 옵션 중 하나
+	//    새로운 트랜잭션 생성, 독립적인 트랜잭션, 롤백 및 커밋의 독립성 특성을 지님
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public int registLog(Map<String, Object> result) {
+		return mapper.insertLog(result);
+	}
+	// =========================================================================
+
+	// ===================== [ 메인 통계 ] =========================
+	// 등록된 상품 건수
+	public int getTotalProducts() {
+		return mapper.selectTotalProducts();
 	}
 
-	// 회원 신고 채팅방 대화내역 조회
-	public List<Map<String, Object>> getReportedChatHistory(String room_id) {
-		return mapper.selectReportChatHistory(room_id);
+	// 진행중인 거래 건수
+	public int getActiveTrades() {
+		return mapper.selectActiveTrades();
 	}
 
-	// 신고 채팅방 상세
-	public Map<String, Object> getChatDetail(String room_id) {
-		return mapper.selectChatDetail(room_id);
+	// 완료된 거래 건수
+	public int getCompleteTrades() {
+		return mapper.selectCompleteTrades();
+	}
+
+	// 미처리 된 신고 건수 (모든 신고 합쳐서)
+	public int getPendingReports() {
+		return mapper.selectPendingReports();
+	}
+
+	// 신규 가입자 수
+	public int getNewUsers() {
+		return mapper.selectNewUsers();
+	}
+
+	// 전체 회원 수
+	public int getTotalUsers() {
+		return mapper.selectTotalUsers();
 	}
 	
+	// 가격대별 상품 분포
+	public Map<String, Object> getPriceRange() {
+		return mapper.selectPriceRange();
+	}
 	
-//	// 답글 등록(수정)
-//	public int registReplyInfo(Map<String, Object> param) {
-//		return mapper.updateReplyInfo(param);
-//	}
+	// 카테고리별 통계
+	public List<Map<String, String>> getCategoryStatus() {
+		return mapper.selectCategoryStatus();
+	}
 
-
+	// 최근 7일간 거래 통계
+	public List<Map<String, Object>> getTransactionList() {
+		return mapper.selectTransactionList();
+	}
+	
 	
 }

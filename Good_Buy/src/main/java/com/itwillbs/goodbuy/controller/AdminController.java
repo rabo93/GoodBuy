@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.itwillbs.goodbuy.aop.AdminLog;
 import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
@@ -50,9 +51,70 @@ public class AdminController {
 	// 관리자 메인
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmMain")
-	public String admMain() {
+	public String admMain(Model model) {
+		
+		 // 등록된 상품 건수
+		int totalProducts = service.getTotalProducts();
+		// 진행중인 거래 건수
+		int activeTrades = service.getActiveTrades();
+		// 완료된 거래 건수
+		int completeTrades = service.getCompleteTrades();
+		// 미처리 된 신고 건수 (모든 신고 합쳐서)
+		int pendingReports = service.getPendingReports();
+		// 신규 가입자 수
+		int newUsers = service.getNewUsers();
+		// 전체 회원 수
+		int totalUsers = service.getTotalUsers();
+		
+		// 최근 7일간 거래 통계
+		
+		model.addAttribute("totalProducts", totalProducts);
+		model.addAttribute("activeTrades", activeTrades);
+		model.addAttribute("completeTrades", completeTrades);
+		model.addAttribute("pendingReports", pendingReports);
+		model.addAttribute("newUsers", newUsers);
+		model.addAttribute("totalUsers", totalUsers);
+		
 		return "admin/index";
 	}
+	
+	@ResponseBody
+	@PostMapping("PriceRangeChart")
+	public String priceRangeChart() {
+		// 가격대별 상품 분포
+		Map<String, Object> priceRange = service.getPriceRange();
+		System.out.println("priceRange : " + priceRange);
+		
+		return new Gson().toJson(priceRange);
+	}
+	
+	@ResponseBody
+	@PostMapping("CategoryStats")
+	public String categoryStats() {
+		// 카테고리별 통계
+		List<Map<String, String>> categoryStats = service.getCategoryStatus();
+		System.out.println("categoryStats : " + categoryStats);
+		
+		return new Gson().toJson(categoryStats);
+	}
+	
+	@ResponseBody
+	@PostMapping("WeeklyTransaction")
+	public String WeeklyTransaction() {	
+			// 공통코드 전체 목록 조회
+			List<Map<String, Object>> transactionList = service.getTransactionList();
+			
+			// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
+			Map<String, Object> response = new HashMap<String, Object>();
+			
+			response.put("transactionList", transactionList); // 컬럼 데이터
+			
+			JSONObject jo = new JSONObject(response);
+			
+			return jo.toString();
+	}
+	
+	
 	// ======================================================
 	// [ 공통코드 관리 ]
 	// 공통코드 관리 - 등록 폼 요청
@@ -422,6 +484,7 @@ public class AdminController {
 	}
 	
 	// 신고 회원 목록 - 조치하기(+ 수정하기)
+	@AdminLog
 	@PostMapping("AdmUserReportModify")
 	public String admUserReportModify(@RequestParam Map<String, Object> param, Model model) {
 		log.info(">>> 신고 조치 : " + param);
@@ -615,7 +678,6 @@ public class AdminController {
 	}
 	
 	// [ FAQ 목록 조회 ]
-	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("FaqListForm")
 	public String admFaqListForm(@RequestParam Map<String, String> param) {
@@ -647,7 +709,6 @@ public class AdminController {
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 수정 ]
 	@AdminLog
-	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmFaqModify")
 	public String admFaqModify(@RequestParam Map<String, Object> param, Model model) {
 //		log.info(">>> 수정할 faq 정보: " + param);
@@ -667,7 +728,6 @@ public class AdminController {
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 삭제 ]
 	@AdminLog
-	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@ResponseBody
 	@PostMapping("AdmFaqDelete")
 	public Map<String, Object> admFaqDelete(@RequestBody List<Integer> faqIds) {
@@ -691,6 +751,7 @@ public class AdminController {
 	
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 사용여부 실시간 업데이트 ]
+	@AdminLog
 	@ResponseBody
 	@PostMapping("UpdateFaqStatus")
 	public Map<String, Object> updateFaqStatus(@RequestParam Map<String, String> param) {
@@ -716,10 +777,31 @@ public class AdminController {
 	// ======================================================
 	// [ 통계 ]
 	// 통계 차트 페이지
+	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmChartList")
 	public String admChartList() {
 		return "admin/chart_list";
 	}
+	
+	
+	
+	//-----------------------------------------------------
+	// 기간별 통계 페이지
+	@LoginCheck(memberRole = MemberRole.ADMIN)
+	@GetMapping("PeriodAnalysis")
+	public String periodAnalysis() {
+		return "admin/period_analysis";
+	}
+	
+	@ResponseBody
+	@PostMapping("PeriodAanalysis")
+	public String periodAanalysis() {
+		
+		
+		return "";
+	}
+	
+	
 	
 	
 	// ======================================================
@@ -753,6 +835,8 @@ public class AdminController {
 		
 		return jo.toString();
 	}
+	
+	
 	
 	
 	// ======================================================

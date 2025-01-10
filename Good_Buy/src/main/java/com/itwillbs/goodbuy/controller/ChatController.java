@@ -1,5 +1,6 @@
 package com.itwillbs.goodbuy.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,30 +31,30 @@ public class ChatController {
 	@Autowired
 	private FileHandler fileHandler;
 	
+	//	채팅 메인페이지 이동(팝업창)
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("ChatMain")
-	public String chatMain(HttpSession session,Model model) {
+	public String chatMain(HttpSession session, Model model) {
 		String sId = (String)session.getAttribute("sId");
-		System.out.println("sId : " + sId);
+		//	대화중인 채팅방 조회
 		List<ChatRoom> chatRoom = chatService.selectChatRoomList(sId);
-		System.out.println(chatRoom);
-		model.addAttribute("chatRoomList", chatRoom);
+		//	최근 채팅메세지를 저장하기위한 List 객체 생성
+		List<ChatMessage> chatMessage = new ArrayList<ChatMessage>();
+		for (ChatRoom chatRoomList : chatRoom) {
+			//	최근 메세지 List 객체에 저장
+			chatMessage.add(chatService.selectLastMessage(chatRoomList.getRoom_id()));
+		}
 		
+		model.addAttribute("chatRoomList", chatRoom);
+		model.addAttribute("chatMessageList", chatMessage);
 		
 		return "chat/chat_list";
 	}
 	
-//	@GetMapping("ChatStart")
-//	public String chatStart() {
-//		
-//		return "chat/chatting";
-//	}
-	
+	//	기존 채팅방 존재여부 판단
 	@ResponseBody
 	@PostMapping("ChatRoomAjax")
 	public String chatRoomAjax(@RequestParam Map<String, String> map) {
-		System.out.println("asdfasdfasdf");
-		System.out.println("ChatRoomAjax");
 		System.out.println(map);
 		String sender_id = map.get("sender_id");
 		String receiver_id = map.get("receiver_id");
@@ -75,6 +76,7 @@ public class ChatController {
 		return chatMessageList;
 	}
 	
+	//	채팅방에서 회원 신고 작업
 	@ResponseBody
 	@PostMapping("ChatReport")
 	public String chatReport(@RequestParam Map<String, String> map) {
@@ -87,6 +89,7 @@ public class ChatController {
 		int product_id = Integer.parseInt(map.get("product_id"));
 		//	변수를 통해 room_id 가져오기
 		String room_id = chatService.selectChatRoom(reporter_id, reported_id, product_id).getRoom_id();
+		System.out.println(room_id);
 		//	신고 접수 요청
 		int result = chatService.insertChatReport(reporter_id, reported_id, reason, room_id);
 		

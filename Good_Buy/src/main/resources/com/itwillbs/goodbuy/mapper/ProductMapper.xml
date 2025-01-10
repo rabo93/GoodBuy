@@ -33,9 +33,33 @@
 		 WHERE MEM_ID = #{mem_id}
 	</select>
 	
+	<!-- 통합검색 결과 조회 -->
+	<select id="totalSearch" resultType="map">
+		SELECT 
+			pro.PRODUCT_PIC1
+			, pro.PRODUCT_CATEGORY
+			, pro.PRODUCT_TRADE_ADR1
+			, pro.PRODUCT_ID
+			, pro.PRODUCT_TITLE
+			, pro.PRODUCT_PRICE
+			, mem.MEM_NICK
+			, REPLACE(FORMAT(pro.PRODUCT_REG_DATE, 'yyyyMMddHHmmss'), ',', '') AS PRODUCT_REG_DATE
+			, pro.PRODUCT_REG_DATE
+			, pro.PRODUCT_STATUS
+		FROM PRODUCT pro
+		JOIN MEMBER mem
+		ON pro.MEM_ID = mem.MEM_ID
+		WHERE 
+		mem.MEM_NICK LIKE #{searchKeyword}
+		OR pro.MEM_ID LIKE #{searchKeyword}
+		OR pro.PRODUCT_TITLE LIKE #{searchKeyword}
+		OR pro.PRODUCT_INTRO LIKE #{searchKeyword}
+		OR pro.PRODUCT_TRADE_ADR1 LIKE #{searchKeyword};
+	</select>
+	
 	<!-- 새 상품ID 조회 -->
 	<select id="newProductId" resultType="int">
-		SELECT MAX(PRODUCT_ID) + 1
+		SELECT IFNULL(MAX(PRODUCT_ID), 0) + 1
 		FROM PRODUCT;
 	</select>
 	

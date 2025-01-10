@@ -35,7 +35,7 @@
     </li>
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#menu03" aria-expanded="true" aria-controls="menu03">
-        	<i class="fa-solid fa-credit-card"></i> <span>결제 관리</span>
+        	<i class="fa-solid fa-credit-card"></i> <span>거래 관리</span>
         </a>
         <div id="menu03" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">

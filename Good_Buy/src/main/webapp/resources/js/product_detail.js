@@ -71,28 +71,41 @@ $(function(){
 		});
 	}
 	
-	$(document).ready(function(){
-		$(".modal-otherReason").text($("select[name=modal-sb] option:selected").val());
-		$("select[name=modal-sb]").change(function(){
-			if ($("select[name=modal-sb] option:selected").text() === "기타") {
-				$(".modal-otherReason").removeAttr("readonly");
-				$(".modal-otherReason").val("");
-				$(".modal-otherReason").attr("placeholder", "기타 사유를 입력해주세요.");
-			} else {
-				$(".modal-otherReason").attr("readonly", "readonly");
-				$(".modal-otherReason").val($("select[name=modal-sb] option:selected").val());
-			}
-		});
-	})
+	$(".modal-otherReason").text($("select[name=modal-sb] option:selected").val());
+	$("select[name=modal-sb]").change(function(){
+		if ($("select[name=modal-sb] option:selected").text() === "기타") {
+			$(".modal-otherReason").removeAttr("readonly");
+			$(".modal-otherReason").val("");
+			$(".modal-otherReason").attr("placeholder", "기타 사유를 입력해주세요.");
+		} else {
+			$(".modal-otherReason").attr("readonly", "readonly");
+			$(".modal-otherReason").val($("select[name=modal-sb] option:selected").val());
+		}
+	});
 	
 	$("#shop-detail").on('click', onClickShopDetail)
 	function onClickShopDetail() {
 		location.href='ProductShop?MEM_NICK=' + $("#item-seller-nick").text();
 	}
 	
-	$("#editItem").on('click', onClickItemEdit)
-	function onClickItemEdit() {
+	$("#editItem").on('click', function() {
 		location.href='ProductEdit?Product_ID=' + url.searchParams.get('PRODUCT_ID');
-	}
+	})
+	
+	$("#removeItem").on('click', function() {
+		$.ajax({
+			url: "ItemRemove",
+			type: "GET",
+			data: {
+				PRODUCT_ID: url.searchParams.get('PRODUCT_ID'),
+			},
+		}).done(function(response){
+			alert(decodeURIComponent(response).replaceAll("+", " "));
+			modalClose();
+		}).fail(function() {
+			alert(decodeURIComponent(response).replaceAll("+", " "));
+			modalClose();
+		});
+	})
 	
 })

@@ -10,8 +10,8 @@
 			<a href="/"><h1><img src="${pageContext.request.contextPath}/resources/img/new_logo.svg" alt="굿바이"></h1></a>
 		</div>
 		<div class="hd-sch">
-			<form action="" method="get">
-				<input type="text" name="" class="sch-input" placeholder="어떤 상품을 찾으시나요?">
+			<form action="TotalSearch" method="get">
+				<input type="text" name="searchKeyword" class="sch-input" placeholder="어떤 상품을 찾으시나요?">
 				<button type="submit" class="sch-submit">
 					<i class="fa-solid fa-magnifying-glass"></i>
 				</button>

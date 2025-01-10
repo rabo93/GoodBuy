@@ -68,10 +68,6 @@
 							<h3>굿페이 메인</h3>
 						</div>
 						<div class="contents">
-							송금은 계좌번호가 떠야되는 것이 아니고 물건 산 내역이 떠야함
-							전체 이용 내역에도 마찬가지 임
-							
-							페이 결제하면 무조건 여기에 뜨니까 맞춰야 id와 내역을 맞춰야 함.
 							
 							<div class="goodpay-container">
 								<c:if test="${empty recieverTransactionInfo }">
@@ -116,17 +112,16 @@
 															</c:forEach>
 														</select>
 														<input type="hidden" name="deposit_client_name" value="${deposit_client_name}">
-														<input type="hidden" name="tran_amt" value="10000"> 
 													
 														<div class="input-section">
-<!-- 															거래금액 <input type="text" name="tran_amt" value="5000">  -->
-											            	<input type="text" class="input-label" placeholder="금액을 입력해 주세요" id="total-amount">
+											            	<input type="text" class="input-label" pattern="[0-9]+" title="숫자만 입력하세요" 
+											            	placeholder="금액을 입력해 주세요" id="total-amount">
 										        		</div>
 											            <div class="balance-info">굿페이 잔액: <strong>${payAmount} 원</strong></div>
 											            <div class="amount-btns">
-												            <input type="button" class="amount-btn" onclick="addAmount(10000, 're')" value="+ 1만원">
-												            <input type="button" class="amount-btn" onclick="addAmount(50000, 're')" value="+ 5만원">
-												            <input type="button" class="amount-btn" onclick="addAmount(100000, 're')" value="+ 10만원">
+												            <input type="button" class="amount-btn" name="tran_amt" onclick="addAmount(10000, 're')" value="+ 1만원">
+												            <input type="button" class="amount-btn" name="tran_amt" onclick="addAmount(50000, 're')" value="+ 5만원">
+												            <input type="button" class="amount-btn" name="tran_amt" onclick="addAmount(100000, 're')" value="+ 10만원">
 												        </div>
 												        <div class="recharge-button">
 												            <button class="recharge-btn">환불하기</button>
@@ -159,17 +154,19 @@
 														</select>
 													
 														<input type="hidden" name="withdraw_client_name" value="${withdraw_client_name}">
-														<input type="hidden" name="tran_amt" value="5000">	
+<!-- 														<input type="hidden" name="tran_amt" value="5000">	 -->
+														<input type="hidden" name="tran_amt" value="">
 													
 														<div class="input-section">
 <!-- 															거래금액 <input type="text" name="tran_amt" value="5000">  -->
-											            	<input type="text" class="input-label" placeholder="금액을 입력해 주세요" id="total-amount-charge">
+											            	<input type="text" class="input-label" pattern="[0-9]+" title="숫자만 입력하세요" 
+											            	placeholder="금액을 입력해 주세요" id="total-amount-charge">
 										        		</div>
 											            <div class="balance-info">굿페이 잔액: <strong>${payAmount} 원</strong></div>
 											            <div class="amount-btns">
-												            <input type="button" class="amount-btn" onclick="addAmount(10000,ch)" value="+ 1만원">
-												            <input type="button" class="amount-btn" onclick="addAmount(50000,ch)" value="+ 5만원">
-												            <input type="button" class="amount-btn" onclick="addAmount(100000,ch)" value="+ 10만원">
+												            <input type="button" class="amount-btn" onclick="addAmount(10000,'ch')" value="+ 1만원">
+												            <input type="button" class="amount-btn" onclick="addAmount(50000,'ch')" value="+ 5만원">
+												            <input type="button" class="amount-btn" onclick="addAmount(100000,'ch')" value="+ 10만원">
 												        </div>
 												        <div class="recharge-button">
 												            <button class="recharge-btn">충전하기</button>

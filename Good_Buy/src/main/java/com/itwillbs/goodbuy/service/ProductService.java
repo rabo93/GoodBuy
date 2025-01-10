@@ -16,8 +16,8 @@ public class ProductService {
 	@Autowired
 	private ProductMapper mapper;
 
-	public int registProduct(ProductVO product, String id) {
-		return mapper.insertProduct(product, id);
+	public int registProduct(ProductVO product, String sId) {
+		return mapper.insertProduct(product, sId);
 	}
 		
 	//판매 상품목록 조회
@@ -90,29 +90,52 @@ public class ProductService {
 		return mapper.searchSameCategoryProduct(product_category, product_id);
 	}
 		
-	//판매상품 상위 4개 조회
+	// 판매상품 상위 4개 조회
 	public List<ProductVO> getProductListLimit(String id) {
 		return mapper.selectLimitProductList(id);
 	}
-
+	
+	// 개인상점페이지 조회
 	public Map<String, Object> searchSellerShop(String mem_nick) {
 		return mapper.searchSellerShop(mem_nick);
 	}
-
+	
+	// 판매자 리뷰 목록 조회
 	public List<Map<String, Object>> searchSellerReview(String mem_id) {
 		return mapper.searchSellerReview(mem_id);
 	}
-
+	
 	public Map<String, Object> productContent(int product_ID) {
 		return mapper.productContent(product_ID);
 	}
-
-	public int productUpdate(ProductVO product) {
-		return mapper.productUpdate(product);
+	
+	// 상품 수정 로직
+	public Object productUpdate(ProductVO product, int product_ID) {
+		return mapper.productUpdate(product, product_ID);
 	}
-
+	
+	// 상품수정시 기존사진주소 조회
 	public ProductVO getProductPic(int product_ID) {
 		return mapper.getProductPic(product_ID);
+	}
+	
+	// 상품등록시 새 상푸ID 가져오기
+	public int newProductId() {
+		return mapper.newProductId();
+	}
+	
+	// 상품 삭제 로직
+	public int productRemove(int product_ID) {
+		return mapper.productRemove(product_ID);
+	}
+	
+	// 판매자 리뷰 갯수 조회
+	public Map<String, Object> searchSellerScore(String mem_id) {
+		return mapper.searchSellerScore(mem_id);
+	}
+
+	public List<Map<String, Object>> totalSearch(String searchKeyword) {
+		return mapper.totalSearch(searchKeyword);
 	}
 
 }

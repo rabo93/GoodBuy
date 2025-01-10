@@ -20,6 +20,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Nunito:wght@200..1000&display=swap" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/adm/css/sb-admin-2.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/adm/css/adm.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.css" rel="stylesheet">
 
 </head>
 <body id="page-top">
@@ -173,7 +175,7 @@
                     <div class="row">
                     
                     	<!-- Area Chart -->
-                        <div class="col-xl-4 col-lg-4">
+                        <div class="col-xl-3 col-lg-3">
                             <div class="card shadow mb-4">
                                 <!-- Card Header -->
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -182,7 +184,7 @@
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div class="chart-area">
-<!--                                         <canvas id="priceRangeChart"></canvas> -->
+                                        <canvas id="priceRangeChart"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -198,7 +200,7 @@
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div class="chart-pie pt-4 pb-2">
-<!--                                         <canvas id="categoryStats"></canvas> -->
+                                        <canvas id="categoryStats"></canvas>
                                     </div>
                                     <div class="mt-4 text-center small">
                                         <span class="mr-2">
@@ -225,15 +227,19 @@
                         </div>
                         
                         <!-- Bar Chart -->
-                        <div class="col-xl-4 col-lg-4">
+                        <div class="col-xl-5 col-lg-5">
 	                        <div class="card shadow mb-4">
 	                            <div class="card-header py-3">
-	                                <h6 class="m-0 font-weight-bold text-primary">최근 7일간 거래 통계</h6>
+	                                <h6 class="m-0 font-weight-bold text-primary">최근 일주일간 중고거래</h6>
 	                            </div>
 	                            <div class="card-body">
-	                                <div class="chart-bar">
-<!-- 	                                    <canvas id="weeklyTransactionStats"></canvas> -->
-	                                </div>
+	                            	<div class="text-sm-right font-weight-bold"><a href="AdmProductOrderList">거래내역 보러가기 <i class="fa-solid fa-arrow-right"></i></a></div>
+	                            	<div class="table-responsive">
+		                                <table class="table table-bordered compact" id="transactionList" width="100%" cellspacing="0">
+		                                    <thead></thead>
+		                                    <tbody></tbody>
+		                                </table>
+		                          	</div>
 	                            </div>
 	                        </div>
                     	</div>
@@ -277,51 +283,15 @@
     <!-- Page level plugins -->
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/chart.js/Chart.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/moment.min.js"></script>
+	 <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 	
     <!-- Page level custom scripts -->
     <script src="${pageContext.request.contextPath}/resources/adm/js/index.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/adm/js/index_chart.js"></script>
     
     <script>
-    	const categoryStats = '${categoryStats}';
-    	let data = categoryStats.replaceAll('=', ':').replaceAll('{', '{"').replaceAll(':', '":').replaceAll('", ', '", "');
-    	data = JSON.parse(data);
-    	
-// 	 	// Pie Chart Example
-// 	    var ctx = document.getElementById("categoryStats");
-// 	    var myPieChart = new Chart(ctx, {
-// 	      type: 'doughnut',
-// 	      data: {
-// // 	        labels: ["여성의류", "남성의류", "레저/스포츠", "생활용품", "키즈", "도서"],
-// 			labels: data.map(e => e.PRODUCT_CATEGORY),
-// 	        datasets: [{
-// // 	          data: categoryStats,
-// 			  data: data.map(e => e.COUNT),
-// 	          backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#e83e8c', '#f6c23e', '#e74a3b'],
-// 	          hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#e83e8c', '#f6c23e', '#e74a3b'],
-// 	          hoverBorderColor: "rgba(234, 236, 244, 1)",
-// 	        }],
-// 	      },
-// 	      options: {
-// 	        maintainAspectRatio: false,
-// 	        tooltips: {
-// 	          backgroundColor: "rgb(255,255,255)",
-// 	          bodyFontColor: "#858796",
-// 	          borderColor: '#dddfeb',
-// 	          borderWidth: 1,
-// 	          xPadding: 15,
-// 	          yPadding: 15,
-// 	          displayColors: false,
-// 	          caretPadding: 10,
-// 	        },
-// 	        legend: {
-// 	          display: false
-// 	        },
-// 	        cutoutPercentage: 80,
-// 	      },
-// 	    });
-    
-    
+//     	const categoryStats = '${categoryStats}';
+//     	let data = categoryStats.replaceAll('=', ':').replaceAll('{', '{"').replaceAll(':', '":').replaceAll('", ', '", "');
     </script>
 
 </body>

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.itwillbs.goodbuy.aop.AdminLog;
 import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
@@ -64,10 +65,7 @@ public class AdminController {
 		int newUsers = service.getNewUsers();
 		// 전체 회원 수
 		int totalUsers = service.getTotalUsers();
-		// 가격대별 상품 분포
-//		Map<String, Object> priceRange = service.getPriceRange();
-		// 카테고리별 통계
-//		List<Map<String, String>> categoryStats = service.getCategoryStatus();
+		
 		// 최근 7일간 거래 통계
 		
 		model.addAttribute("totalProducts", totalProducts);
@@ -76,16 +74,44 @@ public class AdminController {
 		model.addAttribute("pendingReports", pendingReports);
 		model.addAttribute("newUsers", newUsers);
 		model.addAttribute("totalUsers", totalUsers);
-//		model.addAttribute("priceRange", priceRange);
-//		model.addAttribute("categoryStats", categoryStats);
 		
 		return "admin/index";
 	}
 	
 	@ResponseBody
-	@GetMapping("MainChart")
-	public String mainChart() {
-		return "";
+	@PostMapping("PriceRangeChart")
+	public String priceRangeChart() {
+		// 가격대별 상품 분포
+		Map<String, Object> priceRange = service.getPriceRange();
+		System.out.println("priceRange : " + priceRange);
+		
+		return new Gson().toJson(priceRange);
+	}
+	
+	@ResponseBody
+	@PostMapping("CategoryStats")
+	public String categoryStats() {
+		// 카테고리별 통계
+		List<Map<String, String>> categoryStats = service.getCategoryStatus();
+		System.out.println("categoryStats : " + categoryStats);
+		
+		return new Gson().toJson(categoryStats);
+	}
+	
+	@ResponseBody
+	@PostMapping("WeeklyTransaction")
+	public String WeeklyTransaction() {	
+			// 공통코드 전체 목록 조회
+			List<Map<String, Object>> transactionList = service.getTransactionList();
+			
+			// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
+			Map<String, Object> response = new HashMap<String, Object>();
+			
+			response.put("transactionList", transactionList); // 컬럼 데이터
+			
+			JSONObject jo = new JSONObject(response);
+			
+			return jo.toString();
 	}
 	
 	

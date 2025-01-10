@@ -49,8 +49,8 @@ public class OauthService {
 	        StringBuilder sb = new StringBuilder();
 	        sb.append("grant_type=authorization_code");
 	        sb.append("&client_id=6a7a7bde7898c6d7f7c08a7a14bad8e9");  		//REST_API_KEY 입력
-//	        sb.append("&redirect_uri=http://c3d2407t1p2.itwillbs.com/kakaologin");   //설정해 놓은 redirect_uri 주소
-	        sb.append("&redirect_uri=http://localhost:8081/kakaologin");   //설정해 놓은 redirect_uri 주소
+	        sb.append("&redirect_uri=http://c3d2407t1p2.itwillbs.com/kakaologin");   //설정해 놓은 redirect_uri 주소
+//	        sb.append("&redirect_uri=http://localhost:8081/kakaologin");   //설정해 놓은 redirect_uri 주소
 	        sb.append("&code=" + code);
 	        bw.write(sb.toString());
 	        bw.flush();

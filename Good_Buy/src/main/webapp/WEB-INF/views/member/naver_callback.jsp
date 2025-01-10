@@ -25,7 +25,8 @@
 <body>
 	<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
 	<script type="text/javascript">
-		var naver_id_login = new naver_id_login("v2NPkz3kuDJkYM_nAyMT", "http://localhost:8081/NaverCallback");
+// 		var naver_id_login = new naver_id_login("v2NPkz3kuDJkYM_nAyMT", "http://localhost:8081/NaverCallback");
+		var naver_id_login = new naver_id_login("v2NPkz3kuDJkYM_nAyMT", "http://c3d2407t1p2.itwillbs.com/NaverCallback");
 	  // 접근 토큰 값 출력
 // 		alert(naver_id_login.oauthParams.access_token);
 	  // 네이버 사용자 프로필 조회

@@ -39,8 +39,8 @@
 				    <h1 class="login-ttl">LOGIN</h1>
 				    <div class="login-box">
 		    			<a href="MemberLogin">ID/PW로 로그인</a>
-<!-- 		    			<a href="https://kauth.kakao.com/oauth/authorize?client_id=6a7a7bde7898c6d7f7c08a7a14bad8e9&redirect_uri=http://c3d2407t1p2.itwillbs.com/kakaologin&response_type=code" class="sns-login" > -->
-		    			<a href="https://kauth.kakao.com/oauth/authorize?client_id=6a7a7bde7898c6d7f7c08a7a14bad8e9&redirect_uri=http://localhost:8081/kakaologin&response_type=code" class="sns-login" >
+		    			<a href="https://kauth.kakao.com/oauth/authorize?client_id=6a7a7bde7898c6d7f7c08a7a14bad8e9&redirect_uri=http://c3d2407t1p2.itwillbs.com/kakaologin&response_type=code" class="sns-login" >
+<!-- 		    			<a href="https://kauth.kakao.com/oauth/authorize?client_id=6a7a7bde7898c6d7f7c08a7a14bad8e9&redirect_uri=http://localhost:8081/kakaologin&response_type=code" class="sns-login" > -->
 						   <i class="fa-solid fa-comment"></i>카카오톡으로 간편로그인
 						</a>
 						<div id="naver_id_login" ></div>

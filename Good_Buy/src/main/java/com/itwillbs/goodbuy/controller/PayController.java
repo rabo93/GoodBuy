@@ -283,6 +283,8 @@ public class PayController {
 	@PayTokenCheck
 	@PostMapping("PayWithdraw")
 	public String payWithdraw(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
+		String id = (String)session.getAttribute("sId");
+
 		// 엑세스토큰 정보가 저장된 BankToken 객체를 세션에서 꺼내기
 		PayToken token = (PayToken)session.getAttribute("token");
 
@@ -298,7 +300,7 @@ public class PayController {
 			model.addAttribute("msg", "출금실패 : " + withdrawResult.get("rsp_message"));
 			return "result/fail";
 		}
-		
+		withdrawResult.put("id", id);
 		// 사용자 번호를 출금이체 결과 객체에 추가 
 		withdrawResult.put("user_seq_no", token.getUser_seq_no());
 		
@@ -337,6 +339,7 @@ public class PayController {
 	@PayTokenCheck
 	@PostMapping("PayDeposit")
 	public String PayDeposit(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
+		String id = (String)session.getAttribute("sId");
 		PayToken token = (PayToken)session.getAttribute("token");
 
 		map.put("id", session.getAttribute("sId"));
@@ -354,6 +357,7 @@ public class PayController {
 			return "result/fail";
 		}
 				
+		depositResult.put("id", id);
 		// 사용자번호를 입금이체 결과 객체에 추가
 		depositResult.put("user_seq_no", token.getUser_seq_no());
 				

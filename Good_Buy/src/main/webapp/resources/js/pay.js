@@ -47,8 +47,11 @@ function closeModal(modal) {
 	}
 }
 
-function addAmount(amount) {
-//	console.log(amount);
+function addAmount(amount, type) {
+	console.log('type : ' + type);
+	total-amount-charge
+
+    const inputField = document.getElementById('total-amount-charge');
     const inputField = document.getElementById('total-amount');
     const currentValue = parseInt(inputField.value) || 0;  // 현재 값 가져오기 (없으면 0)
     inputField.value = currentValue + amount;  // 금액 추가

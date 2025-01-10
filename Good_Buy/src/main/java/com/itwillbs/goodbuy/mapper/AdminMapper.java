@@ -204,7 +204,4 @@ public interface AdminMapper {
 	List<Map<String, Object>> selectTransactionList();
 
 
-	
-
-
 }

@@ -129,13 +129,14 @@
         )
      </delete>
      
+     <!-- 공통코드 사용여부 업데이트 -->
      <update id="updateCommonCodeStatus">
      	UPDATE COMMONCODE
 		   SET 
-		   	<if test="param.ISCHECKED.equals('true')">
+		   	<if test='param.ISCHECKED.equals("1")'>
 			    CODE_STATUS = 1
 		   	</if>
-		   	<if test="param.ISCHECKED.equals('false')">
+		   	<if test='param.ISCHECKED.equals("2")'>
 			    CODE_STATUS = 2
 		   	</if>
 		 WHERE

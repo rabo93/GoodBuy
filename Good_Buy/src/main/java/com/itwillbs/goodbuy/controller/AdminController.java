@@ -209,7 +209,7 @@ public class AdminController {
 	@ResponseBody
 	@PostMapping("AdmDeleteCommonCode")
 	public Map<String, Object> admCommoncodeDelete(@RequestParam Map<String, Object> param) {
-//		log.info(">>> param : " + param);
+		log.info(">>> param : " + param);
 		
 		int deleteResult = service.removeCommonCode(param);
 		
@@ -227,20 +227,37 @@ public class AdminController {
 		return response;
 	}
 	
+	// 공통코드 관리 - 여러행 한번에 삭제
+	@LoginCheck(memberRole = MemberRole.ADMIN)
+	@ResponseBody
+	@PostMapping("AdmDeleteCommonCodeList")
+	public Map<String, Object> admCommoncodeListDelete(@RequestBody List<Map<String, Object>> param) {
+		log.info(">>> param : " + param);
+		
+		int deleteResult = service.removeCommonCode(param);
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		if(deleteResult > 0) {
+			response.put("status", "success");
+			response.put("message", "선택한 공통코드가 삭제되었습니다.");
+		} else {
+			response.put("status", "fail");
+			response.put("message", "공통코드 삭제에 실패했습니다. 삭제할 데이터를 확인하세요.");
+		}
+		
+		return response;
+	}
+	
 	// 공통코드 관리 - 사용함/안함 업데이트
 	@ResponseBody
 	@PostMapping("AdmCommonCodeChangeStatus")
 	public Map<String, Object> admCommoncodeChangeStatus(@RequestParam Map<String, String> param) {
-//		System.out.println(param);
-		
 		int updateResult = service.modifyCommonCodeStatus(param);
 		
 		Map<String, Object> response = new HashMap<String, Object>();
 		
 		if(updateResult > 0) {
 			response.put("status", "success");
-			response.put("message", "사용여부가 변경되었습니다.");
-			response.put("redirectURL", "/AdmCommoncodeList");
 		} else {
 			response.put("status", "fail");
 			response.put("message", "변경에 실패했습니다. 변경할 데이터를 확인하세요.");

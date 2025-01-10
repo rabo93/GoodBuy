@@ -33,34 +33,17 @@
 		 WHERE MEM_ID = #{mem_id}
 	</select>
 	
-	<!-- 통합검색 결과 조회 -->
-	<select id="totalSearch" resultType="map">
-		SELECT 
-			pro.PRODUCT_PIC1
-			, pro.PRODUCT_CATEGORY
-			, pro.PRODUCT_TRADE_ADR1
-			, pro.PRODUCT_ID
-			, pro.PRODUCT_TITLE
-			, pro.PRODUCT_PRICE
-			, mem.MEM_NICK
-			, REPLACE(FORMAT(pro.PRODUCT_REG_DATE, 'yyyyMMddHHmmss'), ',', '') AS PRODUCT_REG_DATE
-			, pro.PRODUCT_REG_DATE
-			, pro.PRODUCT_STATUS
-		FROM PRODUCT pro
-		JOIN MEMBER mem
-		ON pro.MEM_ID = mem.MEM_ID
-		WHERE 
-		mem.MEM_NICK LIKE #{searchKeyword}
-		OR pro.MEM_ID LIKE #{searchKeyword}
-		OR pro.PRODUCT_TITLE LIKE #{searchKeyword}
-		OR pro.PRODUCT_INTRO LIKE #{searchKeyword}
-		OR pro.PRODUCT_TRADE_ADR1 LIKE #{searchKeyword};
+	<!-- 헤더 카테고리 가져오기 -->
+	<select id="cateSearch" resultType="Map">
+		SELECT *
+		FROM COMMONCODE
+		WHERE CODETYPE_ID = 'category'
 	</select>
 	
 	<!-- 새 상품ID 조회 -->
 	<select id="newProductId" resultType="int">
 		SELECT IFNULL(MAX(PRODUCT_ID), 0) + 1
-		FROM PRODUCT;
+		FROM PRODUCT
 	</select>
 	
 	<!-- 상품 등록 -->
@@ -100,10 +83,13 @@
 			, REPLACE(FORMAT(pro.PRODUCT_REG_DATE, 'yyyyMMddHHmmss'), ',', '') AS PRODUCT_REG_DATE
 			, pro.PRODUCT_REG_DATE
 			, pro.PRODUCT_STATUS
-		FROM PRODUCT pro join MEMBER mem
+		FROM PRODUCT pro 
+		JOIN MEMBER mem
 		ON pro.MEM_ID = mem.MEM_ID
-		WHERE 
-			PRODUCT_CATEGORY = #{cate} 
+		JOIN COMMONCODE com
+		ON pro.PRODUCT_CATEGORY = com.CODE_NAME
+		WHERE  
+			com.CODE_ID = #{cate} 
 		<choose>
 			<when test="product_status == 0">
 				AND 
@@ -123,6 +109,14 @@
 		<if test="product_trade_adr1 != null">
 			AND
 				PRODUCT_TRADE_ADR1 LIKE CONCAT('%', #{product_trade_adr1}, '%')
+		</if>
+		<if test="search_keyword != null">
+			AND
+				mem.MEM_NICK LIKE CONCAT('%', #{search_keyword}, '%')
+				OR pro.MEM_ID LIKE CONCAT('%', #{search_keyword}, '%')
+				OR pro.PRODUCT_TITLE LIKE CONCAT('%', #{search_keyword}, '%')
+				OR pro.PRODUCT_INTRO LIKE CONCAT('%', #{search_keyword}, '%')
+				OR pro.PRODUCT_TRADE_ADR1 LIKE CONCAT('%', #{search_keyword}, '%')
 		</if>
 	</select>
 	

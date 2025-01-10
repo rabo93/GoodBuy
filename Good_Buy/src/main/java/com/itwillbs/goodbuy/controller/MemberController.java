@@ -292,7 +292,6 @@ public class MemberController {
 //        	System.out.println("인증정보 : " + mailAuthInfo);
         	result.put("success", true);
         	result.put("message", "임시 비밀번호가 발송되었습니다.");
-	        
 	    } else {
 	        result.put("success", false);
 	        result.put("message", "비밀번호 변경에 실패했습니다. 다시 시도해주세요.");
@@ -366,8 +365,8 @@ public class MemberController {
 			session.setAttribute("sProfile", member.getMem_profile());
 			model.addAttribute("member", member);
 			model.addAttribute("msg", "회원정보 수정 성공!");
-			return"mypage/mypage_info";
-			
+			model.addAttribute("targetURL", "MyInfo");
+			return"result/success";
 		} else {
 			model.addAttribute("msg", "회원정보 수정 실패!\\n다시 확인해주세요 ");
 			return"result/fail";

@@ -37,6 +37,7 @@ public interface ProductMapper {
 			@Param("price_end")int price_end, 
 			@Param("product_status")int product_status, 
 			@Param("product_trade_adr1")String product_trade_adr1,
+			@Param("search_keyword")String search_keyword,
 			@Param("cate")String product_category);
 	
 	// 상품 상세페이지 조회
@@ -50,7 +51,7 @@ public interface ProductMapper {
 
 	List<ProductVO> selectLimitProductList(String id);
 	
-// 상품 조회수 증가
+	// 상품 조회수 증가
 	void plusViewCount(int product_id);
 	
 	// 상품 찜여부 조회
@@ -83,7 +84,6 @@ public interface ProductMapper {
 	// 판매자 리뷰 갯수 조회
 	Map<String, Object> searchSellerScore(String mem_id);
 	
-	// 통합검색 조회
-	List<Map<String, Object>> totalSearch(String searchKeyword);
-	
+	// 헤더 카테고리 가져오기
+	List<Map<String, String>> cateSearch();
 }

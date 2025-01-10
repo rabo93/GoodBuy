@@ -8,44 +8,71 @@ $(document).ready(function() {
 		paging : true,
 		responsive: true, // 반응형
 		destroy: true,
+		scrollX: true, 
+		autoWidth: false,
 		ajax : {
 			url: "AdmCommoncodeListForm",
 			type: "POST",
 			dataType : "JSON",
+			data: function(d) {
+                d.searchValue = $('input[name="keyword_search"]').val();
+            },
 			dataSrc: function (res) {
-				return res.commonCodes;
+				const data = res.commonCodes;
+				const start = $('#codeList').DataTable().page.info().start; 
+				
+				// 고유번호(PK)가 아닌 단순 테이블 컬럼 번호 계산(페이징 포함)
+				for (let i = 0; i < data.length; i++) {
+					data[i].listIndex = start + i + 1;
+				}
+				return data;
 			},
 		},
-		order: [[0, 'asc']],
-		columnDefs: [],
+		order: [[2, 'desc']],
+		columnDefs: [
+			{ targets: [0, 1, 3, 4, 6, 7, 8, 9, 10], orderable: false},
+			{ targets: [0, 1, 8, 9, 10], searchable: false},
+		],
 		columns: [
-            { data : "CODETYPE_ID", orderable: true, },
-            { data : "CODETYPE_NAME", orderable: false, },
-            { data : "MAIN_DESC", orderable: false, },
-            { data : "CODE_ID", orderable: true, },
-            { data : "CODE_NAME", orderable: false, },
-            { data : "SUB_DESC", orderable: false, },
+			{
+				data: null,searchable: false, className : "dt-center", width: '60px',
+				render : function(data, type, row) {
+					const rowCount = codeList.rows().count() + 1;
+					return `
+						<div class="custom-control custom-checkbox small">
+							<input type="hidden" name="codetype_id" value="${data.CODETYPE_ID}">
+							<input type="hidden" name="code_id" value="${data.CODE_ID}">
+			               	<input type="checkbox" class="custom-control-input" id="customCheck${rowCount}">
+			                <label class="custom-control-label" for="customCheck${rowCount}"></label>
+						</div>
+					`;
+				}
+			},
+			{ data: "listIndex", className : "dt-center", width: '60px', },
+            { data : "CODETYPE_ID", },
+            { data : "CODETYPE_NAME" },
+            { data : "MAIN_DESC", },
+            { data : "CODE_ID", },
+            { data : "CODE_NAME", },
+            { data : "SUB_DESC", },
             { 
 				data : "CODE_STATUS",
-				orderable: false, // 정렬 비활성화
-            	searchable: false, // 검색 비활성화
+				width: "160px",
 				render: function(data, type, row) {
 					let isChecked = data == 1 ? "checked" : "";
 					let isUsed = data == 1 ? "사용함" : "사용안함";
                	 return `
                	 	<div class="form-check form-switch">
 		        		<input type="hidden" value="${data}" name="CODE_STATUS">
-						<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault_${row.CODE_ID}" ${isChecked} onchange="changeStatus('${row.CODETYPE_ID}', '${row.CODE_ID}', '${row.CODE_STATUS}')">
-						<label class="form-check-label" for="flexSwitchCheckDefault_${row.CODE_ID}">${isUsed}</label>
+						<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" data-codetype-id="${row.CODETYPE_ID}" data-code-id="${row.CODE_ID}" ${isChecked}>
+						<label class="form-check-label" for="flexSwitchCheckDefault">${isUsed}</label>
 					</div>
                	 `;
             	},
             },
-            { data : "CODE_SEQ", orderable: false, className: 'dt-center', type: "string", width: '5%', },
+            { data : "CODE_SEQ", className: 'dt-center', type: "string", width: '5%', },
             { 
 				data : null,
-				orderable: false,
-            	searchable: false, // 검색 비활성화
             	className : "dt-center", 
             	width: '13%',
             	render : function(data, type, row) {
@@ -81,16 +108,44 @@ $(document).ready(function() {
         },
 	});
 
+	// 기존 검색 숨기기
+	$("#codeList_filter").attr("hidden", "hidden");
+	
+	// 검색 버튼 클릭 시 테이블 다시 로드
+    $('#searchBtn').on('click', function() {
+        codeList.draw();
+    });
+
+    // 엔터키 입력으로 검색
+    $('#searchKeyword').on('keypress', function(e) {
+        if (e.which == 13) {
+            codeList.draw();
+        }
+    });
+    
+    // 등록 버튼 이동
+	$("#btnAddRow").on("click", function() {
+		window.location.href='AdmCommoncodeRegistForm';
+	});
+	
+	// 체크박스 전체 선택
+	const checkAll = $("#checkAll");
+	checkAll.on("change", function() {
+		codeList.rows().every(function (index) {
+	        const row = this.node(); // 현재 행
+	        const checkBox = row.querySelector(".custom-control-input");
+	        checkBox.checked = checkAll.is(":checked") ? true : false;
+	    });
+	});
+	
 	// 공통코드 테이블 컬럼 수정 팝업 셋팅
 	codeList.on("click", '.edit-btn', function() {
 		const row = $(this).closest('tr');
 		const rowData = codeList.row(row).data();
-//		let codeStatus = rowData.CODE_STATUS == 1 ? true : false;
-//		let codeStatusText = rowData.CODE_STATUS == 1 ? "사용함" : "사용안함";
-		let codeStatus = $(`#flexSwitchCheckDefault_${rowData.CODE_ID}`).is(':checked') ? true : false;
-		let codeStatusText = $(`#flexSwitchCheckDefault_${rowData.CODE_ID}`).is(':checked') ? "사용함" : "사용안함";
-//		console.log(rowData);
-		console.log(codeStatus);
+		const codeStatus = rowData.CODE_STATUS == 1 ? true : false;
+		const codeStatusText = rowData.CODE_STATUS == 1 ? "사용함" : "사용안함";
+		
+		console.log(rowData.CODE_SEQ);
 		
 		// 수정 전 기본 데이터 셋팅
 		$("#oldCodetypeId").val(rowData.CODETYPE_ID);
@@ -122,14 +177,11 @@ $(document).ready(function() {
 	    }
 	});
 	
-	// 선택한 컬럼 삭제
+	// 단일 행 삭제
 	$(document).on("click", '.delete-btn', function() {
-		if(confirm("해당 상세코드를 삭제하시겠습니까?")) {
+		if(confirm("해당 코드를 삭제하시겠습니까?")) {
 			const codetypeId = this.dataset.codetypeId;
 			const codeId = this.dataset.codeId;
-			
-			console.log(codetypeId);
-			console.log(codeId);
 			
 			$.ajax({
 				url : "AdmDeleteCommonCode",
@@ -141,7 +193,7 @@ $(document).ready(function() {
 				success: function(response){
 					alert(response.message);
 					if(response.status == 'success') {
-						window.location.href = response.redirectURL;
+						codeList.ajax.reload();
 					}
 				},
 				error : function(res) {
@@ -151,30 +203,75 @@ $(document).ready(function() {
 		}
 	});
 	
-	
-});
-
-// 사용여부 실시간 업데이트
-function changeStatus(codetypeId, codeId, status) {
-	let isChecked = status == 1 ? true : false;
-	let checkedText = isChecked ? "사용안함" : "사용함";
-	
-	$.ajax({
-		url : "AdmCommonCodeChangeStatus",
-		type : "POST",
-		data : {
-			"CODETYPE_ID" : codetypeId,
-			"CODE_ID" : codeId,
-			"ISCHECKED" : !isChecked
-		},
-		success: function(response){
-			alert(response.message);
-			if(response.status == 'success') {
-//				window.location.href = response.redirectURL;
+	// 다중 행 삭제
+	$(document).on("click", '#btnDeleteRow', function() {
+		let deletedItems = [];
+		
+		codeList.rows().every(function (index) {
+			const row = this.node();
+			const checkBox = row.querySelector(".custom-control-input");
+			const checkedCodeTypeId = row.querySelector("input[name='codetype_id']");
+			const checkedCodeId = row.querySelector("input[name='code_id']");
+			const deletedCode = {};
+			
+			if(checkBox.checked){
+				deletedCode.CODETYPE_ID = checkedCodeTypeId.value;
+				deletedCode.CODE_ID = checkedCodeId.value;
+				deletedItems.push(deletedCode);
 			}
-		},
-		error : function(res) {
-			alert(res.message);
+		});	
+		
+		if(deletedItems.length == 0) {
+			alert("삭제할 행을 선택하세요.");
+			return;
+		}
+			
+		if(confirm("선택한 행을 삭제하시겠습니까?\n삭제 후 복구가 불가능합니다.")) {
+			
+			console.log(deletedItems);
+			$.ajax({
+				url : "AdmDeleteCommonCodeList",
+				type : "POST",
+				contentType : 'application/json',
+				data: JSON.stringify(deletedItems),
+				success: function(response){
+					alert(response.message);
+					if(response.status == 'success') {
+						codeList.ajax.reload();
+					}
+				},
+				error : function(res) {
+					alert(res.message);
+				}
+			});
 		}
 	});
-}
+	
+	// 사용여부 실시간 업데이트
+	$(document).on("change", "#flexSwitchCheckDefault", function() {
+		const codetypeId = this.dataset.codetypeId;
+		const codeId = this.dataset.codeId;
+		const isChecked = this.checked ? 1 : 2;
+		
+		$.ajax({
+			url : "AdmCommonCodeChangeStatus",
+			type : "POST",
+			data : {
+				"CODETYPE_ID" : codetypeId,
+				"CODE_ID" : codeId,
+				"ISCHECKED" : isChecked
+			},
+			success: function(response){
+				if(response.status == 'success') {
+					 codeList.ajax.reload();
+				}
+			},
+			error : function(res) {
+				alert(res.message);
+			}
+		});
+	});
+	
+	
+	
+});

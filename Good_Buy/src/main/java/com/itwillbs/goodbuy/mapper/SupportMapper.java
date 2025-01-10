@@ -16,7 +16,8 @@ public interface SupportMapper {
 	SupportVO selectSupportDetail(int support_id);
 
 	List<SupportVO> selectSupportList(int startRow, int listLimit,
-									@Param("MEM_ID")String id);
+									@Param("MEM_ID")String id,
+									@Param("searchKeyword") String searchKeyword);
 
 	int selectSupportListCount(String id);
 	//1:1 글쓰기

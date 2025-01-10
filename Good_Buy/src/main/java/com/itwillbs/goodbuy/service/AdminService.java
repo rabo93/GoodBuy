@@ -73,17 +73,32 @@ public class AdminService {
 	@AdminLog
 	@Transactional
 	public int removeCommonCode(Map<String, Object> param) {
-		// 상위코드 삭제
+		// 하위코드 삭제
 		int deleteCommonCodeResult = mapper.deleteCommonCodes(param);
 		if(deleteCommonCodeResult == 0) {
-			log.info(">>> 삭제할 상위코드가 없습니다.");
+			log.info(">>> 삭제할 하위코드가 없습니다.");
 			throw new RuntimeException("공통코드 삭제에 실패했습니다.");
 		}
 		
-		// 하위코드 삭제
+		// 사용되지않는 공통코드(상위코드) 삭제
 		int deleteDeprecatedCommonCodeResult = mapper.deleteDeprecatedCommonCode();
 		
         return deleteCommonCodeResult + deleteDeprecatedCommonCodeResult;
+	}
+	
+	// 공통코드 여러컬럼 삭제(오버로딩)
+	@AdminLog
+	@Transactional
+	public int removeCommonCode(List<Map<String, Object>> param) {
+		int deleteCommonCodeResult = 0;
+		for(Map<String, Object> item : param) {
+			deleteCommonCodeResult = mapper.deleteCommonCodes(item);
+		}
+		
+		// 사용되지않는 공통코드(상위코드) 삭제
+		int deleteDeprecatedCommonCodeResult = mapper.deleteDeprecatedCommonCode();
+		
+		return deleteCommonCodeResult + deleteDeprecatedCommonCodeResult;
 	}
 
 	// 공통코드 사용여부 실시간 변경

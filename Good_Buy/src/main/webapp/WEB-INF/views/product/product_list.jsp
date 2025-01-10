@@ -37,7 +37,7 @@
 		<section class="wrapper">
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
-				<section class="product-item-wrap">
+				<section class="product-item-wrap" id="product-item-wrap">
 					<!-- navbar -->
 					<aside class="item-sch-area">
 						<div class="sch-inner">
@@ -71,30 +71,6 @@
 						<!-- product-list -->
 						<div class="product-list">
 							<ul class="product-wrap" id="product-wrap">
-								<!-- 8개 -->
-								<c:forEach items="${keywordSearch}" var="list">
-									<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.PRODUCT_ID}'">
-										<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" />
-										<div class="card-info">
-											<div class="category">
-												<span>${list.PRODUCT_CATEGORY}</span>
-												<c:if test="${list.PRODUCT_TRADE_ADR1 != ''}">
-													<span class="type">직거래</span>
-												</c:if>
-											</div>
-											<div class="ttl">${list.PRODUCT_TITLE}</div>
-											<div class="price">
-											 	<fmt:formatNumber var="price" value="${list.PRODUCT_PRICE}" type="number"/>
-											 	${price} 원
-											 </div>
-											<div class="card-row">
-												<span class="add">${list.PRODUCT_TRADE_ADR1}</span>
-												<span class="name">${list.MEM_NICK}</span>
-												<span class="time">${moment(item.PRODUCT_REG_DATE, "YYYYMMDDhhmmss").fromNow()}</span>
-											</div>
-										</div>
-									</li>	
-								</c:forEach>
 							</ul>
 						</div>
 					</article>

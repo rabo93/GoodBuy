@@ -43,13 +43,21 @@
 						<div class="item-shop-seller-nick">${searchSeller.MEM_NICK}</div>
 						<div class="item-shop-seller-review">
 							<div class="item-shop-seller-review-title">셀러평점</div>
-							<div class="item-shop-seller-review-star">★★★★★</div>
+							<div class="item-shop-seller-review-star">
+								<c:if test="${not empty searchSellerScore}">
+									최고예요 + ${searchSellerScore.Best} |
+									좋아요 + ${searchSellerScore.Good} |
+									별로예요 + ${searchSellerScore.Bad}
+								</c:if>
+							</div>
 						</div>
 					</div>
-					<h1 class="sec-ttl">
-					이 판매자가 판매하는 물품
-					<button class="more"><svg class="svg-inline--fa fa-chevron-right" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" data-fa-i2svg=""><path fill="currentColor" d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"></path></svg><!-- <i class="fa-solid fa-chevron-right"></i> Font Awesome fontawesome.com --></button>
-					</h1>
+					<button class="more">
+						<h1 class="sec-ttl">
+						이 판매자가 판매하는 물품
+						<i class="fa-solid fa-chevron-right"></i>
+						</h1>
+					</button>
 					<div class="product-list" style="margin-bottom: 20px">
 						<ul class="product-wrap">
 							<!-- 8개 -->
@@ -92,7 +100,19 @@
 									<div class="item-shopreview-product">${review.PRODUCT_TITLE}</div>
 								</div>
 								<div class="item-shop-review-writer">${review.REVIEWER}</div>
-								<div class="item-shop-review-list-star">★★★★★</div>
+								<div class="item-shop-review-list-star">
+									<c:choose>
+										<c:when test="${review.REVIEW_SCORE == 0}">
+											별로에요
+										</c:when>
+										<c:when test="${review.REVIEW_SCORE == 1}">
+											좋아요
+										</c:when>
+										<c:otherwise>
+											최고에요
+										</c:otherwise>
+									</c:choose>
+								</div>
 							</div>
 						</c:forEach>
 					</div>

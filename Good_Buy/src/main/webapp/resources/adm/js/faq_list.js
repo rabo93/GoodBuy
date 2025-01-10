@@ -193,12 +193,7 @@ document.addEventListener("DOMContentLoaded", function(){
 				//{redirectURL: '/AdmFaqList', message: '사용여부가 변경되었습니다.', status: 'success'}
 				console.log(response.message); // 굳이 얼럿창 메세지 띄울 필요 없을 거 같음
 	            if (response.status == "success") {
-//					faqList.ajax.reload(); 
-					//=> 전체 목록 리로드 (전체 목록 불러오는데 시간이 많이 소요될 수 있으니 아래 코드 사용)
-
-					// 사용 여부 텍스트만 업데이트
-					const isUsed = statusValue == 1 ? "사용함" : "사용안함";
-					$(".form-check-label").text(isUsed);
+					faqList.ajax.reload(); 
 	            }
 	        }
 		});
@@ -233,7 +228,7 @@ document.addEventListener("DOMContentLoaded", function(){
 		$("#updatedListStatus").val(rowData.LIST_STATUS);	// 사용여부 값
 		
 		const listStatus = rowData.LIST_STATUS == 1 ? true : false;
-		const listStatusText = rowData.list_status == 1 ? "사용함" : "사용안함";
+		const listStatusText = rowData.LIST_STATUS == 1 ? "사용함" : "사용안함";
 		$("#updateFlexSwitchCheckDefault").prop("checked", listStatus); // 사용여부 버튼
 		$("#updateFlexSwitchCheckDefaultLab").text(listStatusText); 	// 사용여부 텍스트
 		

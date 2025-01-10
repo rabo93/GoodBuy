@@ -9,6 +9,7 @@ const TYPE_REQUEST_CHAT_ROOM_LIST = "REQUEST_CHAT_ROOM_LIST";
 const TYPE_REQUEST_CHAT_LIST = "REQUEST_CHAT_LIST";
 const TYPE_FILE_UPLOAD_COMPLETE = "FILE_UPLOAD_COMPLETE";
 const TYPE_FILE = "FILE";
+const TYPE_READ = "READ";
 
 //	채팅 메세지 정렬 위치
 const ALIGN_CENTER = "center";
@@ -46,6 +47,8 @@ $(".sidebar-item").on("dblclick", function() {
 		sender_id : sId,
 		product_id : product_id
 	}
+	
+	$(".messageStatus"+ index).empty();
 	
 	showChatRoom(room);
 })
@@ -286,6 +289,11 @@ function sendMessage(type, product_id, sender_id, receiver_id, room_id, message)
 }
 function closeChat() {
 	$(".chat-area").empty();
+}
+
+function isOpenedSidebar() {
+	
+	return $(".sidebar").length;
 }
 //	===============================================================================
 //	[ 모달창 ]

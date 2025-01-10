@@ -351,7 +351,7 @@
     font-size: 20px;
     align-self: center;
 }
-.item-detail .item-detail-seller-info .item-detail-seller-review {color: #0dcc5a;font-size: 20px;align-self: center;margin: 0 0 0 auto;}
+.item-detail .item-detail-seller-info .item-detail-seller-review {font-size: 15px;color: #0dcc5a;/* text-shadow: 0 0 black; */align-self: center;margin: 0 0 0 auto;}
 
 /* =================================================================================== */
 /* ================================ product_shop.jsp =============================== */
@@ -382,7 +382,8 @@
 .item-shop-section .item-shop-seller-info .item-shop-seller-review-title {}
 .item-shop-section .item-shop-seller-info .item-shop-seller-review-star {
     color: #0dcc5a;
-    font-size: 30px;
+    margin: 10px 0px 0px 0px;
+    font-size: 25px;
 }
 
 .item-shop-section .item-shop-review-list-area {

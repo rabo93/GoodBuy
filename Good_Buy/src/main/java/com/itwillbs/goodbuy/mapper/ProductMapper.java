@@ -13,8 +13,11 @@ import com.itwillbs.goodbuy.vo.WishlistVO;
 @Mapper
 public interface ProductMapper {
 
-	int insertProduct(@Param("vo")ProductVO product, @Param("id")String id);
-
+	// 상품 등록시 새상품ID조회
+	int newProductId();
+	
+	// 상품 등록
+	int insertProduct(@Param("vo")ProductVO product, @Param("sId")String sId);
 
 	int salesListCount(String id);
 	
@@ -69,8 +72,18 @@ public interface ProductMapper {
 	Map<String, Object> productContent(int product_ID);
 
 	// 상품수정 로직
-	int productUpdate(ProductVO product);
+	Object productUpdate(@Param("vo")ProductVO product, @Param("product_id")int product_ID);
 
 	// 상품수정시 원본 이미지 가져오기
 	ProductVO getProductPic(int product_ID);
+	
+	// 상품삭제
+	int productRemove(int product_ID);
+	
+	// 판매자 리뷰 갯수 조회
+	Map<String, Object> searchSellerScore(String mem_id);
+	
+	// 통합검색 조회
+	List<Map<String, Object>> totalSearch(String searchKeyword);
+	
 }

@@ -40,6 +40,7 @@
 					<div>
 						<h2 class="page-title">상품 수정</h2>
 						<form action="ProductEditing" method="post" enctype="multipart/form-data">
+							<input type="hidden" name="Product_ID" value="${productContent.PRODUCT_ID}">
 							<section class="item-regi-img">
 								<h2 class="item-regi-name">상품이미지</h2>
 								<div class="item-thumb">
@@ -110,8 +111,8 @@
 										<input type="hidden" name="product_shipping_fee" value="0">
 										<input type="number" class="shipping-fee-price" id="shipping-fee-price" name="product_shipping_fee" value="${productContent.product_shipping_fee}" placeholder="택배비를 입력해주세요.">
 										<div><input type="number" class="item-price" name="product_price" value="${productContent.PRODUCT_PRICE}" placeholder="상품 가격을 입력해주세요."></div>
-										<input type="hidden" name="product_discount_status" value="0">
 										<label class="item-discount-box"><input type="checkbox" class="item-discount" id="item-discount" name="product_discount_status" value="1">가격 제안 가능</label>
+										<input type="hidden" name="product_discount_status" value="0">
 									</div>
 								</div>
 							</section>

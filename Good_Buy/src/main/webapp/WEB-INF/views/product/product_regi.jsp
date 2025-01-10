@@ -109,8 +109,8 @@
 										<input type="hidden" name="product_shipping_fee" value="0">
 										<input type="number" class="shipping-fee-price" id="shipping-fee-price" name="product_shipping_fee" placeholder="택배비를 입력해주세요.">
 										<div><input type="number" class="item-price" name="product_price" placeholder="상품 가격을 입력해주세요."></div>
-										<input type="hidden" name="product_discount_status" value="0">
 										<label class="item-discount-box"><input type="checkbox" class="item-discount" name="product_discount_status" value="1">가격 제안 가능</label>
+										<input type="hidden" name="product_discount_status" value="0">
 									</div>
 								</div>
 							</section>

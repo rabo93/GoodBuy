@@ -166,6 +166,7 @@
 										</a>
 										<c:if test="${sessionScope.sId eq productSearch.mem_id}">
 											<input type="button" value="상품 수정하기" class="item-detail-editItem" id="editItem">
+											<input type="button" value="상품 삭제" class="item-detail-removeItem" id="removeItem">
 										</c:if>
 										<input type="hidden" id="sId" value="${sessionScope.sId}">
 										<input type="hidden" id="receiver_id" value="${productSearch.mem_id}">
@@ -185,7 +186,13 @@
 						<input type="hidden" name="viewer-id" value="${sessionScope.sId}">
 						<input type="hidden" name="wishlistCheck" value="${wishSearch.wishlist_id}">
 						<div class="item-detail-seller-nick" id="item-seller-nick">${productSearch.mem_nick}</div>
-						<div class="item-detail-seller-review">★★★★★</div>
+						<div class="item-detail-seller-review">
+							<div class="star-bg">
+								<c:if test="${not empty searchSellerScore}">
+							        좋아요 + ${searchSellerScore.Bad}
+								</c:if>
+							</div>
+						</div>
 					</div>
 					<div class="item-detail-more-item">
 						<h1 class="sec-ttl">

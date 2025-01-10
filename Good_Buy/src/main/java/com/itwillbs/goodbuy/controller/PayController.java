@@ -59,17 +59,12 @@ public class PayController {
 		Map<String, String> userAccount = service.getPayAccountInfo(token.getUser_seq_no());
 
 		
-		
-		
-		
-		
-		
-		
-		
 		/* 이 부분은 SQL로 해서 뽑아 내야 됨.   */
 		
 		// 충전금액 조회(송금, 충전 본인) : 내역이 없을 수도 있으므로 Integer로 리턴함.
 		Integer pay_amount = service.getPayAmount(token.getUser_seq_no());
+		System.out.println("굿페이 : getUser_seq_no조회" + token.getUser_seq_no());
+		System.out.println("굿페이 금액 조회 : " + pay_amount);
 		
 		// 거래내역조회
 		List<Map<String, String>> transactionInfo = service.getTransactionDetail(token.getUser_seq_no());

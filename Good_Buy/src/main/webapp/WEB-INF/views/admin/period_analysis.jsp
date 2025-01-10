@@ -71,6 +71,7 @@
 		                                <table class="table table-bordered compact" id="periodList2" width="100%" cellspacing="0">
 		                                    <thead></thead>
 		                                    <tbody></tbody>
+		                                    <tfoot></tfoot>
 		                                </table>
 		                          	</div>
                                 </div>

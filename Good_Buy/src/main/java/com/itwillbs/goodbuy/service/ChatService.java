@@ -28,6 +28,12 @@ public class ChatService {
 		return chatMessage;
 	}
 	
+	//	읽지 않은 메세지 갯수 조회
+	public int selectCountMessage(String room_id, String receiver_id) {
+		return mapper.selectCountMessage(room_id, receiver_id);
+	}
+	
+	
 	//	기존의 상대방과의 채팅방 조회 요청
 	public ChatRoom selectChatRoom(String sender_id, String receiver_id, int product_id) {
 		ChatRoom chatRoom = mapper.selectChatRoom(sender_id, receiver_id, product_id);
@@ -55,6 +61,8 @@ public class ChatService {
 //		return 0;
 		return mapper.insertChatReport(reporter_id, reported_id, reason, room_id);
 	}
+
+	
 
 	
 

@@ -27,7 +27,10 @@ public interface MyReviewMapper {
 	int selectReviewCountCheck(int product_id);
 	
 	//내가 쓴 리뷰
-	List<MyReviewVO> selectReviewHistory(String id);
+	List<MyReviewVO> selectReviewHistory(
+			@Param("mem_id") String id, 
+			@Param("startRow")int startRow, 
+			@Param("listLimit")int listLimit);
 	//내가쓴 리뷰 수정
 	int updateReview(
 			@Param("review_content") String reviewContent
@@ -36,5 +39,8 @@ public interface MyReviewMapper {
 	int deleteReview(int reviewId);
 	//별점조회
 	List<Map<String, String>> selectScoreCount(String id);
+	//내가쓴 리뷰 갯수조회
+	int selectReviewHistoryCount(String id);
+	
 
 }

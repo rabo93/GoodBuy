@@ -21,6 +21,10 @@ public interface ChatMapper {
 							@Param("receiver_id") String receiver_id,
 							@Param("product_id") int product_id);
 	
+	//	읽지않은 메세지 갯수 조회
+	int selectCountMessage(@Param("room_id") String room_id,
+						   @Param("receiver_id") String receiver_id);
+	
 	//	새 채팅방 정보 저장 요청
 	void insertChatRoom(List<ChatRoom> chatRoomList);
 	
@@ -35,6 +39,8 @@ public interface ChatMapper {
 						 @Param("reported_id") String reported_id,
 						 @Param("reason") String reason,
 						 @Param("room_id") String room_id);
+
+	
 
 	
 

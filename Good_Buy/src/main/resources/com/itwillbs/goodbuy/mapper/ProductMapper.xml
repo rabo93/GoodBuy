@@ -33,18 +33,44 @@
 		 WHERE MEM_ID = #{mem_id}
 	</select>
 	
+	<!-- 통합검색 결과 조회 -->
+	<select id="totalSearch" resultType="map">
+		SELECT 
+			pro.PRODUCT_PIC1
+			, pro.PRODUCT_CATEGORY
+			, pro.PRODUCT_TRADE_ADR1
+			, pro.PRODUCT_ID
+			, pro.PRODUCT_TITLE
+			, pro.PRODUCT_PRICE
+			, mem.MEM_NICK
+			, REPLACE(FORMAT(pro.PRODUCT_REG_DATE, 'yyyyMMddHHmmss'), ',', '') AS PRODUCT_REG_DATE
+			, pro.PRODUCT_REG_DATE
+			, pro.PRODUCT_STATUS
+		FROM PRODUCT pro
+		JOIN MEMBER mem
+		ON pro.MEM_ID = mem.MEM_ID
+		WHERE 
+		mem.MEM_NICK LIKE #{searchKeyword}
+		OR pro.MEM_ID LIKE #{searchKeyword}
+		OR pro.PRODUCT_TITLE LIKE #{searchKeyword}
+		OR pro.PRODUCT_INTRO LIKE #{searchKeyword}
+		OR pro.PRODUCT_TRADE_ADR1 LIKE #{searchKeyword};
+	</select>
+	
+	<!-- 새 상품ID 조회 -->
+	<select id="newProductId" resultType="int">
+		SELECT IFNULL(MAX(PRODUCT_ID), 0) + 1
+		FROM PRODUCT;
+	</select>
+	
 	<!-- 상품 등록 -->
 	<insert id="insertProduct" >
-		<selectKey resultType="int" order="BEFORE" keyProperty="product_id">
-			SELECT MAX(PRODUCT_ID) + 1
-			FROM PRODUCT;
-		</selectKey>
 		INSERT
 		INTO PRODUCT
 		VALUES (
-			#{product_id}
+			#{vo.product_id}
 			, #{vo.product_title}
-			, #{id}
+			, #{sId}
 			, #{vo.product_intro}
 			, #{vo.product_shipping_fee}
 			, #{vo.product_price}
@@ -222,8 +248,20 @@
 				, rev.REVIEW_CONTENT
 		        , rev.PRODUCT_TITLE
 		        , rev.REVIEW_SCORE
+		        , rev.review_options
 		        , pro.MEM_ID AS SELLER
 		        , pro.PRODUCT_PIC1
+		FROM MYREVIEW rev
+		JOIN PRODUCT pro
+		ON rev.PRODUCT_ID = pro.PRODUCT_ID
+        WHERE pro.MEM_ID = #{mem_id}
+	</select>
+	
+	<!-- 셀러 리뷰 총 갯수 조회 -->
+	<select id="searchSellerScore" resultType="map">
+		SELECT SUM(CASE WHEN rev.REVIEW_SCORE = 0 THEN 1 ELSE 0 END) AS Bad
+				, SUM(CASE WHEN rev.REVIEW_SCORE = 1 THEN 1 ELSE 0 END) AS Good
+		        , SUM(CASE WHEN rev.REVIEW_SCORE = 2 THEN 1 ELSE 0 END) AS Best
 		FROM MYREVIEW rev
 		JOIN PRODUCT pro
 		ON rev.PRODUCT_ID = pro.PRODUCT_ID
@@ -262,28 +300,35 @@
 	
 	<!-- 상품수정시 원본 이미지 가져오기 -->
 	<select id="getProductPic">
-		SELECT PRODUCT_PIC1, PRODUCT_PIC2, PRODUCT_PIC3
+		SELECT PRODUCT_PIC1, PRODUCT_PIC2, PRODUCT_PIC3, MEM_ID
 		FROM PRODUCT
-		WHERE  PRODUCT_ID = #{product_id}
+		WHERE PRODUCT_ID = #{product_id}
 	</select>
 	
 	<!-- 상품수정 로직 -->
 	<select id="productUpdate">
 		UPDATE PRODUCT
 		SET
-			PRODUCT_TITLE = #{product_title}
-			, PRODUCT_INTRO = #{product_intro}
-			, PRODUCT_SHIPPING_FEE = #{product_shipping_fee}
-			, PRODUCT_PRICE = #{product_price}
-			, PRODUCT_DISCOUNT_STATUS = #{product_discount_status}
-			, PRODUCT_CATEGORY = #{product_category}
-			, PRODUCT_PIC1 = #{product_pic1}
-			, PRODUCT_PIC2 = #{product_pic2}
-			, PRODUCT_PIC3 = #{product_pic3}
-			, PRODUCT_TRADE_ADR1 = #{product_trade_adr1}
-			, PRODUCT_STATUS = #{product_status}
+			PRODUCT_TITLE = #{vo.product_title}
+			, PRODUCT_INTRO = #{vo.product_intro}
+			, PRODUCT_SHIPPING_FEE = #{vo.product_shipping_fee}
+			, PRODUCT_PRICE = #{vo.product_price}
+			, PRODUCT_DISCOUNT_STATUS = #{vo.product_discount_status}
+			, PRODUCT_CATEGORY = #{vo.product_category}
+			, PRODUCT_PIC1 = #{vo.product_pic1}
+			, PRODUCT_PIC2 = #{vo.product_pic2}
+			, PRODUCT_PIC3 = #{vo.product_pic3}
+			, PRODUCT_TRADE_ADR1 = #{vo.product_trade_adr1}
+			, PRODUCT_STATUS = #{vo.product_status}
 		WHERE PRODUCT_ID = #{product_id}
 	</select>
+	
+	<!-- 상품삭제 로직 -->
+	<delete id="productRemove">
+		DELETE
+		FROM PRODUCT
+		WHERE PRODUCT_ID = #{product_ID}
+	</delete>
 	
 	<!-- 구매상품 갯수 조회 -->
 <!-- 	<select id="selectOrderCount" resultType="int"> -->

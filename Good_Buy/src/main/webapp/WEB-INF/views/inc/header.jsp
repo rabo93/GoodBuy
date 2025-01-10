@@ -10,8 +10,8 @@
 			<a href="/"><h1><img src="${pageContext.request.contextPath}/resources/img/new_logo.svg" alt="굿바이"></h1></a>
 		</div>
 		<div class="hd-sch">
-			<form action="" method="get">
-				<input type="text" name="" class="sch-input" placeholder="어떤 상품을 찾으시나요?">
+			<form action="TotalSearch" method="get">
+				<input type="text" name="searchKeyword" class="sch-input" placeholder="어떤 상품을 찾으시나요?">
 				<button type="submit" class="sch-submit">
 					<i class="fa-solid fa-magnifying-glass"></i>
 				</button>
@@ -21,7 +21,7 @@
 			<div class="gnb-left">
 				<a href="ProductRegist" class="gnb-btn"><i class="fa-solid fa-store"></i> 판매하기</a>
 				<a href="javascript:void(0)" class="gnb-btn" onclick="startChat()">
-					<i class="fa-solid fa-comment-dots"></i> 채팅하기
+					<i class="fa-solid fa-comment-dots"></i> 채팅하기 <span class="messageStatus"></span>
 				</a>
 			</div>
 			<div class="gnb-right">

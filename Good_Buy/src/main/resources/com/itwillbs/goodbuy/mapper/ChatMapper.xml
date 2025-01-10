@@ -34,6 +34,14 @@
 		 LIMIT 1
 	</select>
 	
+	<!-- 읽지않은 메세지 갯수 조회 -->
+	<select id="selectCountMessage" resultType="int">
+		SELECT COUNT(*)
+		  FROM CHATTING
+		 WHERE ROOM_ID = #{room_id}
+		   AND RECEIVER_ID = #{receiver_id}
+	</select>
+	
 	<!-- 기존의 상대방과의 채팅방 조회 요청 -->
 	<select id="selectChatRoom" resultType="chatRoom">
 		SELECT c1.ROOM_ID

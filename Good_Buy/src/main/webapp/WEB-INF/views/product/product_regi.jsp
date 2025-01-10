@@ -41,22 +41,20 @@
 							<section class="item-regi-img">
 								<h2 class="item-regi-name">상품이미지</h2>
 								<div class="item-thumb">
-										<i class="fa-light fa-image"></i>
 									<button class="item-thumb-upload" type="button">
-										<img id="item-thumb-preview1">
+										<img src="${pageContext.request.contextPath}/resources/img/product-thumb-no.jpg" id="item-thumb-preview1">
 									</button>
 									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn1" name="pic1">
 								</div>
 								<div class="item-thumb">
 									<button class="item-thumb-upload" type="button">
-										<img id="item-thumb-preview2">
-										
+										<img src="${pageContext.request.contextPath}/resources/img/product-thumb-no.jpg" id="item-thumb-preview2">
 									</button>
 									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn2" name="pic2">
 								</div>
 								<div class="item-thumb">
 									<button class="item-thumb-upload" type="button">
-										<img id="item-thumb-preview3">
+										<img src="${pageContext.request.contextPath}/resources/img/product-thumb-no.jpg" id="item-thumb-preview3">
 									</button>
 									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn3" name="pic3">
 								</div>
@@ -109,8 +107,8 @@
 										<input type="hidden" name="product_shipping_fee" value="0">
 										<input type="number" class="shipping-fee-price" id="shipping-fee-price" name="product_shipping_fee" placeholder="택배비를 입력해주세요.">
 										<div><input type="number" class="item-price" name="product_price" placeholder="상품 가격을 입력해주세요."></div>
-										<input type="hidden" name="product_discount_status" value="0">
 										<label class="item-discount-box"><input type="checkbox" class="item-discount" name="product_discount_status" value="1">가격 제안 가능</label>
+										<input type="hidden" name="product_discount_status" value="0">
 									</div>
 								</div>
 							</section>

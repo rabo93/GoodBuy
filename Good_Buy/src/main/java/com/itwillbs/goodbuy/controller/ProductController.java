@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
+import com.itwillbs.goodbuy.service.MyPageService;
+import com.itwillbs.goodbuy.service.MyReviewService;
 import com.itwillbs.goodbuy.service.ProductService;
 import com.itwillbs.goodbuy.vo.ProductVO;
 import com.itwillbs.goodbuy.vo.WishlistVO;
@@ -33,6 +36,7 @@ import retrofit2.http.GET;
 @Controller
 public class ProductController {
 	@Autowired ProductService productService;
+	@Autowired MyReviewService reviewService;
 	
 	// 이클립스 상의 가상의 업로드 경로명 저장(프로젝트 상에서 보이는 경로)
 	private String uploadPath = "/resources/upload";
@@ -40,6 +44,14 @@ public class ProductController {
 	// 상품목록 조회
 	@GetMapping("ProductList")
 	public String productList() {
+		return "product/product_list";
+	}
+	
+	// 통합검색 결과
+	@GetMapping("TotalSearch")
+	public String totalSearch(@RequestParam String searchKeyword, Model model) {
+		List<Map<String, Object>> keywordSearch = productService.totalSearch(searchKeyword); 
+		model.addAttribute("keywordSearch", keywordSearch);
 		return "product/product_list";
 	}
 	
@@ -70,10 +82,12 @@ public class ProductController {
 	// 상품 등록 로직
 	@PostMapping("ProductRegist")
 	public String productRegistSubmit(ProductVO product, HttpSession session) {
-		String id = (String) session.getAttribute("sId");
+		int newProductId = productService.newProductId();
+		product.setProduct_id(newProductId);
+		String sId = (String) session.getAttribute("sId");
 		
 		String realPath = session.getServletContext().getRealPath(uploadPath);
-		String subDir = id + "/" + UUID.randomUUID().toString().substring(0, 6);
+		String subDir = sId + "/" + newProductId;
 		
 		realPath += "/" + subDir;
 		
@@ -103,7 +117,7 @@ public class ProductController {
 		product.setProduct_pic2(productPics[1]);
 		product.setProduct_pic3(productPics[2]);
 		
-		int insertCount = productService.registProduct(product, id);
+		int insertCount = productService.registProduct(product, sId);
 		
 		if (insertCount > 0) {
 		    try {
@@ -131,8 +145,11 @@ public class ProductController {
 		
 		List<Map<String, Object>> searchSellerProduct = productService.searchSellerProduct(productSearch.getMem_id(), PRODUCT_ID);
 		List<Map<String, Object>> searchSameCategoryProduct = productService.searchSameCategoryProduct(productSearch.getProduct_category(), PRODUCT_ID);
+		Map<String, Object> searchSellerScore = productService.searchSellerScore(productSearch.getMem_id());
 		
 		productService.plusviewcount(PRODUCT_ID);
+		
+		model.addAttribute("searchSellerScore", searchSellerScore);
 		model.addAttribute("productSearch", productSearch);
 		model.addAttribute("wishSearch", wishSearch);
 		model.addAttribute("searchSellerProduct", searchSellerProduct);
@@ -167,10 +184,13 @@ public class ProductController {
 	// 개인상점페이지 매핑
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("ProductShop")
-	public String productShop(@RequestParam String MEM_NICK, Model model) {
+	public String productShop(@RequestParam String MEM_NICK, Model model, HttpSession session) {
 		Map<String, Object> searchSeller = productService.searchSellerShop(MEM_NICK);
 		List<ProductVO> searchSellerProduct = (List<ProductVO>) productService.getProductListLimit(searchSeller.get("MEM_ID").toString());
 		List<Map<String, Object>> searchSellerReview = productService.searchSellerReview(searchSeller.get("MEM_ID").toString());
+		Map<String, Object> searchSellerScore = productService.searchSellerScore(searchSeller.get("MEM_ID").toString());
+		
+		model.addAttribute("searchSellerScore", searchSellerScore);
 		model.addAttribute("searchSeller", searchSeller);
 		model.addAttribute("searchSellerProduct", searchSellerProduct);
 		model.addAttribute("searchSellerReview", searchSellerReview);
@@ -193,82 +213,95 @@ public class ProductController {
 		}
 	}
 	
+	// 상품수정 로직
 	@PostMapping("ProductEditing")
 	public String productEditing(HttpSession session, ProductVO product, Model model,
 								 @RequestParam("pic1") MultipartFile pic1,
 								 @RequestParam("pic2") MultipartFile pic2,
 								 @RequestParam("pic3") MultipartFile pic3,
 								 @RequestParam("Product_ID")int product_ID) {
-		String id = (String) session.getAttribute("sId");
-		String realPath = session.getServletContext().getRealPath(uploadPath);
-		String subDir = id + "/" + UUID.randomUUID().toString().substring(0, 6);
-		
-		realPath += "/" + subDir;
 
 	    try {
-	        // 기존 파일 경로 가져오기
 	    	ProductVO getProductPic = productService.getProductPic(product_ID);
-	        String oldFileName1 = getProductPic.getProduct_pic1();
-	        String oldFileName2 = getProductPic.getProduct_pic2();
-	        String oldFileName3 = getProductPic.getProduct_pic3();
-	        
-	        if (!pic1.isEmpty()) {
-	            // 기존 파일 삭제 로직
-	            if (oldFileName1 != null && !oldFileName1.isEmpty()) {
-	                File oldFile = new File(realPath, oldFileName1);
-	                if (oldFile.exists()) {
-	                    oldFile.delete();
+	    	String id = getProductPic.getMem_id();
+	    	String realPath = session.getServletContext().getRealPath(uploadPath);
+	    	String subDir = id + "/" + product_ID;
+	    	realPath += "/" + subDir;
+	    	
+	        // 기존 파일 경로 가져오기
+	        MultipartFile[] pics = {pic1, pic2, pic3};
+	        String[] oldFileNames = {getProductPic.getProduct_pic1(), getProductPic.getProduct_pic2(), getProductPic.getProduct_pic3()};
+	        String[] newFileNames = new String[3];
+	        String[] newFilePaths = new String[3];
+	        String[] productPics = new String[3];
+
+	        for (int i = 0; i < pics.length; i++) {
+	            if (!pics[i].isEmpty()) {
+	                if (oldFileNames[i] != null && !oldFileNames[i].isEmpty()) {
+	                    File oldFile = new File(realPath, oldFileNames[i]);
+
+	                    if (oldFile.exists()) {
+	                        oldFile.delete();
+	                    }
 	                }
+	                
+	                String ext = oldFileNames[i].substring(oldFileNames[i].lastIndexOf("."));
+	                newFileNames[i] = UUID.randomUUID().toString().substring(0, 8) + "_pic" + (i + 1) + ext;
+	                newFilePaths[i] = subDir + "/" + newFileNames[i];
+	                pics[i].transferTo(new File(realPath, newFileNames[i]));
+	                productPics[i] = newFilePaths[i];
+
+	            } else {
+	                productPics[i] = oldFileNames[i];
 	            }
-	            if (oldFileName2 != null && !oldFileName2.isEmpty()) {
-	            	File oldFile = new File(realPath, oldFileName2);
-	            	if (oldFile.exists()) {
-	            		oldFile.delete();
-	            	}
-	            }
-	            if (oldFileName3 != null && !oldFileName3.isEmpty()) {
-	            	File oldFile = new File(realPath, oldFileName3);
-	            	if (oldFile.exists()) {
-	            		oldFile.delete();
-	            	}
-	            }
-	            
-	            // 새 파일 저장 로직
-	            String newFileName1 = UUID.randomUUID().toString().substring(0, 8) + "_" + pic1.getOriginalFilename();
-	            String newFileName2 = UUID.randomUUID().toString().substring(0, 8) + "_" + pic2.getOriginalFilename();
-	            String newFileName3 = UUID.randomUUID().toString().substring(0, 8) + "_" + pic3.getOriginalFilename();
-	            
-	            String newFilePath1 = subDir + "/" + newFileName1;
-	            String newFilePath2 = subDir + "/" + newFileName2;
-	            String newFilePath3 = subDir + "/" + newFileName3;
-	            
-	            pic1.transferTo(new File(realPath, newFilePath1));
-	            pic2.transferTo(new File(realPath, newFilePath2));
-	            pic3.transferTo(new File(realPath, newFilePath3));
-	            
-	            product.setProduct_pic1(newFilePath1);
-	            product.setProduct_pic2(newFilePath2);
-	            product.setProduct_pic3(newFilePath3);
-	        } else {
-	            // 새로운 파일이 없는 경우 기존 파일 경로 유지
-	            product.setProduct_pic1(oldFileName1);
-	            product.setProduct_pic1(oldFileName2);
-	            product.setProduct_pic1(oldFileName3);
 	        }
+
+	        product.setProduct_pic1(productPics[0]);
+	        product.setProduct_pic2(productPics[1]);
+	        product.setProduct_pic3(productPics[2]);
+
 	    } catch (IllegalStateException | IOException e) {
 	        e.printStackTrace();
 	    }
 	    
-	    int updateStatus = productService.productUpdate(product);
-	    
-	    if (updateStatus < 0) {
-			model.addAttribute("msg", "클래스 수정 실패!");
-			return "admin/fail";
-		}
+	    productService.productUpdate(product, product_ID);
 		
 		return "MySales";
 	}
-
+	
+	@ResponseBody
+	@GetMapping("ItemRemove")
+	public String itemRemove(@RequestParam("PRODUCT_ID")int product_ID, HttpSession session) {
+		ProductVO getProductPic = productService.getProductPic(product_ID);
+    	String realPath = session.getServletContext().getRealPath(uploadPath) + "/" + getProductPic.getMem_id() + "/" + product_ID;
+    	File directory = new File(realPath);
+    	String msg = "";
+    	int result = 0;
+    	
+    	if(directory.isDirectory()) {
+    		File[] files = directory.listFiles();
+    		if (files != null) {
+    			for (File file : files) {
+    				file.delete(); 
+    			} 
+    		}
+    		directory.delete();
+    		result = productService.productRemove(product_ID);
+    	}
+		
+		if (result > 0) {
+			msg = "상품 삭제가 완료되었습니다.";
+		} else {
+			msg = "상품 삭제에 실패하였습니다.\n나중에 다시 시도해주세요";
+		}
+		
+		try {
+			msg = URLEncoder.encode(msg, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return msg;
+	}
 	
 }
 

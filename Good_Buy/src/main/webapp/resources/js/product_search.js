@@ -14,10 +14,10 @@ function addAdr() {
 	const region = url.searchParams.get('REGION');
 	const regionValue = $("input[name='regionSearch']").val();
 	switch (true) {
-	    case regionValue === "":
+	    case regionValue == "":
 	        url.searchParams.delete('REGION');
 	        break;
-	    case region === undefined:
+	    case region == undefined:
 	        url.searchParams.append('REGION', regionValue);
 	        break;
 	    default:
@@ -31,10 +31,10 @@ function addAdrEnter(e) {
         const region = url.searchParams.get('REGION');
         const regionValue = $("input[name='regionSearch']").val();
         switch (true) {
-            case regionValue === "":
+            case regionValue == "":
                 url.searchParams.delete('REGION');
                 break;
-            case region === undefined:
+            case region == undefined:
                 url.searchParams.append('REGION', regionValue);
                 break;
             default:

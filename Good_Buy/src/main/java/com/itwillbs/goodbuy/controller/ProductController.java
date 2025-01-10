@@ -47,10 +47,11 @@ public class ProductController {
 		return "product/product_list";
 	}
 	
+	// 통합검색 결과
 	@GetMapping("TotalSearch")
-	public String totalSearch(@RequestParam String searchKeyword) {
+	public String totalSearch(@RequestParam String searchKeyword, Model model) {
 		List<Map<String, Object>> keywordSearch = productService.totalSearch(searchKeyword); 
-		
+		model.addAttribute("keywordSearch", keywordSearch);
 		return "product/product_list";
 	}
 	

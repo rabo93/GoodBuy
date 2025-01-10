@@ -115,13 +115,13 @@
 													
 														<div class="input-section">
 											            	<input type="text" class="input-label" pattern="[0-9]+" title="숫자만 입력하세요" 
-											            	placeholder="금액을 입력해 주세요" id="total-amount">
+											            			name="tran_amt"  placeholder="금액을 입력해 주세요" id="total-amount">
 										        		</div>
 											            <div class="balance-info">굿페이 잔액: <strong>${payAmount} 원</strong></div>
 											            <div class="amount-btns">
-												            <input type="button" class="amount-btn" name="tran_amt" onclick="addAmount(10000, 're')" value="+ 1만원">
-												            <input type="button" class="amount-btn" name="tran_amt" onclick="addAmount(50000, 're')" value="+ 5만원">
-												            <input type="button" class="amount-btn" name="tran_amt" onclick="addAmount(100000, 're')" value="+ 10만원">
+												            <input type="button" class="amount-btn" onclick="addAmount(10000, 're')" value="+ 1만원">
+												            <input type="button" class="amount-btn" onclick="addAmount(50000, 're')" value="+ 5만원">
+												            <input type="button" class="amount-btn" onclick="addAmount(100000, 're')" value="+ 10만원">
 												        </div>
 												        <div class="recharge-button">
 												            <button class="recharge-btn">환불하기</button>
@@ -159,7 +159,7 @@
 													
 														<div class="input-section">
 <!-- 															거래금액 <input type="text" name="tran_amt" value="5000">  -->
-											            	<input type="text" class="input-label" pattern="[0-9]+" title="숫자만 입력하세요" 
+											            	<input type="text" class="input-label" pattern="[0-9]+"  
 											            	placeholder="금액을 입력해 주세요" id="total-amount-charge">
 										        		</div>
 											            <div class="balance-info">굿페이 잔액: <strong>${payAmount} 원</strong></div>

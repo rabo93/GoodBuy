@@ -73,48 +73,44 @@
 		        
 		        	<div class="my-container">
 						<div class="contents-ttl">
-							<h3>굿페이 > ${account_holder_name} 고객님의 계좌 상세정보</h3>
+							<h3>굿페이 > ${account_holder_name} 고객님의 계좌</h3>
 							<br>	
-				
-				
-				 
-							<div class="linked-account">
-					            <div class="account-info">
-					                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
-					                <span class="account-number">
-					                		${accountDetail.bank_name}<strong>&nbsp;&nbsp;&nbsp;&nbsp;${account_num_masked}</strong>
-					                </span>
-					            </div>
-					            <button class="primary-account-btn">대표계좌</button>
-					        </div>
-					        <div class="goodpay-container">
-					         	<div class="account-item">
-						            <div class="details">
-					                    <span>계좌명</span>
-					                </div>
-                    				<div class="amount">${accountDetail.product_name }</div>
-					            </div>
-					         	<div class="account-item">
-						            <div class="details">
-					                    <span>계좌 개설일</span>
-					                </div>
-					                <c:set var="dateStr" value="${accountDetail.bank_tran_date }" />
-									<c:set var="formattedDate" value="${fn:substring(dateStr, 0, 4)}.${fn:substring(dateStr, 4, 6)}.${fn:substring(dateStr, 6, 8)}" />
-					                
-                    				<div class="amount">${formattedDate}</div>
-					            </div>
-					         	<div class="account-item">
-						            <div class="details">
-					                    <span>계좌잔액</span>
-					                </div>
-                    				<div class="amount"><fmt:formatNumber pattern="#,###">${accountDetail.available_amt }</fmt:formatNumber>원</div>
-					            </div>
-					        </div><!-- goodpay-container -->
-					        
-					        
-					        
 						</div>
-					</div>
+						<div class="contents">
+					        <div class="goodpay-container">
+								<div class="account-box">
+					                <div class="info"><h1>계좌 상세정보</h1></div>
+						            <div class="account-header">
+						                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
+						                <div class="details">
+						                    ${accountDetail.bank_name}<strong>&nbsp;&nbsp;&nbsp;&nbsp;${account_num_masked}</strong>
+						                </div>
+							            <div class="amount"><button class="primary-account-btn">대표계좌</button></div>
+						            </div><!-- account-header -->
+					            	<div class="account-item">
+							            <div class="details">
+						                    <span>계좌명</span>
+						                </div>
+		                   				<div class="amount">${accountDetail.product_name }</div>
+						            </div>
+					            	<div class="account-item">
+							            <div class="details">
+						                    <span>계좌 개설일</span>
+						                </div>
+						                <c:set var="dateStr" value="${accountDetail.bank_tran_date }" />
+										<c:set var="formattedDate" value="${fn:substring(dateStr, 0, 4)}.${fn:substring(dateStr, 4, 6)}.${fn:substring(dateStr, 6, 8)}" />
+		                   				<div class="amount">${formattedDate}</div>
+					            	</div>
+						         	<div class="account-item">
+							            <div class="details">
+						                    <span>계좌잔액</span>
+						                </div>
+		                   				<div class="amount"><fmt:formatNumber pattern="#,###">${accountDetail.available_amt }</fmt:formatNumber>원</div>
+						            </div>
+					        	</div><!-- account-box -->
+							</div><!-- goodpay-container -->
+						</div><!-- contents -->
+					</div><!-- my-container -->
 				</section>
 			<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 			</div>

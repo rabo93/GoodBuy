@@ -105,8 +105,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 						//	새 채팅방 정보 DB 저장 요청
 						List<ChatRoom> chatRoomList = new ArrayList<ChatRoom>();
 						//	room_id, product_id, title, sender_id, receiver_id, status
-						chatRoomList.add(new ChatRoom(chatMessage.getRoom_id(), product_id, title, sender_id, receiver_id, 1));
-						chatRoomList.add(new ChatRoom(chatMessage.getRoom_id(), product_id, title, receiver_id, sender_id, 1));
+						chatRoomList.add(new ChatRoom(chatMessage.getRoom_id(), product_id, title, sender_id, receiver_id, 1, "buyer"));
+						chatRoomList.add(new ChatRoom(chatMessage.getRoom_id(), product_id, title, receiver_id, sender_id, 1, "seller"));
 						//	DB에 채팅방 저장 요청
 						chatService.insertChatRoom(chatRoomList);
 						

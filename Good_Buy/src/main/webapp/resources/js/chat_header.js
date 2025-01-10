@@ -7,9 +7,9 @@ $(function() {
 
 function connect() {
 //	let ws_base_url = "ws://itwillbs.com";
-//	let ws_base_url = "ws://localhost:8081";
+	let ws_base_url = "ws://localhost:8081";
 //	let ws_base_url = "ws://localhost:8080";
-	let ws_base_url = "ws://c3d2407t1p2.itwillbs.com/";
+//	let ws_base_url = "ws://c3d2407t1p2.itwillbs.com/";
 	ws = new WebSocket(ws_base_url + "/echo");
 	console.log("WebSocket 객체 : " + ws);
 	console.log("웹소켓 연결 상태 : " + ws.readyState);
@@ -38,10 +38,15 @@ function onOpen () {
 
 function onMessage(event) {
 	console.log("onMessage()");
+	let data = JSON.parse(event.data);
 	if(childChat && !childChat.closed) {
 		childChat.postMessage(event.data);
 	} else {
-		$(".messageStatus").html("★").css("color", "red");
+		
+		if(!data.sender_id == sId) {
+			$(".messageStatus").html("★").css("color", "red");
+		}
+		
 		chatProduct(event.data);
 	}
 	

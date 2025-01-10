@@ -85,11 +85,18 @@ $(function() {
 
 function chatProduct(e) {
 	let chatData = JSON.parse(e);
-	console.log(chatData.type);
+	let chatMessageData = JSON.parse(chatData.message);
+	console.log("chatData.type : " + chatData.type);
+	console.log("chatData.title : " + chatData.title);
+	console.log("chatData : " + chatData);
+	console.log("chatMessageData : " + chatMessageData);
+	console.log("e : " + e);
+	console.log("e.title : " + e.title);
 	if(chatData.type == TYPE_START) {
 		console.log("room_id : " + chatData.room_id);
 		window.room_id = chatData.room_id;
 		console.log("window.room_id : " + window.room_id);
+//		appendMessage(TYPE_TALK, sId, receiver_id, "")
 	}
 	
 	if (chatData.type == TYPE_TALK || chatData.type == TYPE_FILE) {
@@ -121,7 +128,7 @@ function toggleSlideChat() {
 		console.log(result);
 		if(result == null) {
 			showChatList(receiver_id, product_id);
-			return;
+//			return;
 		} else {
 			window.room_id = result.room_id;
 			$.ajax({
@@ -140,6 +147,13 @@ function toggleSlideChat() {
 			});
 		}
 	});
+	
+	console.log("채팅방 비어잇나? : " + $(".chat-body").length);
+	
+	if($(".chat-body").length == 0) {
+		console.log("채팅 시작 메세지 ㄱㄱ");
+	}
+	
 	
 	//	슬라이드로 보이기
 	$("html").toggleClass("fixed");

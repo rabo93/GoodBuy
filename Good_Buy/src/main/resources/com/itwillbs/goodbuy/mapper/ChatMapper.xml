@@ -69,6 +69,7 @@
 			 , #{chatRoomList.title}
 			 , #{chatRoomList.sender_id}
 			 , #{chatRoomList.status}
+			 , #{chatRoomList.grade}
 			 )
 		</foreach>
 	</insert>

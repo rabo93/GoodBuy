@@ -36,8 +36,8 @@ public class MyReviewService {
 	}
 	
 	//내가 쓴 리뷰
-	public List<MyReviewVO> getReviewHistory(String id) {
-		return mapper.selectReviewHistory(id);
+	public List<MyReviewVO> getReviewHistory(int startRow, int listLimit, String id) {
+		return mapper.selectReviewHistory(id,startRow,listLimit);
 	}
 	//내가쓴 리뷰 수정
 	public int reviewEdit(String reviewContent,String productId) {
@@ -50,6 +50,12 @@ public class MyReviewService {
 	//나의 별점조회
 	public List<Map<String, String>> getScoreCount(String id) {
 		return mapper.selectScoreCount(id);
+	}
+	
+	//내가 쓴 리뷰 갯수조회
+	public int getReviewHistoryCount(String id) {
+		// TODO Auto-generated method stub
+		return mapper.selectReviewHistoryCount(id);
 	}
 	
 	

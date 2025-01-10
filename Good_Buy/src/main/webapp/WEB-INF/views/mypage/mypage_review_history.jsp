@@ -76,7 +76,7 @@
 											            	<img src="${member.mem_profile}?${System.currentTimeMillis()}" id="profile_preview"><br>
 											            </c:when>
 											            <c:otherwise>
-											                <!-- member.memProfile이 비어 있으면 기본 이미지 출력 -->
+<!-- 											                member.memProfile이 비어 있으면 기본 이미지 출력 -->
 											                <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview"><br>
 											            </c:otherwise>
 											        </c:choose>
@@ -85,38 +85,25 @@
 									            <div class="name">${review.buyerNick} <span class="date">${review.review_date}</span></div>
 									        </div>
 									        <div class="review-score">
-								            	<c:if test="${review.review_score == '2'}">
-								            		<span id="score" name="score">최고예요🥳</span>
-										            </c:if>
-									            <c:if test="${review.review_score == '1'}">
-								            		<span id="score" name="score">좋아요💕</span>
-									            </c:if>
-									            <c:if test="${review.review_score == '0'}">
-								            		<span id="score" name="score">별로예요👿</span>
-								           	 	</c:if>
+								            	<c:if test="${review.review_score == '2'}"><span id="score" name="score">최고예요🥳</span></c:if>
+									            <c:if test="${review.review_score == '1'}"><span id="score" name="score">좋아요💕</span></c:if>
+									            <c:if test="${review.review_score == '0'}"><span id="score" name="score">별로예요👿</span></c:if>
 								            </div>
 										    <div class="review-text">${review.review_content}</div>
 								            <div class="review-score-option">
 								            	<%-- 리뷰 옵션 --%>
-												<c:if test="${fn:contains(review.review_options, '1')}">
-													<span id="score" name="score">배송이 빨라요🚚</span>
-												</c:if>
-												<c:if test="${fn:contains(review.review_options, '2')}">
-													<span id="score" name="score">친절해요💖</span>
-												</c:if>
-												<c:if test="${fn:contains(review.review_options, '3')}">
-													<span id="score" name="score">물건상태가 좋아요✨</span>
-												</c:if>
-												<c:if test="${fn:contains(review.review_options, '4')}">
-													<span id="score" name="score">또 거래하고 싶어요💰</span>
-												</c:if>
+												<c:if test="${fn:contains(review.review_options, '1')}"><span id="score" name="score">배송이 빨라요🚚</span></c:if>
+												<c:if test="${fn:contains(review.review_options, '2')}"><span id="score" name="score">친절해요💖</span></c:if>
+												<c:if test="${fn:contains(review.review_options, '3')}"><span id="score" name="score">물건상태가 좋아요✨</span></c:if>
+												<c:if test="${fn:contains(review.review_options, '4')}"><span id="score" name="score">또 거래하고 싶어요💰</span></c:if>
 								            </div>
 								            <div class="btns">
 											    <input type="hidden" name="product_id" id="hiddenProductId">
 												<button class="open-modal-btn my-btn"
 											        data-product-id="${review.product_id}"
 											        data-title="${review.product_title}"
-											        data-buyer="${review.sellerNick}">
+											        data-buyer="${review.sellerNick}"
+											        data-content="${review.review_content}">
 											        수정
 											    </button>
 												<button class="my-btn del" onclick="deleteReview(${review.review_id})">삭제</button>
@@ -126,6 +113,34 @@
 								</c:otherwise>
 							</c:choose>	
 						</div>
+						<section id="pageList">
+							<button 
+								onclick="location.href='MyReviewHistory?pageNum=${pageInfo.startPage - pageInfo.pageListLimit}'"
+								<c:if test="${pageInfo.startPage == 1}">disabled</c:if>
+							><i class="fa-solid fa-angles-left"></i></button>
+							<button 
+								onclick="location.href='MyReviewHistory?pageNum=${pageNum - 1}'"
+								<c:if test="${pageNum == 1}">disabled</c:if>
+							><i class="fa-solid fa-angle-left"></i></button>
+							<c:forEach var="i" begin="${pageInfo.startPage}" end="${pageInfo.endPage}">
+								<c:choose>
+									<c:when test="${i eq pageNum}">
+										<strong>${i}</strong>
+									</c:when>
+									<c:otherwise>
+										<a href="MyReviewHistory?pageNum=${i}">${i}</a>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+							<button 
+								onclick="location.href='MyReviewHistory?pageNum=${pageNum + 1}'"
+								<c:if test="${pageNum == pageInfo.maxPage}">disabled</c:if>
+							><i class="fa-solid fa-angle-right"></i></button>
+							<button
+								onclick="location.href='MyReviewHistory?pageNum=${pageInfo.startPage + pageInfo.pageListLimit}'"
+								<c:if test="${pageInfo.endPage == pageInfo.maxPage}">disabled</c:if>
+							><i class="fa-solid fa-angles-right"></i></button>
+						</section>
 					</section>
 					<!-- // contents -->
 				</div>
@@ -143,7 +158,7 @@
             </h2>
             <input type="hidden" id="modal_product_id"> <!-- id저장용 -->
 <!--             <input type="hidden" id="modal_review_cnt"> 리뷰 갯수 저장용 -->
-            <textarea rows="4" cols="50" id="review_content" placeholder="후기를 작성해주세요."></textarea>
+            <textarea rows="4" cols="50" id="review_content" placeholder="후기를 작성해주세요.">content</textarea>
             <br>
             <button id="close-modal">닫기</button>
             <button id="submit-review">수정완료</button>
@@ -157,12 +172,14 @@
             const productId = $(this).data("product-id");
             const productTitle = $(this).data("title");
             const buyerName = $(this).data("buyer");
+            const content = $(this).data("content")
 //             const review_cnt = $(this).data("review-cnt");
 
             // 모달에 데이터 주입
             $("#buyerName").text(buyerName);
             $("#productTitle").text(productTitle);
             $("#modal_product_id").val(productId);
+            $("#review_content").val(content);
 //             $("#modal_review_cnt").val(review_cnt);
 
 
@@ -172,6 +189,13 @@
         // 모달 닫기
         $("#close-modal").click(function () {
             $("#review-modal").fadeOut(300);
+        });
+        
+        // 클릭한 영역이 모달 내용이 아니라면 닫기
+        $("#review-modal").click(function (e) {
+            if ($(e.target).is("#review-modal")) {
+                $("#review-modal").fadeOut(300);
+            }
         });
 
         // 후기 제출 이벤트
@@ -237,6 +261,7 @@
 	    }
 	}
 </script>
+
 	
 </body>
 </html>

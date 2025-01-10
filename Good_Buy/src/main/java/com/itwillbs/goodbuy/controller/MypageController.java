@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -278,17 +279,50 @@ public class MypageController {
 		return msg;
 	}
 	
-	//내가 쓴 후기
+	//내가 쓴 후기 조회
 	@GetMapping("MyReviewHistory")
-	public String myReviewHistory(Model model,HttpSession session,MemberVO member) {
+	public String myReviewHistory(@RequestParam(defaultValue = "1") int pageNum,Model model,HttpSession session,MemberVO member) {
 		String id = getSessionUserId(session);
 		member.setMem_id(id);
 		
-		List<MyReviewVO> reviewHistory = reviewService.getReviewHistory(id);
+		// 페이징 설정
+		int listLimit = 3; // 한 페이지당 게시물 수
+		int startRow = (pageNum - 1) * listLimit;
+		int listCount = reviewService.getReviewHistoryCount(id);
+
+		int pageListLimit = 5; // 페이징 개수 
+		int maxPage = (listCount / listLimit) + (listCount % listLimit > 0 ? 1 : 0);
+
+		if(maxPage == 0) {
+			maxPage = 1;
+		}
+		int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
+		System.out.println("maxPage = " + maxPage);
+		int endPage = startPage + pageListLimit - 1;
+
+		if(endPage > maxPage) {
+			endPage = maxPage;
+		}
+
+		if(pageNum < 1 || pageNum > maxPage) {
+			model.addAttribute("msg", "해당 페이지는 존재하지 않습니다!");
+			model.addAttribute("targetURL", "MyReviewHistory?pageNum=1");
+			return "result/fail";
+		}
+		PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage, endPage);
+
+		// Model 객체에 페이징 정보 저장
+		model.addAttribute("pageInfo", pageInfo);
+
+		// 게시물 목록 조회
+		List<MyReviewVO> reviewHistory = reviewService.getReviewHistory(startRow, listLimit,id);
 		model.addAttribute("review",reviewHistory);
+
 		
 		return "mypage/mypage_review_history";
 	}
+	
+
 	
 	//내가쓴 후기 수정
 		@ResponseBody

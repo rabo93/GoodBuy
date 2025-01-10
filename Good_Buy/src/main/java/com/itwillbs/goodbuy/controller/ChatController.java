@@ -40,13 +40,16 @@ public class ChatController {
 		List<ChatRoom> chatRoom = chatService.selectChatRoomList(sId);
 		//	최근 채팅메세지를 저장하기위한 List 객체 생성
 		List<ChatMessage> chatMessage = new ArrayList<ChatMessage>();
+		List<Integer> chatMessageCnt = new ArrayList<Integer>();
 		for (ChatRoom chatRoomList : chatRoom) {
 			//	최근 메세지 List 객체에 저장
 			chatMessage.add(chatService.selectLastMessage(chatRoomList.getRoom_id()));
+			chatMessageCnt.add(chatService.selectCountMessage(chatRoomList.getRoom_id(), sId));
 		}
 		
 		model.addAttribute("chatRoomList", chatRoom);
 		model.addAttribute("chatMessageList", chatMessage);
+		model.addAttribute("chatMessageCnt", chatMessageCnt);
 		
 		return "chat/chat_list";
 	}
@@ -134,7 +137,6 @@ public class ChatController {
 		
 		return new Gson().toJson(uploadResult);
 	}
-	
 	
 }
 

@@ -21,7 +21,7 @@
 			<div class="gnb-left">
 				<a href="ProductRegist" class="gnb-btn"><i class="fa-solid fa-store"></i> 판매하기</a>
 				<a href="javascript:void(0)" class="gnb-btn" onclick="startChat()">
-					<i class="fa-solid fa-comment-dots"></i> 채팅하기
+					<i class="fa-solid fa-comment-dots"></i> 채팅하기 <span class="messageStatus"></span>
 				</a>
 			</div>
 			<div class="gnb-right">

@@ -174,6 +174,12 @@
         $("#close-modal").click(function () {
             $("#review-modal").fadeOut(300);
         });
+   	    // 클릭한 영역이 모달 내용이 아니라면 닫기
+        $("#review-modal").click(function (e) {
+            if ($(e.target).is("#review-modal")) {
+                $("#review-modal").fadeOut(300);
+            }
+        });
 
         // 후기 제출 이벤트
         $("#submit-review").click(function () {

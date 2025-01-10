@@ -144,8 +144,9 @@ document.addEventListener("DOMContentLoaded", function(){
 				success: function(response){
 					alert(response.message);
 					if(response.status == 'success') {
-						window.location.href = response.redirectURL;
-					}
+//						window.location.href = response.redirectURL;
+						noticeList.ajax.reload();
+					} 
 				},
 				error : function(res) {
 					alert(res.message);

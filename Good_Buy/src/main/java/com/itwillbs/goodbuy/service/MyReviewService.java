@@ -36,8 +36,8 @@ public class MyReviewService {
 	}
 	
 	//내가 쓴 리뷰
-	public List<MyReviewVO> getReviewHistory(int startRow, int listLimit, String id) {
-		return mapper.selectReviewHistory(id,startRow,listLimit);
+	public List<MyReviewVO> getReviewHistory(int startRow, int listLimit, String id, String searchKeyword) {
+		return mapper.selectReviewHistory(id,startRow,listLimit,searchKeyword);
 	}
 	//내가쓴 리뷰 수정
 	public int reviewEdit(String reviewContent,String productId) {

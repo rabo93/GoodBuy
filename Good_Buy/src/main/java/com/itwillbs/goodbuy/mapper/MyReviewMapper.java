@@ -30,7 +30,9 @@ public interface MyReviewMapper {
 	List<MyReviewVO> selectReviewHistory(
 			@Param("mem_id") String id, 
 			@Param("startRow")int startRow, 
-			@Param("listLimit")int listLimit);
+			@Param("listLimit")int listLimit,
+			@Param("searchKeyword")String searchKeyword);
+	
 	//내가쓴 리뷰 수정
 	int updateReview(
 			@Param("review_content") String reviewContent

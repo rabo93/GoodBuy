@@ -47,6 +47,7 @@ public class ProductService {
 	public List<Map<String, Object>> searchFilterList(int product_status, 
 													  String product_price,
 													  String product_trade_adr1,
+													  String search_keyword,
 													  String product_category) {
 	    int price_start = 0;
 	    int price_end = 0;
@@ -56,7 +57,7 @@ public class ProductService {
 	        price_end = Integer.parseInt(product_price.split("_")[1]);
 	    }
 
-	    return mapper.searchFliterList(price_start, price_end, product_status, product_trade_adr1, product_category);
+	    return mapper.searchFliterList(price_start, price_end, product_status, product_trade_adr1, search_keyword, product_category);
 	}
 	
 	// 상품 상세정보 조회
@@ -134,8 +135,8 @@ public class ProductService {
 		return mapper.searchSellerScore(mem_id);
 	}
 
-	public List<Map<String, Object>> totalSearch(String searchKeyword) {
-		return mapper.totalSearch(searchKeyword);
+	public List<Map<String, String>> cateSearch() {
+		return mapper.cateSearch();
 	}
 
 }

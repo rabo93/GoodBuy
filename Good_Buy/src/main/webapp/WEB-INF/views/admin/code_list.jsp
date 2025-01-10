@@ -53,10 +53,33 @@
                                     <h5 class="m-0 font-weight-bold text-primary">공통코드 목록</h5>
                                 </div>
                                 <div class="card-body">
+                                	<div class="search-wrap border">
+									   	<section class="d-flex search-inner">
+										    <div class="col-6 search-box">
+						                        <div class="input-group">
+						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="코드ID, 코드명, 설명 검색" aria-label="Search" aria-describedby="basic-addon2">
+						                            <div class="input-group-append">
+						                                <button class="btn btn-primary" id="searchBtn" type="button">검색</button>
+						                            </div>
+						                        </div>
+					                        </div>
+					                        <div class="col-6 d-flex justify-right">
+												<button class="btn btn-primary ml-auto" type="button" id="btnAddRow"><i class="fa-regular fa-pen-to-square"></i> 등록하기</button>
+												<button class="btn btn-danger ml-2" type="button" id="btnDeleteRow"><i class="fa-solid fa-trash-can"></i> 선택 삭제</button>
+		                                    </div>
+									   	</section>
+									</div>
                                 	<div class="table-responsive overflow-hidden">
 		                                <table class="table table-bordered" id="codeList" width="100%" cellspacing="0">
 		                                    <thead>
-		                                        <tr>
+		                                    	<tr>
+		                                    		<th width="30px">
+		                                            	<div class="custom-control custom-checkbox small">
+			                                            	<input type="checkbox" class="custom-control-input" id="checkAll">
+			                                            	<label class="custom-control-label" for="checkAll"></label>
+		                                            	</div>
+		                                            </th>
+		                                            <th>No.</th>
 		                                            <th>공통코드ID</th>
 		                                            <th>공통코드명</th>
 		                                            <th>공통코드 설명</th>
@@ -66,7 +89,7 @@
 		                                            <th>사용여부</th>
 		                                            <th>순서</th>
 		                                            <th>관리</th>
-		                                        </tr>
+		                                    	</tr>
 		                                    </thead>
 		                                    <tbody></tbody>
 		                                </table>

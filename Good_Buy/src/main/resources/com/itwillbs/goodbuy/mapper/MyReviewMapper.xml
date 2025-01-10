@@ -66,10 +66,14 @@
 		JOIN MEMBER M ON R.MEM_ID = M.MEM_ID
 		JOIN PRODUCT P ON R.PRODUCT_ID = P.PRODUCT_ID
 		JOIN MEMBER M1 ON P.MEM_ID = M1.MEM_ID
-		WHERE R.MEM_ID = #{mem_id}
-		ORDER BY R.REVIEW_DATE DESC
-		LIMIT #{startRow}, #{listLimit}
-<!-- 		limit 3 -->
+		 <where>
+	        R.MEM_ID = #{mem_id}
+	        <if test="searchKeyword != null and !searchKeyword.isEmpty()">
+	            AND P.PRODUCT_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+	        </if>
+	    </where>
+	    ORDER BY R.REVIEW_DATE DESC
+	    LIMIT #{startRow}, #{listLimit}
 	</select>
 	
 	<!-- 나의 리부 수정 -->

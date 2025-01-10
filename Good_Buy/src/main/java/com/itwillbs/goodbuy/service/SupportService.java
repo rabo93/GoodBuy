@@ -23,9 +23,9 @@ public class SupportService {
 		return mapper.selectSupportDetail(support_id);
 	}
 
-	public List<SupportVO> getSupporList(int startRow, int listLimit, String id) {
+	public List<SupportVO> getSupporList(int startRow, int listLimit, String id, String searchKeyword) {
 		// TODO Auto-generated method stub
-		return mapper.selectSupportList(startRow,listLimit,id);
+		return mapper.selectSupportList(startRow,listLimit,id,searchKeyword);
 	}
 
 	public int getSupportListCount(String id) {

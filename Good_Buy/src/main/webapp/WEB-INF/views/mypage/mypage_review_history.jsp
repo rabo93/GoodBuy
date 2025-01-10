@@ -25,6 +25,7 @@
 <!-- CSS for Page -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/notice.css">
 
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
@@ -56,6 +57,13 @@
 				<div class="contents">
 					<!-- contents -->
 					<section class="my-rev-wrap">
+						<div class="nt-form">
+						<%--검색 필터 --%>
+							<form action="" class="nt-search-form" method="get">
+							<input type="text" id="nt-searchKeyword" name="searchKeyword" value="${param.searchKeyword}" placeholder="검색어를 입력하세요">
+							<input type="submit" value="검색">
+							</form>
+						</div>
 						<div class="my-rev-li">
 						<c:choose>
 								<c:when test="${empty review}">

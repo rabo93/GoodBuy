@@ -10,8 +10,8 @@
 			<a href="/"><h1><img src="${pageContext.request.contextPath}/resources/img/new_logo.svg" alt="굿바이"></h1></a>
 		</div>
 		<div class="hd-sch">
-			<form action="TotalSearch" method="get">
-				<input type="text" name="searchKeyword" class="sch-input" placeholder="어떤 상품을 찾으시나요?">
+			<form action="ProductList" method="get">
+				<input type="text" name="SEARCHKEYWORD" class="sch-input" placeholder="어떤 상품을 찾으시나요?">
 				<button type="submit" class="sch-submit">
 					<i class="fa-solid fa-magnifying-glass"></i>
 				</button>
@@ -99,12 +99,12 @@
 				<ul class="mgnb">
 					<li class="mgnb-menu">
 						<ul class="mgnb-dep-01">
-							<li><a href="ProductList?PRODUCT_CATEGORY=여성의류">여성의류</a></li>
-							<li><a href="ProductList?PRODUCT_CATEGORY=남성의류">남성의류</a></li>
-							<li><a href="ProductList?PRODUCT_CATEGORY=레저/스포츠">레저/스포츠</a></li>
-							<li><a href="ProductList?PRODUCT_CATEGORY=생활용품">생활용품</a></li>
-							<li><a href="ProductList?PRODUCT_CATEGORY=키즈">키즈</a></li>
-							<li><a href="ProductList?PRODUCT_CATEGORY=도서">도서</a></li>
+							<li><a href="ProductList?CODE_ID=category_01">여성의류</a></li>
+							<li><a href="ProductList?CODE_ID=category_02">남성의류</a></li>
+							<li><a href="ProductList?CODE_ID=category_03">레저/스포츠</a></li>
+							<li><a href="ProductList?CODE_ID=category_04">생활용품</a></li>
+							<li><a href="ProductList?CODE_ID=category_05">키즈</a></li>
+							<li><a href="ProductList?CODE_ID=category_06">도서</a></li>
 						</ul>
 					</li>
 <!-- 					<li><a href="BestCourse">BEST 🔥</a></li> -->
@@ -114,13 +114,13 @@
         </div>
 	</section>
 	<section class="hd-menu">
-		<nav class="hd-lnb">
-			<a href="ProductList?PRODUCT_CATEGORY=여성의류">여성의류</a>
-			<a href="ProductList?PRODUCT_CATEGORY=남성의류">남성의류</a>
-			<a href="ProductList?PRODUCT_CATEGORY=레저/스포츠">레저/스포츠</a>
-			<a href="ProductList?PRODUCT_CATEGORY=생활용품">생활용품</a>
-			<a href="ProductList?PRODUCT_CATEGORY=키즈">키즈</a>
-			<a href="ProductList?PRODUCT_CATEGORY=도서">도서</a>
+		<nav class="hd-lnb" id="hd-lnb">
+<!-- 			<a href="ProductList?CODE_ID=category_01">여성의류</a> -->
+<!-- 			<a href="ProductList?CODE_ID=category_02">남성의류</a> -->
+<!-- 			<a href="ProductList?CODE_ID=category_03">레저/스포츠</a> -->
+<!-- 			<a href="ProductList?CODE_ID=category_04">생활용품</a> -->
+<!-- 			<a href="ProductList?CODE_ID=category_05">키즈</a> -->
+<!-- 			<a href="ProductList?CODE_ID=category_06">도서</a> -->
 		</nav>
 	</section>
 </div>

@@ -1,13 +1,13 @@
 let url_href = window.location.href;
 let url = new URL(url_href);
-let category = url.searchParams.get('PRODUCT_CATEGORY');
+let category = url.searchParams.get('CODE_ID');
 let price = url.searchParams.get('PRICE');
 let tradeEnable = url.searchParams.get('STATUS');
 let region = url.searchParams.get('REGION');
 
 // 필터 초기화 버튼
 function fliterReset() {
-	window.location.search = "&PRODUCT_CATEGORY=" + category;
+	window.location.search = "&CODE_ID=" + category;
 }
 
 function addAdr() {
@@ -99,7 +99,7 @@ $(document).ready(function() {
 	if (url.searchParams.get('REGION') != undefined) {
 		$("input[name='regionSearch']").val(url.searchParams.get('REGION'))
 	}
-		
+	
 	$.ajax({
 		
 		url: "SearchPriceFilter",
@@ -108,37 +108,44 @@ $(document).ready(function() {
 			PRODUCT_STATUS: url.searchParams.get('STATUS') != undefined ? tradeEnable : undefined, 
 			PRODUCT_PRICE: url.searchParams.get('PRICE') != undefined ? price : undefined, 
 			PRODUCT_TRADE_ADR1: url.searchParams.get('REGION') != undefined ? region : undefined, 
+			SEARCHKEYWORD: url.searchParams.get('SEARCHKEYWORD') != undefined ? url.searchParams.get('SEARCHKEYWORD') : undefined, 
 			PRODUCT_CATEGORY: category
 		}
 	
 	}).done(function(data) {
-		moment.locale('ko')
-		$("#product-wrap").empty();
-		for(let item of data) {
-			let category = `<span>${item.PRODUCT_CATEGORY}</span>`;
-			if (item.PRODUCT_TRADE_ADR1) {
-				category += `<span class="type">직거래</span>`;
-			}
+		console.log(data);
+		if(data.length != 0) {
+			moment.locale('ko')
+			$("#product-wrap").empty();
+			for(let item of data) {
+				let category = `<span>${item.PRODUCT_CATEGORY}</span>`;
+				if (item.PRODUCT_TRADE_ADR1) {
+					category += `<span class="type">직거래</span>`;
+				}
+				$("#product-wrap").append(
+					`<li class="product-card" onclick="location.href=\'ProductDetail?PRODUCT_ID=${item.PRODUCT_ID}'">
+						<img src="../resources/upload/${item.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail"/>
+						<div class="card-info">
+							<div class="category">
+								${category}
+							</div>
+							<div class="ttl">${item.PRODUCT_TITLE}</div>
+							<div class="price">
+							 	${item.PRODUCT_PRICE.toLocaleString()} 원
+							</div>
+							<div class="card-row">
+								<span class="add">${item.PRODUCT_TRADE_ADR1}</span>
+								<span class="name">${item.MEM_NICK}</span>
+								<span class="time">${moment(item.PRODUCT_REG_DATE, "YYYYMMDDhhmmss").fromNow()}</span>
+							</div>
+						</div>
+					</li>`)};
+		} else {
 			$("#product-wrap").append(
-				`<li class="product-card" onclick="location.href=\'ProductDetail?PRODUCT_ID=${item.PRODUCT_ID}'">
-					<img src="../resources/upload/${item.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail"/>
-					<div class="card-info">
-						<div class="category">
-							${category}
-						</div>
-						<div class="ttl">${item.PRODUCT_TITLE}</div>
-						<div class="price">
-						 	${item.PRODUCT_PRICE.toLocaleString()} 원
-						</div>
-						<div class="card-row">
-							<span class="add">${item.PRODUCT_TRADE_ADR1}</span>
-							<span class="name">${item.MEM_NICK}</span>
-							<span class="time">${moment(item.PRODUCT_REG_DATE, "YYYYMMDDhhmmss").fromNow()}</span>
-						</div>
-					</div>
-				</li>`)};
+				`<h1>:( 검색결과가 없습니다</h1>`
+			)
+		}
 	}).fail(function() {
 		alert("검색 실패\n나중에 다시 시도해주세요.");
 	})	
-	
 })

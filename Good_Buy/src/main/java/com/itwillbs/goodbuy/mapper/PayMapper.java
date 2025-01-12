@@ -55,7 +55,7 @@ public interface PayMapper {
 			@Param("type") String type);
 	
 	// 충전금액조회(송금하는 사람 : user_seq_no로 조회, 받는사람 : 핀테크no로 조회)
-	Integer selectPayAmount(String user_seq_no);
+	Integer selectPayAmount(String id);
 
 	// 충전금액조회(송금받는사람 : 핀테크no로 조회)
 	Integer selectReceiverPayAmount(String fintech_use_num);

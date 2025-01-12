@@ -59,56 +59,31 @@ public class PayController {
 		Map<String, String> userAccount = service.getPayAccountInfo(token.getUser_seq_no());
 
 		
-		/* 이 부분은 SQL로 해서 뽑아 내야 됨.   */
-		
 		// 충전금액 조회(송금, 충전 본인) : 내역이 없을 수도 있으므로 Integer로 리턴함.
-		Integer pay_amount = service.getPayAmount(token.getUser_seq_no());
-		System.out.println("굿페이 : getUser_seq_no조회" + token.getUser_seq_no());
-		System.out.println("굿페이 금액 조회 : " + pay_amount);
+		Integer pay_amount = service.getPayAmount(id);
 		
-		// 거래내역조회
-		List<Map<String, String>> transactionInfo = service.getTransactionDetail(token.getUser_seq_no());
-		
-		// 거래내역에서 송금일 경우 : 송금받는 사람(RECEIVER_FINTECH_USE_NUM)도 내역 표시. 
-		// 자기자신의 FINTECH_USE_NUM으로 RECEIVER_FINTECH_USE_NUM이 있는지 거래내역 조회 
-		List<Map<String, String>> recieverTransactionInfo = service.getReceiverTransactionDetail(fintech_use_num);
-		// 충전금액 조회(송금, 충전 본인) : 내역이 없을 수도 있으므로 Integer로 리턴함.
-		Integer pay_amount_receive = service.getReceiverPayAmount(fintech_use_num);
-		// 모든 거래내역 조회 
+		// 거래내역조회(ID로 조회)
 		List<Map<String, String>> getPayInfo = service.getPayInfo(id);
+//		System.out.println("getPayInfo 자라 불러오나?? : " + getPayInfo);
 		
 		
-		Object productId = getPayInfo.get(0).get("PRODUCT_ID");
-//		System.out.println("productId 잘불러오나? : " + productId);
-		/*
-		=====> 결과가 첫번째 PRODUCT_ID만 뽑아와서 거래내역 전체를 못 불러옴.
-		 */
-		
-		int product_id = Integer.parseInt(productId.toString());
-		// 상품조회
-		ProductVO product = productService.productSearch(product_id);
-		
-		
-		
-		
-		
-		
+		for(Map<String, String> pId : getPayInfo) {
+			Object obj = pId.get("PRODUCT_ID");
+			if (obj != null) {
+				String productId = obj.toString();
+//			    System.out.println("Product ID 값 잘가지고 오나?? : " + productId);
+			    int product_id = Integer.parseInt(productId);
+//			    System.out.println("product_id 잘 불러오나? : " + product_id);
+			    // 상품조회
+				ProductVO product = productService.productSearch(product_id);
+				String productName = product.getProduct_title();
+				model.addAttribute("productName", productName);
+			}
+		}
 		
 		
-		
-//		String productName = product.getProduct_title();
-//		model.addAttribute("productName", productName);
-		
-		
-		
-		
-		
-		
-		model.addAttribute("userAccount", userAccount);
-		model.addAttribute("recieverTransactionInfo", recieverTransactionInfo);
-		model.addAttribute("transactionInfo", transactionInfo);
+		model.addAttribute("getPayInfo", getPayInfo);
 		model.addAttribute("pay_amount", pay_amount);
-		model.addAttribute("pay_amount_receive", pay_amount_receive);
 		model.addAttribute("bankUserInfo", bankUserInfo);
 		model.addAttribute("fintech_use_num", fintech_use_num);
 		
@@ -521,28 +496,30 @@ public class PayController {
 	@PayTokenCheck
 	@GetMapping("AllPayList")
 	public String allPayList(HttpSession session, Model model) {
+		String id = (String)session.getAttribute("sId");
 		PayToken token = (PayToken)session.getAttribute("token");
 		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
-		// 거래내역조회 - 로그인 유저
-		List<Map<String, String>> transactionInfo = service.getTransactionDetail(token.getUser_seq_no());
-		// 거래내역조회 - 송금받은 유저
-		List<Map<String, String>> recieverTransactionInfo = service.getReceiverTransactionDetail(fintech_use_num);
 		
-		String id = (String)session.getAttribute("sId");
 		
 		// 내 id로 거래한 모든 거래내역 조회 
 		List<Map<String, String>> getPayInfo = service.getPayInfo(id);
-//		Object productId = getPayInfo.get("PRODUCT_ID");
-//		int product_id = Integer.parseInt(productId.toString());
-//		// 상품조회
-//		ProductVO product = productService.productSearch(product_id);
-//		String productName = product.getProduct_title();
-//		model.addAttribute("productName", productName);
+		for(Map<String, String> pId : getPayInfo) {
+			Object obj = pId.get("PRODUCT_ID");
+			if (obj != null) {
+				String productId = obj.toString();
+//			    System.out.println("Product ID 값 잘가지고 오나?? : " + productId);
+			    int product_id = Integer.parseInt(productId);
+//			    System.out.println("product_id 잘 불러오나? : " + product_id);
+			    // 상품조회
+				ProductVO product = productService.productSearch(product_id);
+				String productName = product.getProduct_title();
+				model.addAttribute("productName", productName);
+			}
+		}
 		
-		model.addAttribute("transactionInfo", transactionInfo);
-		model.addAttribute("recieverTransactionInfo", recieverTransactionInfo);
+		model.addAttribute("getPayInfo", getPayInfo);
 		
-
+		
 		return "pay/pay_use_list";
 	}
     

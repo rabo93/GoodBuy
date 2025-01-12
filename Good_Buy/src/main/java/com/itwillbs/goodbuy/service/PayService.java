@@ -192,8 +192,8 @@ public class PayService {
 	}
 
 	// 충전금액조회(송금하는 사람)
-	public int getPayAmount(String user_seq_no) {
-	    Integer amount = mapper.selectPayAmount(user_seq_no);
+	public int getPayAmount(String id) {
+	    Integer amount = mapper.selectPayAmount(id);
 	    return amount != null ? amount : 0; 
 	}
 	// 충전금액조회(송금받는 사람)

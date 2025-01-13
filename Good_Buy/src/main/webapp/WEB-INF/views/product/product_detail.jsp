@@ -50,6 +50,7 @@
 				<section class="item-report-modal">
 					<div class="modal-bg" onclick="toggleModal('close')"></div>
 					<div class="modal-wrap">
+					<h1 class="modal-subject">상품 신고</h1>
 						<div class="modal-content">
 							<select class="modal-sb" name="modal-sb">
 								<option value="상품 설명에 불법적이거나 음란한 내용이 포함된 경우.">부적절한 상품 내용</option>
@@ -59,14 +60,16 @@
 								<option value="동일한 상품을 여러 번 등록하여 스팸성으로 간주되는 경우.">중복 또는 스팸 상품</option>
 								<option value="기타 사유를 입력해주세요.">기타</option>
 							</select>
-							<textarea class="modal-otherReason" readonly textho></textarea>
+							<textarea class="modal-otherReason" readonly placeholder="기타 사유를 입력해주세요."></textarea>
+						</div>
+						<div class="modal-btnGroup">
 							<button class="model-report-btn" type="button" id="itemReporting">
 								신고하기
 							</button>
+							<button class="model-close-btn" type="button" onclick="toggleModal('close')">
+								닫기
+							</button>
 						</div>
-						<button class="model-close-btn" type="button" onclick="toggleModal('close')">
-							닫기
-						</button>
 					</div>	
 				</section>
 				<section class="ch-report-modal">
@@ -157,20 +160,24 @@
 								<c:if test="${not empty sessionScope.sId}">
 									<c:if test="${productSearch.product_status != 4}">
 										<c:choose>
-											<c:when test="${wishSearch.wishlist_id != '' && wishSearch.wishlist_id != undefined}">
-												<input type="button" value="찜 삭제하기" class="item-detail-fav" id="removeWish">
+											<c:when test="${sessionScope.sId eq productSearch.mem_id}">
+												<input type="button" value="상품 수정하기" class="item-detail-editItem" id="editItem">
+												<input type="button" value="상품 삭제" class="item-detail-removeItem" id="removeItem">
 											</c:when>
 											<c:otherwise>
-												<input type="button" value="찜 하기" class="item-detail-fav" id="addWish">
+												<c:choose>
+													<c:when test="${wishSearch.wishlist_id != '' && wishSearch.wishlist_id != undefined}">
+														<input type="button" value="찜 삭제하기" class="item-detail-fav" id="removeWish">
+													</c:when>
+													<c:otherwise>
+														<input type="button" value="찜 하기" class="item-detail-fav" id="addWish">
+													</c:otherwise>
+												</c:choose>
+												<a href="javascript:void(0)"  onclick="toggleSlideChat()">
+													<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
+												</a>
 											</c:otherwise>
 										</c:choose>
-										<a href="javascript:void(0)"  onclick="toggleSlideChat()">
-											<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
-										</a>
-										<c:if test="${sessionScope.sId eq productSearch.mem_id}">
-											<input type="button" value="상품 수정하기" class="item-detail-editItem" id="editItem">
-											<input type="button" value="상품 삭제" class="item-detail-removeItem" id="removeItem">
-										</c:if>
 										<input type="hidden" id="sId" value="${sessionScope.sId}">
 										<input type="hidden" id="receiver_id" value="${productSearch.mem_id}">
 										<input type="hidden" id="product_id" value="${productSearch.product_id}">

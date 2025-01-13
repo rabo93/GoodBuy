@@ -64,7 +64,7 @@
 								<h2 class="item-regi-name">상품명</h2>
 								<div class="item-regi-box">
 									<input type="text" name="product_title" class="item-regi-title-text" id="item-regi-title-text" >
-									<a href="ProductBanedItem">거래금지 품목 보기</a>
+									<a href="ProductBanedItem" target='_blank'>거래금지 품목 보기</a>
 								</div>
 								<h6 class="item-regi-name-byte" id="item-regi-name-byte">(0 / 100)</h6>
 							</section>

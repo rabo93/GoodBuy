@@ -53,6 +53,20 @@ public class ChatController {
 		return "chat/chat_list";
 	}
 	
+	@GetMapping("ChatRequestPay")
+	public String chatRequestPay(int product_id, String receiver_id, String room_id, Model model) {
+		System.out.println("넘어오는 map 확인 : " + product_id);
+		System.out.println("넘어오는 map 확인 : " + receiver_id);
+		
+		int product_price = chatService.selectProductPrice(product_id);
+		model.addAttribute("product_id", product_id);
+		model.addAttribute("product_price", product_price);
+		model.addAttribute("receiver_id", receiver_id);
+		model.addAttribute("room_id", room_id);
+		return "chat/chat_request_pay";
+	}
+	
+	
 	//	기존 채팅방 존재여부 판단
 	@ResponseBody
 	@PostMapping("ChatRoomAjax")

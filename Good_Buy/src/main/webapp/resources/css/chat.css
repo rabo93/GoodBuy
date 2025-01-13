@@ -132,6 +132,10 @@
     margin: 10px 0;
 }
 
+.message.center {
+    text-align: center;
+}
+
 .message.user {
     text-align: right;
 }
@@ -143,6 +147,10 @@
     max-width: 70%;
 }
 
+.message.center .bubble {
+    background-color: #fff;
+}
+
 .message.user .bubble {
     background-color: #d1e7ff;
 }
@@ -150,6 +158,18 @@
 .message.other .bubble {
     background-color: #eaeaea;
 }
+
+.message .bubble .item-button{
+	border:0;
+	background:var(--primary);
+	height: 34px;
+	color: var(--white);
+	font-weight: 700;
+	padding: 0 1rem;
+	border-radius: 4px;
+	font-size: 0.875rem;
+}
+
 
 .chat-footer {
 /* 	display: none; */

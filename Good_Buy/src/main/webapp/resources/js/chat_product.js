@@ -15,6 +15,7 @@ const ALIGN_CENTER = "center";
 const ALIGN_LEFT = "other";
 const ALIGN_RIGHT = "user";
 //	====================================================================
+let currentDate = new Date();
 const productUrl = location.href;
 var baseUrl = productUrl.substring(0, productUrl.lastIndexOf('/ProductDetail'));
 
@@ -89,7 +90,10 @@ function chatProduct(e) {
 		console.log("room_id : " + chatData.room_id);
 		window.room_id = chatData.room_id;
 		console.log("window.room_id : " + window.room_id);
-//		appendMessage(TYPE_TALK, sId, receiver_id, "")
+		if($(".chat-body").children().length == 0) {
+			sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, "안녕하세요 판매글 보고 연락드립니다.", "");
+		}
+		
 	}
 	
 	if (chatData.type == TYPE_TALK || chatData.type == TYPE_FILE) {
@@ -136,22 +140,19 @@ function toggleSlideChat() {
 				for(let message of response) {
 					appendMessage(message.type, message.sender_id, message.receiver_id, message.message, message.send_time);
 				}
-				
 			});
 		}
 	});
 	
-	console.log("채팅방 비어잇나? : " + $(".chat-body").length);
-	
-	if($(".chat-body").length == 0) {
-		console.log("채팅 시작 메세지 ㄱㄱ");
-	}
 	
 	
 	//	슬라이드로 보이기
 	$("html").toggleClass("fixed");
 	$('.chat-container').toggleClass('open');
 	$(".chat-body").scrollTop($(".chat-body")[0].scrollHeight);
+	
+	
+	
 }
 
 $("#wrapper-bg").on("click", () => {
@@ -159,7 +160,7 @@ $("#wrapper-bg").on("click", () => {
 });
 
 function showChatList(receiver_id, product_id) {
-	sendMessage(TYPE_INIT_COMPLETE, product_id, "", receiver_id, "", "");
+	sendMessage(TYPE_INIT_COMPLETE, product_id, "", receiver_id, "", "", "");
 }
 
 function appendMessage(type, sender_id, receiver_id, message, send_time) {
@@ -192,7 +193,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 	}
 
 	$(".chat-body").append(div_message);
-//	$(".chat-body").scrollTop($(".chat-body")[0].scrollHeight);
+	$(".chat-body").scrollTop($(".chat-body")[0].scrollHeight);
 	
 }
 
@@ -215,7 +216,7 @@ function sendInputMessage() {
 	}).done(function(result){
 		let room_id = result.room_id;
 		console.log("TYPE_TALK에서 receiver_id 확인 - " + receiver_id);
-		sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, message);
+		sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, message, "");
 	});
 	
 	$(".chatMessage").val("");
@@ -246,7 +247,7 @@ function sendFile() {
 		}
 		
 		if(response.fileName != "" && response.thumbnailFileName != "") {
-			sendMessage(TYPE_FILE_UPLOAD_COMPLETE, product_id, sId, receiver_id, window.room_id , response.fileName + ":" + response.thumbnailFileName);
+			sendMessage(TYPE_FILE_UPLOAD_COMPLETE, product_id, sId, receiver_id, window.room_id , response.fileName + ":" + response.thumbnailFileName, "");
 		}
 		
 	});

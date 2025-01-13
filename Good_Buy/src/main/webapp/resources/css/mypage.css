@@ -508,3 +508,27 @@ textarea {
 	
 	
 }
+
+
+/* 마이스토어 : 등록한 상품목록 */
+.myproduct-wrap {
+    -webkit-column-gap: 1rem;
+    column-gap: 1rem;
+    row-gap: 1rem;
+    grid-template-columns: auto;
+    display: flex
+}
+
+/*판매상품*/
+.product-wrap {
+    display: flex
+;
+    -webkit-column-gap: 1rem;
+    column-gap: 1rem;
+    row-gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/*위시리스트*/
+.wish-contents{margin-left: 1rem;padding: 2rem;background: var(--milk);flex: 1 1 auto;min-height: 400px;border-radius: 8px;
+display: flex; flex-wrap: wrap;}

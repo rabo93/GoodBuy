@@ -378,15 +378,15 @@
 			   , A.ACTION_REASON = #{ACTION_REASON}
 			   , A.ADMIN_ID = #{ADMIN_ID}
 			   , A.ACTION_DATE = NOW()
-			<if test='STATUS != null or STATUS.equals("처리완료")'>
+			<if test='STATUS != null and STATUS.equals("처리완료")'>
      	   	   , B.PRODUCT_STATUS = 4
 			</if>
-			<if test='STATUS != null or STATUS.equals("기각")'>
+			<if test='STATUS != null and STATUS.equals("기각")'>
      	   	   , B.PRODUCT_STATUS = 0
 			</if>
 		</set>
      	 WHERE A.REPORT_ID = CAST(#{REPORT_ID} AS UNSIGNED)
-		<if test='STATUS != null or STATUS.equals("처리완료")'>
+		<if test='STATUS != null and STATUS.equals("처리완료")'>
      	   AND B.PRODUCT_ID = CAST(#{PRODUCT_ID} AS UNSIGNED)
 		</if>
      </update>
@@ -952,10 +952,15 @@
 		  FROM PRODUCT 
 		 WHERE PRODUCT_STATUS <![CDATA[<]]> 3
 	</select>
+<!-- 	<select id="selectCompleteTrades" resultType="int"> -->
+<!-- 		SELECT COUNT(*)  -->
+<!-- 		  FROM PRODUCT  -->
+<!-- 		 WHERE PRODUCT_STATUS = 3 -->
+<!-- 	</select> -->
 	<select id="selectCompleteTrades" resultType="int">
-		SELECT COUNT(*) 
-		  FROM PRODUCT 
-		 WHERE PRODUCT_STATUS = 3
+		SELECT COUNT(*)
+		  FROM PAYINFO
+		 WHERE PAY_STATUS >= 3
 	</select>
 	<select id="selectPendingReports" resultType="int">
 		SELECT 
@@ -989,6 +994,7 @@
 			 , COUNT(PRODUCT_ID) AS COUNT
 		  FROM PRODUCT
 		 GROUP BY PRODUCT_CATEGORY
+		 ORDER BY PRODUCT_CATEGORY ASC
 	</select>
 	<select id="selectTransactionList" resultType="map">
 		SELECT S.SELLER_ID
@@ -1002,5 +1008,51 @@
 		 ORDER BY S.PAY_DATE ASC
 		 LIMIT 0, 5
 	</select>
+    
+    
+    <!-- ************************************************************************* -->
+	<!-- 채팅 통계 -->
+	<select id="selectUserChatCount" resultType="map">
+		SELECT DATE(SEND_TIME) AS SEND_TIME
+			   , COUNT(*) AS COUNT
+		  FROM CHATTING
+		 WHERE 1 = 1
+		 <choose>
+		 	<when test="param == null or param.equals('')">
+		 	AND DATE(SEND_TIME) > DATE_ADD(NOW(), INTERVAL - 7 DAY)
+		 	</when>
+		 	<when test="param != null and !param.equals('')">
+		 	AND DATE(SEND_TIME) BETWEEN SUBSTRING_INDEX(#{param}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param}, ' ~ ', -1)
+		 	</when>
+		 </choose>
+		 GROUP BY DATE(SEND_TIME)
+		 ORDER BY SEND_TIME ASC
+	</select>
+	<select id="selectChatTotal" resultType="int">
+		SELECT COUNT(*) AS TOTAL
+		  FROM CHATTING
+	</select>
+    <!-- ************************************************************************* -->
+    <!-- 기간별 통계 - 회원수 조회 -->
+    <select id="selectTotalMember" resultType="map">
+    	SELECT DATE(MEM_REG_DATE) AS date
+			  , COUNT(*) AS memberTotal
+		FROM MEMBER
+		WHERE MEM_STATUS = 1
+		AND DATE(MEM_REG_DATE) BETWEEN #{startDate} AND #{endDate}
+    	GROUP BY DATE(MEM_REG_DATE)
+    	ORDER BY DATE ASC
+    </select>
+    
+    <!-- 기간별 통계 - 거래수 조회 -->
+    <select id="selectTotalOrder" resultType="map">
+    	SELECT DATE(PAY_DATE) AS date,
+				COUNT(*) AS orderTotal
+		FROM PAYINFO
+		WHERE PAY_STATUS = 3 -- 거래완료
+		AND DATE(PAY_DATE) BETWEEN #{startDate} AND #{endDate}
+    	GROUP BY DATE(PAY_DATE)
+    	ORDER BY DATE ASC
+    </select>
      
 </mapper>

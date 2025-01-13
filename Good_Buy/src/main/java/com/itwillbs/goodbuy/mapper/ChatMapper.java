@@ -39,6 +39,9 @@ public interface ChatMapper {
 						 @Param("reported_id") String reported_id,
 						 @Param("reason") String reason,
 						 @Param("room_id") String room_id);
+	
+	//	product_id로 가격 알아오기
+	int selectProductPrice(int product_id);
 
 	
 

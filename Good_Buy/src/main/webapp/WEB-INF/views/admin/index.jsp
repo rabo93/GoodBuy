@@ -5,6 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
 <!-- default -->
@@ -283,7 +285,7 @@
     <!-- Page level plugins -->
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/chart.js/Chart.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/moment.min.js"></script>
-	 <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/jquery.dataTables.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 	
     <!-- Page level custom scripts -->

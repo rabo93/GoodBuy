@@ -54,7 +54,7 @@
 			</aside>
 			<div class="my-container">
 				<div class="contents-ttl">관심목록 <small>(총 <span>${wishlistCount}</span>건)</small></div>
-				<div class="contents">
+				<div class="wish-contents">
 					<!-- contents -->
 					<section class="my-rev-wrap">
 						<div class="my-rev-li">

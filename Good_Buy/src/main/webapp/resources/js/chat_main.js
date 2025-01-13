@@ -10,6 +10,7 @@ const TYPE_REQUEST_CHAT_LIST = "REQUEST_CHAT_LIST";
 const TYPE_FILE_UPLOAD_COMPLETE = "FILE_UPLOAD_COMPLETE";
 const TYPE_FILE = "FILE";
 const TYPE_READ = "READ";
+const TYPE_REQUEST_PAY = "REQUEST_PAY";
 
 //	채팅 메세지 정렬 위치
 const ALIGN_CENTER = "center";
@@ -20,6 +21,7 @@ var ws;
 var receiver_id;
 //var sId;
 var product_id;
+var sNick;
 const childUrl = location.href;
 var baseUrl = childUrl.substring(0, childUrl.lastIndexOf('/ChatMain'));
 
@@ -30,6 +32,7 @@ $(".sidebar-item").on("dblclick", function() {
 	let title = $("#title" + index).val();
 	let receiver_id = $("#receiver_id" + index).val();
 	product_id = $("#product_id" + index).val();
+	let grade = $("#grade" + index).val();
 	window.index = index;
 	console.log("index =" + index);
 	console.log("room_id =" + room_id);
@@ -38,6 +41,7 @@ $(".sidebar-item").on("dblclick", function() {
 	console.log("sender_id =" + sId);
 	console.log("product_id =" + product_id);
 	console.log("lastMessage =" + recentMessage);
+	console.log("grade =" + grade);
 	
 	//	room_id, title, sender_id, receive_id
 	let room = {
@@ -45,7 +49,8 @@ $(".sidebar-item").on("dblclick", function() {
 		title : title,
 		receiver_id : receiver_id,
 		sender_id : sId,
-		product_id : product_id
+		product_id : product_id,
+		grade : grade
 	}
 	
 	$(".messageStatus"+ index).empty();
@@ -101,6 +106,14 @@ $(function() {
 			$(".item-chat" + index).append(recent_div);
 		} 
 		
+		if(data.type == TYPE_REQUEST_PAY) {
+			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
+			let recent_div = `${data.message}을 요청했어요<span class="item-send-time${index}">&nbsp; · &nbsp; ${data.send_time}</span>`
+			$(".item-chat" + index).empty();
+			$(".item-chat" + index).append(recent_div);
+		}
+		
+		
 	};
 	
 	initChat();
@@ -134,6 +147,64 @@ function showChatList(data) {
 function showChatRoom(room) {
 	console.log("showChatRoom -  채팅화면 표시 - " + room);
 	console.log(room);
+	let divRoom = "";
+	if(room.grade == "seller") {
+			divRoom = 	  '<div class="extra-header">'
+							+ '<button class="close-chat-button" onclick="closeChat()">'
+								+ '<i class="fa-solid fa-arrow-left"></i>'
+							+ '</button>'
+							+ '<button class="report-chat-button" onclick="toggleChatModal(\'open\')">'
+								+ '<i class="fa-solid fa-land-mine-on"></i>&nbsp;신고하기'
+							+ '</button>'
+						+ '</div>'
+						+ '<div class="chat-header">'
+				           	+ '<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>'
+				           	+ '<div class="title">'+ room.title +' </div>'
+				           	+ '<button class="item-button" onclick="requestPay(' + room.product_id + ', \'' + room.receiver_id + '\', \'' + room.room_id + '\')">송금요청</button>'
+				           + '</div>'
+				           + '<div class="chat-body">'
+				           + '</div>'
+			           + '<div class="chat-footer">'
+				           	+ '<input type="hidden" id="room_id" value="' + room.room_id +'">'
+				           	+ '<input type="hidden" id="receiver_id" value="' + room.receiver_id +'">'
+				           	+ '<input type="hidden" id="sId" value="' + room.sender_id +'">'
+				           	+ '<span class="fileArea">'
+				           	+ '<label for="chatFile"><i class="fa-solid fa-circle-plus"></i></label>'
+				           	+ '<input type="file" id="chatFile" onchange="sendFile()" accept="image/*">'
+				           	+ '</span>'
+				           	+ '<input type="text" class="chatMessage" placeholder="메시지를 입력하세요...">'
+				            + '<button class="btnSend">전송</button>'
+			            + '</div>';
+	} else {
+		
+		divRoom = '<div class="extra-header">'
+							+ '<button class="close-chat-button" onclick="closeChat()">'
+								+ '<i class="fa-solid fa-arrow-left"></i>'
+							+ '</button>'
+							+ '<button class="report-chat-button" onclick="toggleChatModal(\'open\')">'
+								+ '<i class="fa-solid fa-land-mine-on"></i>&nbsp;신고하기'
+							+ '</button>'
+						+ '</div>'
+						+ '<div class="chat-header">'
+				           	+ '<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>'
+				           	+ '<div class="title">'+ room.title +' </div>'
+				           	+ '<button class="item-button" onclick="openPayWindow(' + room.product_id + ', \'' + room.receiver_id + '\')">구매하기</button>'
+				           + '</div>'
+				           + '<div class="chat-body">'
+				           + '</div>'
+			           + '<div class="chat-footer">'
+				           	+ '<input type="hidden" id="room_id" value="' + room.room_id +'">'
+				           	+ '<input type="hidden" id="receiver_id" value="' + room.receiver_id +'">'
+				           	+ '<input type="hidden" id="sId" value="' + room.sender_id +'">'
+				           	+ '<span class="fileArea">'
+				           	+ '<label for="chatFile"><i class="fa-solid fa-circle-plus"></i></label>'
+				           	+ '<input type="file" id="chatFile" onchange="sendFile()" accept="image/*">'
+				           	+ '</span>'
+				           	+ '<input type="text" class="chatMessage" placeholder="메시지를 입력하세요...">'
+				            + '<button class="btnSend">전송</button>'
+			            + '</div>';
+	}
+	
 	let divRoom = 	  '<div class="extra-header">'
 						+ '<button class="close-chat-button" onclick="closeChat()">'
 							+ '<i class="fa-solid fa-arrow-left"></i>'
@@ -202,11 +273,21 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 	let bubble_message = "";
 	let div_message = "";
 	
-	if(type != TYPE_TALK && type != TYPE_FILE) {
-		div_message = '<div class="message center">'
-						+ '<div class="bubble">' + message + '</div>'
-					 + '</div>';
+	if(type == TYPE_REQUEST_PAY) {
+		bubble_message = `
+						<div class="bubble">
+							${sender_id}님이 ￦ ${message}원을 요청했어요
+							<span><button class="item-button" onclick="openPayWindow(${product_id}, '${receiver_id}', ${message})">송금하기</button></span>
+						</div>
+						 `
 	}
+	
+	
+//	if(type != TYPE_TALK && type != TYPE_FILE) {
+//		div_message = '<div class="message center">'
+//						+ '<div class="bubble">' + message + '</div>'
+//					 + '</div>';
+//	}
 	
 	if(type == TYPE_TALK) {	// 채팅메세지
 		bubble_message = '<div class="bubble">' + message + '</div>';
@@ -350,11 +431,79 @@ $(document).ready(function(){
 	});
 })
 
+//	========================= 송금 요청 시작 =========================
+function requestPay(product_id, receiver_id, room_id) {
+	var requestPayUrl = "ChatRequestPay?product_id=" + product_id + "&receiver_id=" + receiver_id + "&room_id=" + room_id;
+	window.open(requestPayUrl, "chat_request_pay", "width=500,height=500");
+}
+
+$(document).ready(function() {
+	
+    // 초기 가격을 숫자로 설정 (₩을 제외한 숫자만)
+    let product_price = parseInt($("#priceDisplay").text().replace(/[^\d]/g, ''));
+
+    // 상품 가격 초기화 화면에 표시 (숫자 값으로)
+    $('#priceDisplay').text('₩ ' + formatNumber(product_price));
+
+    const $inputField = $('#inputField');
+    const $priceDisplay = $('#priceDisplay');
+    const $keys = $('.key');
+
+    // 숫자 버튼 클릭 시 처리
+    $keys.each(function() {
+        $(this).click(function() {
+            const value = $(this).data('value');
+            
+            if (value === 'clear') {
+                $inputField.val('');  // C 버튼 클릭 시 입력값 초기화
+                $priceDisplay.text('₩ ' + formatNumber(product_price));  // 초기 가격 표시
+            } else if (value === 'enter') {
+                // 엔터 버튼 클릭 시 입력한 가격을 상품 가격으로 표시
+                let enteredValue = parseInt($inputField.val().replace(/[^\d]/g, '')); // 입력된 값에서 숫자만 추출
+                if (!isNaN(enteredValue)) {
+                    product_price = enteredValue;  // 실제 product_price 값 갱신
+                    $priceDisplay.text('₩ ' + formatNumber(product_price));
+                }
+                $inputField.val('');  // 입력 필드는 초기화
+            } else {
+                // 숫자 버튼 클릭 시 입력값에 숫자 추가
+                if ($inputField.val() === '') {
+                    $priceDisplay.text(''); // 기존 가격 없애기
+                }
+                let currentValue = $inputField.val() + value;
+                $inputField.val(currentValue);  // 숫자 추가
+                $inputField.val(formatNumber(currentValue.replace(/[^\d]/g, ''))); // 쉼표 추가
+            }
+        });
+    });
+
+    // 숫자 형식에 쉼표 추가하는 함수
+    function formatNumber(number) {
+        return Number(number).toLocaleString();
+    }
+    
+    $("#requsetBtn").on("click", function() {
+		room_id = $("#room_id").val();
+		receiver_id = $("#receiver_id").val();
+		product_id = $("#product_id").val();
+		let priceText = $("#priceDisplay").text();
+		let price = priceText.replace('₩', '').trim();
+		console.log(price);
+		console.log(room_id);
+		console.log(receiver_id);
+		console.log(product_id);
+		sendMessage(TYPE_REQUEST_PAY, product_id, sId, receiver_id, room_id, price);
+//		window.close();
+	});
+    
+});
+//	========================= 송금 요청 끝 =========================
 
 // ==============================================================================
 // 결제창 열기 - 창을 작게 열려고 함수로 만들었음
-function openPayWindow(product_id, receiver_id) {
+function openPayWindow(product_id, receiver_id, price) {
 	var url = "PayTransferRequest?product_id=" + encodeURIComponent(product_id) +
-              "&receiver_id=" + encodeURIComponent(receiver_id);
+              "&receiver_id=" + encodeURIComponent(receiver_id)+
+              "&price=" + encodeURIComponent(price) ;
     payWindow = window.open(url, "chat_window", "width=500,height=500");
 }

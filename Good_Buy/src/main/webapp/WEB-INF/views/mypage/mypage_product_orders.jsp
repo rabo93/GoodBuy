@@ -96,7 +96,7 @@
 <!-- 														</button> -->
                                                     	<input type="hidden" name="product_id" id="hiddenProductId">
                                                     	<c:choose>
-                                                    		<c:when test="${product.REVIEW_CNT != null && product.REVIEW_CNT == 0}">
+                                                    		<c:when test="${empty product.REVIEW_CNT || product.REVIEW_CNT == 0}">
 	                                                    		 <button class="open-modal-btn"
 															        data-product-id="${product.PRODUCT_ID}"
 															        data-title="${product.PRODUCT_TITLE}"

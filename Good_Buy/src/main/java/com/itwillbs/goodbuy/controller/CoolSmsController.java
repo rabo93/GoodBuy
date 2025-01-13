@@ -112,11 +112,11 @@ public class CoolSmsController {
         }
         
         // 2) 인증번호 유효시간 확인 (5분)
-        long validDuration = 5 * 60 * 1000; // 5분
+        long validDuration = 1 * 60 * 1000; // 5분
         long currentTime = System.currentTimeMillis();
         long authDateTime = smsAuthInfoVO.getAuth_date().getTime(); // DB에서 가져온 인증시간
-//        log.info(">>>>>>>>>> 현재 시간: " + currentTime);
-//        log.info(">>>>>>>>>> 인증 요청 시간: " + authDateTime);
+        log.info(">>>>>>>>>> 현재 시간: " + currentTime);
+        log.info(">>>>>>>>>> 인증 요청 시간: " + authDateTime);
 
         if (currentTime - authDateTime > validDuration) {
             return ResponseEntity.badRequest()

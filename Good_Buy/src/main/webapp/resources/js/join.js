@@ -42,6 +42,10 @@ $(document).ready(function() {
                 	
                 	$("#authChkBtn").attr("disabled", false); // 인증하기 버튼 활성화
                     $(".after").attr("disabled", true); // 인증완료 버튼 비활성화
+                    
+                    // 5분 타이머 시작
+                    startTimer(1);
+			    	
             	}
             },
             error: function (xhr) {
@@ -168,6 +172,35 @@ $(document).ready(function() {
 	
 });
 
+// 타이머
+function startTimer(min) {
+	const timer = document.querySelector("#rest_time");
+	let sec = 60;
+	timer.innerHTML = `0${min}:00`;
+	min -= 1;
+	
+	let countdown = setInterval(() => {
+		sec -= 1;
+		
+		if (sec < 10) {
+			timer.innerHTML = `0${min}:0${sec}`;
+		} else {
+			timer.innerHTML = `0${min}:${sec}`;
+		}
+		
+		if(sec < 0) {
+			min -= 1;
+			sec = 60;
+		}
+		
+		if (min == 0 && sec == 0) {
+			clearInterval(countdown);
+			$("#authCheckResult").text("인증시간이 만료되었습니다. 재인증해주세요.").css("color", "red");
+		}
+		
+	}, 1000);
+}
+	
 //---------------------------------------------------------------------
 // 아이디 중복체크/길이검사
 function checkId(){

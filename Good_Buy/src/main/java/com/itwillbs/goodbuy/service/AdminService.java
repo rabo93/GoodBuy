@@ -416,8 +416,6 @@ public class AdminService {
 		return mapper.selectChatTotal();
 	}
 	
-	
-	
 	// 기간별 회원수 통계 
 	public List<Map<String, Object>> getMemberPeriod(String startDate, String endDate) {
 		return mapper.selectTotalMember(startDate,endDate);

@@ -1011,6 +1011,28 @@
     
     
     <!-- ************************************************************************* -->
+	<!-- 채팅 통계 -->
+	<select id="selectUserChatCount" resultType="map">
+		SELECT DATE(SEND_TIME) AS SEND_TIME
+			   , COUNT(*) AS COUNT
+		  FROM CHATTING
+		 WHERE 1 = 1
+		 <choose>
+		 	<when test="param == null or param.equals('')">
+		 	AND DATE(SEND_TIME) > DATE_ADD(NOW(), INTERVAL - 7 DAY)
+		 	</when>
+		 	<when test="param != null and !param.equals('')">
+		 	AND DATE(SEND_TIME) BETWEEN SUBSTRING_INDEX(#{param}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param}, ' ~ ', -1)
+		 	</when>
+		 </choose>
+		 GROUP BY DATE(SEND_TIME)
+		 ORDER BY SEND_TIME ASC
+	</select>
+	<select id="selectChatTotal" resultType="int">
+		SELECT COUNT(*) AS TOTAL
+		  FROM CHATTING
+	</select>
+    <!-- ************************************************************************* -->
     <!-- 기간별 통계 - 회원수 조회 -->
     <select id="selectTotalMember" resultType="map">
     	SELECT DATE(MEM_REG_DATE) AS date
@@ -1032,33 +1054,5 @@
     	GROUP BY DATE(PAY_DATE)
     	ORDER BY DATE ASC
     </select>
-    <!-- ************************************************************************* -->
-    
-    
-    
-    
-    
-    
-    
-	<select id="selectUserChatCount" resultType="map">
-		SELECT DATE(SEND_TIME) AS SEND_TIME
-			   , COUNT(*) AS COUNT
-		  FROM CHATTING
-		 WHERE 1 = 1
-		 <choose>
-		 	<when test="param == null or param.equals('')">
-		 	AND DATE(SEND_TIME) > DATE_ADD(NOW(), INTERVAL - 7 DAY)
-		 	</when>
-		 	<when test="param != null and !param.equals('')">
-		 	AND DATE(SEND_TIME) BETWEEN SUBSTRING_INDEX(#{param}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param}, ' ~ ', -1)
-		 	</when>
-		 </choose>
-		 GROUP BY DATE(SEND_TIME)
-		 ORDER BY SEND_TIME ASC
-	</select>
-	<select id="selectChatTotal" resultType="int">
-		SELECT COUNT(*) AS TOTAL
-		  FROM CHATTING
-	</select>
      
 </mapper>

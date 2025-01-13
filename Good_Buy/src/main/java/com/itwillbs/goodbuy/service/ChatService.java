@@ -62,6 +62,10 @@ public class ChatService {
 		return mapper.insertChatReport(reporter_id, reported_id, reason, room_id);
 	}
 
+	public int selectProductPrice(int product_id) {
+		return mapper.selectProductPrice(product_id);
+	}
+
 	
 
 	

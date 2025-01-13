@@ -84,17 +84,6 @@
                                                         <span class="add">${product.PRODUCT_TRADE_ADR1}</span>
                                                         <span class="name">${product.MEM_NICK}</span>
                                                     </div>
-                                                    
-                                                    <!-- 후기 작성하기 버튼 (상품 정보 포함) -->
-<!--                                                     	<input type="hidden" name="product_id" id="hiddenProductId"> -->
-<!-- 	                                                    <button class="open-modal-btn" -->
-<%-- 														        data-product-id="${product.product_id}" --%>
-<%-- 														        data-title="${product.product_title}" --%>
-<%-- 														        data-buyer="${product.mem_nick}" --%>
-<%--  														        data-review-cnt="${product.review_cnt}" --%>
-<%-- 														        type="button" ${product.review_cnt == 1 ? 'disabled' : ''}> --%>
-<%-- 														    ${product.review_cnt == 1 ? '작성완료📩' : '후기 작성하기📮'} --%>
-<!-- 														</button> -->
                                                     	<input type="hidden" name="product_id" id="hiddenProductId">
                                                     	<c:choose>
                                                     		<c:when test="${empty product.REVIEW_CNT || product.REVIEW_CNT == 0}">
@@ -103,13 +92,12 @@
 																        data-product-id="${product.PRODUCT_ID}"
 																        data-title="${product.PRODUCT_TITLE}"
 																        data-buyer="${product.MEM_NICK}">
-																        후기 작성하기📮
+																        <i class="fa-regular fa-envelope"></i> 후기 작성하기
 																     </button>
 															     </div>
                                                     		</c:when>
-                                                    		<c:otherwise><a class="review-done-btn" href='MyReviewHistory'><i class="fa-regular fa-envelope"></i> 작성완료</a></c:otherwise>
+                                                    		<c:otherwise><a class="review-done-btn" href='MyReviewHistory?product_id=${product.PRODUCT_ID}'><i class="fa-solid fa-envelope"></i> 작성완료</a></c:otherwise>
                                                     	</c:choose>
-														
                                                 </div>
                                             </li>
                                         </c:forEach>
@@ -131,7 +119,7 @@
    <div id="review-modal" class="modal-overlay" style="display: none;">
     <div class="modal-content">
         <h2>
-            <span id="buyerName"></span>님께 구매한 [<span id="productTitle"></span>]<br>후기 보내기📮
+            <span id="buyerName"></span>님께 구매한 [<span id="productTitle"></span>]<br>후기 보내기 <i class="fa-regular fa-envelope"></i>
         </h2>
         <div class="review-radio">
             <label><input type="radio" name="score" value="2">최고예요🥳</label>
@@ -209,7 +197,7 @@
 			}
 		}
    	    
-   	    $("input[name='score']").on("change",function(){
+   	    $("input[name='score']").on("change",function(){ // 체크박스를 라디오 버튼 선택에 따라 업데이트
    	    	const selectValue = $(this).val();
    	    	updateCheckBox(selectValue);
    	    });
@@ -273,6 +261,5 @@
     });
 
 </script>
-
 </body>
 </html>

@@ -67,6 +67,7 @@
 				                	<input type="hidden" id="title${status.index}" value="${chatRoom.title}">
 				                	<input type="hidden" id="receiver_id${status.index}" value="${chatRoom.receiver_id}">
 				                	<input type="hidden" id="product_id${status.index}" value="${chatRoom.product_id}">
+				                	<input type="hidden" id="grade${status.index}" value="${chatRoom.grade}">
 					                <div class="item"><strong>${chatRoom.title}</strong>
 					                	<span class="messageStatus${status.index}">${chatMessageCnt[status.index]}</span>
 					                </div>
@@ -84,6 +85,9 @@
 			        </div>
 			        <div class="chat-area">
 		        	<%-- 채팅창 영역 --%>
+			        </div>
+			        <div class="requestPay">
+			        <%-- 송금요청 --%>
 			        </div>
 		    	</div>
 				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->

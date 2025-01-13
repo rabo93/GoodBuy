@@ -70,7 +70,7 @@
 									</div>
 									<div class="table-responsive">
 <!-- 		                                <table class="table table-bordered compact" id="periodList" width="100%" cellspacing="0"> -->
-		                                <table class="table table-bordered compact" id="periodList2" width="100%" cellspacing="0">
+		                                <table class="table table-bordered compact" id="periodList" width="100%" cellspacing="0">
 		                                    <thead>
 		                                    	<tr>
 		                                    		<th>날짜</th>
@@ -131,7 +131,7 @@
 
     <!-- Page level custom scripts -->
 <%--     <script src="${pageContext.request.contextPath}/resources/adm/js/period_analysis.js"></script> --%>
-    <script src="${pageContext.request.contextPath}/resources/adm/js/period_analysis2.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/js/period_analysis.js"></script>
 
 </body>
 

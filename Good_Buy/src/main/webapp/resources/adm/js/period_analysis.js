@@ -65,6 +65,34 @@ document.addEventListener("DOMContentLoaded", function(){
                 last:     '마지막'
             },
         },
+        footerCallback: function (nRow) {
+			// 당일 합계
+          let api = this.api();
+          let intVal = function (i) {
+              return typeof i === 'string' ?
+                  i.replace(/[\$,]/g, '') * 1 || i.replace('m', '') * 1 :
+                  typeof i === 'number' ?
+                      i : 0;
+          };
+
+          api.columns('.sum', {page: 'current'}).every(function () {
+              let sum = this
+                  .data()
+                  .reduce(function (a, b) {
+                      return intVal(a) + intVal(b);
+                  }, 0);
+              this.footer().innerHTML = sum;
+          });
+
+          // 시작 ~ 당일 합계
+          let totalValues = Object.values(totalArr)
+          let secondRow = $(nRow).next()[0];
+          let nCells = secondRow.getElementsByTagName('th');
+          for (let j = 0; j < totalValues.length; j++) {
+              nCells[j + 3].innerHTML = Object.values(totalArr)[j];
+          }
+      }
+      
 	});
 	
 	// 현재 월의 일자별 데이터를 생성하는 함수

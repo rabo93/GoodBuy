@@ -5,6 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
 <!-- default -->
@@ -22,6 +24,9 @@
 <link href="${pageContext.request.contextPath}/resources/adm/css/adm.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.css" rel="stylesheet">
+<%-- <link href="${pageContext.request.contextPath}/resources/adm/vendor/datatables/buttons.dataTables.css" rel="stylesheet"> --%>
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+
 
 </head>
 <body id="page-top">
@@ -101,16 +106,6 @@
 						                        </div>
 					                        </div>
 									   	</section>
-<!-- 									   	<section class="d-flex search-inner mt-3"> -->
-<!-- 										   	<div class="col-4 pl-4 search-box"> -->
-<!-- 			                                	<div class="search-ttl">가입기간별</div> -->
-<!-- 												<div class="input-group align-items-center justify-content-center"> -->
-<!-- 												    <input type="date" class="form-control rounded-sm mr-2" id="searchDate1" placeholder="날짜를 선택하세요" /> -->
-<!-- 													~  -->
-<!-- 												    <input type="date" class="form-control rounded-sm ml-2" id="searchDate2" placeholder="날짜를 선택하세요" /> -->
-<!-- 												</div> -->
-<!-- 										    </div> -->
-<!-- 									   	</section> -->
 									</div>
                                 	<div class="table-responsive">
 		                                <table class="table table-bordered compact" id="memberList" width="100%" cellspacing="0">
@@ -195,7 +190,11 @@
     <!-- Page level plugins -->
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<%--     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script> --%> <%-- 반응형 --%>
+	
+	<script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.buttons.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/buttons.html5.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/jszip.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/buttons.print.min.js"></script>
 
     <!-- Page level custom scripts -->
     <script src="${pageContext.request.contextPath}/resources/adm/js/member_list.js"></script>

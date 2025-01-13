@@ -327,5 +327,11 @@ body {font-family: "Nunito", 'Pretendard', serif;}
     background: var(--gray-dark);
 }
 
+.top {display:flex;align-items:center;justify-content:space-between;}
+.top .left-length {display:flex; align-items:center;}
+.dataTables_wrapper .dataTables_length label {margin:0;}
+.right-buttons .dt-buttons button {border:0;background:var(--success);color:var(--white);font-weight:700;border-radius:6px;font-size: 15px;}
+.right-buttons .dt-buttons button:nth-child(2) {border:0;background:var(--primary);color:var(--white);font-weight:700;border-radius:6px;font-size: 15px;}
+.right-buttons .dt-buttons button:not(:disabled):hover {background:var(--secondary);border:0;}
 
 

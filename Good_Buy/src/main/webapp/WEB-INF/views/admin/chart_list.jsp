@@ -6,6 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
 <!-- default -->
@@ -50,11 +52,72 @@
 					<div class="row">
                         <div class="col-lg-12">
                             <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h5 class="m-0 font-weight-bold text-primary">통계</h5>
-                                </div>
                                 <div class="card-body">
-                                	음..
+                                
+                                	<div class="row mb-4">
+				                        <div class="col-xl-6 col-md-6">
+				                            <div class="card shadow h-100 py-2">
+				                                <div class="card-body">
+				                                    <div class="row no-gutters align-items-center">
+				                                        <div class="col mr-2">
+				                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+				                                                전체 이용자수</div>
+				                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="allUserCount"></div>
+				                                        </div>
+				                                        <div class="col-auto">
+				                                        	<i class="fa-solid fa-users fa-2x text-gray-300"></i>
+				                                        </div>
+				                                    </div>
+				                                </div>
+				                            </div>
+				                        </div>
+				                        <div class="col-xl-6 col-md-6">
+				                            <div class="card shadow h-100 py-2">
+				                                <div class="card-body">
+				                                    <div class="row no-gutters align-items-center">
+				                                        <div class="col mr-2">
+				                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+				                                                전체 메세지 건 수</div>
+				                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="allChatCount"></div>
+				                                        </div>
+				                                        <div class="col-auto">
+				                                        	<i class="fa-regular fa-comments fa-2x text-gray-300"></i>
+				                                        </div>
+				                                    </div>
+				                                </div>
+				                            </div>
+				                        </div>
+				                    </div>
+								   	
+                               		<!-- Area Chart -->
+			                        <div class="col-xl-12 col-lg-12 p-0">
+			                            <div class="card shadow mb-4">
+			                                <!-- Card Header -->
+			                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+			                                    <h6 class="m-0 font-weight-bold text-primary">소통</h6>
+			                                </div>
+			                                <!-- Card Body -->
+			                                <div class="card-body">
+			                                	<div class="search-wrap border">
+			                                		<section class="d-flex search-inner">
+													    <div class="col-12 px-12 search-box">
+						                                	<div class="search-ttl">기간별</div>
+															<div class="input-group align-items-center justify-content-center schDate-wrap">
+																<input type="text" class="form-control rounded-sm mr-2" placeholder="날짜 선택" value="" name="schDate" id="schDate"  autocomplete="off"/>
+																<button class="btn btn-primary" id="searchDateBtn" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
+																<button class="btn btn-success ml-2" id="initDateBtn" type="button"><i class="fa-solid fa-rotate"></i></button>
+															</div>
+													    </div>
+												   	</section>
+												</div>
+			                                    <div class="chart-area">
+			                                        <canvas id="chatAreaChart"></canvas>
+			                                    </div>
+			                                </div>
+			                            </div>
+			                        </div>
+			                        <!-- // Area chart -->
+                                	
                                 </div>
                             </div>
                         </div>
@@ -92,12 +155,12 @@
     <!-- Page level plugins -->
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<%--     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script> --%> <%-- 반응형 --%>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/moment.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/daterangepicker.js"></script>
-
+    <script src="${pageContext.request.contextPath}/resources/adm/vendor/chart.js/Chart.min.js"></script>
+    
     <!-- Page level custom scripts -->
-    <script src="${pageContext.request.contextPath}/resources/adm/js/member_report_list.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/js/chart_list.js"></script>
 
 </body>
 

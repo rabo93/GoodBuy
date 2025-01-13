@@ -208,5 +208,11 @@ public interface AdminMapper {
 	// 기간별 거래수 통계
 	List<Map<String, Object>> selectTotalOrder(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
+	// 기간별 채팅 메세지 건수
+	List<Map<String, Object>> selectUserChatCount(String param);
+
+	// 전체 채팅 건수
+	int selectChatTotal();
+
 
 }

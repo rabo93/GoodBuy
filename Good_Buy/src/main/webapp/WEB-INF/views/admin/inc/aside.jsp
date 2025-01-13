@@ -80,7 +80,7 @@
         <div id="menu06" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
             	<h6 class="collapse-header">ADMIN</h6>
-                <a class="collapse-item" href="AdmChartList">통계</a>
+                <a class="collapse-item" href="AdmChartList">채팅 통계</a>
                 <a class="collapse-item" href="PeriodAnalysis">기간별 통계</a>
                 <a class="collapse-item" href="AdmLogList">로그 기록</a>
             </div>

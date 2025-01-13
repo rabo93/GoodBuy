@@ -113,7 +113,6 @@ $(function() {
 			$(".item-chat" + index).append(recent_div);
 		}
 		
-		
 	};
 	
 	initChat();
@@ -249,7 +248,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 		bubble_message = `
 						<div class="bubble">
 							${sender_id}님이 ￦ ${message}원을 요청했어요
-							<span><button class="item-button" onclick="openPayWindow(${product_id}, '${receiver_id}', ${message})">송금하기</button></span>
+							<span><button class="item-button" onclick="openPayWindow(${product_id}, '${sender_id}', ${message})">송금하기</button></span>
 						</div>
 						 `
 	}

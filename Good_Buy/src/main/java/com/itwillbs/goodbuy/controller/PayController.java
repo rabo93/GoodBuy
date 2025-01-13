@@ -365,7 +365,9 @@ public class PayController {
 	public String payTransferRequest(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
 		int product_id = Integer.parseInt((String) map.get("product_id"));
 		PayToken token = (PayToken)session.getAttribute("token");
-		
+		System.out.println("!@#!@#!@#");
+		System.out.println(map.get("price"));
+//		int price = Integer.parseInt((String) map.get("price"));
 		
 		Map<String, Object> bankUserInfo = service.getPayUserInfo(token);
 		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
@@ -380,6 +382,7 @@ public class PayController {
 		model.addAttribute("productSearch", productSearch);
 		model.addAttribute("bankUserInfo", bankUserInfo);
 		model.addAttribute("fintech_use_num", fintech_use_num);
+//		model.addAttribute("price", price);
 		
 		return "pay/pay_remit";
 	}

@@ -16,6 +16,7 @@
 		 WHERE ROOM_ID = s.ROOM_ID
 		   AND MEM_ID != #{sender_id}
 		     ) AS receiver_id
+		     , GRADE
 		  FROM CHATROOM AS s
 		 WHERE MEM_ID = #{sender_id}
 		   AND STATUS = 1
@@ -128,6 +129,12 @@ ROOM_ID
 			 , #{room_id}
 			 )
 	</insert>
+	
+	<select id="selectProductPrice" resultType="int">
+		SELECT PRODUCT_PRICE
+		  FROM PRODUCT
+		 WHERE PRODUCT_ID = #{product_id}
+	</select>
 	
 	
 </mapper>

@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -67,7 +71,6 @@ public class AdminController {
 		int totalUsers = service.getTotalUsers();
 		
 		// 최근 7일간 거래 통계
-		
 		model.addAttribute("totalProducts", totalProducts);
 		model.addAttribute("activeTrades", activeTrades);
 		model.addAttribute("completeTrades", completeTrades);
@@ -101,17 +104,17 @@ public class AdminController {
 	@ResponseBody
 	@PostMapping("WeeklyTransaction")
 	public String WeeklyTransaction() {	
-			// 공통코드 전체 목록 조회
-			List<Map<String, Object>> transactionList = service.getTransactionList();
-			
-			// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
-			Map<String, Object> response = new HashMap<String, Object>();
-			
-			response.put("transactionList", transactionList); // 컬럼 데이터
-			
-			JSONObject jo = new JSONObject(response);
-			
-			return jo.toString();
+		// 공통코드 전체 목록 조회
+		List<Map<String, Object>> transactionList = service.getTransactionList();
+		
+		// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		response.put("transactionList", transactionList); // 컬럼 데이터
+		
+		JSONObject jo = new JSONObject(response);
+		
+		return jo.toString();
 	}
 	
 	
@@ -838,11 +841,70 @@ public class AdminController {
 	}
 	
 	@ResponseBody
-	@PostMapping("PeriodAanalysis")
-	public String periodAanalysis() {
+	@PostMapping("PeriodListForm")
+	public String periodListForm(@RequestParam Map<String, String> param) {
+		System.out.println("조회할 기간 : " + param.get("searchDate"));
+		String searchDate = param.get("searchDate");
+		String startDate = "";
+		String endDate = "";
+		
+		if (searchDate != null && searchDate.contains(" ~ ")) {
+			String[] date = searchDate.split(" ~ ");
+			startDate = date[0];
+			endDate = date[1];
+		}
+				
+		// 각각의 컬럼 데이터 가져오기
+		// 회원수
+		List<Map<String, Object>> memberPeriod = service.getMemberPeriod(startDate, endDate);
+		System.out.println("회원수: " + memberPeriod);
+		// [{date=2025-01-01, memberTotal=1}, {date=2025-01-02, memberTotal=4}, {date=2025-01-03, memberTotal=3}, {date=2025-01-04, memberTotal=3}, {date=2025-01-05, memberTotal=3}, {date=2025-01-06, memberTotal=3}, {date=2025-01-07, memberTotal=3}, {date=2025-01-08, memberTotal=3}, {date=2025-01-09, memberTotal=3}, {date=2025-01-10, memberTotal=6}, {date=2025-01-13, memberTotal=2}]
+		// 거래수 
+		List<Map<String, Object>> orderPeriod = service.getOrderePeriod(startDate, endDate);
+		System.out.println("거래수: " + orderPeriod);
+		// [{date=2025-01-10, orderTotal=1}]
+		
+		// 날짜별 컬럼 병합
+		Map<String, Map<String, Object>> resultMap = new LinkedHashMap<>();
+		// 회원수 데이터 추가
+		for(Map<String, Object> memberData : memberPeriod) {
+			Date memberDate = (Date) memberData.get("date");
+			String dateString = new SimpleDateFormat("yyyy-MM-dd").format(memberDate); // java.sql.Date를 String으로 변환
+			
+			resultMap.putIfAbsent(dateString, new HashMap<String, Object>());
+			resultMap.get(dateString).put("memberTotal", memberData.get("memberTotal"));
+		}
+		System.out.println("여기까지왔나요!?"+resultMap);
+		
+		// 거래수 데이터 추가
+		for(Map<String, Object> orderData : orderPeriod) {
+			Date orderDate  = (Date) orderData.get("date");
+			String dateString = new SimpleDateFormat("yyyy-MM-dd").format(orderDate); // java.sql.Date를 String으로 변환
+			
+			resultMap.putIfAbsent(dateString, new HashMap<String, Object>());
+			resultMap.get(dateString).put("orderTotal", orderData.get("orderTotal"));
+		}
+		System.out.println("여기까지왔나요22222!?"+resultMap);
+		
+		// 데이터 결합
+		List<Map<String, Object>> finalList = new ArrayList<Map<String,Object>>();
+		for(Map.Entry<String, Map<String, Object>> entry : resultMap.entrySet()) {
+			Map<String, Object> finalData = new HashMap<String, Object>();
+			finalData.put("date", entry.getKey());
+			finalData.put("memberTotal", entry.getValue().getOrDefault("memberTotal", 0));
+			finalData.put("orderTotal", entry.getValue().getOrDefault("orderTotal", 0));
+			finalList.add(finalData);
+		}
+		
+		System.out.println("finalList: " + finalList);
 		
 		
-		return "";
+		// 결과 JSONObject로 변환
+		JSONObject jo = new JSONObject();
+		jo.put("periodList2", finalList);
+		
+		// JSONObject를 문자열로 리턴
+		return jo.toString();
 	}
 	
 	
@@ -884,6 +946,11 @@ public class AdminController {
 	
 	// ======================================================
 	// ======================================================
+	// date 타입 String으로 변환
+//	public String convertSqlDateToString(Date date) {
+//	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // 원하는 날짜 형식으로 변경
+//	    return sdf.format(date);
+//	}
 	// ======================================================
 	//	실제 업로드 경로 메서드
 	public String getRealPath(HttpSession session) {

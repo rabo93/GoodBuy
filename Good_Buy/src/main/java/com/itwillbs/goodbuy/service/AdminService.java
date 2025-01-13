@@ -417,4 +417,15 @@ public class AdminService {
 	}
 	
 	
+	
+	// 기간별 회원수 통계 
+	public List<Map<String, Object>> getMemberPeriod(String startDate, String endDate) {
+		return mapper.selectTotalMember(startDate,endDate);
+	}
+	// 기간별 거래 통계
+	public List<Map<String, Object>> getOrderePeriod(String startDate, String endDate) {
+		return mapper.selectTotalOrder(startDate,endDate);
+	}
+	
+	
 }

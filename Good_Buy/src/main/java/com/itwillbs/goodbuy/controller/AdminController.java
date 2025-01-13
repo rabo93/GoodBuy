@@ -800,6 +800,33 @@ public class AdminController {
 		return "admin/chart_list";
 	}
 	
+	@ResponseBody
+	@PostMapping("UserChatAnalysis")
+	public List<Map<String, Object>> userChatAnalysis(@RequestBody Map<String, Object> param) {
+		log.info("param" + param);
+		String date = (String)param.get("schDate");
+		log.info("schDate" + date);
+		
+		List<Map<String, Object>> userChatList = service.getUserChatCount(date);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("userChatList", userChatList);
+		
+		return userChatList;
+	}
+	
+	@ResponseBody
+	@PostMapping("AllUserCount")
+	public int allUserCount() {
+		int totalUsers = service.getTotalUsers();
+		return totalUsers;
+	}
+	
+	@ResponseBody
+	@PostMapping("AllChatCount")
+	public int allChatCount() {
+		int totalChat = service.getTotalChats();
+		return totalChat;
+	}
 	
 	
 	//-----------------------------------------------------
@@ -817,7 +844,6 @@ public class AdminController {
 		
 		return "";
 	}
-	
 	
 	
 	

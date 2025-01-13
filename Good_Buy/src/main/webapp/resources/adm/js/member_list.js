@@ -31,6 +31,20 @@ document.addEventListener("DOMContentLoaded", function(){
 				return data;
 			},
 		},
+		dom: '<"top"<"left-length"l><"right-buttons"fB>>rt<"bottom"ip>',
+        buttons: [
+			{
+                extend: 'copy',
+                text: '복사',
+            },
+            {
+                extend: 'excel',
+                text: '엑셀 저장',
+                exportOptions: {
+		            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+		        },
+            },
+		],
 		order: [[8, 'desc']], // 최초 조회 시 가입일자 최신순으로 기본 설정
 		columnDefs: [
 			 { targets: [0, 5, 6, 7, 9, 10, 11], orderable: false },

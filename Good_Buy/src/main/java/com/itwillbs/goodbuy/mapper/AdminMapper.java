@@ -203,5 +203,11 @@ public interface AdminMapper {
 	// 최근 7일간 거래 목록
 	List<Map<String, Object>> selectTransactionList();
 
+	// 기간별 채팅 메세지 건수
+	List<Map<String, Object>> selectUserChatCount(String param);
+
+	// 전체 채팅 건수
+	int selectChatTotal();
+
 
 }

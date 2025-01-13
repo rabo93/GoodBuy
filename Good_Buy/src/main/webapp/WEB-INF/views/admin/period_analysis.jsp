@@ -69,9 +69,21 @@
 									<div class="table-responsive">
 <!-- 		                                <table class="table table-bordered compact" id="periodList" width="100%" cellspacing="0"> -->
 		                                <table class="table table-bordered compact" id="periodList2" width="100%" cellspacing="0">
-		                                    <thead></thead>
+		                                    <thead>
+		                                    	<tr>
+		                                    		<th>날짜</th>
+		                                    		<th>회원수</th>
+		                                    		<th>거래수</th>
+		                                    	</tr>
+		                                    </thead>
 		                                    <tbody></tbody>
-		                                    <tfoot></tfoot>
+		                                    <tfoot>
+		                                    	<tr>
+		                                    		<th>총합</th>
+		                                    		<th></th>
+		                                    		<th></th>
+		                                    	</tr>
+		                                    </tfoot>
 		                                </table>
 		                          	</div>
                                 </div>

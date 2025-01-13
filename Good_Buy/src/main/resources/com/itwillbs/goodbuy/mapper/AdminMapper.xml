@@ -1002,5 +1002,43 @@
 		 ORDER BY S.PAY_DATE ASC
 		 LIMIT 0, 5
 	</select>
+    
+    
+    <!-- ************************************************************************* -->
+    <!-- 기간별 통계 - 회원수 조회 -->
+    <select id="selectTotalMember" resultType="map">
+    	SELECT DATE(MEM_REG_DATE) AS date
+			  , COUNT(*) AS memberTotal
+		FROM MEMBER
+		WHERE MEM_STATUS = 1
+		AND DATE(MEM_REG_DATE) BETWEEN #{startDate} AND #{endDate}
+    	GROUP BY DATE(MEM_REG_DATE)
+    	ORDER BY DATE ASC
+    </select>
+    
+    <!-- 기간별 통계 - 거래수 조회 -->
+    <select id="selectTotalOrder" resultType="map">
+    	SELECT DATE(PAY_DATE) AS date,
+				COUNT(*) AS orderTotal
+		FROM PAYINFO
+		WHERE PAY_STATUS = 3 -- 거래완료
+		AND DATE(PAY_DATE) BETWEEN #{startDate} AND #{endDate}
+    	GROUP BY DATE(PAY_DATE)
+    	ORDER BY DATE ASC
+    </select>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      
 </mapper>

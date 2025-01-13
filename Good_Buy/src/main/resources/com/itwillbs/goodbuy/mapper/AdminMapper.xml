@@ -1042,6 +1042,8 @@
 		AND DATE(MEM_REG_DATE) BETWEEN #{startDate} AND #{endDate}
     	GROUP BY DATE(MEM_REG_DATE)
     	ORDER BY DATE ASC
+<!--     		<if test='param.orderDir.equals("asc")'>ASC</if> -->
+<!-- 			<if test='param.orderDir.equals("desc")'>DESC</if> -->
     </select>
     
     <!-- 기간별 통계 - 거래수 조회 -->

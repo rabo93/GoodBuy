@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		],
 		order: [[0, 'asc']], // 최초 조회시 날짜 순으로 기본 설정
         columnDefs: [
+			{ targets: [1,2], orderable: false },
 		],
         columns: [
 			// defaultContent 는 기본값 설정, 데이터 없는 컬럼일 경우 오류나기 때className : "dt-center",문에 널스트링 처리 해주어야 함

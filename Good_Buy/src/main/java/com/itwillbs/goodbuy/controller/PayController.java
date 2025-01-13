@@ -490,17 +490,12 @@ public class PayController {
 		
 		session.setAttribute("transferResult", transferResult);
 		
-		
+		/*
 		Map<String, String> chatMap = new HashMap<String, String>();
 		
 		chatMap.put("sender_id", id);
 		chatMap.put("receiver_id", receiver_id);
 		chatMap.put("product_id", (String) map.get("product_id"));
-		
-		
-
-		
-		
 		
 		String chatRoomAjax =  chatController.chatRoomAjax(chatMap);
 		
@@ -514,17 +509,15 @@ public class PayController {
 		chatMessage.setRoom_id(roomId);
 //		chatMessage.setRoom_id(map.get("room_id"));
 		List<ChatMessage> chatMessageList = chatService.selectChatMessage(chatMessage);
-//		System.out.println("chatMessageList는 어떻게 받아오나? :   "  + chatMessageList);
 		// sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, message);
+		*/
 		
 		
 		
 		
 		
 		
-		
-//		return "redirect:/PayTransferResult";
-		return "";
+		return "redirect:/PayTransferResult";
 	}
 	
 	

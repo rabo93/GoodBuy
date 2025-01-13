@@ -901,7 +901,7 @@ public class AdminController {
 		
 		// 결과 JSONObject로 변환
 		JSONObject jo = new JSONObject();
-		jo.put("periodList2", finalList);
+		jo.put("periodList", finalList);
 		
 		// JSONObject를 문자열로 리턴
 		return jo.toString();

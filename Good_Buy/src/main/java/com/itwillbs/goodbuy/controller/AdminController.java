@@ -843,12 +843,12 @@ public class AdminController {
 	@ResponseBody
 	@PostMapping("PeriodListForm")
 	public String periodListForm(@RequestParam Map<String, String> param) {
-		System.out.println("조회할 기간 : " + param.get("searchDate"));
-		String searchDate = param.get("searchDate");
+		Map<String, Object> convertParam = convertMap(param);
+		String orderDir = (String) convertParam.get("orderDir"); 		// 정렬순서(asc/desc)
+		String searchDate = (String) convertParam.get("searchDate");	// 조회기간
 		String startDate = "";
 		String endDate = "";
-		
-		if (searchDate != null && searchDate.contains(" ~ ")) {
+		if (searchDate != null && searchDate.contains(" ~ ")) { 		// 조회기간 분리
 			String[] date = searchDate.split(" ~ ");
 			startDate = date[0];
 			endDate = date[1];
@@ -856,10 +856,10 @@ public class AdminController {
 				
 		// 각각의 컬럼 데이터 가져오기
 		// 회원수
-		List<Map<String, Object>> memberPeriod = service.getMemberPeriod(startDate, endDate);
+		List<Map<String, Object>> memberPeriod = service.getMemberPeriod(orderDir, startDate, endDate);
 		System.out.println("회원수: " + memberPeriod);
 		// 거래수 
-		List<Map<String, Object>> orderPeriod = service.getOrderePeriod(startDate, endDate);
+		List<Map<String, Object>> orderPeriod = service.getOrderePeriod(orderDir, startDate, endDate);
 		System.out.println("거래수: " + orderPeriod);
 		
 		// 날짜별 컬럼 병합
@@ -940,11 +940,6 @@ public class AdminController {
 	
 	// ======================================================
 	// ======================================================
-	// date 타입 String으로 변환
-//	public String convertSqlDateToString(Date date) {
-//	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // 원하는 날짜 형식으로 변경
-//	    return sdf.format(date);
-//	}
 	// ======================================================
 	//	실제 업로드 경로 메서드
 	public String getRealPath(HttpSession session) {

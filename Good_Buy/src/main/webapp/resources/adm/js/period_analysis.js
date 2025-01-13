@@ -3,22 +3,15 @@ document.addEventListener("DOMContentLoaded", function () {
 	const today = moment(); // 오늘 날짜
 	const firstDayOfMonth = today.clone().startOf('month'); // 이번 달 첫날
 	const lastDayOfMonth = today.clone().endOf('month'); // 이번 달 마지막 날
-	
-//	const dateRange = [];
-//	let currentDate = firstDayOfMonth.clone();
-//	while (currentDate <= lastDayOfMonth) {
-//		dateRange.push(currentDate.format('YYYY-MM-DD'));
-//		currentDate.add(1, 'days');
-//	}
 	const defaultRange = `${firstDayOfMonth.format('YYYY-MM-DD')} ~ ${lastDayOfMonth.format('YYYY-MM-DD')}`;
-	$('#schDate').val(defaultRange); //2025-01-01 ~ 2025-01-31
+	$('#schDate').val(defaultRange);
 	
     const periodList = $('#periodList').DataTable({
         lengthChange: false,	//건수(비활성화) 
         searching: false,		//검색(비활성화) 
-        info: true,				//정보
+        info: false,			//정보(비활성화) 
         ordering: true,			//정렬
-        paging: true,  			//페이징
+        paging: false,  		//페이징(비활성화)
         responsive: true,		//반응형
         destroy: true,			
         scrollX: true,
@@ -28,31 +21,12 @@ document.addEventListener("DOMContentLoaded", function () {
 			type: "POST",
 			dataType : "JSON",
 			data: function(d) {
-				// 'schDate'의 값을 'searchDate'로 전달
 				d.searchDate = $("#schDate").val();
-				console.log(d.searchDate);
+//				console.log(d.searchDate);
             },
 			dataSrc: function (res) {
-				console.log("res:" + JSON.stringify(res));
+//				console.log("res:" + JSON.stringify(res));
 				const data = res.periodList;
-				
-				// 페이징 ???
-				const start = $('#periodList').DataTable().page.info().start; 
-				// 회원번호(PK)가 아닌 테이블 컬럼 번호 계산(페이징 포함)
-				for (let i = 0; i < data.length; i++) {
-					data[i].listIndex = start + i + 1;
-				}
-				
-				// 날짜 범위에 맞는 데이터를 생성
-//				const data = dataRange.map(date => {
-//					const existData = data.find(item => item.date == date);
-//					return {
-//						date : date,
-//						memberTotal: existData ? existData.memberTotal : 0,
-//						memberTotal: orderTotal ? existData.orderTotal : 0
-//					};
-//				});
-
 				return data;
 			},
 		},
@@ -68,6 +42,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 exportOptions: {
 		            columns: [0, 1, 2]
 		        },
+		        customize: function (xlsx) {
+					// 엑셀에 총합 추가
+					const sheet = xlsx.xl.worksheets['sheet1.xml'];
+                    const totalMember = $('#periodList').DataTable().column(1).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
+                    const totalOrder = $('#periodList').DataTable().column(2).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
+
+                    const rows = $('sheetData row', sheet);
+                    const lastRow = rows.last(); // 마지막 행 찾기
+                    const totalRow = `
+                        <row r="${rows.length + 1}">
+                            <c t="inlineStr"><is><t>총합</t></is></c>
+                            <c t="inlineStr"><is><t>${totalMember}</t></is></c>
+                            <c t="inlineStr"><is><t>${totalOrder}</t></is></c>
+                        </row>`;
+                    lastRow.after(totalRow); // 마지막 행 다음에 총합 행 추가
+				},
             },
 		],
 		order: [[0, 'asc']], // 최초 조회시 날짜 순으로 기본 설정
@@ -90,9 +80,17 @@ document.addEventListener("DOMContentLoaded", function () {
         language: {
             emptyTable: "데이터가 없습니다.",
             info: "현재 _START_ - _END_ / 총 _TOTAL_건",
+            infoEmpty: "데이터 없음",
             loadingRecords: "로딩중...",
 			processing: "잠시만 기다려 주세요...",
 			zeroRecords: "일치하는 데이터가 없습니다.",
+//			infoFiltered: "( _MAX_건의 데이터에서 필터링됨 )",
+//			paginate: {
+//                first:    '처음',
+//                previous: '이전',
+//                next:     '다음',
+//                last:     '마지막'
+//            },
         },
         footerCallback: function (row, data, start, end, display) {
 			var api = this.api();
@@ -161,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function () {
     //------------------------------------------------------------------------------------------------
 	// 날짜 검색 초기화
 	$("#initDateBtn").on('click', function() {
-		$('#schDate').val('');
+		$('#schDate').val(defaultRange);
 		periodList.draw();
 	});
 	

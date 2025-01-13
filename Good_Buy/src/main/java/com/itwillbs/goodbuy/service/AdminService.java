@@ -405,6 +405,25 @@ public class AdminService {
 	public List<Map<String, Object>> getTransactionList() {
 		return mapper.selectTransactionList();
 	}
+
+	// 기간별 채팅 건수
+	public List<Map<String, Object>> getUserChatCount(String param) {
+		return mapper.selectUserChatCount(param);
+	}
+
+	// 전체 채팅 건수
+	public int getTotalChats() {
+		return mapper.selectChatTotal();
+	}
+	
+	// 기간별 회원수 통계 
+	public List<Map<String, Object>> getMemberPeriod(String startDate, String endDate) {
+		return mapper.selectTotalMember(startDate,endDate);
+	}
+	// 기간별 거래 통계
+	public List<Map<String, Object>> getOrderePeriod(String startDate, String endDate) {
+		return mapper.selectTotalOrder(startDate,endDate);
+	}
 	
 	
 }

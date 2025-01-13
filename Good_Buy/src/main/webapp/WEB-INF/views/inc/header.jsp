@@ -52,6 +52,7 @@
 							</c:if>
 							<a href="MemberLogout">로그아웃</a>
 							<input type="hidden" id="sId" value="${sessionScope.sId}">
+							<input type="hidden" id="sNick" value="${sessionScope.sNick}">
 							<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script>
 						</div>
 						<script src="${pageContext.request.contextPath}/resources/js/header.js"></script>
@@ -96,6 +97,7 @@
 								</a>
 								<a href="MemberLogout">로그아웃</a>
 								<input type="hidden" id="sId" value="${sessionScope.sId}">
+								<input type="hidden" id="sNick" value="${sessionScope.sNick}">
 						</c:otherwise>				
 					</c:choose>
         		</div>

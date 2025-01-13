@@ -109,6 +109,7 @@ ADMIN_ID
 ACTION_DATE
 ROOM_ID
 -->
+	<!-- 채팅방에서 회원 신고 -->
 	<insert id="insertChatReport">
 		<selectKey keyProperty="report_id" resultType="int" order="BEFORE">
 		SELECT IFNULL(MAX(REPORT_ID), 0)
@@ -130,10 +131,19 @@ ROOM_ID
 			 )
 	</insert>
 	
+	<!-- product_id로 가격 알아오기 -->
 	<select id="selectProductPrice" resultType="int">
 		SELECT PRODUCT_PRICE
 		  FROM PRODUCT
 		 WHERE PRODUCT_ID = #{product_id}
+	</select>
+	
+	<!-- mem_id로 mem_nick 가져오기 -->
+	<select id="selectMemberNick" resultType="member">
+		SELECT MEM_NICK
+			 , MEM_PROFILE
+		  FROM MEMBER
+		 WHERE MEM_ID = #{receiver_id}
 	</select>
 	
 	

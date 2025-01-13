@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.itwillbs.goodbuy.mapper.ChatMapper;
 import com.itwillbs.goodbuy.vo.ChatMessage;
 import com.itwillbs.goodbuy.vo.ChatRoom;
+import com.itwillbs.goodbuy.vo.MemberVO;
 
 @Service
 public class ChatService {
@@ -61,10 +62,21 @@ public class ChatService {
 //		return 0;
 		return mapper.insertChatReport(reporter_id, reported_id, reason, room_id);
 	}
-
+	
+	//	상품 가격 알아오기
 	public int selectProductPrice(int product_id) {
 		return mapper.selectProductPrice(product_id);
 	}
+	
+	//	멤버 정보 가져오기
+	public MemberVO selectMemberNick(String receiver_id) {
+		return mapper.selectMemberNick(receiver_id);
+	}
+	
+	//	멤버 프로필 받아오기
+//	public String selectMemberProfile(String mem_id) {
+//		return mapper.selectMemberProfile(mem_id);
+//	}
 
 	
 

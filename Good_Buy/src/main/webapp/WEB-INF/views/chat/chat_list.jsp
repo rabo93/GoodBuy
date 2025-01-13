@@ -68,6 +68,8 @@
 				                	<input type="hidden" id="receiver_id${status.index}" value="${chatRoom.receiver_id}">
 				                	<input type="hidden" id="product_id${status.index}" value="${chatRoom.product_id}">
 				                	<input type="hidden" id="grade${status.index}" value="${chatRoom.grade}">
+				                	<input type="hidden" id="mem_nick${status.index}" value="${member[status.index].mem_nick}">
+				                	<input type="hidden" id="mem_profile${status.index}" value="${member[status.index].mem_profile}">
 					                <div class="item"><strong>${chatRoom.title}</strong>
 					                	<span class="messageStatus${status.index}">${chatMessageCnt[status.index]}</span>
 					                </div>

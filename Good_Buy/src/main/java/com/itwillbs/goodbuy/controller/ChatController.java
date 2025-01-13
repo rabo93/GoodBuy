@@ -23,6 +23,7 @@ import com.itwillbs.goodbuy.handler.FileHandler;
 import com.itwillbs.goodbuy.service.ChatService;
 import com.itwillbs.goodbuy.vo.ChatMessage;
 import com.itwillbs.goodbuy.vo.ChatRoom;
+import com.itwillbs.goodbuy.vo.MemberVO;
 
 @Controller
 public class ChatController {
@@ -41,14 +42,18 @@ public class ChatController {
 		//	최근 채팅메세지를 저장하기위한 List 객체 생성
 		List<ChatMessage> chatMessage = new ArrayList<ChatMessage>();
 		List<Integer> chatMessageCnt = new ArrayList<Integer>();
+		List<MemberVO> member = new ArrayList<MemberVO>();
 		for (ChatRoom chatRoomList : chatRoom) {
 			//	최근 메세지 List 객체에 저장
 			chatMessage.add(chatService.selectLastMessage(chatRoomList.getRoom_id()));
 			chatMessageCnt.add(chatService.selectCountMessage(chatRoomList.getRoom_id(), sId));
+			member.add(chatService.selectMemberNick(chatRoomList.getReceiver_id()));
 		}
+		
 		model.addAttribute("chatRoomList", chatRoom);
 		model.addAttribute("chatMessageList", chatMessage);
 		model.addAttribute("chatMessageCnt", chatMessageCnt);
+		model.addAttribute("member", member);
 		
 		return "chat/chat_list";
 	}
@@ -155,7 +160,6 @@ public class ChatController {
 		
 		return new Gson().toJson(uploadResult);
 	}
-
 	
 }
 

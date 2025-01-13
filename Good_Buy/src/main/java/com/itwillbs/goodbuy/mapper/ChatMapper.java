@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.itwillbs.goodbuy.vo.ChatMessage;
 import com.itwillbs.goodbuy.vo.ChatRoom;
+import com.itwillbs.goodbuy.vo.MemberVO;
 
 @Mapper
 public interface ChatMapper {
@@ -42,6 +43,12 @@ public interface ChatMapper {
 	
 	//	product_id로 가격 알아오기
 	int selectProductPrice(int product_id);
+
+	//	mem_id로 mem_nick 가져오기
+	MemberVO selectMemberNick(String receiver_id);
+
+	//	mem_id로 mem_profile 받아오기
+//	String selectMemberProfile(String mem_id);
 
 	
 

@@ -25,6 +25,7 @@ var sNick;
 const childUrl = location.href;
 var baseUrl = childUrl.substring(0, childUrl.lastIndexOf('/ChatMain'));
 
+
 $(".sidebar-item").on("dblclick", function() {
 	let index = $(this).data("index");
 	let recentMessage = $(".item-chat" + index).data("message");
@@ -33,7 +34,10 @@ $(".sidebar-item").on("dblclick", function() {
 	let receiver_id = $("#receiver_id" + index).val();
 	product_id = $("#product_id" + index).val();
 	let grade = $("#grade" + index).val();
+	let mem_nick = $("#mem_nick" + index).val();
+	let mem_profile = $("#mem_profile" + index).val();
 	window.index = index;
+	window.mem_nick = mem_nick;
 	console.log("index =" + index);
 	console.log("room_id =" + room_id);
 	console.log("title =" + title);
@@ -42,6 +46,8 @@ $(".sidebar-item").on("dblclick", function() {
 	console.log("product_id =" + product_id);
 	console.log("lastMessage =" + recentMessage);
 	console.log("grade =" + grade);
+	console.log("mem_nick =" + mem_nick);
+	console.log("mem_profile =" + mem_profile);
 	
 	//	room_id, title, sender_id, receive_id
 	let room = {
@@ -63,16 +69,14 @@ $(function() {
 	
 	sId = $("#sId", opener.document).val();
 	console.log("sId : " + sId);
+	sNick = $(opener.document).find("#sNick").val();
+	console.log("sNick : " + sNick);
 	
 	if (!sId) {
 		alert("로그인이 필요합니다.\n로그인 페이지로 이동합니다.")
 		opener.location.href = "MemberLogin";
 		window.close();
 	}
-	
-	console.log("부모창에서 받은 receiver_id : " + receiver_id);
-	console.log("부모창에서 받은 product_id : " + product_id);
-	
 	
 	window.onmessage = function(e) {
 		console.log("부모창 메세지 : " + e.data);
@@ -108,7 +112,7 @@ $(function() {
 		
 		if(data.type == TYPE_REQUEST_PAY) {
 			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
-			let recent_div = `${data.message}을 요청했어요<span class="item-send-time${index}">&nbsp; · &nbsp; ${data.send_time}</span>`
+			let recent_div = `${data.message}원을 요청했어요<span class="item-send-time${index}">&nbsp; · &nbsp; ${data.send_time}</span>`
 			$(".item-chat" + index).empty();
 			$(".item-chat" + index).append(recent_div);
 		}
@@ -247,7 +251,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 		message = parseInt(message.replace(/,/g, ''));
 		bubble_message = `
 						<div class="bubble">
-							${sender_id}님이 ￦ ${message}원을 요청했어요
+							${sNick}님이 ￦ ${message}원을 요청했어요
 							<span><button class="item-button" onclick="openPayWindow(${product_id}, '${sender_id}', ${message})">송금하기</button></span>
 						</div>
 						 `

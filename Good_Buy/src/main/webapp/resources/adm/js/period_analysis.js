@@ -1,8 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
 	// 이번 달 범위 계산(초기 설정)
 	const today = moment(); // 오늘 날짜
-	const firstDayOfMonth = today.clone().startOf('month'); // 이번 달 첫날 = today.startOf('month');
+	const firstDayOfMonth = today.clone().startOf('month'); // 이번 달 첫날
 	const lastDayOfMonth = today.clone().endOf('month'); // 이번 달 마지막 날
+	
+//	const dateRange = [];
+//	let currentDate = firstDayOfMonth.clone();
+//	while (currentDate <= lastDayOfMonth) {
+//		dateRange.push(currentDate.format('YYYY-MM-DD'));
+//		currentDate.add(1, 'days');
+//	}
 	const defaultRange = `${firstDayOfMonth.format('YYYY-MM-DD')} ~ ${lastDayOfMonth.format('YYYY-MM-DD')}`;
 	$('#schDate').val(defaultRange); //2025-01-01 ~ 2025-01-31
 	
@@ -28,17 +35,49 @@ document.addEventListener("DOMContentLoaded", function () {
 			dataSrc: function (res) {
 				console.log("res:" + JSON.stringify(res));
 				const data = res.periodList;
+				
+				// 페이징 ???
+				const start = $('#periodList').DataTable().page.info().start; 
+				// 회원번호(PK)가 아닌 테이블 컬럼 번호 계산(페이징 포함)
+				for (let i = 0; i < data.length; i++) {
+					data[i].listIndex = start + i + 1;
+				}
+				
+				// 날짜 범위에 맞는 데이터를 생성
+//				const data = dataRange.map(date => {
+//					const existData = data.find(item => item.date == date);
+//					return {
+//						date : date,
+//						memberTotal: existData ? existData.memberTotal : 0,
+//						memberTotal: orderTotal ? existData.orderTotal : 0
+//					};
+//				});
+
 				return data;
 			},
 		},
+		dom: '<"top"<"left-length"l><"right-buttons"fB>>rt<"bottom"ip>',
+		buttons: [
+			{
+                extend: 'copy',
+                text: '복사',
+            },
+            {
+                extend: 'excel',
+                text: '엑셀 저장',
+                exportOptions: {
+		            columns: [0, 1, 2]
+		        },
+            },
+		],
 		order: [[0, 'asc']], // 최초 조회시 날짜 순으로 기본 설정
         columnDefs: [
 		],
         columns: [
 			// defaultContent 는 기본값 설정, 데이터 없는 컬럼일 경우 오류나기 때className : "dt-center",문에 널스트링 처리 해주어야 함
             { title: "날짜", data: "date", className : "dt-center", defaultContent: ""},
-            { title: "회원수", data: "memberTotal", defaultContent: "0" },
-            { title: "거래수", data: "orderTotal", defaultContent: "0" },
+            { title: "회원수(명)", data: "memberTotal", className : "dt-center", defaultContent: "0" },
+            { title: "거래완료(건)", data: "orderTotal", className : "dt-center", defaultContent: "0" },
 //            { title: "방문자수", data: "visit", defaultContent: "0" },
         ],
         initComplete: function () {
@@ -56,31 +95,30 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         footerCallback: function (row, data, start, end, display) {
 			var api = this.api();
-	
-	        var totalJoin = api
+	        var totalMember = api
 	            .column(1, { page: 'current' })
 	            .data()
 	            .reduce(function (a, b) {
-	                return parseFloat(a) + parseFloat(b);
+	                return parseInt(a) + parseInt(b);
 	            }, 0);
-	
+	            
+			var totalOrder = api
+	            .column(2, { page: 'current' })
+	            .data()
+	            .reduce(function (a, b) {
+	                return parseInt(a) + parseInt(b);
+	            }, 0);
+	            
 //	        var totalVisit = api
-//	            .column(2, { page: 'current' })
+//	            .column(3, { page: 'current' })
 //	            .data()
 //	            .reduce(function (a, b) {
 //	                return parseFloat(a) + parseFloat(b);
 //	            }, 0);
-	
-			var totalTrade = api
-	            .column(2, { page: 'current' })
-	            .data()
-	            .reduce(function (a, b) {
-	                return parseFloat(a) + parseFloat(b);
-	            }, 0);
-	            
-	        $(api.column(1).footer()).html(totalJoin.toFixed(1));
-//	        $(api.column(2).footer()).html(totalVisit.toFixed(2));
-	        $(api.column(2).footer()).html(totalTrade.toFixed(2));
+
+	        $(api.column(1).footer()).html(totalMember.toFixed(0)); //toFixed(0)안 숫자는 소수점 자리수 
+	        $(api.column(2).footer()).html(totalOrder.toFixed(0));
+//	        $(api.column(3).footer()).html(totalVisit.toFixed(2));
 	        
 	    }
     });

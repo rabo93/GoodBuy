@@ -858,14 +858,13 @@ public class AdminController {
 		// 회원수
 		List<Map<String, Object>> memberPeriod = service.getMemberPeriod(startDate, endDate);
 		System.out.println("회원수: " + memberPeriod);
-		// [{date=2025-01-01, memberTotal=1}, {date=2025-01-02, memberTotal=4}, {date=2025-01-03, memberTotal=3}, {date=2025-01-04, memberTotal=3}, {date=2025-01-05, memberTotal=3}, {date=2025-01-06, memberTotal=3}, {date=2025-01-07, memberTotal=3}, {date=2025-01-08, memberTotal=3}, {date=2025-01-09, memberTotal=3}, {date=2025-01-10, memberTotal=6}, {date=2025-01-13, memberTotal=2}]
 		// 거래수 
 		List<Map<String, Object>> orderPeriod = service.getOrderePeriod(startDate, endDate);
 		System.out.println("거래수: " + orderPeriod);
-		// [{date=2025-01-10, orderTotal=1}]
 		
 		// 날짜별 컬럼 병합
 		Map<String, Map<String, Object>> resultMap = new LinkedHashMap<>();
+		
 		// 회원수 데이터 추가
 		for(Map<String, Object> memberData : memberPeriod) {
 			Date memberDate = (Date) memberData.get("date");
@@ -874,8 +873,6 @@ public class AdminController {
 			resultMap.putIfAbsent(dateString, new HashMap<String, Object>());
 			resultMap.get(dateString).put("memberTotal", memberData.get("memberTotal"));
 		}
-		System.out.println("여기까지왔나요!?"+resultMap);
-		
 		// 거래수 데이터 추가
 		for(Map<String, Object> orderData : orderPeriod) {
 			Date orderDate  = (Date) orderData.get("date");
@@ -884,7 +881,6 @@ public class AdminController {
 			resultMap.putIfAbsent(dateString, new HashMap<String, Object>());
 			resultMap.get(dateString).put("orderTotal", orderData.get("orderTotal"));
 		}
-		System.out.println("여기까지왔나요22222!?"+resultMap);
 		
 		// 데이터 결합
 		List<Map<String, Object>> finalList = new ArrayList<Map<String,Object>>();
@@ -895,9 +891,7 @@ public class AdminController {
 			finalData.put("orderTotal", entry.getValue().getOrDefault("orderTotal", 0));
 			finalList.add(finalData);
 		}
-		
-		System.out.println("finalList: " + finalList);
-		
+//		System.out.println("finalList: " + finalList);
 		
 		// 결과 JSONObject로 변환
 		JSONObject jo = new JSONObject();

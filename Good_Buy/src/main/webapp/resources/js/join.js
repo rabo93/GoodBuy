@@ -44,7 +44,7 @@ $(document).ready(function() {
                     $(".after").attr("disabled", true); // 인증완료 버튼 비활성화
                     
                     // 5분 타이머 시작
-                    startTimer(1);
+                    startTimer(5);
 			    	
             	}
             },

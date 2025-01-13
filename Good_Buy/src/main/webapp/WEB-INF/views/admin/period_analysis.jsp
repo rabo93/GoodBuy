@@ -26,6 +26,7 @@
 <link href="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/daterangepicker.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
 
 </head>
 <body id="page-top">
@@ -81,7 +82,7 @@
 		                                    <tbody></tbody>
 		                                    <tfoot>
 		                                    	<tr>
-		                                    		<th>Total</th>
+		                                    		<th>합계</th>
 		                                    		<th></th>
 		                                    		<th></th>
 		                                    	</tr>
@@ -128,11 +129,18 @@
 <%--     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script> --%> <%-- 반응형 --%>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/moment.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/daterangepicker.js"></script>
-
+	
+	
+	<script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.buttons.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/buttons.html5.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/jszip.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/buttons.print.min.js"></script>
     <!-- Page level custom scripts -->
 <%--     <script src="${pageContext.request.contextPath}/resources/adm/js/period_analysis.js"></script> --%>
     <script src="${pageContext.request.contextPath}/resources/adm/js/period_analysis.js"></script>
-
+	
+	
+	
 </body>
 
 

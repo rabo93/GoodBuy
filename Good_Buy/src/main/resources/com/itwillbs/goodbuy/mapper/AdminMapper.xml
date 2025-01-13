@@ -994,6 +994,7 @@
 			 , COUNT(PRODUCT_ID) AS COUNT
 		  FROM PRODUCT
 		 GROUP BY PRODUCT_CATEGORY
+		 ORDER BY PRODUCT_CATEGORY ASC
 	</select>
 	<select id="selectTransactionList" resultType="map">
 		SELECT S.SELLER_ID

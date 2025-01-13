@@ -84,6 +84,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	}).done(function(res){
 		const labelArr = [];
 		const dataArr = [];
+		console.log(res);
 		
 		for(let key in res) {
 			labelArr.push(res[key].PRODUCT_CATEGORY);
@@ -97,8 +98,9 @@ document.addEventListener("DOMContentLoaded", function(){
   	        labels: labelArr,
  	        datasets: [{
   	          data: dataArr,
- 	          backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#e83e8c', '#f6c23e', '#e74a3b'],
- 	          hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#e83e8c', '#f6c23e', '#e74a3b'],
+  	          // 순서 : 남성의류, 도서, 레저/스포츠, 생활용품, 여성의류, 키즈
+ 	          backgroundColor: [ '#1cc88a', '#e74a3b', '#36b9cc', '#858796', '#4e73df', '#f6c23e'],
+ 	          hoverBackgroundColor: [ '#17a673', '#e74a3b', '#2c9faf', '#5a5c69', '#4e73df', '#f6c23e'],
  	          hoverBorderColor: "rgba(234, 236, 244, 1)",
  	        }],
  	      },

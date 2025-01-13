@@ -3,7 +3,10 @@ document.addEventListener("DOMContentLoaded", function(){
 	Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 	Chart.defaults.global.defaultFontColor = '#858796';
 	
-	// 기간별 채팅 개수 
+	// 기간 초기화 (최근 7일)
+	
+	
+	// 기간별 채팅 개수
 	fetchData();
 	
 	$(document).on("click", "#searchDateBtn", function() {
@@ -13,6 +16,8 @@ document.addEventListener("DOMContentLoaded", function(){
 	
 	// 기간별 검색 필터링 제이쿼리
     $('#schDate').daterangepicker({
+		startDate : moment().subtract(6, 'days'),
+		endDate : moment(),
         maxDate: moment(),
         locale: {
 			start: '시작일시',
@@ -25,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function(){
 		    monthNames: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
 			customRangeLabel: '기간 지정',
 		 },
-		autoUpdateInput: false,
+		autoUpdateInput: true,
 	    timePicker: false, // 시간 노출 여부
 	    showDropdowns: true, // 년월 수동 설정 여부
 	    autoApply: false, // 확인/취소 버튼 사용여부

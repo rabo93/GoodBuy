@@ -293,6 +293,7 @@ public class AdminService {
 	}
 	
 	// FAQ 사용여부 업데이트
+	@AdminLog
 	public int modifyFaqStatus(Map<String, String> param) {
 		return mapper.UpdateFaqStatus(param);
 	}

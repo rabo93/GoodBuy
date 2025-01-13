@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
-import com.itwillbs.goodbuy.aop.AdminLog;
 import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.service.AdminService;
@@ -504,7 +503,6 @@ public class AdminController {
 	}
 	
 	// 신고 회원 목록 - 조치하기(+ 수정하기)
-	@AdminLog
 	@PostMapping("AdmUserReportModify")
 	public String admUserReportModify(@RequestParam Map<String, Object> param, Model model) {
 		log.info(">>> 신고 조치 : " + param);
@@ -669,7 +667,6 @@ public class AdminController {
 	
 	//----------------------------------------------------------------------------------------
 	// 1:1 문의 - 답글달기(+ 수정하기)
-	@AdminLog
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmSupportAction")
 	public String admSupportAction(@RequestParam Map<String, Object> param,  Model model) {
@@ -728,7 +725,6 @@ public class AdminController {
 	}
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 수정 ]
-	@AdminLog
 	@PostMapping("AdmFaqModify")
 	public String admFaqModify(@RequestParam Map<String, Object> param, Model model) {
 //		log.info(">>> 수정할 faq 정보: " + param);
@@ -747,7 +743,6 @@ public class AdminController {
 	
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 삭제 ]
-	@AdminLog
 	@ResponseBody
 	@PostMapping("AdmFaqDelete")
 	public Map<String, Object> admFaqDelete(@RequestBody List<Integer> faqIds) {
@@ -771,7 +766,6 @@ public class AdminController {
 	
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 사용여부 실시간 업데이트 ]
-	@AdminLog
 	@ResponseBody
 	@PostMapping("UpdateFaqStatus")
 	public Map<String, Object> updateFaqStatus(@RequestParam Map<String, String> param) {

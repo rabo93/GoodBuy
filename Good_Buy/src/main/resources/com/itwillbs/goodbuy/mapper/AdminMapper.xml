@@ -947,6 +947,7 @@
 		SELECT COUNT(*) 
 		  FROM PRODUCT
 	</select>
+	
 	<select id="selectActiveTrades" resultType="int">
 		SELECT COUNT(*) 
 		  FROM PRODUCT 
@@ -1028,6 +1029,7 @@
 		 GROUP BY DATE(SEND_TIME)
 		 ORDER BY SEND_TIME ASC
 	</select>
+	<!-- 전체 채팅메세지 건수 조회 -->
 	<select id="selectChatTotal" resultType="int">
 		SELECT COUNT(*) AS TOTAL
 		  FROM CHATTING

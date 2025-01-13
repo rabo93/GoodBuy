@@ -106,13 +106,14 @@
 								<div class="st-box">
 									<h3 class="st-ttl">등록한 상품목록 <small>(총 <span>${salesCount}</span>건)</small> <a href="MySales" class="more-btn">더보기</a></h3>
 									<div class="product-list">
-									    <ul class="product-wrap">
+									    <ul class="myproduct-wrap">
 									        <c:choose>
 									            <c:when test="${empty product}">
 									                <li>등록된 상품이 없습니다.</li>
 									            </c:when>
 									            <c:otherwise>
 									                <c:forEach var="product" items="${product}">
+									                    <a href='ProductDetail?PRODUCT_ID=${product.product_id}'>
 									                    <li class="product-card">
 									                        <img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" 
 									                             class="card-thumb" 
@@ -156,6 +157,7 @@
 									                            </div>
 									                        </div>
 									                    </li>
+									                    </a>
 									                </c:forEach>
 									            </c:otherwise>
 									        </c:choose>
@@ -190,15 +192,9 @@
 													            <div class="name">${review.buyerNick} <span class="date">${review.review_date}</span></div>
 													        </div>
 															<div class="review-score">
-												            	<c:if test="${review.review_score == '2'}">
-												            		<span id="score" name="score">최고예요🥳</span>
-			 										            </c:if>
-													            <c:if test="${review.review_score == '1'}">
-												            		<span id="score" name="score">좋아요💕</span>
-													            </c:if>
-													            <c:if test="${review.review_score == '0'}">
-												            		<span id="score" name="score">별로예요👿</span>
-												           	 	</c:if>
+												            	<c:if test="${review.review_score == '2'}"><span id="score" name="score">최고예요🥳</span></c:if>
+													            <c:if test="${review.review_score == '1'}"><span id="score" name="score">좋아요💕</span></c:if>
+													            <c:if test="${review.review_score == '0'}"><span id="score" name="score">별로예요👿</span></c:if>
 												            </div>
 														    <div class="review-text">${review.review_content}</div>
 												            <div class="review-score-option">
@@ -211,7 +207,7 @@
 																<c:if test="${fn:contains(review.review_options, '6')}"><span id="score" name="score">채팅 답장이 느려요😫</span></c:if>
 																<c:if test="${fn:contains(review.review_options, '7')}"><span id="score" name="score">물건 상태가 사진과 달라요💣</span></c:if>
 												            </div>
-												            <div class="product"><b>거래상품</b> <span>${review.product_title}</span></div>
+												            <div class="product"><a href='ProductDetail?PRODUCT_ID=${review.product_id}'><b>거래상품</b><span>${review.product_title}</span></a></div>
 														</div>
 										            </c:forEach>
 												</c:otherwise>

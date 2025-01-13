@@ -54,7 +54,9 @@ public class ProductController {
 	
 	// 상품목록 조회
 	@GetMapping("ProductList")
-	public String productList() {
+	public String productList(Model model) {
+//		List<Map<String, Object>> recommendedItem = productService.getRecommendedItem();
+//		model.addAttribute("recommeded", recommendedItem);
 		return "product/product_list";
 	}
 	
@@ -65,7 +67,7 @@ public class ProductController {
 													   @RequestParam(required=false) String PRODUCT_PRICE,
 													   @RequestParam(required=false) String PRODUCT_TRADE_ADR1,
 													   @RequestParam(required=false) String SEARCHKEYWORD,
-													   @RequestParam String PRODUCT_CATEGORY) {
+													   @RequestParam(required=false) String PRODUCT_CATEGORY) {
 		List<Map<String, Object>> listSearch = productService.searchFilterList(PRODUCT_STATUS, PRODUCT_PRICE, PRODUCT_TRADE_ADR1, SEARCHKEYWORD, PRODUCT_CATEGORY);
 		return listSearch;
 	}

@@ -40,6 +40,25 @@
 		WHERE CODETYPE_ID = 'category'
 	</select>
 	
+	<!-- 메인화면 추천상품 가져오기 -->
+	<select id="getRecommendedItem" resultType="Map">
+		SELECT 
+			pro.PRODUCT_PIC1
+			, pro.PRODUCT_CATEGORY
+			, pro.PRODUCT_TRADE_ADR1
+			, pro.PRODUCT_ID
+			, pro.PRODUCT_TITLE
+			, pro.PRODUCT_PRICE
+			, mem.MEM_NICK
+			, REPLACE(FORMAT(pro.PRODUCT_REG_DATE, 'yyyyMMddHHmmss'), ',', '') AS PRODUCT_REG_DATE
+			, pro.PRODUCT_REG_DATE
+			, pro.PRODUCT_STATUS
+		FROM PRODUCT pro 
+		JOIN MEMBER mem
+		ON pro.MEM_ID = mem.MEM_ID
+		ORDER BY PRODUCT_REG_DATE DESC;
+	</select>
+	
 	<!-- 새 상품ID 조회 -->
 	<select id="newProductId" resultType="int">
 		SELECT IFNULL(MAX(PRODUCT_ID), 0) + 1
@@ -88,8 +107,16 @@
 		ON pro.MEM_ID = mem.MEM_ID
 		JOIN COMMONCODE com
 		ON pro.PRODUCT_CATEGORY = com.CODE_NAME
-		WHERE  
+		WHERE
 			com.CODE_ID = #{cate} 
+<!-- 		<choose> -->
+<!-- 			<when test="cate != null || cate != ''"> -->
+<!-- 				com.CODE_ID = #{cate}  -->
+<!-- 			</when> -->
+<!-- 			<otherwise> -->
+<!-- 				com.CODE_ID = 0 -->
+<!-- 			</otherwise> -->
+<!-- 		</choose> -->
 		<choose>
 			<when test="product_status == 0">
 				AND 
@@ -202,13 +229,13 @@
 	<!-- 상품 신고 -->
 	<insert id="itemReporting">
 	<selectKey resultType="int" order="BEFORE"  keyProperty="report_id">
-		SELECT MAX(REPORT_ID) + 1
+		SELECT IFNULL(MAX(REPORT_ID), 0)
 		FROM PRODUCT_REPORTS
 	</selectKey>
 		INSERT
 		INTO PRODUCT_REPORTS
 		VALUES(
-			#{report_id} 
+			#{report_id} + 1 
 			, #{reporter_id}
 			, #{product_id}
 			, CURRENT_TIMESTAMP

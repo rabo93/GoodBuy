@@ -1,5 +1,6 @@
 package com.itwillbs.goodbuy.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +16,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.google.gson.Gson;
 import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.aop.PayTokenCheck;
+import com.itwillbs.goodbuy.handler.MyWebSocketHandler;
+import com.itwillbs.goodbuy.service.ChatService;
 import com.itwillbs.goodbuy.service.PayService;
 import com.itwillbs.goodbuy.service.ProductService;
+import com.itwillbs.goodbuy.vo.ChatMessage;
 import com.itwillbs.goodbuy.vo.PayToken;
 import com.itwillbs.goodbuy.vo.ProductVO;
 
@@ -27,12 +33,25 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Controller
 public class PayController {
+	
+	//	JSON 데이터 파싱 작업을 처리할 Gson 객체 생성
+	private final Gson gson = new Gson();
+	
+	@Autowired
+	ChatController chatController;
+	
+	@Autowired
+	MyWebSocketHandler myWebSocketHandler;
+
 
 	@Autowired
 	PayService service;
 	
 	@Autowired
 	ProductService  productService;
+	
+	@Autowired
+	ChatService chatService;
 	
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("GoodPay")
@@ -384,6 +403,7 @@ public class PayController {
 		model.addAttribute("fintech_use_num", fintech_use_num);
 		model.addAttribute("price", price);
 		
+		
 		return "pay/pay_remit";
 	}
 	
@@ -391,7 +411,7 @@ public class PayController {
 	@LoginCheck(memberRole = MemberRole.USER)
 	@PayTokenCheck
 	@PostMapping("PayTransfer")
-	public String payTransfer(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
+	public String payTransfer(@RequestParam Map<String, Object> map, HttpSession session, Model model) throws Exception {
 		PayToken senderToken = (PayToken)session.getAttribute("token");
 		
 		// 이체에 필요한 사용자 계좌(입금받는 상대방) 관련 정보(토큰) 조회
@@ -405,15 +425,12 @@ public class PayController {
 		int product_id = Integer.parseInt((String) map.get("product_id"));
 		ProductVO productSearch = productService.productSearch(product_id);
 		
-		
-		
 		map.put("buyer_id", id);
 		map.put("receiver_id", receiver_id);
 		
 		
 		map.put("product_price", productSearch.getProduct_price());
 		map.put("product_trade_adr1", productSearch.getProduct_trade_adr1());
-		System.out.println("판매자 주소 알아보기 : " + productSearch);
 
 		// 수신자(상대방)의 토큰이 존재하지 않을 경우(= 계좌 등록이 되어있지 않음 등)
 		if(receiverToken == null || receiverToken.getAccess_token() == null) {
@@ -436,7 +453,6 @@ public class PayController {
 		log.info(">>>>>>>> 송금 요청 정보 : " + map);
 
 		
-//		System.out.println("payTransfer에서 map 정보 보기 : " + map);
 		// PayService - transfer() 메서드 호출하여 송금 작업 요청
 		Map<String, Object> transferResult = service.transfer(map);
 		
@@ -466,20 +482,49 @@ public class PayController {
 		// 사용자번호를 입금이체 결과 객체에 추가
 		transferResult.put("user_seq_no", senderToken.getUser_seq_no());
 		// 송금이체 성공 시 결과를 DB (TRANSACTIONINFO) 에 저장
-		
-		
-		System.out.println("transferResult 이체결과 잘 나오나?   : " + transferResult);
 		service.registTransferResult(transferResult);
 		
 		// DB에 거래내역 저장
-//		int payInfo = service.registPayInfo(map); // update 치려고 주석침
 		service.registPayInfo(map); // 일단 업데이트 치러감.
 		
 		
 		session.setAttribute("transferResult", transferResult);
 		
+		/*
+		Map<String, String> chatMap = new HashMap<String, String>();
+		
+		chatMap.put("sender_id", id);
+		chatMap.put("receiver_id", receiver_id);
+		chatMap.put("product_id", (String) map.get("product_id"));
+		
+		String chatRoomAjax =  chatController.chatRoomAjax(chatMap);
+		
+		// JSON 문자열을 JSONObject로 변환
+        JSONObject jsonObject = new JSONObject(chatRoomAjax);
+
+        // room_id 추출
+        String roomId = jsonObject.getString("room_id");
+		
+		ChatMessage chatMessage = new ChatMessage();
+		chatMessage.setRoom_id(roomId);
+//		chatMessage.setRoom_id(map.get("room_id"));
+		List<ChatMessage> chatMessageList = chatService.selectChatMessage(chatMessage);
+		// sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, message);
+		*/
+		
+		
+		
+		
+		
+		
 		return "redirect:/PayTransferResult";
 	}
+	
+	
+	
+	
+	
+	
 	
 	// P2P 송금(이체) 결과 뷰페이지 처리
 	@LoginCheck(memberRole = MemberRole.USER)
@@ -491,10 +536,10 @@ public class PayController {
 		
 		// 세션에서 객체 꺼낸 후 세션내의 객체는 제거
 		session.removeAttribute("ransferResult"); // 마치 세션을 리퀘스트 처럼 사용함.
-		// 포워딩은 리퀘스트처럼하는데 라디이렉트는 다음페이지에 유지가 안됨. 그래서 디비에서 갖고오거나 세션에담되 없애면 됨.
 		
 		// 이체 결과 객체를 모델 객체에 저장
 		model.addAttribute("transferResult", transferResult);
+		
 		
 		return "pay/pay_transfer_result";
 		
@@ -515,9 +560,7 @@ public class PayController {
 			Object obj = pId.get("PRODUCT_ID");
 			if (obj != null) {
 				String productId = obj.toString();
-//			    System.out.println("Product ID 값 잘가지고 오나?? : " + productId);
 			    int product_id = Integer.parseInt(productId);
-//			    System.out.println("product_id 잘 불러오나? : " + product_id);
 			    // 상품조회
 				ProductVO product = productService.productSearch(product_id);
 				String productName = product.getProduct_title();

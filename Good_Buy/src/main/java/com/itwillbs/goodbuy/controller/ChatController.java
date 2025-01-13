@@ -46,7 +46,6 @@ public class ChatController {
 			chatMessage.add(chatService.selectLastMessage(chatRoomList.getRoom_id()));
 			chatMessageCnt.add(chatService.selectCountMessage(chatRoomList.getRoom_id(), sId));
 		}
-		
 		model.addAttribute("chatRoomList", chatRoom);
 		model.addAttribute("chatMessageList", chatMessage);
 		model.addAttribute("chatMessageCnt", chatMessageCnt);
@@ -77,6 +76,8 @@ public class ChatController {
 		String receiver_id = map.get("receiver_id");
 		int product_id = Integer.parseInt(map.get("product_id"));
 		ChatRoom chatRoom = chatService.selectChatRoom(sender_id, receiver_id, product_id);
+
+		System.out.println("PayController에서 보낸 거 잘받나? : " + new Gson().toJson(chatRoom));
 		
 		return new Gson().toJson(chatRoom);
 	}
@@ -84,6 +85,9 @@ public class ChatController {
 	@ResponseBody
 	@PostMapping("ChatListAjax")
 	public List<ChatMessage> chatListAjax(@RequestParam Map<String, String> map) {
+		
+		
+		
 		ChatMessage chatMessage = new ChatMessage();
 		chatMessage.setRoom_id(map.get("room_id"));
 		System.out.println(chatMessage);
@@ -151,6 +155,7 @@ public class ChatController {
 		
 		return new Gson().toJson(uploadResult);
 	}
+
 	
 }
 

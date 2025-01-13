@@ -166,7 +166,7 @@ function showChatList(receiver_id, product_id) {
 function appendMessage(type, sender_id, receiver_id, message, send_time) {
 	//	send_time 추가 예정
 	let bubble_message = "";
-	let div_message = "";
+	let div_message = "";	
 	
 	if(type != TYPE_TALK && type != TYPE_FILE) {
 		div_message = '<div class="message center">'
@@ -270,8 +270,9 @@ function toggleChatModal(action) {
 
 // ==============================================================================
 // 결제창 열기 - 창을 작게 열려고 함수로 만들었음
-function openPayWindow(product_id, receiver_id) {
+function openPayWindow(product_id, receiver_id, room_id) {
 	var url = "PayTransferRequest?product_id=" + encodeURIComponent(product_id) +
-              "&receiver_id=" + encodeURIComponent(receiver_id) ;
+              "&receiver_id=" + encodeURIComponent(receiver_id) +
+              "&room_id=" + encodeURIComponent(room_id);
     payWindow = window.open(url, "chat_window", "width=500,height=500");
 }

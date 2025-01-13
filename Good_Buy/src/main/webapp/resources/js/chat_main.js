@@ -474,7 +474,7 @@ $(document).ready(function() {
 // 결제창 열기 - 창을 작게 열려고 함수로 만들었음
 function openPayWindow(product_id, receiver_id, price) {
 	var url = "PayTransferRequest?product_id=" + encodeURIComponent(product_id) +
-              "&receiver_id=" + encodeURIComponent(receiver_id) +
+              "&receiver_id=" + encodeURIComponent(receiver_id)+
               "&price=" + encodeURIComponent(price) ;
     payWindow = window.open(url, "chat_window", "width=500,height=500");
 }

@@ -205,35 +205,6 @@ function showChatRoom(room) {
 			            + '</div>';
 	}
 	
-	let divRoom = 	  '<div class="extra-header">'
-						+ '<button class="close-chat-button" onclick="closeChat()">'
-							+ '<i class="fa-solid fa-arrow-left"></i>'
-						+ '</button>'
-						+ '<button class="report-chat-button" onclick="toggleChatModal(\'open\')">'
-//							+ '<img src="${pageContext.request.contextPath}/resources/img/siren.png">'
-							+ '<i class="fa-solid fa-land-mine-on"></i>&nbsp;신고하기'
-						+ '</button>'
-					+ '</div>'
-					+ '<div class="chat-header">'
-			           	+ '<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>'
-			           	+ '<div class="title">'+ room.title +' </div>'
-			           	+ '	 <c:if test="${productSearch.product_status != 3}">'
-			           	+ '		<button class="item-button" onclick="openPayWindow(' + room.product_id + ', \'' + room.receiver_id + '\')">구매하기</button>'
-			           	+ '	 </c:if>'
-			           + '</div>'
-			           + '<div class="chat-body">'
-			           + '</div>'
-		           + '<div class="chat-footer">'
-			           	+ '<input type="hidden" id="room_id" value="' + room.room_id +'">'
-			           	+ '<input type="hidden" id="receiver_id" value="' + room.receiver_id +'">'
-			           	+ '<input type="hidden" id="sId" value="' + room.sender_id +'">'
-			           	+ '<span class="fileArea">'
-			           	+ '<label for="chatFile"><i class="fa-solid fa-circle-plus"></i></label>'
-			           	+ '<input type="file" id="chatFile" onchange="sendFile()" accept="image/*">'
-			           	+ '</span>'
-			           	+ '<input type="text" class="chatMessage" placeholder="메시지를 입력하세요...">'
-			            + '<button class="btnSend">전송</button>'
-		            + '</div>';
 	
 	//	chat-area 영역에 채팅창 div 출력
 	$(".chat-area").html(divRoom);
@@ -274,6 +245,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 	let div_message = "";
 	
 	if(type == TYPE_REQUEST_PAY) {
+		message = parseInt(message.replace(/,/g, ''));
 		bubble_message = `
 						<div class="bubble">
 							${sender_id}님이 ￦ ${message}원을 요청했어요
@@ -502,8 +474,9 @@ $(document).ready(function() {
 // ==============================================================================
 // 결제창 열기 - 창을 작게 열려고 함수로 만들었음
 function openPayWindow(product_id, receiver_id, price) {
-	var url = "PayTransferRequest?product_id=" + encodeURIComponent(product_id) +
-              "&receiver_id=" + encodeURIComponent(receiver_id) +
-              "&price=" + encodeURIComponent(price) ;
-    payWindow = window.open(url, "chat_window", "width=500,height=500");
+	console.log(price);
+//	var url = "PayTransferRequest?product_id=" + encodeURIComponent(product_id) +
+//              "&receiver_id=" + encodeURIComponent(receiver_id) +
+//              "&price=" + encodeURIComponent(price) ;
+//    payWindow = window.open(url, "chat_window", "width=500,height=500");
 }

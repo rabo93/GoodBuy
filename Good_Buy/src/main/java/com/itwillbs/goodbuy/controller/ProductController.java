@@ -46,17 +46,13 @@ public class ProductController {
 	@ResponseBody
 	@GetMapping("getCategory")
 	public List<Map<String, String>> getCategory() {
-		System.out.println("카테고리 호출됨");
 		List<Map<String, String>> cateSearch = productService.cateSearch();
-		System.out.println("카테고리 조회 결과 : " + cateSearch);
 		return cateSearch;
 	}
 	
 	// 상품목록 조회
 	@GetMapping("ProductList")
-	public String productList(Model model) {
-//		List<Map<String, Object>> recommendedItem = productService.getRecommendedItem();
-//		model.addAttribute("recommeded", recommendedItem);
+	public String productList() {
 		return "product/product_list";
 	}
 	

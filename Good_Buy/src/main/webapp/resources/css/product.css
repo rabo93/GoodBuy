@@ -3,8 +3,13 @@
 /* ================================================================================ */
 /* =============================== product_list.jsp =============================== */
 /* ================================================================================ */
+.product-item-wrap #cateTitle {
+    font-weight: 900;
+    font-size: 30px;
+    padding: 0 0px 0px 20px;
+}
 
-.item-sch-area {background: #fff;margin: 2rem 0 4rem;border-top: 2px solid var(--dark);}
+.item-sch-area {background: #fff;margin: 1rem 0 4rem;border-top: 2px solid var(--dark);}
 .item-sch-area .sch-inner h2 {font-size: 16px;font-weight: 500;padding: 16px 20px;background: #f7f9fa;width: 150px;color: var(--dark);}
 
 .item-sch-area .sch-inner .sch-box {

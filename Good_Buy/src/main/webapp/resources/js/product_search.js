@@ -105,15 +105,14 @@ $(document).ready(function() {
 		url: "SearchPriceFilter",
 		type: "GET",
 		data: {
-			PRODUCT_STATUS: url.searchParams.get('STATUS') != undefined ? tradeEnable : undefined, 
-			PRODUCT_PRICE: url.searchParams.get('PRICE') != undefined ? price : undefined, 
-			PRODUCT_TRADE_ADR1: url.searchParams.get('REGION') != undefined ? region : undefined, 
+			PRODUCT_STATUS: tradeEnable != undefined ? tradeEnable : undefined, 
+			PRODUCT_PRICE: price != undefined ? price : undefined, 
+			PRODUCT_TRADE_ADR1: region != undefined ? region : undefined, 
 			SEARCHKEYWORD: url.searchParams.get('SEARCHKEYWORD') != undefined ? url.searchParams.get('SEARCHKEYWORD') : undefined, 
-			PRODUCT_CATEGORY: category
+			PRODUCT_CATEGORY: category != undefined ? category : undefined
 		}
 	
 	}).done(function(data) {
-		console.log(data);
 		if(data.length != 0) {
 			moment.locale('ko')
 			$("#product-wrap").empty();
@@ -148,4 +147,5 @@ $(document).ready(function() {
 	}).fail(function() {
 		alert("검색 실패\n나중에 다시 시도해주세요.");
 	})	
+	
 })

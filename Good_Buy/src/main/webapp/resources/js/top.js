@@ -9,18 +9,24 @@ $(document).ready(function(){
 	});
 	
 	$.ajax({
-		
 		url : "getCategory",
 		type : "GET",
-		
 	}).done(function(data) {
+		const codeId = url.searchParams.get('CODE_ID')
+		
 		for(let item of data) {
 			$("#hd-lnb").append(
 				`<a href="ProductList?CODE_ID=${item.CODE_ID}">${item.CODE_NAME}</a>`
 			)
+			
+			if (document.location.href.includes("ProductList")) {
+				if (codeId == item.CODE_ID) {
+					$("#cateTitle").text(`${item.CODE_NAME}`)
+				}
+			}
 		}
 	}).fail(function() {
-		
+		alert("카테고리 불러오기 실패\n나중에 다시 시도해주세요.");
 	})
 	
 	if (url.searchParams.get('SEARCHKEYWORD')) {

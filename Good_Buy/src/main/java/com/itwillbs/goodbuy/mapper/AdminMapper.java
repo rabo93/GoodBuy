@@ -210,8 +210,8 @@ public interface AdminMapper {
 	int selectChatTotal();
 
 	// 기간별 회원수 통계
-	List<Map<String, Object>> selectTotalMember(@Param("startDate") String startDate, @Param("endDate") String endDate);
+	List<Map<String, Object>> selectTotalMember(@Param("orderDir") String orderDir, @Param("startDate") String startDate, @Param("endDate") String endDate);
 	// 기간별 거래수 통계
-	List<Map<String, Object>> selectTotalOrder(@Param("startDate") String startDate, @Param("endDate") String endDate);
+	List<Map<String, Object>> selectTotalOrder(@Param("orderDir") String orderDir, @Param("startDate") String startDate, @Param("endDate") String endDate);
 
 }

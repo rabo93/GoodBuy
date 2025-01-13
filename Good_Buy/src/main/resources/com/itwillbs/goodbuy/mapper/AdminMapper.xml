@@ -1041,7 +1041,9 @@
 		WHERE MEM_STATUS = 1
 		AND DATE(MEM_REG_DATE) BETWEEN #{startDate} AND #{endDate}
     	GROUP BY DATE(MEM_REG_DATE)
-    	ORDER BY DATE ASC
+    	ORDER BY DATE 
+    		<if test="orderDir == 'asc'">ASC</if>
+			<if test="orderDir == 'desc'">DESC</if>
     </select>
     
     <!-- 기간별 통계 - 거래수 조회 -->
@@ -1052,7 +1054,9 @@
 		WHERE PAY_STATUS = 3 -- 거래완료
 		AND DATE(PAY_DATE) BETWEEN #{startDate} AND #{endDate}
     	GROUP BY DATE(PAY_DATE)
-    	ORDER BY DATE ASC
+    	ORDER BY DATE 
+    		<if test="orderDir == 'asc'">ASC</if>
+			<if test="orderDir == 'desc'">DESC</if>
     </select>
      
 </mapper>

@@ -514,7 +514,9 @@ public class PayController {
 		
 		
 		
-		
+		 // 팝업에서 확인할 기본 메시지 전달
+        String popupMessage = "팝업 창에 표시할 결과입니다!";
+        model.addAttribute("popupMessage", popupMessage);
 		
 		
 		return "redirect:/PayTransferResult";

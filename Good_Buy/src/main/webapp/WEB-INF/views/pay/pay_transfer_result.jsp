@@ -29,13 +29,33 @@
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/product.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/pay.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/chat_main.js"></script>
 <script>
 	// 창이 닫히기 전에 부모 창 함수 호출
-	window.onbeforeunload = function () {
-		if (window.opener && !window.opener.closed) {
-			window.opener.reloadParent(); // 부모 창의 함수 호출
-		}
-	};
+// 	window.onbeforeunload = function () {
+// 		if (window.opener && !window.opener.closed) {
+// 			window.opener.reloadParent(); // 부모 창의 함수 호출
+// 		}
+// 	};
+	
+window.onload = function() {
+    // 부모 창에서 메시지 받기
+    window.addEventListener("message", function(event) {
+        if (event.origin !== window.location.origin) return;
+
+        const data = event.data;
+        console.log("Popup received:", data);
+
+        // 데이터를 화면에 표시
+//         document.getElementById("result").innerText =
+	document.getElementsByClassName("bubble").innerText =
+//         '송금 상태: ${data.status}\n메시지: ${data.message}\n금액: ${data.amount}\n받는 사람: ${data.receiver}'';
+        '송금 상태: \N메시지: \N금액: \N받는 사람: ';
+        // appendMessage로 보내는 게 낫지 않나?
+    });
+    
+    sendMessage(TYPE_RESPONSE_PAY, 24 , 'apple123', 'bang', 'e02266e1-8082-4eaf-bede-c509166f1236', 2000);
+};
 </script>
 </head>
 
@@ -45,10 +65,6 @@
 		<section class="wrapper">
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
-                
-                
-                
-                
 		        
 		        
 		        

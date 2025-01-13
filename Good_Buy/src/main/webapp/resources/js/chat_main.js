@@ -11,6 +11,7 @@ const TYPE_FILE_UPLOAD_COMPLETE = "FILE_UPLOAD_COMPLETE";
 const TYPE_FILE = "FILE";
 const TYPE_READ = "READ";
 const TYPE_REQUEST_PAY = "REQUEST_PAY";
+const TYPE_RESPONSE_PAY = "RESPONSE_PAY";
 
 //	채팅 메세지 정렬 위치
 const ALIGN_CENTER = "center";
@@ -112,11 +113,17 @@ $(function() {
 		
 		if(data.type == TYPE_REQUEST_PAY) {
 			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
-			let recent_div = `${data.message}원을 요청했어요<span class="item-send-time${index}">&nbsp; · &nbsp; ${data.send_time}</span>`
+			let recent_div = `${data.message}원을 요청했어요.<span class="item-send-time${index}">&nbsp; · &nbsp; ${data.send_time}</span>`
 			$(".item-chat" + index).empty();
 			$(".item-chat" + index).append(recent_div);
 		}
 		
+		if(data.type == TYPE_RESPONSE_PAY) {
+			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
+			let recent_div = `${data.message}원을 송금했어요<span class="item-send-time${index}">&nbsp; · &nbsp; ${data.send_time}</span>`
+			$(".item-chat" + index).empty();
+			$(".item-chat" + index).append(recent_div);
+		}
 	};
 	
 	initChat();
@@ -251,8 +258,16 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 		message = parseInt(message.replace(/,/g, ''));
 		bubble_message = `
 						<div class="bubble">
-							${sNick}님이 ￦ ${message}원을 요청했어요
+							${receiver_id}님이 ￦ ${message}원을 요청했어요
 							<span><button class="item-button" onclick="openPayWindow(${product_id}, '${sender_id}', ${message})">송금하기</button></span>
+						</div>
+						 `
+	}
+	if(type == TYPE_RESPONSE_PAY) {
+		message = parseInt(message.replace(/,/g, ''));
+		bubble_message = `
+						<div class="bubble">
+							${receiver_id}님에게 ￦ ${message}원을 송금했어요
 						</div>
 						 `
 	}
@@ -343,6 +358,8 @@ function sendFile() {
 //	===============================================================================
 //	부모창의 sendMessage() 함수 호출
 function sendMessage(type, product_id, sender_id, receiver_id, room_id, message) {
+	console.log('sendMessage : ' );
+	console.log(type, product_id, sender_id, receiver_id, room_id, message);
 	opener.sendMessage(type, product_id, sender_id, receiver_id, room_id, message);
 }
 function closeChat() {
@@ -481,4 +498,36 @@ function openPayWindow(product_id, receiver_id, price) {
               "&receiver_id=" + encodeURIComponent(receiver_id)+
               "&price=" + encodeURIComponent(price) ;
     payWindow = window.open(url, "chat_window", "width=500,height=500");
+    
+    
+    
+    
+    // 송금 데이터 생성
+    const transferData = {
+        status: "success",
+        message: "송금이 완료되었습니다!",
+        amount: 10000,
+        receiver: "John Doe"
+    };
+
+    // 부모 창에서 즉시 데이터 처리
+////    handleTransferResult(transferData);
+//
+//    // 팝업 창에도 데이터를 전달
+//    if (transferPopup) {
+//        transferPopup.onload = function () {
+//            transferPopup.postMessage(transferData, window.location.origin);
+//        };
+//    }
 }
+function handleTransferResult(data) {
+    // 받은 데이터를 처리 (예: UI 업데이트)
+//    alert("송금 결과: " + data.message);  // alert창 기능은 필요없으니 삭제 
+    console.log("송금처리결과 Transfer data:", data);
+}
+
+// 팝업 창에서 전달받는 메시지를 처리 (예비 처리)
+window.addEventListener("message", function(event) {
+    if (event.origin !== window.location.origin) return;
+    console.log("팝업창에서 받은 메세지 : ", event.data);
+});

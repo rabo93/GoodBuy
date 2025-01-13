@@ -77,17 +77,17 @@
 						            <c:forEach var="review" items="${review}" varStatus="status">
 						            	<div class="review-box">
 									        <div class="user-info">
-									            <div class="seller"><span>${review.sellerNick} 상점</span> / <b>${review.product_title}</b></div>
+									            <div class="seller"><a href='/ProductShop?MEM_NICK=${review.sellerNick}'><span>${review.sellerNick} 상점</span></a> / <b><a href='ProductDetail?PRODUCT_ID=${review.product_id}'>${review.product_title}</a></b></div>
 									        	<div class="user-thumb">
-										            <c:choose>
-											            <c:when test="${not empty member.mem_profile}">
-											            	<img src="${member.mem_profile}?${System.currentTimeMillis()}" id="profile_preview"><br>
-											            </c:when>
-											            <c:otherwise>
-<!-- 											                member.memProfile이 비어 있으면 기본 이미지 출력 -->
-											                <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview"><br>
-											            </c:otherwise>
-											        </c:choose>
+													<c:choose>
+														<c:when test="${not empty sessionScope.sProfile}">
+															<img src="${sessionScope.sProfile}?${System.currentTimeMillis()}" id="profile_preview"><br>
+														</c:when>
+														<c:otherwise>
+															<!-- member.memProfile이 비어 있으면 기본 이미지 출력 -->
+															<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview"><br>
+														</c:otherwise>
+													</c:choose>
 										        </div>
 									        <!-- /프로필사진 -->
 									            <div class="name">${review.buyerNick} <span class="date">${review.review_date}</span></div>
@@ -104,6 +104,9 @@
 												<c:if test="${fn:contains(review.review_options, '2')}"><span id="score" name="score">친절해요💖</span></c:if>
 												<c:if test="${fn:contains(review.review_options, '3')}"><span id="score" name="score">물건상태가 좋아요✨</span></c:if>
 												<c:if test="${fn:contains(review.review_options, '4')}"><span id="score" name="score">또 거래하고 싶어요💰</span></c:if>
+												<c:if test="${fn:contains(review.review_options, '5')}"><span id="score" name="score">배송이 느려요😵‍💫</span></c:if>
+												<c:if test="${fn:contains(review.review_options, '6')}"><span id="score" name="score">채팅 답장이 느려요😫</span></c:if>
+												<c:if test="${fn:contains(review.review_options, '7')}"><span id="score" name="score">물건 상태가 사진과 달라요💣</span></c:if>
 								            </div>
 								            <div class="btns">
 											    <input type="hidden" name="product_id" id="hiddenProductId">

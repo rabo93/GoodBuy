@@ -205,6 +205,35 @@ function showChatRoom(room) {
 			            + '</div>';
 	}
 	
+	let divRoom = 	  '<div class="extra-header">'
+						+ '<button class="close-chat-button" onclick="closeChat()">'
+							+ '<i class="fa-solid fa-arrow-left"></i>'
+						+ '</button>'
+						+ '<button class="report-chat-button" onclick="toggleChatModal(\'open\')">'
+//							+ '<img src="${pageContext.request.contextPath}/resources/img/siren.png">'
+							+ '<i class="fa-solid fa-land-mine-on"></i>&nbsp;신고하기'
+						+ '</button>'
+					+ '</div>'
+					+ '<div class="chat-header">'
+			           	+ '<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>'
+			           	+ '<div class="title">'+ room.title +' </div>'
+			           	+ '	 <c:if test="${productSearch.product_status != 3}">'
+			           	+ '		<button class="item-button" onclick="openPayWindow(' + room.product_id + ', \'' + room.receiver_id + '\')">구매하기</button>'
+			           	+ '	 </c:if>'
+			           + '</div>'
+			           + '<div class="chat-body">'
+			           + '</div>'
+		           + '<div class="chat-footer">'
+			           	+ '<input type="hidden" id="room_id" value="' + room.room_id +'">'
+			           	+ '<input type="hidden" id="receiver_id" value="' + room.receiver_id +'">'
+			           	+ '<input type="hidden" id="sId" value="' + room.sender_id +'">'
+			           	+ '<span class="fileArea">'
+			           	+ '<label for="chatFile"><i class="fa-solid fa-circle-plus"></i></label>'
+			           	+ '<input type="file" id="chatFile" onchange="sendFile()" accept="image/*">'
+			           	+ '</span>'
+			           	+ '<input type="text" class="chatMessage" placeholder="메시지를 입력하세요...">'
+			            + '<button class="btnSend">전송</button>'
+		            + '</div>';
 	
 	//	chat-area 영역에 채팅창 div 출력
 	$(".chat-area").html(divRoom);

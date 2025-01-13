@@ -6,6 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
 <!-- default -->
@@ -68,10 +70,22 @@
 									</div>
 									<div class="table-responsive">
 <!-- 		                                <table class="table table-bordered compact" id="periodList" width="100%" cellspacing="0"> -->
-		                                <table class="table table-bordered compact" id="periodList2" width="100%" cellspacing="0">
-		                                    <thead></thead>
+		                                <table class="table table-bordered compact" id="periodList" width="100%" cellspacing="0">
+		                                    <thead>
+		                                    	<tr>
+		                                    		<th>날짜</th>
+		                                    		<th>회원수</th>
+		                                    		<th>거래수</th>
+		                                    	</tr>
+		                                    </thead>
 		                                    <tbody></tbody>
-		                                    <tfoot></tfoot>
+		                                    <tfoot>
+		                                    	<tr>
+		                                    		<th>Total</th>
+		                                    		<th></th>
+		                                    		<th></th>
+		                                    	</tr>
+		                                    </tfoot>
 		                                </table>
 		                          	</div>
                                 </div>
@@ -117,7 +131,7 @@
 
     <!-- Page level custom scripts -->
 <%--     <script src="${pageContext.request.contextPath}/resources/adm/js/period_analysis.js"></script> --%>
-    <script src="${pageContext.request.contextPath}/resources/adm/js/period_analysis2.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/adm/js/period_analysis.js"></script>
 
 </body>
 

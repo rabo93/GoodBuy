@@ -21,6 +21,7 @@
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/modal.css">
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
 </head>
 
@@ -83,30 +84,20 @@
                                                         <span class="add">${product.PRODUCT_TRADE_ADR1}</span>
                                                         <span class="name">${product.MEM_NICK}</span>
                                                     </div>
-                                                    
-                                                    <!-- 후기 작성하기 버튼 (상품 정보 포함) -->
-<!--                                                     	<input type="hidden" name="product_id" id="hiddenProductId"> -->
-<!-- 	                                                    <button class="open-modal-btn" -->
-<%-- 														        data-product-id="${product.product_id}" --%>
-<%-- 														        data-title="${product.product_title}" --%>
-<%-- 														        data-buyer="${product.mem_nick}" --%>
-<%--  														        data-review-cnt="${product.review_cnt}" --%>
-<%-- 														        type="button" ${product.review_cnt == 1 ? 'disabled' : ''}> --%>
-<%-- 														    ${product.review_cnt == 1 ? '작성완료📩' : '후기 작성하기📮'} --%>
-<!-- 														</button> -->
                                                     	<input type="hidden" name="product_id" id="hiddenProductId">
                                                     	<c:choose>
-                                                    		<c:when test="${product.REVIEW_CNT != null && product.REVIEW_CNT == 0}">
-	                                                    		 <button class="open-modal-btn"
-															        data-product-id="${product.PRODUCT_ID}"
-															        data-title="${product.PRODUCT_TITLE}"
-															        data-buyer="${product.MEM_NICK}">
-															        후기 작성하기📮
-															     </button>
+                                                    		<c:when test="${empty product.REVIEW_CNT || product.REVIEW_CNT == 0}">
+	                                                    		 <div class="review-write-btn">
+		                                                    		 <button class="open-modal-btn"
+																        data-product-id="${product.PRODUCT_ID}"
+																        data-title="${product.PRODUCT_TITLE}"
+																        data-buyer="${product.MEM_NICK}">
+																        <i class="fa-regular fa-envelope"></i> 후기 작성하기
+																     </button>
+															     </div>
                                                     		</c:when>
-                                                    		<c:otherwise><a class="review-done-btn" href='MyReviewHistory'><i class="fa-regular fa-envelope"></i> 작성완료</a></c:otherwise>
+                                                    		<c:otherwise><a class="review-done-btn" href='MyReviewHistory?product_id=${product.PRODUCT_ID}'><i class="fa-solid fa-envelope"></i> 작성완료</a></c:otherwise>
                                                     	</c:choose>
-														
                                                 </div>
                                             </li>
                                         </c:forEach>
@@ -125,31 +116,34 @@
     </footer>
 
     <!-- 후기 작성 모달 (반복문 바깥에 모달 하나만 사용) -->
-    <div id="review-modal" class="modal-overlay" style="display: none;">
-        <div class="modal-content">
-            <h2>
-                <span id="buyerName"></span>님께 구매한 [<span id="productTitle"></span>]<br>후기 보내기📮
-            </h2>
-	        <br>
-           	<label><input type="radio" name="score" value="2">최고예요🥳</label>
-          	<label><input type="radio" name="score" value="1">좋아요💕</label>
-           	<label><input type="radio" name="score" value="0">별로예요👿</label>
-            <input type="hidden" id="modal_product_id"> <!-- id저장용 -->
-<!--             <input type="hidden" id="modal_review_cnt"> 리뷰 갯수 저장용 -->
-			<!-- 추가 리뷰 옵션 (중복 선택 가능) -->
-	        <br><br>
-	        <h3>추가로 만족한 부분을 선택해 주세요 (복수 선택 가능)</h3>
-	        <label><input type="checkbox" name="reviewOptions" value="1"> 배송이 빨라요🚚</label>
-	        <label><input type="checkbox" name="reviewOptions" value="2"> 친절해요💖</label><br>
-	        <label><input type="checkbox" name="reviewOptions" value="3"> 물건상태가 좋아요✨</label>
-	        <label><input type="checkbox" name="reviewOptions" value="4"> 또 거래하고 싶어요💰</label>
-	        <br><br>
-            <textarea rows="4" cols="50" id="review_content" placeholder="후기를 작성해주세요."></textarea>
-            <br>
-            <button id="close-modal">닫기</button>
-            <button id="submit-review">작성완료</button>
+   <div id="review-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <h2>
+            <span id="buyerName"></span>님께 구매한 [<span id="productTitle"></span>]<br>후기 보내기 <i class="fa-regular fa-envelope"></i>
+        </h2>
+        <div class="review-radio">
+            <label><input type="radio" name="score" value="2">최고예요🥳</label>
+            <label><input type="radio" name="score" value="1">좋아요💕</label>
+            <label><input type="radio" name="score" value="0">별로예요👿</label>
+            <input type="hidden" id="modal_product_id">
+        </div>
+        <br><br>
+        <h3>추가로 만족한 부분을 선택해 주세요 (복수 선택 가능)</h3>
+        <div class="review-check">
+            <label><input type="checkbox" name="reviewOptions" value="1"> 배송이 빨라요🚚</label>
+            <label><input type="checkbox" name="reviewOptions" value="2"> 친절해요💖</label>
+            <label><input type="checkbox" name="reviewOptions" value="3"> 물건상태가 좋아요✨</label>
+            <label><input type="checkbox" name="reviewOptions" value="4"> 또 거래하고 싶어요💰</label>
+        </div>
+        <textarea class="" rows="4" cols="50" id="review_content" placeholder="후기를 작성해주세요."></textarea>
+        <br>
+        <div class="modal-ft">
+            <button id="close-modal" class="reset">닫기</button>
+            <button id="submit-review" class="active">작성완료</button>
         </div>
     </div>
+</div>
+   
 
     <script type="text/javascript">
     $(document).ready(function () {
@@ -165,8 +159,6 @@
             $("#productTitle").text(productTitle);
             $("#modal_product_id").val(productId);
 //             $("#modal_review_cnt").val(review_cnt);
-
-
             $("#review-modal").fadeIn(300);
         });
 
@@ -180,6 +172,35 @@
                 $("#review-modal").fadeOut(300);
             }
         });
+   	    
+   	    
+   	    function resetOption() { //기본 옵션 버튼
+			$(".review-check").html(
+					`  
+					<label><input type="checkbox" name="reviewOptions" value="1"> 배송이 빨라요🚚</label>
+	                <label><input type="checkbox" name="reviewOptions" value="2"> 친절해요💖</label>
+	                <label><input type="checkbox" name="reviewOptions" value="3"> 물건상태가 좋아요✨</label>
+	                <label><input type="checkbox" name="reviewOptions" value="4"> 또 거래하고 싶어요💰</label>
+					`);
+		}
+   	    
+   	    function updateCheckBox(scoreValue) {
+			const reviewCheck = $(".review-check");
+			if (scoreValue == "0") { // 불만족 클릭시
+				reviewCheck.html(`
+		                <label><input type="checkbox" name="reviewOptions" value="5"> 배송이 느려요😵‍💫</label>
+		                <label><input type="checkbox" name="reviewOptions" value="6"> 채팅 답장이 느려요😫</label>
+		                <label><input type="checkbox" name="reviewOptions" value="7"> 물건 상태가 사진과 달라요💣</label>
+		            	`)
+			} else {
+				resetOption();
+			}
+		}
+   	    
+   	    $("input[name='score']").on("change",function(){ // 체크박스를 라디오 버튼 선택에 따라 업데이트
+   	    	const selectValue = $(this).val();
+   	    	updateCheckBox(selectValue);
+   	    });
 
         // 후기 제출 이벤트
         $("#submit-review").click(function () {
@@ -193,9 +214,12 @@
             }).get().join(",");  // 콤마(,)로 구분된 문자열로 변환
 
 // 			const review_cnt = $("#modal_review_cnt").val();
-
+			
             if (!reviewText.trim()) {
                 alert("후기를 작성해주세요!");
+                return;
+            } else if (!score){
+                alert("평점을 함께 남겨주세요!");
                 return;
             }
 
@@ -205,7 +229,6 @@
             console.log("상품 제목: " + productTitle);
             console.log("평점: " + score);
             console.log(">>>추가평점: " + reviewOptions);
-// 			console.log(">>>>>>>>>>>>"+review_cnt);
 			  
 
             // Ajax로 데이터 전송
@@ -236,11 +259,6 @@
             });
         });
     });
-
-</script>
-
-<script type="text/javascript">
-	
 
 </script>
 </body>

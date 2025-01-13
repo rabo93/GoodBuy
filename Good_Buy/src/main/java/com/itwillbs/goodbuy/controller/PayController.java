@@ -407,8 +407,6 @@ public class PayController {
 		
 		
 		
-		
-		map.put("pay_id", 0);
 		map.put("buyer_id", id);
 		map.put("receiver_id", receiver_id);
 		
@@ -437,6 +435,8 @@ public class PayController {
 		
 		log.info(">>>>>>>> 송금 요청 정보 : " + map);
 
+		
+//		System.out.println("payTransfer에서 map 정보 보기 : " + map);
 		// PayService - transfer() 메서드 호출하여 송금 작업 요청
 		Map<String, Object> transferResult = service.transfer(map);
 		
@@ -461,15 +461,20 @@ public class PayController {
 		log.info(">>>>> 이체결과 : " + transferResult);
 		
 		transferResult.put("id", id);
+		transferResult.put("product_id", product_id);
 		// 송금결과 DB 저장
 		// 사용자번호를 입금이체 결과 객체에 추가
 		transferResult.put("user_seq_no", senderToken.getUser_seq_no());
 		// 송금이체 성공 시 결과를 DB (TRANSACTIONINFO) 에 저장
+		
+		
+		System.out.println("transferResult 이체결과 잘 나오나?   : " + transferResult);
 		service.registTransferResult(transferResult);
 		
-		
 		// DB에 거래내역 저장
-		int payInfo = service.registPayInfo(map);
+//		int payInfo = service.registPayInfo(map); // update 치려고 주석침
+		service.registPayInfo(map); // 일단 업데이트 치러감.
+		
 		
 		session.setAttribute("transferResult", transferResult);
 		

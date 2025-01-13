@@ -180,6 +180,8 @@
 								            	</div>
 							            	</c:when>
 							            	<c:otherwise>
+<%-- 							            	getPayInfo :${getPayInfo } --%>
+							            	
 							            		<c:forEach var="item" items="${getPayInfo}" varStatus="status">
 							            			<c:if test="${item.TRANSACTION_TYPE eq 'WI'}">
 							            				<c:set var="detail" value="${item.BANK_NAME} ${item.ACCOUNT_NUM} "/>
@@ -199,7 +201,7 @@
 							            				</c:if>
 							            				<c:if test="${item.RECEIVER_ID eq sId}">
 							            					<c:set var="symbol" value="+"/>
-							            				</c:if>
+							            				</c:if>		
 							            			</c:if>
 							            			<c:if test="${status.index < 5}">
 								            			<div class="history-item">
@@ -208,11 +210,11 @@
 											                    <span>${detail }</span>
 											                    <span class="date" >
 											                    	<fmt:parseDate var="parsedReplyRegDate"
- 																						value="${item.API_TRAN_DTM}"  
- 																						pattern="yyyy-MM-dd'T'HH:mm:ss"  
- 																						type="both" /> 
- 																		<fmt:formatDate value="${parsedReplyRegDate}" pattern="yyyy-MM-dd" />  
- 																	| ${classify} 
+   																						value="${item.API_TRAN_DTM}"    
+   																						pattern="yyyy-MM-dd'T'HH:mm:ss"    
+   																						type="both" />   
+   																		<fmt:formatDate value="${parsedReplyRegDate}" pattern="yyyy-MM-dd" />    
+   																	| ${classify}   
 											                    </span>
 											                </div>
 											                <div class="amount">${symbol} <fmt:formatNumber pattern="#,###">${item.TRAN_AMT}</fmt:formatNumber></div>

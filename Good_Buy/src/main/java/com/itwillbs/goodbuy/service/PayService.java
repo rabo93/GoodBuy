@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.itwillbs.goodbuy.handler.PayApiClient;
 import com.itwillbs.goodbuy.mapper.PayMapper;
@@ -177,10 +178,24 @@ public class PayService {
 
 	
 	
-
-	public int registPayInfo(Map<String, Object> map) {
-		return mapper.insertPayInfo(map);
+	// PRODUCT_ID UPDATE 해야함.
+//	public int registPayInfo(Map<String, Object> map) {
+//		return mapper.insertPayInfo(map);
+//	}
+	
+	@Transactional
+	public void registPayInfo(Map<String, Object> map) {
+		
+//		public void processTransaction(String value1, String value2, String value3, String newStatus, int productId) {
+		
+		// TRANSACTIONINFO 테이블에 데이터 삽입
+	    mapper.insertTransactionPayInfo(map);
+	
+	    // PRODUCT 테이블의 상태 변경
+	    mapper.updateProductStatus(map);
 	}
+		
+		
 
 	// 거래내역 조회 
 	public List<Map<String, String>> getTransactionDetail(String fintech_use_num) {
@@ -205,6 +220,9 @@ public class PayService {
 	public List<Map<String, String>> getPayInfo(String id) {
 		return mapper.selectPayInfo(id);
 	}
+	
+	
+	
 
 
 

@@ -288,7 +288,12 @@
 						<div class="chat-header">
 			            	<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>
 			                <div class="chat-title">${productSearch.product_title}</div>
-			                <button class="chat-item-button" onclick="openPayWindow('${productSearch.product_id}' , '${productSearch.mem_id}')">구매하기</button>
+			                <c:if test="${productSearch.product_status == 3}">
+			               		<button class="chat-item-button" style="background-color: var(--gray)">판매완료된 상품</button>
+			               	</c:if>
+			               	<c:if test="${productSearch.product_status != 3}">
+			                	<button class="chat-item-button" onclick="openPayWindow('${productSearch.product_id}' , '${productSearch.mem_id}')">구매하기</button>
+			                </c:if>
 			            </div>
 			            <div class="chat-body">
 			            </div>

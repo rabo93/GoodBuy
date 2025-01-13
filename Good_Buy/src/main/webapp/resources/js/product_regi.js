@@ -59,6 +59,27 @@ $(function(){
 	    }
 	});
 	
+	$("#productRegist").on("submit", function() {
+		if ($("#item-thumb-upload-btn1").val() == "") {
+			alert("썸네일을 등록해주세요!");
+			$("#item-thumb-preview1").focus();
+			return false;
+		} else if ($("#item-regi-title-text").val() == "") {
+			alert("제목을 입력해주세요!");
+			$("#item-regi-title-text").focus();
+			return false;
+		} else if ($("#item-regi-description-text").val() == "") {
+			alert("내용을 입력해주세요!");
+			$("#item-regi-description-text").focus();
+			return false;
+		}  else if ($("#product_price").val() == "") {
+			alert("가격을 입력해주세요!");
+			$("#product_price").focus();
+			return false;
+		}
+		
+	})
+	
 })
 
 

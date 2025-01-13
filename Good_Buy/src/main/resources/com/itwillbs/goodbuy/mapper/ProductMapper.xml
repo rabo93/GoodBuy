@@ -124,7 +124,7 @@
 			</when>
 			<otherwise>
 				AND
-					PRODUCT_STATUS BETWEEN 0 AND 3
+					PRODUCT_STATUS BETWEEN 0 AND 2
 			</otherwise>
 		</choose>
 		<if test="price_end != 0">

@@ -77,17 +77,17 @@
 						            <c:forEach var="review" items="${review}" varStatus="status">
 						            	<div class="review-box">
 									        <div class="user-info">
-									            <div class="seller"><span>${review.sellerNick} 상점</span> / <b>${review.product_title}</b></div>
+									            <div class="seller"><a href='/ProductShop?MEM_NICK=${review.sellerNick}'><span>${review.sellerNick} 상점</span></a> / <b><a href='ProductDetail?PRODUCT_ID=${review.product_id}'>${review.product_title}</a></b></div>
 									        	<div class="user-thumb">
-										            <c:choose>
-											            <c:when test="${not empty member.mem_profile}">
-											            	<img src="${member.mem_profile}?${System.currentTimeMillis()}" id="profile_preview"><br>
-											            </c:when>
-											            <c:otherwise>
-<!-- 											                member.memProfile이 비어 있으면 기본 이미지 출력 -->
-											                <img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview"><br>
-											            </c:otherwise>
-											        </c:choose>
+													<c:choose>
+														<c:when test="${not empty sessionScope.sProfile}">
+															<img src="${sessionScope.sProfile}?${System.currentTimeMillis()}" id="profile_preview"><br>
+														</c:when>
+														<c:otherwise>
+															<!-- member.memProfile이 비어 있으면 기본 이미지 출력 -->
+															<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" id="profile_preview"><br>
+														</c:otherwise>
+													</c:choose>
 										        </div>
 									        <!-- /프로필사진 -->
 									            <div class="name">${review.buyerNick} <span class="date">${review.review_date}</span></div>

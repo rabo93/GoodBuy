@@ -100,7 +100,7 @@ public class MemberService {
 	
 	
 	//-------------------------------------------------------------
-	// 비밀번호 찾기 - 회원정보 찾기
+	// 휴대폰번호로 회원정보 찾기
 	public MemberVO getMemInfo(String mem_phone) {
 		return mapper.selectMemInfo(mem_phone);
 	}

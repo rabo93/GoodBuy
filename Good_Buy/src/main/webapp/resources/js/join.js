@@ -1,4 +1,5 @@
 // ************* 변수 초기화 **************
+let checkPhone = false;
 let checkName = false;
 let checkNic = false;
 let checkIdResult = false;
@@ -6,8 +7,6 @@ let checkPasswd1 = false;
 let checkPasswd2 = false;
 let checkEmail = false;
 let checkBirthday = false;
-
-
 let oldPasswd = false;
 
 $(document).ready(function() {
@@ -45,7 +44,6 @@ $(document).ready(function() {
                     
                     // 5분 타이머 시작
                     startTimer(5);
-			    	
             	}
             },
             error: function (xhr) {
@@ -74,6 +72,7 @@ $(document).ready(function() {
             data: { "authCode": authCode, "userPhone" : userPhone },
             success: function (response) {
                 alert(response || "인증 성공!");
+                
                 // 인증 상태를 1로 변경
     			$("#auth_status").val(1);
                 
@@ -245,6 +244,35 @@ function checkNameResult(){
 }
 
 //---------------------------------------------------------------------
+// 휴대폰번호 중복검사
+function ckPhone(){
+	let mem_phone = $("#mem_phone").val();
+	console.log("입력한 휴대폰번호" + mem_phone);
+	let regex = /^[0-9]{11}$/;
+	if(regex.exec(mem_phone)){
+		$.ajax({
+			type : "Post",
+			url : "MemberCheckPhone",
+			data : {
+				mem_phone : mem_phone
+			},
+			success : function(result){
+				if(result.trim() == "false" ){
+					$("#phoneCheckResult").text("인증번호 요청을 눌러 본인 인증을 진행해 주세요.").css("color","var(--secondary)");
+					checkPhone = true;
+				} else {
+					$("#phoneCheckResult").text("이미 가입된 휴대폰번호 입니다").css("color","var(--red)");
+					checkPhone = false;
+				}
+			}
+		});
+	} else {
+		alert("유효한 11자리 휴대폰 번호를 입력해주세요.");  
+		checkPhone = false;
+	}
+}
+
+//---------------------------------------------------------------------
 // 닉네임 중복검사
 function ckNick(){
 	let nick = $("#mem_nick").val();
@@ -336,12 +364,16 @@ function checkSubmit(){
 	
 	//--------------------------------------------
     // ********** 필수 기입 항목 확인 *********
-	// 휴대폰 본인확인
+	// 휴대폰 본인확인 완료되었는지
     let authStatus = $("#auth_status").val();
 	if (authStatus !== "1") {
        alert("휴대폰 인증을 완료해주세요.");
        return false; // 가입 중단
     }
+    // 휴대폰 중복확인
+//    let mem_phone = $("mem_phone").val();
+    
+    
 	//--------------------------------------------
     // 이름
     if (!checkName) {
@@ -387,7 +419,7 @@ function checkSubmit(){
     month = month.padStart(2, '0'); // 2자리로 변환
     day = day.padStart(2, '0'); // 2자리로 변환
     let birthday = `${year}-${month}-${day}`;
-	
+	 
 	// 생년월일 유효한 경우 상태 업데이트
     checkBirthday = true;
 	
@@ -431,6 +463,7 @@ function previewImage(event) {
     }
 //     reader.readAsDataURL(file);
 }
+
 
 //-----------------------------------------------------------------------
 // 닉네임 변경시 중복 검사(기존 닉네임과 같을 경우에는 유지)

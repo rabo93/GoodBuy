@@ -205,6 +205,16 @@ public class MemberController {
 	}
 	
 	@ResponseBody
+	@PostMapping("MemberCheckPhone")
+	public String memberCheckPhone(String mem_phone, MemberVO member) {
+		member = memberService.getMemInfo(mem_phone);
+		boolean isDuplicate = false;
+		if(member != null) { //중복
+			isDuplicate= true;
+		}
+		return isDuplicate + "";
+	}
+	@ResponseBody
 	@GetMapping("MemberCheckNick")
 	public String memberCheckNick(String mem_nick, MemberVO member) {
 		member = memberService.getMemberNick(member);

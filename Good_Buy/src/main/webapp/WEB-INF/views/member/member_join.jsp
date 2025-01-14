@@ -45,7 +45,7 @@
 									<section class="row">
 										<label for="mem_phone">휴대폰번호</label> <span class="required"> * </span>
 										<div class="box">
-											<input type="text" name="mem_phone" id="mem_phone" placeholder="'-'없이 입력해주세요" required> 
+											<input type="text" name="mem_phone" id="mem_phone" placeholder="'-'없이 입력해주세요" onchange="ckPhone()" required> 
 											<input type="button" value="인증번호 요청" id="phoneChk">
 											<input type="button" value="휴대폰번호 재인증" id="phoneReChk" style="display:none;">
 										</div>

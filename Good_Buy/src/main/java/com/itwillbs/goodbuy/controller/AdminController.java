@@ -848,17 +848,28 @@ public class AdminController {
 			endDate = date[1];
 		}
 				
+		//--------------------------------------------------------------
 		// 각각의 컬럼 데이터 가져오기
-		// 회원수
+		// 1.총 회원수
 		List<Map<String, Object>> memberPeriod = service.getMemberPeriod(orderDir, startDate, endDate);
-		System.out.println("회원수: " + memberPeriod);
-		// 거래수 
-		List<Map<String, Object>> orderPeriod = service.getOrderePeriod(orderDir, startDate, endDate);
-		System.out.println("거래수: " + orderPeriod);
+//		System.out.println("회원수: " + memberPeriod);
+		// 2.회원가입수 
+		List<Map<String, Object>> joinPeriod = service.getJoinPeriod(orderDir, startDate, endDate);
+//		System.out.println("회원가입수: " + joinPeriod);
+		// 3.상품등록수
+		List<Map<String, Object>> productPeriod = service.getProductPeriod(orderDir, startDate, endDate);
+//		System.out.println("상품등록: " + productPeriod);
+		// 4.거래완료수 
+		List<Map<String, Object>> orderPeriod = service.getOrderPeriod(orderDir, startDate, endDate);
+//		System.out.println("거래수: " + orderPeriod);
+		// 5.거래금액 
+		List<Map<String, Object>> payPeriod = service.getPayPeriod(orderDir, startDate, endDate);
+//		System.out.println("거래금액: " + payPeriod);
 		
+		//--------------------------------------------------------------
 		// 날짜별 컬럼 병합
 		Map<String, Map<String, Object>> resultMap = new LinkedHashMap<>();
-		
+		//--------------------------------------------------------------
 		// 회원수 데이터 추가
 		for(Map<String, Object> memberData : memberPeriod) {
 			Date memberDate = (Date) memberData.get("date");
@@ -866,6 +877,22 @@ public class AdminController {
 			
 			resultMap.putIfAbsent(dateString, new HashMap<String, Object>());
 			resultMap.get(dateString).put("memberTotal", memberData.get("memberTotal"));
+		}
+		// 회원가입수 데이터 추가
+		for(Map<String, Object> joinData : joinPeriod) {
+			Date joinDate = (Date) joinData.get("date");
+			String dateString = new SimpleDateFormat("yyyy-MM-dd").format(joinDate); // java.sql.Date를 String으로 변환
+			
+			resultMap.putIfAbsent(dateString, new HashMap<String, Object>());
+			resultMap.get(dateString).put("joinTotal", joinData.get("joinTotal"));
+		}
+		// 상품등록수 데이터 추가
+		for(Map<String, Object> productData : productPeriod) {
+			Date productDate  = (Date) productData.get("date");
+			String dateString = new SimpleDateFormat("yyyy-MM-dd").format(productDate); // java.sql.Date를 String으로 변환
+			
+			resultMap.putIfAbsent(dateString, new HashMap<String, Object>());
+			resultMap.get(dateString).put("productTotal", productData.get("productTotal"));
 		}
 		// 거래수 데이터 추가
 		for(Map<String, Object> orderData : orderPeriod) {
@@ -875,14 +902,26 @@ public class AdminController {
 			resultMap.putIfAbsent(dateString, new HashMap<String, Object>());
 			resultMap.get(dateString).put("orderTotal", orderData.get("orderTotal"));
 		}
+		// 거래금액 데이터 추가
+		for(Map<String, Object> payData : payPeriod) {
+			Date payDate  = (Date) payData.get("date");
+			String dateString = new SimpleDateFormat("yyyy-MM-dd").format(payDate); // java.sql.Date를 String으로 변환
+			
+			resultMap.putIfAbsent(dateString, new HashMap<String, Object>());
+			resultMap.get(dateString).put("payTotal", payData.get("payTotal"));
+		}
 		
+		//--------------------------------------------------------------
 		// 데이터 결합
 		List<Map<String, Object>> finalList = new ArrayList<Map<String,Object>>();
 		for(Map.Entry<String, Map<String, Object>> entry : resultMap.entrySet()) {
 			Map<String, Object> finalData = new HashMap<String, Object>();
 			finalData.put("date", entry.getKey());
 			finalData.put("memberTotal", entry.getValue().getOrDefault("memberTotal", 0));
+			finalData.put("joinTotal", entry.getValue().getOrDefault("joinTotal", 0));
+			finalData.put("productTotal", entry.getValue().getOrDefault("productTotal", 0));
 			finalData.put("orderTotal", entry.getValue().getOrDefault("orderTotal", 0));
+			finalData.put("payTotal", entry.getValue().getOrDefault("payTotal", 0));
 			finalList.add(finalData);
 		}
 //		System.out.println("finalList: " + finalList);

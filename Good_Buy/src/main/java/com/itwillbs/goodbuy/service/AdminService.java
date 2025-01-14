@@ -421,10 +421,24 @@ public class AdminService {
 	public List<Map<String, Object>> getMemberPeriod(String orderDir, String startDate, String endDate) {
 		return mapper.selectTotalMember(orderDir, startDate, endDate);
 	}
+	// 기간별 회원가입수 통계
+	public List<Map<String, Object>> getJoinPeriod(String orderDir, String startDate, String endDate) {
+		return mapper.selectTotalJoin(orderDir, startDate, endDate);
+	}
+	// 기간별 상품등록수 통계
+	public List<Map<String, Object>> getProductPeriod(String orderDir, String startDate, String endDate) {
+		return mapper.selectTotalProduct(orderDir, startDate, endDate);
+	}
 	// 기간별 거래 통계
-	public List<Map<String, Object>> getOrderePeriod(String orderDir, String startDate, String endDate) {
+	public List<Map<String, Object>> getOrderPeriod(String orderDir, String startDate, String endDate) {
 		return mapper.selectTotalOrder(orderDir, startDate, endDate);
 	}
+	// 기간별 거래금액 통계
+	public List<Map<String, Object>> getPayPeriod(String orderDir, String startDate, String endDate) {
+		return mapper.selectTotalPay(orderDir, startDate, endDate);
+	}
+
+
 	
 	
 }

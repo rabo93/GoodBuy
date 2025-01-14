@@ -1072,30 +1072,78 @@
 		  FROM CHATTING
 	</select>
     <!-- ************************************************************************* -->
-    <!-- 기간별 통계 - 회원수 조회 -->
+    <!-- 기간별 통계 - 총 회원수 조회 -->
     <select id="selectTotalMember" resultType="map">
+<!--     < 이스케이프문자가 xml에서 적용되지 않아서 CDATA로 처리  -->
+	    <![CDATA[ 
+		    WITH
+		    -- 시작일자 이전 누적 회원 수 계산
+		    InitialCounts AS (
+		    	SELECT COUNT(*) AS initialMemberTotal
+		    	FROM MEMBER
+		    	WHERE MEM_STATUS = 1
+		    	AND MEM_REG_DATE < #{startDate}
+		    ),
+		    -- 기간 내 일자별 회원 가입 수 계산
+		    DailyCounts AS (
+		    	SELECT DATE(MEM_REG_DATE) AS date
+		    			,COUNT(*) AS dailyJoin
+		    	FROM MEMBER
+		    	WHERE MEM_STATUS = 1
+		    	AND MEM_REG_DATE BETWEEN #{startDate} AND #{endDate}
+		    	GROUP BY DATE(MEM_REG_DATE)
+		    )
+		    -- 누적 합계 계산
+		    SELECT d.date
+		    		,(i.initialMemberTotal + SUM(d.dailyJoin) OVER (ORDER BY d.date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)) AS memberTotal
+		    FROM DailyCounts d
+		    CROSS JOIN InitialCounts i
+		    ORDER BY d.date ${orderDir}
+	    ]]>
+    </select>
+    
+    <!-- 기간별 통계 - 일자별 회원가입수 조회 -->
+    <select id="selectTotalJoin" resultType="map">
     	SELECT DATE(MEM_REG_DATE) AS date
-			  , COUNT(*) AS memberTotal
+			  , COUNT(*) AS joinTotal
 		FROM MEMBER
 		WHERE MEM_STATUS = 1
 		AND DATE(MEM_REG_DATE) BETWEEN #{startDate} AND #{endDate}
     	GROUP BY DATE(MEM_REG_DATE)
-    	ORDER BY DATE 
-    		<if test="orderDir == 'asc'">ASC</if>
-			<if test="orderDir == 'desc'">DESC</if>
+    	ORDER BY DATE ${orderDir}
+    </select>
+    
+    <!-- 기간별 통계 - 상품등록수 조회 -->
+    <select id="selectTotalProduct" resultType="map">
+    	SELECT DATE(PRODUCT_REG_DATE) AS date
+				, COUNT(*) AS productTotal
+		FROM PRODUCT
+		WHERE DATE(PRODUCT_REG_DATE) BETWEEN #{startDate} AND #{endDate}
+    	GROUP BY DATE(PRODUCT_REG_DATE)
+    	ORDER BY DATE ${orderDir}
     </select>
     
     <!-- 기간별 통계 - 거래수 조회 -->
     <select id="selectTotalOrder" resultType="map">
-    	SELECT DATE(PAY_DATE) AS date,
-				COUNT(*) AS orderTotal
+    	SELECT DATE(PAY_DATE) AS date
+				, COUNT(*) AS orderTotal
 		FROM PAYINFO
 		WHERE PAY_STATUS = 3 -- 거래완료
 		AND DATE(PAY_DATE) BETWEEN #{startDate} AND #{endDate}
     	GROUP BY DATE(PAY_DATE)
-    	ORDER BY DATE 
-    		<if test="orderDir == 'asc'">ASC</if>
-			<if test="orderDir == 'desc'">DESC</if>
+    	ORDER BY DATE ${orderDir}
     </select>
+    
+    <!-- 기간별 통계 - 거래금액 조회 -->
+    <select id="selectTotalPay" resultType="map">
+    	SELECT DATE(PAY_DATE) AS date,
+				SUM(PAY_PRICE) AS payTotal
+		FROM PAYINFO
+		WHERE PAY_STATUS = 3 -- 거래완료
+		AND DATE(PAY_DATE) BETWEEN #{startDate} AND #{endDate}
+    	GROUP BY DATE(PAY_DATE)
+    	ORDER BY DATE ${orderDir}
+    </select>
+    <!-- ************************************************************************* -->
      
 </mapper>

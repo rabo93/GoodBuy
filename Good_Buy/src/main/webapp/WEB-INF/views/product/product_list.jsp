@@ -38,6 +38,7 @@
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 				<section class="product-item-wrap" id="product-item-wrap">
+					<h2 id="cateTitle"></h2>
 					<!-- navbar -->
 					<aside class="item-sch-area">
 						<div class="sch-inner">

@@ -153,6 +153,8 @@
     }
     
 	$("select[name=product_category] option:contains('${productContent.PRODUCT_CATEGORY}')").prop("selected", true);
+	$("select[name=product_status]").val("${productContent.PRODUCT_STATUS}").prop("selected", true);
+// 	$("select[name=product_status] option:contains('${productContent.PRODUCT_STATUS}')").prop("selected", true);
 	
 	if (${productContent.PRODUCT_DISCOUNT_STATUS} != 0) {
 		$("#item-discount").prop("checked", true);

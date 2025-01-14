@@ -74,15 +74,21 @@
 		                                <table class="table table-bordered compact" id="periodList" width="100%" cellspacing="0">
 		                                    <thead>
 		                                    	<tr>
-		                                    		<th>날짜</th>
-		                                    		<th>회원수</th>
-		                                    		<th>거래수</th>
+		                                    		<th></th>
+		                                    		<th></th>
+		                                    		<th></th>
+		                                    		<th></th>
+		                                    		<th></th>
+		                                    		<th></th>
 		                                    	</tr>
 		                                    </thead>
 		                                    <tbody></tbody>
 		                                    <tfoot>
 		                                    	<tr>
 		                                    		<th>합계</th>
+		                                    		<th></th>
+		                                    		<th></th>
+		                                    		<th></th>
 		                                    		<th></th>
 		                                    		<th></th>
 		                                    	</tr>

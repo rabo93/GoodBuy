@@ -26,6 +26,9 @@ public class ChatService {
 		if(chatMessage.getType().equals("FILE")) {
 			chatMessage.setMessage("사진을 보냈습니다");
 		}
+		if(chatMessage.getType().equals("REQUEST_PAY")) {
+			chatMessage.setMessage(chatMessage.getMessage() + "원을 요청했어요");
+		}
 		return chatMessage;
 	}
 	

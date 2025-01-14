@@ -86,4 +86,7 @@ public interface ProductMapper {
 	
 	// 헤더 카테고리 가져오기
 	List<Map<String, String>> cateSearch();
+
+	// 메인화면 추천상품 가져오기
+	List<Map<String, Object>> getRecommendedItem();
 }

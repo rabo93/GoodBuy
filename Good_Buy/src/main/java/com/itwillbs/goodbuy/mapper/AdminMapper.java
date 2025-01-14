@@ -211,11 +211,21 @@ public interface AdminMapper {
 
 	// 전체 채팅 건수
 	int selectChatTotal();
-
+	
+	//---------------------------------------------------
+	// [기간별 통계]
 	// 기간별 회원수 통계
 	List<Map<String, Object>> selectTotalMember(@Param("orderDir") String orderDir, @Param("startDate") String startDate, @Param("endDate") String endDate);
+	// 기간별 회원가입수 통계
+	List<Map<String, Object>> selectTotalJoin(@Param("orderDir") String orderDir, @Param("startDate") String startDate, @Param("endDate") String endDate);
+	// 기간별 상품등록수 통계
+	List<Map<String, Object>> selectTotalProduct(@Param("orderDir") String orderDir, @Param("startDate") String startDate, @Param("endDate") String endDate);
 	// 기간별 거래수 통계
 	List<Map<String, Object>> selectTotalOrder(@Param("orderDir") String orderDir, @Param("startDate") String startDate, @Param("endDate") String endDate);
+	// 기간별 거래금액 통계
+	List<Map<String, Object>> selectTotalPay(@Param("orderDir") String orderDir, @Param("startDate") String startDate, @Param("endDate") String endDate);
+
+
 
 	// 상세코드ID 중복 체크
 	String isSubCodeId(String subCode);

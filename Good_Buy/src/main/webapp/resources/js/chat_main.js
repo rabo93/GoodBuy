@@ -13,6 +13,8 @@ const TYPE_READ = "READ";
 const TYPE_REQUEST_PAY = "REQUEST_PAY";
 const TYPE_RESPONSE_PAY = "RESPONSE_PAY";
 const TYPE_RESERVATION = "RESERVATION";
+const TYPE_ACCEPT_RESERVATION = "ACCEPT_RESERVATION";
+const TYPE_CANCEL_RESERVATION = "CANCEL_RESERVATION";
 
 //	채팅 메세지 정렬 위치
 const ALIGN_CENTER = "center";
@@ -37,10 +39,12 @@ $(".sidebar-item").on("dblclick", function() {
 	let grade = $("#grade" + index).val();
 	let mem_nick = $("#mem_nick" + index).val();
 	let mem_profile = $("#mem_profile" + index).val();
+	let product_img = $("#product_img" + index).val();
 	product_id = $("#product_id" + index).val();
 	window.index = index;
 	window.mem_nick = mem_nick;
 	window.mem_profile = mem_profile;
+	window.product_img = product_img;
 	console.log("index =" + index);
 	console.log("room_id =" + room_id);
 	console.log("title =" + title);
@@ -51,6 +55,7 @@ $(".sidebar-item").on("dblclick", function() {
 	console.log("grade =" + grade);
 	console.log("mem_nick =" + mem_nick);
 	console.log("mem_profile =" + mem_profile);
+	console.log("product_img =" + product_img);
 	
 	//	room_id, title, sender_id, receive_id
 	let room = {
@@ -133,6 +138,20 @@ $(function() {
 			$(".item-chat" + index).append(recent_div);
 		}
 		
+		if(data.type == TYPE_ACCEPT_RESERVATION) {
+			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
+			let recent_div = `상품예약을 ${data.message} 했어요<span class="item-send-time${index}">${data.send_time}</span>`;
+			$(".item-chat" + index).empty();
+			$(".item-chat" + index).append(recent_div);
+		}
+		
+		if(data.type == TYPE_CANCEL_RESERVATION) {
+			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
+			let recent_div = `상품예약을 ${data.message} 했어요<span class="item-send-time${index}">${data.send_time}</span>`;
+			$(".item-chat" + index).empty();
+			$(".item-chat" + index).append(recent_div);
+		}
+		
 	};
 	
 	initChat();
@@ -177,7 +196,7 @@ function showChatRoom(room) {
 							+ '</button>'
 						+ '</div>'
 						+ '<div class="chat-header">'
-				           	+ '<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>'
+				           	+ '<a><img src="' + baseUrl + "/upload/" +product_img + '" alt="item"></a>'
 				           	+ '<div class="title">'+ room.title +' </div>'
 				           	+ '<button class="item-button" onclick="requestPay(' + room.product_id + ', \'' + room.receiver_id + '\', \'' + room.room_id + '\')">송금요청</button>'
 				           + '</div>'
@@ -205,7 +224,7 @@ function showChatRoom(room) {
 							+ '</button>'
 						+ '</div>'
 						+ '<div class="chat-header">'
-				           	+ '<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>'
+				           	+ '<a><img src="' + baseUrl + "/upload/" +  product_img + '" alt="item"></a>'
 				           	+ '<div class="title">'+ room.title +' </div>'
 				           	+ '<button class="item-button" onclick="requestReservation(' + room.product_id + ')">예약요청</button>'
 				           + '</div>'
@@ -266,6 +285,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 	if(type == TYPE_REQUEST_PAY) {
 		message = parseInt(message.replace(/,/g, ''));
 		if(receiver_id == sId) {
+			//	송금 요청
 			bubble_message = `
 			<div class="chat-bubble">
 				<div class="pay-container">
@@ -279,11 +299,12 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 		}
 		
 		if(sender_id == sId) {
+			//	송금 요청
 			bubble_message = `
 			<div class="chat-bubble user">
 				<div class="pay-container">
 					<div class="request-pay">
-						<p class="pay-text">${sNick}님이 ￦ ${message}원을 요청했어요</p>								
+						<p class="pay-text">${sNick}님이 ￦ ${message}원을 요청했어요</p>
 						<span></span>
 					</div>
 				</div>
@@ -292,6 +313,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 		}
 		
 	}
+	
 	if(type == TYPE_RESPONSE_PAY) {
 		message = parseInt(message.replace(/,/g, ''));
 		if(receiver_id == sId) {
@@ -321,13 +343,14 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 	}
 	
 	if(type == TYPE_RESERVATION) {
+		//	예약 요청
 		if(receiver_id == sId) {
 			bubble_message = `
 			<div class="chat-bubble">
 				<div class="pay-container">
 					<div class="request-pay">
 						<p class="pay-text">${mem_nick}님이 ${message}을 요청했어요</p>
-						<button class="item-button" onclick="acceptRequest(${product_id})">요청 수락</button>
+						<button class="item-button" onclick="acceptReservation(${product_id})">요청 수락</button>
 					</div>
 				</div>
 			</div>
@@ -335,11 +358,69 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 		}
 		
 		if(sender_id == sId) {
+			//	예약 요청
 			bubble_message = `
 			<div class="chat-bubble user">
 				<div class="pay-container">
 					<div class="request-pay">
 						<p class="pay-text">${sNick}님이 ${message}을 요청했어요</p>
+					</div>
+				</div>
+			</div>
+			 `
+		}
+	}
+	
+	if(type == TYPE_ACCEPT_RESERVATION) {
+		//	예약 수락
+		if(receiver_id == sId) {
+			bubble_message = `
+			<div class="chat-bubble">
+				<div class="pay-container">
+					<div class="request-pay">
+						<p class="pay-text">${mem_nick}님이 예약을 ${message} 했어요</p>
+					</div>
+				</div>
+			</div>
+			 `
+		}
+		
+		if(sender_id == sId) {
+			//	예약 수락
+			bubble_message = `
+			<div class="chat-bubble user">
+				<div class="pay-container">
+					<div class="request-pay">
+						<p class="pay-text">${sNick}님이 예약을 ${message} 했어요</p>
+						<button class="item-button" onclick="cancelReservation(${product_id})">예약 취소</button>
+					</div>
+				</div>
+			</div>
+			 `
+		}
+	}
+	
+	if(type == TYPE_CANCEL_RESERVATION) {
+		//	예약 취소
+		if(receiver_id == sId) {
+			bubble_message = `
+			<div class="chat-bubble">
+				<div class="pay-container">
+					<div class="request-pay">
+						<p class="pay-text">${mem_nick}님이 예약을 ${message} 했어요</p>
+					</div>
+				</div>
+			</div>
+			 `
+		}
+		
+		if(sender_id == sId) {
+			//	예약 취소
+			bubble_message = `
+			<div class="chat-bubble user">
+				<div class="pay-container">
+					<div class="request-pay">
+						<p class="pay-text">${sNick}님이 예약을 ${message} 했어요</p>
 					</div>
 				</div>
 			</div>
@@ -581,12 +662,17 @@ $(document).ready(function() {
 function requestReservation(product_id, room_id) {
 	room_id = $("#room_id").val();
 	receiver_id = $("#receiver_id").val();
-	sendMessage(TYPE_RESERVATION, product_id, sId, receiver_id, room_id, "예약");
+	sendMessage(TYPE_RESERVATION, product_id, sId, receiver_id, room_id, "상품 예약");
 }
-function acceptRequest(product_id) {
+function acceptReservation(product_id) {
 	room_id = $("#room_id").val();
 	receiver_id = $("#receiver_id").val();
 	sendMessage(TYPE_ACCEPT_RESERVATION, product_id, sId, receiver_id, room_id, "수락");
+}
+function cancelReservation(product_id) {
+	room_id = $("#room_id").val();
+	receiver_id = $("#receiver_id").val();
+	sendMessage(TYPE_CANCEL_RESERVATION, product_id, sId, receiver_id, room_id, "취소");
 }
 
 //	========================= 예약요청 요청 끝 =========================

@@ -24,6 +24,7 @@ import com.itwillbs.goodbuy.service.ChatService;
 import com.itwillbs.goodbuy.vo.ChatMessage;
 import com.itwillbs.goodbuy.vo.ChatRoom;
 import com.itwillbs.goodbuy.vo.MemberVO;
+import com.itwillbs.goodbuy.vo.ProductVO;
 
 @Controller
 public class ChatController {
@@ -45,25 +46,26 @@ public class ChatController {
 		List<Integer> chatMessageCnt = new ArrayList<Integer>();
 		//	회원 닉네임 저장하기 위한 List 객체 생성
 		List<MemberVO> member = new ArrayList<MemberVO>();
+		//	상품 사진을 저장하기 위한 List 객체 생성
+		List<ProductVO> product = new ArrayList<ProductVO>();
 		for (ChatRoom chatRoomList : chatRoom) {
 			//	최근 메세지 List 객체에 저장
 			chatMessage.add(chatService.selectLastMessage(chatRoomList.getRoom_id()));
 			chatMessageCnt.add(chatService.selectCountMessage(chatRoomList.getRoom_id(), sId));
 			member.add(chatService.selectMemberNick(chatRoomList.getReceiver_id()));
+			product.add(chatService.selectProductImg(chatRoomList.getRoom_id()));
 		}
-		
 		model.addAttribute("chatRoomList", chatRoom);
 		model.addAttribute("chatMessageList", chatMessage);
 		model.addAttribute("chatMessageCnt", chatMessageCnt);
 		model.addAttribute("member", member);
+		model.addAttribute("product", product);
 		
 		return "chat/chat_list";
 	}
 	
 	@GetMapping("ChatRequestPay")
 	public String chatRequestPay(int product_id, String receiver_id, String room_id, Model model) {
-		System.out.println("넘어오는 map 확인 : " + product_id);
-		System.out.println("넘어오는 map 확인 : " + receiver_id);
 		
 		int product_price = chatService.selectProductPrice(product_id);
 		model.addAttribute("product_id", product_id);

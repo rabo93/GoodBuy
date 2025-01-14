@@ -6,14 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.itwillbs.goodbuy.mapper.ChatMapper;
+import com.itwillbs.goodbuy.mapper.ProductMapper;
 import com.itwillbs.goodbuy.vo.ChatMessage;
 import com.itwillbs.goodbuy.vo.ChatRoom;
 import com.itwillbs.goodbuy.vo.MemberVO;
+import com.itwillbs.goodbuy.vo.ProductVO;
 
 @Service
 public class ChatService {
 	@Autowired
 	private ChatMapper mapper;
+	@Autowired
+	private ProductMapper proMapper;
 	
 	//	기존 자신의 채팅방 목록 조회 요청
 	public List<ChatRoom> selectChatRoomList(String sender_id) {
@@ -29,6 +33,13 @@ public class ChatService {
 		if(chatMessage.getType().equals("REQUEST_PAY")) {
 			chatMessage.setMessage(chatMessage.getMessage() + "원을 요청했어요");
 		}
+		if(chatMessage.getType().equals("RESERVATION")) {
+			chatMessage.setMessage("상품 예약 " + chatMessage.getMessage() + "을 요청했어요");
+		}
+		if(chatMessage.getType().equals("ACCEPT_RESERVATION") && chatMessage.getType().equals("CANCEL_RESERVATION")) {
+			chatMessage.setMessage("상품 예약을 " + chatMessage.getMessage() + "했어요");
+		}
+		
 		return chatMessage;
 	}
 	
@@ -79,6 +90,14 @@ public class ChatService {
 	public void updateMessageRead(ChatMessage chatMessage) {
 		mapper.updateMessageRead(chatMessage);
 	}
+
+	//	상품 사진 가져오기
+	public ProductVO selectProductImg(String room_id) {
+		int product_id = mapper.selectProductInfo(room_id);
+		ProductVO product = proMapper.getProductPic(product_id);
+		return product;
+	}
+	
 	
 
 	

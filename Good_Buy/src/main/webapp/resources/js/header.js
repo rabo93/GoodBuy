@@ -2,19 +2,17 @@ url = new URL(window.location.href);
 
 // 헤더 스크립트
 $(document).ready(function(){
-	const loginBtn = document.querySelector("#login-btn");
-	const panel = document.querySelector("#login-panel");
-	loginBtn.addEventListener("click", function(event){
-		event.stopPropagation();
-		panel.classList.toggle("on");
+	$("#login-btn").on("click", function(e){
+		e.stopPropagation();
+		$("#login-panel").classList.toggle("on");
 	});
 	
-	panel.addEventListener("click", function(event) {
-		event.stopPropagation();
+	$("#login-panel").on("click", function(e){
+		e.stopPropagation();
 	});
 	
-	document.addEventListener("click", function(event) {
-		panel.classList.remove("on");
+	$("document").on("click", function() {
+		$("#login-panel").classList.remove("on");
 	});
 })
 

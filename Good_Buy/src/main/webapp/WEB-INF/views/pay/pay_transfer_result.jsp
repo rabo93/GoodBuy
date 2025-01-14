@@ -39,22 +39,11 @@
 // 	};
 	
 window.onload = function() {
-    // 부모 창에서 메시지 받기
-    window.addEventListener("message", function(event) {
-        if (event.origin !== window.location.origin) return;
-
-        const data = event.data;
-        console.log("Popup received:", data);
-
-        // 데이터를 화면에 표시
-//         document.getElementById("result").innerText =
-	document.getElementsByClassName("bubble").innerText =
-//         '송금 상태: ${data.status}\n메시지: ${data.message}\n금액: ${data.amount}\n받는 사람: ${data.receiver}'';
-        '송금 상태: \N메시지: \N금액: \N받는 사람: ';
-        // appendMessage로 보내는 게 낫지 않나?
-    });
+// 	alert('pay_transfer_result.jsp'); // 잘 작동됨
+// 	appendMessage();
+//     sendInputMessage();
     
-    sendMessage(TYPE_RESPONSE_PAY, 24 , 'apple123', 'bang', 'e02266e1-8082-4eaf-bede-c509166f1236', 2000);
+//     sendMessage(TYPE_RESPONSE_PAY, 24 , 'apple123', 'bang', 'e02266e1-8082-4eaf-bede-c509166f1236', 2000);
 };
 </script>
 </head>
@@ -65,8 +54,6 @@ window.onload = function() {
 		<section class="wrapper">
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
-		        
-		        
 		        
 		        	<div class="my-container">
 						<div class="contents-ttl">
@@ -113,8 +100,6 @@ window.onload = function() {
 						                </div>
 	                    				<div class="amount">${transferResult.depositResult.res_list[0].bank_name} ${transferResult.depositResult.res_list[0].account_num_masked}</div>
 						            </div>
-<!-- 						            <div class="return-btn"><button onclick="location.href = document.referrer">돌아가기</button></div> -->
-						            <div class="return-btn"><button onclick="closeWindow()">돌아가기</button></div>
 								</div><!-- account-box -->
 						    </div>
                 		</div>

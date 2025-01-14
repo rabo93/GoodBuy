@@ -80,7 +80,6 @@ $(function() {
 		opener.location.href = "MemberLogin";
 		window.close();
 	}
-	
 	window.onmessage = function(e) {
 		console.log("부모창 메세지 : " + e.data);
 		let data = JSON.parse(e.data);
@@ -272,7 +271,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 				<div class="pay-container">
 					<div class="request-pay">
 						<p class="pay-text">${mem_nick}님이 ￦ ${message}원을 요청했어요</p>								
-						<button class="item-button" onclick="openPayWindow(${product_id}, ${sender_id}, ${message})">송금하기</button>
+						<button class="item-button" onclick="openPayWindow(${product_id}, '${sender_id}', ${message})">송금하기</button>
 					</div>
 				</div>
 			</div>
@@ -285,6 +284,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 				<div class="pay-container">
 					<div class="request-pay">
 						<p class="pay-text">${sNick}님이 ￦ ${message}원을 요청했어요</p>								
+						<span></span>
 					</div>
 				</div>
 			</div>
@@ -294,12 +294,30 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 	}
 	if(type == TYPE_RESPONSE_PAY) {
 		message = parseInt(message.replace(/,/g, ''));
-		bubble_message = `
-			<div class="bubble">
-				${receiver_id}님에게 ￦ ${message}원을 송금했어요
-				<button class="item-button" onclick="openPayWindow(${product_id}, ${sender_id}, ${message})">송금하기</button>
+		if(receiver_id == sId) {
+			bubble_message = `
+			<div class="chat-bubble">
+				<div class="pay-container">
+					<div class="request-pay">
+						<p class="pay-text">${mem_nick}님이 ￦ ${message}원을 송금했어요</p>
+						<span><button class="item-button" onclick="closePayWindow('seller')">판매내역으로 이동</button></span>								
+					</div>
+				</div>
 			</div>
 			 `
+		}
+		if(sender_id == sId) {
+			bubble_message = `
+			<div class="chat-bubble user">
+				<div class="pay-container">
+					<div class="request-pay">
+						<p class="pay-text">${receiver_id}님에게 ￦ ${message}원을 송금했어요</p>
+						<span><button class="item-button" onclick="closePayWindow('buyer')">구매내역으로 이동</button></span>								
+					</div>
+				</div>
+			</div>
+			 `
+		}
 	}
 	
 	if(type == TYPE_RESERVATION) {
@@ -545,6 +563,18 @@ $(document).ready(function() {
 		window.close();
 	});
     
+   $("#transfer-btn-chat").on("click", function() {
+//		alert('transfer-btn-chat'); 잘들어옴.
+		receiver_id = $("#receiver_id").val();
+		product_id = $("#product_id").val();
+		room_id = $("#room_id").val();
+		price = $("#tran_amt").val();
+		sendMessage(TYPE_RESPONSE_PAY, product_id, sId, receiver_id, room_id, price); // 이거 안됨
+//		sendMessage(TYPE_REQUEST_PAY, product_id, sId, receiver_id, room_id, price); // 이거 됨
+
+	});		
+	
+    
 });
 //	========================= 송금 요청 끝 =========================
 //	========================= 예약요청 요청=========================
@@ -559,46 +589,30 @@ function acceptRequest(product_id) {
 	sendMessage(TYPE_ACCEPT_RESERVATION, product_id, sId, receiver_id, room_id, "수락");
 }
 
-
 //	========================= 예약요청 요청 끝 =========================
 
 // ==============================================================================
 // 결제창 열기 - 창을 작게 열려고 함수로 만들었음
-function openPayWindow(product_id, receiver_id, price) {
+function openPayWindow(product_id, receiver_id, price, room_id) {
+	
 	var url = "PayTransferRequest?product_id=" + encodeURIComponent(product_id) +
-              "&receiver_id=" + encodeURIComponent(receiver_id)+
-              "&price=" + encodeURIComponent(price) ;
+              "&receiver_id=" + encodeURIComponent(receiver_id) +
+              "&price=" + encodeURIComponent(price) +  
+              "&room_id=" + encodeURIComponent(room_id)
+              ;
+//    payWindow = window.open(url, "chat_window", "width=500,height=500"); // 부모창에 전달안되는게 변수 때문인가? 싶어서 주석침.
     payWindow = window.open(url, "chat_window", "width=500,height=500");
-    
-    
-    
-    
-    // 송금 데이터 생성
-    const transferData = {
-        status: "success",
-        message: "송금이 완료되었습니다!",
-        amount: 10000,
-        receiver: "John Doe"
-    };
-
-    // 부모 창에서 즉시 데이터 처리
-////    handleTransferResult(transferData);
-//
-//    // 팝업 창에도 데이터를 전달
-//    if (transferPopup) {
-//        transferPopup.onload = function () {
-//            transferPopup.postMessage(transferData, window.location.origin);
-//        };
-//    }
-}
-function handleTransferResult(data) {
-    // 받은 데이터를 처리 (예: UI 업데이트)
-//    alert("송금 결과: " + data.message);  // alert창 기능은 필요없으니 삭제 
-    console.log("송금처리결과 Transfer data:", data);
 }
 
-// 팝업 창에서 전달받는 메시지를 처리 (예비 처리)
-window.addEventListener("message", function(event) {
-    if (event.origin !== window.location.origin) return;
-    console.log("팝업창에서 받은 메세지 : ", event.data);
-});
+function closePayWindow(type) {
+	if(type == 'seller') {
+    	window.open("MySales", "_blank");
+		
+	} else if (type == 'buyer') {
+    	window.open("MyOrder", "_blank");
+	} else if (type == 'transfer') {
+    	window.open("AllPayList", "_blank");
+		
+	}
+    window.close();
+}

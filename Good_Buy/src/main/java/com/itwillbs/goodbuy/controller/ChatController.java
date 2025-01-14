@@ -41,7 +41,9 @@ public class ChatController {
 		List<ChatRoom> chatRoom = chatService.selectChatRoomList(sId);
 		//	최근 채팅메세지를 저장하기위한 List 객체 생성
 		List<ChatMessage> chatMessage = new ArrayList<ChatMessage>();
+		//	안읽은 메세지 중 최근 메세지 저장하기 위한 List 객체 생성
 		List<Integer> chatMessageCnt = new ArrayList<Integer>();
+		//	회원 닉네임 저장하기 위한 List 객체 생성
 		List<MemberVO> member = new ArrayList<MemberVO>();
 		for (ChatRoom chatRoomList : chatRoom) {
 			//	최근 메세지 List 객체에 저장

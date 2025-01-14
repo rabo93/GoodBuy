@@ -26,7 +26,7 @@ function startChat() {
 	let height = 640;
 	let left = window.innerWidth - width;  // 화면의 오른쪽 끝에서 시작
 	let top = 0;  // 화면의 상단
-	$(".messageStatus").empty();
+	$(".messageStatus").remove();
 	
 	childChat = window.open(chatUrl, "start_chat", `width=${width},height=${height},left=${left},top=${top}`);
 	window.childChat = childChat;
@@ -38,17 +38,19 @@ function onOpen () {
 
 function onMessage(event) {
 	console.log("onMessage()");
+	sId = $("#sId").val();
 	let data = JSON.parse(event.data);
+	console.log(childChat);
 	if(childChat && !childChat.closed) {
 		childChat.postMessage(event.data);
+		
 	} else {
-		
-		if(!data.sender_id == sId) {
-			$(".messageStatus").html("★").css("color", "red");
-		}
-		
 		chatProduct(event.data);
 	}
+	
+//	if(!data.sender_id == sId) {
+//			$(".messageStatus").html("★").css("color", "red");
+//	}
 	
 }
 

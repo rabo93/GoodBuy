@@ -204,25 +204,25 @@
                                     <div class="chart-pie pt-4 pb-2">
                                         <canvas id="categoryStats"></canvas>
                                     </div>
-                                    <div class="mt-4 text-center small">
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> 여성의류
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> 남성의류
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> 레저/스포츠
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-secondary"></i> 생활용품
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-warning"></i> 키즈
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-danger"></i> 도서
-                                        </span>
+                                    <div class="mt-4 text-center small" id="categoryLabels">
+<!--                                         <span class="mr-2"> -->
+<!--                                             <i class="fas fa-circle text-primary"></i> 여성의류 -->
+<!--                                         </span> -->
+<!--                                         <span class="mr-2"> -->
+<!--                                             <i class="fas fa-circle text-success"></i> 남성의류 -->
+<!--                                         </span> -->
+<!--                                         <span class="mr-2"> -->
+<!--                                             <i class="fas fa-circle text-info"></i> 레저/스포츠 -->
+<!--                                         </span> -->
+<!--                                         <span class="mr-2"> -->
+<!--                                             <i class="fas fa-circle text-secondary"></i> 생활용품 -->
+<!--                                         </span> -->
+<!--                                         <span class="mr-2"> -->
+<!--                                             <i class="fas fa-circle text-warning"></i> 키즈 -->
+<!--                                         </span> -->
+<!--                                         <span class="mr-2"> -->
+<!--                                             <i class="fas fa-circle text-danger"></i> 도서 -->
+<!--                                         </span> -->
                                     </div>
                                 </div>
                             </div>

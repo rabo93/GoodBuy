@@ -69,17 +69,17 @@
 					</div>
 				<section>
 					   <div class="product-list">
-					    <ul class="product-wrap">
+<!-- 					    <ul class="product-wrap"> -->
 						    <c:choose>
 						        <c:when test="${empty product}">
-						            <li class="product-card" data-status="none">등록된 상품이 없습니다.</li>
+						            <div class="product-card-empty" data-status="none">등록된 상품이 없습니다.</div>
 						        </c:when>
 						        <c:otherwise>
 						            <c:forEach var="product" items="${product}">
 						                <li class="product-card" data-status="${product.product_status}">
-						                    <img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" 
-						                         class="card-thumb" 
-						                         alt="thumbnail" height="180px" />
+						                    <a href='ProductDetail?PRODUCT_ID=${product.product_id}'>
+						                    	<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" height="180px" />
+						                     </a>
 						                    <div class="card-info">
 						                        <div class="category">
 						                            <span>${product.product_category}</span>
@@ -115,7 +115,7 @@
 						            </c:forEach>
 						        </c:otherwise>
 						    </c:choose>
-						</ul>
+<!-- 						</ul> -->
 					    
 					</div>
 				</section>

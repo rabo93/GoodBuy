@@ -71,13 +71,15 @@
 				                	<input type="hidden" id="mem_nick${status.index}" value="${member[status.index].mem_nick}">
 				                	<input type="hidden" id="mem_profile${status.index}" value="${member[status.index].mem_profile}">
 					                <div class="item"><strong>${chatRoom.title}</strong>
-					                	<span class="messageStatus${status.index}">${chatMessageCnt[status.index]}</span>
+					                	<c:if test="${chatMessageCnt[status.index] ne '0' }">
+						                	<span id="messageStatus${status.index}" class="unread_msg">${chatMessageCnt[status.index]}</span>
+					                	</c:if>
 					                </div>
 					                <c:forEach items="${chatMessageList}" var="chatMessage">
 					                	<c:if test="${chatRoom.room_id eq chatMessage.room_id}">
 							                <div class="item-chat item-chat${status.index}" data-message="${chatMessage.message}">
 							                	${chatMessage.message}
-							                	<span class="item-send-time${status.index}">&nbsp; · &nbsp; ${chatMessage.send_time}</span>
+							                	<span class="item-send-time${status.index}">${chatMessage.send_time}</span>
 							                </div>
 					                	</c:if>
 					                </c:forEach>

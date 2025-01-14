@@ -512,23 +512,34 @@ textarea {
 
 /* 마이스토어 : 등록한 상품목록 */
 .myproduct-wrap {
+    display: grid;
     -webkit-column-gap: 1rem;
     column-gap: 1rem;
     row-gap: 1rem;
-    grid-template-columns: auto;
-    display: flex
+    grid-template-columns: repeat(3, minmax(0, 1fr))
 }
 
 /*판매상품*/
 .product-wrap {
-    display: flex
-;
-    -webkit-column-gap: 1rem;
-    column-gap: 1rem;
-    row-gap: 1rem;
-    flex-wrap: wrap;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 /*위시리스트*/
 .wish-contents{margin-left: 1rem;padding: 2rem;background: var(--milk);flex: 1 1 auto;min-height: 400px;border-radius: 8px;
 display: flex; flex-wrap: wrap;}
+
+
+/*판매,구매내역 없음*/
+/*판매,구매내역 없음*/
+.product-card-empty {
+    background: url(/resources/img/no-data-02.svg) no-repeat center top 20px;
+    background-size: auto 220px;
+    height: 270px;
+    width: 100%;
+    text-align: center;
+    font-weight: 600;
+    padding-top: 250px;
+    font-size: 16px;
+    color: var(--dark);
+    font-weight: 600;
+}

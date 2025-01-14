@@ -7,7 +7,7 @@ let region = url.searchParams.get('REGION');
 
 // 필터 초기화 버튼
 function fliterReset() {
-	window.location.search = "&CODE_ID=" + category;
+	window.location = 'ProductList';
 }
 
 function addAdr() {
@@ -49,7 +49,7 @@ $(document).ready(function() {
 	$("input[name='trade-box']").change(function() {
 		if ($("input[name='trade-box']").is(':checked')) {
 			tradeEnable = 0;	
-			url += "&STATUS=" + tradeEnable;
+			url.searchParams.append('STATUS', tradeEnable);
 			window.location = url;
 		} else {
 			tradeEnable = 1;
@@ -117,19 +117,19 @@ $(document).ready(function() {
 			moment.locale('ko')
 			$("#product-wrap").empty();
 			for(let item of data) {
-				
+				let addr = "";
 				let category = `<span>${item.PRODUCT_CATEGORY}</span>`;
-				let status;
+				let status = "";
+				
 				if (item.PRODUCT_TRADE_ADR1) {
 					category += `<span class="type">직거래</span>`;
+					addr = `<span class="add">${item.PRODUCT_TRADE_ADR1}</span>`;
 				}
 				
 				if (item.PRODUCT_STATUS == 1) {
 					status = `<div class="status" id="status">거래중</div>` 
 				} else if (item.PRODUCT_STATUS == 2) {
 					status = `<div class="status" id="status">예약중</div>` 
-				} else if (item.PRODUCT_STATUS == 0) {
-					status = "";
 				}
 				
 				$("#product-wrap").append(
@@ -147,7 +147,7 @@ $(document).ready(function() {
 							 	${item.PRODUCT_PRICE.toLocaleString()} 원
 							</div>
 							<div class="card-row">
-								<span class="add">${item.PRODUCT_TRADE_ADR1}</span>
+								${addr}
 								<span class="name">${item.MEM_NICK}</span>
 								<span class="time">${moment(item.PRODUCT_REG_DATE, "YYYYMMDDhhmmss").fromNow()}</span>
 							</div>
@@ -157,7 +157,7 @@ $(document).ready(function() {
 		} else {
 			$("#product-list").append(
 				`<div class="no-data">
-				<img class="no-data-pic" src="../resources/img/no-data.png">
+				<img class="no-data-pic" src="../resources/img/no-data-02.svg">
 				<h1 class="no-data-text">:( 검색결과가 없습니다</h1>
 				</div>`
 			)

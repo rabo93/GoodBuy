@@ -100,11 +100,10 @@ $(function(){
 				PRODUCT_ID: url.searchParams.get('PRODUCT_ID'),
 			},
 		}).done(function(response){
+			location.href='MySales';
 			alert(decodeURIComponent(response).replaceAll("+", " "));
-			location.reload();
 		}).fail(function() {
-			alert(decodeURIComponent(response).replaceAll("+", " "));
-			location.reload();
+			alert("상품 삭제에 실패하였습니다.\n나중에 다시 시도해주세요");
 		});
 	})
 	

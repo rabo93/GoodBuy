@@ -304,6 +304,7 @@ public class ProductController {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
+		
 		return msg;
 	}
 	

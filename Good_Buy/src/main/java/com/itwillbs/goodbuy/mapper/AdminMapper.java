@@ -27,6 +27,9 @@ public interface AdminMapper {
 
 	// 공통코드 검색 컬럼 수 조회
 	int selectCommonCodesFiltered(@Param("param") Map<String, Object> param);
+	
+	// 공통코드 상위코드 조회
+	List<Map<String, String>> selectCommonCodesList();
 
 	// 공통코드 컬럼 수정
 	int updateCommonCodes(Map<String, Object> param);
@@ -213,5 +216,15 @@ public interface AdminMapper {
 	List<Map<String, Object>> selectTotalMember(@Param("orderDir") String orderDir, @Param("startDate") String startDate, @Param("endDate") String endDate);
 	// 기간별 거래수 통계
 	List<Map<String, Object>> selectTotalOrder(@Param("orderDir") String orderDir, @Param("startDate") String startDate, @Param("endDate") String endDate);
+
+	// 상세코드ID 중복 체크
+	String isSubCodeId(String subCode);
+
+	// 공통코드 상세코드 팝업으로 추가
+	int insertSubCommonCode(@Param("param") Map<String, String> param);
+
+	// 공통코드 ID 중복 체크
+	String isMainCodeId(@Param("mainCode") String mainCode);
+
 
 }

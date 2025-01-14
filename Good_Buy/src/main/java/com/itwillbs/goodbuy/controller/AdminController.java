@@ -189,6 +189,68 @@ public class AdminController {
 		return jo.toString();
 	}
 	
+	// 공통코드 관리 - 추가
+	@LoginCheck(memberRole = MemberRole.ADMIN)
+	@ResponseBody
+	@PostMapping("GetCommonCodes")
+	public List<Map<String, String>> getCommonCodes() {
+		List<Map<String, String>> commonCodes = service.getCommonCodes();
+		return commonCodes;
+	}
+	
+	// 공통코드 ID 중복체크
+	@ResponseBody
+	@PostMapping("CheckCommonCodeID")
+	public String checkCommonCodeID(@RequestParam Map<String, String> param) {
+		String mainCode = param.get("mainCodeId").toString();
+		String mainCodeId = service.isMainCodeId(mainCode);
+		boolean isUsedMainCodeId = false;
+		
+		if("TRUE".equals(mainCodeId)) {
+			isUsedMainCodeId = true;
+		}
+		
+		return isUsedMainCodeId + "";
+	}
+	
+	// 상세코드ID 중복체크
+	@ResponseBody
+	@PostMapping("CheckSubCodeId")
+	public String checkSubCodeId(@RequestParam Map<String, String> param) {
+		String subCode = param.get("subCodeId").toString();
+		String subCodeId = service.isSubCodeId(subCode);
+		boolean isUsedSubCodeId = false;
+		
+		if("TRUE".equals(subCodeId)) {
+			isUsedSubCodeId = true;
+		}
+		
+		return isUsedSubCodeId + "";
+	}
+	
+	// 상세코드 추가 등록
+	@ResponseBody
+	@PostMapping("AddCommonCode")
+	public Map<String, String> addCommonCode(@RequestParam Map<String, String> param) {
+//		log.info(param);
+		
+		int addSubCommonCode = service.addSubCommonCode(param);
+		
+		Map<String, String> response = new HashMap<String, String>();
+		
+		if(addSubCommonCode > 0) {
+			response.put("status", "success");
+			response.put("message", "공통코드가 추가되었습니다.");
+			response.put("redirectURL", "/AdmCommoncodeList");
+		} else {
+			response.put("status", "fail");
+			response.put("message", "공통코드 추가에 실패했습니다. 다시 시도해주세요.");
+		}
+		
+		return response;
+	}
+	
+	
 	// 공통코드 관리 - 수정
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmCommoncodeModify")

@@ -12,6 +12,7 @@ const TYPE_FILE = "FILE";
 const TYPE_READ = "READ";
 const TYPE_REQUEST_PAY = "REQUEST_PAY";
 const TYPE_RESPONSE_PAY = "RESPONSE_PAY";
+const TYPE_RESERVATION = "RESERVATION";
 
 //	채팅 메세지 정렬 위치
 const ALIGN_CENTER = "center";
@@ -125,6 +126,14 @@ $(function() {
 			$(".item-chat" + index).empty();
 			$(".item-chat" + index).append(recent_div);
 		}
+		
+		if(data.type == TYPE_RESERVATION) {
+			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
+			let recent_div = `${data.message}을 요청했어요<span class="item-send-time${index}">${data.send_time}</span>`;
+			$(".item-chat" + index).empty();
+			$(".item-chat" + index).append(recent_div);
+		}
+		
 	};
 	
 	initChat();
@@ -199,7 +208,7 @@ function showChatRoom(room) {
 						+ '<div class="chat-header">'
 				           	+ '<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>'
 				           	+ '<div class="title">'+ room.title +' </div>'
-				           	+ '<button class="item-button" onclick="openPayWindow(' + room.product_id + ', \'' + room.receiver_id + '\')">구매하기</button>'
+				           	+ '<button class="item-button" onclick="requestReservation(' + room.product_id + ')">예약요청</button>'
 				           + '</div>'
 				           + '<div class="chat-body">'
 				           + '</div>'
@@ -263,7 +272,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 				<div class="pay-container">
 					<div class="request-pay">
 						<p class="pay-text">${mem_nick}님이 ￦ ${message}원을 요청했어요</p>								
-						<button class="item-button" onclick="openPayWindow(${product_id}, '${sender_id}', ${message})">송금하기</button>
+						<button class="item-button" onclick="openPayWindow(${product_id}, ${sender_id}, ${message})">송금하기</button>
 					</div>
 				</div>
 			</div>
@@ -276,7 +285,6 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 				<div class="pay-container">
 					<div class="request-pay">
 						<p class="pay-text">${sNick}님이 ￦ ${message}원을 요청했어요</p>								
-						<button class="item-button" onclick="openPayWindow(${product_id}, '${sender_id}', ${message})">송금하기</button>
 					</div>
 				</div>
 			</div>
@@ -289,9 +297,38 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 		bubble_message = `
 			<div class="bubble">
 				${receiver_id}님에게 ￦ ${message}원을 송금했어요
+				<button class="item-button" onclick="openPayWindow(${product_id}, ${sender_id}, ${message})">송금하기</button>
 			</div>
 			 `
 	}
+	
+	if(type == TYPE_RESERVATION) {
+		if(receiver_id == sId) {
+			bubble_message = `
+			<div class="chat-bubble">
+				<div class="pay-container">
+					<div class="request-pay">
+						<p class="pay-text">${mem_nick}님이 ${message}을 요청했어요</p>
+						<button class="item-button" onclick="acceptRequest(${product_id})">요청 수락</button>
+					</div>
+				</div>
+			</div>
+			 `
+		}
+		
+		if(sender_id == sId) {
+			bubble_message = `
+			<div class="chat-bubble user">
+				<div class="pay-container">
+					<div class="request-pay">
+						<p class="pay-text">${sNick}님이 ${message}을 요청했어요</p>
+					</div>
+				</div>
+			</div>
+			 `
+		}
+	}
+	
 	
 	if(type == TYPE_TALK) {	// 채팅메세지
 		bubble_message = '<div class="bubble">' + message + '</div>';
@@ -510,6 +547,20 @@ $(document).ready(function() {
     
 });
 //	========================= 송금 요청 끝 =========================
+//	========================= 예약요청 요청=========================
+function requestReservation(product_id, room_id) {
+	room_id = $("#room_id").val();
+	receiver_id = $("#receiver_id").val();
+	sendMessage(TYPE_RESERVATION, product_id, sId, receiver_id, room_id, "예약");
+}
+function acceptRequest(product_id) {
+	room_id = $("#room_id").val();
+	receiver_id = $("#receiver_id").val();
+	sendMessage(TYPE_ACCEPT_RESERVATION, product_id, sId, receiver_id, room_id, "수락");
+}
+
+
+//	========================= 예약요청 요청 끝 =========================
 
 // ==============================================================================
 // 결제창 열기 - 창을 작게 열려고 함수로 만들었음

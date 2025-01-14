@@ -163,6 +163,15 @@ public class ChatController {
 		return new Gson().toJson(uploadResult);
 	}
 	
+	@ResponseBody
+	@PostMapping("GetUnreadMsg")
+	public int getUnreadMsg(String sId) {
+		int count = chatService.selectCountMessage("", sId);
+		return count;
+	}
+	
+	
+	
 }
 
 

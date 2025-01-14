@@ -28,4 +28,5 @@ public class ChatMessage {
 	public static final String TYPE_FILE = "FILE";
 	public static final String TYPE_READ = "READ";
 	public static final String TYPE_REQUEST_PAY = "REQUEST_PAY";
+	public static final String TYPE_RESERVATION = "RESERVATION";
 }

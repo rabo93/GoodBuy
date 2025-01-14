@@ -1,6 +1,5 @@
 package com.itwillbs.goodbuy.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +7,6 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +22,6 @@ import com.itwillbs.goodbuy.handler.MyWebSocketHandler;
 import com.itwillbs.goodbuy.service.ChatService;
 import com.itwillbs.goodbuy.service.PayService;
 import com.itwillbs.goodbuy.service.ProductService;
-import com.itwillbs.goodbuy.vo.ChatMessage;
 import com.itwillbs.goodbuy.vo.PayToken;
 import com.itwillbs.goodbuy.vo.ProductVO;
 

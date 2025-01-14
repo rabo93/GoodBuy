@@ -1,5 +1,7 @@
 package com.itwillbs.goodbuy.vo;
 
+import org.springframework.web.socket.WebSocketSession;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,4 +30,6 @@ public class ChatMessage {
 	public static final String TYPE_FILE = "FILE";
 	public static final String TYPE_READ = "READ";
 	public static final String TYPE_REQUEST_PAY = "REQUEST_PAY";
+	public static final String TYPE_RESPONSE_PAY = "RESPONSE_PAY";
+	
 }

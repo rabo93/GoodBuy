@@ -79,7 +79,6 @@ $(function() {
 		opener.location.href = "MemberLogin";
 		window.close();
 	}
-	
 	window.onmessage = function(e) {
 		console.log("부모창 메세지 : " + e.data);
 		let data = JSON.parse(e.data);
@@ -291,8 +290,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 			<div class="chat-bubble">
 				<div class="pay-container">
 					<div class="request-pay">
-						<p class="pay-text">${mem_nick}님이 ￦ ${message}원을 요청했어요</p>
-						${receiver_id}님에게 ￦ ${message}원을 송금했어요ㅁㄴㄻㄴㅇㄻㄴㅇㄹ
+						<p class="pay-text">${mem_nick}님이 ￦ ${message}원을 송금했어요</p>
 						<span><button class="item-button" onclick="closePayWindow()">송금내역으로 이동</button></span>								
 					</div>
 				</div>
@@ -305,8 +303,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 			<div class="chat-bubble user">
 				<div class="pay-container">
 					<div class="request-pay">
-						<p class="pay-text">${sNick}님이 ￦ ${message}원을 요청했어요</p>
-						${receiver_id}님에게 ￦ ${message}원을 송금했어요
+						<p class="pay-text">${receiver_id}님에게 ￦ ${message}원을 송금했어요</p>
 						<span><button class="item-button" onclick="closePayWindow()">송금내역으로 이동</button></span>								
 					</div>
 				</div>
@@ -535,7 +532,7 @@ $(document).ready(function() {
 		receiver_id = $("#receiver_id").val();
 		product_id = $("#product_id").val();
 		room_id = $("#room_id").val();
-		price = $("#product_id").val();
+		price = $("#tran_amt").val();
 		sendMessage(TYPE_RESPONSE_PAY, product_id, sId, receiver_id, room_id, price); // 이거 안됨
 //		sendMessage(TYPE_REQUEST_PAY, product_id, sId, receiver_id, room_id, price); // 이거 됨
 

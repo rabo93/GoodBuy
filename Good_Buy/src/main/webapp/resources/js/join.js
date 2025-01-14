@@ -370,9 +370,6 @@ function checkSubmit(){
        alert("휴대폰 인증을 완료해주세요.");
        return false; // 가입 중단
     }
-    // 휴대폰 중복확인
-//    let mem_phone = $("mem_phone").val();
-    
     
 	//--------------------------------------------
     // 이름

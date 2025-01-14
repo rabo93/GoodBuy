@@ -101,7 +101,7 @@ public class CoolSmsController {
     @ResponseBody
     public ResponseEntity<?> verifyCode(@RequestParam("authCode") String authCode, @RequestParam("userPhone") String userPhone) {
 //    	log.info(">>>>>>>>>> 입력된 인증번호 번호 : " + authCode);
-//    	log.info(">>>>>>>>>> 휴대폰번호 : " + memPhone);
+//    	log.info(">>>>>>>>>> 휴대폰번호 : " + userPhone);
     	
     	// 1) DB에서 입력된 인증번호의 인증 정보 조회
     	SmsAuthInfoVO smsAuthInfoVO = memberService.getSmsAuthInfo(authCode);
@@ -117,8 +117,8 @@ public class CoolSmsController {
         long validDuration = 5 * 60 * 1000; // 5분
         long currentTime = System.currentTimeMillis();
         long authDateTime = smsAuthInfoVO.getAuth_date().getTime(); // DB에서 가져온 인증시간
-        log.info(">>>>>>>>>> 현재 시간: " + currentTime);
-        log.info(">>>>>>>>>> 인증 요청 시간: " + authDateTime);
+//        log.info(">>>>>>>>>> 현재 시간: " + currentTime);
+//        log.info(">>>>>>>>>> 인증 요청 시간: " + authDateTime);
 
         if (currentTime - authDateTime > validDuration) {
             return ResponseEntity.badRequest()

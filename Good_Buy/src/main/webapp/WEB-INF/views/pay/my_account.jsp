@@ -70,10 +70,7 @@
 		        
 		        
 							<div class="account-container">
-							
 						        <c:forEach var="account" items="${bankUserInfo.res_list}" varStatus="status">
-						        
-						        
 										<form action="PayAccountDetail" method="POST" id="PayAccountDetail-${account.fintech_use_num}">
 										        <input type="hidden" name="fintech_use_num" value="${account.fintech_use_num}">
 										        <input type="hidden" name="account_holder_name" value="${account.account_holder_name}">
@@ -110,6 +107,7 @@
 						            <button class="add-account-btn" onclick="linkAccount()">+ 연결계좌 추가하기</button>
 						        </div>
 						    </div><!-- account-container 끝  -->
+						        <div class="return-btn"><button onclick="location.href = document.referrer">돌아가기</button></div>
 						</div>
 					</div>
 				</section><!-- my-wrap -->

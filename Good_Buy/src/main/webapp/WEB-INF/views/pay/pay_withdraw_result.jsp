@@ -79,7 +79,7 @@
 						                    <span>산업 </span>
 						                    <span class="account-num">${userAccount.ACCOUNT_NUM}</span>
 						                </div>
-							            <div class="amount">+ <fmt:formatNumber pattern="#,###">${withdrawResult.TRAN_AMT}</fmt:formatNumber>원</div>
+							            <div class="amount">출금 <fmt:formatNumber pattern="#,###">${withdrawResult.TRAN_AMT}</fmt:formatNumber>원</div>
 						            </div><!-- history-item -->
 						            <div class="account-item">
 						            	<div class="details">

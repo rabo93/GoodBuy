@@ -273,7 +273,7 @@
 		ORDER BY API_TRAN_DTM DESC;
 	</select>
 	
-	<select id="selectPayInfoProduct">
+	<select id="selectPayInfoProduct" resultType="map">
 		SELECT * 
 		  FROM PAYINFO
 		 WHERE PRODUCT_ID=#{product_id} AND PAY_STATUS=1

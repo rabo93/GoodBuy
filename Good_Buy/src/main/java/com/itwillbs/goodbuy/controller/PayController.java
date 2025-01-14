@@ -298,11 +298,11 @@ public class PayController {
 	@GetMapping("PayWithdrawResult")
 	public String payWithdrawResult(String bank_tran_id, HttpSession session, Model model) {
 		PayToken token = (PayToken)session.getAttribute("token");
-
+		String id = (String)session.getAttribute("sId");
 		Map<String, String> withdrawResult = service.getWithdarwResult(bank_tran_id);
 		Map<String, String> userAccount = service.getPayAccountInfo(token.getUser_seq_no());
 		// 충전금액 조회
-		int pay_amount = service.getPayAmount(token.getUser_seq_no());
+		Integer pay_amount = service.getPayAmount(id);
 				
 		model.addAttribute("withdrawResult", withdrawResult);
 		model.addAttribute("userAccount", userAccount);
@@ -354,11 +354,11 @@ public class PayController {
 	@GetMapping("PayDepositResult")
 	public String payDepositResult(String bank_tran_id, HttpSession session, Model model) {
 		PayToken token = (PayToken)session.getAttribute("token");
-		
+		String id = (String)session.getAttribute("sId");
 		Map<String, String> depositResult = service.getDepositResult(bank_tran_id);
 		Map<String, String> userAccount = service.getPayAccountInfo(token.getUser_seq_no());
 		// 충전금액 조회
-		int pay_amount = service.getPayAmount(token.getUser_seq_no());
+		Integer pay_amount = service.getPayAmount(id);
 				
 		
 		model.addAttribute("depositResult", depositResult);

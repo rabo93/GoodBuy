@@ -39,8 +39,11 @@
 	<select id="selectCountMessage" resultType="int">
 		SELECT COUNT(*)
 		  FROM CHATTING
-		 WHERE ROOM_ID = #{room_id}
-		   AND RECEIVER_ID = #{receiver_id}
+		 WHERE RECEIVER_ID = #{receiver_id}
+		   AND READ_STATE = 0
+		 <if test="!room_id.equals('')">
+		   AND ROOM_ID = #{room_id}
+		 </if>
 	</select>
 	
 	<!-- 기존의 상대방과의 채팅방 조회 요청 -->
@@ -146,6 +149,13 @@ ROOM_ID
 		 WHERE MEM_ID = #{receiver_id}
 	</select>
 	
+	<!-- 메세지 읽음 처리 -->
+	<update id="updateMessageRead">
+		UPDATE CHATTING
+		   SET READ_STATE = 1
+		 WHERE ROOM_ID = #{room_id}
+		   AND receiver_id = #{sender_id}
+	</update>
 	
 </mapper>
 

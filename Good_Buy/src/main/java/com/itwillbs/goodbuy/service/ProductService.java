@@ -134,9 +134,15 @@ public class ProductService {
 	public Map<String, Object> searchSellerScore(String mem_id) {
 		return mapper.searchSellerScore(mem_id);
 	}
-
+	
+	// 헤더 카테고리 가져오기
 	public List<Map<String, String>> cateSearch() {
 		return mapper.cateSearch();
+	}
+	
+	// 메인화면 추천상품 가져오기
+	public List<Map<String, Object>> getRecommendedItem() {
+		return mapper.getRecommendedItem();
 	}
 
 }

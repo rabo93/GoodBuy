@@ -200,6 +200,15 @@ html.fixed .chat-container {z-index:9990;}
 }
 
 
-
+.messageStatus {
+	display:block;
+	width:6px;
+	height:6px;
+	border-radius:100%;
+	background:#e31212;
+	position: absolute;
+	right: -10px;
+	top: 0;
+}
 
 

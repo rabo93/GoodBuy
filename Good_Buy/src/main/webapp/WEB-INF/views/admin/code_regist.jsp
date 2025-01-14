@@ -57,21 +57,22 @@
                                 </div>
                                 <div class="card-body">
                                     <form action="AdmCommoncodeRegist" name="commoncodeForm" method="post">
-                                    	<h6 class="font-weight-bold text-primary mb-4">공통코드</h6>
+                                    	<h6 class="font-weight-bold text-primary mb-4">코드타입</h6>
                                         <div class="mb-3">
-                                            <label class="small mb-1" for="CODETYPE_ID">공통코드ID</label>
-                                            <input class="form-control" id="codetype_id" name="CODETYPE_ID" type="text" placeholder="공통코드 ID 입력" required>
+                                            <label class="small mb-1" for="CODETYPE_ID">코드타입ID</label>
+                                            <input class="form-control" id="codetype_id" name="CODETYPE_ID" type="text" placeholder="코드타입ID 입력" required>
+                                        	<span class="result" id="commonCodeResult"></span>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="small mb-1" for="CODETYPE_NAME">공통코드명</label>
-                                            <input class="form-control" id="codetype_name" name="CODETYPE_NAME" type="text" placeholder="공통코드명 입력" required>
+                                            <label class="small mb-1" for="CODETYPE_NAME">코드타입명</label>
+                                            <input class="form-control" id="codetype_name" name="CODETYPE_NAME" type="text" placeholder="코드타입명 입력" required>
                                         </div>
                                         <div class="mb-3">
                                             <label class="small mb-1" for="DESCRIPTION">설명</label>
                                             <input class="form-control" id="description" name="DESCRIPTION" type="text" placeholder="설명 입력" required>
                                         </div>
                                         <hr class="mt-4 pt-2">
-                                        <h6 class="m-0 font-weight-bold text-primary">상세코드</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">공통코드</h6>
                                         <div class="d-flex justify-right">
 	                                        <button class="btn btn-primary ml-auto mb-2" type="button" id="btnAddRow"><i class="fa-solid fa-plus"></i> 행 추가</button>
 	                                        <button class="btn btn-danger ml-2 mb-2" type="button" id="btnDeleteRow"><i class="fa-solid fa-minus"></i> 선택 삭제</button>
@@ -87,8 +88,8 @@
 			                                            	</div>
 			                                            </th>
 			                                            <th width="30px">No.</th>
-			                                            <th class="col-2">상세코드 ID</th>
-			                                            <th class="col-2">상세코드명</th>
+			                                            <th class="col-2">공통코드 ID</th>
+			                                            <th class="col-2">공통코드명</th>
 			                                            <th>설명</th>
 			                                            <th class="col-2">사용여부</th>
 			                                            <th class="col-1" style="min-width:100px;">순서</th>

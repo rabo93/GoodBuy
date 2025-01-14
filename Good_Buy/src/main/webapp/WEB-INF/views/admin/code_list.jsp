@@ -66,7 +66,7 @@
 						                        </div>
 					                        </div>
 					                        <div class="col-6 d-flex justify-right">
-												<button class="btn btn-primary ml-auto" type="button" id="btnAddRow"><i class="fa-regular fa-pen-to-square"></i> 등록하기</button>
+												<button class="btn btn-primary ml-auto"  data-toggle="modal" data-target="#addCommonCodes" type="button" id="btnAddRow"><i class="fa-regular fa-pen-to-square"></i>공통코드 추가</button>
 												<button class="btn btn-danger ml-2" type="button" id="btnDeleteRow"><i class="fa-solid fa-trash-can"></i> 선택 삭제</button>
 		                                    </div>
 									   	</section>
@@ -82,12 +82,12 @@
 		                                            	</div>
 		                                            </th>
 		                                            <th>No.</th>
+		                                            <th>코드타입ID</th>
+		                                            <th>코드타입명</th>
+		                                            <th>코드타입 설명</th>
 		                                            <th>공통코드ID</th>
 		                                            <th>공통코드명</th>
 		                                            <th>공통코드 설명</th>
-		                                            <th>상세코드ID</th>
-		                                            <th>상세코드명</th>
-		                                            <th>상세코드 설명</th>
 		                                            <th>사용여부</th>
 		                                            <th>순서</th>
 		                                            <th>관리</th>
@@ -120,6 +120,66 @@
         <i class="fas fa-angle-up"></i>
     </a>
     
+    <!-- 추가 모달 -->
+    <div class="modal fade" id="addCommonCodes" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+		    <div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="addModalLabel">공통코드 추가</h5>
+					<button type="button" class="close" data-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+				</div>
+				<div class="modal-body">
+					<form action="AdmCommoncodeAdd" method="post" id="addCommoncodeForm">
+						<div class="mb-1">
+							<label for="updatedCommoncodeId" class="col-form-label">코드타입ID</label>
+							<select id="mainCodeList" class="form-control">
+							</select>
+						</div>
+						<div class="mb-1">
+							<label for="viewCommonCodeName" class="col-form-label">코드타입명</label>
+							<input type="text" class="form-control" name="CODETYPE_NAME" id="viewCommonCodeName" readonly>
+						</div>
+						<div class="mb-1">
+							<label for="viewCommonCodeDesc" class="col-form-label">코드타입 설명</label>
+							<input type="text" class="form-control" name="CODETYPE_DESC" id="viewCommonCodeDesc" readonly>
+						</div>
+						<div class="mb-1">
+							<label for="newCodeId" class="col-form-label">공통코드ID</label>
+							<input type="text" class="form-control" name="CODE_ID" id="newCodeId" required>
+							<span class="result" id="subCodeResult"></span>
+						</div>
+						<div class="mb-1">
+							<label for="newCodeName" class="col-form-label">공통코드명</label>
+							<input type="text" class="form-control" name="CODE_NAME" id="newCodeName" required>
+						</div>
+						<div class="mb-1">
+							<label for="newCodeDesc" class="col-form-label">공통코드 설명</label>
+							<input type="text" class="form-control" name="CODE_DESC" id="newCodeDesc" required>
+						</div>
+						<div class="row px-2">
+							<div class="w-50">
+								<label for="newCodeStatus" class="col-form-label">사용여부</label>
+								<div class="form-check form-switch">
+					        		<input type="hidden" id="newCodeStatus" name="CODE_STATUS">
+									<input class="form-check-input" type="checkbox" role="switch" id="newSwitchCheckDefault">
+									<label class="form-check-label text-center" style="width:70px" id="newFlexSwitchCheckDefaultLab" for="newFlexSwitchCheckDefault"></label>
+								</div>
+							</div>
+							<div class="w-50">
+								<label for="newCodeSeq" class="col-form-label">공통코드 순서</label>
+								<input type="number" min="1" class="form-control" name="CODE_SEQ" id="newCodeSeq" placeholder="순서 입력" required>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer justify-content-center">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+					<button type="submit" class="btn btn-primary" id="btnAddForm" form="addCommoncodeForm">추가하기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+    
     <!-- 수정 모달 -->
     <div class="modal fade" id="updateCommonCodes" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
@@ -133,27 +193,27 @@
 						<input type="hidden" id="oldCodetypeId" name="OLD_CODETYPE_ID">
 						<input type="hidden" id="oldCodeId" name="OLD_CODE_ID">
 						<div class="mb-1">
-							<label for="updatedCommoncodeId" class="col-form-label">공통코드ID <small class="text-primary" style="font-weight:600;">공통코드ID는 수정할 수 없습니다.</small></label>
+							<label for="updatedCommoncodeId" class="col-form-label">코드타입ID <small class="text-primary" style="font-weight:600;">코드타입ID는 수정할 수 없습니다.</small></label>
 							<input type="text" class="form-control" name="CODETYPE_ID" id="updatedCommonCodeId" readonly>
 						</div>
 						<div class="mb-1">
-							<label for="updatedCommonCodeName" class="col-form-label">공통코드명</label>
-							<input type="text" class="form-control" name="CODETYPE_NAME" id="updatedCommonCodeName" required>
+							<label for="updatedCommonCodeName" class="col-form-label">코드타입명</label>
+							<input type="text" class="form-control" name="CODETYPE_NAME" id="updatedCommonCodeName" readonly>
 						</div>
 						<div class="mb-1">
-							<label for="updatedCommonCodeDesc" class="col-form-label">공통코드 설명</label>
-							<input type="text" class="form-control" name="CODETYPE_DESC" id="updatedCommonCodeDesc" required>
+							<label for="updatedCommonCodeDesc" class="col-form-label">코드타입 설명</label>
+							<input type="text" class="form-control" name="CODETYPE_DESC" id="updatedCommonCodeDesc" readonly>
 						</div>
 						<div class="mb-1">
-							<label for="updatedCodeId" class="col-form-label">상세코드ID</label>
+							<label for="updatedCodeId" class="col-form-label">공통코드ID</label>
 							<input type="text" class="form-control" name="CODE_ID" id="updatedCodeId" required>
 						</div>
 						<div class="mb-1">
-							<label for="updatedCodeName" class="col-form-label">상세코드명</label>
+							<label for="updatedCodeName" class="col-form-label">공통코드명</label>
 							<input type="text" class="form-control" name="CODE_NAME" id="updatedCodeName" required>
 						</div>
 						<div class="mb-1">
-							<label for="updatedCodeDesc" class="col-form-label">상세코드 설명</label>
+							<label for="updatedCodeDesc" class="col-form-label">공통코드 설명</label>
 							<input type="text" class="form-control" name="CODE_DESC" id="updatedCodeDesc" required>
 						</div>
 						<div class="row px-2">
@@ -166,7 +226,7 @@
 								</div>
 							</div>
 							<div class="w-50">
-								<label for="updatedCodeSeq" class="col-form-label">상세코드 순서</label>
+								<label for="updatedCodeSeq" class="col-form-label">공통코드 순서</label>
 								<input type="number" min="1" class="form-control" name="CODE_SEQ" id="updatedCodeSeq" placeholder="순서 입력" required>
 							</div>
 						</div>

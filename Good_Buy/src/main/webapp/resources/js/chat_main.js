@@ -33,12 +33,13 @@ $(".sidebar-item").on("dblclick", function() {
 	let room_id = $("#room_id" + index).val();
 	let title = $("#title" + index).val();
 	let receiver_id = $("#receiver_id" + index).val();
-	product_id = $("#product_id" + index).val();
 	let grade = $("#grade" + index).val();
 	let mem_nick = $("#mem_nick" + index).val();
 	let mem_profile = $("#mem_profile" + index).val();
+	product_id = $("#product_id" + index).val();
 	window.index = index;
 	window.mem_nick = mem_nick;
+	window.mem_profile = mem_profile;
 	console.log("index =" + index);
 	console.log("room_id =" + room_id);
 	console.log("title =" + title);
@@ -60,7 +61,7 @@ $(".sidebar-item").on("dblclick", function() {
 		grade : grade
 	}
 	
-	$(".messageStatus"+ index).empty();
+	$("#messageStatus"+ index).empty();
 	
 	showChatRoom(room);
 })
@@ -97,7 +98,7 @@ $(function() {
 		if (data.type == TYPE_TALK) {	// 채팅 입력
 			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
 			console.log("채팅리스트 덮어쓰기 작업");
-			let recent_div = `${data.message}<span class="item-send-time${index}">&nbsp; · &nbsp; ${data.send_time}</span>`;
+			let recent_div = `${data.message}<span class="item-send-time${index}">${data.send_time}</span>`;
 			$(".item-chat" + index).empty();
 			$(".item-chat" + index).append(recent_div);
 			
@@ -106,21 +107,21 @@ $(function() {
 		if(data.type == TYPE_FILE) {	// 파일 전송
 			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
 			data.message = "사진을 보냈습니다.";
-			let recent_div = `${data.message}<span class="item-send-time${index}">&nbsp; · &nbsp; ${data.send_time}</span>`
+			let recent_div = `${data.message}<span class="item-send-time${index}">${data.send_time}</span>`
 			$(".item-chat" + index).empty();
 			$(".item-chat" + index).append(recent_div);
 		} 
 		
 		if(data.type == TYPE_REQUEST_PAY) {
 			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
-			let recent_div = `${data.message}원을 요청했어요.<span class="item-send-time${index}">&nbsp; · &nbsp; ${data.send_time}</span>`
+			let recent_div = `${data.message}원을 요청했어요.<span class="item-send-time${index}">${data.send_time}</span>`
 			$(".item-chat" + index).empty();
 			$(".item-chat" + index).append(recent_div);
 		}
 		
 		if(data.type == TYPE_RESPONSE_PAY) {
 			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
-			let recent_div = `${data.message}원을 송금했어요<span class="item-send-time${index}">&nbsp; · &nbsp; ${data.send_time}</span>`
+			let recent_div = `${data.message}원을 송금했어요<span class="item-send-time${index}">${data.send_time}</span>`
 			$(".item-chat" + index).empty();
 			$(".item-chat" + index).append(recent_div);
 		}
@@ -244,7 +245,7 @@ function showChatRoom(room) {
 	
 	//	기존 채팅 내역 불러오기 작업
 	sendMessage(TYPE_REQUEST_CHAT_LIST, product_id, sId, "", room.room_id, "");
-	
+	sendMessage(TYPE_READ, product_id, sId, "", room.room_id, "");
 }
 //	=========================채팅방 목록 작업 끝===============================
 //	===========================================================================
@@ -256,28 +257,41 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 	
 	if(type == TYPE_REQUEST_PAY) {
 		message = parseInt(message.replace(/,/g, ''));
-		bubble_message = `
-						<div class="bubble">
-							${receiver_id}님이 ￦ ${message}원을 요청했어요
-							<span><button class="item-button" onclick="openPayWindow(${product_id}, '${sender_id}', ${message})">송금하기</button></span>
-						</div>
-						 `
+		if(receiver_id == sId) {
+			bubble_message = `
+			<div class="chat-bubble">
+				<div class="pay-container">
+					<div class="request-pay">
+						<p class="pay-text">${mem_nick}님이 ￦ ${message}원을 요청했어요</p>								
+						<button class="item-button" onclick="openPayWindow(${product_id}, '${sender_id}', ${message})">송금하기</button>
+					</div>
+				</div>
+			</div>
+			 `
+		}
+		
+		if(sender_id == sId) {
+			bubble_message = `
+			<div class="chat-bubble user">
+				<div class="pay-container">
+					<div class="request-pay">
+						<p class="pay-text">${sNick}님이 ￦ ${message}원을 요청했어요</p>								
+						<button class="item-button" onclick="openPayWindow(${product_id}, '${sender_id}', ${message})">송금하기</button>
+					</div>
+				</div>
+			</div>
+			 `
+		}
+		
 	}
 	if(type == TYPE_RESPONSE_PAY) {
 		message = parseInt(message.replace(/,/g, ''));
 		bubble_message = `
-						<div class="bubble">
-							${receiver_id}님에게 ￦ ${message}원을 송금했어요
-						</div>
-						 `
+			<div class="bubble">
+				${receiver_id}님에게 ￦ ${message}원을 송금했어요
+			</div>
+			 `
 	}
-	
-	
-//	if(type != TYPE_TALK && type != TYPE_FILE) {
-//		div_message = '<div class="message center">'
-//						+ '<div class="bubble">' + message + '</div>'
-//					 + '</div>';
-//	}
 	
 	if(type == TYPE_TALK) {	// 채팅메세지
 		bubble_message = '<div class="bubble">' + message + '</div>';
@@ -291,14 +305,22 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 	
 	if(sender_id == sId) {	// 자신이 보낸 메세지(송신자가 자신인 경우)
 		div_message = '<div class="message user">' + bubble_message + '</div>';
-//						+ '<div class="bubble">' + bubble_message + '</div>'
-//					 + '</div>';
 	}
 	
-	if(receiver_id == sId) {	// 자신이 보낸 메세지(송신자가 자신인 경우)
-		div_message = '<div class="message other">' + bubble_message + '</div>';
-//						+ '<div class="bubble">' + bubble_message + '</div>'
-//					 + '</div>';
+	if(receiver_id == sId) {	//	상대방이 보낸 메세지
+		if(mem_profile == "") {
+			window.mem_profile = "/resources/img/user_thumb.png";
+		}
+		div_message = `
+		<div class="chat-bubble">
+			<div class="chat-profile">
+				<img src="${baseUrl +  mem_profile}">
+			</div>
+			<div class="message other">
+				${bubble_message}
+			</div>
+		</div>
+		`;
 	}
 
 	$(".chat-body").append(div_message);
@@ -358,7 +380,6 @@ function sendFile() {
 //	===============================================================================
 //	부모창의 sendMessage() 함수 호출
 function sendMessage(type, product_id, sender_id, receiver_id, room_id, message) {
-	console.log('sendMessage : ' );
 	console.log(type, product_id, sender_id, receiver_id, room_id, message);
 	opener.sendMessage(type, product_id, sender_id, receiver_id, room_id, message);
 }
@@ -367,7 +388,6 @@ function closeChat() {
 }
 
 function isOpenedSidebar() {
-	
 	return $(".sidebar").length;
 }
 //	===============================================================================

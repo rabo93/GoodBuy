@@ -23,6 +23,7 @@
     padding: 10px;
     border-bottom: 1px solid #eee;
     cursor: pointer;
+    flex-wrap: wrap;
 }
 
 .sidebar-item img {
@@ -38,16 +39,33 @@
 .sidebar-item .item-container {
 	display: flex;
 	flex-direction: column;
+	flex: 0 1 calc(100% - 100px);
+    overflow: hidden;
 }
 
 .sidebar-item .item-container .item-chat {
 	margin-top: 5px;
-	font-size: 15px;
-	color : #ccc;
+	font-size: 14px;
+	color: #696969;
+	text-overflow: ellipsis;
+	width: 100%;
+	display: block;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
+.sidebar-item .item-container .item strong {
+	width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
 .sidebar-item .item-container .item-chat span {
-	font-size: 12px;
+	font-size: 11px;
+	display: block;
+	margin-top: 4px;
+	color: #adadad;
 }
 
 .chat-area {
@@ -128,6 +146,10 @@
     min-height: 40vh;
 }
 
+.chat-body .chat-bubble {
+	display: flex;
+}
+
 .message {
     margin: 10px 0;
 }
@@ -142,9 +164,9 @@
 
 .message .bubble {
     display: inline-block;
-    padding: 10px;
+    padding: 15px;
     border-radius: 10px;
-    max-width: 70%;
+    max-width: 100%;
 }
 
 .message.center .bubble {
@@ -156,6 +178,7 @@
 }
 
 .message.other .bubble {
+	margin-left : 5px;
     background-color: #eaeaea;
 }
 
@@ -169,6 +192,60 @@
 	border-radius: 4px;
 	font-size: 0.875rem;
 }
+
+/* ================= 송금요청 ================== */
+.pay-container {
+	display: flex;
+    justify-content: center;
+/*     padding: 10px; */
+    margin: 10px 0;
+}
+
+.request-pay {
+	background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    background-color: #e1f2ceff;
+}
+
+.pay-text {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.pay-container .item-button {
+    background-color: var(--primary);
+    color: white;
+    font-size: 16px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    max-width: 200px;
+    margin-top: 10px;
+}
+
+.chat-body .chat-bubble .chat-profile {
+	width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+}
+
+.chat-body .chat-bubble.user{
+	justify-content: right;
+}
+
+/* ==============================================*/
+
 
 
 .chat-footer {
@@ -247,4 +324,21 @@
 .ch-report-modal .ch-modal-wrap .ch-model-close-btn {display: flex;}
 .ch-report-modal .ch-modal-result {display: none;}
 
+
+.sidebar-item {position:relative;}
+.unread_msg {
+	display:block;
+	border-radius: 50px;
+	background:#e31212;
+	position: absolute;
+	right: 10px;
+	top: 12px;
+	font-size: 9px;
+	font-weight: 900;
+	width: auto;
+	line-height: 16px;
+	text-align: center;
+	color: white;
+	padding: 0 6px;
+}
 

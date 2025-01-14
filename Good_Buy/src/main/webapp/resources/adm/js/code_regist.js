@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	const btnDeleteRow = document.querySelector("#btnDeleteRow");
 	const commoncodeForm = document.querySelector("form[name=commoncodeForm]");
 	const checkAll = document.querySelector("#checkAll");
+	let codeIdCheck = false;
 	
 	// 테이블 그리기
 	const codeTable = $('#commoncode').DataTable({
@@ -26,8 +27,8 @@ document.addEventListener("DOMContentLoaded", function(){
                 <label class="custom-control-label" for="customCheck${rowCount}"></label>
 			</div>`,
 			`<span class="num">${rowCount}</span>`,
-			`<input type="text" class="form-control" name="CODE_ID" placeholder="상세코드ID 입력" required>`,
-			`<input type="text" class="form-control" name="CODE_NAME" placeholder="상세코드명 입력" required>`,
+			`<input type="text" class="form-control" name="CODE_ID" placeholder="공통코드ID 입력" required>`,
+			`<input type="text" class="form-control" name="CODE_NAME" placeholder="공통코드명 입력" required>`,
 			`<input type="text" class="form-control" name="CODE_DESCRIPTION" placeholder="설명 입력" required>`,
 			`<div class="form-check form-switch">
         		<input type="hidden" value="1" name="CODE_STATUS">
@@ -55,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 		// 전부 삭제했을 경우 최소 1행 추가
 		if(codeTable.rows().count() == 0) {
-			alert("상세코드는 최소 1행 이상 등록하여야 합니다.");
+			alert("공통코드는 최소 1행 이상 등록하여야 합니다.");
         	addNewRow();
 		}
 		reDrawTable(codeTable);
@@ -101,11 +102,47 @@ document.addEventListener("DOMContentLoaded", function(){
 		
 	}
 	
+	
+	// 공통코드 ID 중복검사
+	$("#codetype_id").on("keyup", function(){
+		
+		// 유효성 체크
+		$.ajax({
+			url: "CheckCommonCodeID",
+			type: "POST",
+			data: {
+				mainCodeId : $("#codetype_id").val()
+			},
+			success: function(res) {
+				console.log(res);
+				if(res == "true") {
+					$("#commonCodeResult").show();
+					$("#commonCodeResult").css("color", "#e74a3b").text("이미 존재하는 코드타입ID입니다. 다시 입력해주세요.");
+					$("#codetype_id").focus();
+					codeIdCheck = false;
+				} else {
+					$("#commonCodeResult").css("color", "#4e73df").text("사용할 수 있는 코드타입ID입니다.");
+					codeIdCheck = true;
+				}
+			},
+			error: function() {
+				alert("오류가 발생했습니다.\n다시 입력해주세요.");
+			}
+		
+		});
+	});
+	
 	// 전체 폼 저장
 	function submitForm(e) {
 		e.preventDefault();
 		const formData = $(this).serializeArray();
 		console.log("폼데이터: " + formData); // 넘어오는거 확인
+		
+		if(!codeIdCheck) {
+			alert("코드타입 ID를 확인해주세요.");
+			$("#codetype_id").focus();
+			return;
+		};
 		
 		// 일반 필드 input 값 저장
 		const mainCode = {};

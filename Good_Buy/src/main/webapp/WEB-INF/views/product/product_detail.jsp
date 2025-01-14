@@ -207,7 +207,7 @@
 					<div class="item-detail-more-item">
 						<h1 class="sec-ttl">
 						이 판매자가 판매하는 다른 물품
-						<button class="more"><i class="fa-solid fa-chevron-right"></i></button>
+						<button class="more" onclick="location.href='ProductList?SEARCHKEYWORD=${productSearch.mem_nick}'"><i class="fa-solid fa-chevron-right"></i></button>
 						</h1>
 						<div class="product-list">
 							<ul class="product-wrap">
@@ -244,7 +244,7 @@
 						</div>
 						<h1 class="sec-ttl">
 						이 상품과 비슷한 상품
-						<button class="more"><i class="fa-solid fa-chevron-right"></i></button>
+						<button class="more" onclick="location.href='ProductList?SEARCHKEYWORD=${productSearch.product_category}'"><i class="fa-solid fa-chevron-right"></i></button>
 						</h1>
 						<div class="product-list">
 							<ul class="product-wrap">

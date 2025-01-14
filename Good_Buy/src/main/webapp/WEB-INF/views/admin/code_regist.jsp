@@ -61,6 +61,7 @@
                                         <div class="mb-3">
                                             <label class="small mb-1" for="CODETYPE_ID">공통코드ID</label>
                                             <input class="form-control" id="codetype_id" name="CODETYPE_ID" type="text" placeholder="공통코드 ID 입력" required>
+                                        	<span class="result" id="commonCodeResult"></span>
                                         </div>
                                         <div class="mb-3">
                                             <label class="small mb-1" for="CODETYPE_NAME">공통코드명</label>

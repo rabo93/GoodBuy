@@ -180,6 +180,7 @@
 .message.other .bubble {
 	margin-left : 5px;
     background-color: #eaeaea;
+    display: flex;
 }
 
 .message .bubble .item-button{
@@ -192,6 +193,11 @@
 	border-radius: 4px;
 	font-size: 0.875rem;
 }
+
+.chat-mem-nick {
+	margin-left: 10px;
+}
+
 
 /* ================= 송금요청 ================== */
 .pay-container {

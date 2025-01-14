@@ -22,9 +22,12 @@
 				<a href="ProductRegist" class="gnb-btn"><i class="fa-solid fa-store"></i> 판매하기</a>
 				<a href="javascript:void(0)" id="chat-btn" class="gnb-btn" onclick="startChat()">
 					<i class="fa-solid fa-comment-dots"></i> 채팅하기
-<%-- 					<c:if test="${alram ne '0' && not empty sessionScope.sId}"> --%>
-<!-- 						<span class="messageStatus"></span> -->
-<%-- 					</c:if> --%>
+					<script type="text/javascript">
+						function startChat() {
+							alert("로그인이 필요합니다!");
+							location.href = "MemberLogin";
+						}
+					</script>
 				</a>
 			</div>
 			<div class="gnb-right">
@@ -95,9 +98,6 @@
 			        			<a href="ProductRegist" class="gnb-btn"><i class="fa-solid fa-store"></i> 판매하기</a>
 								<a href="javascript:void(0)" class="gnb-btn" onclick="startChat()">
 									<i class="fa-solid fa-comment-dots"></i> 채팅하기
-									<c:if test="${alram ne '0' && not empty sessionScope.sId}">
-										<span class="messageStatus"></span>
-									</c:if>
 								</a>
 								<a href="MemberLogout">로그아웃</a>
 								<input type="hidden" id="sId" value="${sessionScope.sId}">

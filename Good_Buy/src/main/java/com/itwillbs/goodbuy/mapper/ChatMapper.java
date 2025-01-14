@@ -26,6 +26,7 @@ public interface ChatMapper {
 	int selectCountMessage(@Param("room_id") String room_id,
 						   @Param("receiver_id") String receiver_id);
 	
+	
 	//	새 채팅방 정보 저장 요청
 	void insertChatRoom(List<ChatRoom> chatRoomList);
 	
@@ -47,8 +48,9 @@ public interface ChatMapper {
 	//	mem_id로 mem_nick 가져오기
 	MemberVO selectMemberNick(String receiver_id);
 
-	//	mem_id로 mem_profile 받아오기
-//	String selectMemberProfile(String mem_id);
+	//	메세지 읽음 처리
+	void updateMessageRead(ChatMessage chatMessage);
+
 
 	
 

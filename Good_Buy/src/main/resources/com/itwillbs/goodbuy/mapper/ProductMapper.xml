@@ -124,7 +124,7 @@
 			</when>
 			<otherwise>
 				AND
-					PRODUCT_STATUS BETWEEN 0 AND 2
+					(PRODUCT_STATUS BETWEEN 0 AND 2)
 			</otherwise>
 		</choose>
 		<if test="price_end != 0">
@@ -139,11 +139,12 @@
 		</if>
 		<if test="search_keyword != null">
 			AND
-				mem.MEM_NICK LIKE CONCAT('%', #{search_keyword}, '%')
+				(mem.MEM_NICK LIKE CONCAT('%', #{search_keyword}, '%')
 				OR pro.MEM_ID LIKE CONCAT('%', #{search_keyword}, '%')
 				OR pro.PRODUCT_TITLE LIKE CONCAT('%', #{search_keyword}, '%')
 				OR pro.PRODUCT_INTRO LIKE CONCAT('%', #{search_keyword}, '%')
 				OR pro.PRODUCT_TRADE_ADR1 LIKE CONCAT('%', #{search_keyword}, '%')
+				OR pro.PRODUCT_CATEGORY LIKE CONCAT('%', #{search_keyword}, '%'))
 		</if>
 		ORDER BY PRODUCT_REG_DATE DESC
 	</select>
@@ -254,15 +255,9 @@
 		SELECT mem.MEM_PROFILE
 				 , mem.MEM_NICK
 		         , mem.MEM_ID
-				 , ROUND(IFNULL(AVG(rev.REVIEW_SCORE), 0)) AS AVG_SCORE
-				 , ROUND(IFNULL(AVG(rev.REVIEW_SCORE), 0)) / 5.0 * 100 AS PER_AVG_SCORE
+		         , mem.MEM_INTRO
 		FROM MEMBER mem
-		LEFT OUTER JOIN PRODUCT pro ON mem.MEM_ID = pro.MEM_ID
-		LEFT OUTER JOIN MYREVIEW rev ON pro.PRODUCT_ID = rev.PRODUCT_ID
 		WHERE mem.MEM_NICK = #{mem_nick}
-		GROUP BY mem.MEM_PROFILE
-					, mem.MEM_NICK
-					, mem.MEM_ID;
 	</select>
 	
 	<!-- 상점페이지 셀러 리뷰목록 조회 -->

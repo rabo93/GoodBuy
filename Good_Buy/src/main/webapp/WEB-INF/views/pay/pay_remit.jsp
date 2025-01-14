@@ -32,14 +32,7 @@
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/product.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/pay.js"></script>
-<script>
-	// 창이 닫히기 전에 부모 창 함수 호출
-	window.onbeforeunload = function () {
-        if (window.opener && !window.opener.closed) {
-        	window.opener.reloadParent(); // 부모 창의 함수 호출
-    	}
-	};
-</script>
+<script src="${pageContext.request.contextPath}/resources/js/chat_main.js"></script>
 </head>
 <body>
 	<main>
@@ -52,16 +45,16 @@
 				        <div class="input-section">
 				        	구매물품 : ${productSearch.product_title}<br>
 							<br>
-<%-- 							'${param.receiver_id}' 님에게 <fmt:formatNumber pattern="#,###">${productSearch.product_price}</fmt:formatNumber>원을 송금합니다. --%>
 							'${param.receiver_id}' 님에게 <fmt:formatNumber pattern="#,###">${price}</fmt:formatNumber>원을 송금합니다.
 							<br><br>
 							<div class="balance-info">굿페이 잔액: <strong>${pay_amount} 원</strong></div>
 							<form action="PayTransfer" method="post">
-								<input type="hidden" name="receiver_id" value="${param.receiver_id}">
-								<input type="hidden" name="product_id" value="${param.product_id}">
-								<input type="hidden" name="tran_amt" value="2000">
+								<input type="hidden" name="receiver_id" id="receiver_id" value="${param.receiver_id}">
+								<input type="hidden" name="product_id" id="product_id" value="${param.product_id}">
+								<input type="hidden" name="room_id" id="room_id" value="${param.room_id}">
+								<input type="hidden" name="tran_amt" id="tran_amt" value="2000">
 						        <div class="recharge-button">
-						            <button class="transfer-btn-chat">송금하기</button>
+						            <button class="transfer-btn-chat" id="transfer-btn-chat" >송금하기</button>
 						        </div> 
 							</form>
 				        </div>

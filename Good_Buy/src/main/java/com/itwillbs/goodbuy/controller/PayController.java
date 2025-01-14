@@ -382,21 +382,24 @@ public class PayController {
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("PayTransferRequest")
 	public String payTransferRequest(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
+		
+		
+		String id = (String)session.getAttribute("sId");
 		int product_id = Integer.parseInt((String) map.get("product_id"));
 		PayToken token = (PayToken)session.getAttribute("token");
-		System.out.println("!@#!@#!@#");
-		System.out.println(map.get("price"));
+//		System.out.println("Controller에서 room_id 잘 받아오나????????? " + map.get("room_id"));
 		int price = Integer.parseInt((String) map.get("price"));
 		
 		Map<String, Object> bankUserInfo = service.getPayUserInfo(token);
 		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
 		
 		// 충전금액 조회
-		int pay_amount = service.getPayAmount(token.getUser_seq_no());
+		Integer pay_amount = service.getPayAmount(id);
 		
 		// 상품 조회
 		ProductVO productSearch = productService.productSearch(product_id);
 		
+		model.addAttribute("room_id", map.get("room_id"));
 		model.addAttribute("pay_amount", pay_amount);
 		model.addAttribute("productSearch", productSearch);
 		model.addAttribute("bankUserInfo", bankUserInfo);
@@ -488,6 +491,8 @@ public class PayController {
 		service.registPayInfo(map); // 일단 업데이트 치러감.
 		
 		
+		
+		session.setAttribute("room_id", map.get("room_id"));
 		session.setAttribute("transferResult", transferResult);
 		
 		/*
@@ -513,12 +518,6 @@ public class PayController {
 		*/
 		
 		
-		
-		 // 팝업에서 확인할 기본 메시지 전달
-        String popupMessage = "팝업 창에 표시할 결과입니다!";
-        model.addAttribute("popupMessage", popupMessage);
-		
-		
 		return "redirect:/PayTransferResult";
 	}
 	
@@ -535,16 +534,11 @@ public class PayController {
 	public String payTransferResult(HttpSession session, Model model) {
 		// 세션에 저장된 이체결과객체 (transferResult) 꺼내기
 		Map<String, Object> transferResult =(Map<String, Object>)session.getAttribute("transferResult");
-		
 		// 세션에서 객체 꺼낸 후 세션내의 객체는 제거
 		session.removeAttribute("ransferResult"); // 마치 세션을 리퀘스트 처럼 사용함.
-		
 		// 이체 결과 객체를 모델 객체에 저장
 		model.addAttribute("transferResult", transferResult);
-		
-		
 		return "pay/pay_transfer_result";
-		
 	}
 
 	@LoginCheck(memberRole = MemberRole.USER)

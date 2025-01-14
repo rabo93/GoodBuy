@@ -175,7 +175,8 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 	}
 	
 	if(type == TYPE_TALK) {	// 채팅메세지
-		bubble_message = '<div class="bubble">' + message + '</div>';
+		bubble_message =`<div class="bubble">${message}</div>`;
+//		'<div class="bubble">' + message + '</div>';
 	}
 	
 	if(type == TYPE_FILE) {
@@ -188,8 +189,8 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 		div_message = '<div class="message user">' + bubble_message + '</div>';
 	}
 	
-	if(receiver_id == sId) {	// 자신이 보낸 메세지(송신자가 자신인 경우)
-		div_message = '<div class="message other">' + bubble_message + '</div>';
+	if(receiver_id == sId) {	// 상대방이 보낸 메세지
+		div_message = `<div class="message other">${bubble_message}</div>`;
 	}
 
 	$(".chat-body").append(div_message);

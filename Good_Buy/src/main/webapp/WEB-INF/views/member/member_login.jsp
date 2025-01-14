@@ -90,15 +90,16 @@
 	</footer>
 	<script>
 		const pwBtn = document.querySelector(".passwd-view");
-		const pwInput = document.querySelector("#mem_passwd");
+		const pwInput = document.querySelector("#passwd");
 		pwBtn.addEventListener("click", function(){
 			pwBtn.innerHTML = '<i class="fa-solid fa-eye"></i>';
 			pwBtn.classList.toggle("view");
+			
 			if (pwBtn.classList.contains("view")){
 				pwBtn.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
 			}
 			
-			if (pwInput.type === "password") {
+			if (pwInput.type == "password") {
 				pwInput.type = "text"; // 비밀번호 표시
 		 	 } else {
 		 		pwInput.type = "password"; // 비밀번호 숨김

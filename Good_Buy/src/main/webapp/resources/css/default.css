@@ -10,7 +10,7 @@ header {box-shadow: 0 2px 14px rgb(226 226 226);}
 .hd-sch form .sch-input{border:0;padding:.6rem;background:transparent;width: 400px;}
 .hd-sch form .sch-submit{width:2rem;height:2rem;background:transparent;color: var(--dark);font-size:19px}
 .hd-gnb{display:flex;align-items:center;gap: 20px;}
-.hd-gnb .gnb-btn{font-size: 15px;border:0;padding:0;background:none;font-weight: 500;display: flex;align-items: center;gap: 6px;border-radius: 50px;color: #1a292d;}
+.hd-gnb .gnb-btn{position:relative;font-size: 15px;border:0;padding:0;background:none;font-weight: 500;display: flex;align-items: center;gap: 6px;border-radius: 50px;color: #1a292d;}
 .hd-gnb .gnb-btn b {font-size:16px;}
 /* .hd-gnb .gnb-btn .profile-pic {border-radius: 50%; width: 40px; height: 40px; border:1px solid #ccc;} */
 .hd-gnb .gnb-btn img {width:40px;height:40px;border-radius:50%;border:1px solid #ccc;}

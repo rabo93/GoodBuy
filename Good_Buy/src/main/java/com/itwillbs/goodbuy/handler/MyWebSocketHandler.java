@@ -184,8 +184,12 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			}
 			
 			sendMessage(session, chatMessage);
-			
 		}
+		
+		if(chatMessage.getType().equals(ChatMessage.TYPE_READ)) {
+			chatService.updateMessageRead(chatMessage);
+		}
+		
 		
 	}
 	

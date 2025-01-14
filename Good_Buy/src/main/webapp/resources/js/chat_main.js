@@ -453,6 +453,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 				<img src="${baseUrl +  mem_profile}">
 			</div>
 			<div class="message other">
+			<span class="chat-mem-nick">${mem_nick}</span>
 				${bubble_message}
 			</div>
 		</div>

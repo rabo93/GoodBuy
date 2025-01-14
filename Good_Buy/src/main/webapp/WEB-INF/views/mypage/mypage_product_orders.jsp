@@ -56,9 +56,7 @@
                             <div class="product-list">
                                 <c:choose>
                                     <c:when test="${empty order}">
-                                        <ul>
-                                            <li>구매내역이 없습니다.</li>
-                                        </ul>
+                                        <div class ="product-card-empty">구매내역이 없습니다.</div>
                                     </c:when>
                                     <c:otherwise>
                                         <c:forEach var="product" items="${order}">

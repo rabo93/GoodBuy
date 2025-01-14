@@ -69,10 +69,10 @@
 					</div>
 				<section>
 					   <div class="product-list">
-					    <ul class="product-wrap">
+<!-- 					    <ul class="product-wrap"> -->
 						    <c:choose>
 						        <c:when test="${empty product}">
-						            <li class="product-card" data-status="none">등록된 상품이 없습니다.</li>
+						            <div class="product-card-empty" data-status="none">등록된 상품이 없습니다.</div>
 						        </c:when>
 						        <c:otherwise>
 						            <c:forEach var="product" items="${product}">
@@ -115,7 +115,7 @@
 						            </c:forEach>
 						        </c:otherwise>
 						    </c:choose>
-						</ul>
+<!-- 						</ul> -->
 					    
 					</div>
 				</section>

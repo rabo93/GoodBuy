@@ -224,7 +224,7 @@ function showChatRoom(room) {
 							+ '</button>'
 						+ '</div>'
 						+ '<div class="chat-header">'
-				           	+ '<a><img src="' + baseUrl + "/upload/" +  product_img + '" alt="item"></a>'
+				           	+ '<a><img src="' + baseUrl + "/resources/upload/" +  product_img + '" alt="item"></a>'
 				           	+ '<div class="title">'+ room.title +' </div>'
 				           	+ '<button class="item-button" onclick="requestReservation(' + room.product_id + ')">예약요청</button>'
 				           + '</div>'

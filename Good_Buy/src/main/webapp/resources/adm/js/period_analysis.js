@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			// defaultContent 는 기본값 설정, 데이터 없는 컬럼일 경우 오류나기 때className : "dt-center",문에 널스트링 처리 해주어야 함
             { title: "날짜", data: "date", className : "dt-center", defaultContent: ""},
             { title: "회원수(명)", data: "memberTotal", className : "dt-center", defaultContent: "0" },
-            { title: "회원가입(명)", data: "joinTotal", className : "dt-center", defaultContent: "0" },
+            { title: "신규회원(명)", data: "joinTotal", className : "dt-center", defaultContent: "0" },
             { title: "상품등록(건)", data: "productTotal", className : "dt-center", defaultContent: "0" },
             { title: "거래완료(건)", data: "orderTotal", className : "dt-center", defaultContent: "0" },
             { title: "거래금액(원)", data: "payTotal", className : "dt-center", defaultContent: "0" },

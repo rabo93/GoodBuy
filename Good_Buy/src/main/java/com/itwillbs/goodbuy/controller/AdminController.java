@@ -852,19 +852,19 @@ public class AdminController {
 		// 각각의 컬럼 데이터 가져오기
 		// 1.총 회원수
 		List<Map<String, Object>> memberPeriod = service.getMemberPeriod(orderDir, startDate, endDate);
-		System.out.println("회원수: " + memberPeriod);
+//		System.out.println("회원수: " + memberPeriod);
 		// 2.회원가입수 
 		List<Map<String, Object>> joinPeriod = service.getJoinPeriod(orderDir, startDate, endDate);
-		System.out.println("회원가입수: " + joinPeriod);
+//		System.out.println("회원가입수: " + joinPeriod);
 		// 3.상품등록수
 		List<Map<String, Object>> productPeriod = service.getProductPeriod(orderDir, startDate, endDate);
-		System.out.println("상품등록: " + productPeriod);
+//		System.out.println("상품등록: " + productPeriod);
 		// 4.거래완료수 
 		List<Map<String, Object>> orderPeriod = service.getOrderPeriod(orderDir, startDate, endDate);
-		System.out.println("거래수: " + orderPeriod);
+//		System.out.println("거래수: " + orderPeriod);
 		// 5.거래금액 
 		List<Map<String, Object>> payPeriod = service.getPayPeriod(orderDir, startDate, endDate);
-		System.out.println("거래금액: " + payPeriod);
+//		System.out.println("거래금액: " + payPeriod);
 		
 		//--------------------------------------------------------------
 		// 날짜별 컬럼 병합
@@ -924,7 +924,7 @@ public class AdminController {
 			finalData.put("payTotal", entry.getValue().getOrDefault("payTotal", 0));
 			finalList.add(finalData);
 		}
-		System.out.println("finalList: " + finalList);
+//		System.out.println("finalList: " + finalList);
 		
 		// 결과 JSONObject로 변환
 		JSONObject jo = new JSONObject();

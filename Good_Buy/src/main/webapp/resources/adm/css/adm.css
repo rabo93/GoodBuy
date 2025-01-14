@@ -334,4 +334,5 @@ body {font-family: "Nunito", 'Pretendard', serif;}
 .right-buttons .dt-buttons button:nth-child(2) {border:0;background:var(--primary);color:var(--white);font-weight:700;border-radius:6px;font-size: 15px;}
 .right-buttons .dt-buttons button:not(:disabled):hover {background:var(--secondary);border:0;}
 
+.result {font-size:14px;padding:4px; display: none;}
 

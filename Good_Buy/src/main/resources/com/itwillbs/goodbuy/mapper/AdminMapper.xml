@@ -144,6 +144,43 @@
 			    AND CODE_ID = #{param.CODE_ID}
      </update>
      
+     <!-- 공통코드ID 가져오기 -->
+     <select id="selectCommonCodesList" resultType="map">
+     	SELECT CODETYPE_ID
+			   , CODETYPE_NAME
+		       , DESCRIPTION
+		  FROM COMMONCODETYPE
+     </select>
+     
+     <!-- 공통코드 ID 중복체크 -->
+     <select id="isMainCodeId" resultType="string">
+    	SELECT "TRUE" AS RESULT
+		  FROM COMMONCODETYPE
+		 WHERE CODETYPE_ID = #{mainCode};
+     </select>
+     
+     <!-- 상세코드 ID 중복체크 -->
+     <select id="isSubCodeId" resultType="string">
+     	SELECT "TRUE" AS RESULT
+		  FROM COMMONCODE
+		 WHERE CODE_ID = #{subCode}
+     </select>
+     
+     <!-- 공통코드 - 상세코드만 팝업으로 추가 -->
+     <insert id="insertSubCommonCode">
+     	INSERT 
+		  INTO COMMONCODE
+		VALUES 
+            (
+	            #{param.mainCodeId}
+	            , #{param.subCodeId}
+	            , #{param.subCodeName}
+	            , #{param.subCodeDesc}
+	            , #{param.subCodeStatus}
+	            , #{param.subCodeSeq}
+            )
+     </insert>
+     
      <!-- ************************************************************************* -->
      <!-- [ 회원관리 ] -->
      <!-- 전체 회원 목록 조회 - SELECT -->

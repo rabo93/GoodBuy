@@ -62,6 +62,11 @@ public class AdminService {
 	public int getCommonCodesFiltered(Map<String, Object> param) {
 		return mapper.selectCommonCodesFiltered(param);
 	}
+	
+	// 공통코드 상위코드 조회(오버로딩)
+	public List<Map<String, String>> getCommonCodes() {
+		return mapper.selectCommonCodesList();
+	}
 
 	// 공통코드 컬럼 수정
 	@AdminLog
@@ -107,6 +112,20 @@ public class AdminService {
 		return mapper.updateCommonCodeStatus(param);
 	}
 
+	// 상세코드 ID 중복체크
+	public String isSubCodeId(String subCode) {
+		return mapper.isSubCodeId(subCode);
+	}
+
+	// 공통코드 상세코드 팝업으로 추가
+	public int addSubCommonCode(Map<String, String> param) {
+		return mapper.insertSubCommonCode(param);
+	}
+
+	// 공통코드 ID 중복체크
+	public String isMainCodeId(String mainCode) {
+		return mapper.isMainCodeId(mainCode);
+	}
 	// ============== [ 회원관리 ] ==============
 	// 회원 목록 조회
 	public List<MemberVO> getMemberList(Map<String, Object> param) {
@@ -433,12 +452,10 @@ public class AdminService {
 	public List<Map<String, Object>> getOrderPeriod(String orderDir, String startDate, String endDate) {
 		return mapper.selectTotalOrder(orderDir, startDate, endDate);
 	}
+	
 	// 기간별 거래금액 통계
 	public List<Map<String, Object>> getPayPeriod(String orderDir, String startDate, String endDate) {
 		return mapper.selectTotalPay(orderDir, startDate, endDate);
 	}
-
-
-	
 	
 }

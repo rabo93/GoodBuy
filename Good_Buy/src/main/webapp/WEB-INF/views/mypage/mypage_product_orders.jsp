@@ -63,11 +63,11 @@
                                     <c:otherwise>
                                         <c:forEach var="product" items="${order}">
                                             <li class="product-card">
-                                                <img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg"
-                                                     class="card-thumb" alt="thumbnail" height="180px"/>
-                                                <div class="card-info">
+                                            	<a href='ProductDetail?PRODUCT_ID=${product.PRODUCT_ID}'>
+                                                	<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" height="180px"/>
+                                                </a>
+                                                	<div class="card-info">
                                                     <div class="category">
-                                                    
                                                         <span>${product.PRODUCT_CATEGORY}</span>
                                                         <span class="type">직거래</span>
                                                     </div>

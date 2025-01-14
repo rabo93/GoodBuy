@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			{ targets: [1,2,3,4,5], orderable: false },
 		],
         columns: [
-			// defaultContent 는 기본값 설정, 데이터 없는 컬럼일 경우 오류나기 때className : "dt-center",문에 널스트링 처리 해주어야 함
+			// defaultContent 는 기본값 설정, 데이터 없는 컬럼일 경우 오류나기 때문에 널스트링 처리 해주어야 함
             { title: "날짜", data: "date", className : "dt-center", defaultContent: ""},
             { title: "회원수(명)", data: "memberTotal", className : "dt-center", defaultContent: "0" },
             { title: "신규회원(명)", data: "joinTotal", className : "dt-center", defaultContent: "0" },

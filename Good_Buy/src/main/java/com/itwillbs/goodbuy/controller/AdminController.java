@@ -924,7 +924,6 @@ public class AdminController {
 			finalData.put("payTotal", entry.getValue().getOrDefault("payTotal", 0));
 			finalList.add(finalData);
 		}
-//		System.out.println("finalList: " + finalList);
 		
 		// 결과 JSONObject로 변환
 		JSONObject jo = new JSONObject();

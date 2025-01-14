@@ -3,8 +3,8 @@ document.addEventListener("DOMContentLoaded", function(){
 	Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 	Chart.defaults.global.defaultFontColor = '#858796';
 	
-	// 기간 초기화 (최근 7일)
-	
+	// moment.js 에 한글 추가
+	moment.locale('ko');
 	
 	// 기간별 채팅 개수
 	fetchData();
@@ -90,7 +90,7 @@ function fetchData(schDate = null){
 		const labelArr = [];
 		const dataArr = [];
 		for(let key in res) {
-			labelArr.push(moment(res[key].SEND_TIME, 'M월 D, YYYY').format('M/D'));
+			labelArr.push(moment(res[key].SEND_TIME, 'M월 D, YYYY').format('MM/DD'));
 			dataArr.push(res[key].COUNT);
 		}
 		

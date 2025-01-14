@@ -93,6 +93,7 @@ function fetchData(schDate = null){
 			labelArr.push(moment(res[key].SEND_TIME, 'M월 D, YYYY').format('MM/DD'));
 			dataArr.push(res[key].COUNT);
 		}
+		console.log(labelArr);
 		
 		// 차트 그리기
 		createChart(labelArr, dataArr);		

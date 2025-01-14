@@ -235,10 +235,14 @@
 
 .chat-body .chat-bubble .chat-profile {
 	width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid #ccc;
+	height: 40px;
+	border-radius: 50%;
+	border: 1px solid #ccc;
+	overflow: hidden;
 }
+
+.chat-body .chat-bubble .chat-profile img {/* width:100%; */display:block;max-height: 100%;object-fit: cover;margin: 0 auto;}
+
 
 .chat-body .chat-bubble.user{
 	justify-content: right;

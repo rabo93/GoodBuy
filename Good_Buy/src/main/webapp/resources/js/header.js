@@ -4,19 +4,16 @@ url = new URL(window.location.href);
 $(document).ready(function(){
 	$("#login-btn").on("click", function(e){
 		e.stopPropagation();
-		$("#login-panel").classList.toggle("on");
+		$("#login-panel").toggleClass("on");
 	});
 	
 	$("#login-panel").on("click", function(e){
 		e.stopPropagation();
 	});
 	
-	$("document").on("click", function() {
-		$("#login-panel").classList.remove("on");
+	$(document).on("click", function() {
+		$("#login-panel").removeClass("on");
 	});
-})
-
-$(document).ready(function(){
 		
 	$.ajax({
 		url : "getCategory",

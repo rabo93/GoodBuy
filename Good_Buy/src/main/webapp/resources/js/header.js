@@ -1,3 +1,4 @@
+url = new URL(window.location.href);
 
 // 헤더 스크립트
 $(document).ready(function(){

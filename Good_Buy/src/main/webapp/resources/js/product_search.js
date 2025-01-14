@@ -155,8 +155,11 @@ $(document).ready(function() {
 					</li>`)
 			};
 		} else {
-			$("#product-wrap").append(
-				`<h1>:( 검색결과가 없습니다</h1>`
+			$("#product-list").append(
+				`<div class="no-data">
+				<img class="no-data-pic" src="../resources/img/no-data.png">
+				<h1 class="no-data-text">:( 검색결과가 없습니다</h1>
+				</div>`
 			)
 		}
 		

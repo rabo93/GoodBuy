@@ -70,7 +70,7 @@
 					</aside>
 					<article class="item-list-area">
 						<!-- product-list -->
-						<div class="product-list">
+						<div class="product-list" id="product-list">
 							<ul class="product-wrap" id="product-wrap">
 							</ul>
 						</div>

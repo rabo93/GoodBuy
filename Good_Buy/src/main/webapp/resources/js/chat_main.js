@@ -275,7 +275,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 				<div class="pay-container">
 					<div class="request-pay">
 						<p class="pay-text">${sNick}님이 ￦ ${message}원을 요청했어요</p>								
-						<span><button class="item-button" onclick="openPayWindow(${product_id}, '${sender_id}', ${message}, '${room_id.value}')">송금하기</button></span>
+						<span></span>
 					</div>
 				</div>
 			</div>
@@ -291,7 +291,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 				<div class="pay-container">
 					<div class="request-pay">
 						<p class="pay-text">${mem_nick}님이 ￦ ${message}원을 송금했어요</p>
-						<span><button class="item-button" onclick="closePayWindow()">송금내역으로 이동</button></span>								
+						<span><button class="item-button" onclick="closePayWindow('seller')">판매내역으로 이동</button></span>								
 					</div>
 				</div>
 			</div>
@@ -304,7 +304,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 				<div class="pay-container">
 					<div class="request-pay">
 						<p class="pay-text">${receiver_id}님에게 ￦ ${message}원을 송금했어요</p>
-						<span><button class="item-button" onclick="closePayWindow()">송금내역으로 이동</button></span>								
+						<span><button class="item-button" onclick="closePayWindow('buyer')">구매내역으로 이동</button></span>								
 					</div>
 				</div>
 			</div>
@@ -554,7 +554,15 @@ function openPayWindow(product_id, receiver_id, price, room_id) {
     payWindow = window.open(url, "chat_window", "width=500,height=500");
 }
 
-function closePayWindow() {
-    window.open("AllPayList", "_blank");
+function closePayWindow(type) {
+	if(type == 'seller') {
+    	window.open("MySales", "_blank");
+		
+	} else if (type == 'buyer') {
+    	window.open("MyOrder", "_blank");
+	} else if (type == 'transfer') {
+    	window.open("AllPayList", "_blank");
+		
+	}
     window.close();
 }

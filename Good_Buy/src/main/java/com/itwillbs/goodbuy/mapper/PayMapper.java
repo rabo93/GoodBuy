@@ -70,5 +70,7 @@ public interface PayMapper {
 
 	List<Map<String, String>> selectPayInfo(String id);
 
+	List<Map<String, String>> selectPayInfoProduct(int product_id);
+
 
 }

@@ -37,7 +37,6 @@ public class ChatService {
 		return mapper.selectCountMessage(room_id, receiver_id);
 	}
 	
-	
 	//	기존의 상대방과의 채팅방 조회 요청
 	public ChatRoom selectChatRoom(String sender_id, String receiver_id, int product_id) {
 		ChatRoom chatRoom = mapper.selectChatRoom(sender_id, receiver_id, product_id);
@@ -75,11 +74,12 @@ public class ChatService {
 	public MemberVO selectMemberNick(String receiver_id) {
 		return mapper.selectMemberNick(receiver_id);
 	}
+
+	//	메세지 읽음 처리
+	public void updateMessageRead(ChatMessage chatMessage) {
+		mapper.updateMessageRead(chatMessage);
+	}
 	
-	//	멤버 프로필 받아오기
-//	public String selectMemberProfile(String mem_id) {
-//		return mapper.selectMemberProfile(mem_id);
-//	}
 
 	
 

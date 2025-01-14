@@ -61,7 +61,7 @@ $(".sidebar-item").on("dblclick", function() {
 		grade : grade
 	}
 	
-	$(".messageStatus"+ index).empty();
+	$("#messageStatus"+ index).empty();
 	
 	showChatRoom(room);
 })
@@ -98,7 +98,7 @@ $(function() {
 		if (data.type == TYPE_TALK) {	// 채팅 입력
 			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
 			console.log("채팅리스트 덮어쓰기 작업");
-			let recent_div = `${data.message}<span class="item-send-time${index}">&nbsp; · &nbsp; ${data.send_time}</span>`;
+			let recent_div = `${data.message}<span class="item-send-time${index}">${data.send_time}</span>`;
 			$(".item-chat" + index).empty();
 			$(".item-chat" + index).append(recent_div);
 			
@@ -107,21 +107,21 @@ $(function() {
 		if(data.type == TYPE_FILE) {	// 파일 전송
 			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
 			data.message = "사진을 보냈습니다.";
-			let recent_div = `${data.message}<span class="item-send-time${index}">&nbsp; · &nbsp; ${data.send_time}</span>`
+			let recent_div = `${data.message}<span class="item-send-time${index}">${data.send_time}</span>`
 			$(".item-chat" + index).empty();
 			$(".item-chat" + index).append(recent_div);
 		} 
 		
 		if(data.type == TYPE_REQUEST_PAY) {
 			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
-			let recent_div = `${data.message}원을 요청했어요.<span class="item-send-time${index}">&nbsp; · &nbsp; ${data.send_time}</span>`
+			let recent_div = `${data.message}원을 요청했어요.<span class="item-send-time${index}">${data.send_time}</span>`
 			$(".item-chat" + index).empty();
 			$(".item-chat" + index).append(recent_div);
 		}
 		
 		if(data.type == TYPE_RESPONSE_PAY) {
 			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
-			let recent_div = `${data.message}원을 송금했어요<span class="item-send-time${index}">&nbsp; · &nbsp; ${data.send_time}</span>`
+			let recent_div = `${data.message}원을 송금했어요<span class="item-send-time${index}">${data.send_time}</span>`
 			$(".item-chat" + index).empty();
 			$(".item-chat" + index).append(recent_div);
 		}
@@ -245,7 +245,7 @@ function showChatRoom(room) {
 	
 	//	기존 채팅 내역 불러오기 작업
 	sendMessage(TYPE_REQUEST_CHAT_LIST, product_id, sId, "", room.room_id, "");
-	
+	sendMessage(TYPE_READ, product_id, sId, "", room.room_id, "");
 }
 //	=========================채팅방 목록 작업 끝===============================
 //	===========================================================================
@@ -402,7 +402,6 @@ function sendFile() {
 //	===============================================================================
 //	부모창의 sendMessage() 함수 호출
 function sendMessage(type, product_id, sender_id, receiver_id, room_id, message) {
-	console.log('sendMessage : ' );
 	console.log(type, product_id, sender_id, receiver_id, room_id, message);
 	opener.sendMessage(type, product_id, sender_id, receiver_id, room_id, message);
 }
@@ -411,7 +410,6 @@ function closeChat() {
 }
 
 function isOpenedSidebar() {
-	
 	return $(".sidebar").length;
 }
 //	===============================================================================

@@ -45,19 +45,21 @@ public class CoolSmsController {
 	}
 	
 	//======================================================================================================
-	// 단일 문자 발송
+	// 단일 문자 발송 
 	@PostMapping("/send-one")
 	@ResponseBody
 	public ResponseEntity<?> sendOne(@RequestParam("userPhone") String userPhone) {
-		log.info(">>>>>>>>> 입력한 휴대폰 번호 : " + userPhone);
-		// 해당 휴대폰 번호로 가입한 회원이 있는지 판별
-		String memId = memberService.getMemberInfo(userPhone);
-		// * 이미 존재할 경우 *
-		if (memId != null) {
-			return ResponseEntity.badRequest()
-					.header("Content-Type", "text/plain; charset=UTF-8")
-					.body("이미 가입된 휴대폰번호입니다.");
-		}
+//		log.info(">>>>>>>>> 입력한 휴대폰 번호 : " + userPhone);
+//		// 해당 휴대폰 번호로 가입한 회원이 있는지 판별
+//		String memId = memberService.getMemberInfo(userPhone);
+//		// * 이미 존재할 경우 *
+//		if (memId != null) {
+//			return ResponseEntity.badRequest()
+//					.header("Content-Type", "text/plain; charset=UTF-8")
+//					.body("이미 가입된 휴대폰번호입니다.");
+//		}
+		// => 이 판별은 따로 뺌(아이디 찾기때는 이미 가입된 휴대폰 번호를 가져와야하기 때문)
+		
 		// * 존재하지 않을 경우 *
         // 1) 랜덤 인증번호 생성 **아래에 랜덤 코드 생성 메서드 호출
 	    String smsCode = RandomNumber();

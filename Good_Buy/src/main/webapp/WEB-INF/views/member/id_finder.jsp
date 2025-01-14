@@ -41,7 +41,6 @@
 							<input type="text" name="mem_phone" id="mem_phone" placeholder="'-'없이 입력해주세요" required> 
 							<input type="button" value="인증번호 요청" id="phoneChk">
 							<input type="button" value="휴대폰번호 재인증" id="phoneReChk" style="display:none;">
-<!-- 							<input type="button" value="휴대폰번호 재인증" id="phoneReChk"> -->
 						</div>
 						<div id="phoneCheckResult" class="result"></div>
 					</section>

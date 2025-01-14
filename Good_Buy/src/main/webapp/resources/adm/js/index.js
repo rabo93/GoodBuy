@@ -1,7 +1,28 @@
 document.addEventListener("DOMContentLoaded", function(){
 	Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 	Chart.defaults.global.defaultFontColor = '#858796';
-
+	
+	// 카테고리 label 클래스명 지정
+	const classNames = {
+		"여성의류" : "primary", 
+		"남성의류" :"success", 
+		"레저/스포츠" :"info", 
+		"생활용품" :"secondary", 
+		"키즈" :"warning", 
+		"도서" :"danger"	
+	};
+	
+	// 카테고리 label 색상 지정
+	const colors = {
+		"여성의류" : "#4e73df", 
+		"남성의류" :"#1cc88a", 
+		"레저/스포츠" :"#36b9cc", 
+		"생활용품" :"#858796", 
+		"키즈" :"#f6c23e", 
+		"도서" :"#e74a3b"
+	}
+		
+	// 시계 
 	updateTime(); 
 	setInterval(updateTime, 1000);
 	
@@ -19,58 +40,8 @@ document.addEventListener("DOMContentLoaded", function(){
 		for(let key in res) {
 			dataArr.push(res[key]);
 		}
-			
-		const ctx = document.getElementById("priceRangeChart");
-		const myLineChart = new Chart(ctx, {
-			type: 'bar',
-			data: {
-				labels: ["~ 10,000", " ~ 50,000", " ~ 100,000", " ~ 500,000", "500,000 ~"],
-				datasets: [{
-					label: "가격대별 상품 개수",
-					backgroundColor: "#4e73df",
-					hoverBackgroundColor: "#2e59d9",
-					borderColor: "#4e73df",
-					data: dataArr,
-				}],
-			},
-			options: {
-				maintainAspectRatio: false,
-				layout: { padding: { left: 10, right: 25, top: 25, bottom: 0} },
-				scales: {
-					xAxes: [{ time: { unit: '원'}, gridLines: { display: false, drawBorder: false }, ticks: { maxTicksLimit: 6 }}],
-					yAxes: [{
-						ticks: {
-							min: 0,
-							max: 20,
-							maxTicksLimit: 4, 
-							padding: 5,
-						},
-						gridLines: { color: "rgb(234, 236, 244)", zeroLineColor: "rgb(234, 236, 244)", drawBorder: false, borderDash: [2], zeroLineBorderDash: [2] }
-					}],
-				},
-				legend: { display: false },
-				tooltips: { 
-					backgroundColor: "rgb(255,255,255)",
-					bodyFontColor: "#858796",
-					titleMarginBottom: 10,
-					titleFontColor: '#6e707e',
-					titleFontSize: 14,
-					borderColor: '#dddfeb',
-					borderWidth: 1,
-					xPadding: 15,
-					yPadding: 15,
-					displayColors: false,
-					intersect: false,
-					caretPadding: 10,
-					callbacks: {
-						label: function(tooltipItem, chart) {
-							var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-							return datasetLabel + ': ' + number_format(tooltipItem.yLabel) + "개";
-						}
-					}
-				} // tooltips
-			} //options
-		}); // end
+		createBarChart(dataArr);
+		
 	}).fail(function(){
 		alert("실패!");
 	});
@@ -84,44 +55,23 @@ document.addEventListener("DOMContentLoaded", function(){
 	}).done(function(res){
 		const labelArr = [];
 		const dataArr = [];
-		console.log(res);
+		const colorArr = [];
 		
 		for(let key in res) {
+			let category = res[key].PRODUCT_CATEGORY.replaceAll('"', '');
+			
 			labelArr.push(res[key].PRODUCT_CATEGORY);
 			dataArr.push(res[key].COUNT);
+			colorArr.push(colors[category]);
+			
+			$("#categoryLabels").append(`
+				<span class="mr-2">
+		            <i class="fas fa-circle text-${classNames[category]}"></i> ${category}
+		        </span>
+			`);
 		}
 		
-		const ctx2 = document.getElementById("categoryStats");
-		const myPieChart = new Chart(ctx2, {
- 	      type: 'doughnut',
- 	      data: {
-  	        labels: labelArr,
- 	        datasets: [{
-  	          data: dataArr,
-  	          // 순서 : 남성의류, 도서, 레저/스포츠, 생활용품, 여성의류, 키즈
- 	          backgroundColor: [ '#1cc88a', '#e74a3b', '#36b9cc', '#858796', '#4e73df', '#f6c23e'],
- 	          hoverBackgroundColor: [ '#17a673', '#e74a3b', '#2c9faf', '#5a5c69', '#4e73df', '#f6c23e'],
- 	          hoverBorderColor: "rgba(234, 236, 244, 1)",
- 	        }],
- 	      },
- 	      options: {
- 	        maintainAspectRatio: false,
- 	        tooltips: {
- 	          backgroundColor: "rgb(255,255,255)",
- 	          bodyFontColor: "#858796",
- 	          borderColor: '#dddfeb',
- 	          borderWidth: 1,
- 	          xPadding: 15,
- 	          yPadding: 15,
- 	          displayColors: false,
- 	          caretPadding: 10,
- 	        },
- 	        legend: {
- 	          display: false
- 	        },
- 	        cutoutPercentage: 80,
- 	      },
- 	    });
+		createDonutChart(labelArr, dataArr, colorArr);
 		
 	}).fail(function() {
 		alert("실패");
@@ -191,6 +141,96 @@ document.addEventListener("DOMContentLoaded", function(){
 	});
 	
 });
+
+function createBarChart(dataArr) {
+	const ctx = document.getElementById("priceRangeChart");
+	const myLineChart = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			labels: ["~ 10,000", " ~ 50,000", " ~ 100,000", " ~ 500,000", "500,000 ~"],
+			datasets: [{
+				label: "가격대별 상품 개수",
+				backgroundColor: "#4e73df",
+				hoverBackgroundColor: "#2e59d9",
+				borderColor: "#4e73df",
+				data: dataArr,
+			}],
+		},
+		options: {
+			maintainAspectRatio: false,
+			layout: { padding: { left: 10, right: 25, top: 25, bottom: 0} },
+			scales: {
+				xAxes: [{ time: { unit: '원'}, gridLines: { display: false, drawBorder: false }, ticks: { maxTicksLimit: 6 }}],
+				yAxes: [{
+					ticks: {
+						min: 0,
+						max: 20,
+						maxTicksLimit: 4, 
+						padding: 5,
+					},
+					gridLines: { color: "rgb(234, 236, 244)", zeroLineColor: "rgb(234, 236, 244)", drawBorder: false, borderDash: [2], zeroLineBorderDash: [2] }
+				}],
+			},
+			legend: { display: false },
+			tooltips: { 
+				backgroundColor: "rgb(255,255,255)",
+				bodyFontColor: "#858796",
+				titleMarginBottom: 10,
+				titleFontColor: '#6e707e',
+				titleFontSize: 14,
+				borderColor: '#dddfeb',
+				borderWidth: 1,
+				xPadding: 15,
+				yPadding: 15,
+				displayColors: false,
+				intersect: false,
+				caretPadding: 10,
+				callbacks: {
+					label: function(tooltipItem, chart) {
+						var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+						return datasetLabel + ': ' + number_format(tooltipItem.yLabel) + "개";
+					}
+				}
+			} // tooltips
+		} //options
+	}); // end
+}
+
+
+// 도넛차트 그리기
+function createDonutChart(labelArr, dataArr, colorArr){
+	const ctx2 = document.getElementById("categoryStats");
+	const myPieChart = new Chart(ctx2, {
+		type: 'doughnut',
+		data: {
+			labels: labelArr,
+			datasets: [{
+			data: dataArr,
+			// 순서 : 남성의류, 도서, 레저/스포츠, 생활용품, 여성의류, 키즈
+			backgroundColor: colorArr,
+			// hoverBackgroundColor: [ '#17a673', '#e74a3b', '#2c9faf', '#5a5c69', '#4e73df', '#f6c23e'],
+			hoverBorderColor: "rgba(234, 236, 244, 1)",
+		}],
+	},
+	options: {
+        maintainAspectRatio: false,
+        tooltips: {
+          backgroundColor: "rgb(255,255,255)",
+          bodyFontColor: "#858796",
+          borderColor: '#dddfeb',
+          borderWidth: 1,
+          xPadding: 15,
+          yPadding: 15,
+          displayColors: false,
+          caretPadding: 10,
+        },
+        legend: {
+          display: false
+        },
+        cutoutPercentage: 80,
+      },
+	});
+}
 
 // 카운트 애니메이션 함수
 function counter(counter) {

@@ -23,6 +23,7 @@ import com.itwillbs.goodbuy.handler.FileHandler;
 import com.itwillbs.goodbuy.service.ChatService;
 import com.itwillbs.goodbuy.vo.ChatMessage;
 import com.itwillbs.goodbuy.vo.ChatRoom;
+import com.itwillbs.goodbuy.vo.MemberVO;
 
 @Controller
 public class ChatController {
@@ -41,18 +42,35 @@ public class ChatController {
 		//	최근 채팅메세지를 저장하기위한 List 객체 생성
 		List<ChatMessage> chatMessage = new ArrayList<ChatMessage>();
 		List<Integer> chatMessageCnt = new ArrayList<Integer>();
+		List<MemberVO> member = new ArrayList<MemberVO>();
 		for (ChatRoom chatRoomList : chatRoom) {
 			//	최근 메세지 List 객체에 저장
 			chatMessage.add(chatService.selectLastMessage(chatRoomList.getRoom_id()));
 			chatMessageCnt.add(chatService.selectCountMessage(chatRoomList.getRoom_id(), sId));
+			member.add(chatService.selectMemberNick(chatRoomList.getReceiver_id()));
 		}
 		
 		model.addAttribute("chatRoomList", chatRoom);
 		model.addAttribute("chatMessageList", chatMessage);
 		model.addAttribute("chatMessageCnt", chatMessageCnt);
+		model.addAttribute("member", member);
 		
 		return "chat/chat_list";
 	}
+	
+	@GetMapping("ChatRequestPay")
+	public String chatRequestPay(int product_id, String receiver_id, String room_id, Model model) {
+		System.out.println("넘어오는 map 확인 : " + product_id);
+		System.out.println("넘어오는 map 확인 : " + receiver_id);
+		
+		int product_price = chatService.selectProductPrice(product_id);
+		model.addAttribute("product_id", product_id);
+		model.addAttribute("product_price", product_price);
+		model.addAttribute("receiver_id", receiver_id);
+		model.addAttribute("room_id", room_id);
+		return "chat/chat_request_pay";
+	}
+	
 	
 	//	기존 채팅방 존재여부 판단
 	@ResponseBody
@@ -63,6 +81,8 @@ public class ChatController {
 		String receiver_id = map.get("receiver_id");
 		int product_id = Integer.parseInt(map.get("product_id"));
 		ChatRoom chatRoom = chatService.selectChatRoom(sender_id, receiver_id, product_id);
+
+		System.out.println("PayController에서 보낸 거 잘받나? : " + new Gson().toJson(chatRoom));
 		
 		return new Gson().toJson(chatRoom);
 	}
@@ -70,6 +90,9 @@ public class ChatController {
 	@ResponseBody
 	@PostMapping("ChatListAjax")
 	public List<ChatMessage> chatListAjax(@RequestParam Map<String, String> map) {
+		
+		
+		
 		ChatMessage chatMessage = new ChatMessage();
 		chatMessage.setRoom_id(map.get("room_id"));
 		System.out.println(chatMessage);

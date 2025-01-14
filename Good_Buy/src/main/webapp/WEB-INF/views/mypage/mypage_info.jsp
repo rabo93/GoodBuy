@@ -65,8 +65,8 @@
 								<div class="box">
 									<c:choose>
 							            <c:when test="${not empty member.mem_profile}">
-							            	<img src="${member.mem_profile}?${System.currentTimeMillis()}" id="profile_preview"><br>
-<%-- 							                <img src="${member.mem_profile}" id="profile_preview"><br> --%>
+<%-- 							            	<img src="${member.mem_profile}?${System.currentTimeMillis()}" id="profile_preview"><br> --%>
+							                <img src="${member.mem_profile}" id="profile_preview"><br>
 							            </c:when>
 							            <c:otherwise>
 							                <!-- member.memProfile이 비어 있으면 기본 이미지 출력 -->
@@ -75,7 +75,6 @@
 							        </c:choose>
 									<br>
 									<!-- 파일 선택 버튼 -->
-<!-- 									<input type="file" class="btn-frm" name="profile_upload" id="profile_upload" onchange="previewImage(event)"><br> -->
 									<div class="row">
 									    <label for="file_upload" class="custom-file-upload">
 									        파일 선택
@@ -96,7 +95,8 @@
 							<section class="row">
 								<label for="mem_nick">닉네임</label>
 								<div class="box">
-									<input type="text" name="mem_nick" id="mem_nick" placeholder="${member.mem_nick}" value="${member.mem_nick}" onblur="ckNick()"><br>
+									<input type="text" name="mem_nick" id="mem_nick" placeholder="${member.mem_nick}" 
+										value="${member.mem_nick}" data-original-nick="${member.mem_nick}" onchange="ckReNick()"><br>
 								</div>
 								<div id="checkNic" class="result"></div>
 							</section>
@@ -112,8 +112,7 @@
 							<section class="row">
 								<label for="mem_passwd1">비밀번호 변경</label>
 								<div class="box">
-<!-- 									<input type="password" name="mem_passwd" id="mem_passwd1" placeholder="비밀번호 입력" onblur="checkPasswdLength1()" required>  -->
-									<input type="password" name="mem_passwd" id="mem_passwd1" placeholder="새 비밀번호 입력" required> 
+									<input type="password" name="mem_passwd" id="mem_passwd1" placeholder="새 비밀번호 입력" > 
 								</div>
 								<div id="checkPasswd1" class="result"></div>
 							</section>
@@ -121,7 +120,7 @@
 							<section class="row">
 								<label for="mem_passwd2">비밀번호 변경 확인</label>
 								<div class="box">
-									<input type="password" name="mem_passwd2" id="mem_passwd2" placeholder="새 비밀번호 재입력" onkeyup="checkPasswdResult()" required> 
+									<input type="password" name="mem_passwd2" id="mem_passwd2" placeholder="새 비밀번호 재입력" onkeyup="checkPasswdResult()" > 
 								</div>
 								<div id="checkPasswd2" class="result"></div>
 							</section>
@@ -150,9 +149,7 @@
 								<div id="checkAddr" class="result"></div>
 							</section>
 							
-							<button id="modifyBtn" onclick="myInfoModify()">수정완료</button>
-							
-							
+							<button id="modifyBtn" type="submit" onclick="myInfoModify()">수정완료</button>
 							
 							<a href="MemberWithdraw" class="withdraw-link">회원탈퇴</a>
 						</form>

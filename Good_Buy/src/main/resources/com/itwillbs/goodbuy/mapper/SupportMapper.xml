@@ -19,7 +19,12 @@
 		FROM SUPPORT S 
 		JOIN MEMBER M 
 		    ON M.MEM_ID = S.MEM_ID 
-		WHERE S.MEM_ID = #{MEM_ID}
+		    <where>
+				S.MEM_ID = #{MEM_ID}
+				<if test="searchKeyword != null and !searchKeyword.isEmpty()">
+					AND S.SUPPORT_SUBJECT LIKE CONCAT('%',#{searchKeyword},'%')
+				</if>	    
+		    </where>
 		ORDER BY S.SUPPORT_ID DESC;
 	</select> 
 	

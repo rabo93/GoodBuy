@@ -14,4 +14,5 @@ public class ChatRoom {
 	private String sender_id;	//	송신자
 	private String receiver_id;	//	수신자
 	private int status;			//	방 상태
+	private String grade;		//	구매자 / 판매자
 }

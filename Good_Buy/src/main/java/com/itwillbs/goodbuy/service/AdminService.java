@@ -73,17 +73,32 @@ public class AdminService {
 	@AdminLog
 	@Transactional
 	public int removeCommonCode(Map<String, Object> param) {
-		// 상위코드 삭제
+		// 하위코드 삭제
 		int deleteCommonCodeResult = mapper.deleteCommonCodes(param);
 		if(deleteCommonCodeResult == 0) {
-			log.info(">>> 삭제할 상위코드가 없습니다.");
+			log.info(">>> 삭제할 하위코드가 없습니다.");
 			throw new RuntimeException("공통코드 삭제에 실패했습니다.");
 		}
 		
-		// 하위코드 삭제
+		// 사용되지않는 공통코드(상위코드) 삭제
 		int deleteDeprecatedCommonCodeResult = mapper.deleteDeprecatedCommonCode();
 		
         return deleteCommonCodeResult + deleteDeprecatedCommonCodeResult;
+	}
+	
+	// 공통코드 여러컬럼 삭제(오버로딩)
+	@AdminLog
+	@Transactional
+	public int removeCommonCode(List<Map<String, Object>> param) {
+		int deleteCommonCodeResult = 0;
+		for(Map<String, Object> item : param) {
+			deleteCommonCodeResult = mapper.deleteCommonCodes(item);
+		}
+		
+		// 사용되지않는 공통코드(상위코드) 삭제
+		int deleteDeprecatedCommonCodeResult = mapper.deleteDeprecatedCommonCode();
+		
+		return deleteCommonCodeResult + deleteDeprecatedCommonCodeResult;
 	}
 
 	// 공통코드 사용여부 실시간 변경
@@ -278,6 +293,7 @@ public class AdminService {
 	}
 	
 	// FAQ 사용여부 업데이트
+	@AdminLog
 	public int modifyFaqStatus(Map<String, String> param) {
 		return mapper.UpdateFaqStatus(param);
 	}
@@ -390,6 +406,39 @@ public class AdminService {
 	public List<Map<String, Object>> getTransactionList() {
 		return mapper.selectTransactionList();
 	}
+
+	// 기간별 채팅 건수
+	public List<Map<String, Object>> getUserChatCount(String param) {
+		return mapper.selectUserChatCount(param);
+	}
+
+	// 전체 채팅 건수
+	public int getTotalChats() {
+		return mapper.selectChatTotal();
+	}
+	
+	// 기간별 회원수 통계 
+	public List<Map<String, Object>> getMemberPeriod(String orderDir, String startDate, String endDate) {
+		return mapper.selectTotalMember(orderDir, startDate, endDate);
+	}
+	// 기간별 회원가입수 통계
+	public List<Map<String, Object>> getJoinPeriod(String orderDir, String startDate, String endDate) {
+		return mapper.selectTotalJoin(orderDir, startDate, endDate);
+	}
+	// 기간별 상품등록수 통계
+	public List<Map<String, Object>> getProductPeriod(String orderDir, String startDate, String endDate) {
+		return mapper.selectTotalProduct(orderDir, startDate, endDate);
+	}
+	// 기간별 거래 통계
+	public List<Map<String, Object>> getOrderPeriod(String orderDir, String startDate, String endDate) {
+		return mapper.selectTotalOrder(orderDir, startDate, endDate);
+	}
+	// 기간별 거래금액 통계
+	public List<Map<String, Object>> getPayPeriod(String orderDir, String startDate, String endDate) {
+		return mapper.selectTotalPay(orderDir, startDate, endDate);
+	}
+
+
 	
 	
 }

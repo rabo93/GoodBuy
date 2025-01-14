@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -23,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
-import com.itwillbs.goodbuy.aop.AdminLog;
 import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.service.AdminService;
@@ -67,7 +70,6 @@ public class AdminController {
 		int totalUsers = service.getTotalUsers();
 		
 		// 최근 7일간 거래 통계
-		
 		model.addAttribute("totalProducts", totalProducts);
 		model.addAttribute("activeTrades", activeTrades);
 		model.addAttribute("completeTrades", completeTrades);
@@ -101,17 +103,17 @@ public class AdminController {
 	@ResponseBody
 	@PostMapping("WeeklyTransaction")
 	public String WeeklyTransaction() {	
-			// 공통코드 전체 목록 조회
-			List<Map<String, Object>> transactionList = service.getTransactionList();
-			
-			// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
-			Map<String, Object> response = new HashMap<String, Object>();
-			
-			response.put("transactionList", transactionList); // 컬럼 데이터
-			
-			JSONObject jo = new JSONObject(response);
-			
-			return jo.toString();
+		// 공통코드 전체 목록 조회
+		List<Map<String, Object>> transactionList = service.getTransactionList();
+		
+		// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		response.put("transactionList", transactionList); // 컬럼 데이터
+		
+		JSONObject jo = new JSONObject(response);
+		
+		return jo.toString();
 	}
 	
 	
@@ -209,7 +211,7 @@ public class AdminController {
 	@ResponseBody
 	@PostMapping("AdmDeleteCommonCode")
 	public Map<String, Object> admCommoncodeDelete(@RequestParam Map<String, Object> param) {
-//		log.info(">>> param : " + param);
+		log.info(">>> param : " + param);
 		
 		int deleteResult = service.removeCommonCode(param);
 		
@@ -227,20 +229,37 @@ public class AdminController {
 		return response;
 	}
 	
+	// 공통코드 관리 - 여러행 한번에 삭제
+	@LoginCheck(memberRole = MemberRole.ADMIN)
+	@ResponseBody
+	@PostMapping("AdmDeleteCommonCodeList")
+	public Map<String, Object> admCommoncodeListDelete(@RequestBody List<Map<String, Object>> param) {
+		log.info(">>> param : " + param);
+		
+		int deleteResult = service.removeCommonCode(param);
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		if(deleteResult > 0) {
+			response.put("status", "success");
+			response.put("message", "선택한 공통코드가 삭제되었습니다.");
+		} else {
+			response.put("status", "fail");
+			response.put("message", "공통코드 삭제에 실패했습니다. 삭제할 데이터를 확인하세요.");
+		}
+		
+		return response;
+	}
+	
 	// 공통코드 관리 - 사용함/안함 업데이트
 	@ResponseBody
 	@PostMapping("AdmCommonCodeChangeStatus")
 	public Map<String, Object> admCommoncodeChangeStatus(@RequestParam Map<String, String> param) {
-//		System.out.println(param);
-		
 		int updateResult = service.modifyCommonCodeStatus(param);
 		
 		Map<String, Object> response = new HashMap<String, Object>();
 		
 		if(updateResult > 0) {
 			response.put("status", "success");
-			response.put("message", "사용여부가 변경되었습니다.");
-			response.put("redirectURL", "/AdmCommoncodeList");
 		} else {
 			response.put("status", "fail");
 			response.put("message", "변경에 실패했습니다. 변경할 데이터를 확인하세요.");
@@ -484,7 +503,6 @@ public class AdminController {
 	}
 	
 	// 신고 회원 목록 - 조치하기(+ 수정하기)
-	@AdminLog
 	@PostMapping("AdmUserReportModify")
 	public String admUserReportModify(@RequestParam Map<String, Object> param, Model model) {
 		log.info(">>> 신고 조치 : " + param);
@@ -649,7 +667,6 @@ public class AdminController {
 	
 	//----------------------------------------------------------------------------------------
 	// 1:1 문의 - 답글달기(+ 수정하기)
-	@AdminLog
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmSupportAction")
 	public String admSupportAction(@RequestParam Map<String, Object> param,  Model model) {
@@ -708,7 +725,6 @@ public class AdminController {
 	}
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 수정 ]
-	@AdminLog
 	@PostMapping("AdmFaqModify")
 	public String admFaqModify(@RequestParam Map<String, Object> param, Model model) {
 //		log.info(">>> 수정할 faq 정보: " + param);
@@ -727,7 +743,6 @@ public class AdminController {
 	
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 삭제 ]
-	@AdminLog
 	@ResponseBody
 	@PostMapping("AdmFaqDelete")
 	public Map<String, Object> admFaqDelete(@RequestBody List<Integer> faqIds) {
@@ -751,7 +766,6 @@ public class AdminController {
 	
 	//-------------------------------------------------------------------------------------
 	// [ FAQ 사용여부 실시간 업데이트 ]
-	@AdminLog
 	@ResponseBody
 	@PostMapping("UpdateFaqStatus")
 	public Map<String, Object> updateFaqStatus(@RequestParam Map<String, String> param) {
@@ -783,6 +797,33 @@ public class AdminController {
 		return "admin/chart_list";
 	}
 	
+	@ResponseBody
+	@PostMapping("UserChatAnalysis")
+	public List<Map<String, Object>> userChatAnalysis(@RequestBody Map<String, Object> param) {
+		log.info("param" + param);
+		String date = (String)param.get("schDate");
+		log.info("schDate" + date);
+		
+		List<Map<String, Object>> userChatList = service.getUserChatCount(date);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("userChatList", userChatList);
+		
+		return userChatList;
+	}
+	
+	@ResponseBody
+	@PostMapping("AllUserCount")
+	public int allUserCount() {
+		int totalUsers = service.getTotalUsers();
+		return totalUsers;
+	}
+	
+	@ResponseBody
+	@PostMapping("AllChatCount")
+	public int allChatCount() {
+		int totalChat = service.getTotalChats();
+		return totalChat;
+	}
 	
 	
 	//-----------------------------------------------------
@@ -794,13 +835,104 @@ public class AdminController {
 	}
 	
 	@ResponseBody
-	@PostMapping("PeriodAanalysis")
-	public String periodAanalysis() {
+	@PostMapping("PeriodListForm")
+	public String periodListForm(@RequestParam Map<String, String> param) {
+		Map<String, Object> convertParam = convertMap(param);
+		String orderDir = (String) convertParam.get("orderDir"); 		// 정렬순서(asc/desc)
+		String searchDate = (String) convertParam.get("searchDate");	// 조회기간
+		String startDate = "";
+		String endDate = "";
+		if (searchDate != null && searchDate.contains(" ~ ")) { 		// 조회기간 분리
+			String[] date = searchDate.split(" ~ ");
+			startDate = date[0];
+			endDate = date[1];
+		}
+				
+		//--------------------------------------------------------------
+		// 각각의 컬럼 데이터 가져오기
+		// 1.총 회원수
+		List<Map<String, Object>> memberPeriod = service.getMemberPeriod(orderDir, startDate, endDate);
+//		System.out.println("회원수: " + memberPeriod);
+		// 2.회원가입수 
+		List<Map<String, Object>> joinPeriod = service.getJoinPeriod(orderDir, startDate, endDate);
+//		System.out.println("회원가입수: " + joinPeriod);
+		// 3.상품등록수
+		List<Map<String, Object>> productPeriod = service.getProductPeriod(orderDir, startDate, endDate);
+//		System.out.println("상품등록: " + productPeriod);
+		// 4.거래완료수 
+		List<Map<String, Object>> orderPeriod = service.getOrderPeriod(orderDir, startDate, endDate);
+//		System.out.println("거래수: " + orderPeriod);
+		// 5.거래금액 
+		List<Map<String, Object>> payPeriod = service.getPayPeriod(orderDir, startDate, endDate);
+//		System.out.println("거래금액: " + payPeriod);
 		
+		//--------------------------------------------------------------
+		// 날짜별 컬럼 병합
+		Map<String, Map<String, Object>> resultMap = new LinkedHashMap<>();
+		//--------------------------------------------------------------
+		// 회원수 데이터 추가
+		for(Map<String, Object> memberData : memberPeriod) {
+			Date memberDate = (Date) memberData.get("date");
+			String dateString = new SimpleDateFormat("yyyy-MM-dd").format(memberDate); // java.sql.Date를 String으로 변환
+			
+			resultMap.putIfAbsent(dateString, new HashMap<String, Object>());
+			resultMap.get(dateString).put("memberTotal", memberData.get("memberTotal"));
+		}
+		// 회원가입수 데이터 추가
+		for(Map<String, Object> joinData : joinPeriod) {
+			Date joinDate = (Date) joinData.get("date");
+			String dateString = new SimpleDateFormat("yyyy-MM-dd").format(joinDate); // java.sql.Date를 String으로 변환
+			
+			resultMap.putIfAbsent(dateString, new HashMap<String, Object>());
+			resultMap.get(dateString).put("joinTotal", joinData.get("joinTotal"));
+		}
+		// 상품등록수 데이터 추가
+		for(Map<String, Object> productData : productPeriod) {
+			Date productDate  = (Date) productData.get("date");
+			String dateString = new SimpleDateFormat("yyyy-MM-dd").format(productDate); // java.sql.Date를 String으로 변환
+			
+			resultMap.putIfAbsent(dateString, new HashMap<String, Object>());
+			resultMap.get(dateString).put("productTotal", productData.get("productTotal"));
+		}
+		// 거래수 데이터 추가
+		for(Map<String, Object> orderData : orderPeriod) {
+			Date orderDate  = (Date) orderData.get("date");
+			String dateString = new SimpleDateFormat("yyyy-MM-dd").format(orderDate); // java.sql.Date를 String으로 변환
+			
+			resultMap.putIfAbsent(dateString, new HashMap<String, Object>());
+			resultMap.get(dateString).put("orderTotal", orderData.get("orderTotal"));
+		}
+		// 거래금액 데이터 추가
+		for(Map<String, Object> payData : payPeriod) {
+			Date payDate  = (Date) payData.get("date");
+			String dateString = new SimpleDateFormat("yyyy-MM-dd").format(payDate); // java.sql.Date를 String으로 변환
+			
+			resultMap.putIfAbsent(dateString, new HashMap<String, Object>());
+			resultMap.get(dateString).put("payTotal", payData.get("payTotal"));
+		}
 		
-		return "";
+		//--------------------------------------------------------------
+		// 데이터 결합
+		List<Map<String, Object>> finalList = new ArrayList<Map<String,Object>>();
+		for(Map.Entry<String, Map<String, Object>> entry : resultMap.entrySet()) {
+			Map<String, Object> finalData = new HashMap<String, Object>();
+			finalData.put("date", entry.getKey());
+			finalData.put("memberTotal", entry.getValue().getOrDefault("memberTotal", 0));
+			finalData.put("joinTotal", entry.getValue().getOrDefault("joinTotal", 0));
+			finalData.put("productTotal", entry.getValue().getOrDefault("productTotal", 0));
+			finalData.put("orderTotal", entry.getValue().getOrDefault("orderTotal", 0));
+			finalData.put("payTotal", entry.getValue().getOrDefault("payTotal", 0));
+			finalList.add(finalData);
+		}
+//		System.out.println("finalList: " + finalList);
+		
+		// 결과 JSONObject로 변환
+		JSONObject jo = new JSONObject();
+		jo.put("periodList", finalList);
+		
+		// JSONObject를 문자열로 리턴
+		return jo.toString();
 	}
-	
 	
 	
 	

@@ -70,12 +70,6 @@
 						<div class="contents">
 							
 							<div class="goodpay-container">
-								<c:if test="${empty recieverTransactionInfo }">
-									<c:set var="payAmount" value="${pay_amount}"/>
-								</c:if>
-								<c:if test="${empty transactionInfo }">
-									<c:set var="payAmount" value="${pay_amount_receive}"/>
-								</c:if>
 						        <!-- 상단: 계좌 정보 -->
 						        <div class="account-box">
 						        	<div class="info">
@@ -84,7 +78,7 @@
 						        	</div>
 									
 						            <div class="balance">
-						                <h1><fmt:formatNumber pattern="#,###">${payAmount}</fmt:formatNumber> 원</h1>
+						                <h1><fmt:formatNumber pattern="#,###">${pay_amount}</fmt:formatNumber> 원</h1>
 						                <i class="fa-solid fa-arrow-rotate-right"></i>
 						            </div>
 						            <div class="buttons">
@@ -115,13 +109,13 @@
 													
 														<div class="input-section">
 											            	<input type="text" class="input-label" pattern="[0-9]+" title="숫자만 입력하세요" 
-											            	placeholder="금액을 입력해 주세요" id="total-amount">
+											            			name="tran_amt"  placeholder="금액을 입력해 주세요" id="total-amount">
 										        		</div>
 											            <div class="balance-info">굿페이 잔액: <strong>${payAmount} 원</strong></div>
 											            <div class="amount-btns">
-												            <input type="button" class="amount-btn" name="tran_amt" onclick="addAmount(10000, 're')" value="+ 1만원">
-												            <input type="button" class="amount-btn" name="tran_amt" onclick="addAmount(50000, 're')" value="+ 5만원">
-												            <input type="button" class="amount-btn" name="tran_amt" onclick="addAmount(100000, 're')" value="+ 10만원">
+												            <input type="button" class="amount-btn" onclick="addAmount(10000, 're')" value="+ 1만원">
+												            <input type="button" class="amount-btn" onclick="addAmount(50000, 're')" value="+ 5만원">
+												            <input type="button" class="amount-btn" onclick="addAmount(100000, 're')" value="+ 10만원">
 												        </div>
 												        <div class="recharge-button">
 												            <button class="recharge-btn">환불하기</button>
@@ -159,7 +153,7 @@
 													
 														<div class="input-section">
 <!-- 															거래금액 <input type="text" name="tran_amt" value="5000">  -->
-											            	<input type="text" class="input-label" pattern="[0-9]+" title="숫자만 입력하세요" 
+											            	<input type="text" class="input-label" pattern="[0-9]+"  
 											            	placeholder="금액을 입력해 주세요" id="total-amount-charge">
 										        		</div>
 											            <div class="balance-info">굿페이 잔액: <strong>${payAmount} 원</strong></div>
@@ -180,58 +174,47 @@
 							        <div class="history">
 							            <h3>최근 이용내역 <a href="AllPayList" class="see-all">전체보기 ></a></h3>
 							            <c:choose>
-							            	<c:when test="${empty transactionInfo and empty recieverTransactionInfo}">
+							            	<c:when test="${empty getPayInfo}">
 								            	<div class="history-item empty-text">
 								            	굿페이 이용내역이 없습니다.
 								            	</div>
 							            	</c:when>
 							            	<c:otherwise>
-							            		<c:forEach var="item" items="${recieverTransactionInfo}">
-							            			<div class="history-item">
-							            				<div class="icon"><i class="fa-solid fa-building-columns"></i></div>
-										                <div class="details">
-										                    <span>산업 ${item.RECEIVER_FINTECH_USE_NUM }</span>
-										                    <span class="date" >
-										                    	<fmt:parseDate var="parsedReplyRegDate"
-																				value="${item.API_TRAN_DTM}" 
-																				pattern="yyyy-MM-dd'T'HH:mm:ss" 
-																				type="both" /> 
-																<fmt:formatDate value="${parsedReplyRegDate}" pattern="yyyy-MM-dd" /> 
-																| 송금
-										                    </span>
-										                </div>
-										                <div class="amount">+ <fmt:formatNumber pattern="#,###">${item.TRAN_AMT}</fmt:formatNumber></div>
-							            			</div>	
-						            			</c:forEach>	
-							            		<c:forEach var="item" items="${transactionInfo}" varStatus="status">
+<%-- 							            	getPayInfo :${getPayInfo } --%>
+							            	
+							            		<c:forEach var="item" items="${getPayInfo}" varStatus="status">
 							            			<c:if test="${item.TRANSACTION_TYPE eq 'WI'}">
-							            				<c:set var="detail" value="KDB산업은행 202407222***"/>
+							            				<c:set var="detail" value="${item.BANK_NAME} ${item.ACCOUNT_NUM} "/>
 							            				<c:set var="classify" value="충전"/>
 							            				<c:set var="symbol" value="+"/>
 							            			</c:if>
 							            			<c:if test="${item.TRANSACTION_TYPE eq 'DE'}">
-							            				<c:set var="detail" value="KDB산업은행 202407222***"/>
+							            				<c:set var="detail" value="${item.BANK_NAME} ${item.ACCOUNT_NUM} "/>
 							            				<c:set var="classify" value="환불"/>
 							            				<c:set var="symbol" value="-"/>
 							            			</c:if>
 							            			<c:if test="${item.TRANSACTION_TYPE eq 'TR'}">
 							            				<c:set var="detail" value="${productName }"/>
 							            				<c:set var="classify" value="송금"/>
-							            				<c:set var="symbol" value="-"/>
+							            				<c:if test="${item.RECEIVER_ID != sId }">
+							            					<c:set var="symbol" value="-"/>
+							            				</c:if>
+							            				<c:if test="${item.RECEIVER_ID eq sId}">
+							            					<c:set var="symbol" value="+"/>
+							            				</c:if>		
 							            			</c:if>
 							            			<c:if test="${status.index < 5}">
-		
 								            			<div class="history-item">
 											                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
 											                <div class="details">
 											                    <span>${detail }</span>
 											                    <span class="date" >
 											                    	<fmt:parseDate var="parsedReplyRegDate"
-																						value="${item.API_TRAN_DTM}" 
-																						pattern="yyyy-MM-dd'T'HH:mm:ss" 
-																						type="both" /> 
-																		<fmt:formatDate value="${parsedReplyRegDate}" pattern="yyyy-MM-dd" /> 
-																	| ${classify}
+   																						value="${item.API_TRAN_DTM}"    
+   																						pattern="yyyy-MM-dd'T'HH:mm:ss"    
+   																						type="both" />   
+   																		<fmt:formatDate value="${parsedReplyRegDate}" pattern="yyyy-MM-dd" />    
+   																	| ${classify}   
 											                    </span>
 											                </div>
 											                <div class="amount">${symbol} <fmt:formatNumber pattern="#,###">${item.TRAN_AMT}</fmt:formatNumber></div>

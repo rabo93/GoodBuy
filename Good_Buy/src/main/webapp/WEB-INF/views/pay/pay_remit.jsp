@@ -52,7 +52,8 @@
 				        <div class="input-section">
 				        	구매물품 : ${productSearch.product_title}<br>
 							<br>
-							'${param.receiver_id}' 님에게 <fmt:formatNumber pattern="#,###">${productSearch.product_price}</fmt:formatNumber>원을 송금합니다.
+<%-- 							'${param.receiver_id}' 님에게 <fmt:formatNumber pattern="#,###">${productSearch.product_price}</fmt:formatNumber>원을 송금합니다. --%>
+							'${param.receiver_id}' 님에게 <fmt:formatNumber pattern="#,###">${price}</fmt:formatNumber>원을 송금합니다.
 							<br><br>
 							<div class="balance-info">굿페이 잔액: <strong>${pay_amount} 원</strong></div>
 							<form action="PayTransfer" method="post">

@@ -15,6 +15,7 @@ const ALIGN_CENTER = "center";
 const ALIGN_LEFT = "other";
 const ALIGN_RIGHT = "user";
 //	====================================================================
+let currentDate = new Date();
 const productUrl = location.href;
 var baseUrl = productUrl.substring(0, productUrl.lastIndexOf('/ProductDetail'));
 
@@ -85,11 +86,14 @@ $(function() {
 
 function chatProduct(e) {
 	let chatData = JSON.parse(e);
-	console.log(chatData.type);
 	if(chatData.type == TYPE_START) {
 		console.log("room_id : " + chatData.room_id);
 		window.room_id = chatData.room_id;
 		console.log("window.room_id : " + window.room_id);
+		if($(".chat-body").children().length == 0) {
+			sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, "안녕하세요 판매글 보고 연락드립니다.", "");
+		}
+		
 	}
 	
 	if (chatData.type == TYPE_TALK || chatData.type == TYPE_FILE) {
@@ -121,7 +125,7 @@ function toggleSlideChat() {
 		console.log(result);
 		if(result == null) {
 			showChatList(receiver_id, product_id);
-			return;
+//			return;
 		} else {
 			window.room_id = result.room_id;
 			$.ajax({
@@ -136,15 +140,19 @@ function toggleSlideChat() {
 				for(let message of response) {
 					appendMessage(message.type, message.sender_id, message.receiver_id, message.message, message.send_time);
 				}
-				
 			});
 		}
 	});
+	
+	
 	
 	//	슬라이드로 보이기
 	$("html").toggleClass("fixed");
 	$('.chat-container').toggleClass('open');
 	$(".chat-body").scrollTop($(".chat-body")[0].scrollHeight);
+	
+	
+	
 }
 
 $("#wrapper-bg").on("click", () => {
@@ -152,13 +160,13 @@ $("#wrapper-bg").on("click", () => {
 });
 
 function showChatList(receiver_id, product_id) {
-	sendMessage(TYPE_INIT_COMPLETE, product_id, "", receiver_id, "", "");
+	sendMessage(TYPE_INIT_COMPLETE, product_id, "", receiver_id, "", "", "");
 }
 
 function appendMessage(type, sender_id, receiver_id, message, send_time) {
 	//	send_time 추가 예정
 	let bubble_message = "";
-	let div_message = "";
+	let div_message = "";	
 	
 	if(type != TYPE_TALK && type != TYPE_FILE) {
 		div_message = '<div class="message center">'
@@ -167,7 +175,8 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 	}
 	
 	if(type == TYPE_TALK) {	// 채팅메세지
-		bubble_message = '<div class="bubble">' + message + '</div>';
+		bubble_message =`<div class="bubble">${message}</div>`;
+//		'<div class="bubble">' + message + '</div>';
 	}
 	
 	if(type == TYPE_FILE) {
@@ -180,12 +189,12 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 		div_message = '<div class="message user">' + bubble_message + '</div>';
 	}
 	
-	if(receiver_id == sId) {	// 자신이 보낸 메세지(송신자가 자신인 경우)
-		div_message = '<div class="message other">' + bubble_message + '</div>';
+	if(receiver_id == sId) {	// 상대방이 보낸 메세지
+		div_message = `<div class="message other">${bubble_message}</div>`;
 	}
 
 	$(".chat-body").append(div_message);
-//	$(".chat-body").scrollTop($(".chat-body")[0].scrollHeight);
+	$(".chat-body").scrollTop($(".chat-body")[0].scrollHeight);
 	
 }
 
@@ -208,7 +217,7 @@ function sendInputMessage() {
 	}).done(function(result){
 		let room_id = result.room_id;
 		console.log("TYPE_TALK에서 receiver_id 확인 - " + receiver_id);
-		sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, message);
+		sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, message, "");
 	});
 	
 	$(".chatMessage").val("");
@@ -239,7 +248,7 @@ function sendFile() {
 		}
 		
 		if(response.fileName != "" && response.thumbnailFileName != "") {
-			sendMessage(TYPE_FILE_UPLOAD_COMPLETE, product_id, sId, receiver_id, window.room_id , response.fileName + ":" + response.thumbnailFileName);
+			sendMessage(TYPE_FILE_UPLOAD_COMPLETE, product_id, sId, receiver_id, window.room_id , response.fileName + ":" + response.thumbnailFileName, "");
 		}
 		
 	});
@@ -262,8 +271,9 @@ function toggleChatModal(action) {
 
 // ==============================================================================
 // 결제창 열기 - 창을 작게 열려고 함수로 만들었음
-function openPayWindow(product_id, receiver_id) {
+function openPayWindow(product_id, receiver_id, room_id) {
 	var url = "PayTransferRequest?product_id=" + encodeURIComponent(product_id) +
-              "&receiver_id=" + encodeURIComponent(receiver_id) ;
+              "&receiver_id=" + encodeURIComponent(receiver_id) +
+              "&room_id=" + encodeURIComponent(room_id);
     payWindow = window.open(url, "chat_window", "width=500,height=500");
 }

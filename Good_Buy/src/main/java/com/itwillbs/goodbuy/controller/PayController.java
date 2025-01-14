@@ -1,5 +1,6 @@
 package com.itwillbs.goodbuy.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +16,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.google.gson.Gson;
 import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.aop.PayTokenCheck;
+import com.itwillbs.goodbuy.handler.MyWebSocketHandler;
+import com.itwillbs.goodbuy.service.ChatService;
 import com.itwillbs.goodbuy.service.PayService;
 import com.itwillbs.goodbuy.service.ProductService;
+import com.itwillbs.goodbuy.vo.ChatMessage;
 import com.itwillbs.goodbuy.vo.PayToken;
 import com.itwillbs.goodbuy.vo.ProductVO;
 
@@ -27,12 +33,25 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Controller
 public class PayController {
+	
+	//	JSON 데이터 파싱 작업을 처리할 Gson 객체 생성
+	private final Gson gson = new Gson();
+	
+	@Autowired
+	ChatController chatController;
+	
+	@Autowired
+	MyWebSocketHandler myWebSocketHandler;
+
 
 	@Autowired
 	PayService service;
 	
 	@Autowired
 	ProductService  productService;
+	
+	@Autowired
+	ChatService chatService;
 	
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("GoodPay")
@@ -59,61 +78,31 @@ public class PayController {
 		Map<String, String> userAccount = service.getPayAccountInfo(token.getUser_seq_no());
 
 		
-		
-		
-		
-		
-		
-		
-		
-		/* 이 부분은 SQL로 해서 뽑아 내야 됨.   */
-		
 		// 충전금액 조회(송금, 충전 본인) : 내역이 없을 수도 있으므로 Integer로 리턴함.
-		Integer pay_amount = service.getPayAmount(token.getUser_seq_no());
+		Integer pay_amount = service.getPayAmount(id);
 		
-		// 거래내역조회
-		List<Map<String, String>> transactionInfo = service.getTransactionDetail(token.getUser_seq_no());
-		
-		// 거래내역에서 송금일 경우 : 송금받는 사람(RECEIVER_FINTECH_USE_NUM)도 내역 표시. 
-		// 자기자신의 FINTECH_USE_NUM으로 RECEIVER_FINTECH_USE_NUM이 있는지 거래내역 조회 
-		List<Map<String, String>> recieverTransactionInfo = service.getReceiverTransactionDetail(fintech_use_num);
-		// 충전금액 조회(송금, 충전 본인) : 내역이 없을 수도 있으므로 Integer로 리턴함.
-		Integer pay_amount_receive = service.getReceiverPayAmount(fintech_use_num);
-		// 모든 거래내역 조회 
+		// 거래내역조회(ID로 조회)
 		List<Map<String, String>> getPayInfo = service.getPayInfo(id);
+//		System.out.println("getPayInfo 자라 불러오나?? : " + getPayInfo);
 		
 		
-		Object productId = getPayInfo.get(0).get("PRODUCT_ID");
-//		System.out.println("productId 잘불러오나? : " + productId);
-		/*
-		=====> 결과가 첫번째 PRODUCT_ID만 뽑아와서 거래내역 전체를 못 불러옴.
-		 */
-		
-		int product_id = Integer.parseInt(productId.toString());
-		// 상품조회
-		ProductVO product = productService.productSearch(product_id);
-		
-		
-		
-		
-		
-		
+		for(Map<String, String> pId : getPayInfo) {
+			Object obj = pId.get("PRODUCT_ID");
+			if (obj != null) {
+				String productId = obj.toString();
+//			    System.out.println("Product ID 값 잘가지고 오나?? : " + productId);
+			    int product_id = Integer.parseInt(productId);
+//			    System.out.println("product_id 잘 불러오나? : " + product_id);
+			    // 상품조회
+				ProductVO product = productService.productSearch(product_id);
+				String productName = product.getProduct_title();
+				model.addAttribute("productName", productName);
+			}
+		}
 		
 		
-		
-//		String productName = product.getProduct_title();
-//		model.addAttribute("productName", productName);
-		
-		
-		
-		
-		
-		
-		model.addAttribute("userAccount", userAccount);
-		model.addAttribute("recieverTransactionInfo", recieverTransactionInfo);
-		model.addAttribute("transactionInfo", transactionInfo);
+		model.addAttribute("getPayInfo", getPayInfo);
 		model.addAttribute("pay_amount", pay_amount);
-		model.addAttribute("pay_amount_receive", pay_amount_receive);
 		model.addAttribute("bankUserInfo", bankUserInfo);
 		model.addAttribute("fintech_use_num", fintech_use_num);
 		
@@ -395,7 +384,9 @@ public class PayController {
 	public String payTransferRequest(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
 		int product_id = Integer.parseInt((String) map.get("product_id"));
 		PayToken token = (PayToken)session.getAttribute("token");
-		
+		System.out.println("!@#!@#!@#");
+		System.out.println(map.get("price"));
+		int price = Integer.parseInt((String) map.get("price"));
 		
 		Map<String, Object> bankUserInfo = service.getPayUserInfo(token);
 		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
@@ -410,6 +401,8 @@ public class PayController {
 		model.addAttribute("productSearch", productSearch);
 		model.addAttribute("bankUserInfo", bankUserInfo);
 		model.addAttribute("fintech_use_num", fintech_use_num);
+		model.addAttribute("price", price);
+		
 		
 		return "pay/pay_remit";
 	}
@@ -418,7 +411,7 @@ public class PayController {
 	@LoginCheck(memberRole = MemberRole.USER)
 	@PayTokenCheck
 	@PostMapping("PayTransfer")
-	public String payTransfer(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
+	public String payTransfer(@RequestParam Map<String, Object> map, HttpSession session, Model model) throws Exception {
 		PayToken senderToken = (PayToken)session.getAttribute("token");
 		
 		// 이체에 필요한 사용자 계좌(입금받는 상대방) 관련 정보(토큰) 조회
@@ -432,17 +425,12 @@ public class PayController {
 		int product_id = Integer.parseInt((String) map.get("product_id"));
 		ProductVO productSearch = productService.productSearch(product_id);
 		
-		
-		
-		
-		map.put("pay_id", 0);
 		map.put("buyer_id", id);
 		map.put("receiver_id", receiver_id);
 		
 		
 		map.put("product_price", productSearch.getProduct_price());
 		map.put("product_trade_adr1", productSearch.getProduct_trade_adr1());
-		System.out.println("판매자 주소 알아보기 : " + productSearch);
 
 		// 수신자(상대방)의 토큰이 존재하지 않을 경우(= 계좌 등록이 되어있지 않음 등)
 		if(receiverToken == null || receiverToken.getAccess_token() == null) {
@@ -464,6 +452,7 @@ public class PayController {
 		
 		log.info(">>>>>>>> 송금 요청 정보 : " + map);
 
+		
 		// PayService - transfer() 메서드 호출하여 송금 작업 요청
 		Map<String, Object> transferResult = service.transfer(map);
 		
@@ -488,20 +477,56 @@ public class PayController {
 		log.info(">>>>> 이체결과 : " + transferResult);
 		
 		transferResult.put("id", id);
+		transferResult.put("product_id", product_id);
 		// 송금결과 DB 저장
 		// 사용자번호를 입금이체 결과 객체에 추가
 		transferResult.put("user_seq_no", senderToken.getUser_seq_no());
 		// 송금이체 성공 시 결과를 DB (TRANSACTIONINFO) 에 저장
 		service.registTransferResult(transferResult);
 		
-		
 		// DB에 거래내역 저장
-		int payInfo = service.registPayInfo(map);
+		service.registPayInfo(map); // 일단 업데이트 치러감.
+		
 		
 		session.setAttribute("transferResult", transferResult);
 		
+		/*
+		Map<String, String> chatMap = new HashMap<String, String>();
+		
+		chatMap.put("sender_id", id);
+		chatMap.put("receiver_id", receiver_id);
+		chatMap.put("product_id", (String) map.get("product_id"));
+		
+		String chatRoomAjax =  chatController.chatRoomAjax(chatMap);
+		
+		// JSON 문자열을 JSONObject로 변환
+        JSONObject jsonObject = new JSONObject(chatRoomAjax);
+
+        // room_id 추출
+        String roomId = jsonObject.getString("room_id");
+		
+		ChatMessage chatMessage = new ChatMessage();
+		chatMessage.setRoom_id(roomId);
+//		chatMessage.setRoom_id(map.get("room_id"));
+		List<ChatMessage> chatMessageList = chatService.selectChatMessage(chatMessage);
+		// sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, message);
+		*/
+		
+		
+		
+		 // 팝업에서 확인할 기본 메시지 전달
+        String popupMessage = "팝업 창에 표시할 결과입니다!";
+        model.addAttribute("popupMessage", popupMessage);
+		
+		
 		return "redirect:/PayTransferResult";
 	}
+	
+	
+	
+	
+	
+	
 	
 	// P2P 송금(이체) 결과 뷰페이지 처리
 	@LoginCheck(memberRole = MemberRole.USER)
@@ -513,10 +538,10 @@ public class PayController {
 		
 		// 세션에서 객체 꺼낸 후 세션내의 객체는 제거
 		session.removeAttribute("ransferResult"); // 마치 세션을 리퀘스트 처럼 사용함.
-		// 포워딩은 리퀘스트처럼하는데 라디이렉트는 다음페이지에 유지가 안됨. 그래서 디비에서 갖고오거나 세션에담되 없애면 됨.
 		
 		// 이체 결과 객체를 모델 객체에 저장
 		model.addAttribute("transferResult", transferResult);
+		
 		
 		return "pay/pay_transfer_result";
 		
@@ -526,28 +551,28 @@ public class PayController {
 	@PayTokenCheck
 	@GetMapping("AllPayList")
 	public String allPayList(HttpSession session, Model model) {
+		String id = (String)session.getAttribute("sId");
 		PayToken token = (PayToken)session.getAttribute("token");
 		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
-		// 거래내역조회 - 로그인 유저
-		List<Map<String, String>> transactionInfo = service.getTransactionDetail(token.getUser_seq_no());
-		// 거래내역조회 - 송금받은 유저
-		List<Map<String, String>> recieverTransactionInfo = service.getReceiverTransactionDetail(fintech_use_num);
 		
-		String id = (String)session.getAttribute("sId");
 		
 		// 내 id로 거래한 모든 거래내역 조회 
 		List<Map<String, String>> getPayInfo = service.getPayInfo(id);
-//		Object productId = getPayInfo.get("PRODUCT_ID");
-//		int product_id = Integer.parseInt(productId.toString());
-//		// 상품조회
-//		ProductVO product = productService.productSearch(product_id);
-//		String productName = product.getProduct_title();
-//		model.addAttribute("productName", productName);
+		for(Map<String, String> pId : getPayInfo) {
+			Object obj = pId.get("PRODUCT_ID");
+			if (obj != null) {
+				String productId = obj.toString();
+			    int product_id = Integer.parseInt(productId);
+			    // 상품조회
+				ProductVO product = productService.productSearch(product_id);
+				String productName = product.getProduct_title();
+				model.addAttribute("productName", productName);
+			}
+		}
 		
-		model.addAttribute("transactionInfo", transactionInfo);
-		model.addAttribute("recieverTransactionInfo", recieverTransactionInfo);
+		model.addAttribute("getPayInfo", getPayInfo);
 		
-
+		
 		return "pay/pay_use_list";
 	}
     

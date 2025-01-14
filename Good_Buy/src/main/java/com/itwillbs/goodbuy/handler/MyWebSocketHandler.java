@@ -105,8 +105,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 						//	새 채팅방 정보 DB 저장 요청
 						List<ChatRoom> chatRoomList = new ArrayList<ChatRoom>();
 						//	room_id, product_id, title, sender_id, receiver_id, status
-						chatRoomList.add(new ChatRoom(chatMessage.getRoom_id(), product_id, title, sender_id, receiver_id, 1));
-						chatRoomList.add(new ChatRoom(chatMessage.getRoom_id(), product_id, title, receiver_id, sender_id, 1));
+						chatRoomList.add(new ChatRoom(chatMessage.getRoom_id(), product_id, title, sender_id, receiver_id, 1, "buyer"));
+						chatRoomList.add(new ChatRoom(chatMessage.getRoom_id(), product_id, title, receiver_id, sender_id, 1, "seller"));
 						//	DB에 채팅방 저장 요청
 						chatService.insertChatRoom(chatRoomList);
 						
@@ -144,6 +144,20 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			
 		}
 		if (chatMessage.getType().equals(ChatMessage.TYPE_TALK)) {
+			//	현재 시스템 날짜 시각정보 받아와서 저장
+			chatMessage.setSend_time(getDateTimeNow());
+			//	채팅 메세지 DB 저장 요청
+			chatService.insertChatMessage(chatMessage);
+			
+			if (userList.get(receiver_id) != null) { //	접속중일 경우
+				WebSocketSession receiver_session = userSessionList.get(userList.get(receiver_id));
+				sendMessage(receiver_session, chatMessage);
+			}
+			
+			sendMessage(session, chatMessage);
+			
+		}
+		if (chatMessage.getType().equals(ChatMessage.TYPE_REQUEST_PAY)) {
 			//	현재 시스템 날짜 시각정보 받아와서 저장
 			chatMessage.setSend_time(getDateTimeNow());
 			//	채팅 메세지 DB 저장 요청

@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function(){
 				return data;
 			},
 		},
-		order: [[4, 'asc']], // 최초 조회시 카테고리(5번째 컬럼)별로 조회
+		order: [[2, 'asc']], // 최초 조회시 카테고리(5번째 컬럼)별로 조회
 		columnDefs: [ { targets: [0, 1, 6], orderable: false } ],
 		columns: [
 			{
@@ -53,8 +53,6 @@ document.addEventListener("DOMContentLoaded", function(){
 			// defaultContent 는 기본값 설정, 데이터 없는 컬럼일 경우 오류나기 때문에 널스트링 처리 해주어야 함
 			// 등록 시 유효성 체크를 한다면 defaultContent 값 설정 필요 없음!
             { title: "No.", data: "listIndex" , className : "dt-center",  width: '60px', },
-            { title: "제목", data : "FAQ_SUBJECT", className : "dt-center", defaultContent: "", orderable: false, searchable: true, },
-            { title: "내용", data : "FAQ_CONTENT", className : "dt-center", defaultContent: "", orderable: false, searchable: true, },
             { 
 				title: "FAQ 유형", 
 				data : "FAQ_CATE", 
@@ -62,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function(){
 				orderable: true,	// 정렬 활성화
 				searchable: false, // 검색 비활성화
 				className : "dt-center", 
+				width: '150px',
 				render : function(data, type, row) {
 					const categories = {
 						1: "운영정책",
@@ -73,12 +72,15 @@ document.addEventListener("DOMContentLoaded", function(){
 					return `<span class='faq-cate' status>${categories[data] || ""}</span>`
 				},
              },
+            { title: "제목", data : "FAQ_SUBJECT", className : "dt-center",width: '300px', defaultContent: "", orderable: false, searchable: true, },
+            { title: "내용", data : "FAQ_CONTENT", className : "dt-center", defaultContent: "", orderable: false, searchable: true, },
 			{ 	
 				title : "사용여부",
 				data : "LIST_STATUS",
 				orderable: false, // 정렬 비활성화
             	searchable: false, // 검색 비활성화
-            	className : "dt-center", 
+            	className : "dt-center",
+            	width: '160px',
 				render: function(data, type, row) {
 					let isChecked = data == 1 ? "checked" : "";
 					let isUsed = data == 1 ? "사용함" : "사용안함";
@@ -96,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function(){
 				data: null,
 				searchable: false,
 				className : "dt-center",
-				width: '160px',
+				width: '100px',
 				render : function(data, type, row) {
 					return `
 						<button class="btn btn-primary edit-btn" data-toggle="modal" data-target="#updateFaq"

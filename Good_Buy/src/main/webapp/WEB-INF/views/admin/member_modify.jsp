@@ -7,10 +7,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
 <link rel="icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
-
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
 <!-- default -->
@@ -176,20 +174,27 @@
 								                                    	</tr>
 								                                    </thead>
 								                                    <tbody>
-								                                    	<c:forEach var="history" items="${reportHistory}">
-								                                    		<tr>
-								                                    			<td>${history.REPORT_ID}</td>
-								                                    			<td>${history.REPORTER_ID}</td>
-								                                    			<td>${history.REPORTED_ID}</td>
-								                                    			<td>${history.REPORT_DATE}</td>
-								                                    			<td>${history.REASON}</td>
-								                                    			<td>${history.STATUS}</td>
-								                                    			<td>${history.ACTION_REASON}</td>
-								                                    			<td>${history.ADMIN_ID}</td>
-								                                    			<td>${history.ACTION_DATE}</td>
-								                                    			<td>${history.ROOM_ID}</td>
-								                                    		</tr>
-								                                    	</c:forEach>
+								                                    	<c:choose>
+								                                    		<c:when test="${empty reportHistory}">
+								                                    			<tr><td class="text-center" colspan="10">데이터가 없습니다.</td></tr>
+								                                    		</c:when>
+								                                    		<c:otherwise>
+								                                    			<c:forEach var="history" items="${reportHistory}">
+										                                    		<tr>
+										                                    			<td>${history.REPORT_ID}</td>
+										                                    			<td>${history.REPORTER_ID}</td>
+										                                    			<td>${history.REPORTED_ID}</td>
+										                                    			<td>${history.REPORT_DATE}</td>
+										                                    			<td>${history.REASON}</td>
+										                                    			<td>${history.STATUS}</td>
+										                                    			<td>${history.ACTION_REASON}</td>
+										                                    			<td>${history.ADMIN_ID}</td>
+										                                    			<td>${history.ACTION_DATE}</td>
+										                                    			<td>${history.ROOM_ID}</td>
+										                                    		</tr>
+										                                    	</c:forEach>
+								                                    		</c:otherwise>
+								                                    	</c:choose>
 								                                    </tbody>
 								                                </table>
 								                          	</div>
@@ -257,7 +262,7 @@
     <!-- Page level plugins -->
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script>
+<%--     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script> --%>
 
 
 </body>

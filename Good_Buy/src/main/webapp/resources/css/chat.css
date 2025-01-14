@@ -128,8 +128,16 @@
     min-height: 40vh;
 }
 
+.chat-body .chat-bubble {
+	display: flex;
+}
+
 .message {
     margin: 10px 0;
+}
+
+.message.center {
+    text-align: center;
 }
 
 .message.user {
@@ -138,9 +146,13 @@
 
 .message .bubble {
     display: inline-block;
-    padding: 10px;
+    padding: 15px;
     border-radius: 10px;
-    max-width: 70%;
+    max-width: 100%;
+}
+
+.message.center .bubble {
+    background-color: #fff;
 }
 
 .message.user .bubble {
@@ -148,8 +160,68 @@
 }
 
 .message.other .bubble {
+	margin-left : 5px;
     background-color: #eaeaea;
 }
+
+.message .bubble .item-button{
+	border:0;
+	background:var(--primary);
+	height: 34px;
+	color: var(--white);
+	font-weight: 700;
+	padding: 0 1rem;
+	border-radius: 4px;
+	font-size: 0.875rem;
+}
+
+/* ================= 송금요청 ================== */
+.pay-container {
+	display: flex;
+    justify-content: center;
+/*     padding: 10px; */
+    margin: 10px 0;
+}
+
+.request-pay {
+	background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    background-color: #e1f2ceff;
+}
+
+.pay-text {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.pay-container .item-button {
+    background-color: var(--primary);
+    color: white;
+    font-size: 16px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    max-width: 200px;
+    margin-top: 10px;
+}
+
+.chat-body .chat-bubble.user{
+	justify-content: right;
+}
+
+/* ==============================================*/
+
+
 
 .chat-footer {
 /* 	display: none; */

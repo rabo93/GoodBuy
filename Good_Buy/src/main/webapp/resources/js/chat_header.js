@@ -9,6 +9,7 @@ function connect() {
 //	let ws_base_url = "ws://itwillbs.com";
 	let ws_base_url = "ws://localhost:8081";
 //	let ws_base_url = "ws://localhost:8080";
+//	let ws_base_url = "ws://c3d2407t1p2.itwillbs.com/";
 	ws = new WebSocket(ws_base_url + "/echo");
 	console.log("WebSocket 객체 : " + ws);
 	console.log("웹소켓 연결 상태 : " + ws.readyState);
@@ -20,14 +21,14 @@ function connect() {
 }
 
 function startChat() {
-	let url = "ChatMain"
+	let chatUrl = "ChatMain"
 	let width = 840;
 	let height = 640;
 	let left = window.innerWidth - width;  // 화면의 오른쪽 끝에서 시작
 	let top = 0;  // 화면의 상단
 	$(".messageStatus").empty();
 	
-	childChat = window.open(url, "start_chat", `width=${width},height=${height},left=${left},top=${top}`);
+	childChat = window.open(chatUrl, "start_chat", `width=${width},height=${height},left=${left},top=${top}`);
 	window.childChat = childChat;
 }
 
@@ -37,10 +38,15 @@ function onOpen () {
 
 function onMessage(event) {
 	console.log("onMessage()");
+	let data = JSON.parse(event.data);
 	if(childChat && !childChat.closed) {
 		childChat.postMessage(event.data);
 	} else {
-		$(".messageStatus").html("★").css("color", "red");
+		
+		if(!data.sender_id == sId) {
+			$(".messageStatus").html("★").css("color", "red");
+		}
+		
 		chatProduct(event.data);
 	}
 	

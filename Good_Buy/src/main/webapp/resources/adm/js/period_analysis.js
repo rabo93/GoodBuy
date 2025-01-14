@@ -1,115 +1,167 @@
-document.addEventListener("DOMContentLoaded", function(){
-	const periodList = $('#periodList').DataTable({
-		lengthChange : false, // 건수
-		searching : false, // 검색
-		info : true, // 정보
-		ordering : true, // 정렬
-		paging : true,
-		responsive: true, // 반응형
-		destroy: true,
-		scrollX: true, 
-		autoWidth: false,
-		data: generateCurrentMonthDates(), // 데이터 생성
+document.addEventListener("DOMContentLoaded", function () {
+	// 이번 달 범위 계산(초기 설정)
+	const today = moment(); // 오늘 날짜
+	const firstDayOfMonth = today.clone().startOf('month'); // 이번 달 첫날
+	const lastDayOfMonth = today.clone().endOf('month'); // 이번 달 마지막 날
+	const defaultRange = `${firstDayOfMonth.format('YYYY-MM-DD')} ~ ${lastDayOfMonth.format('YYYY-MM-DD')}`;
+	$('#schDate').val(defaultRange);
+	
+    const periodList = $('#periodList').DataTable({
+        lengthChange: false,	//건수(비활성화) 
+        searching: false,		//검색(비활성화) 
+        info: false,			//정보(비활성화) 
+        ordering: true,			//정렬
+        paging: false,  		//페이징(비활성화)
+        responsive: true,		//반응형
+        destroy: true,			
+        scrollX: true,
+        autoWidth: false,		//컬럼사이즈 조정 자동설정(비활성화)
 		ajax : {
-			url: "PeriodAnalysis",
+			url: "PeriodListForm",
 			type: "POST",
 			dataType : "JSON",
 			data: function(d) {
-                d.searchDate = $("#schDate").val(); //기간별
+				d.searchDate = $("#schDate").val();
+//				console.log(d.searchDate);
             },
 			dataSrc: function (res) {
-//				const data = res.periodList;
-//				const start = $('#periodList').DataTable().page.info().start; 
-//				// PK가 아닌 테이블 컬럼 번호 계산(페이징 포함) => 이건 필요 없을꺼 같은데..
-//				for (let i = 0; i < data.length; i++) {
-//					data[i].listIndex = start + i + 1;
-//				}
-//				return data;
-
-				if (res.periodList) {
-                    return res.periodList; // 데이터가 있으면 반환
-                }
-                return []; // 데이터가 없으면 빈 배열 반환
-
+//				console.log("res:" + JSON.stringify(res));
+				const data = res.periodList;
+				return data;
 			},
 		},
-		order: [[0, 'asc']], // 최초 조회 시 날짜순으로 기본 설정
-		columnDefs: [
-			 { targets: [2, 3], orderable: false },
-			 { targets: "_all", className: "dt-center" }, // 모든 컬럼 가운데 정렬
+		dom: '<"top"<"left-length"l><"right-buttons"fB>>rt<"bottom"ip>',
+		buttons: [
+			{
+                extend: 'copy',
+                text: '복사',
+            },
+            {
+                extend: 'excel',
+                text: '엑셀 저장',
+                exportOptions: {
+		            columns: [0, 1, 2, 3, 4, 5]
+		        },
+		        customize: function (xlsx) {
+					// 엑셀에 총합 추가
+					const sheet = xlsx.xl.worksheets['sheet1.xml'];
+                    const totalMember = $('#periodList').DataTable().column(1).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
+                    const totalJoin = $('#periodList').DataTable().column(2).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
+                    const totalProduct = $('#periodList').DataTable().column(3).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
+                    const totalOrder = $('#periodList').DataTable().column(4).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
+                    const totalPay = $('#periodList').DataTable().column(5).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
+
+                    const rows = $('sheetData row', sheet);
+                    const lastRow = rows.last(); // 마지막 행 찾기
+                    const totalRow = `
+                        <row r="${rows.length + 1}">
+                            <c t="inlineStr"><is><t>총합</t></is></c>
+                            <c t="inlineStr"><is><t>${totalMember}</t></is></c>
+                            <c t="inlineStr"><is><t>${totalJoin}</t></is></c>
+                            <c t="inlineStr"><is><t>${totalProduct}</t></is></c>
+                            <c t="inlineStr"><is><t>${totalOrder}</t></is></c>
+                            <c t="inlineStr"><is><t>${totalPay}</t></is></c>
+                        </row>`;
+                    lastRow.after(totalRow); // 마지막 행 다음에 총합 행 추가
+				},
+            },
 		],
-		columns: [
-			// defaultContent 는 기본값 설정, 데이터 없는 컬럼일 경우 오류나기 때문에 널스트링 처리 해주어야 함
-			// 회원가입 시 유효성 체크를 한다면 defaultContent 값 설정 필요 없음!
-            { title: "날짜", data: "date"},
-            { title: "가입수", data : "join", defaultContent: "0"},
-            { title: "방문자수", data : "visit", defaultContent: "0"},
-            { title: "거래수", data : "order", defaultContent: "0"},
+		order: [[0, 'asc']], // 최초 조회시 날짜 순으로 기본 설정
+        columnDefs: [
+			{ targets: [1,2,3,4,5], orderable: false },
+		],
+        columns: [
+			// defaultContent 는 기본값 설정, 데이터 없는 컬럼일 경우 오류나기 때className : "dt-center",문에 널스트링 처리 해주어야 함
+            { title: "날짜", data: "date", className : "dt-center", defaultContent: ""},
+            { title: "회원수(명)", data: "memberTotal", className : "dt-center", defaultContent: "0" },
+            { title: "신규회원(명)", data: "joinTotal", className : "dt-center", defaultContent: "0" },
+            { title: "상품등록(건)", data: "productTotal", className : "dt-center", defaultContent: "0" },
+            { title: "거래완료(건)", data: "orderTotal", className : "dt-center", defaultContent: "0" },
+            { title: "거래금액(원)", data: "payTotal", className : "dt-center", defaultContent: "0" },
         ],
-		serverSide : true, // 서버사이드 처리
+        createdRow: function (row, data, dataIndex) {
+            // 모든 숫자 데이터 셀에 대해 세자리 콤마 추가
+            $('td', row).each(function () {
+                const cell = $(this);
+                const text = cell.text();
+                if ($.isNumeric(text)) {
+                    cell.text(Number(text).toLocaleString()); // 세자리 콤마 추가
+                }
+            });
+        },
+        initComplete: function () {
+			// 데이터 초기화 완료 후 총합 계산
+//			updateFooter(this.api());
+		},
+		serverSide : true, 	// 서버사이드 처리
 		processing : true,  // 서버와 통신 시 응답을 받기 전이라는 ui를 띄울 것인지 여부
-		language : {
-			emptyTable: "데이터가 없습니다.",
-//			lengthMenu: "_MENU_ 건씩 보기",
-			info: "현재 _START_ - _END_ / 총 _TOTAL_건",
-			infoEmpty: "데이터 없음",
-			search: "검색",
-			infoFiltered: "( _MAX_건의 데이터에서 필터링됨 )",
-			loadingRecords: "로딩중...",
+        language: {
+            emptyTable: "데이터가 없습니다.",
+            info: "현재 _START_ - _END_ / 총 _TOTAL_건",
+            infoEmpty: "데이터 없음",
+            loadingRecords: "로딩중...",
 			processing: "잠시만 기다려 주세요...",
 			zeroRecords: "일치하는 데이터가 없습니다.",
-            paginate: {
-                first:    '처음',
-                previous: '이전',
-                next:     '다음',
-                last:     '마지막'
-            },
+//			infoFiltered: "( _MAX_건의 데이터에서 필터링됨 )",
+//			paginate: {
+//                first:    '처음',
+//                previous: '이전',
+//                next:     '다음',
+//                last:     '마지막'
+//            },
         },
-	});
-	
-	// 현재 월의 일자별 데이터를 생성하는 함수
-    function generateCurrentMonthDates() {
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = today.getMonth(); // 0: January
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const data = [];
+        footerCallback: function (row, data, start, end, display) {
+			var api = this.api();
+	        var totalMember = api
+	            .column(1, { page: 'current' })
+	            .data()
+	            .reduce(function (a, b) {
+	                return parseInt(a) + parseInt(b);
+	            }, 0);
+	            
+	            
+	        var totalJoin = api
+	            .column(2, { page: 'current' })
+	            .data()
+	            .reduce(function (a, b) {
+	                return parseFloat(a) + parseFloat(b);
+	            }, 0);
 
-        for (let day = 1; day <= daysInMonth; day++) {
-            const date = new Date(year, month, day);
-            const formattedDate = date.toISOString().split('T')[0]; // YYYY-MM-DD 포맷
-            data.push({
-                date: formattedDate,
-                join: "", // 가입 수는 기본값
-                visit: "", // 방문자 수 기본값
-                order: "", // 거래 수 기본값
-            });
-        }
-
-        return data;
-    }
-	
-	
-	// 기존 검색 숨기기
-//	$("#periodList_filter").attr("hidden", "hidden");
-	
-	 // 필터 변경 시 데이터 테이블 다시 로드
-    $('input[name="status"]').on('change', () => periodList.draw());
-
-    // 검색 버튼 클릭 시 테이블 다시 로드
-    $('#searchBtn').on('click', () => periodList.draw());
-    
-    // 엔터키 입력으로 검색
-    $('#searchKeyword').on('keypress', (e) => {
-        if (e.which == 13)  periodList.draw();
+			var totalProduct = api
+	            .column(3, { page: 'current' })
+	            .data()
+	            .reduce(function (a, b) {
+	                return parseInt(a) + parseInt(b);
+	            }, 0);
+	            
+			var totalOrder = api
+	            .column(4, { page: 'current' })
+	            .data()
+	            .reduce(function (a, b) {
+	                return parseInt(a) + parseInt(b);
+	            }, 0);
+	            
+			var totalPay = api
+	            .column(5, { page: 'current' })
+	            .data()
+	            .reduce(function (a, b) {
+	                return parseInt(a) + parseInt(b);
+	            }, 0);
+	            
+	        $(api.column(1).footer()).html(totalMember.toLocaleString(0));
+	        $(api.column(2).footer()).html(totalJoin.toLocaleString(0));
+	        $(api.column(3).footer()).html(totalProduct.toLocaleString(0));
+	        $(api.column(4).footer()).html(totalOrder.toLocaleString(0));
+	        $(api.column(5).footer()).html(totalPay.toLocaleString(0));
+	        
+	    }
     });
-    
-	// 기간별 검색 필터링 제이쿼리
+	//------------------------------------------------------------------
+    // 기간별 검색 필터링 제이쿼리
     $('#schDate').daterangepicker({
-//        startDate: moment().subtract(29, 'days'),
-//        startDate: false,
-//        endDate: moment(),
-        maxDate: moment(),
+		startDate: firstDayOfMonth, // 이번 달 첫날
+		endDate: lastDayOfMonth, // 이번 달 마지막 날
+//        maxDate: moment(),
         locale: {
 			start: '시작일시',
 			end: '종료일시',
@@ -126,33 +178,36 @@ document.addEventListener("DOMContentLoaded", function(){
 	    showDropdowns: true, // 년월 수동 설정 여부
 	    autoApply: false, // 확인/취소 버튼 사용여부
 		ranges: {
-            '이번 달': [moment().startOf('month'), moment().endOf('month')], // 이번 달 전체
+            '오늘': [moment()], // 오늘
+            '이번 달': [firstDayOfMonth, lastDayOfMonth], // 이번 달 전체
+//            '이번 달': [moment().startOf('month'), moment().endOf('month')], // 이번 달 전체
             '지난 달': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')], // 지난 달 전체
             '지난 7일': [moment().subtract(6, 'days'), moment()], // 최근 7일
             '지난 14일': [moment().subtract(13, 'days'), moment()], // 최근 14일
             '지난 30일': [moment().subtract(29, 'days'), moment()], // 최근 30일
             '지난 3개월': [moment().subtract(3, 'months').startOf('month'), moment().endOf('month')], // 최근 3개월
         },
-    }).on('show.daterangepicker', function (ev, picker) {
-        picker.container.addClass('goodbuyCustomPicker');                            
+//    }).on('show.daterangepicker', function (ev, picker) {
+//        picker.container.addClass('goodbuyCustomPicker');                            
     });
     
-    // 날짜 선택 후에도 placeholder 유지
-    $('#schDate').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(`${picker.startDate.format('YYYY-MM-DD')} ~ ${picker.endDate.format('YYYY-MM-DD')}`);
-    });
-    
+    //------------------------------------------------------------------------------------------------
 	// 날짜 검색 초기화
 	$("#initDateBtn").on('click', function() {
-		$('#schDate').val('');
+		$('#schDate').val(defaultRange);
 		periodList.draw();
 	});
 	
-    // 기간별 검색 후 테이블 다시 로드
+    // 날짜 선택 후에도 placeholder 유지
+    $('#schDate').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(`${picker.startDate.format('YYYY-MM-DD')} ~ ${picker.endDate.format('YYYY-MM-DD')}`);
+    	periodList.draw(); // 기간 변경 시 테이블 갱신
+    });
+    
+    // 검색 버튼 클릭 시 데이터 필터링
     $("#searchDateBtn").on('click', function() {
-//		periodList.draw(); // 화면만 갱신
-		periodList.ajax.reload(); // 서버에서 데이터 다시 갱신
+		periodList.draw();
 	});
 	
-
+    
 });

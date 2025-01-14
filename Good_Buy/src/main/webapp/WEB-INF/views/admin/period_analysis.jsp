@@ -6,6 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
 <!-- default -->
@@ -24,6 +26,7 @@
 <link href="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/daterangepicker.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
 
 </head>
 <body id="page-top">
@@ -68,10 +71,28 @@
 									</div>
 									<div class="table-responsive">
 <!-- 		                                <table class="table table-bordered compact" id="periodList" width="100%" cellspacing="0"> -->
-		                                <table class="table table-bordered compact" id="periodList2" width="100%" cellspacing="0">
-		                                    <thead></thead>
+		                                <table class="table table-bordered compact" id="periodList" width="100%" cellspacing="0">
+		                                    <thead>
+		                                    	<tr>
+		                                    		<th></th>
+		                                    		<th></th>
+		                                    		<th></th>
+		                                    		<th></th>
+		                                    		<th></th>
+		                                    		<th></th>
+		                                    	</tr>
+		                                    </thead>
 		                                    <tbody></tbody>
-		                                    <tfoot></tfoot>
+		                                    <tfoot>
+		                                    	<tr>
+		                                    		<th>합계</th>
+		                                    		<th></th>
+		                                    		<th></th>
+		                                    		<th></th>
+		                                    		<th></th>
+		                                    		<th></th>
+		                                    	</tr>
+		                                    </tfoot>
 		                                </table>
 		                          	</div>
                                 </div>
@@ -114,11 +135,18 @@
 <%--     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script> --%> <%-- 반응형 --%>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/moment.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datepicker/daterangepicker.js"></script>
-
+	
+	
+	<script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.buttons.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/buttons.html5.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/jszip.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/buttons.print.min.js"></script>
     <!-- Page level custom scripts -->
 <%--     <script src="${pageContext.request.contextPath}/resources/adm/js/period_analysis.js"></script> --%>
-    <script src="${pageContext.request.contextPath}/resources/adm/js/period_analysis2.js"></script>
-
+    <script src="${pageContext.request.contextPath}/resources/adm/js/period_analysis.js"></script>
+	
+	
+	
 </body>
 
 

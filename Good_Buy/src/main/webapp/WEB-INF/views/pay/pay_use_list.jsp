@@ -68,8 +68,6 @@
 					<div class="my-container">
 						<div class="contents-ttl">
 							<h3>굿페이 > 이용내역</h3>
-							
-							송금은 계좌번호가 떠야되는 것이 아니고 물건 산 내역이 떠야함
 						</div>
 						<div class="contents">
 							<div class="goodpay-container">
@@ -80,60 +78,59 @@
 						                <button class="use-charge-btn" onclick="listToggleButton('charge')">충전</button>
 						                <button class="use-refund-btn" onclick="listToggleButton('refund')">환불</button>
 						            </div>
-						            <c:forEach var="item" items="${recieverTransactionInfo}">
-				            			<div class="use-history-item active" data-type="transfer">
-<!-- 				            				<div class="icon"><i class="fa-solid fa-building-columns"></i></div> -->
-							                <div class="details">
-							                    <span class="his-ttl">산업 ${item.RECEIVER_FINTECH_USE_NUM }</span>
-							                    <span class="date" >
-							                    	<fmt:parseDate var="parsedReplyRegDate"
-																		value="${item.API_TRAN_DTM}" 
-																		pattern="yyyy-MM-dd'T'HH:mm:ss" 
-																		type="both" /> 
-														<fmt:formatDate value="${parsedReplyRegDate}" pattern="yy.MM.dd" /> 
-													| 송금
-							                    </span>
-							                </div>
-							                <div class="amount">+ <fmt:formatNumber pattern="#,###">${item.TRAN_AMT}</fmt:formatNumber></div>
-				            			</div>	
-			            			</c:forEach>	
-				            		<c:forEach var="item" items="${transactionInfo}" varStatus="status">
-				            			<c:set var="dataType" value="all"/>
-				            			<c:if test="${item.TRANSACTION_TYPE eq 'WI'}">
-				            				<c:set var="dataType" value="charge"/>
-				            				<c:set var="detail" value="KDB산업은행 202407222***"/>
-				            				<c:set var="classify" value="충전"/>
-				            				<c:set var="symbol" value="+"/>
-				            			</c:if>
-				            			<c:if test="${item.TRANSACTION_TYPE eq 'DE'}">
-				            				<c:set var="dataType" value="refund"/>
-				            				<c:set var="detail" value="KDB산업은행 202407222***"/>
-				            				<c:set var="classify" value="환불"/>
-				            				<c:set var="symbol" value="-"/>
-				            			</c:if>
-				            			<c:if test="${item.TRANSACTION_TYPE eq 'TR'}">
-				            				<c:set var="dataType" value="transfer"/>
-				            				<c:set var="detail" value="${productName }"/>
-				            				<c:set var="classify" value="송금"/>
-				            				<c:set var="symbol" value="-"/>
-				            			</c:if>
-				            			
-				            			<div class="use-history-item active" data-type="${dataType}">
-<!-- 							                <div class="icon"><i class="fa-solid fa-building-columns"></i></div> -->
-							                <div class="details">
-							                    <span class="his-ttl">${detail }</span>
-							                    <span class="date" >
-							                    	<fmt:parseDate var="parsedReplyRegDate"
-																		value="${item.API_TRAN_DTM}" 
-																		pattern="yyyy-MM-dd'T'HH:mm:ss" 
-																		type="both" /> 
-														<fmt:formatDate value="${parsedReplyRegDate}" pattern="yy.MM.dd" /> 
-													| ${classify}
-							                    </span>
-							                </div>
-							                <div class="amount">${symbol} <fmt:formatNumber pattern="#,###">${item.TRAN_AMT}</fmt:formatNumber></div>
-							            </div>
-				            		</c:forEach>
+						            
+						            ${item }
+						            <c:choose>
+						            	<c:when test="${empty getPayInfo}">
+							            	<div class="history-item empty-text">
+							            	굿페이 이용내역이 없습니다.
+							            	</div>
+						            	</c:when>
+						            	<c:otherwise>
+						            		<c:forEach var="item" items="${getPayInfo}" varStatus="status">
+						            			<c:set var="dataType" value="all"/>
+						            			<c:if test="${item.TRANSACTION_TYPE eq 'WI'}">
+						            				<c:set var="dataType" value="charge"/>
+						            				<c:set var="detail" value="${item.BANK_NAME} ${item.ACCOUNT_NUM} "/>
+						            				<c:set var="classify" value="충전"/>
+						            				<c:set var="symbol" value="+"/>
+						            			</c:if>
+						            			<c:if test="${item.TRANSACTION_TYPE eq 'DE'}">
+						            				<c:set var="dataType" value="refund"/>
+						            				<c:set var="detail" value="${item.BANK_NAME} ${item.ACCOUNT_NUM} "/>
+						            				<c:set var="classify" value="환불"/>
+						            				<c:set var="symbol" value="-"/>
+						            			</c:if>
+						            			<c:if test="${item.TRANSACTION_TYPE eq 'TR'}">
+						            				<c:set var="dataType" value="transfer"/>
+						            				<c:set var="detail" value="${productName }"/>
+						            				<c:set var="classify" value="송금"/>
+						            				<c:if test="${item.RECEIVER_ID != sId }">
+						            					<c:set var="symbol" value="-"/>
+						            				</c:if>
+						            				<c:if test="${item.RECEIVER_ID eq sId}">
+						            					<c:set var="symbol" value="+"/>
+						            				</c:if>
+						            			</c:if>
+									            <div class="use-history-item active" data-type="${dataType}">
+													<div class="icon"><i class="fa-solid fa-building-columns"></i></div> 
+									                <div class="details">
+									                    <span class="his-ttl">${detail }</span>
+									                    <span class="date" >
+									                    	<fmt:parseDate var="parsedReplyRegDate"
+																				value="${item.API_TRAN_DTM}" 
+																				pattern="yyyy-MM-dd'T'HH:mm:ss" 
+																				type="both" /> 
+																<fmt:formatDate value="${parsedReplyRegDate}" pattern="yy.MM.dd" /> 
+															| ${classify}
+									                    </span>
+									                </div>
+							                		<div class="amount">${symbol} <fmt:formatNumber pattern="#,###">${item.TRAN_AMT}</fmt:formatNumber></div>
+							           			 </div>
+						            		</c:forEach>
+						            	</c:otherwise>
+						            </c:choose>	
+				            		<div class="return-btn"><button onclick="location.href = document.referrer">돌아가기</button></div>		
 							 	</div>
 						    </div>
 						</div>

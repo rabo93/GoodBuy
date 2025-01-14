@@ -5,6 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/g_favicon.ico" type="image/x-icon">
 <title>굿바이 - 중고거래, 이웃과 함께 더 쉽게!</title>
 
 <!-- default -->
@@ -22,7 +24,6 @@
 <link href="${pageContext.request.contextPath}/resources/adm/css/adm.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.css" rel="stylesheet">
-
 </head>
 <body id="page-top">
 
@@ -176,16 +177,6 @@
 						<!-- faq 아이디 -->
 						<input type="hidden" id="faqId" name="faq_id">
 						<div class="mb-1">
-							<label for="updatedFaqSubject" class="col-form-label">제목</label>
-							<input type="text" class="form-control" name="faq_subject" id="updatedFaqSubject" required>
-						</div>
-						
-						<div class="mb-3">
-							<label class="small mb-1" for="updatedFaqContent">내용</label>
-							<textarea class="form-control" col="4" id="updatedFaqContent" name="faq_content"  placeholder="내용을 입력하세요." required></textarea>
-							<small class="text-primary text-right d-block font-weight-bold"><span id="lengthInfo">0</span> / 500자</small>
-						</div>
-						<div class="mb-1">
 							<label class="small mb-1" for="updatedFaqCate">FAQ 유형</label>
 							<select class="custom-select" id="updatedFaqCate" name="faq_cate" >
 								<option value="1">운영정책</option>
@@ -195,9 +186,17 @@
 								<option value="5">기타</option>
 							</select>
 						</div>
-						
+						<div class="mb-1">
+							<label for="updatedFaqSubject" class="col-form-label">제목</label>
+							<input type="text" class="form-control" name="faq_subject" id="updatedFaqSubject" required>
+						</div>
+						<div class="mb-1">
+							<label class="small mb-1" for="updatedFaqContent">내용</label>
+							<textarea class="form-control" col="4" id="updatedFaqContent" name="faq_content"  placeholder="내용을 입력하세요." required></textarea>
+							<small class="text-primary text-right d-block font-weight-bold"><span id="lengthInfo">0</span> / 500자</small>
+						</div>
 						<div class="row px-2">
-							<div class="w-50">
+							<div class="w-50 m-auto">
 								<label for="updatedListStatus" class="col-form-label">사용여부</label>
 								<div class="form-check form-switch">
 					        		<input type="hidden" id="updatedListStatus" name="list_status">
@@ -206,6 +205,7 @@
 								</div>
 							</div>
 						</div>
+						
 					</form>
 				</div>
 				<div class="modal-footer justify-content-center">
@@ -229,7 +229,7 @@
     <!-- Page level plugins -->
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script>
+<%--     <script src="${pageContext.request.contextPath}/resources/adm/vendor/datatables/datatables.min.js"></script> --%>
 
     <!-- Page level custom scripts -->
     <script src="${pageContext.request.contextPath}/resources/adm/js/faq_list.js"></script>

@@ -281,8 +281,12 @@ public class MypageController {
 	
 	//내가 쓴 후기 조회
 	@GetMapping("MyReviewHistory")
-	public String myReviewHistory(@RequestParam(defaultValue = "1") int pageNum,Model model,HttpSession session,MemberVO member) {
-		String id = getSessionUserId(session);
+	public String myReviewHistory(
+			@RequestParam(defaultValue = "1") int pageNum
+			,@RequestParam(defaultValue = "") String searchKeyword
+			,Model model,HttpSession session,MemberVO member) {
+			String id = getSessionUserId(session);
+			
 		member.setMem_id(id);
 		
 		// 페이징 설정
@@ -309,13 +313,13 @@ public class MypageController {
 			model.addAttribute("targetURL", "MyReviewHistory?pageNum=1");
 			return "result/fail";
 		}
-		PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage, endPage);
+		PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage, pageNum);
 
 		// Model 객체에 페이징 정보 저장
 		model.addAttribute("pageInfo", pageInfo);
 
 		// 게시물 목록 조회
-		List<MyReviewVO> reviewHistory = reviewService.getReviewHistory(startRow, listLimit,id);
+		List<MyReviewVO> reviewHistory = reviewService.getReviewHistory(startRow, listLimit,id,searchKeyword);
 		model.addAttribute("review",reviewHistory);
 
 		
@@ -357,7 +361,12 @@ public class MypageController {
 
 		// 문의내역 목록
 			@GetMapping("MySupport")
-			public String mySupportList(@RequestParam(defaultValue = "1") int pageNum, HttpServletRequest request, HttpSession session, Model model) {
+			public String mySupportList(
+					@RequestParam(defaultValue = "1") int pageNum
+					,@RequestParam(defaultValue = "") String searchKeyword
+					, HttpServletRequest request
+					, HttpSession session, Model model) {
+				
 				System.out.println("페이지번호: " + pageNum);
 				// 세션아이디 체크
 				String id = (String)session.getAttribute("sId");
@@ -393,13 +402,13 @@ public class MypageController {
 					model.addAttribute("targetURL", "MySupport?pageNum=1");
 					return "result/fail";
 				}
-				PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage, endPage);
+				PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage, pageNum);
 
 				// Model 객체에 페이징 정보 저장
 				model.addAttribute("pageInfo", pageInfo);
 
 				// 게시물 목록 조회
-				List<SupportVO> supportList = supportService.getSupporList(startRow, listLimit, id);
+				List<SupportVO> supportList = supportService.getSupporList(startRow, listLimit, id,searchKeyword);
 
 				model.addAttribute("supportList", supportList);
 
@@ -531,6 +540,7 @@ public class MypageController {
 			}
 			return "true";
 		}
+		
 
 	// ===========================================================================================
 	// ===========================================================================================

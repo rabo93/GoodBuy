@@ -48,18 +48,27 @@ public interface PayMapper {
 	Map<String, String> selectPayAccountInfo(String user_seq_no);
 
 
-	int insertPayInfo(Map<String, Object> map);
+//	update 치려고 주석처리함
+//	int insertPayInfo(Map<String, Object> map);
+	void insertTransactionPayInfo(Map<String, Object> map);
+	
+	void updateProductStatus(Map<String, Object> map);
+	
+	
+	
+	
 
 	List<Map<String, String>> selectTransactionDetail(
 			@Param("fintech_use_num") String fintech_use_num,
 			@Param("type") String type);
 	
 	// 충전금액조회(송금하는 사람 : user_seq_no로 조회, 받는사람 : 핀테크no로 조회)
-	Integer selectPayAmount(String user_seq_no);
+	Integer selectPayAmount(String id);
 
 	// 충전금액조회(송금받는사람 : 핀테크no로 조회)
 	Integer selectReceiverPayAmount(String fintech_use_num);
 
 	List<Map<String, String>> selectPayInfo(String id);
+
 
 }

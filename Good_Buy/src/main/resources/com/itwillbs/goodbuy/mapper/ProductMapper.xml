@@ -23,7 +23,7 @@
 		 WHERE 
 		 	P.MEM_ID = #{mem_id}
 		ORDER BY PRODUCT_REG_DATE DESC
-		LIMIT 4
+		LIMIT 3
 	</select>
 	
 	<!--판매 상품 리스트 갯수 조회  -->

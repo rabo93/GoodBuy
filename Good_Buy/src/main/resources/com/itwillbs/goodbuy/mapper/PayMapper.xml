@@ -93,7 +93,8 @@
 		INSERT 
 		INTO TRANSACTIONINFO
 		VALUES (
-		      #{withdrawResult.id}
+			  #{withdrawResult.product_id}
+		    , #{withdrawResult.id}
 		    , #{withdrawResult.user_seq_no}
 		     <if test="trnsactionType.equals('WI')">
 			, #{withdrawResult.fintech_use_num}
@@ -193,20 +194,13 @@
 	  SELECT 
 		   SUM(CASE 
 		            WHEN TRANSACTION_TYPE = 'WI' THEN tran_amt 
-		            WHEN TRANSACTION_TYPE = 'TR' THEN -tran_amt 
-		            WHEN TRANSACTION_TYPE = 'DE' THEN -tran_amt 
+		            WHEN TRANSACTION_TYPE = 'DE' THEN -tran_amt
+		            WHEN TRANSACTION_TYPE = 'TR' AND RECEIVER_ID=#{id} THEN +tran_amt
+                	WHEN TRANSACTION_TYPE = 'TR' AND MEM_ID=#{id} THEN -tran_amt   
 		            ELSE 0 
 		        END) AS total_amount
 		FROM TRANSACTIONINFO
-	   WHERE USER_SEQ_NO = #{user_seq_no}
-	 HAVING SUM(
-		        CASE 
-		            WHEN TRANSACTION_TYPE = 'WI' THEN tran_amt 
-		            WHEN TRANSACTION_TYPE = 'TR' THEN -tran_amt 
-		            WHEN TRANSACTION_TYPE = 'DE' THEN -tran_amt 
-		            ELSE 0 
-		        END
-		    ) >= 0;
+	   WHERE MEM_ID = #{id} OR RECEIVER_ID = #{id}
 	</select>
 	
 	
@@ -221,7 +215,8 @@
 	
 	
 	<!-- 거래내역 저장 -->
-	<insert id="insertPayInfo">
+<!-- 	<insert id="insertPayInfo"> -->
+	<insert id="insertTransactionPayInfo">
 		<selectKey keyProperty="pay_id" resultType="int" order="BEFORE">
 		SELECT IFNULL(MAX(PAY_ID),0) + 1 AS pay_id
 		  FROM PAYINFO
@@ -241,10 +236,45 @@
 		  )	
 	</insert>
 	
+	<!-- PRODUCT 테이블의 상태 변경  -->
+	<update id="updateProductStatus">
+		UPDATE PRODUCT
+        SET PRODUCT_STATUS = 3
+        WHERE PRODUCT_ID = #{product_id}
+	
+	</update>
+	
+	
 	<!-- 거래내역 조회 -->
-	<select id="selectPayInfo" resultType="map">
-		SELECT * 
-		  FROM PAYINFO
-		 WHERE BUYER_ID = #{id} 
+	<select id="selectPayInfo">
+		SELECT TRANSACTION_TYPE, MEM_ID, RECEIVER_ID, PB.PRODUCT_ID, TRAN_AMT, T.API_TRAN_DTM, BANK_NAME, ACCOUNT_NUM 
+		FROM TRANSACTIONINFO T 
+		JOIN PAYINFO PB -- 판매자일 경우 : 송금 
+		ON T.TRANSACTION_TYPE = 'TR' AND T.PRODUCT_ID = PB.PRODUCT_ID
+		JOIN ACCOUNTINFO A  
+		ON T.FINTECH_USE_NUM = A.FINTECH_USE_NUM
+		WHERE IF(T.MEM_ID = #{id}, T.MEM_ID = #{id}, T.RECEIVER_ID = PB.SELLER_ID)
+		GROUP BY API_TRAN_DTM, TRANSACTION_TYPE, MEM_ID, RECEIVER_ID, PB.PRODUCT_ID, TRAN_AMT, BANK_NAME, ACCOUNT_NUM
+		
+		
+		UNION ALL
+		
+		SELECT TRANSACTION_TYPE, MEM_ID, RECEIVER_ID,  T.PRODUCT_ID, TRAN_AMT, T.API_TRAN_DTM, BANK_NAME, ACCOUNT_NUM
+		FROM TRANSACTIONINFO T
+		JOIN ACCOUNTINFO A  
+		ON T.FINTECH_USE_NUM = A.FINTECH_USE_NUM
+		-- 구매자일 경우 : 송금 외
+		WHERE T.TRANSACTION_TYPE != 'TR'
+		  AND EXISTS (
+		    SELECT 1
+		    FROM PAYINFO PB
+		    WHERE T.MEM_ID = PB.BUYER_ID AND T.MEM_ID = #{id}
+		  )
+		ORDER BY API_TRAN_DTM DESC;
 	</select>
+	
+	
+	
+	
+	
 </mapper>

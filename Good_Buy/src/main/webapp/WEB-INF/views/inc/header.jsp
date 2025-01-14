@@ -34,8 +34,8 @@
 <%-- 									<img src="${member.mem_profile}" alt="프로필사진"><br> --%>
 <%-- 								</c:when> --%>
 								<c:when test="${not empty sessionScope.sProfile}">
-									<img src="${sessionScope.sProfile}?${System.currentTimeMillis()}" alt="프로필사진" class="profile-pic">
-<%-- 									<img src="${sessionScope.sProfile}" alt="프로필사진"> --%>
+<%-- 									<img src="${sessionScope.sProfile}?${System.currentTimeMillis()}" alt="프로필사진" class="profile-pic"> --%>
+									<img src="${sessionScope.sProfile}" alt="프로필사진">
 								</c:when>
 								<c:otherwise>
 									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" alt="프로필사진">
@@ -47,8 +47,12 @@
 							<a href="MyStore">나의상점</a>
 							<a href="GoodPay">굿페이</a>
 							<a href="MyInfo">계정정보</a>
+							<c:if test="${sessionScope.sId eq 'admin'}">
+								<a href="AdmMain">관리자화면</a>
+							</c:if>
 							<a href="MemberLogout">로그아웃</a>
-							<input type="hidden" id="sId" value="${sessionScope.sId}">
+							<input type="hidden" id="sNick" value="${sessionScope.sNick}">
+							<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script>
 						</div>
 					</c:when>
 					<c:otherwise>
@@ -91,6 +95,7 @@
 								</a>
 								<a href="MemberLogout">로그아웃</a>
 								<input type="hidden" id="sId" value="${sessionScope.sId}">
+								<input type="hidden" id="sNick" value="${sessionScope.sNick}">
 						</c:otherwise>				
 					</c:choose>
         		</div>

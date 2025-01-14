@@ -111,6 +111,7 @@
 						                </div>
 	                    				<div class="amount"><fmt:formatNumber pattern="#,###">${pay_amount}</fmt:formatNumber>원</div>
 						            </div>
+						            <div class="return-btn"><button onclick="location.href = document.referrer">돌아가기</button></div>
 								</div><!-- account-box -->
 						    </div>
 						</div>	

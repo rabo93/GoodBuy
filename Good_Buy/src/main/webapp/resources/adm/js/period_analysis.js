@@ -40,13 +40,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 extend: 'excel',
                 text: '엑셀 저장',
                 exportOptions: {
-		            columns: [0, 1, 2]
+		            columns: [0, 1, 2, 3, 4, 5]
 		        },
 		        customize: function (xlsx) {
 					// 엑셀에 총합 추가
 					const sheet = xlsx.xl.worksheets['sheet1.xml'];
                     const totalMember = $('#periodList').DataTable().column(1).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
-                    const totalOrder = $('#periodList').DataTable().column(2).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
+                    const totalJoin = $('#periodList').DataTable().column(2).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
+                    const totalProduct = $('#periodList').DataTable().column(3).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
+                    const totalOrder = $('#periodList').DataTable().column(4).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
+                    const totalPay = $('#periodList').DataTable().column(5).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
 
                     const rows = $('sheetData row', sheet);
                     const lastRow = rows.last(); // 마지막 행 찾기
@@ -54,7 +57,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         <row r="${rows.length + 1}">
                             <c t="inlineStr"><is><t>총합</t></is></c>
                             <c t="inlineStr"><is><t>${totalMember}</t></is></c>
+                            <c t="inlineStr"><is><t>${totalJoin}</t></is></c>
+                            <c t="inlineStr"><is><t>${totalProduct}</t></is></c>
                             <c t="inlineStr"><is><t>${totalOrder}</t></is></c>
+                            <c t="inlineStr"><is><t>${totalPay}</t></is></c>
                         </row>`;
                     lastRow.after(totalRow); // 마지막 행 다음에 총합 행 추가
 				},
@@ -62,15 +68,27 @@ document.addEventListener("DOMContentLoaded", function () {
 		],
 		order: [[0, 'asc']], // 최초 조회시 날짜 순으로 기본 설정
         columnDefs: [
-			{ targets: [1,2], orderable: false },
+			{ targets: [1,2,3,4,5], orderable: false },
 		],
         columns: [
 			// defaultContent 는 기본값 설정, 데이터 없는 컬럼일 경우 오류나기 때className : "dt-center",문에 널스트링 처리 해주어야 함
             { title: "날짜", data: "date", className : "dt-center", defaultContent: ""},
             { title: "회원수(명)", data: "memberTotal", className : "dt-center", defaultContent: "0" },
+            { title: "신규회원(명)", data: "joinTotal", className : "dt-center", defaultContent: "0" },
+            { title: "상품등록(건)", data: "productTotal", className : "dt-center", defaultContent: "0" },
             { title: "거래완료(건)", data: "orderTotal", className : "dt-center", defaultContent: "0" },
-//            { title: "방문자수", data: "visit", defaultContent: "0" },
+            { title: "거래금액(원)", data: "payTotal", className : "dt-center", defaultContent: "0" },
         ],
+        createdRow: function (row, data, dataIndex) {
+            // 모든 숫자 데이터 셀에 대해 세자리 콤마 추가
+            $('td', row).each(function () {
+                const cell = $(this);
+                const text = cell.text();
+                if ($.isNumeric(text)) {
+                    cell.text(Number(text).toLocaleString()); // 세자리 콤마 추가
+                }
+            });
+        },
         initComplete: function () {
 			// 데이터 초기화 완료 후 총합 계산
 //			updateFooter(this.api());
@@ -101,23 +119,40 @@ document.addEventListener("DOMContentLoaded", function () {
 	                return parseInt(a) + parseInt(b);
 	            }, 0);
 	            
-			var totalOrder = api
+	            
+	        var totalJoin = api
 	            .column(2, { page: 'current' })
+	            .data()
+	            .reduce(function (a, b) {
+	                return parseFloat(a) + parseFloat(b);
+	            }, 0);
+
+			var totalProduct = api
+	            .column(3, { page: 'current' })
 	            .data()
 	            .reduce(function (a, b) {
 	                return parseInt(a) + parseInt(b);
 	            }, 0);
 	            
-//	        var totalVisit = api
-//	            .column(3, { page: 'current' })
-//	            .data()
-//	            .reduce(function (a, b) {
-//	                return parseFloat(a) + parseFloat(b);
-//	            }, 0);
-
-	        $(api.column(1).footer()).html(totalMember.toFixed(0)); //toFixed(0)안 숫자는 소수점 자리수 
-	        $(api.column(2).footer()).html(totalOrder.toFixed(0));
-//	        $(api.column(3).footer()).html(totalVisit.toFixed(2));
+			var totalOrder = api
+	            .column(4, { page: 'current' })
+	            .data()
+	            .reduce(function (a, b) {
+	                return parseInt(a) + parseInt(b);
+	            }, 0);
+	            
+			var totalPay = api
+	            .column(5, { page: 'current' })
+	            .data()
+	            .reduce(function (a, b) {
+	                return parseInt(a) + parseInt(b);
+	            }, 0);
+	            
+	        $(api.column(1).footer()).html(totalMember.toLocaleString(0));
+	        $(api.column(2).footer()).html(totalJoin.toLocaleString(0));
+	        $(api.column(3).footer()).html(totalProduct.toLocaleString(0));
+	        $(api.column(4).footer()).html(totalOrder.toLocaleString(0));
+	        $(api.column(5).footer()).html(totalPay.toLocaleString(0));
 	        
 	    }
     });

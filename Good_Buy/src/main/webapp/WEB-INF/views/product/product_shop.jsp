@@ -40,7 +40,9 @@
 				<section class="item-shop-section">
 					<div class="item-shop-seller-info">
 						<img src="${searchSeller.MEM_PROFILE}" class="item-shop-seller-pic">
-						<div class="item-shop-seller-nick">${searchSeller.MEM_NICK}</div>
+						<div class="item-shop-seller-nick">${searchSeller.MEM_NICK}
+							<div class="item-shop-seller-description">${searchSeller.MEM_INTRO}</div>
+						</div>
 						<div class="item-shop-seller-review">
 							<div class="item-shop-seller-review-title">셀러평점</div>
 							<div class="item-shop-seller-review-star">

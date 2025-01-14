@@ -46,9 +46,7 @@ public class ProductController {
 	@ResponseBody
 	@GetMapping("getCategory")
 	public List<Map<String, String>> getCategory() {
-		System.out.println("카테고리 호출됨");
 		List<Map<String, String>> cateSearch = productService.cateSearch();
-		System.out.println("카테고리 조회 결과 : " + cateSearch);
 		return cateSearch;
 	}
 	
@@ -65,7 +63,7 @@ public class ProductController {
 													   @RequestParam(required=false) String PRODUCT_PRICE,
 													   @RequestParam(required=false) String PRODUCT_TRADE_ADR1,
 													   @RequestParam(required=false) String SEARCHKEYWORD,
-													   @RequestParam String PRODUCT_CATEGORY) {
+													   @RequestParam(required=false) String PRODUCT_CATEGORY) {
 		List<Map<String, Object>> listSearch = productService.searchFilterList(PRODUCT_STATUS, PRODUCT_PRICE, PRODUCT_TRADE_ADR1, SEARCHKEYWORD, PRODUCT_CATEGORY);
 		return listSearch;
 	}
@@ -270,10 +268,9 @@ public class ProductController {
 	    } catch (IllegalStateException | IOException e) {
 	        e.printStackTrace();
 	    }
-	    
 	    productService.productUpdate(product, product_ID);
 		
-		return "MySales";
+		return "redirect:/MySales";
 	}
 	
 	@ResponseBody
@@ -307,6 +304,7 @@ public class ProductController {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
+		
 		return msg;
 	}
 	

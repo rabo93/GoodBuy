@@ -51,11 +51,9 @@
 								<a href="AdmMain">관리자화면</a>
 							</c:if>
 							<a href="MemberLogout">로그아웃</a>
-							<input type="hidden" id="sId" value="${sessionScope.sId}">
 							<input type="hidden" id="sNick" value="${sessionScope.sNick}">
 							<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script>
 						</div>
-						<script src="${pageContext.request.contextPath}/resources/js/header.js"></script>
 					</c:when>
 					<c:otherwise>
 						<a href="SNSLogin" class="gnb-btn"><i class="fa-solid fa-user"></i> 로그인</a>
@@ -129,5 +127,6 @@
 		</nav>
 	</section>
 </div>
+<script src="${pageContext.request.contextPath}/resources/js/header.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/top.js"></script>
 

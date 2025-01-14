@@ -105,26 +105,39 @@ $(document).ready(function() {
 		url: "SearchPriceFilter",
 		type: "GET",
 		data: {
-			PRODUCT_STATUS: url.searchParams.get('STATUS') != undefined ? tradeEnable : undefined, 
-			PRODUCT_PRICE: url.searchParams.get('PRICE') != undefined ? price : undefined, 
-			PRODUCT_TRADE_ADR1: url.searchParams.get('REGION') != undefined ? region : undefined, 
+			PRODUCT_STATUS: tradeEnable != undefined ? tradeEnable : undefined, 
+			PRODUCT_PRICE: price != undefined ? price : undefined, 
+			PRODUCT_TRADE_ADR1: region != undefined ? region : undefined, 
 			SEARCHKEYWORD: url.searchParams.get('SEARCHKEYWORD') != undefined ? url.searchParams.get('SEARCHKEYWORD') : undefined, 
-			PRODUCT_CATEGORY: category
+			PRODUCT_CATEGORY: category != undefined ? category : undefined
 		}
 	
 	}).done(function(data) {
-		console.log(data);
 		if(data.length != 0) {
 			moment.locale('ko')
 			$("#product-wrap").empty();
 			for(let item of data) {
+				
 				let category = `<span>${item.PRODUCT_CATEGORY}</span>`;
+				let status;
 				if (item.PRODUCT_TRADE_ADR1) {
 					category += `<span class="type">직거래</span>`;
 				}
+				
+				if (item.PRODUCT_STATUS == 1) {
+					status = `<div class="status" id="status">거래중</div>` 
+				} else if (item.PRODUCT_STATUS == 2) {
+					status = `<div class="status" id="status">예약중</div>` 
+				} else if (item.PRODUCT_STATUS == 0) {
+					status = "";
+				}
+				
 				$("#product-wrap").append(
-					`<li class="product-card" onclick="location.href=\'ProductDetail?PRODUCT_ID=${item.PRODUCT_ID}'">
-						<img src="../resources/upload/${item.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail"/>
+					`<li class="product-card" id="product-card" onclick="location.href=\'ProductDetail?PRODUCT_ID=${item.PRODUCT_ID}'">
+						${status}
+						<div class="product-thumb">
+							<img src="../resources/upload/${item.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail"/>
+						</div>
 						<div class="card-info">
 							<div class="category">
 								${category}
@@ -139,13 +152,19 @@ $(document).ready(function() {
 								<span class="time">${moment(item.PRODUCT_REG_DATE, "YYYYMMDDhhmmss").fromNow()}</span>
 							</div>
 						</div>
-					</li>`)};
+					</li>`)
+			};
 		} else {
-			$("#product-wrap").append(
-				`<h1>:( 검색결과가 없습니다</h1>`
+			$("#product-list").append(
+				`<div class="no-data">
+				<img class="no-data-pic" src="../resources/img/no-data.png">
+				<h1 class="no-data-text">:( 검색결과가 없습니다</h1>
+				</div>`
 			)
 		}
+		
 	}).fail(function() {
 		alert("검색 실패\n나중에 다시 시도해주세요.");
 	})	
+	
 })

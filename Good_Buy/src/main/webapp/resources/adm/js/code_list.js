@@ -1,5 +1,7 @@
 $(document).ready(function() {
+	let codeIdCheck = false;
 	const modifyForm = document.querySelector("#modifyForm");
+	
 	const codeList = $('#codeList').DataTable({
 		lengthChange : true, // 건수
 		searching : true, // 검색
@@ -125,8 +127,115 @@ $(document).ready(function() {
     
     // 등록 버튼 이동
 	$("#btnAddRow").on("click", function() {
-		window.location.href='AdmCommoncodeRegistForm';
+		
+		// 공통 상위코드 불러오기
+		$.ajax({
+			url : "GetCommonCodes",
+			type : "POST",
+			success: function(res){
+				console.log(res);
+				
+				const $mainCodeList = $("#mainCodeList");
+				$mainCodeList.empty();
+				
+				if(!res || !res.length || !res[0]) {
+					$("#addCommonCodes").modal('hide');
+					alert("등록된 공통코드가 없습니다. 공통코드를 먼저 등록해주세요.");
+					window.location.href='AdmCommoncodeRegistForm';
+					return;
+				}
+				
+				for(let item of res) {
+					$mainCodeList.append(`<option value="${item.CODETYPE_ID}">${item.CODETYPE_ID}</option>`);
+				}
+				
+				const firstData = res[0];
+		        $mainCodeList.val(firstData.CODETYPE_ID).change();
+		        changeCommonCode(firstData);
+				
+				$mainCodeList.on("change", function() {
+					const findData = res.find(elem => elem.CODETYPE_ID == $(this).val());
+					changeCommonCode(findData);
+				});
+				
+				// 공통코드 세부정보 업데이트
+		        function changeCommonCode(data) {
+		            $("#viewCommonCodeName").val(data.CODETYPE_NAME);
+		            $("#viewCommonCodeDesc").val(data.DESCRIPTION);
+		        }
+			},
+			error : function(res) {
+				alert("불러오기 실패!");
+			}
+		});
+		
 	});
+	
+	$("#newCodeId").on("keyup", function(){
+		// 상세코드ID 중복 확인
+		$.ajax({
+			url : "CheckSubCodeId",
+			type : "POST",
+			data : {
+				subCodeId: $(this).val()
+			},
+			success: function(res){
+				console.log(res);
+				
+				if(res == "true") {
+					$("#subCodeResult").show();
+					$("#subCodeResult").css("color", "#e74a3b").text("이미 존재하는 상세코드ID입니다. 다시 입력해주세요.");
+					$("#newCodeId").focus();
+					codeIdCheck = false;
+				} else {
+					$("#subCodeResult").css("color", "#4e73df").text("사용할 수 있는 ID입니다.");
+					codeIdCheck = true;
+				}
+				
+			},
+			error : function(res) {
+				alert("불러오기 실패!");
+			}
+		});
+	});
+	
+	$("#addCommoncodeForm").on("submit", function(e){
+		e.preventDefault();
+		const subCodeVal = $("#newSwitchCheckDefault").prop("checked");
+		const subCodeStatus = subCodeVal ? 1 : 2;
+		
+		if(!codeIdCheck) {
+			alert("상세코드ID를 확인해주세요.");
+			$("#newCodeId").focus();
+			return;
+		}
+		
+		// 저장
+		$.ajax({
+			url: "AddCommonCode",
+			type: "POST",
+			data: {
+				mainCodeId: $("#mainCodeList").val(),
+				subCodeId: $("#newCodeId").val(),
+				subCodeName: $("#newCodeName").val(),
+				subCodeDesc: $("#newCodeDesc").val(),
+				subCodeStatus: subCodeStatus,
+				subCodeSeq: $("#newCodeSeq").val(),
+			},
+			success: function(res){
+//				window.location.href = res.redirectURL;
+				$("#addCommonCodes").modal('hide');
+				alert("상세코드가 추가되었습니다.");
+				codeList.ajax.reload();
+				
+			},
+			error: function(){
+				alert("등록 실패");
+			}
+		});
+		
+	});
+	
 	
 	// 체크박스 전체 선택
 	const checkAll = $("#checkAll");

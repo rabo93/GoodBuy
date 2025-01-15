@@ -380,7 +380,10 @@ public class MemberController {
 		// 결과처리
 		if(updateCount > 0) {
 			// 수정 후, 뷰페이지에 뿌릴 세션 및 모델에 프로필경로명 저장
-//			session.setAttribute("sProfile", member.getMem_profile());
+//			session.setAttribute("sId", member.getMem_id());
+//			session.setAttribute("sNick", member.getMem_nick());
+			session.setAttribute("sProfile", member.getMem_profile());
+			
 			model.addAttribute("member", member);
 			model.addAttribute("msg", "회원정보 수정 성공!");
 			model.addAttribute("targetURL", "MyInfo");
@@ -483,17 +486,18 @@ public class MemberController {
 			memberService.removeMemInfo(id, 3);
 		}
 		
-		
 		// 회원 탈퇴 성공 시 첨부파일 제거 작업
-//		String realPath = getRealPath(session);
-//		System.out.println("첨부파일 제거 경로: " + realPath);
-//		Path path = Paths.get(realPath, member.getMem_profile());
-//		System.out.println("첨부파일 제거: " + path);
-//		try {
-//			Files.delete(path);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		String realPath = getRealPath(session);
+		// 끝에 "resources/upload"가 포함되어 있다면 지우기
+		if (realPath.endsWith("resources\\upload") || realPath.endsWith("resources/upload")) {
+			realPath = realPath.substring(0, realPath.lastIndexOf("resources\\upload"));
+		}
+		Path path = Paths.get(realPath, member.getMem_profile());
+		try {
+			Files.delete(path);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		// 세션 제거
 		session.invalidate();

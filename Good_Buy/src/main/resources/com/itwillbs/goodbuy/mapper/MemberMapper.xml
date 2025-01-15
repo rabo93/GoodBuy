@@ -274,6 +274,8 @@
 		  	MEM_STATUS = #{mem_status}
 			, MEM_WITHDRAW_DATE = now()
 			, MEM_PHONE = NULL
+			, AUTH_STATUS = 2
+			, MEM_PROFILE = NULL
 		 WHERE MEM_ID = #{mem_id}
 	</update>
 	<!-- Sns 계정 삭제 -->

@@ -1,15 +1,46 @@
+//	채팅 메세지 타입 구분
+const TYPE_ENTER = "ENTER";
+const TYPE_LEAVE = "LEAVE";
+const TYPE_TALK = "TALK";
+const TYPE_INIT = "INIT";
+const TYPE_INIT_COMPLETE = "INIT_COMPLETE";
+const TYPE_START = "START";
+const TYPE_REQUEST_CHAT_ROOM_LIST = "REQUEST_CHAT_ROOM_LIST";
+const TYPE_REQUEST_CHAT_LIST = "REQUEST_CHAT_LIST";
+const TYPE_FILE_UPLOAD_COMPLETE = "FILE_UPLOAD_COMPLETE";
+const TYPE_FILE = "FILE";
+
+//	채팅 메세지 정렬 위치
+const ALIGN_CENTER = "center";
+const ALIGN_LEFT = "other";
+const ALIGN_RIGHT = "user";
+
 var ws;
 var childChat;
 
 $(function() {
 	connect();
+	
+	sId = $("#sId").val();
+	if(sId) {
+		//	읽지않은 메세지 요청
+		$.ajax({
+			url : "GetUnreadMsg",
+			type : "POST",
+			data : {sId : sId}
+		}).done(function(response){
+			if(response != 0) {
+				$("#chat-btn").append(`<span class="messageStatus"></span>`)
+			}
+		});
+	}
 });
 
 function connect() {
 //	let ws_base_url = "ws://itwillbs.com";
-	let ws_base_url = "ws://localhost:8081";
+//	let ws_base_url = "ws://localhost:8081";
 //	let ws_base_url = "ws://localhost:8080";
-//	let ws_base_url = "ws://c3d2407t1p2.itwillbs.com/";
+	let ws_base_url = "ws://c3d2407t1p2.itwillbs.com/";
 	ws = new WebSocket(ws_base_url + "/echo");
 	console.log("WebSocket 객체 : " + ws);
 	console.log("웹소켓 연결 상태 : " + ws.readyState);
@@ -22,8 +53,8 @@ function connect() {
 
 function startChat() {
 	let chatUrl = "ChatMain"
-	let width = 840;
-	let height = 640;
+	let width = 920;
+	let height = 800;
 	let left = window.innerWidth - width;  // 화면의 오른쪽 끝에서 시작
 	let top = 0;  // 화면의 상단
 	$(".messageStatus").remove();
@@ -40,19 +71,35 @@ function onMessage(event) {
 	console.log("onMessage()");
 	sId = $("#sId").val();
 	let data = JSON.parse(event.data);
-	console.log(childChat);
 	if(childChat && !childChat.closed) {
 		childChat.postMessage(event.data);
 		
 	} else {
+		if(!data.sender_id == sId) {
+			console.log("sender_id확인");
+		}
 		chatProduct(event.data);
 	}
 	
-//	if(!data.sender_id == sId) {
-//			$(".messageStatus").html("★").css("color", "red");
-//	}
+}
+
+function chatProduct(e) {
+	let chatData = JSON.parse(e);
+	if(chatData.type == TYPE_START) {
+		console.log("room_id : " + chatData.room_id);
+		window.room_id = chatData.room_id;
+		console.log("window.room_id : " + window.room_id);
+		if($(".chat-body").children().length == 0) {
+			sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, "안녕하세요 판매글 보고 연락드립니다.", "");
+		}
+	}
+	
+	if (chatData.type == TYPE_TALK || chatData.type == TYPE_FILE) {
+		appendMessage(chatData.type, chatData.sender_id, chatData.receiver_id, chatData.message, chatData.send_time);
+	}
 	
 }
+
 
 //	==============================================================================
 //	자신의 채팅창에 메세지를 표시하는 함수

@@ -220,6 +220,10 @@ public class PayService {
 	public List<Map<String, String>> getPayInfo(String id) {
 		return mapper.selectPayInfo(id);
 	}
+
+	public List<Map<String, String>> getPayInfoProduct(int product_id) {
+		return mapper.selectPayInfoProduct(product_id);
+	}
 	
 	
 	

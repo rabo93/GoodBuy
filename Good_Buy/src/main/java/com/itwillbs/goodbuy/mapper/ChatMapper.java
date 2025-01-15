@@ -50,6 +50,9 @@ public interface ChatMapper {
 
 	//	메세지 읽음 처리
 	void updateMessageRead(ChatMessage chatMessage);
+	
+	//	상품 번호 가져오기
+	int selectProductInfo(String room_id);
 
 
 	

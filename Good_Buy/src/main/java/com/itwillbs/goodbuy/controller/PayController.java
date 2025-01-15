@@ -1,6 +1,5 @@
 package com.itwillbs.goodbuy.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +7,6 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.google.gson.Gson;
 import com.itwillbs.goodbuy.aop.LoginCheck;
 import com.itwillbs.goodbuy.aop.LoginCheck.MemberRole;
 import com.itwillbs.goodbuy.aop.PayTokenCheck;
@@ -24,7 +21,6 @@ import com.itwillbs.goodbuy.handler.MyWebSocketHandler;
 import com.itwillbs.goodbuy.service.ChatService;
 import com.itwillbs.goodbuy.service.PayService;
 import com.itwillbs.goodbuy.service.ProductService;
-import com.itwillbs.goodbuy.vo.ChatMessage;
 import com.itwillbs.goodbuy.vo.PayToken;
 import com.itwillbs.goodbuy.vo.ProductVO;
 
@@ -33,12 +29,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Controller
 public class PayController {
-	
-	//	JSON 데이터 파싱 작업을 처리할 Gson 객체 생성
-	private final Gson gson = new Gson();
-	
-	@Autowired
-	ChatController chatController;
 	
 	@Autowired
 	MyWebSocketHandler myWebSocketHandler;
@@ -82,26 +72,25 @@ public class PayController {
 		Integer pay_amount = service.getPayAmount(id);
 		
 		// 거래내역조회(ID로 조회)
-		List<Map<String, String>> getPayInfo = service.getPayInfo(id);
-//		System.out.println("getPayInfo 자라 불러오나?? : " + getPayInfo);
+		List<Map<String, String>> getPayInfoAll = service.getPayInfo(id);
 		
+		List<Map<String, String>> payInfo =  getPayInfoAll.stream()
+                					 .limit(5) 
+                					 .collect(Collectors.toList());
+		System.out.println("payInfo 상위 5개만 잘 잘라지는지 확인 :             " + payInfo);
 		
-		for(Map<String, String> pId : getPayInfo) {
+		for(Map<String, String> pId : payInfo) {
 			Object obj = pId.get("PRODUCT_ID");
 			if (obj != null) {
 				String productId = obj.toString();
-//			    System.out.println("Product ID 값 잘가지고 오나?? : " + productId);
 			    int product_id = Integer.parseInt(productId);
-//			    System.out.println("product_id 잘 불러오나? : " + product_id);
 			    // 상품조회
 				ProductVO product = productService.productSearch(product_id);
 				String productName = product.getProduct_title();
 				model.addAttribute("productName", productName);
 			}
 		}
-		
-		
-		model.addAttribute("getPayInfo", getPayInfo);
+		model.addAttribute("getPayInfo", payInfo);
 		model.addAttribute("pay_amount", pay_amount);
 		model.addAttribute("bankUserInfo", bankUserInfo);
 		model.addAttribute("fintech_use_num", fintech_use_num);
@@ -309,11 +298,11 @@ public class PayController {
 	@GetMapping("PayWithdrawResult")
 	public String payWithdrawResult(String bank_tran_id, HttpSession session, Model model) {
 		PayToken token = (PayToken)session.getAttribute("token");
-
+		String id = (String)session.getAttribute("sId");
 		Map<String, String> withdrawResult = service.getWithdarwResult(bank_tran_id);
 		Map<String, String> userAccount = service.getPayAccountInfo(token.getUser_seq_no());
 		// 충전금액 조회
-		int pay_amount = service.getPayAmount(token.getUser_seq_no());
+		Integer pay_amount = service.getPayAmount(id);
 				
 		model.addAttribute("withdrawResult", withdrawResult);
 		model.addAttribute("userAccount", userAccount);
@@ -365,11 +354,11 @@ public class PayController {
 	@GetMapping("PayDepositResult")
 	public String payDepositResult(String bank_tran_id, HttpSession session, Model model) {
 		PayToken token = (PayToken)session.getAttribute("token");
-		
+		String id = (String)session.getAttribute("sId");
 		Map<String, String> depositResult = service.getDepositResult(bank_tran_id);
 		Map<String, String> userAccount = service.getPayAccountInfo(token.getUser_seq_no());
 		// 충전금액 조회
-		int pay_amount = service.getPayAmount(token.getUser_seq_no());
+		Integer pay_amount = service.getPayAmount(id);
 				
 		
 		model.addAttribute("depositResult", depositResult);
@@ -382,21 +371,28 @@ public class PayController {
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("PayTransferRequest")
 	public String payTransferRequest(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
+		
+		
+		String id = (String)session.getAttribute("sId");
 		int product_id = Integer.parseInt((String) map.get("product_id"));
 		PayToken token = (PayToken)session.getAttribute("token");
-		System.out.println("!@#!@#!@#");
-		System.out.println(map.get("price"));
+//		System.out.println("Controller에서 room_id 잘 받아오나????????? " + map.get("room_id"));
 		int price = Integer.parseInt((String) map.get("price"));
 		
 		Map<String, Object> bankUserInfo = service.getPayUserInfo(token);
 		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
 		
 		// 충전금액 조회
-		int pay_amount = service.getPayAmount(token.getUser_seq_no());
+		Integer pay_amount = service.getPayAmount(id);
 		
 		// 상품 조회
 		ProductVO productSearch = productService.productSearch(product_id);
 		
+		List<Map<String, String>> getPayInfoProduct = service.getPayInfoProduct(product_id);
+		
+		
+		model.addAttribute("getPayInfoProduct", getPayInfoProduct);
+		model.addAttribute("room_id", map.get("room_id"));
 		model.addAttribute("pay_amount", pay_amount);
 		model.addAttribute("productSearch", productSearch);
 		model.addAttribute("bankUserInfo", bankUserInfo);
@@ -488,45 +484,13 @@ public class PayController {
 		service.registPayInfo(map); // 일단 업데이트 치러감.
 		
 		
+		
+		session.setAttribute("room_id", map.get("room_id"));
 		session.setAttribute("transferResult", transferResult);
-		
-		/*
-		Map<String, String> chatMap = new HashMap<String, String>();
-		
-		chatMap.put("sender_id", id);
-		chatMap.put("receiver_id", receiver_id);
-		chatMap.put("product_id", (String) map.get("product_id"));
-		
-		String chatRoomAjax =  chatController.chatRoomAjax(chatMap);
-		
-		// JSON 문자열을 JSONObject로 변환
-        JSONObject jsonObject = new JSONObject(chatRoomAjax);
-
-        // room_id 추출
-        String roomId = jsonObject.getString("room_id");
-		
-		ChatMessage chatMessage = new ChatMessage();
-		chatMessage.setRoom_id(roomId);
-//		chatMessage.setRoom_id(map.get("room_id"));
-		List<ChatMessage> chatMessageList = chatService.selectChatMessage(chatMessage);
-		// sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, message);
-		*/
-		
-		
-		
-		 // 팝업에서 확인할 기본 메시지 전달
-        String popupMessage = "팝업 창에 표시할 결과입니다!";
-        model.addAttribute("popupMessage", popupMessage);
 		
 		
 		return "redirect:/PayTransferResult";
 	}
-	
-	
-	
-	
-	
-	
 	
 	// P2P 송금(이체) 결과 뷰페이지 처리
 	@LoginCheck(memberRole = MemberRole.USER)
@@ -535,16 +499,11 @@ public class PayController {
 	public String payTransferResult(HttpSession session, Model model) {
 		// 세션에 저장된 이체결과객체 (transferResult) 꺼내기
 		Map<String, Object> transferResult =(Map<String, Object>)session.getAttribute("transferResult");
-		
 		// 세션에서 객체 꺼낸 후 세션내의 객체는 제거
 		session.removeAttribute("ransferResult"); // 마치 세션을 리퀘스트 처럼 사용함.
-		
 		// 이체 결과 객체를 모델 객체에 저장
 		model.addAttribute("transferResult", transferResult);
-		
-		
 		return "pay/pay_transfer_result";
-		
 	}
 
 	@LoginCheck(memberRole = MemberRole.USER)
@@ -569,6 +528,74 @@ public class PayController {
 				model.addAttribute("productName", productName);
 			}
 		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		// -------------------------------------------------------------------
+		// [ 페이징 처리 ]
+		// 1. 페이징 처리를 위해 조회 목록 갯수 조절에 사용될 변수 선언 및 계산
+//		int listLimit = 10; // 페이지 당 게시물 수
+//		int startRow = (pageNum - 1) * listLimit; // 조회할 게시물의 DB 행 번호(row 값)
+//		
+//		// 2. 실제 뷰페이지에서 페이징 처리를 위한 계산 작업
+//		// BoardService - getBoardListCount() 메서드 호출하여 전체 게시물 수 조회 요청
+//		// => 파라미터 : 검색타입, 검색어   리턴타입 : int(listCount)
+//		int listCount = service.getBoardListCount(searchType, searchKeyword);
+////				System.out.println("전체 게시물 수 : " + listCount);
+//		
+//		// 임시) 페이지 당 페이지 번호 갯수를 2개로 지정(1 2 or 3 4...)
+//		int pageListLimit = 3; 
+//		// 최대 페이지 번호 계산(전체 게시물 수를 페이지 당 게시물 수로 나눔)
+//		// => 이 때, 나머지가 0보다 크면 페이지 수 + 1
+//		int maxPage = listCount / listLimit + (listCount % listLimit > 0 ? 1 : 0);
+//		// => 단, 최대 페이지 번호가 0 일 경우 1페이지로 변경
+//		if(maxPage == 0) {
+//			maxPage = 1;
+//		}
+//		
+//		// 현재 페이지에서 보여줄 시작 페이지 번호 계산(1, 3, 5, 7, 9)
+//		int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
+//		// 현재 페이지에서 보여줄 마지막 페이지 번호 계산(2, 4, 6, 8, 10)
+//		int endPage = startPage + pageListLimit - 1;
+//		
+//		// 단, 마지막 페이지번호(endPage) 값이 최대 페이지번호(maxPage)보다 클 경우
+//		// 마지막 페이지 번호를 최대 페이지번호로 교체
+//		if(endPage > maxPage) {
+//			endPage = maxPage;
+//		}
+//		
+//		// 전달받은 페이지번호가 1보다 작거나 최대 페이지 번호보다 클 경우
+//		// fail.jsp 페이지 포워딩을 통해 "해당 페이지는 존재하지 않습니다!" 출력하고
+//		// 1페이지로 이동하도록 처리
+//		if(pageNum < 1 || pageNum > maxPage) {
+//			model.addAttribute("msg", "해당 페이지는 존재하지 않습니다!");
+//			model.addAttribute("targetURL", "BoardList?pageNum=1");
+//			return "result/fail";
+//		}
+//		
+//		// 페이징 정보 관리하는 PageInfo 객체 생성 및 계산 결과 저장
+//		PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage);
+//		
+//		// Model 객체에 페이징 정보 저장
+//		model.addAttribute("pageInfo", pageInfo);
+		// -------------------------------------------------------------------
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		model.addAttribute("getPayInfo", getPayInfo);
 		

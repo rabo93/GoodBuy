@@ -25,17 +25,9 @@ public class MainController {
 	@GetMapping("/")
 	public String main(Model model, HttpSession session) {
 		String sId = (String)session.getAttribute("sId");
-		int alram = 0;
-		System.out.println(sId);
 		List<Map<String, Object>> recommendedItem = productService.getRecommendedItem();
-		if(!(sId == null)) {
-			alram = chatService.selectCountMessage("" ,sId);
-			System.out.println("!@#!@#");
-			System.out.println(alram);
-		}
 		
 		model.addAttribute("recommeded", recommendedItem);
-		model.addAttribute("alram", alram);
 		return "index";
 	}
 	

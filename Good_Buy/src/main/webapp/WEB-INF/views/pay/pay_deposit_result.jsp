@@ -72,7 +72,7 @@
 						                    <span>산업 </span>
 						                    <span class="account-num">${userAccount.ACCOUNT_NUM}</span>
 						                </div>
-							            <div class="amount">+ <fmt:formatNumber pattern="#,###">${depositResult.TRAN_AMT}</fmt:formatNumber>원</div>
+							            <div class="amount">입금 <fmt:formatNumber pattern="#,###">${depositResult.TRAN_AMT}</fmt:formatNumber>원</div>
 						            </div><!-- account-header -->
 						            <div class="account-item">
 						            	<div class="details">

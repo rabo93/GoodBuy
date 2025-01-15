@@ -171,6 +171,20 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			sendMessage(session, chatMessage);
 			
 		}
+		if (chatMessage.getType().equals(ChatMessage.TYPE_RESPONSE_PAY)) {
+			//	현재 시스템 날짜 시각정보 받아와서 저장
+			chatMessage.setSend_time(getDateTimeNow());
+			//	채팅 메세지 DB 저장 요청
+			chatService.insertChatMessage(chatMessage);
+			
+			if (userList.get(receiver_id) != null) { //	접속중일 경우
+				WebSocketSession receiver_session = userSessionList.get(userList.get(receiver_id));
+				sendMessage(receiver_session, chatMessage);
+			}
+			
+			sendMessage(session, chatMessage);
+			
+		}
 		if (chatMessage.getType().equals(ChatMessage.TYPE_FILE_UPLOAD_COMPLETE)) {
 			//	현재 시스템 날짜 시각정보 받아와서 저장
 			chatMessage.setType(ChatMessage.TYPE_FILE);
@@ -190,6 +204,47 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			chatService.updateMessageRead(chatMessage);
 		}
 		
+		if(chatMessage.getType().equals(ChatMessage.TYPE_RESERVATION)) {
+			//	현재 시스템 날짜 시각정보 받아와서 저장
+			chatMessage.setSend_time(getDateTimeNow());
+			//	채팅 메세지 DB 저장 요청
+			chatService.insertChatMessage(chatMessage);
+			
+			if (userList.get(receiver_id) != null) { //	접속중일 경우
+				WebSocketSession receiver_session = userSessionList.get(userList.get(receiver_id));
+				sendMessage(receiver_session, chatMessage);
+			}
+			
+			sendMessage(session, chatMessage);
+		}
+		
+		if(chatMessage.getType().equals(ChatMessage.TYPE_ACCEPT_RESERVATION)) {
+			//	현재 시스템 날짜 시각정보 받아와서 저장
+			chatMessage.setSend_time(getDateTimeNow());
+			//	채팅 메세지 DB 저장 요청
+			chatService.insertChatMessage(chatMessage);
+			
+			if (userList.get(receiver_id) != null) { //	접속중일 경우
+				WebSocketSession receiver_session = userSessionList.get(userList.get(receiver_id));
+				sendMessage(receiver_session, chatMessage);
+			}
+			
+			sendMessage(session, chatMessage);
+		}
+		
+		if(chatMessage.getType().equals(ChatMessage.TYPE_CANCEL_RESERVATION)) {
+			//	현재 시스템 날짜 시각정보 받아와서 저장
+			chatMessage.setSend_time(getDateTimeNow());
+			//	채팅 메세지 DB 저장 요청
+			chatService.insertChatMessage(chatMessage);
+			
+			if (userList.get(receiver_id) != null) { //	접속중일 경우
+				WebSocketSession receiver_session = userSessionList.get(userList.get(receiver_id));
+				sendMessage(receiver_session, chatMessage);
+			}
+			
+			sendMessage(session, chatMessage);
+		}
 		
 	}
 	

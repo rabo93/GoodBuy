@@ -180,6 +180,7 @@
 .message.other .bubble {
 	margin-left : 5px;
     background-color: #eaeaea;
+    display: flex;
 }
 
 .message .bubble .item-button{
@@ -192,6 +193,11 @@
 	border-radius: 4px;
 	font-size: 0.875rem;
 }
+
+.chat-mem-nick {
+	margin-left: 10px;
+}
+
 
 /* ================= 송금요청 ================== */
 .pay-container {
@@ -215,7 +221,7 @@
 .pay-text {
     font-size: 16px;
     color: #333;
-    margin-bottom: 20px;
+/*     margin-bottom: 5px; */
     font-weight: 600;
 }
 
@@ -235,10 +241,14 @@
 
 .chat-body .chat-bubble .chat-profile {
 	width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid #ccc;
+	height: 40px;
+	border-radius: 50%;
+	border: 1px solid #ccc;
+	overflow: hidden;
 }
+
+.chat-body .chat-bubble .chat-profile img {/* width:100%; */display:block;max-height: 100%;object-fit: cover;margin: 0 auto;}
+
 
 .chat-body .chat-bubble.user{
 	justify-content: right;

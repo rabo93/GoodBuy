@@ -61,7 +61,7 @@
 			        <div class="sidebar"> 
 			        	<c:forEach items="${chatRoomList}" var="chatRoom" varStatus="status">
 				            <div class="sidebar-item ${chatRoom.room_id}" data-index="${status.index}">
-				                <a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>
+				                <a><img src="${pageContext.request.contextPath}/resources/upload/${product[status.index].product_pic1}" alt="item"></a>
 				                <div class="item-container">
 				                	<input type="hidden" id="room_id${status.index}" value="${chatRoom.room_id}">
 				                	<input type="hidden" id="title${status.index}" value="${chatRoom.title}">
@@ -70,6 +70,7 @@
 				                	<input type="hidden" id="grade${status.index}" value="${chatRoom.grade}">
 				                	<input type="hidden" id="mem_nick${status.index}" value="${member[status.index].mem_nick}">
 				                	<input type="hidden" id="mem_profile${status.index}" value="${member[status.index].mem_profile}">
+				                	<input type="hidden" id="product_img${status.index}" value="${product[status.index].product_pic1}">
 					                <div class="item"><strong>${chatRoom.title}</strong>
 					                	<c:if test="${chatMessageCnt[status.index] ne '0' }">
 						                	<span id="messageStatus${status.index}" class="unread_msg">${chatMessageCnt[status.index]}</span>

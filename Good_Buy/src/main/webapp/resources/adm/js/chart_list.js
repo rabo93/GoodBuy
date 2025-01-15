@@ -3,9 +3,6 @@ document.addEventListener("DOMContentLoaded", function(){
 	Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 	Chart.defaults.global.defaultFontColor = '#858796';
 	
-	// 기간 초기화 (최근 7일)
-	
-	
 	// 기간별 채팅 개수
 	fetchData();
 	
@@ -78,6 +75,9 @@ document.addEventListener("DOMContentLoaded", function(){
 // 채팅 AJAX
 function fetchData(schDate = null){
 	const requestData = schDate ? { schDate: schDate } : {};
+		
+	// moment.js 에 한글 추가
+	moment.locale('ko');
 	
 	// 기간별 소통
 	$.ajax({
@@ -87,12 +87,16 @@ function fetchData(schDate = null){
 		contentType : "application/json",
 		data : JSON.stringify(requestData)
 	}).done(function(res) {
+		console.log(res);
 		const labelArr = [];
 		const dataArr = [];
 		for(let key in res) {
-			labelArr.push(moment(res[key].SEND_TIME, 'M월 D, YYYY').format('M/D'));
+//			labelArr.push(moment(res[key].SEND_TIME, 'M월 D, YYYY').format('MM/DD'));
+//			labelArr.push(moment(res[key].SEND_TIME, 'MMM D, YYYY').format('MM/DD'));
+			labelArr.push(res[key].SEND_TIME);
 			dataArr.push(res[key].COUNT);
 		}
+		console.log(labelArr);
 		
 		// 차트 그리기
 		createChart(labelArr, dataArr);		

@@ -157,6 +157,15 @@ ROOM_ID
 		   AND receiver_id = #{sender_id}
 	</update>
 	
+	<!-- 상품 id 가져오기 -->
+	<select id="selectProductInfo" resultType="int">
+		SELECT PRODUCT_ID
+		  FROM CHATROOM
+		 WHERE ROOM_ID = #{room_id}
+		 LIMIT 1
+	</select>
+	
+	
 </mapper>
 
 

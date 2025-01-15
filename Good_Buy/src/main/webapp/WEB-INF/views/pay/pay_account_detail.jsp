@@ -107,6 +107,7 @@
 						                </div>
 		                   				<div class="amount"><fmt:formatNumber pattern="#,###">${accountDetail.available_amt }</fmt:formatNumber>원</div>
 						            </div>
+						            <div class="return-btn"><button onclick="location.href = document.referrer">돌아가기</button></div>
 					        	</div><!-- account-box -->
 							</div><!-- goodpay-container -->
 						</div><!-- contents -->

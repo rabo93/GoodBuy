@@ -32,14 +32,7 @@
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/product.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/pay.js"></script>
-<script>
-	// 창이 닫히기 전에 부모 창 함수 호출
-	window.onbeforeunload = function () {
-        if (window.opener && !window.opener.closed) {
-        	window.opener.reloadParent(); // 부모 창의 함수 호출
-    	}
-	};
-</script>
+<script src="${pageContext.request.contextPath}/resources/js/chat_main.js"></script>
 </head>
 <body>
 	<main>
@@ -49,38 +42,51 @@
 	        	<div class="my-container">
 					<div class="contents-ttl">
 						<h3>굿페이 > 계좌송금</h3><br>
-				        <div class="input-section">
-				        	구매물품 : ${productSearch.product_title}<br>
-							<br>
-<%-- 							'${param.receiver_id}' 님에게 <fmt:formatNumber pattern="#,###">${productSearch.product_price}</fmt:formatNumber>원을 송금합니다. --%>
-							'${param.receiver_id}' 님에게 <fmt:formatNumber pattern="#,###">${price}</fmt:formatNumber>원을 송금합니다.
-							<br><br>
-							<div class="balance-info">굿페이 잔액: <strong>${pay_amount} 원</strong></div>
-							<form action="PayTransfer" method="post">
-								<input type="hidden" name="receiver_id" value="${param.receiver_id}">
-								<input type="hidden" name="product_id" value="${param.product_id}">
-								<input type="hidden" name="tran_amt" value="2000">
-						        <div class="recharge-button">
-						            <button class="transfer-btn-chat">송금하기</button>
-						        </div> 
-							</form>
-				        </div>
-				        <!-- 계좌내역 -->
-				        <div class="accounts">
-				            <h3>내 계좌</h3>
-				            
-							<select class="account-select"  name="withdraw_client_fintech_use_num">
-								<c:forEach var="account" items="${bankUserInfo.res_list}" varStatus="status">
-									<option value="${account.fintech_use_num}" <c:if test="${account.fintech_use_num eq fintech_use_num}">selected</c:if>>
-							                ${account.bank_name} &nbsp;&nbsp; ${account.account_num_masked}
-						           		<c:if test="${account.fintech_use_num eq fintech_use_num}">
-											( 대표계좌 )
-										</c:if>
-									</option>
-								</c:forEach>
-							</select>
-				            <br>
-				       	</div>
+		        		<c:if test="${not empty getPayInfoProduct}">
+		        			<div class="input-section">
+		        				구매물품 : ${productSearch.product_title}<br>
+								<br>
+		        				이미 '${param.receiver_id}' 님에게 <fmt:formatNumber pattern="#,###">${price}</fmt:formatNumber>원을 송금하였습니다.
+		        				<br><br>
+		        				<div class="balance-info">굿페이 잔액: <strong>${pay_amount} 원</strong></div>
+		        				
+		        				<button class="transfer-btn-chat" onclick="closePayWindow('transfer')">송금내역으로 이동</button>
+		        			</div>
+		        		</c:if>
+		        		<c:if test="${empty getPayInfoProduct}">
+		        			<div class="input-section">
+					        	구매물품 : ${productSearch.product_title}<br>
+								<br>
+								'${param.receiver_id}' 님에게 <fmt:formatNumber pattern="#,###">${price}</fmt:formatNumber>원을 송금합니다.
+								<br><br>
+								<div class="balance-info">굿페이 잔액: <strong>${pay_amount} 원</strong></div>
+								<form action="PayTransfer" method="post">
+									<input type="hidden" name="receiver_id" id="receiver_id" value="${param.receiver_id}">
+									<input type="hidden" name="product_id" id="product_id" value="${param.product_id}">
+									<input type="hidden" name="room_id" id="room_id" value="${param.room_id}">
+									<input type="hidden" name="tran_amt" id="tran_amt" value="2000">
+							        <div class="recharge-button">
+							            <button class="transfer-btn-chat" id="transfer-btn-chat" >송금하기</button>
+							        </div> 
+								</form>
+					        </div>
+					        <!-- 계좌내역 -->
+					        <div class="accounts">
+					            <h3>내 계좌</h3>
+					            
+								<select class="account-select"  name="withdraw_client_fintech_use_num">
+									<c:forEach var="account" items="${bankUserInfo.res_list}" varStatus="status">
+										<option value="${account.fintech_use_num}" <c:if test="${account.fintech_use_num eq fintech_use_num}">selected</c:if>>
+								                ${account.bank_name} &nbsp;&nbsp; ${account.account_num_masked}
+							           		<c:if test="${account.fintech_use_num eq fintech_use_num}">
+												( 대표계좌 )
+											</c:if>
+										</option>
+									</c:forEach>
+								</select>
+					            <br>
+					       	</div><!-- accounts -->
+		        		</c:if>
 					</div>
 			    </div>
 				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->

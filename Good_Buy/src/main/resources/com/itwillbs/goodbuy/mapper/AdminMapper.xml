@@ -1042,7 +1042,7 @@
 		       , S.PAY_ADDRESS
 		  FROM PAYINFO S JOIN PRODUCT P
 		    ON P.PRODUCT_ID = S.PRODUCT_ID
-		 WHERE S.PAY_DATE > DATE_ADD(NOW(), INTERVAL - 7 DAY)
+		 WHERE DATE(S.PAY_DATE) > DATE(DATE_ADD(NOW(), INTERVAL - 7 DAY))
 		 ORDER BY S.PAY_DATE ASC
 		 LIMIT 0, 5
 	</select>
@@ -1051,19 +1051,21 @@
     <!-- ************************************************************************* -->
 	<!-- 채팅 통계 -->
 	<select id="selectUserChatCount" resultType="map">
-		SELECT DATE(SEND_TIME) AS SEND_TIME
+		SELECT DATE_FORMAT(SEND_TIME, '%m/%d') AS SEND_TIME
 			   , COUNT(*) AS COUNT
 		  FROM CHATTING
 		 WHERE 1 = 1
 		 <choose>
 		 	<when test="param == null or param.equals('')">
-		 	AND DATE(SEND_TIME) > DATE_ADD(NOW(), INTERVAL - 7 DAY)
+		 	AND DATE(SEND_TIME) > DATE(DATE_ADD(NOW(), INTERVAL - 7 DAY))
 		 	</when>
 		 	<when test="param != null and !param.equals('')">
-		 	AND DATE(SEND_TIME) BETWEEN SUBSTRING_INDEX(#{param}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param}, ' ~ ', -1)
+		 	AND DATE(SEND_TIME) BETWEEN 
+		 		DATE(SUBSTRING_INDEX(#{param}, ' ~ ', 1)) 
+		 		AND DATE(SUBSTRING_INDEX(#{param}, ' ~ ', -1))
 		 	</when>
 		 </choose>
-		 GROUP BY DATE(SEND_TIME)
+		 GROUP BY DATE_FORMAT(SEND_TIME, '%m/%d')
 		 ORDER BY SEND_TIME ASC
 	</select>
 	<!-- 전체 채팅메세지 건수 조회 -->

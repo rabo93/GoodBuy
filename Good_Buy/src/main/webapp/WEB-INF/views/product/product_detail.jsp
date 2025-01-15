@@ -316,7 +316,7 @@
 <!-- 							</button> -->
 						</div>
 						<div class="chat-header">
-			            	<a><img src="${pageContext.request.contextPath}/resources/img/testPicture.png" alt="item"></a>
+			            	<a><img src="${pageContext.request.contextPath}/resources/upload/${productSearch.product_pic1}"></a>
 			                <div class="chat-title">${productSearch.product_title}</div>
 <%-- 			                <c:if test="${productSearch.product_status == 3}"> --%>
 <!-- 			               		<button class="chat-item-button" style="background-color: var(--gray)">판매완료된 상품</button> -->

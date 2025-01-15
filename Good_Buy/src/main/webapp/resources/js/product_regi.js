@@ -41,6 +41,21 @@ $(function(){
 		});
 	}
 	
+	// 카테고리 불러오기
+	$.ajax({
+		url : "getCategory",
+		type : "GET",
+	}).done(function(data) {
+		for(let item of data) {
+			$("#product_category").append(
+				`<option>${item.CODE_NAME}</option>`
+			)
+		}
+	}).fail(function() {
+		alert("카테고리 불러오기 실패\n나중에 다시 시도해주세요.");
+	})
+	
+	
 	// 직거래 주소 입력박스
 	$("#trade-enable, #trade-disable").change(function() {
 	    if ($("#trade-enable").is(":checked")) {

@@ -380,7 +380,7 @@ public class MemberController {
 		// 결과처리
 		if(updateCount > 0) {
 			// 수정 후, 뷰페이지에 뿌릴 세션 및 모델에 프로필경로명 저장
-			session.setAttribute("sProfile", member.getMem_profile());
+//			session.setAttribute("sProfile", member.getMem_profile());
 			model.addAttribute("member", member);
 			model.addAttribute("msg", "회원정보 수정 성공!");
 			model.addAttribute("targetURL", "MyInfo");

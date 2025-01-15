@@ -16,6 +16,7 @@ public class WishlistVO {
 	 private String seller_nickname;
 	 private String product_category;
 	 private String product_trade_adr1;
+	 private String product_pic1;
 	 
 	 
 	

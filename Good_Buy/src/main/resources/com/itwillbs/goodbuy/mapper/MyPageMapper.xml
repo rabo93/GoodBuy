@@ -8,6 +8,7 @@
 	<select id="selectWishlist" resultType="wish">
 			SELECT 
 					P.PRODUCT_TITLE,
+					P.PRODUCT_PIC1,
 					P.PRODUCT_PRICE,
 					P.PRODUCT_TRADE_ADR1,
 					P.PRODUCT_CATEGORY,

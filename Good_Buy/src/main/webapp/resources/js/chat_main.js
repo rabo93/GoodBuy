@@ -196,7 +196,7 @@ function showChatRoom(room) {
 							+ '</button>'
 						+ '</div>'
 						+ '<div class="chat-header">'
-				           	+ '<a><img src="' + baseUrl + "/upload/" +product_img + '" alt="item"></a>'
+				           	+ '<a><img src="' + baseUrl + "/resources/upload/" +product_img + '" alt="item"></a>'
 				           	+ '<div class="title">'+ room.title +' </div>'
 				           	+ '<button class="item-button" onclick="requestPay(' + room.product_id + ', \'' + room.receiver_id + '\', \'' + room.room_id + '\')">송금요청</button>'
 				           + '</div>'

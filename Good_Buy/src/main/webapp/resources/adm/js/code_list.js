@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	// 중복코드 여부 
 	let codeIdCheck = false;
+	
 	// 체크박스
 	const checkAll = $("#checkAll");
 	

@@ -1,17 +1,19 @@
-let myLineChart = null;
+let myLineChart = null; // 차트 전역변수
+
 document.addEventListener("DOMContentLoaded", function(){
 	Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 	Chart.defaults.global.defaultFontColor = '#858796';
 	
-	// 기간별 채팅 개수
+	// 채팅 통계 데이터 가져오기
 	fetchData();
 	
+	// 선택된 날짜로 검색하기
 	$(document).on("click", "#searchDateBtn", function() {
 		const schDate = $("#schDate").val();
         fetchData(schDate); // 선택된 날짜로 조회
 	});
 	
-	// 기간별 검색 필터링 제이쿼리
+	// 기간별 검색 필터링
     $('#schDate').daterangepicker({
 		startDate : moment().subtract(6, 'days'),
 		endDate : moment(),
@@ -42,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function(){
         picker.container.addClass('goodbuyCustomPicker');                            
     });
     
-    // 전체 회원수
+    // 전체 회원수 가져오기
     $.ajax({
 		url: "AllUserCount",
 		type : "POST",
@@ -53,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function(){
 		alert("조회 실패");
 	});
 	
-	// 전체 채팅 건수
+	// 전체 채팅 건수 가져오기
 	$.ajax({
 		url: "AllChatCount",
 		type : "POST",
@@ -64,7 +66,6 @@ document.addEventListener("DOMContentLoaded", function(){
 		alert("조회 실패");
 	});
     
-    
     // 날짜 선택 후에도 placeholder 유지
     $('#schDate').on('apply.daterangepicker', function(ev, picker) {
         $(this).val(`${picker.startDate.format('YYYY-MM-DD')} ~ ${picker.endDate.format('YYYY-MM-DD')}`);
@@ -72,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	
 });
 
-// 채팅 AJAX
+// 채팅 통계 데이터 가져오기
 function fetchData(schDate = null){
 	const requestData = schDate ? { schDate: schDate } : {};
 		
@@ -105,6 +106,7 @@ function fetchData(schDate = null){
 	});
 }
 
+// 차트 생성
 function createChart(labelArr, dataArr){
 	const ctx = document.getElementById("chatAreaChart");
 	
@@ -140,7 +142,6 @@ function createChart(labelArr, dataArr){
 				yAxes: [{
 					ticks: {
 						min: 0,
-//						max: 130,
 						maxTicksLimit: 4, 
 						padding: 5,
 					},

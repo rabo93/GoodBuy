@@ -234,18 +234,18 @@ document.addEventListener("DOMContentLoaded", function(){
 		fnChkByte($("#actionReason"), 500);
 	});
 	
-
-	// 글자수 제한 함수
-	function fnChkByte(item, maxLength){
-		const str = item.val();
-        const strLength = str.length;
-        
-         if (strLength > maxLength) {
-            alert("글자수는 " + maxLength + "자를 초과할 수 없습니다.");
-            $(item).val(str.substr(0, maxLength));      //문자열 자르고 값 넣기
-            fnChkByte(item, maxLength);
-         }
-         $('#lengthInfo').text(strLength);
-    }
 	
 });
+
+// 글자수 제한 함수
+function fnChkByte(item, maxLength){
+	const str = item.val();
+    const strLength = str.length;
+    
+     if (strLength > maxLength) {
+        alert("글자수는 " + maxLength + "자를 초과할 수 없습니다.");
+        $(item).val(str.substr(0, maxLength));      //문자열 자르고 값 넣기
+        fnChkByte(item, maxLength);
+     }
+     $('#lengthInfo').text(strLength);
+}

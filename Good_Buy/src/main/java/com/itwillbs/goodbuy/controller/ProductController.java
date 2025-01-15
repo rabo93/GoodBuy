@@ -262,7 +262,9 @@ public class ProductController {
 	        product.setProduct_pic1(productPics[0]);
 	        product.setProduct_pic2(productPics[1]);
 	        product.setProduct_pic3(productPics[2]);
-
+	        
+	        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> " + product);
+	        
 	    } catch (IllegalStateException | IOException e) {
 	        e.printStackTrace();
 	    }

@@ -42,6 +42,17 @@ public interface AdminMapper {
 
 	// 공통코드 사용여부 실시간 변경
 	int updateCommonCodeStatus(@Param("param") Map<String, String> param);
+
+	// 공통코드 ID 중복 체크
+	String isMainCodeId(@Param("mainCode") String mainCode);
+	
+	// 상세코드ID 중복 체크
+	String isSubCodeId(@Param("param") Map<String, String> param);
+
+	// 공통코드 상세코드 팝업으로 추가
+	int insertSubCommonCode(@Param("param") Map<String, String> param);
+
+	
 	//---------------------------------------------------------
 	// 회원 목록 조회 + 검색 조건
 	List<MemberVO> selectMemberList(@Param("param") Map<String, Object> param);
@@ -225,16 +236,6 @@ public interface AdminMapper {
 	// 기간별 거래금액 통계
 	List<Map<String, Object>> selectTotalPay(@Param("orderDir") String orderDir, @Param("startDate") String startDate, @Param("endDate") String endDate);
 
-
-
-	// 상세코드ID 중복 체크
-	String isSubCodeId(String subCode);
-
-	// 공통코드 상세코드 팝업으로 추가
-	int insertSubCommonCode(@Param("param") Map<String, String> param);
-
-	// 공통코드 ID 중복 체크
-	String isMainCodeId(@Param("mainCode") String mainCode);
 
 
 }

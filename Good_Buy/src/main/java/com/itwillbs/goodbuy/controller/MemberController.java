@@ -464,7 +464,7 @@ public class MemberController {
 		
 		// DB비밀번호와 입력한 비밀번호가 같은지 검증
 		if(dbPasswd == null || !passwordEncoder.matches(memPasswd, dbPasswd)) {
-			model.addAttribute("msg", "권한이 없습니다./n비밀번호를 다시 확인해주세요.");
+			model.addAttribute("msg", "권한이 없습니다.\\n비밀번호를 다시 확인해주세요.");
 			return "result/fail";
 		}
 		
@@ -476,14 +476,17 @@ public class MemberController {
 			memberService.removeMemInfo(id, 3);
 		}
 		
+		
 		// 회원 탈퇴 성공 시 첨부파일 제거 작업
-		String realPath = getRealPath(session);
-		Path path = Paths.get(realPath, member.getMem_profile());
-		try {
-			Files.delete(path);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		String realPath = getRealPath(session);
+//		System.out.println("첨부파일 제거 경로: " + realPath);
+//		Path path = Paths.get(realPath, member.getMem_profile());
+//		System.out.println("첨부파일 제거: " + path);
+//		try {
+//			Files.delete(path);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		
 		// 세션 제거
 		session.invalidate();

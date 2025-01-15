@@ -156,14 +156,15 @@
      <select id="isMainCodeId" resultType="string">
     	SELECT "TRUE" AS RESULT
 		  FROM COMMONCODETYPE
-		 WHERE CODETYPE_ID = #{mainCode};
+		 WHERE CODETYPE_ID = #{mainCode}
      </select>
      
      <!-- 상세코드 ID 중복체크 -->
      <select id="isSubCodeId" resultType="string">
      	SELECT "TRUE" AS RESULT
 		  FROM COMMONCODE
-		 WHERE CODE_ID = #{subCode}
+		 WHERE CODETYPE_ID = #{param.mainCodeId}
+		   AND CODE_ID = #{param.subCodeId}
      </select>
      
      <!-- 공통코드 - 상세코드만 팝업으로 추가 -->
@@ -1051,7 +1052,7 @@
     <!-- ************************************************************************* -->
 	<!-- 채팅 통계 -->
 	<select id="selectUserChatCount" resultType="map">
-		SELECT DATE(SEND_TIME) AS SEND_TIME
+		SELECT DATE_FORMAT(SEND_TIME, '%m/%d') AS SEND_TIME
 			   , COUNT(*) AS COUNT
 		  FROM CHATTING
 		 WHERE 1 = 1
@@ -1065,7 +1066,7 @@
 		 		AND DATE(SUBSTRING_INDEX(#{param}, ' ~ ', -1))
 		 	</when>
 		 </choose>
-		 GROUP BY DATE(SEND_TIME)
+		 GROUP BY DATE_FORMAT(SEND_TIME, '%m/%d')
 		 ORDER BY SEND_TIME ASC
 	</select>
 	<!-- 전체 채팅메세지 건수 조회 -->

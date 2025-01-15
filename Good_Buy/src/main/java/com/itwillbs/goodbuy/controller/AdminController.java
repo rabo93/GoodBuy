@@ -217,8 +217,9 @@ public class AdminController {
 	@ResponseBody
 	@PostMapping("CheckSubCodeId")
 	public String checkSubCodeId(@RequestParam Map<String, String> param) {
-		String subCode = param.get("subCodeId").toString();
-		String subCodeId = service.isSubCodeId(subCode);
+		log.info("param >>>>>>>>> " + param);
+//		String subCode = param.get("subCodeId").toString();
+		String subCodeId = service.isSubCodeId(param);
 		boolean isUsedSubCodeId = false;
 		
 		if("TRUE".equals(subCodeId)) {

@@ -464,7 +464,7 @@ public class MemberController {
 		
 		// DB비밀번호와 입력한 비밀번호가 같은지 검증
 		if(dbPasswd == null || !passwordEncoder.matches(memPasswd, dbPasswd)) {
-			model.addAttribute("msg", "권한이 없습니다./n비밀번호를 다시 확인해주세요.");
+			model.addAttribute("msg", "권한이 없습니다.\\n비밀번호를 다시 확인해주세요.");
 			return "result/fail";
 		}
 		

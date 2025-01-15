@@ -23,6 +23,7 @@
 <!-- ******************* 아래 CSS와 JS는 페이지별로 알맞게 Import 해주세요 ****************** -->
 <!-- CSS for Page -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/product.css">
 
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
@@ -98,6 +99,14 @@
 							<!-- 8개 -->
 							<c:forEach items="${recommeded}" var="list" step="1" end="7">
 								<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.PRODUCT_ID}'">
+									<c:choose>
+										<c:when test="${list.PRODUCT_STATUS == 1}">
+											<div class="status" id="status">거래중</div>
+										</c:when>
+										<c:when test="${list.PRODUCT_STATUS == 2}">
+											<div class="status" id="status">예약중</div>
+										</c:when>
+									</c:choose>
 									<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" />
 									<div class="card-info">
 										<div class="category">
@@ -112,7 +121,9 @@
 										 	${price} 원
 										 </div>
 										<div class="card-row">
-											<span class="add">${list.PRODUCT_TRADE_ADR1}</span>
+											<c:if test="${list.PRODUCT_TRADE_ADR1 != ''}">
+												<span class="add">${list.PRODUCT_TRADE_ADR1}</span>
+											</c:if>
 											<span class="name">${list.MEM_NICK}</span>
 											<span class="time">
 												<script type="text/javascript">
@@ -140,139 +151,6 @@
 					</div>
 				</div>
 			</section>
-<!-- 			<section id="sec03" class="sec"> -->
-<!-- 				<div class="sec-inner"> -->
-<!-- 					<h1 class="sec-ttl"> -->
-<!-- 						여긴 뭐할지 모르겠음 -->
-<!-- 						<button class="more"><i class="fa-solid fa-chevron-right"></i></button> -->
-<!-- 					</h1> -->
-<!-- 					<div class="product-list"> -->
-<!-- 						<ul class="product-wrap"> -->
-<!-- 							8개 -->
-<!-- 							<li class="product-card"> -->
-<%-- 								<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" /> --%>
-<!-- 								<div class="card-info"> -->
-<!-- 									<div class="category"> -->
-<!-- 										<span>생활용품</span> -->
-<!-- 										<span class="type">직거래</span> -->
-<!-- 									</div> -->
-<!-- 									<div class="ttl">젠하이저 H3PRO 팝니다</div> -->
-<!-- 									<div class="price">55,000 원</div> -->
-<!-- 									<div class="card-row"> -->
-<!-- 										<span class="name">홍길동동이</span> -->
-<!-- 										<span class="time">1분 전</span> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 							</li> -->
-<!-- 							<li class="product-card"> -->
-<%-- 								<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" /> --%>
-<!-- 								<div class="card-info"> -->
-<!-- 									<div class="category"> -->
-<!-- 										<span>생활용품</span> -->
-<!-- 										<span class="type">직거래</span> -->
-<!-- 									</div> -->
-<!-- 									<div class="ttl">젠하이저 H3PRO 팝니다</div> -->
-<!-- 									<div class="price">55,000 원</div> -->
-<!-- 									<div class="card-row"> -->
-<!-- 										<span class="name">홍길동동이</span> -->
-<!-- 										<span class="time">1분 전</span> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 							</li> -->
-<!-- 							<li class="product-card"> -->
-<%-- 								<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" /> --%>
-<!-- 								<div class="card-info"> -->
-<!-- 									<div class="category"> -->
-<!-- 										<span>생활용품</span> -->
-<!-- 										<span class="type">직거래</span> -->
-<!-- 									</div> -->
-<!-- 									<div class="ttl">젠하이저 H3PRO 팝니다</div> -->
-<!-- 									<div class="price">55,000 원</div> -->
-<!-- 									<div class="card-row"> -->
-<!-- 										<span class="name">홍길동동이</span> -->
-<!-- 										<span class="time">1분 전</span> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 							</li> -->
-<!-- 							<li class="product-card"> -->
-<%-- 								<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" /> --%>
-<!-- 								<div class="card-info"> -->
-<!-- 									<div class="category"> -->
-<!-- 										<span>생활용품</span> -->
-<!-- 										<span class="type">직거래</span> -->
-<!-- 									</div> -->
-<!-- 									<div class="ttl">젠하이저 H3PRO 팝니다</div> -->
-<!-- 									<div class="price">55,000 원</div> -->
-<!-- 									<div class="card-row"> -->
-<!-- 										<span class="name">홍길동동이</span> -->
-<!-- 										<span class="time">1분 전</span> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 							</li> -->
-<!-- 							<li class="product-card"> -->
-<%-- 								<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" /> --%>
-<!-- 								<div class="card-info"> -->
-<!-- 									<div class="category"> -->
-<!-- 										<span>생활용품</span> -->
-<!-- 										<span class="type">직거래</span> -->
-<!-- 									</div> -->
-<!-- 									<div class="ttl">젠하이저 H3PRO 팝니다</div> -->
-<!-- 									<div class="price">55,000 원</div> -->
-<!-- 									<div class="card-row"> -->
-<!-- 										<span class="name">홍길동동이</span> -->
-<!-- 										<span class="time">1분 전</span> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 							</li> -->
-<!-- 							<li class="product-card"> -->
-<%-- 								<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" /> --%>
-<!-- 								<div class="card-info"> -->
-<!-- 									<div class="category"> -->
-<!-- 										<span>생활용품</span> -->
-<!-- 										<span class="type">직거래</span> -->
-<!-- 									</div> -->
-<!-- 									<div class="ttl">젠하이저 H3PRO 팝니다</div> -->
-<!-- 									<div class="price">55,000 원</div> -->
-<!-- 									<div class="card-row"> -->
-<!-- 										<span class="name">홍길동동이</span> -->
-<!-- 										<span class="time">1분 전</span> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 							</li> -->
-<!-- 							<li class="product-card"> -->
-<%-- 								<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" /> --%>
-<!-- 								<div class="card-info"> -->
-<!-- 									<div class="category"> -->
-<!-- 										<span>생활용품</span> -->
-<!-- 										<span class="type">직거래</span> -->
-<!-- 									</div> -->
-<!-- 									<div class="ttl">젠하이저 H3PRO 팝니다</div> -->
-<!-- 									<div class="price">55,000 원</div> -->
-<!-- 									<div class="card-row"> -->
-<!-- 										<span class="name">홍길동동이</span> -->
-<!-- 										<span class="time">1분 전</span> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 							</li> -->
-<!-- 							<li class="product-card"> -->
-<%-- 								<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" /> --%>
-<!-- 								<div class="card-info"> -->
-<!-- 									<div class="category"> -->
-<!-- 										<span>생활용품</span> -->
-<!-- 										<span class="type">직거래</span> -->
-<!-- 									</div> -->
-<!-- 									<div class="ttl">젠하이저 H3PRO 팝니다</div> -->
-<!-- 									<div class="price">55,000 원</div> -->
-<!-- 									<div class="card-row"> -->
-<!-- 										<span class="name">홍길동동이</span> -->
-<!-- 										<span class="time">1분 전</span> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 							</li> -->
-<!-- 						</ul> -->
-<!-- 					</div> -->
-<!-- 				</div> -->
-<!-- 			</section> -->
 			<!-- *********** // 여기 안에 작업하세요. section.wrapper 건들지말기 ******** -->
 		</section>
 	</main>

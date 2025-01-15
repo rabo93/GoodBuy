@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function(){
 			dataSrc: function (res) {
 				const data = res.OrderList;
 				const start = $('#orderList').DataTable().page.info().start; 
-//				console.log(data);
+				
 				// PK가 아닌 테이블 컬럼 번호 계산(페이징 포함)
 				for (let i = 0; i < data.length; i++) {
 					data[i].listIndex = start + i + 1;

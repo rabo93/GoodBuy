@@ -142,6 +142,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	
 });
 
+// 바 형식 그래프 그리기
 function createBarChart(dataArr) {
 	const ctx = document.getElementById("priceRangeChart");
 	const myLineChart = new Chart(ctx, {

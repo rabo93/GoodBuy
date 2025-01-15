@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function(){
 	const modifyForm = document.querySelector("#modifyForm");
-	
 	const noticeList = $('#noticeList').DataTable({
 		lengthChange : true, // 건수
 		searching : true, // 검색
@@ -134,8 +133,6 @@ document.addEventListener("DOMContentLoaded", function(){
 		}
 			
 		if(confirm("선택한 게시글을 삭제하시겠습니까?\n삭제 후 복구가 불가능합니다.")) {
-			
-			console.log(deleteItems);
 			$.ajax({
 				url : "AdmNoticeDelete",
 				type : "POST",
@@ -144,7 +141,6 @@ document.addEventListener("DOMContentLoaded", function(){
 				success: function(response){
 					alert(response.message);
 					if(response.status == 'success') {
-//						window.location.href = response.redirectURL;
 						noticeList.ajax.reload();
 					} 
 				},
@@ -154,8 +150,6 @@ document.addEventListener("DOMContentLoaded", function(){
 			});
 		}
 	});
-	
-	
 	
 });
 

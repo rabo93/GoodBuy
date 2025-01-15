@@ -67,6 +67,10 @@
 					} else if(result == 2)  {
 						console.log("기존회원 로그인 성공!");
 						closePopupAndRedirect(); 
+					} else if(result == 3)  {
+						console.log("비밀번호 등록이 필요합니다.");
+						alert("최초 로그인시 비밀번호 등록이 필요합니다. 비밀번호 등록 페이지로 이동합니다.");
+				        window.location.href = "/member/sns_pw_regist.jsp"; 
 					} else {
 						console.error("가입 실패");
 						alert("로그인에 실패했습니다. 다시 시도해주세요.");

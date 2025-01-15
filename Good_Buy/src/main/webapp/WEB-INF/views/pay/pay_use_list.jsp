@@ -87,6 +87,10 @@
 							            	</div>
 						            	</c:when>
 						            	<c:otherwise>
+						            		<c:set var="pageNum" value="1" />
+						            		<c:if test="${not empty param.pageNum}">
+												<c:set var="pageNum" value="${param.pageNum}" />
+											</c:if>
 						            		<c:forEach var="item" items="${getPayInfo}" varStatus="status">
 						            			<c:set var="dataType" value="all"/>
 						            			<c:if test="${item.TRANSACTION_TYPE eq 'WI'}">
@@ -103,7 +107,7 @@
 						            			</c:if>
 						            			<c:if test="${item.TRANSACTION_TYPE eq 'TR'}">
 						            				<c:set var="dataType" value="transfer"/>
-						            				<c:set var="detail" value="${productName }"/>
+						            				<c:set var="detail" value="${item.productName }"/>
 						            				<c:set var="classify" value="송금"/>
 						            				<c:if test="${item.RECEIVER_ID != sId }">
 						            					<c:set var="symbol" value="-"/>
@@ -119,7 +123,7 @@
 									                    <span class="date" >
 									                    	<fmt:parseDate var="parsedReplyRegDate"
 																				value="${item.API_TRAN_DTM}" 
-																				pattern="yyyy-MM-dd'T'HH:mm:ss" 
+																				pattern="yyyy-MM-dd'T'HH:mm" 
 																				type="both" /> 
 																<fmt:formatDate value="${parsedReplyRegDate}" pattern="yy.MM.dd" /> 
 															| ${classify}
@@ -130,6 +134,47 @@
 						            		</c:forEach>
 						            	</c:otherwise>
 						            </c:choose>	
+						            <section id="pageList">
+						            	<input type="button" value="&lt;&lt;" 
+											onclick="location.href='AllPayList?pageNum=${pageInfo.startPage - pageInfo.pageListLimit}'"
+											<c:if test="${pageInfo.startPage eq 1}">disabled</c:if>
+										>
+										<%-- [이전] 버튼 클릭 시 이전 페이지 글목록 요청(파라미터로 현재 페이지번호 - 1 전달) --%>
+										<%-- 현재 페이지가 1 페이지일 경우 비활성화(disabled) --%>
+										<input type="button" value="이전" 
+											onclick="location.href='AllPayList?pageNum=${pageNum - 1}'"
+											<c:if test="${pageNum eq 1}">disabled</c:if>
+										>
+										
+										<%-- 계산된 페이지 번호가 저장된 PageInfo 객체(pageInfo)를 통해 페이지번호 출력 --%>
+										<%-- startPage 부터 endPage 까지 1씩 증가하면서 페이지번호 표시 --%>
+										<c:forEach var="i" begin="${pageInfo.startPage}" end="${pageInfo.endPage}">
+											<%-- 각 페이지마다 하이퍼링크 설정(BoardList) => 페이지번호를 파라미터로 전달 --%>
+											<%-- 단, 현재 페이지(i값과 pageNum 파라미터값이 동일)는 하이퍼링크 없이 굵게 표시 --%>
+											<c:choose>
+												<c:when test="${i eq pageNum}">
+													<strong>${i}</strong>
+												</c:when>
+												<c:otherwise>
+													<%-- 페이지번호 클릭 시 해당 페이지 번호를 파라미터로 전달 --%>
+													<a href="AllPayList?pageNum=${i}">${i}</a>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+										
+										<%-- [다음] 버튼 클릭 시 다음 페이지 글목록 요청(파라미터로 현재 페이지번호 + 1 전달)--%>
+										<%-- 현재 페이지가 전체 페이지 수와 동일할 경우 비활성화(disabled) --%>
+										<input type="button" value="다음" 
+											onclick="location.href='AllPayList?pageNum=${pageNum + 1}'"
+											<c:if test="${pageNum eq pageInfo.maxPage}">disabled</c:if>
+										>
+										<%-- 현재 목록의 시작페이지번호에서 페이지 번호 갯수를 더한 페이지 요청 --%>
+										<%-- 끝 페이지가 전체 페이지 수와 동일할 경우 비활성화(disabled) --%>
+										<input type="button" value="&gt;&gt;" 
+											onclick="location.href='AllPayList?pageNum=${pageInfo.startPage + pageInfo.pageListLimit}'"
+											<c:if test="${pageInfo.endPage eq pageInfo.maxPage}">disabled</c:if>
+										>
+						            </section>
 				            		<div class="return-btn"><button onclick="location.href = document.referrer">돌아가기</button></div>		
 							 	</div>
 						    </div>

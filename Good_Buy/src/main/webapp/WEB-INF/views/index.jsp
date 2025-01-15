@@ -68,9 +68,11 @@
 						<a href="#" class="visu-prev"><i class="fa-solid fa-chevron-left"></i></a>
 						<a href="#" class="visu-next"><i class="fa-solid fa-chevron-right"></i></a>
 					</div>
+					<input type="hidden" value="${member.mem_profile}" id="hide">
 				</div>
 				<script>
 					$(document).ready(function(){
+						console.log($("#hide").val());
 						// section01. 메인 비주얼 슬라이드
 						$(".main-visual").slick({
 							infinite : true, 

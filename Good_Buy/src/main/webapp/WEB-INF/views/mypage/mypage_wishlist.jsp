@@ -60,12 +60,10 @@
 						<div class="my-rev-li">
 							<c:choose>
 							<c:when test="${empty wishlist}">
-								<ul>
-									<li>관심상품이 없습니다.</li>
-								</ul>
+								<div class="product-card-empty">관심상품이 없습니다.</div>
 							</c:when>
 							<c:otherwise>
-								<ul>
+								<ul class="myproduct-wrap">
 									<c:forEach var="wish" items="${wishlist}">
 <!-- 										<li> -->
 <!-- 											<div class="thumb-area"> -->
@@ -108,7 +106,6 @@
 												</div>
 											</div>
 										</li>
-
 									</c:forEach>
 								</ul>							
 							</c:otherwise>

@@ -51,7 +51,7 @@
 							<button class="faq-button" onclick="showFAQ('policy')">운영정책</button>
 							<button class="faq-button" onclick="showFAQ('memberAccount')">회원/계정</button>
 							<button class="faq-button" onclick="showFAQ('payment')">결제/페이</button>
-							<button class="faq-button" onclick="showFAQ('advertise')">광고서비스</button>
+<!-- 							<button class="faq-button" onclick="showFAQ('advertise')">광고서비스</button> -->
 							<button class="faq-button" onclick="showFAQ('etc')">기타</button>
 						</div>
 						<div class="faq-list" id="policy">

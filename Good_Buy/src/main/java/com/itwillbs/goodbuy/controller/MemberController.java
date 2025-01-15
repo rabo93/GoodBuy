@@ -521,9 +521,7 @@ public class MemberController {
 		log.info(">>>>>>>>> 네이버 가입 계정 : " + member);
 		
 		String mem_email = (String)member.getMem_email();
-		
 		MemberVO dbMember = memberService.getMemberEmail(mem_email);
-		
 		log.info(">>>>>>>>>> 네이버 중복계정여부: " + dbMember);
 		
 		// 신규 회원 처리
@@ -539,11 +537,17 @@ public class MemberController {
 	        setSessionAttributes(session, member); // 세션 설정
 	        return 1; // 신규 회원 등록 성공
 	    }
+	    
+	    // 비밀번호가 없는 경우 비밀번호 등록 페이지로 이동
+	    if(dbMember.getMem_passwd() == null) {
+	    	return 3;
+	    }
 
 	    // 기존 회원 처리
 	    setSessionAttributes(session, dbMember); // 세션 설정
 	    log.info(">>>>> 네이버 중복 계정(기존 회원)");
 	    return 2; // 기존 회원
+	    
 	}
 	
 	// 세션 설정 메서드 
@@ -555,6 +559,5 @@ public class MemberController {
 		session.setMaxInactiveInterval(60 * 120);
 	}
 		
-
 
 }

@@ -72,9 +72,6 @@
 								        <button class="my-account" onclick="linkAccount()">계좌인증</button>
 						        	</div>
 						        </div>
-						
-						        <!-- 최근 이용 내역 -->
-						        송금받은 내역은 떠야 함. 
 						    </div>
 						</div>
 					</div>

@@ -345,6 +345,7 @@ public class AdminController {
 	@ResponseBody
 	@PostMapping("AdmMemberListForm")
 	public String admMemberListForm(@RequestParam Map<String, String> param) {
+		log.info("param? " + param);
 		Map<String, Object> convertParam = convertMap(param);
 		
 		// 회원 목록 전체 컬럼 수 조회

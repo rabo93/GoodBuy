@@ -225,7 +225,8 @@ public class ProductController {
 								 @RequestParam("pic1") MultipartFile pic1,
 								 @RequestParam("pic2") MultipartFile pic2,
 								 @RequestParam("pic3") MultipartFile pic3,
-								 @RequestParam("Product_ID")int product_ID) {
+								 @RequestParam("Product_ID")int product_ID,
+								 @RequestParam(defaultValue = "0")int product_shipping_fee) {
 
 	    try {
 	    	ProductVO getProductPic = productService.getProductPic(product_ID);
@@ -261,7 +262,8 @@ public class ProductController {
 	                productPics[i] = oldFileNames[i];
 	            }
 	        }
-
+	        
+	        product.setProduct_shipping_fee(product_shipping_fee);
 	        product.setProduct_pic1(productPics[0]);
 	        product.setProduct_pic2(productPics[1]);
 	        product.setProduct_pic3(productPics[2]);

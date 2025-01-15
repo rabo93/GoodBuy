@@ -101,9 +101,13 @@
 									<label><input type="radio" name="shipping-fee" id="shipping-fee-enable"  value="0">택배비 미포함</label>
 									<label><input type="radio" name="shipping-fee" id="shipping-fee-disable" value="1">택배비 포함</label>
 									<div class="item-regi-price-number">
-										<input type="number" class="shipping-fee-price" id="shipping-fee-price" name="product_shipping_fee" value="${productContent.product_shipping_fee}" placeholder="택배비를 입력해주세요.">
-										<input type="hidden" name="product_shipping_fee" value="0">
-										<div><input type="number" class="item-price" name="product_price" value="${productContent.PRODUCT_PRICE}" placeholder="상품 가격을 입력해주세요."></div>
+										<input type="number" class="shipping-fee-price" id="shipping-fee-price" name="product_shipping_fee" placeholder="택배비를 입력해주세요."
+											<c:choose>
+												<c:when test="${not empty productContent.product_shipping_fee}">value="${productContent.product_shipping_fee}"</c:when>
+												<c:otherwise>value="0"</c:otherwise>
+											</c:choose>
+										>
+										<div><input type="number" class="item-price" name="product_price" id="product_price" value="${productContent.PRODUCT_PRICE}" placeholder="상품 가격을 입력해주세요."></div>
 										<label class="item-discount-box"><input type="checkbox" class="item-discount" id="item-discount" name="product_discount_status" value="1">가격 제안 가능</label>
 										<input type="hidden" name="product_discount_status" value="0">
 									</div>

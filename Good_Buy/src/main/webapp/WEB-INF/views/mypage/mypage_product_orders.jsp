@@ -60,7 +60,7 @@
                                         <div class ="product-card-empty">구매내역이 없습니다.</div>
                                     </c:when>
                                     <c:otherwise>
-                                    <ul class="product-wrap">
+                                    <ul class="myproduct-wrap">
                                         <c:forEach var="product" items="${order}">
                                             <li class="product-card">
                                             	<a href='ProductDetail?PRODUCT_ID=${product.PRODUCT_ID}'>

@@ -76,7 +76,6 @@
 						            <div class="product-card-empty" data-status="none">등록된 상품이 없습니다.</div>
 						        </c:when>
 						        <c:otherwise>
-						        <ul class="product-wrap">
 						            <c:forEach var="product" items="${product}">
 						                <li class="product-card" data-status="${product.product_status}">
 						                    <a href='ProductDetail?PRODUCT_ID=${product.product_id}'>
@@ -119,7 +118,6 @@
 						                    </div>
 						                </li>
 						            </c:forEach>
-						            </ul>
 						        </c:otherwise>
 						    </c:choose>
 						</ul>

@@ -80,12 +80,6 @@
 							<section class="item-regi-category">
 								<h6 class="item-regi-category-name">카테고리 & 태그</h6>
 								<select class="item-regi-category-box" name="product_category" id="product_category">
-									<option>여성의류</option>
-									<option>남성의류</option>
-									<option>레저/스포츠</option>
-									<option>생활용품</option>
-									<option>키즈</option>
-									<option>도서</option>
 								</select>
 							</section>
 							<section class="item-regi-trade-adr">
@@ -107,8 +101,8 @@
 									<label><input type="radio" name="shipping-fee" id="shipping-fee-enable"  value="0">택배비 미포함</label>
 									<label><input type="radio" name="shipping-fee" id="shipping-fee-disable" value="1">택배비 포함</label>
 									<div class="item-regi-price-number">
-										<input type="hidden" name="product_shipping_fee" value="0">
 										<input type="number" class="shipping-fee-price" id="shipping-fee-price" name="product_shipping_fee" value="${productContent.product_shipping_fee}" placeholder="택배비를 입력해주세요.">
+										<input type="hidden" name="product_shipping_fee" value="0">
 										<div><input type="number" class="item-price" name="product_price" value="${productContent.PRODUCT_PRICE}" placeholder="상품 가격을 입력해주세요."></div>
 										<label class="item-discount-box"><input type="checkbox" class="item-discount" id="item-discount" name="product_discount_status" value="1">가격 제안 가능</label>
 										<input type="hidden" name="product_discount_status" value="0">

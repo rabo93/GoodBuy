@@ -72,7 +72,7 @@ if ($("#product-wrap2")) {
 						status = `<div class="status" id="status">예약중</div>` 
 					}
 					
-					$("#product-wrap").append(
+					$("#product-wrap2").append(
 					`<li class="product-card" id="product-card" onclick="location.href=\'ProductDetail?PRODUCT_ID=${item.PRODUCT_ID}'">
 						${status}
 						<div class="product-thumb">

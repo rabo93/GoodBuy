@@ -32,22 +32,22 @@
 			</div>
 			<div class="gnb-right">
 				<c:choose>
-<%-- 					<c:when test="${not empty member.mem_profile}"> --%>
-					<c:when test="${not empty sessionScope.sId}">
+					<c:when test="${not empty member.mem_profile}">
+<%-- 					<c:when test="${not empty sessionScope.sId}"> --%>
 						<button type="button" class="gnb-btn" id="login-btn">
 							<c:choose>
-<%-- 								<c:when test="${not empty member.mem_profile}"> --%>
-<%-- 									<img src="${member.mem_profile}" alt="프로필사진"><br> --%>
-<%-- 								</c:when> --%>
-								<c:when test="${not empty sessionScope.sProfile}">
-<%-- 									<img src="${sessionScope.sProfile}?${System.currentTimeMillis()}" alt="프로필사진" class="profile-pic"> --%>
-									<img src="${sessionScope.sProfile}" alt="프로필사진">
+								<c:when test="${not empty member.mem_profile}">
+									<img src="${member.mem_profile}" alt="프로필사진"><br>
 								</c:when>
+<%-- 								<c:when test="${not empty sessionScope.sProfile}"> --%>
+<%-- 									<img src="${sessionScope.sProfile}" alt="프로필사진"> --%>
+<%-- 								</c:when> --%>
 								<c:otherwise>
 									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" alt="프로필사진">
 								</c:otherwise>
 							</c:choose>
-							<b>${sessionScope.sNick}</b> 님
+							<b>${member.mem_nick}</b> 님
+<%-- 							<b>${sessionScope.sNick}</b> 님 --%>
 						</button>
 						<div id="login-panel">
 							<a href="MyStore">나의상점</a>
@@ -82,26 +82,26 @@
         	<nav id="m_nav">
         		<div class="m-info">
         			<c:choose>
-						<c:when test="${empty sessionScope.sId}">
+						<c:when test="${empty member.mem_id}">
 	        				<a href="SNSLogin" class="gnb-btn"><i class="fa-solid fa-user"></i> 로그인</a>
 						</c:when>
 						<c:otherwise>
 							<c:choose>
-								<c:when test="${not empty sessionScope.sProfile}">
-									<img src="${sessionScope.sProfile}" alt="프로필사진">
+								<c:when test="${not empty member.mem_profile}">
+									<img src="${member.mem_profile}" alt="프로필사진">
 								</c:when>
 								<c:otherwise>
 									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" alt="프로필사진" clas>
 								</c:otherwise>
 							</c:choose>
-								<a href="MyInfo" class="my-info"><span>${sessionScope.sId} </span> 님</a>
+								<a href="MyInfo" class="my-info"><span>${member.mem_nick} </span> 님</a>
 			        			<a href="ProductRegist" class="gnb-btn"><i class="fa-solid fa-store"></i> 판매하기</a>
 								<a href="javascript:void(0)" class="gnb-btn" onclick="startChat()">
 									<i class="fa-solid fa-comment-dots"></i> 채팅하기
 								</a>
 								<a href="MemberLogout">로그아웃</a>
-								<input type="hidden" id="sId" value="${sessionScope.sId}">
-								<input type="hidden" id="sNick" value="${sessionScope.sNick}">
+								<input type="hidden" id="sId" value="${member.mem_id}">
+								<input type="hidden" id="sNick" value="${member.mem_nick}">
 						</c:otherwise>				
 					</c:choose>
         		</div>

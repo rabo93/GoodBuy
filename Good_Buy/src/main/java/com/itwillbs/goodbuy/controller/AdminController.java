@@ -208,7 +208,7 @@ public class AdminController {
 		String mainCodeId = service.isMainCodeId(mainCode);
 		boolean isUsedMainCodeId = false;
 		
-		if("TRUE".equals(mainCodeId)) {
+		if (mainCodeId.equals("TRUE")) {
 			isUsedMainCodeId = true;
 		}
 		
@@ -224,7 +224,7 @@ public class AdminController {
 		String subCodeId = service.isSubCodeId(param);
 		boolean isUsedSubCodeId = false;
 		
-		if("TRUE".equals(subCodeId)) {
+		if(subCodeId.equals("TRUE")) {
 			isUsedSubCodeId = true;
 		}
 		

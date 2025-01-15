@@ -31,7 +31,7 @@ public class AdminService {
 		// 상위코드 등록
 		int insertMainCodeResult = mapper.insertCommonCode(mainCode);
 		if(insertMainCodeResult == 0) {
-			throw new RuntimeException("공통코드 등록에 실패했습니다.");
+			throw new RuntimeException("코드타입 등록에 실패했습니다.");
 		}
 			
 		// 하위코드 등록
@@ -42,7 +42,7 @@ public class AdminService {
 		
 		int insertSubCodeResult = mapper.insertCommonCodeType(subCodes);
 		if(insertSubCodeResult == 0) {
-			throw new RuntimeException("상세코드 등록에 실패했습니다.");
+			throw new RuntimeException("공통코드 등록에 실패했습니다.");
 		}
 		
 		return insertMainCodeResult + insertSubCodeResult;
@@ -81,7 +81,7 @@ public class AdminService {
 		// 하위코드 삭제
 		int deleteCommonCodeResult = mapper.deleteCommonCodes(param);
 		if(deleteCommonCodeResult == 0) {
-			log.info(">>> 삭제할 하위코드가 없습니다.");
+			log.info(">>> 삭제할 공통코드가 없습니다.");
 			throw new RuntimeException("공통코드 삭제에 실패했습니다.");
 		}
 		

@@ -156,14 +156,15 @@
      <select id="isMainCodeId" resultType="string">
     	SELECT "TRUE" AS RESULT
 		  FROM COMMONCODETYPE
-		 WHERE CODETYPE_ID = #{mainCode};
+		 WHERE CODETYPE_ID = #{mainCode}
      </select>
      
      <!-- 상세코드 ID 중복체크 -->
      <select id="isSubCodeId" resultType="string">
      	SELECT "TRUE" AS RESULT
 		  FROM COMMONCODE
-		 WHERE CODE_ID = #{subCode}
+		 WHERE CODETYPE_ID = #{param.mainCodeId}
+		   AND CODE_ID = #{param.subCodeId}
      </select>
      
      <!-- 공통코드 - 상세코드만 팝업으로 추가 -->

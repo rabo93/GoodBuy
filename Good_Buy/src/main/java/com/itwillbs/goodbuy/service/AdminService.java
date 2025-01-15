@@ -113,8 +113,8 @@ public class AdminService {
 	}
 
 	// 상세코드 ID 중복체크
-	public String isSubCodeId(String subCode) {
-		return mapper.isSubCodeId(subCode);
+	public String isSubCodeId(Map<String, String> param) {
+		return mapper.isSubCodeId(param);
 	}
 
 	// 공통코드 상세코드 팝업으로 추가

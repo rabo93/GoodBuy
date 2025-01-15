@@ -207,6 +207,7 @@
 						<div class="mb-1">
 							<label for="updatedCodeId" class="col-form-label">공통코드ID</label>
 							<input type="text" class="form-control" name="CODE_ID" id="updatedCodeId" required>
+							<span id="updateSubCodeIdResult" class="result"></span>
 						</div>
 						<div class="mb-1">
 							<label for="updatedCodeName" class="col-form-label">공통코드명</label>

@@ -20,6 +20,7 @@
 <!-- font-awesome -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/fontawesome/all.min.css" />
 <script src="${pageContext.request.contextPath}/resources/fontawesome/all.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
 
 <!-- ******************* 아래 CSS와 JS는 페이지별로 알맞게 Import 해주세요 ****************** -->
 <!-- CSS for Page -->
@@ -84,7 +85,11 @@
 						                    <div class="card-info">
 						                        <div class="category">
 						                            <span>${product.product_category}</span>
-						                            <span class="type">직거래</span>
+						                            <span class="type">
+						                            	<c:if test="${product.product_trade_adr1 != ''}">
+															<span class="type">직거래</span>
+														</c:if>
+						                            </span>
 						                        </div>
 						                        <div class="ttl">
 						                            <c:choose>

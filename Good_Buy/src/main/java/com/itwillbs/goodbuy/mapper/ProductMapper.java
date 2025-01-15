@@ -89,4 +89,8 @@ public interface ProductMapper {
 
 	// 메인화면 추천상품 가져오기
 	List<Map<String, Object>> getRecommendedItem();
+	// 구매확정 버튼
+	int updateProductStatus(
+			@Param("product_id") String product_id,
+			@Param("mem_id") String product_seller);
 }

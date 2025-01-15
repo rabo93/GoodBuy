@@ -144,5 +144,11 @@ public class ProductService {
 	public List<Map<String, Object>> getRecommendedItem() {
 		return mapper.getRecommendedItem();
 	}
-
+	
+	//구매확정버튼
+	
+	public int successOrder(String product_id,String product_seller) {
+		return mapper.updateProductStatus(product_id,product_seller);
+	}
+	
 }

@@ -87,18 +87,34 @@
 	                               					</c:choose>
 	                               					<span class="id">${chat.SENDER_ID}</span>
 	                               					<span class="time">${chat.SEND_TIME}</span>
-		                               				<span class="read <c:if test="${chat.READ_STATE == 1}">no</c:if>"><i class="fa-solid fa-circle-check"></i></span>
+		                               				<span class="read <c:if test="${chat.READ_STATE == 0}">no</c:if>"><i class="fa-solid fa-circle-check"></i></span>
 	                               				</div>
 	                               				<div class="message">
 	                               					<c:choose>
-	                               						<c:when test="${chat.TYPE.equals('TALK')}">
-				                                			${chat.MESSAGE}
-	                               						</c:when>
 	                               						<c:when test="${chat.TYPE.equals('FILE')}">
 	                               							<a href="${pageContext.request.contextPath}/resources/upload/chat/${fn:split(chat.MESSAGE, ':')[0]}" target="_blank">
 	                               								<img src="${pageContext.request.contextPath}/resources/upload/chat/${fn:split(chat.MESSAGE, ':')[1]}">
 	                               							</a>
+	                               							<span>사진을 보냈습니다.</span>
 	                               						</c:when>
+	                               						<c:when test="${chat.TYPE.equals('TALK')}">
+				                                			<span>${chat.MESSAGE}</span>
+	                               						</c:when>
+	                               						<c:when test="${chat.TYPE.equals('REQUEST_PAY')}">
+				                                			<span class="text-primary font-weight-bold">${chat.MESSAGE} 원을 요청했어요</span>
+	                               						</c:when>
+	                               						<c:when test="${chat.TYPE.equals('RESPONSE_PAY')}">
+				                                			<span class="text-success font-weight-bold">${chat.MESSAGE} 원을 송금했어요</span>
+	                               						</c:when>
+	                               						<c:when test="${chat.TYPE.equals('RESERVATION')}">
+				                                			<span class="text-info font-weight-bold">${chat.MESSAGE} 을 요청했어요</span>
+	                               						</c:when>
+	                               						<c:when test="${chat.TYPE.equals('ACCEPT_RESERVATION') || chat.TYPE.equals('CANCEL_RESERVATION')}">
+				                                			<span class="text-danger font-weight-bold">상품 예약을 ${chat.MESSAGE} 했어요</span>
+	                               						</c:when>
+	                               						<c:otherwise>
+				                                			<span>${chat.MESSAGE}</span>
+	                               						</c:otherwise>
 	                               					</c:choose>
 	                               				</div>
 	                                		</li>

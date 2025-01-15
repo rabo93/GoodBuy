@@ -48,7 +48,9 @@ public class ProductService {
 													  String product_price,
 													  String product_trade_adr1,
 													  String search_keyword,
-													  String product_category) {
+													  String product_category,
+													  int startRow, 
+													  int listLimit) {
 	    int price_start = 0;
 	    int price_end = 0;
 
@@ -57,7 +59,7 @@ public class ProductService {
 	        price_end = Integer.parseInt(product_price.split("_")[1]);
 	    }
 
-	    return mapper.searchFliterList(price_start, price_end, product_status, product_trade_adr1, search_keyword, product_category);
+	    return mapper.searchFliterList(price_start, price_end, product_status, product_trade_adr1, search_keyword, product_category, startRow, listLimit);
 	}
 	
 	// 상품 상세정보 조회
@@ -151,4 +153,9 @@ public class ProductService {
 		return mapper.updateProductStatus(product_id,product_seller);
 	}
 	
+	// 메인화면 무한 스크롤
+	public List<Map<String, Object>> getRecommendedItem(int startRow, int listLimit) {
+		return mapper.getRecommendedItem(startRow, listLimit);
+	}
+
 }

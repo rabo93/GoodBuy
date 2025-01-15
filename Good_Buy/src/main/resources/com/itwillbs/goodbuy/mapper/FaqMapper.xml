@@ -11,6 +11,7 @@
 			 , FAQ_CATE
 			 , LIST_STATUS
 		  FROM FAQ
+		 WHERE LIST_STATUS = 1
 	</select>
 	
 	<!-- FAQ 글쓰기 -->

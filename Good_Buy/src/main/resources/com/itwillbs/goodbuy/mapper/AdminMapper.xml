@@ -154,16 +154,28 @@
      
      <!-- 공통코드 ID 중복체크 -->
      <select id="isMainCodeId" resultType="string">
-    	SELECT "TRUE" AS RESULT
-		  FROM COMMONCODETYPE
-		 WHERE CODETYPE_ID = #{mainCode};
+     	SELECT
+			CASE (
+				SELECT 1
+		        FROM COMMONCODETYPE
+		        WHERE CODETYPE_ID = #{mainCode}
+		    ) WHEN 1 THEN 'TRUE'
+		      ELSE 'FALSE'
+		END AS RESULT
      </select>
      
      <!-- 상세코드 ID 중복체크 -->
      <select id="isSubCodeId" resultType="string">
-     	SELECT "TRUE" AS RESULT
-		  FROM COMMONCODE
-		 WHERE CODE_ID = #{subCode}
+	     SELECT 
+				CASE (
+					SELECT 1
+					FROM COMMONCODE
+					WHERE CODETYPE_ID = #{param.mainCodeId}
+					  AND CODE_ID = #{param.subCodeId}
+			    )
+			    WHEN 1 THEN 'TRUE'
+			    ELSE 'FALSE'
+			END AS RESULT
      </select>
      
      <!-- 공통코드 - 상세코드만 팝업으로 추가 -->

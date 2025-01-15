@@ -495,6 +495,8 @@ function ckReNick() {
 function myInfoModify(){
 	event.preventDefault(); // 조건 만족 전에 폼 제출 되는 것을 막음
 	
+	
+	
     //--------------------------------------------
     // 닉네임 변경시 중복 검사(기존 닉네임과 같을 경우에는 유지) 함수 호출
 	// 비동기 처리이므로, 반드시 ckReNick이 true인 상태에서만 폼을 제출하도록 해야 함

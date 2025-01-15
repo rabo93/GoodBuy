@@ -66,7 +66,7 @@
 									<c:choose>
 							            <c:when test="${not empty member.mem_profile}">
 <%-- 							            	<img src="${member.mem_profile}?${System.currentTimeMillis()}" id="profile_preview"><br> --%>
-							                <img src="${member.mem_profile}" id="profile_preview"><br>
+							                <img src="${member.mem_profile}" id="profile_preview" name="mem_profile"><br>
 							            </c:when>
 							            <c:otherwise>
 							                <!-- member.memProfile이 비어 있으면 기본 이미지 출력 -->

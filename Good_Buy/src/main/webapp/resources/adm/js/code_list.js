@@ -1,7 +1,13 @@
 $(document).ready(function() {
+	// 중복코드 여부 
 	let codeIdCheck = false;
+	// 체크박스
+	const checkAll = $("#checkAll");
+	
+	// 수정 모달
 	const modifyForm = document.querySelector("#modifyForm");
 	
+	// 테이블
 	const codeList = $('#codeList').DataTable({
 		lengthChange : true, // 건수
 		searching : true, // 검색
@@ -171,8 +177,8 @@ $(document).ready(function() {
 		
 	});
 	
+	// 상세코드ID 중복 확인
 	$("#newCodeId").on("keyup", function(){
-		// 상세코드ID 중복 확인
 		$.ajax({
 			url : "CheckSubCodeId",
 			type : "POST",
@@ -212,7 +218,7 @@ $(document).ready(function() {
 			return;
 		}
 		
-		// 저장
+		// 공통코드 중복이 되지 않으면 저장
 		$.ajax({
 			url: "AddCommonCode",
 			type: "POST",
@@ -225,11 +231,9 @@ $(document).ready(function() {
 				subCodeSeq: $("#newCodeSeq").val(),
 			},
 			success: function(res){
-//				window.location.href = res.redirectURL;
 				$("#addCommonCodes").modal('hide');
 				alert("공통코드가 추가되었습니다.");
 				codeList.ajax.reload();
-				
 			},
 			error: function(){
 				alert("등록 실패");
@@ -240,7 +244,6 @@ $(document).ready(function() {
 	
 	
 	// 체크박스 전체 선택
-	const checkAll = $("#checkAll");
 	checkAll.on("change", function() {
 		codeList.rows().every(function (index) {
 	        const row = this.node(); // 현재 행

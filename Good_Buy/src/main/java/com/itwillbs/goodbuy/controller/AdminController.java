@@ -45,11 +45,12 @@ public class AdminController {
 	private AdminService service;
 	
 	// 공지사항 첨부파일 URL
-	String uploadPath = "/resources/upload";
+	private String uploadPath = "/resources/upload";
 	
 	// datatables parameter
-	List<String> intColumns = Arrays.asList("draw", "start", "length", "mem_status", "faq_cate", "list_status");
+	private List<String> intColumns = Arrays.asList("draw", "start", "length", "mem_status", "faq_cate", "list_status");
 	
+	// =====================================================
 	// [ 관리자 메인 ]
 	// 관리자 메인
 	@LoginCheck(memberRole = MemberRole.ADMIN)
@@ -80,16 +81,17 @@ public class AdminController {
 		return "admin/index";
 	}
 	
+	// 가격대별 상품 분포 - Bar Chart
 	@ResponseBody
 	@PostMapping("PriceRangeChart")
 	public String priceRangeChart() {
-		// 가격대별 상품 분포
 		Map<String, Object> priceRange = service.getPriceRange();
 		System.out.println("priceRange : " + priceRange);
 		
 		return new Gson().toJson(priceRange);
 	}
 	
+	// 카테고리별 상품 개수 통계 - Donut Chart
 	@ResponseBody
 	@PostMapping("CategoryStats")
 	public String categoryStats() {
@@ -100,6 +102,7 @@ public class AdminController {
 		return new Gson().toJson(categoryStats);
 	}
 	
+	// 최근 일주일간 거래 목록 - Datatables
 	@ResponseBody
 	@PostMapping("WeeklyTransaction")
 	public String WeeklyTransaction() {	
@@ -115,7 +118,6 @@ public class AdminController {
 		
 		return jo.toString();
 	}
-	
 	
 	// ======================================================
 	// [ 공통코드 관리 ]
@@ -198,7 +200,7 @@ public class AdminController {
 		return commonCodes;
 	}
 	
-	// 공통코드 ID 중복체크
+	// 코드타입 ID 중복체크
 	@ResponseBody
 	@PostMapping("CheckCommonCodeID")
 	public String checkCommonCodeID(@RequestParam Map<String, String> param) {
@@ -213,7 +215,7 @@ public class AdminController {
 		return isUsedMainCodeId + "";
 	}
 	
-	// 상세코드ID 중복체크
+	// 공통코드 ID 중복체크
 	@ResponseBody
 	@PostMapping("CheckSubCodeId")
 	public String checkSubCodeId(@RequestParam Map<String, String> param) {
@@ -229,7 +231,7 @@ public class AdminController {
 		return isUsedSubCodeId + "";
 	}
 	
-	// 상세코드 추가 등록
+	// 공통코드 팝업에서 추가 등록
 	@ResponseBody
 	@PostMapping("AddCommonCode")
 	public Map<String, String> addCommonCode(@RequestParam Map<String, String> param) {
@@ -251,7 +253,6 @@ public class AdminController {
 		return response;
 	}
 	
-	
 	// 공통코드 관리 - 수정
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmCommoncodeModify")
@@ -266,7 +267,6 @@ public class AdminController {
 			model.addAttribute("msg", "공통코드 수정에 실패했습니다. 입력값을 확인하세요.");
 			return "result/fail";
 		}
-		
 	}
 	
 	// 공통코드 관리 - 삭제
@@ -596,16 +596,15 @@ public class AdminController {
 		return "admin/reported_chat_history";
 	}
 	// ======================================================
-	// 공지사항 관리
+	// [ 고객지원 관리 ]
+	// 공지사항 관리 이동
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmNoticeList")
 	public String admNoticeListForm() {
 		return "admin/notice_list";
 	}
 	
-	// ======================================================
-	// [ 고객지원 관리 ]
-	// - 공지사항 관리	
+	// 공지사항 관리 목록 조회
 	@ResponseBody
 	@PostMapping("AdmNoticeList")
 	public String admNoticeList(@RequestParam Map<String, String> param) {
@@ -678,9 +677,6 @@ public class AdminController {
 		return response;
 	}
 	
-	
-	// ======================================================
-	// [ 고객지원 관리 ]
 	// 1:1문의 목록 - 포워딩
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmSupportList")
@@ -729,7 +725,6 @@ public class AdminController {
 		return jo.toString();
 	}
 	
-	//----------------------------------------------------------------------------------------
 	// 1:1 문의 - 답글달기(+ 수정하기)
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@PostMapping("AdmSupportAction")
@@ -749,16 +744,14 @@ public class AdminController {
 		}
 	}
 
-	// ======================================================
-	// [ 고객지원 관리 ]
-	// - FAQ 관리 페이지 - 포워딩
+	// FAQ 관리 페이지 - 포워딩
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("AdmFaqList")
 	public String admFaqList() {
 		return "admin/faq_list";
 	}
 	
-	// [ FAQ 목록 조회 ]
+	// FAQ 목록 조회
 	@ResponseBody
 	@PostMapping("FaqListForm")
 	public String admFaqListForm(@RequestParam Map<String, String> param) {
@@ -782,13 +775,12 @@ public class AdminController {
 		response.put("recordsTotal", recordsTotal); // 전체 컬럼 수
 		response.put("recordsFiltered", recordsFiltered); // 검색 필터링 후 컬럼 수
 		response.put("faqList", faqList); // 컬럼 데이터
-//		System.out.println("Map: "+ response); 
 		
 		JSONObject jo = new JSONObject(response);
 		return jo.toString();
 	}
-	//-------------------------------------------------------------------------------------
-	// [ FAQ 수정 ]
+	
+	// FAQ 수정
 	@PostMapping("AdmFaqModify")
 	public String admFaqModify(@RequestParam Map<String, Object> param, Model model) {
 //		log.info(">>> 수정할 faq 정보: " + param);
@@ -805,8 +797,7 @@ public class AdminController {
 		}
 	}
 	
-	//-------------------------------------------------------------------------------------
-	// [ FAQ 삭제 ]
+	// FAQ 삭제
 	@ResponseBody
 	@PostMapping("AdmFaqDelete")
 	public Map<String, Object> admFaqDelete(@RequestBody List<Integer> faqIds) {
@@ -828,8 +819,7 @@ public class AdminController {
 		return response;
 	}
 	
-	//-------------------------------------------------------------------------------------
-	// [ FAQ 사용여부 실시간 업데이트 ]
+	// FAQ 사용여부 실시간 업데이트
 	@ResponseBody
 	@PostMapping("UpdateFaqStatus")
 	public Map<String, Object> updateFaqStatus(@RequestParam Map<String, String> param) {
@@ -851,7 +841,6 @@ public class AdminController {
 		return response;
 	}
 	
-	
 	// ======================================================
 	// [ 통계 ]
 	// 통계 차트 페이지
@@ -861,6 +850,7 @@ public class AdminController {
 		return "admin/chart_list";
 	}
 	
+	// 사용자 채팅 통계
 	@ResponseBody
 	@PostMapping("UserChatAnalysis")
 	public List<Map<String, Object>> userChatAnalysis(@RequestBody Map<String, Object> param) {
@@ -875,6 +865,7 @@ public class AdminController {
 		return userChatList;
 	}
 	
+	// 전체 사용자 수 조회
 	@ResponseBody
 	@PostMapping("AllUserCount")
 	public int allUserCount() {
@@ -882,6 +873,7 @@ public class AdminController {
 		return totalUsers;
 	}
 	
+	// 전체 채팅 건수 조회
 	@ResponseBody
 	@PostMapping("AllChatCount")
 	public int allChatCount() {
@@ -889,8 +881,6 @@ public class AdminController {
 		return totalChat;
 	}
 	
-	
-	//-----------------------------------------------------
 	// 기간별 통계 페이지
 	@LoginCheck(memberRole = MemberRole.ADMIN)
 	@GetMapping("PeriodAnalysis")
@@ -898,6 +888,7 @@ public class AdminController {
 		return "admin/period_analysis";
 	}
 	
+	// 기간별 통계 목록 조회
 	@ResponseBody
 	@PostMapping("PeriodListForm")
 	public String periodListForm(@RequestParam Map<String, String> param) {
@@ -997,8 +988,6 @@ public class AdminController {
 		return jo.toString();
 	}
 	
-	
-	
 	// ======================================================
 	// [ 로그 ]
 	// 로그 기록 페이지 포워딩
@@ -1033,7 +1022,6 @@ public class AdminController {
 	
 	
 	
-	
 	// ======================================================
 	// ======================================================
 	// ======================================================
@@ -1042,6 +1030,7 @@ public class AdminController {
 		String realPath = session.getServletContext().getRealPath(uploadPath);
 		return realPath;
 	}
+	
 	// Map 형변환 처리 메서드
 	private Map<String, Object> convertMap(Map<String, String> param) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();

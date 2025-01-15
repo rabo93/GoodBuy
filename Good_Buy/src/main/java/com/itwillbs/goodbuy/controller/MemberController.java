@@ -476,14 +476,17 @@ public class MemberController {
 			memberService.removeMemInfo(id, 3);
 		}
 		
+		
 		// 회원 탈퇴 성공 시 첨부파일 제거 작업
-		String realPath = getRealPath(session);
-		Path path = Paths.get(realPath, member.getMem_profile());
-		try {
-			Files.delete(path);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		String realPath = getRealPath(session);
+//		System.out.println("첨부파일 제거 경로: " + realPath);
+//		Path path = Paths.get(realPath, member.getMem_profile());
+//		System.out.println("첨부파일 제거: " + path);
+//		try {
+//			Files.delete(path);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		
 		// 세션 제거
 		session.invalidate();

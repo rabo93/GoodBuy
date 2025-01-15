@@ -205,80 +205,104 @@
 						</div>
 					</div>
 					<div class="item-detail-more-item">
-						<h1 class="sec-ttl">
-						이 판매자가 판매하는 다른 물품
-						<button class="more" onclick="location.href='ProductList?SEARCHKEYWORD=${productSearch.mem_nick}'"><i class="fa-solid fa-chevron-right"></i></button>
-						</h1>
-						<div class="product-list">
-							<ul class="product-wrap">
-								<!-- 8개 -->
-								<c:forEach items="${searchSellerProduct}" var="list" step="1" end="3">
-									<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.PRODUCT_ID}'">
-										<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" />
-										<div class="card-info">
-											<div class="category">
-												<span>${list.PRODUCT_CATEGORY}</span>
-												<c:if test="${list.PRODUCT_TRADE_ADR1 != ''}">
-													<span class="type">직거래</span>
-												</c:if>
+						<c:if test="${not empty searchSellerProduct}">
+							<h1 class="sec-ttl">
+							이 판매자가 판매하는 다른 물품
+							<button class="more" onclick="location.href='ProductList?SEARCHKEYWORD=${productSearch.mem_nick}'"><i class="fa-solid fa-chevron-right"></i></button>
+							</h1>
+							<div class="product-list">
+								<ul class="product-wrap">
+									<!-- 8개 -->
+									<c:forEach items="${searchSellerProduct}" var="list" step="1" end="3">
+										<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.PRODUCT_ID}'">
+											<c:choose>
+												<c:when test="${list.PRODUCT_STATUS == 1}">
+													<div class="status" id="status">거래중</div>
+												</c:when>
+												<c:when test="${list.PRODUCT_STATUS == 2}">
+													<div class="status" id="status">예약중</div>
+												</c:when>
+											</c:choose>
+											<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" />
+											<div class="card-info">
+												<div class="category">
+													<span>${list.PRODUCT_CATEGORY}</span>
+													<c:if test="${list.PRODUCT_TRADE_ADR1 != ''}">
+														<span class="type">직거래</span>
+													</c:if>
+												</div>
+												<div class="ttl">${list.PRODUCT_TITLE}</div>
+												<div class="price">
+												 	<fmt:formatNumber var="price" value="${list.PRODUCT_PRICE}" type="number"/>
+												 	${price} 원
+												 </div>
+												<div class="card-row">
+													<c:if test="${list.PRODUCT_TRADE_ADR1 != ''}">
+														<span class="add">${list.PRODUCT_TRADE_ADR1}</span>
+													</c:if>
+													<span class="name">${list.MEM_NICK}</span>
+													<span class="time">
+														<script type="text/javascript">
+															moment.locale('ko')
+															$(".time").text(moment(`${list.PRODUCT_REG_DATE}`, "YYYYMMDDhhmmss").fromNow())
+														</script>
+													</span>
+												</div>
 											</div>
-											<div class="ttl">${list.PRODUCT_TITLE}</div>
-											<div class="price">
-											 	<fmt:formatNumber var="price" value="${list.PRODUCT_PRICE}" type="number"/>
-											 	${price} 원
-											 </div>
-											<div class="card-row">
-												<span class="add">${list.PRODUCT_TRADE_ADR1}</span>
-												<span class="name">${list.MEM_NICK}</span>
-												<span class="time">
-													<script type="text/javascript">
-														moment.locale('ko')
-														$(".time").text(moment(`${list.PRODUCT_REG_DATE}`, "YYYYMMDDhhmmss").fromNow())
-													</script>
-												</span>
+										</li>	
+									</c:forEach>
+								</ul>
+							</div>
+						</c:if>
+						<c:if test="${not empty searchSameCategoryProduct}">
+							<h1 class="sec-ttl">
+							이 상품과 비슷한 상품
+							<button class="more" onclick="location.href='ProductList?SEARCHKEYWORD=${productSearch.product_category}'"><i class="fa-solid fa-chevron-right"></i></button>
+							</h1>
+							<div class="product-list">
+								<ul class="product-wrap">
+									<!-- 8개 -->
+									<c:forEach items="${searchSameCategoryProduct}" var="list" step="1" end="3">
+										<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.PRODUCT_ID}'">
+											<c:choose>
+												<c:when test="${list.PRODUCT_STATUS == 1}">
+													<div class="status" id="status">거래중</div>
+												</c:when>
+												<c:when test="${list.PRODUCT_STATUS == 2}">
+													<div class="status" id="status">예약중</div>
+												</c:when>
+											</c:choose>
+											<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" />
+											<div class="card-info">
+												<div class="category">
+													<span>${list.PRODUCT_CATEGORY}</span>
+													<c:if test="${list.PRODUCT_TRADE_ADR1 != ''}">
+														<span class="type">직거래</span>
+													</c:if>
+												</div>
+												<div class="ttl">${list.PRODUCT_TITLE}</div>
+												<div class="price">
+												 	<fmt:formatNumber var="price" value="${list.PRODUCT_PRICE}" type="number"/>
+												 	${price} 원
+												 </div>
+												<div class="card-row">
+													<c:if test="${list.PRODUCT_TRADE_ADR1 != ''}">
+														<span class="add">${list.PRODUCT_TRADE_ADR1}</span>
+													</c:if>
+													<span class="name">${list.MEM_NICK}</span>
+													<span class="time">
+														<script type="text/javascript">
+															moment.locale('ko')
+															$(".time").text(moment(`${list.PRODUCT_REG_DATE}`, "YYYYMMDDhhmmss").fromNow())
+														</script>
+													</span>
+												</div>
 											</div>
-										</div>
-									</li>	
-								</c:forEach>
-							</ul>
-						</div>
-						<h1 class="sec-ttl">
-						이 상품과 비슷한 상품
-						<button class="more" onclick="location.href='ProductList?SEARCHKEYWORD=${productSearch.product_category}'"><i class="fa-solid fa-chevron-right"></i></button>
-						</h1>
-						<div class="product-list">
-							<ul class="product-wrap">
-								<!-- 8개 -->
-								<c:forEach items="${searchSameCategoryProduct}" var="list" step="1" end="3">
-									<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.PRODUCT_ID}'">
-										<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" />
-										<div class="card-info">
-											<div class="category">
-												<span>${list.PRODUCT_CATEGORY}</span>
-												<c:if test="${list.PRODUCT_TRADE_ADR1 != ''}">
-													<span class="type">직거래</span>
-												</c:if>
-											</div>
-											<div class="ttl">${list.PRODUCT_TITLE}</div>
-											<div class="price">
-											 	<fmt:formatNumber var="price" value="${list.PRODUCT_PRICE}" type="number"/>
-											 	${price} 원
-											 </div>
-											<div class="card-row">
-												<span class="add">${list.PRODUCT_TRADE_ADR1}</span>
-												<span class="name">${list.MEM_NICK}</span>
-												<span class="time">
-													<script type="text/javascript">
-														moment.locale('ko')
-														$(".time").text(moment(`${list.PRODUCT_REG_DATE}`, "YYYYMMDDhhmmss").fromNow())
-													</script>
-												</span>
-											</div>
-										</div>
-									</li>	
-								</c:forEach>
-							</ul>
-						</div>
+										</li>	
+									</c:forEach>
+								</ul>
+							</div>
+						</c:if>
 					</div>
 				</section>
 				<div class="chat-container">

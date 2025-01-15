@@ -4,6 +4,7 @@ let category = url.searchParams.get('CODE_ID');
 let price = url.searchParams.get('PRICE');
 let tradeEnable = url.searchParams.get('STATUS');
 let region = url.searchParams.get('REGION');
+let pageNum = 1;
 
 // 필터 초기화 버튼
 function fliterReset() {
@@ -100,8 +101,17 @@ $(document).ready(function() {
 		$("input[name='regionSearch']").val(url.searchParams.get('REGION'))
 	}
 	
-	$.ajax({
-		
+	searchProduct();
+	
+	$(window).scroll(function() {
+	    if ($(window).scrollTop() == $(document).height() - $(window).height()) {searchProduct()}
+	      
+})
+
+function searchProduct() {
+	
+	  $.ajax({
+	
 		url: "SearchPriceFilter",
 		type: "GET",
 		data: {
@@ -109,62 +119,64 @@ $(document).ready(function() {
 			PRODUCT_PRICE: price != undefined ? price : undefined, 
 			PRODUCT_TRADE_ADR1: region != undefined ? region : undefined, 
 			SEARCHKEYWORD: url.searchParams.get('SEARCHKEYWORD') != undefined ? url.searchParams.get('SEARCHKEYWORD') : undefined, 
-			PRODUCT_CATEGORY: category != undefined ? category : undefined
+			PRODUCT_CATEGORY: category != undefined ? category : undefined,
+			pageNum : pageNum
 		}
 	
-	}).done(function(data) {
-		if(data.length != 0) {
-			moment.locale('ko')
-			$("#product-wrap").empty();
-			for(let item of data) {
-				let addr = "";
-				let category = `<span>${item.PRODUCT_CATEGORY}</span>`;
-				let status = "";
-				
-				if (item.PRODUCT_TRADE_ADR1) {
-					category += `<span class="type">직거래</span>`;
-					addr = `<span class="add">${item.PRODUCT_TRADE_ADR1}</span>`;
-				}
-				
-				if (item.PRODUCT_STATUS == 1) {
-					status = `<div class="status" id="status">거래중</div>` 
-				} else if (item.PRODUCT_STATUS == 2) {
-					status = `<div class="status" id="status">예약중</div>` 
-				}
-				
-				$("#product-wrap").append(
-					`<li class="product-card" id="product-card" onclick="location.href=\'ProductDetail?PRODUCT_ID=${item.PRODUCT_ID}'">
-						${status}
-						<div class="product-thumb">
-							<img src="../resources/upload/${item.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail"/>
-						</div>
-						<div class="card-info">
-							<div class="category">
-								${category}
+		}).done(function(data) {
+			if(data.length != 0) {
+				moment.locale('ko')
+//				$("#product-wrap").empty();
+				for(let item of data) {
+					let addr = "";
+					let category = `<span>${item.PRODUCT_CATEGORY}</span>`;
+					let status = "";
+					
+					if (item.PRODUCT_TRADE_ADR1) {
+						category += `<span class="type">직거래</span>`;
+						addr = `<span class="add">${item.PRODUCT_TRADE_ADR1}</span>`;
+					}
+					
+					if (item.PRODUCT_STATUS == 1) {
+						status = `<div class="status" id="status">거래중</div>` 
+					} else if (item.PRODUCT_STATUS == 2) {
+						status = `<div class="status" id="status">예약중</div>` 
+					}
+					
+					$("#product-wrap").append(
+						`<li class="product-card" id="product-card" onclick="location.href=\'ProductDetail?PRODUCT_ID=${item.PRODUCT_ID}'">
+							${status}
+							<div class="product-thumb">
+								<img src="../resources/upload/${item.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail"/>
 							</div>
-							<div class="ttl">${item.PRODUCT_TITLE}</div>
-							<div class="price">
-							 	${item.PRODUCT_PRICE.toLocaleString()} 원
+							<div class="card-info">
+								<div class="category">
+									${category}
+								</div>
+								<div class="ttl">${item.PRODUCT_TITLE}</div>
+								<div class="price">
+								 	${item.PRODUCT_PRICE.toLocaleString()} 원
+								</div>
+								<div class="card-row">
+									${addr}
+									<span class="name">${item.MEM_NICK}</span>
+									<span class="time">${moment(item.PRODUCT_REG_DATE, "YYYYMMDDhhmmss").fromNow()}</span>
+								</div>
 							</div>
-							<div class="card-row">
-								${addr}
-								<span class="name">${item.MEM_NICK}</span>
-								<span class="time">${moment(item.PRODUCT_REG_DATE, "YYYYMMDDhhmmss").fromNow()}</span>
-							</div>
-						</div>
-					</li>`)
-			};
-		} else {
-			$("#product-list").append(
-				`<div class="no-data">
-				<img class="no-data-pic" src="../resources/img/no-data-02.svg">
-				<h1 class="no-data-text">:( 검색결과가 없습니다</h1>
-				</div>`
-			)
-		}
-		
-	}).fail(function() {
-		alert("검색 실패\n나중에 다시 시도해주세요.");
-	})	
-	
+						</li>`)
+						pageNum++;
+				};
+			} else if (!$("#product-wrap2")) {
+				$("#product-list").append(
+					`<div class="no-data">
+					<img class="no-data-pic" src="../resources/img/no-data-02.svg">
+					<h1 class="no-data-text">:( 검색결과가 없습니다</h1>
+					</div>`
+				)
+			}
+			
+		}).fail(function() {
+			alert("검색 실패\n나중에 다시 시도해주세요.");
+		})	
+	}
 })

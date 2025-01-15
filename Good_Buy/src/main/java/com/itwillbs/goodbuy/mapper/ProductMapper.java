@@ -38,7 +38,9 @@ public interface ProductMapper {
 			@Param("product_status")int product_status, 
 			@Param("product_trade_adr1")String product_trade_adr1,
 			@Param("search_keyword")String search_keyword,
-			@Param("cate")String product_category);
+			@Param("cate")String product_category, 
+			@Param("startRow")int startRow, 
+			@Param("listLimit")int listLimit);
 	
 	// 상품 상세페이지 조회
 	ProductVO productSearch(int product_id);
@@ -89,4 +91,7 @@ public interface ProductMapper {
 
 	// 메인화면 추천상품 가져오기
 	List<Map<String, Object>> getRecommendedItem();
+	
+	// 메인화면 무한 스크롤
+	List<Map<String, Object>> getRecommendedItem(@Param("startRow")int startRow, @Param("listLimit")int listLimit);
 }

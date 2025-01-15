@@ -43,7 +43,8 @@ $(document).ready(function(){
 
 // 메인화면 무한 스크롤
 if ($("#product-wrap2")) {
-	var page = 1;
+	let pageNum = 1;
+	
 	$(window).scroll(function() {
 	    if ($(window).scrollTop() == $(document).height() - $(window).height()) {
 	      
@@ -51,12 +52,13 @@ if ($("#product-wrap2")) {
 			
 			url: "MainProduct",
 			type: "GET",
+			data: {pageNum : pageNum}
 		
 		}).done(function(data) {
 			if(data.length != 0) {
 				moment.locale('ko')
-				$("#product-wrap2").empty();
 				for(let item of data) {
+					
 					let addr = "";
 					let category = `<span>${item.PRODUCT_CATEGORY}</span>`;
 					let status = "";
@@ -94,7 +96,8 @@ if ($("#product-wrap2")) {
 						</div>
 					</li>`)
 				};
-			} else {
+				pageNum++;
+			} else if (!$("#product-wrap2")) {
 				$("#product-wrap2").append(
 					`<h1>:( 검색결과가 없습니다</h1>`
 				)

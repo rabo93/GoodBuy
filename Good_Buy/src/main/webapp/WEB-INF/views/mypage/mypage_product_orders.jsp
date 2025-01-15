@@ -120,7 +120,9 @@
 														                <button class="open-modal-btn"
 														                        data-product-id="${product.PRODUCT_ID}"
 														                        data-title="${product.PRODUCT_TITLE}"
-														                        data-buyer="${product.MEM_NICK}">
+														                        data-buyer="${product.MEM_NICK}"
+														                        
+														                        >
 														                    <i class="fa-regular fa-envelope"></i> 후기 작성하기
 														                </button>
 														            </div>
@@ -207,10 +209,12 @@
             const productId = $(this).data("product-id");
             const productTitle = $(this).data("title");
             const buyerName = $(this).data("buyer");
+            const seller = $(this).data("seller");
 //             const review_cnt = $(this).data("review-cnt");
 
             // 모달에 데이터 주입
             $("#buyerName").text(buyerName);
+            $("#seller").text(seller);
             $("#productTitle").text(productTitle);
             $("#modal_product_id").val(productId);
 //             $("#modal_review_cnt").val(review_cnt);
@@ -260,6 +264,7 @@
         // 후기 제출 이벤트
         $("#submit-review").click(function () {
             const reviewText = $("#review_content").val();
+            const seller = $("#seller").val();
             const productId = $("#modal_product_id").val();
             const productTitle = $("#productTitle").text();
             const score = $("input[name='score']:checked").val();
@@ -283,6 +288,7 @@
             console.log("상품 ID: " + productId);
             console.log("상품 제목: " + productTitle);
             console.log("평점: " + score);
+            console.log("판매자: " + seller);
             console.log(">>>추가평점: " + reviewOptions);
 			  
 
@@ -296,6 +302,7 @@
                     product_title: productTitle,
                     product_id: productId,
                     score: score,
+                    seller: seller,
                     reviewOptions:reviewOptions
 //                     review_cnt : review_cnt
                 }),

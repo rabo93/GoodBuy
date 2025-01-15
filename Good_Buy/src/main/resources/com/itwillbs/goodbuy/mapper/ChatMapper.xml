@@ -79,7 +79,7 @@
 	</insert>
 	
 	<!-- 채팅 메세지 DB 저장 요청 -->
-	<insert id="insertChatMessage">
+	<insert id="insertChatMessage" useGeneratedKeys="true" keyProperty="idx" keyColumn="idx">
 		INSERT
 		  INTO CHATTING
 		VALUES (
@@ -90,6 +90,7 @@
 			 , #{type}
 			 , #{send_time}
 			 , 0
+			 , null
 			 )
 	</insert>
 	
@@ -149,12 +150,18 @@ ROOM_ID
 		 WHERE MEM_ID = #{receiver_id}
 	</select>
 	
+	<!-- 모든 메세지 읽음 처리 -->
+	<update id="updateAllMessageRead">
+		UPDATE CHATTING
+		   SET READ_STATE = 1
+		 WHERE ROOM_ID = #{room_id}
+		   AND RECEIVER_ID = #{sender_id}
+	</update>
 	<!-- 메세지 읽음 처리 -->
 	<update id="updateMessageRead">
 		UPDATE CHATTING
 		   SET READ_STATE = 1
-		 WHERE ROOM_ID = #{room_id}
-		   AND receiver_id = #{sender_id}
+		 WHERE IDX = #{idx}
 	</update>
 	
 	<!-- 상품 id 가져오기 -->

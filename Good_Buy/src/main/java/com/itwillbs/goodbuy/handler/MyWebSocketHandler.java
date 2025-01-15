@@ -77,6 +77,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 		
 		if (chatMessage.getType().equals(ChatMessage.TYPE_INIT_COMPLETE)) {
 			if(chatMessage.getProduct_id() != null) {
+				System.out.println("!@#!@#");
+				System.out.println("확인");
 				//	상품 조회를 위한 product_id 파싱후 저장
 				int product_id = Integer.parseInt(chatMessage.getProduct_id());
 				//	수신자 아이디 포함 여부 판별
@@ -87,7 +89,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 						String dbReceiverId = memberService.selectMemberId(receiver_id);
 						//	DB에서 상대방 아이디 존재 여부 판별
 						if(dbReceiverId == null) {
-							ChatMessage errorMessage = new ChatMessage(ChatMessage.TYPE_ERROR, "", sender_id, "", "존재하지 않는 사용자입니다!", "", "");
+							ChatMessage errorMessage = new ChatMessage(0, ChatMessage.TYPE_ERROR, "", sender_id, "", "존재하지 않는 사용자입니다!", "", "");
 							sendMessage(session, errorMessage);
 							return;
 						}
@@ -137,8 +139,6 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			//	기존 채팅 내역이 존재할 경우만 클라이언트에게 전송
 			if (chatMessageList != null && chatMessageList.size() > 0) {
 				chatMessage.setMessage(gson.toJson(chatMessageList));
-				System.out.println("!@#!@#");
-				System.out.println(chatMessage);
 				sendMessage(session, chatMessage);
 			}
 			
@@ -148,6 +148,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			chatMessage.setSend_time(getDateTimeNow());
 			//	채팅 메세지 DB 저장 요청
 			chatService.insertChatMessage(chatMessage);
+			
+			System.out.println("TALK 일 떄 저장 후 : " + chatMessage);
 			
 			if (userList.get(receiver_id) != null) { //	접속중일 경우
 				WebSocketSession receiver_session = userSessionList.get(userList.get(receiver_id));

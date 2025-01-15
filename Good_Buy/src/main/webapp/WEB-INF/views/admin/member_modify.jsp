@@ -54,7 +54,7 @@
                         <div class="col-lg-12">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h5 class="m-0 font-weight-bold text-primary">회원 상세정보 수정</h5>
+                                    <h5 class="m-0 font-weight-bold text-primary">회원 상세정보</h5>
                                 </div>
                                 <div class="card-body">
                                     <form action="AdmMemberModify" name="memberModifyForm" method="post">

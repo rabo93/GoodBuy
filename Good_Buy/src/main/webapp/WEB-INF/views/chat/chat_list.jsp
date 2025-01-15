@@ -61,7 +61,7 @@
 			        <div class="sidebar"> 
 			        	<c:forEach items="${chatRoomList}" var="chatRoom" varStatus="status">
 				            <div class="sidebar-item ${chatRoom.room_id}" data-index="${status.index}">
-				                <a><img src="${pageContext.request.contextPath}/upload/${product[status.index].product_pic1}" alt="item"></a>
+				                <a><img src="${pageContext.request.contextPath}/resources/upload/${product[status.index].product_pic1}" alt="item"></a>
 				                <div class="item-container">
 				                	<input type="hidden" id="room_id${status.index}" value="${chatRoom.room_id}">
 				                	<input type="hidden" id="title${status.index}" value="${chatRoom.title}">

@@ -308,7 +308,7 @@
 			, P.PRODUCT_TITLE 
 			, P.PRODUCT_PRICE
 			, P.PRODUCT_CATEGORY
-			, P.PRODUCT_PIC1
+			, P.PRODUCT_STATUS
 			, M.MEM_NICK
 			, P.PRODUCT_TRADE_ADR1
 			, R.REVIEW_CNT
@@ -378,5 +378,10 @@
 	    ) TEMP
 	</select>
 	
+	<update id="updateProductStatus">
+		 UPDATE PRODUCT
+	     SET PRODUCT_STATUS = '3'
+	     WHERE PRODUCT_ID = #{product_id}
+	</update>
 	
 </mapper>

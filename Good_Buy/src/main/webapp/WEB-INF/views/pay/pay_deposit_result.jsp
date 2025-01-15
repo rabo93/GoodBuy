@@ -87,7 +87,7 @@
 	                    				<div class="amount">
 	                    					<fmt:parseDate var="parsedReplyRegDate"
 													value="${depositResult.API_TRAN_DTM}" 
-													pattern="yyyy-MM-dd'T'HH:mm:ss" 
+													pattern="yyyy-MM-dd'T'HH:mm" 
 													type="both" /> 
 											<fmt:formatDate value="${parsedReplyRegDate}" pattern="yy.MM.dd HH:mm" />
 										</div>

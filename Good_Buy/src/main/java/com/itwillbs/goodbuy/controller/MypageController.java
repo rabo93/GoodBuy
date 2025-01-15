@@ -541,6 +541,20 @@ public class MypageController {
 			return "true";
 		}
 		
+		
+		//[구매확정 버튼]
+		@ResponseBody
+		@PostMapping("SuccessOrder")
+		public String successOrder(@RequestParam Map<String, String>map,HttpSession session) {
+			String product_id = map.get("product_id");
+			String product_seller = map.get("product_seller");
+			System.out.println(">>id"+product_id+">>status"+product_seller);
+			int status = productService.successOrder(product_id,product_seller);
+			if(status > 0) {
+				return "success";
+			}
+			return "fail";
+		}
 
 	// ===========================================================================================
 	// ===========================================================================================

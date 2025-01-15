@@ -380,7 +380,10 @@ public class MemberController {
 		// 결과처리
 		if(updateCount > 0) {
 			// 수정 후, 뷰페이지에 뿌릴 세션 및 모델에 프로필경로명 저장
-//			session.setAttribute("sProfile", member.getMem_profile());
+			session.setAttribute("sId", map.get("mem_id"));
+			session.setAttribute("sNick", map.get("mem_nick"));
+			session.setAttribute("sProfile", map.get("mem_profile"));
+			
 			model.addAttribute("member", member);
 			model.addAttribute("msg", "회원정보 수정 성공!");
 			model.addAttribute("targetURL", "MyInfo");
@@ -483,17 +486,18 @@ public class MemberController {
 			memberService.removeMemInfo(id, 3);
 		}
 		
-		
 		// 회원 탈퇴 성공 시 첨부파일 제거 작업
-//		String realPath = getRealPath(session);
-//		System.out.println("첨부파일 제거 경로: " + realPath);
-//		Path path = Paths.get(realPath, member.getMem_profile());
-//		System.out.println("첨부파일 제거: " + path);
-//		try {
-//			Files.delete(path);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		String realPath = getRealPath(session);
+		// 끝에 "resources/upload"가 포함되어 있다면 지우기
+		if (realPath.endsWith("resources\\upload") || realPath.endsWith("resources/upload")) {
+			realPath = realPath.substring(0, realPath.lastIndexOf("resources\\upload"));
+		}
+		Path path = Paths.get(realPath, member.getMem_profile());
+		try {
+			Files.delete(path);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		// 세션 제거
 		session.invalidate();
@@ -517,9 +521,7 @@ public class MemberController {
 		log.info(">>>>>>>>> 네이버 가입 계정 : " + member);
 		
 		String mem_email = (String)member.getMem_email();
-		
 		MemberVO dbMember = memberService.getMemberEmail(mem_email);
-		
 		log.info(">>>>>>>>>> 네이버 중복계정여부: " + dbMember);
 		
 		// 신규 회원 처리
@@ -535,11 +537,17 @@ public class MemberController {
 	        setSessionAttributes(session, member); // 세션 설정
 	        return 1; // 신규 회원 등록 성공
 	    }
+	    
+	    // 비밀번호가 없는 경우 비밀번호 등록 페이지로 이동
+	    if(dbMember.getMem_passwd() == null) {
+	    	return 3;
+	    }
 
 	    // 기존 회원 처리
 	    setSessionAttributes(session, dbMember); // 세션 설정
 	    log.info(">>>>> 네이버 중복 계정(기존 회원)");
 	    return 2; // 기존 회원
+	    
 	}
 	
 	// 세션 설정 메서드 
@@ -551,6 +559,5 @@ public class MemberController {
 		session.setMaxInactiveInterval(60 * 120);
 	}
 		
-
 
 }

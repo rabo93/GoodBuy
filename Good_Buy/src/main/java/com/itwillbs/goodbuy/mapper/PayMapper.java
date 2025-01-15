@@ -72,5 +72,12 @@ public interface PayMapper {
 
 	List<Map<String, String>> selectPayInfoProduct(int product_id);
 
+	int selectPayInfoListCount(String id);
+
+	List<Map<String, String>> selectPayInfoPaging(
+			@Param("id") String id, 
+			@Param("startRow") int startRow, 
+			@Param("listLimit") int listLimit);
+
 
 }

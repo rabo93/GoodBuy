@@ -286,8 +286,8 @@ $(document).ready(function() {
 	$("#updatedCodeId").on("keyup", function(){
 		// 현재 값
 		currentCodeId = $(this).val();
-		console.log("수정 값 : " + currentCodeId);
-		console.log("원본 값 : " + originalCodeId);
+//		console.log("수정 값 : " + currentCodeId);
+//		console.log("원본 값 : " + originalCodeId);
 
 	    // 원본 값으로 돌아왔는지 확인
 	    if (currentCodeId == originalCodeId) {
@@ -298,7 +298,7 @@ $(document).ready(function() {
 	        return;
 	    }
 		
-		// 상세코드ID 중복 확인
+		// 공통코드ID 중복 확인
 		$.ajax({
 			url : "CheckSubCodeId",
 			type : "POST",
@@ -308,8 +308,9 @@ $(document).ready(function() {
 			},
 			success: function(res){
 				console.log(res);
+				console.log(typeof(res));
 				
-				if(res == "true") {
+				if(res === "true") {
 					$("#updateSubCodeIdResult").show();
 					$("#updateSubCodeIdResult").css("color", "#e74a3b").text("이미 존재하는 공통코드ID입니다. 다시 입력해주세요.");
 					$("#updatedCodeId").focus();

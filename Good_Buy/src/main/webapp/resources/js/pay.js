@@ -65,7 +65,6 @@ function addAmount(amount, type) {
 
 
 function listToggleButton(type) {
-	debugger;
 	const buttons = document.querySelectorAll('.use-buttons > button');
 	// 목록 활성화 상태 업데이트
 	const lists = document.querySelectorAll('.use-history-item');

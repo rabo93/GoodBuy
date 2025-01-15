@@ -31,7 +31,7 @@ public class AdminService {
 		// 상위코드 등록
 		int insertMainCodeResult = mapper.insertCommonCode(mainCode);
 		if(insertMainCodeResult == 0) {
-			throw new RuntimeException("공통코드 등록에 실패했습니다.");
+			throw new RuntimeException("코드타입 등록에 실패했습니다.");
 		}
 			
 		// 하위코드 등록
@@ -42,7 +42,7 @@ public class AdminService {
 		
 		int insertSubCodeResult = mapper.insertCommonCodeType(subCodes);
 		if(insertSubCodeResult == 0) {
-			throw new RuntimeException("상세코드 등록에 실패했습니다.");
+			throw new RuntimeException("공통코드 등록에 실패했습니다.");
 		}
 		
 		return insertMainCodeResult + insertSubCodeResult;
@@ -81,7 +81,7 @@ public class AdminService {
 		// 하위코드 삭제
 		int deleteCommonCodeResult = mapper.deleteCommonCodes(param);
 		if(deleteCommonCodeResult == 0) {
-			log.info(">>> 삭제할 하위코드가 없습니다.");
+			log.info(">>> 삭제할 공통코드가 없습니다.");
 			throw new RuntimeException("공통코드 삭제에 실패했습니다.");
 		}
 		
@@ -126,6 +126,7 @@ public class AdminService {
 	public String isMainCodeId(String mainCode) {
 		return mapper.isMainCodeId(mainCode);
 	}
+	
 	// ============== [ 회원관리 ] ==============
 	// 회원 목록 조회
 	public List<MemberVO> getMemberList(Map<String, Object> param) {
@@ -175,7 +176,6 @@ public class AdminService {
 	public List<Map<String, Object>> getUserReportList(Map<String, Object> param) {
 		return mapper.selectUserReportList(param);
 	}
-	
 
 	// 신고 회원 - 조치 및 수정
 	@AdminLog
@@ -331,7 +331,6 @@ public class AdminService {
 		return mapper.selectEnquireList(param);
 	}
 	
-	
 	// 답글 등록(수정)
 	@AdminLog
 	public int registReplyInfo(Map<String, Object> param) {
@@ -367,18 +366,6 @@ public class AdminService {
 		return mapper.selectLogList(param);
 	}
 
-	
-
-	// =========================================================================
-	// 로그 저장
-	// @Transactional(propagation = Propagation.REQUIRES_NEW)
-	// => Spring 트랜잭션 관리에서 트랜잭션의 전파 속성(Propagation)을 설정하는 옵션 중 하나
-	//    새로운 트랜잭션 생성, 독립적인 트랜잭션, 롤백 및 커밋의 독립성 특성을 지님
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public int registLog(Map<String, Object> result) {
-		return mapper.insertLog(result);
-	}
-	// =========================================================================
 
 	// ===================== [ 메인 통계 ] =========================
 	// 등록된 상품 건수
@@ -457,5 +444,16 @@ public class AdminService {
 	public List<Map<String, Object>> getPayPeriod(String orderDir, String startDate, String endDate) {
 		return mapper.selectTotalPay(orderDir, startDate, endDate);
 	}
+	
+	// =========================================================================
+	// 로그 저장
+	// @Transactional(propagation = Propagation.REQUIRES_NEW)
+	// => Spring 트랜잭션 관리에서 트랜잭션의 전파 속성(Propagation)을 설정하는 옵션 중 하나
+	//    새로운 트랜잭션 생성, 독립적인 트랜잭션, 롤백 및 커밋의 독립성 특성을 지님
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public int registLog(Map<String, Object> result) {
+		return mapper.insertLog(result);
+	}
+	// =========================================================================
 	
 }

@@ -18,6 +18,7 @@
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.7.1.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/fontawesome/all.min.css" />
 <script src="${pageContext.request.contextPath}/resources/fontawesome/all.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
@@ -59,17 +60,25 @@
                                         <div class ="product-card-empty">구매내역이 없습니다.</div>
                                     </c:when>
                                     <c:otherwise>
+                                    <ul class="product-wrap">
                                         <c:forEach var="product" items="${order}">
                                             <li class="product-card">
                                             	<a href='ProductDetail?PRODUCT_ID=${product.PRODUCT_ID}'>
-                                                	<img src="${pageContext.request.contextPath}/resources/upload/${product.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" height="180px"/>
+                                                	<img src="${pageContext.request.contextPath}/resources/upload/${product.product_pic1}" class="card-thumb" alt="thumbnail" height="180px" />
                                                 </a>
                                                 	<div class="card-info">
                                                     <div class="category">
                                                         <span>${product.PRODUCT_CATEGORY}</span>
-                                                        <span class="type">직거래</span>
+                                                        <span class="type">
+                                                        	<c:if test="${product.PRODUCT_TRADE_ADR1 != ''}">
+																<span class="type">직거래</span>
+															</c:if>
+                                                        </span>
                                                     </div>
                                                     <div class="ttl">
+                                                        <c:if test="${product.PRODUCT_STATUS == 1}">
+                                                            [예약중]
+                                                        </c:if>
                                                         <c:if test="${product.PRODUCT_STATUS == 3}">
                                                             [거래완료]
                                                         </c:if>
@@ -83,22 +92,50 @@
                                                         <span class="name">${product.MEM_NICK}</span>
                                                     </div>
                                                     	<input type="hidden" name="product_id" id="hiddenProductId">
+<%--                                                     	<c:choose> --%>
+<%--                                                     		<c:when test="${product.PRODUCT_STATUS == 1}"> --%>
+<!--                                                     			<button class="successOrder">구매확정</button> -->
+<%--                                                     		</c:when> --%>
+<%--                                                     		<c:when test="${empty product.REVIEW_CNT || product.REVIEW_CNT == 0}"> --%>
+<!-- 	                                                    		 <div class="review-write-btn"> -->
+<!-- 		                                                    		 <button class="open-modal-btn" -->
+<%-- 																        data-product-id="${product.PRODUCT_ID}" --%>
+<%-- 																        data-title="${product.PRODUCT_TITLE}" --%>
+<%-- 																        data-buyer="${product.MEM_NICK}"> --%>
+<!-- 																        <i class="fa-regular fa-envelope"></i> 후기 작성하기 -->
+<!-- 																     </button> -->
+<!-- 															     </div> -->
+<%--                                                     		</c:when> --%>
+<%--                                                     		<c:otherwise><a class="review-done-btn" href='MyReviewHistory?product_id=${product.PRODUCT_ID}'><i class="fa-solid fa-envelope"></i> 작성완료</a></c:otherwise> --%>
+<%--                                                     	</c:choose> --%>
+														<c:if test="${product.PRODUCT_STATUS == 1}">
+															<button class="successOrder" 
+													            data-product-id="${product.PRODUCT_ID}" 
+													            data-product-seller="${product.BUYER_ID}">구매확정</button>
+											            </c:if>
                                                     	<c:choose>
-                                                    		<c:when test="${empty product.REVIEW_CNT || product.REVIEW_CNT == 0}">
-	                                                    		 <div class="review-write-btn">
-		                                                    		 <button class="open-modal-btn"
-																        data-product-id="${product.PRODUCT_ID}"
-																        data-title="${product.PRODUCT_TITLE}"
-																        data-buyer="${product.MEM_NICK}">
-																        <i class="fa-regular fa-envelope"></i> 후기 작성하기
-																     </button>
-															     </div>
-                                                    		</c:when>
-                                                    		<c:otherwise><a class="review-done-btn" href='MyReviewHistory?product_id=${product.PRODUCT_ID}'><i class="fa-solid fa-envelope"></i> 작성완료</a></c:otherwise>
-                                                    	</c:choose>
+														    <c:when test="${empty product.REVIEW_CNT || product.REVIEW_CNT == 0}">
+														        <c:if test="${product.PRODUCT_STATUS == 3}">
+														            <div class="review-write-btn">
+														                <button class="open-modal-btn"
+														                        data-product-id="${product.PRODUCT_ID}"
+														                        data-title="${product.PRODUCT_TITLE}"
+														                        data-buyer="${product.MEM_NICK}">
+														                    <i class="fa-regular fa-envelope"></i> 후기 작성하기
+														                </button>
+														            </div>
+														        </c:if>
+														    </c:when>
+														    <c:otherwise>
+														        <a class="review-done-btn" href='MyReviewHistory?product_id=${product.PRODUCT_ID}'>
+														            <i class="fa-solid fa-envelope"></i> 작성완료
+														        </a>
+														    </c:otherwise>
+														</c:choose>
                                                 </div>
                                             </li>
                                         </c:forEach>
+                                        </ul>
                                     </c:otherwise>
                                 </c:choose>
                             </div>
@@ -141,10 +178,30 @@
         </div>
     </div>
 </div>
-   
+
 
     <script type="text/javascript">
     $(document).ready(function () {
+    	$(".successOrder").click(function () {
+    		var userOrder = confirm("구매를 확정하시겠습니까?\n청약철회가 불가능 합니다.");
+    		if(userOrder){
+    		 const product_id = $(this).data("product-id");
+    		 const product_seller = $(this).data("product-seller");
+    		 console.log(">>>>>>>>>>>"+product_id+ ">>>>"+product_seller + "<<<<");
+    		 
+    		 $.ajax({
+ 	        	type : "post",
+ 	        	url : "SuccessOrder",
+ 	        	data : {product_id : product_id,
+ 	        			product_seller : product_seller},
+ 	        	success : function (response) {
+ 	        		location.reload();
+ 					console.log("에이젝스로 넘어감");					
+ 				}
+ 	        })
+    		}
+		});
+    	
         // 후기 작성하기 버튼 클릭 이벤트
         $(".open-modal-btn").click(function () {
             const productId = $(this).data("product-id");

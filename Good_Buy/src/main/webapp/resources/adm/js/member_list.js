@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function(){
 			data: function(d) {
                 d.mem_status = $('input[name="mem_status"]:checked').val();
                 d.mem_grade = $('input[name="mem_grade"]:checked').val();
-                d.search_keyword = $('input[name="keyword_search"]').val();
+                d.searchValue = $('input[name="keyword_search"]').val();
             },
 			dataSrc: function (res) {
 				const data = res.memberList;

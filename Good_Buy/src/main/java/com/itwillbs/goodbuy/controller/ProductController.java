@@ -63,8 +63,11 @@ public class ProductController {
 													   @RequestParam(required=false) String PRODUCT_PRICE,
 													   @RequestParam(required=false) String PRODUCT_TRADE_ADR1,
 													   @RequestParam(required=false) String SEARCHKEYWORD,
-													   @RequestParam(required=false) String PRODUCT_CATEGORY) {
-		List<Map<String, Object>> listSearch = productService.searchFilterList(PRODUCT_STATUS, PRODUCT_PRICE, PRODUCT_TRADE_ADR1, SEARCHKEYWORD, PRODUCT_CATEGORY);
+													   @RequestParam(required=false) String PRODUCT_CATEGORY,
+													   @RequestParam(defaultValue = "1") int pageNum) {
+		int listLimit = 8;
+		int startRow = (pageNum - 1) * listLimit;
+		List<Map<String, Object>> listSearch = productService.searchFilterList(PRODUCT_STATUS, PRODUCT_PRICE, PRODUCT_TRADE_ADR1, SEARCHKEYWORD, PRODUCT_CATEGORY, startRow, listLimit);
 		return listSearch;
 	}
 	
@@ -222,7 +225,8 @@ public class ProductController {
 								 @RequestParam("pic1") MultipartFile pic1,
 								 @RequestParam("pic2") MultipartFile pic2,
 								 @RequestParam("pic3") MultipartFile pic3,
-								 @RequestParam("Product_ID")int product_ID) {
+								 @RequestParam("Product_ID")int product_ID,
+								 @RequestParam(defaultValue = "0")int product_shipping_fee) {
 
 	    try {
 	    	ProductVO getProductPic = productService.getProductPic(product_ID);
@@ -258,14 +262,18 @@ public class ProductController {
 	                productPics[i] = oldFileNames[i];
 	            }
 	        }
-
+	        
+	        product.setProduct_shipping_fee(product_shipping_fee);
 	        product.setProduct_pic1(productPics[0]);
 	        product.setProduct_pic2(productPics[1]);
 	        product.setProduct_pic3(productPics[2]);
-
+	        
+	        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> " + product);
+	        
 	    } catch (IllegalStateException | IOException e) {
 	        e.printStackTrace();
 	    }
+	    
 	    productService.productUpdate(product, product_ID);
 		
 		return "redirect:/MySales";

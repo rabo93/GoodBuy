@@ -32,7 +32,7 @@
 			</div>
 			<div class="gnb-right">
 				<c:choose>
-<%-- 					<c:when test="${not empty member.mem_profile}"> --%>
+<%-- 					<c:when test="${not empty member.mem_id}"> --%>
 					<c:when test="${not empty sessionScope.sId}">
 						<button type="button" class="gnb-btn" id="login-btn">
 							<c:choose>
@@ -47,6 +47,7 @@
 									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" alt="프로필사진">
 								</c:otherwise>
 							</c:choose>
+<%-- 							<b>${member.mem_nick}</b> 님 --%>
 							<b>${sessionScope.sNick}</b> 님
 						</button>
 						<div id="login-panel">
@@ -57,6 +58,7 @@
 								<a href="AdmMain">관리자화면</a>
 							</c:if>
 							<a href="MemberLogout">로그아웃</a>
+<%-- 							<input type="hidden" id="sNick" value="${member.mem_nick}"> --%>
 							<input type="hidden" id="sNick" value="${sessionScope.sNick}">
 							<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script>
 						</div>

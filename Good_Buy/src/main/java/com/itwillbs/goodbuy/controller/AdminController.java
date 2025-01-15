@@ -701,20 +701,6 @@ public class AdminController {
 		List<Map<String, Object>> EnquireList = service.getEnquireList(convertParam);
 		log.info(">>>>> 필터링 된 1:1 문의 목록 : " + EnquireList);
 		
-		
-		// 첨부파일 정보 저장 (전체회원)
-//		for(Map<String, Object> support : EnquireList) {
-//			System.out.println("suport_file: " + support.get("SUPPORT_FILE"));
-//			String originalFileName = "";
-//			if(support.get("SUPPORT_FILE") != null) {
-////				originalFileName = support.get("SUPPORT_FILE").substring(support.get("SUPPORT_FILE").indexOf("_") + 1);
-//				originalFileName = support.get("SUPPORT_FILE").toString();
-//			} else {
-//				originalFileName = null;
-//			}
-//			support.put("originalFileName", originalFileName);
-//		}
-		
 		Map<String, Object> response = new HashMap<String, Object>();
 		response.put("draw", convertParam.get("draw"));
 		response.put("recordsTotal", recordsTotal);

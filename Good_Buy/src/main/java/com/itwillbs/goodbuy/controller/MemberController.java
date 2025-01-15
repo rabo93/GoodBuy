@@ -334,9 +334,16 @@ public class MemberController {
 									, @RequestParam("profile_upload") MultipartFile mem_profile_get
 									, HttpSession session
 									, Model model ) {
+		
 		String mem_id = (String)session.getAttribute("sId");
+		// 세션아이디로 회원 정보 가져와서 MemberVO에 담기
+		member = memberService.getMember(mem_id);
+		
+		// 수정할 정보 Map에 담기
 		map.put("mem_id", mem_id);
 		map.put("mem_nick", member.getMem_nick());
+		System.out.println("프로필 사진 : " + member.getMem_profile()); //null
+		map.put("mem_profile", member.getMem_profile());
 		//-------------------------------------------------
 		// [비밀번호 검증]
 		// id로 회원 정보 조회하여 기존 패스워드 가져오기
@@ -440,7 +447,6 @@ public class MemberController {
 	        return fileName;
 	        
 	    } catch (IOException e) {
-	        log.error("파일 업로드 중 오류 발생: ", e);
 	        throw new RuntimeException("파일 업로드 실패", e); // 예외를 호출자에게 전달
 	    }
 	}
@@ -476,14 +482,17 @@ public class MemberController {
 			memberService.removeMemInfo(id, 3);
 		}
 		
+		
 		// 회원 탈퇴 성공 시 첨부파일 제거 작업
-		String realPath = getRealPath(session);
-		Path path = Paths.get(realPath, member.getMem_profile());
-		try {
-			Files.delete(path);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		String realPath = getRealPath(session);
+//		System.out.println("첨부파일 제거 경로: " + realPath);
+//		Path path = Paths.get(realPath, member.getMem_profile());
+//		System.out.println("첨부파일 제거: " + path);
+//		try {
+//			Files.delete(path);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		
 		// 세션 제거
 		session.invalidate();

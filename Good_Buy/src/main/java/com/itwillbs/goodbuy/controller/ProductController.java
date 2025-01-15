@@ -268,6 +268,7 @@ public class ProductController {
 	    } catch (IllegalStateException | IOException e) {
 	        e.printStackTrace();
 	    }
+	    
 	    productService.productUpdate(product, product_ID);
 		
 		return "redirect:/MySales";

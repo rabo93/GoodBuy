@@ -76,13 +76,7 @@
 							</section>
 							<section class="item-regi-category">
 								<h6 class="item-regi-category-name">카테고리 & 태그</h6>
-								<select class="item-regi-category-box" name="product_category">
-									<option>여성의류</option>
-									<option>남성의류</option>
-									<option>레저/스포츠</option>
-									<option>생활용품</option>
-									<option>키즈</option>
-									<option>도서</option>
+								<select class="item-regi-category-box" name="product_category" id="product_category">
 								</select>
 							</section>
 							<section class="item-regi-trade-adr">

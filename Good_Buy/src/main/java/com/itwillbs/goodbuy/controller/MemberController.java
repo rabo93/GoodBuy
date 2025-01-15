@@ -328,26 +328,23 @@ public class MemberController {
 	
 	@LoginCheck(memberRole = MemberRole.USER)
 	@PostMapping("MyInfoModify")
-	public String memberModifyForm( MemberVO member
-									, BCryptPasswordEncoder passwordEncoder 
-									, @RequestParam Map<String, String> map
+	public String memberModifyForm( @RequestParam Map<String, String> map
 									, @RequestParam("profile_upload") MultipartFile mem_profile_get
+									, BCryptPasswordEncoder passwordEncoder 
 									, HttpSession session
 									, Model model ) {
-		
 		String mem_id = (String)session.getAttribute("sId");
-		// 세션아이디로 회원 정보 가져와서 MemberVO에 담기
-		member = memberService.getMember(mem_id);
+		// 세션아이디로 회원 기존 정보 가져와서 MemberVO에 다시 담기
+		MemberVO member = memberService.getMember(mem_id);
+		System.out.println("가져온 멤버: " + member);
 		
-		// 수정할 정보 Map에 담기
 		map.put("mem_id", mem_id);
-		map.put("mem_nick", member.getMem_nick());
-		System.out.println("프로필 사진 : " + member.getMem_profile()); //null
-		map.put("mem_profile", member.getMem_profile());
+		// 새로운 닉네임 넣기
+		map.put("mem_nick", map.get("mem_nick"));
+		
 		//-------------------------------------------------
 		// [비밀번호 검증]
 		// id로 회원 정보 조회하여 기존 패스워드 가져오기
-		member = memberService.getMember(mem_id);
 		String dbPasswd = member.getMem_passwd();
 		// 기존 비밀번호와 입력한 비밀번호 비교 검증 
 		if(dbPasswd == null || !passwordEncoder.matches(map.get("old_passwd"), dbPasswd)) {
@@ -358,25 +355,29 @@ public class MemberController {
 		if(!map.get("mem_passwd").equals("")) {
 			map.put("mem_passwd",passwordEncoder.encode(map.get("mem_passwd")));//암호화된 새로운 비밀번호
 		}
+		
 		//-------------------------------------------------
-		// 실제 경로 (/resources/upload)
-		String realPath = getRealPath(session);
-		// 서브 디렉토리 생성 (/연도/월/일)
-		String subDir = createDirectories(realPath);
-		realPath += "/" + subDir;
-		log.info(">>>>realPath/subDir: " + realPath);
-		
-		// 첨부파일 업로드
-		member.setMem_profile_get(mem_profile_get);
-		
-		String fileName = addFileProcess(member, realPath, subDir);
-		member.setMem_profile(fileName);
-		
-		map.put("mem_profile", fileName);
+		// 프로필 사진 변경시 첨부파일 업로드 처리
+		if (mem_profile_get != null && !mem_profile_get.isEmpty()) {
+			// 실제 경로 (/resources/upload)
+			String realPath = getRealPath(session);
+			// 서브 디렉토리 생성 (/연도/월/일)
+			String subDir = createDirectories(realPath);
+			realPath += "/" + subDir;
+			
+			// 첨부파일 업로드
+			String fileName = addFileProcess(mem_profile_get, realPath, subDir);
+			map.put("mem_profile", fileName);
+			
+		} else {
+			// 프로필 사진이 변경되지 않으면 기존 값을 그대로 사용
+			map.put("mem_profile", member.getMem_profile());
+		}
 		
 		// ============변경된 회원 정보 수정============
+		// map정보 DB로 전송
 		int updateCount = memberService.modifyMember(map);
-		
+		// 결과처리
 		if(updateCount > 0) {
 			// 수정 후, 뷰페이지에 뿌릴 세션 및 모델에 프로필경로명 저장
 			session.setAttribute("sProfile", member.getMem_profile());
@@ -426,8 +427,8 @@ public class MemberController {
 	}
 	
 	//	파일 업로드
-	public String addFileProcess(MemberVO member, String realPath, String subDir) {
-		MultipartFile multi = member.getMem_profile_get(); 
+	public String addFileProcess(MultipartFile multi, String realPath, String subDir) {
+//		MultipartFile multi = member.getMem_profile_get(); 
 //		System.out.println("multi:" + multi);
 		
 		if (multi == null || multi.isEmpty()) {

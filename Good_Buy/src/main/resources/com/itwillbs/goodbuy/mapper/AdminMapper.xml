@@ -1051,7 +1051,7 @@
     <!-- ************************************************************************* -->
 	<!-- 채팅 통계 -->
 	<select id="selectUserChatCount" resultType="map">
-		SELECT DATE(SEND_TIME) AS SEND_TIME
+		SELECT DATE_FORMAT(SEND_TIME, '%m/%d') AS SEND_TIME
 			   , COUNT(*) AS COUNT
 		  FROM CHATTING
 		 WHERE 1 = 1
@@ -1065,7 +1065,7 @@
 		 		AND DATE(SUBSTRING_INDEX(#{param}, ' ~ ', -1))
 		 	</when>
 		 </choose>
-		 GROUP BY DATE(SEND_TIME)
+		 GROUP BY DATE_FORMAT(SEND_TIME, '%m/%d')
 		 ORDER BY SEND_TIME ASC
 	</select>
 	<!-- 전체 채팅메세지 건수 조회 -->

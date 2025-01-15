@@ -91,7 +91,9 @@ function fetchData(schDate = null){
 		const labelArr = [];
 		const dataArr = [];
 		for(let key in res) {
-			labelArr.push(moment(res[key].SEND_TIME, 'M월 D, YYYY').format('MM/DD'));
+//			labelArr.push(moment(res[key].SEND_TIME, 'M월 D, YYYY').format('MM/DD'));
+//			labelArr.push(moment(res[key].SEND_TIME, 'MMM D, YYYY').format('MM/DD'));
+			labelArr.push(res[key].SEND_TIME);
 			dataArr.push(res[key].COUNT);
 		}
 		console.log(labelArr);

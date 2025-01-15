@@ -226,6 +226,7 @@
 		ON pro.MEM_ID = mem.MEM_ID
 		WHERE pro.PRODUCT_CATEGORY = #{product_category}
 		AND pro.PRODUCT_ID NOT IN (#{product_id})
+		AND pro.PRODUCT_STATUS BETWEEN 0 AND 2
 		ORDER BY PRODUCT_REG_DATE DESC
 	</select>
 	

@@ -17,7 +17,7 @@
 .item-list-area .product-list .product-wrap .product-card .product-thumb {
     position: relative;
 }
-.item-list-area .product-list .product-wrap .product-card .status {
+.product-card .status {
     position: absolute;
     font-size: 30px;
     text-align: center;

@@ -152,8 +152,6 @@ public class ProductController {
 		List<Map<String, Object>> searchSameCategoryProduct = productService.searchSameCategoryProduct(productSearch.getProduct_category(), PRODUCT_ID);
 		Map<String, Object> searchSellerScore = productService.searchSellerScore(productSearch.getMem_id());
 		
-		productService.plusviewcount(PRODUCT_ID);
-		
 		model.addAttribute("searchSellerScore", searchSellerScore);
 		model.addAttribute("productSearch", productSearch);
 		model.addAttribute("wishSearch", wishSearch);
@@ -264,10 +262,13 @@ public class ProductController {
 	        product.setProduct_pic1(productPics[0]);
 	        product.setProduct_pic2(productPics[1]);
 	        product.setProduct_pic3(productPics[2]);
-
+	        
+	        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> " + product);
+	        
 	    } catch (IllegalStateException | IOException e) {
 	        e.printStackTrace();
 	    }
+	    
 	    productService.productUpdate(product, product_ID);
 		
 		return "redirect:/MySales";

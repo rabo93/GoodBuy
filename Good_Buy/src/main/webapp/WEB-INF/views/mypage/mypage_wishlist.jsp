@@ -88,7 +88,7 @@
 <!-- 											</div> -->
 <!-- 										</li> -->
 										<li class="product-card">
-											<img src="${pageContext.request.contextPath}/resources/img/product_thumb.jpg" class="card-thumb" alt="thumbnail" height="180px"/>
+											<img src="${pageContext.request.contextPath}/resources/upload/${product.product_pic1}" class="card-thumb" alt="thumbnail" height="180px"/>
 											<form action="MyWishDel" method="post" class="MyWishDelFrm">
 												<input type="hidden" name="wishlist_id" value="${wish.wishlist_id}">
 												<button type="button" class="fav-on" onclick="confirmDeleteWishItem(this)"><i class="fa-solid fa-heart"></i></button>

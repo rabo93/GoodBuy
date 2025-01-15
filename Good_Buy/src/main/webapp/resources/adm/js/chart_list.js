@@ -3,9 +3,6 @@ document.addEventListener("DOMContentLoaded", function(){
 	Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 	Chart.defaults.global.defaultFontColor = '#858796';
 	
-	// moment.js 에 한글 추가
-	moment.locale('ko');
-	
 	// 기간별 채팅 개수
 	fetchData();
 	
@@ -78,6 +75,9 @@ document.addEventListener("DOMContentLoaded", function(){
 // 채팅 AJAX
 function fetchData(schDate = null){
 	const requestData = schDate ? { schDate: schDate } : {};
+		
+	// moment.js 에 한글 추가
+	moment.locale('ko');
 	
 	// 기간별 소통
 	$.ajax({
@@ -87,6 +87,7 @@ function fetchData(schDate = null){
 		contentType : "application/json",
 		data : JSON.stringify(requestData)
 	}).done(function(res) {
+		console.log(res);
 		const labelArr = [];
 		const dataArr = [];
 		for(let key in res) {

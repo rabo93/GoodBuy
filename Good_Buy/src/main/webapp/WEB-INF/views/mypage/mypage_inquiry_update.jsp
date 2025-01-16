@@ -34,6 +34,7 @@
         <!-- 계정설정 섹션 -->
         <section class="wrapper">
             <div class="page-inner">
+            
                 <h2 class="page-ttl">마이페이지</h2>
                 <section class="my-wrap">
                     <aside class="my-menu">

@@ -109,7 +109,8 @@
 									<div class="st-ttl">상점 소개</div>
 									<input type="hidden" id = "mem_id" value="${member.mem_id}">
 									<div class="store-intro"> 
-										<textarea rows="5" cols="50" name="mem_intro" id="mem_intro">${storeIntro.mem_intro}</textarea>
+										<textarea class="mem-regi-intro" rows="5" cols="50" name="mem_intro" id="mem_intro">${storeIntro.mem_intro}</textarea>
+										<h6 id="intro-check"> 0/1000 </h6>
 										<button id="submitBtn">저장</button>
 									</div>
 								</div>
@@ -272,8 +273,30 @@
 				},
 			});
 		});
-	});
+		
+	</script>
+	
+	<script type="text/javascript">
+	function updateByteCount(select, byteSelector, maxLength, alertMessage) {
+        $(select).on('keydown change', function () {
+            var content = $(this).val(); // 입력 값 가져오기
+            var length = content.length; 
+
+            $(byteSelector).text(length + " / " + maxLength);
+
+            if (length > maxLength) {
+                alert(alertMessage);
+                $(this).val(content.substring(0, maxLength));
+                $(byteSelector).text(maxLength + " / " + maxLength);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        updateByteCount("#mem_intro", "#intro-check", 1000, "최대 1000글자까지 가능합니다.");
+    });
 	
 	</script>
+	
 </body>
 </html>

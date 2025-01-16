@@ -101,15 +101,17 @@
 							<!-- 8개 -->
 							<c:forEach items="${recommeded}" var="list" step="1" end="7">
 								<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.PRODUCT_ID}'">
-									<c:choose>
-										<c:when test="${list.PRODUCT_STATUS == 1}">
-											<div class="status" id="status">거래중</div>
-										</c:when>
-										<c:when test="${list.PRODUCT_STATUS == 2}">
-											<div class="status" id="status">예약중</div>
-										</c:when>
-									</c:choose>
-									<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" />
+									<div class="product-thumb">
+										<c:choose>
+											<c:when test="${list.PRODUCT_STATUS == 1}">
+												<div class="status" id="status">거래중</div>
+											</c:when>
+											<c:when test="${list.PRODUCT_STATUS == 2}">
+												<div class="status" id="status">예약중</div>
+											</c:when>
+										</c:choose>
+										<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" />
+									</div>
 									<div class="card-info">
 										<div class="category">
 											<span>${list.PRODUCT_CATEGORY}</span>

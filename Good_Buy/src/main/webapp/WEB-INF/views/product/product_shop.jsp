@@ -40,7 +40,12 @@
 				<section class="item-shop-section">
 					<div class="item-shop-seller-info">
 						<img src="${searchSeller.MEM_PROFILE}" class="item-shop-seller-pic">
-						<div class="item-shop-seller-nick">${searchSeller.MEM_NICK}
+						<div class="st-ttl">
+							<c:set var="isGoodStore" value="${searchSellerScore.Best >= 3}" />
+							<c:choose>
+								<c:when test="${isGoodStore}"><div class="shop-title">${searchSeller.MEM_NICK}의 상점&nbsp;&nbsp;<i class="fa-brands fa-square-web-awesome" style="color:var(--primary)";></i></div></c:when>
+								<c:otherwise>${searchSeller.MEM_NICK}의 상점</c:otherwise>
+							</c:choose>
 							<div class="item-shop-seller-description">${searchSeller.MEM_INTRO}</div>
 						</div>
 						<div class="item-shop-seller-review">
@@ -54,7 +59,7 @@
 							</div>
 						</div>
 					</div>
-					<button class="more">
+					<button class="more" onclick="location.href='ProductList?SEARCHKEYWORD=${searchSeller.MEM_NICK}'">
 						<h1 class="sec-ttl">
 						이 판매자가 판매하는 물품
 						<i class="fa-solid fa-chevron-right"></i>
@@ -65,7 +70,17 @@
 							<!-- 8개 -->
 							<c:forEach items="${searchSellerProduct}" var="list" step="1" end="3">
 								<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.product_id}'">
-									<img src="${pageContext.request.contextPath}/resources/upload/${list.product_pic1}" class="card-thumb" alt="thumbnail" />
+									<div class="product-thumb">
+										<c:choose>
+											<c:when test="${list.product_status == 1}">
+												<div class="status" id="status">거래중</div>
+											</c:when>
+											<c:when test="${list.product_status == 2}">
+												<div class="status" id="status">예약중</div>
+											</c:when>
+										</c:choose>
+										<img src="${pageContext.request.contextPath}/resources/upload/${list.product_pic1}" class="card-thumb" alt="thumbnail" />
+									</div>
 									<div class="card-info">
 										<div class="category">
 											<span>${list.product_category}</span>
@@ -79,7 +94,9 @@
 										 	${price} 원
 										 </div>
 										<div class="card-row">
-											<span class="add">${list.product_trade_adr1}</span>
+											<c:if test="${list.product_trade_adr1 != ''}">
+												<span class="add">${list.product_trade_adr1}</span>
+											</c:if>
 											<span class="name">${list.mem_nick}</span>
 											<span class="time">
 												<script type="text/javascript">

@@ -93,22 +93,6 @@
                                                         <span class="name">${product.MEM_NICK}</span>
                                                     </div>
                                                     	<input type="hidden" name="product_id" id="hiddenProductId">
-<%--                                                     	<c:choose> --%>
-<%--                                                     		<c:when test="${product.PRODUCT_STATUS == 1}"> --%>
-<!--                                                     			<button class="successOrder">구매확정</button> -->
-<%--                                                     		</c:when> --%>
-<%--                                                     		<c:when test="${empty product.REVIEW_CNT || product.REVIEW_CNT == 0}"> --%>
-<!-- 	                                                    		 <div class="review-write-btn"> -->
-<!-- 		                                                    		 <button class="open-modal-btn" -->
-<%-- 																        data-product-id="${product.PRODUCT_ID}" --%>
-<%-- 																        data-title="${product.PRODUCT_TITLE}" --%>
-<%-- 																        data-buyer="${product.MEM_NICK}"> --%>
-<!-- 																        <i class="fa-regular fa-envelope"></i> 후기 작성하기 -->
-<!-- 																     </button> -->
-<!-- 															     </div> -->
-<%--                                                     		</c:when> --%>
-<%--                                                     		<c:otherwise><a class="review-done-btn" href='MyReviewHistory?product_id=${product.PRODUCT_ID}'><i class="fa-solid fa-envelope"></i> 작성완료</a></c:otherwise> --%>
-<%--                                                     	</c:choose> --%>
 														<c:if test="${product.PRODUCT_STATUS == 1}">
 															<button class="successOrder" 
 													            data-product-id="${product.PRODUCT_ID}" 
@@ -121,9 +105,7 @@
 														                <button class="open-modal-btn"
 														                        data-product-id="${product.PRODUCT_ID}"
 														                        data-title="${product.PRODUCT_TITLE}"
-														                        data-buyer="${product.MEM_NICK}"
-														                        
-														                        >
+														                        data-buyer="${product.MEM_NICK}">
 														                    <i class="fa-regular fa-envelope"></i> 후기 작성하기
 														                </button>
 														            </div>

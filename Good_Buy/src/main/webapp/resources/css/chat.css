@@ -179,9 +179,9 @@
     max-width: 100%;
 }
 
-.message.center .bubble {
-    background-color: #fff;
-}
+/* .message.center .bubble { */
+/*     background-color: #fff; */
+/* } */
 
 .message.user .bubble {
     background-color: #d1e7ff;

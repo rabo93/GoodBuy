@@ -73,9 +73,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			chatMessage.setMessage(gson.toJson(chatRoomList.size() == 0 ? null : chatRoomList));
 			//	초기화 정보 전송
 			sendMessage(session, chatMessage);
-		}
-		
-		if (chatMessage.getType().equals(ChatMessage.TYPE_INIT_COMPLETE)) {
+		} else if (chatMessage.getType().equals(ChatMessage.TYPE_INIT_COMPLETE)) {
 			if(chatMessage.getProduct_id() != null) {
 				System.out.println("!@#!@#");
 				System.out.println("확인");
@@ -132,8 +130,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 				
 			}
 			
-		}
-		if (chatMessage.getType().equals(ChatMessage.TYPE_REQUEST_CHAT_LIST)) {
+		} else if (chatMessage.getType().equals(ChatMessage.TYPE_REQUEST_CHAT_LIST)) {
 			//	기존 채팅 내역 조회
 			List<ChatMessage> chatMessageList = chatService.selectChatMessage(chatMessage);
 			//	기존 채팅 내역이 존재할 경우만 클라이언트에게 전송
@@ -142,8 +139,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 				sendMessage(session, chatMessage);
 			}
 			
-		}
-		if (chatMessage.getType().equals(ChatMessage.TYPE_TALK)) {
+		} else if (chatMessage.getType().equals(ChatMessage.TYPE_TALK)) {
 			//	현재 시스템 날짜 시각정보 받아와서 저장
 			chatMessage.setSend_time(getDateTimeNow());
 			//	채팅 메세지 DB 저장 요청
@@ -158,8 +154,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			
 			sendMessage(session, chatMessage);
 			
-		}
-		if (chatMessage.getType().equals(ChatMessage.TYPE_REQUEST_PAY)) {
+		} else if (chatMessage.getType().equals(ChatMessage.TYPE_REQUEST_PAY)) {
 			//	현재 시스템 날짜 시각정보 받아와서 저장
 			chatMessage.setSend_time(getDateTimeNow());
 			//	채팅 메세지 DB 저장 요청
@@ -172,8 +167,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			
 			sendMessage(session, chatMessage);
 			
-		}
-		if (chatMessage.getType().equals(ChatMessage.TYPE_RESPONSE_PAY)) {
+		} else if (chatMessage.getType().equals(ChatMessage.TYPE_RESPONSE_PAY)) {
 			//	현재 시스템 날짜 시각정보 받아와서 저장
 			chatMessage.setSend_time(getDateTimeNow());
 			//	채팅 메세지 DB 저장 요청
@@ -186,8 +180,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			
 			sendMessage(session, chatMessage);
 			
-		}
-		if (chatMessage.getType().equals(ChatMessage.TYPE_FILE_UPLOAD_COMPLETE)) {
+		} else if (chatMessage.getType().equals(ChatMessage.TYPE_FILE_UPLOAD_COMPLETE)) {
 			//	현재 시스템 날짜 시각정보 받아와서 저장
 			chatMessage.setType(ChatMessage.TYPE_FILE);
 			chatMessage.setSend_time(getDateTimeNow());
@@ -200,13 +193,9 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			}
 			
 			sendMessage(session, chatMessage);
-		}
-		
-		if(chatMessage.getType().equals(ChatMessage.TYPE_READ)) {
+		} else if(chatMessage.getType().equals(ChatMessage.TYPE_READ)) {
 			chatService.updateMessageRead(chatMessage);
-		}
-		
-		if(chatMessage.getType().equals(ChatMessage.TYPE_RESERVATION)) {
+		} else if(chatMessage.getType().equals(ChatMessage.TYPE_RESERVATION)) {
 			//	현재 시스템 날짜 시각정보 받아와서 저장
 			chatMessage.setSend_time(getDateTimeNow());
 			//	채팅 메세지 DB 저장 요청
@@ -218,9 +207,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			}
 			
 			sendMessage(session, chatMessage);
-		}
-		
-		if(chatMessage.getType().equals(ChatMessage.TYPE_ACCEPT_RESERVATION)) {
+		} else if(chatMessage.getType().equals(ChatMessage.TYPE_ACCEPT_RESERVATION)) {
 			//	현재 시스템 날짜 시각정보 받아와서 저장
 			chatMessage.setSend_time(getDateTimeNow());
 			//	채팅 메세지 DB 저장 요청
@@ -232,9 +219,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			}
 			
 			sendMessage(session, chatMessage);
-		}
-		
-		if(chatMessage.getType().equals(ChatMessage.TYPE_CANCEL_RESERVATION)) {
+		} else if(chatMessage.getType().equals(ChatMessage.TYPE_CANCEL_RESERVATION)) {
 			//	현재 시스템 날짜 시각정보 받아와서 저장
 			chatMessage.setSend_time(getDateTimeNow());
 			//	채팅 메세지 DB 저장 요청
@@ -246,9 +231,22 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			}
 			
 			sendMessage(session, chatMessage);
+		} else if (chatMessage.getType().equals(ChatMessage.TYPE_LEAVE)) {
+			chatMessage.setMessage("대화가 종료되었습니다.");
+			//	현재 시스템 날짜 시각정보 받아와서 저장
+			chatMessage.setSend_time(getDateTimeNow());
+			//	채팅 메세지 DB 저장 요청(추가 예정)
+			chatService.insertChatMessage(chatMessage);
+			
+			if (userList.get(receiver_id) != null) { //	접속중일 경우
+				WebSocketSession receiver_session = userSessionList.get(userList.get(receiver_id));
+				chatMessage.setSender_id("");
+				chatMessage.setReceiver_id("");
+				sendMessage(receiver_session, chatMessage);
+			}
 		}
 		
-	}
+	}	// handleTextMessage() 메서드 끝
 	
 	// 3. afterConnectionClosed - 웹소켓 연결 해제 시 자동으로 호출되는 메서드
 	@Override

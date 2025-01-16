@@ -55,7 +55,7 @@ public class RsaKeyGenerator {
 	
 	// 개인키로 복호화를 수행하는 메서드
 	public static String decrypt(String base64PrivateKey, String encryptedData) {
-		System.out.println("decrypt메서드 encryptedData : "+ encryptedData);
+//		System.out.println("decrypt메서드 encryptedData : "+ encryptedData);
 		
 		String decryptedData = null; // 최종 복호화 결과를 저장할 변수
 		

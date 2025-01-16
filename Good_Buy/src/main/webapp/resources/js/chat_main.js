@@ -65,11 +65,10 @@ $(".sidebar-item").on("dblclick", function() {
 		grade : grade
 	}
 	
-	$(roomItem).find("#messageStatus").empty();
+	$(roomItem).find("#messageStatus").remove();
 	
 	showChatRoom(room);
 })
-
 
 $(function() {
 	
@@ -130,8 +129,13 @@ $(function() {
 			let messageCnt = $(".sidebar-item." + data.room_id).find("#messageStatus").text();
 			if(!messageCnt) {
 				messageCnt = 0;
+				$(".sidebar-item." + data.room_id).find(".item").append(`<span id="messageStatus" class="unread_msg">${Number(messageCnt) + 1}</span>`);
+			} else {
+				$(".sidebar-item." + data.room_id).find(".item").find("span").text(Number(messageCnt) + 1);
 			}
-			$(".sidebar-item." + data.room_id).find(".messageStatus").html(Number(messageCnt) + 1);
+			
+//			Number(messageCnt) + 1
+			
 		}
 		
 		$(".sidebar-item." + data.room_id + " .item-chat").empty();
@@ -210,10 +214,10 @@ function showChatRoom(room) {
 			<button class="close-chat-button" onclick="closeChat()">
 				<i class="fa-solid fa-arrow-left"></i>
 			</button>
-			<button class="chat-option" onclick="">
+			<button id="chat-option">
 				<i class="fa-solid fa-ellipsis"></i>
 			</button>
-			<div class="chat-panel">
+			<div id="chat-panel">
 				<button class="report-chat-button" onclick="toggleChatModal(\'open\')">
 					<i class="fa-solid fa-land-mine-on"></i>&nbsp;신고하기
 				</button>
@@ -264,6 +268,19 @@ function showChatRoom(room) {
 		if (keyCode == 13) {
 			sendInputMessage();
 		}
+	});
+	
+	$("#chat-option").on("click", function(e){
+		e.stopPropagation();
+		$("#chat-panel").toggleClass("on");
+	});
+	
+	$("#chat-panel").on("click", function(e){
+		e.stopPropagation();
+	});
+	
+	$(document).on("click", function() {
+		$("#chat-panel").removeClass("on");
 	});
 	
 	//	채팅목록 수신메세지 표시 제거 작업 예정

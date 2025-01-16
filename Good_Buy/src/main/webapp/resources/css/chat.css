@@ -106,6 +106,16 @@
     margin-right: 10px;
 }
 
+.report-chat-leave {
+	background-color: #fff;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    color: gray;
+    cursor: pointer;
+    padding: 0;
+    margin-right: 10px;
+}
 
 .chat-header {
     padding: 10px;

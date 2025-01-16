@@ -79,7 +79,8 @@
 						                <button class="use-refund-btn" onclick="listToggleButton('refund')">환불</button>
 						            </div>
 						            
-						            ${item }
+
+						            
 						            <c:choose>
 						            	<c:when test="${empty getPayInfo}">
 							            	<div class="history-item empty-text">
@@ -87,10 +88,6 @@
 							            	</div>
 						            	</c:when>
 						            	<c:otherwise>
-						            		<c:set var="pageNum" value="1" />
-						            		<c:if test="${not empty param.pageNum}">
-												<c:set var="pageNum" value="${param.pageNum}" />
-											</c:if>
 						            		<c:forEach var="item" items="${getPayInfo}" varStatus="status">
 						            			<c:set var="dataType" value="all"/>
 						            			<c:if test="${item.TRANSACTION_TYPE eq 'WI'}">
@@ -133,7 +130,11 @@
 							           			 </div>
 						            		</c:forEach>
 						            	</c:otherwise>
-						            </c:choose>	
+						            </c:choose>
+						            <c:set var="pageNum" value="1" />
+				            		<c:if test="${not empty param.pageNum}">
+										<c:set var="pageNum" value="${param.pageNum}" />
+									</c:if>
 						            <section id="pageList">
 						            	<input type="button" value="&lt;&lt;" 
 											onclick="location.href='AllPayList?pageNum=${pageInfo.startPage - pageInfo.pageListLimit}'"
@@ -175,7 +176,8 @@
 											<c:if test="${pageInfo.endPage eq pageInfo.maxPage}">disabled</c:if>
 										>
 						            </section>
-				            		<div class="return-btn"><button onclick="location.href = document.referrer">돌아가기</button></div>		
+						            
+<!-- 				            		<div class="return-btn"><button onclick="location.href = document.referrer">돌아가기</button></div>		 -->
 							 	</div>
 						    </div>
 						</div>

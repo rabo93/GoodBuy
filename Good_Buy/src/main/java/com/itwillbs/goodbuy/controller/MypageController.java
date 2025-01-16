@@ -68,6 +68,9 @@ public class MypageController {
 		
 		//판매내역 조회
 		List<ProductVO> productlist =(List<ProductVO>) productService.getProductListLimit(id);
+		
+		System.out.println("productlist 잘 나오나 보자.  :  " + productlist);
+		
 //		List<ProductVO> productlist =(List<ProductVO>) productService.getProductList(id);
 		model.addAttribute("product", productlist);
 		System.out.println("상품목록 조회"+productlist);
@@ -124,10 +127,11 @@ public class MypageController {
 
 		//구매내역 조회
 		List<Map<String, String>> orderList = productService.getOrderList(id);
-		model.addAttribute("order", orderList);
-		System.out.println("구매내역 조회 : "+orderList);
 		
-
+		model.addAttribute("order", orderList);
+		
+//		String seller_id = orderList.get(0).get("MEM_ID");
+//		System.out.println("구매내역 seller_id 조회 : "+seller_id);
 		//구매내역 갯수조회
 		int orderCount = productService.orderListCount(id);
 		model.addAttribute("orderCount",orderCount);
@@ -203,20 +207,14 @@ public class MypageController {
 	@ResponseBody
 	@PostMapping("MyReviewText")
 	public String myReviewText(@RequestBody Map<String, String>reviewData,HttpSession session) {
-//		String review = reviewData.get("review"); // JSON에서 'review' 키로 데이터 받기
-//		String productTitle = reviewData.get("product_title");
-//		String productId = reviewData.get("product_id");
-//		String score = reviewData.get("score");
-//		String reviewOptions  = reviewData.get("reviewOptions");
-//		String review_cnt = reviewData.get("review_cnt");
 		String id = getSessionUserId(session);
 		reviewData.put("mem_id", id);
-//		System.out.println("@@@@@@@@@@@"+review+productId + productTitle+score);
-//		System.out.println(">>>>>>>>>>>>>>>>>"+reviewOptions);
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>review_data"+reviewData);
 		
 //		int result = reviewService.saveReviewData(id,review,productTitle,productId,score,reviewOptions);
 		int result = reviewService.saveReviewData(reviewData);
 		if(result > 0) {
+//			int reviewScore = reviewService.addReviewCount(reviewData);
 			return "result/success";
 		} else {
 			return "result/fail";

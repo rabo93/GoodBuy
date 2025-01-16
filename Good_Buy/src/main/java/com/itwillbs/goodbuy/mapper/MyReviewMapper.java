@@ -43,6 +43,8 @@ public interface MyReviewMapper {
 	List<Map<String, String>> selectScoreCount(String id);
 	//내가쓴 리뷰 갯수조회
 	int selectReviewHistoryCount(String id);
+	//리뷰 평점 올라감
+//	int insertReviewScore(Map<String, String> reviewData);
 	
 
 }

@@ -71,6 +71,7 @@ $(function(){
 	        $("#shipping-fee-price").show();
 	    } else {
 	        $("#shipping-fee-price").hide();
+	        $("#shipping-fee-price").val(0)
 	    }
 	});
 	

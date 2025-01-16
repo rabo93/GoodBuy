@@ -34,6 +34,7 @@
     <main>
         <section class="wrapper">
             <div class="page-inner">
+            
                 <h2 class="page-ttl">마이페이지</h2>
                 
                 <section class="my-wrap">

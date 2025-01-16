@@ -106,6 +106,7 @@
 		  	}
 		});
 		//--------------------------------------------------------------------
+		// RSA 알고리즘 (로그인) 
 		$(function() {
 			const publicKey = '${publicKey}'; // 공개키 저장
 			
@@ -131,7 +132,7 @@
 				// ------------------------------------------
 				// 암호화할 데이터(id, passwd)를 JSON 형식 문자열로 변환하여 폼에 추가
 				let encryptedData = jsEncrypt.encrypt(JSON.stringify({id, passwd}));
-				console.log("encryptedData" + encryptedData);
+// 				console.log("encryptedData" + encryptedData);
 				$("form").prepend("<input type='hidden' name='encryptedData' value='" + encryptedData + "'>");
 				
 			});

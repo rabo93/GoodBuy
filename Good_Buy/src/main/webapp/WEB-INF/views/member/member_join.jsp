@@ -40,7 +40,6 @@
 					<div id="form-container">
 						<div id="form-inner-container">
 							<div id="sign-up-container">
-							
 								<form action="MemberJoin" id="joinForm" name="joinForm" method="post" enctype="multipart/form-data">
 									<section class="row">
 										<label for="mem_phone">휴대폰번호</label> <span class="required"> * </span>

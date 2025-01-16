@@ -119,7 +119,6 @@ $(document).ready(function() {
 	    checkEmailDuplicate();
 	});
 	
-	
 	//---------------------------------------------------------------------
 	// 비밀번호 / 비밀번호 재입력 키업시 이벤트
 	$("#mem_passwd1, #mem_passwd2").keyup(function() {
@@ -288,7 +287,7 @@ function ckNick(){
 				if(result.trim() == "false" ){
 					$("#checkNic").text("사용가능한 닉네임 입니다").css("color","var(--secondary)");
 					checkNic = true;
-				}else {
+				} else {
 					$("#checkNic").text("이미 사용중인 닉네임 입니다").css("color","var(--red)");
 					checkNic = false;
 				}
@@ -302,6 +301,21 @@ function ckNick(){
 }
 
 //---------------------------------------------------------------------
+// 비밀번호 길이 검사
+function checkPasswdLength1() {
+	let passwd1 = $("#mem_passwd1").val();
+	let regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+	if(regex.exec(passwd1)){
+		$("#checkPasswd1").text("사용가능한 비밀번호 입니다").css("color","var(--secondary)");
+		checkPasswd1 = true;
+	} else {
+		$("#checkPasswd1").text("비밀번호는 최소 8자 이상, 숫자와 문자를 포함해야 합니다").css("color","var(--red)");
+		checkPasswd1 = false;
+	}
+}
+
+
+//---------------------------------------------------------------------
 // 비밀번호 재입력 동일 검사
 function checkPasswdResult(){
 	let passwd1 = $("#mem_passwd1").val();
@@ -310,15 +324,15 @@ function checkPasswdResult(){
 	if(passwd1 == "") {
 		$("#checkPasswd2").text("비밀번호를 입력해주세요.");
 		$("#checkPasswd2").css("color","var(--red)");
-		checkPasswd1 = false;
+		checkPasswd2 = false;
 	} else if(passwd1 != passwd2) {
 		$("#checkPasswd2").text("비밀번호가 일치하지 않습니다.");
 		$("#checkPasswd2").css("color","var(--red)");
-		checkPasswd1 = false;
+		checkPasswd2 = false;
 	} else {
 		$("#checkPasswd2").text("비밀번호가 일치합니다.");
 		$("#checkPasswd2").css("color","var(--secondary)");
-		checkPasswd1 = true;
+		checkPasswd2 = true;
 	}
 }
 
@@ -395,6 +409,11 @@ function checkSubmit(){
         alert("비밀번호를 다시 확인해주세요.");
         return false;
     }
+    if (!checkPasswd2) {
+        alert("비밀번호를 다시 확인해주세요.");
+        return false;
+    }
+    
 	//--------------------------------------------
 	// 이메일
     if (!checkEmail) {
@@ -494,9 +513,6 @@ function ckReNick() {
 // [ 수정완료 버튼 ]
 function myInfoModify(){
 	event.preventDefault(); // 조건 만족 전에 폼 제출 되는 것을 막음
-	
-	
-	
     //--------------------------------------------
     // 닉네임 변경시 중복 검사(기존 닉네임과 같을 경우에는 유지) 함수 호출
 	// 비동기 처리이므로, 반드시 ckReNick이 true인 상태에서만 폼을 제출하도록 해야 함
@@ -533,6 +549,4 @@ function myInfoModify(){
     //--------------------------------------------
 	// 수정 폼 제출
 	$("#myInfo").submit();
-	
 };
-

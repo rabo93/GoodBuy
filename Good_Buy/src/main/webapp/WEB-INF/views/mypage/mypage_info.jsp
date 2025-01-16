@@ -186,6 +186,27 @@
 				}
 			}).open();
 		}
+		
+		$(document).ready(function () {
+			// 모바일 마이페이지 활성화 메뉴로 자동 스크롤 포커싱
+	    	menuFocusing();
+		});
+		
+		// 모바일 마이페이지 활성화 메뉴로 자동 스크롤 포커싱
+		function menuFocusing(){
+			let menuIdx = 0;
+		    const myMenu = document.querySelector(".my-menu");
+		    const myMenuItems = document.querySelectorAll(".my-menu > a");
+			
+			myMenuItems.forEach((elem, idx) => {
+		    	if(elem.classList.contains("active")) menuIdx = idx;
+		    });
+			
+			myMenu.scrollTo({
+				left : myMenuItems[menuIdx].getBoundingClientRect().left - myMenuItems[menuIdx].getBoundingClientRect().width, 
+				behavior : 'smooth'
+			});
+		}
 	</script>
 	
 </body>

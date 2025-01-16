@@ -162,23 +162,25 @@
 	    });
 	    
 	    
-	    // 모바일 마이페이지 활성화 메뉴로 포커싱
+	 	// 모바일 마이페이지 활성화 메뉴로 자동 스크롤 포커싱
 	    menuFocusing();
 	    
 	});
 	
+	// 모바일 마이페이지 활성화 메뉴로 자동 스크롤 포커싱
 	function menuFocusing(){
 		let menuIdx = 0;
-	    const myMenu = document.querySelectorAll(".my-menu > a");
-		const menuSize = myMenu[menuIdx].getBoundingClientRect();
-	    
-		console.log(menuSize);
+	    const myMenu = document.querySelector(".my-menu");
+	    const myMenuItems = document.querySelectorAll(".my-menu > a");
 		
-	    myMenu.forEach((elem, idx) => {
+		myMenuItems.forEach((elem, idx) => {
 	    	if(elem.classList.contains("active")) menuIdx = idx;
 	    });
-	    
-		$('.my-menu').scrollLeft(menuIdx);
+		
+		myMenu.scrollTo({
+			left : myMenuItems[menuIdx].getBoundingClientRect().left - myMenuItems[menuIdx].getBoundingClientRect().width, 
+			behavior : 'smooth'
+		});
 	}
 	
 	

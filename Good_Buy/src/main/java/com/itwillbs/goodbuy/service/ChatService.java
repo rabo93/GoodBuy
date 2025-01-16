@@ -27,17 +27,13 @@ public class ChatService {
 	//	해당 채팅방 제일 마지막 대화 조회
 	public ChatMessage selectLastMessage(String room_id) {
 		ChatMessage chatMessage = mapper.selectLastMessage(room_id);
-		if(chatMessage.getType().equals("FILE")) {
-			chatMessage.setMessage("사진을 보냈습니다");
-		}
-		if(chatMessage.getType().equals("REQUEST_PAY")) {
-			chatMessage.setMessage(chatMessage.getMessage() + "원을 요청했어요");
-		}
-		if(chatMessage.getType().equals("RESERVATION")) {
-			chatMessage.setMessage("상품 예약 " + chatMessage.getMessage() + "을 요청했어요");
-		}
-		if(chatMessage.getType().equals("ACCEPT_RESERVATION") && chatMessage.getType().equals("CANCEL_RESERVATION")) {
-			chatMessage.setMessage("상품 예약을 " + chatMessage.getMessage() + "했어요");
+		
+		switch (chatMessage.getType()) {
+		case "FILE": chatMessage.setMessage("사진을 보냈습니다"); break;
+		case "REQUEST_PAY": chatMessage.setMessage(chatMessage.getMessage() + "원을 요청했어요"); break;
+		case "RESPONSE_PAY": chatMessage.setMessage(chatMessage.getMessage() + "원을 송금했어요"); break;
+		case "RESERVATION": chatMessage.setMessage("상품 예약 " + chatMessage.getMessage() + "을 요청했어요"); break;
+		case "ACCEPT_RESERVATION": chatMessage.setMessage("상품 예약을 " + chatMessage.getMessage() + "했어요"); break;
 		}
 		
 		return chatMessage;
@@ -61,11 +57,16 @@ public class ChatService {
 	
 	//	채팅 메세지 DB 저장 요청
 	public void insertChatMessage(ChatMessage chatMessage) {
-		System.out.println("타입 확인 : " + chatMessage.getType());
-		if(chatMessage.getType().equals(ChatMessage.TYPE_RESERVATION)) {
-			
-		}
+		int state;
 		mapper.insertChatMessage(chatMessage);
+		
+		switch (chatMessage.getType()) {
+		case "ACCEPT_RESERVATION": state = 2;proMapper.updateChatProductStatus(chatMessage.getProduct_id(), state);break;
+		case "CANCEL_RESERVATION": state = 0;proMapper.updateChatProductStatus(chatMessage.getProduct_id(), state);break;
+		case "RESPONSE_PAY": state = 1;proMapper.updateChatProductStatus(chatMessage.getProduct_id(), state);break;
+		case "LEAVE" : mapper.updateChatRoomState(chatMessage.getRoom_id(), chatMessage.getSender_id());
+		}
+		
 	}
 	
 	//	기존 채팅 내역 조회

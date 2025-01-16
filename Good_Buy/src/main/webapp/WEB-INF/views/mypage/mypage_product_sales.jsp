@@ -40,7 +40,6 @@
 		<section class="wrapper">
 			<div class="page-inner">
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
-			<!-- -->
 			<h2 class="page-ttl">마이페이지</h2>
 			<section class="my-wrap">
 				<aside class="my-menu">
@@ -161,7 +160,30 @@
 	            }
 	        });
 	    });
+	    
+	    
+	 	// 모바일 마이페이지 활성화 메뉴로 자동 스크롤 포커싱
+	    menuFocusing();
+	    
 	});
+	
+	// 모바일 마이페이지 활성화 메뉴로 자동 스크롤 포커싱
+	function menuFocusing(){
+		let menuIdx = 0;
+	    const myMenu = document.querySelector(".my-menu");
+	    const myMenuItems = document.querySelectorAll(".my-menu > a");
+		
+		myMenuItems.forEach((elem, idx) => {
+	    	if(elem.classList.contains("active")) menuIdx = idx;
+	    });
+		
+		myMenu.scrollTo({
+			left : myMenuItems[menuIdx].getBoundingClientRect().left - myMenuItems[menuIdx].getBoundingClientRect().width, 
+			behavior : 'smooth'
+		});
+	}
+	
+	
 
     </script>
 </body>

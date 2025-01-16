@@ -96,8 +96,12 @@ public interface ProductMapper {
 	int updateProductStatus(
 			@Param("product_id") String product_id,
 			@Param("mem_id") String product_seller);
-
+	
+	//	채팅에서 상품 상태 변경
+	void updateChatProductStatus(@Param("product_id") String product_id,
+								 @Param("state")int state);
 	
 	// 메인화면 무한 스크롤
 	List<Map<String, Object>> getRecommendedItem(@Param("startRow")int startRow, @Param("listLimit")int listLimit);
+
 }

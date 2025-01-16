@@ -95,26 +95,39 @@
     margin-right: 10px;
 }
 
+
+
+
+#chat-panel{display:none;position: fixed;padding: 20px;top: 60px;right: 20px;border-radius:14px;box-shadow: 1px 1px 5px rgb(201 187 176 / 67%);z-index: 9991;background: #fff;}
+#chat-panel.on{display:block;}
+
+
+
+
+
+
+
 .report-chat-button {
     background-color: #fff;
     border: none;
     font-size: 14px;
     font-weight: bold;
-    color: red;
+    color: var(--red);
     cursor: pointer;
     padding: 0;
-    margin-right: 10px;
+    margin-bottom: 14px;
+    width: 100%;
 }
 
 .report-chat-leave {
 	background-color: #fff;
-    border: none;
-    font-size: 14px;
-    font-weight: bold;
-    color: gray;
-    cursor: pointer;
-    padding: 0;
-    margin-right: 10px;
+	border: none;
+	font-size: 14px;
+	font-weight: bold;
+	color: var(--dark);
+	padding: 0;
+	margin-right: 10px;
+	width: 100%;
 }
 
 .chat-header {
@@ -179,9 +192,9 @@
     max-width: 100%;
 }
 
-.message.center .bubble {
-    background-color: #fff;
-}
+/* .message.center .bubble { */
+/*     background-color: #fff; */
+/* } */
 
 .message.user .bubble {
     background-color: #d1e7ff;
@@ -322,7 +335,7 @@
 	top:0;left:0;
 	right:0;
 	background: rgba(0, 0, 0, 0.6);
-	z-index:9991;
+	z-index:9992;
 }
 .ch-report-modal .ch-modal-wrap {
 	display: none;
@@ -334,7 +347,7 @@
 	width: 500px;
 	height: 400px;
 	background:#fff;
-	z-index:9992;
+	z-index:9993;
 }
 
 .ch-report-modal .ch-modal-wrap .ch-modal-content {margin-bottom: 20px;}
@@ -362,3 +375,4 @@
 	padding: 0 6px;
 }
 
+#chat-option {background: none; width: 36px; height: 30px;}

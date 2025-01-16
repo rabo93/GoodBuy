@@ -40,7 +40,6 @@
 					<div id="form-container">
 						<div id="form-inner-container">
 							<div id="sign-up-container">
-							
 								<form action="MemberJoin" id="joinForm" name="joinForm" method="post" enctype="multipart/form-data">
 									<section class="row">
 										<label for="mem_phone">휴대폰번호</label> <span class="required"> * </span>
@@ -96,8 +95,8 @@
 									<section class="row">
 										<label for="mem_passwd1">비밀번호</label> <span class="required"> * </span>
 										<div class="box"> 
-<!-- 											<input type="password" name="mem_passwd" id="mem_passwd1" placeholder="비밀번호 입력" onblur="checkPasswdLength1()" required>  -->
-											<input type="password" name="mem_passwd" id="mem_passwd1" placeholder="비밀번호 입력" required> 
+											<input type="password" name="mem_passwd" id="mem_passwd1" placeholder="비밀번호 입력" onblur="checkPasswdLength1()" required> 
+<!-- 											<input type="password" name="mem_passwd" id="mem_passwd1" placeholder="비밀번호 입력" required>  -->
 										</div>
 										<div id="checkPasswd1" class="result"></div>
 									</section>

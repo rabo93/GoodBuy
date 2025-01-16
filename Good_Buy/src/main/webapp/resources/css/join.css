@@ -164,12 +164,19 @@ section.row label[for="mem_birthday"] {
 
 
 
+/* 반응형 */
+/* 기본 스타일 */
+@media screen and (max-width: 1400px) {
+	
+}
 
+/* 모바일 스타일 (960px 이하) */
+@media screen and (max-width: 960px) {
+	
+}
 
-
-
-
-
-
-
+/* 모바일 스타일 (480px 이하) */
+@media screen and (max-width: 480px) {
+	
+}
 

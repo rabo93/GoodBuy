@@ -82,10 +82,10 @@
 													    <input class="form-check-input" id="status3" type="radio" name="status" value="3">
 													    <label class="form-check-label" for="status3">거래완료</label>
 													</div>
-													<div class="form-check ml-3">
-													    <input class="form-check-input" id="status4" type="radio" name="status" value="4">
-													    <label class="form-check-label" for="status4">신고처리</label>
-													</div>
+<!-- 													<div class="form-check ml-3"> -->
+<!-- 													    <input class="form-check-input" id="status4" type="radio" name="status" value="4"> -->
+<!-- 													    <label class="form-check-label" for="status4">신고처리</label> -->
+<!-- 													</div> -->
 											    </div>
 										    </div>
 										    <div class="col-4 px-4 search-box">

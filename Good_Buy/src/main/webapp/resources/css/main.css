@@ -34,7 +34,7 @@
 @media screen and (max-width:1400px){
     .visual-area .main-visual .slick-slide .ban-wrap .ban-text {padding-left:50px;}
     .visual-area .main-visual .slick-slide .ban-wrap .ban-text .ttl {font-size:25px;}
-    .visual-area .main-visual .slick-slide .ban-wrap .ban-text .subttl {font-size:16px;}
+    .visual-area .main-visual .slick-slide .ban-wrap .ban-text .subttl {font-size:16px;margin-bottom: 0;}
     .visual-area .main-visual .slick-slide .ban-wrap img {width:30%;flex:0 0 30%;margin-top:4rem;}
 }
 
@@ -54,7 +54,7 @@
 @media screen and (max-width:480px){
     .visual-area .main-visual .slick-slide .ban-wrap .ban-text {margin-top:2rem;margin-bottom:1rem;}
     .visual-area .main-visual .slick-slide .ban-wrap .ban-text .ttl {font-size:20px;}
-    .visual-area .main-visual .slick-slide .ban-wrap .ban-text .subttl {font-size:14px;}
+    .visual-area .main-visual .slick-slide .ban-wrap .ban-text .subttl {font-size:14px;margin-bottom: 0;}
 }
 
 /* section02 */

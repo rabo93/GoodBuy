@@ -41,6 +41,7 @@ import com.itwillbs.goodbuy.vo.ProductVO;
 import com.itwillbs.goodbuy.vo.SupportVO;
 import com.itwillbs.goodbuy.vo.WishlistVO;
 
+import kotlinx.serialization.descriptors.StructureKind.MAP;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -90,7 +91,13 @@ public class MypageController {
 		//나의 별점조회
 		List<Map<String, String>> scoreCount = reviewService.getScoreCount(id);
 		model.addAttribute("scoreCount",scoreCount);
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+scoreCount);
+		System.out.println(">>>>"+scoreCount);
+		
+		//별점 3개 이상인 상점 조회
+		Map<String, String> goodStore = reviewService.goodStore(id);
+		model.addAttribute("goodStore",goodStore);
+		
+		
 		//기존 상점소개문구
 		 MemberVO storeIntro = memberService.getStoreIntro(member);
 		 model.addAttribute("storeIntro",storeIntro);
@@ -130,8 +137,6 @@ public class MypageController {
 		
 		model.addAttribute("order", orderList);
 		
-//		String seller_id = orderList.get(0).get("MEM_ID");
-//		System.out.println("구매내역 seller_id 조회 : "+seller_id);
 		//구매내역 갯수조회
 		int orderCount = productService.orderListCount(id);
 		model.addAttribute("orderCount",orderCount);

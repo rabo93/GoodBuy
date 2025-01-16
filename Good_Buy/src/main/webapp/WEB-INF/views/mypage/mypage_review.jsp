@@ -36,8 +36,13 @@
 	</header>
 	<main>
 			<!-- 계정설정 -->
+			<!-- 계정설정 -->
+	<section class="wrapper">
+			<div class="page-inner">
+			
 		<h2 class="page-ttl">마이페이지</h2>
 		<section class="my-wrap">
+		
 			<aside class="my-menu">
 				<h3>거래 정보</h3>
 				<a href="MyStore">나의 상점</a>
@@ -108,6 +113,8 @@
 					<!-- // contents -->
 				</div>
 			</div>
+		</section>
+		</div>
 		</section>
 	</main>
 	<footer>

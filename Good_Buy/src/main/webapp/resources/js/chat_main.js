@@ -65,11 +65,10 @@ $(".sidebar-item").on("dblclick", function() {
 		grade : grade
 	}
 	
-	$(roomItem).find("#messageStatus").empty();
+	$(roomItem).find("#messageStatus").remove();
 	
 	showChatRoom(room);
 })
-
 
 $(function() {
 	
@@ -115,6 +114,8 @@ $(function() {
 			recent_div = `상품예약을 ${data.message} 했어요<span class="item-send-time">${data.send_time}</span>`;
 		} else if(data.type == TYPE_CANCEL_RESERVATION) {
 			recent_div = `상품예약을 ${data.message} 했어요<span class="item-send-time">${data.send_time}</span>`;
+		} else if(data.type == TYPE_LEAVE) {
+			recent_div = `${data.message}`;
 		}
 		
 		//	채팅방이 열려있는지 & 해당 채팅방이 현재 수신된 메세지의 상대방과의 채팅방인지 체크
@@ -124,6 +125,17 @@ $(function() {
 				console.log("data.receiver_id == sId 일 때 idx : " + data.idx);
 				sendMessage(TYPE_READ, data.product_id, data.sender_id, data.receiver_id, data.room_id, data.message, data.idx);
 			}
+		} else { // 채팅방이 열려있지 않을 경우
+			let messageCnt = $(".sidebar-item." + data.room_id).find("#messageStatus").text();
+			if(!messageCnt) {
+				messageCnt = 0;
+				$(".sidebar-item." + data.room_id).find(".item").append(`<span id="messageStatus" class="unread_msg">${Number(messageCnt) + 1}</span>`);
+			} else {
+				$(".sidebar-item." + data.room_id).find(".item").find("span").text(Number(messageCnt) + 1);
+			}
+			
+//			Number(messageCnt) + 1
+			
 		}
 		
 		$(".sidebar-item." + data.room_id + " .item-chat").empty();
@@ -135,19 +147,25 @@ $(function() {
 	
 });
 
+//	채팅창 열려있는지 판단 메서드
 function isOpenedChatRoom() {
 	if($(".chat-area").length == 1) {
 		return true;
 	}
 	return false;
 }
-
+//	채팅창에서 room_id 리턴 메서드
 function getOpenedChatRoomId() {
 	if(isOpenedChatRoom()) {
 		return $(".chat-footer").find("#room_id").val();
 	}
 	
-	
+}
+//	채팅창에서 receiver_id 리턴 메서드
+function getOpenedReciverId() {
+	if(isOpenedChatRoom()) {
+		return $(".chat-footer").find("#receiver_id").val();
+	}
 	
 }
 
@@ -196,10 +214,10 @@ function showChatRoom(room) {
 			<button class="close-chat-button" onclick="closeChat()">
 				<i class="fa-solid fa-arrow-left"></i>
 			</button>
-			<button class="chat-option" onclick="">
+			<button id="chat-option">
 				<i class="fa-solid fa-ellipsis"></i>
 			</button>
-			<div class="chat-panel">
+			<div id="chat-panel">
 				<button class="report-chat-button" onclick="toggleChatModal(\'open\')">
 					<i class="fa-solid fa-land-mine-on"></i>&nbsp;신고하기
 				</button>
@@ -228,9 +246,6 @@ function showChatRoom(room) {
         </div>
 	`;
 	
-	
-	
-	
 	//	chat-area 영역에 채팅창 div 출력
 	$(".chat-area").html(divRoom);
 		$(".chat-area").on("click", ".btnSend", function() {
@@ -255,6 +270,19 @@ function showChatRoom(room) {
 		}
 	});
 	
+	$("#chat-option").on("click", function(e){
+		e.stopPropagation();
+		$("#chat-panel").toggleClass("on");
+	});
+	
+	$("#chat-panel").on("click", function(e){
+		e.stopPropagation();
+	});
+	
+	$(document).on("click", function() {
+		$("#chat-panel").removeClass("on");
+	});
+	
 	//	채팅목록 수신메세지 표시 제거 작업 예정
 	
 	//	기존 채팅 내역 불러오기 작업
@@ -268,6 +296,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 	//	send_time 추가 예정
 	let bubble_message = "";
 	let div_message = "";
+	
 	
 	if(type == TYPE_REQUEST_PAY || type == TYPE_RESPONSE_PAY || type == TYPE_RESERVATION || type == TYPE_ACCEPT_RESERVATION || type == TYPE_CANCEL_RESERVATION) {
 		if(type == TYPE_REQUEST_PAY || type == TYPE_RESPONSE_PAY) {
@@ -343,7 +372,6 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 				</div>
 			</div>
 		`;
-//		console.log("bubble : " + bubble_message);
 		
 	} else if(type == TYPE_TALK) {	// 채팅메세지
 		bubble_message = '<div class="bubble">' + message + '</div>';
@@ -351,13 +379,15 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 		let hrefUrl = baseUrl + "/resources/upload/chat/" + message.split(":")[0];
 		let imgUrl = baseUrl + "/resources/upload/chat/" + message.split(":")[1];
 		bubble_message = '<div class="bubble"><a href="' + hrefUrl + '" target="_blank"><img class="img" src="' + imgUrl + '"</div>'
+	} else if(type == TYPE_LEAVE) {
+		bubble_message = `<div class="bubble">${message}</div>`
 	}
+	
 	
 	if(sender_id == sId) {	// 자신이 보낸 메세지(송신자가 자신인 경우)
 		div_message = '<div class="message user">' + bubble_message + '</div>';
-	}
-	
-	if(receiver_id == sId) {	//	상대방이 보낸 메세지
+	} else if(receiver_id == sId) {	//	상대방이 보낸 메세지
+		
 		if(mem_profile == "") {
 			window.mem_profile = "/resources/img/user_thumb.png";
 		}
@@ -372,6 +402,8 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 			</div>
 		</div>
 		`;
+	} else {
+		div_message = `<div class="message center">${bubble_message}</div>`;
 	}
 
 	$(".chat-body").append(div_message);
@@ -442,6 +474,7 @@ function isOpenedSidebar() {
 	return $(".sidebar").length;
 }
 //	===============================================================================
+//	==============================extra-header 영역================================
 //	[ 모달창 ]
 //	모달창 띄우기
 function toggleChatModal(action) {
@@ -496,11 +529,13 @@ $(document).ready(function(){
 
 function leaveChat(){
 	if(confirm("채팅방을 나가시겠습니까?")) {
-		console.log("채팅방 나감");
+		room_id = getOpenedChatRoomId();
+		receiver_id = getOpenedReciverId();
+		sendMessage(TYPE_LEAVE, 0, sId, receiver_id, room_id);
+		location.reload();
 	}
 }
-
-
+//	===============================================================================
 //	========================= 송금 요청 시작 =========================
 function requestPay(product_id, receiver_id, room_id) {
 	var requestPayUrl = "ChatRequestPay?product_id=" + product_id + "&receiver_id=" + receiver_id + "&room_id=" + room_id;

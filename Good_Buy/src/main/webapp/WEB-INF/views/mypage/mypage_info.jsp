@@ -35,6 +35,8 @@
 		<jsp:include page="/WEB-INF/views/inc/header.jsp"></jsp:include>
 	</header>
 	<main>
+		<section class="wrapper">
+            <div class="page-inner">
 		<!-- 왼쪽 메뉴바 -->
 		<h2 class="page-ttl">마이페이지</h2>
 		<section class="my-wrap">
@@ -158,6 +160,8 @@
 				</div>
 			</div>
 		</section>
+		</div>
+		</section>
 	</main>
 	<footer>
 		<jsp:include page="/WEB-INF/views/inc/footer.jsp"></jsp:include>
@@ -181,6 +185,27 @@
 					document.myInfo.mem_address2.focus();
 				}
 			}).open();
+		}
+		
+		$(document).ready(function () {
+			// 모바일 마이페이지 활성화 메뉴로 자동 스크롤 포커싱
+	    	menuFocusing();
+		});
+		
+		// 모바일 마이페이지 활성화 메뉴로 자동 스크롤 포커싱
+		function menuFocusing(){
+			let menuIdx = 0;
+		    const myMenu = document.querySelector(".my-menu");
+		    const myMenuItems = document.querySelectorAll(".my-menu > a");
+			
+			myMenuItems.forEach((elem, idx) => {
+		    	if(elem.classList.contains("active")) menuIdx = idx;
+		    });
+			
+			myMenu.scrollTo({
+				left : myMenuItems[menuIdx].getBoundingClientRect().left - myMenuItems[menuIdx].getBoundingClientRect().width, 
+				behavior : 'smooth'
+			});
 		}
 	</script>
 	

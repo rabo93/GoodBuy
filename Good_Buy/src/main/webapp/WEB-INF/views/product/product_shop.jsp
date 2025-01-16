@@ -40,8 +40,6 @@
 				<section class="item-shop-section">
 					<div class="item-shop-seller-info">
 						<img src="${searchSeller.MEM_PROFILE}" class="item-shop-seller-pic">
-<%-- 						<div class="item-shop-seller-nick">${searchSeller.MEM_NICK} --%>
-<!-- 						</div> -->
 						<div class="st-ttl">
 							<c:set var="isGoodStore" value="${searchSellerScore.Best >= 3}" />
 							<c:choose>

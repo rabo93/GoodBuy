@@ -32,7 +32,7 @@
 }
 
 .item-sch-area {background: #fff;margin: 1rem 0 4rem;border-top: 2px solid var(--dark);}
-.item-sch-area .sch-inner h2 {font-size: 16px;font-weight: 500;padding: 16px 20px;background: #f7f9fa;width: 150px;color: var(--dark);}
+.item-sch-area .sch-inner h2 {font-size: 16px;font-weight: 500;padding: 16px 20px;background: #f7f9fa;width: 100%;max-width: 150px;}
 
 .item-sch-area .sch-inner .sch-box {
     display: flex;
@@ -74,8 +74,8 @@
 
 .item-sch-area .sch-inner .sch-box .ip-tt {height: 30px;width: 400px;border: max(1px, 0.1em) solid #dadee5;}
 
-.item-sch-area .sch-inner .sch-box .ip-num1 {vertical-align: middle;appearance: none;border: max(1px, 0.1em) solid #dadee5;border-radius: 5%;width: 200px;height: 30px;margin-right: 10px;}
-.item-sch-area .sch-inner .sch-box .ip-num2 {vertical-align: middle;appearance: none;border: max(1px, 0.1em) solid #dadee5;border-radius: 5%;width: 200px;height: 30px;margin-left: 10px;}
+.item-sch-area .sch-inner .sch-box .ip-num1 {vertical-align: middle;appearance: none;border: max(1px, 0.1em) solid #dadee5;border-radius: 5%;width: 100%;max-width: 200px;height: 30px;margin-right: 10px;}
+.item-sch-area .sch-inner .sch-box .ip-num2 {vertical-align: middle;appearance: none;border: max(1px, 0.1em) solid #dadee5;border-radius: 5%;width: 100%;max-width: 200px;height: 30px;margin-left: 10px;}
 .item-sch-area .sch-inner .sch-box .ip-num {display: flex;}
 .item-sch-area .sch-box-reset {
     font-size: 15px;
@@ -171,7 +171,7 @@
 .item-regi .item-regi-trade-adr .item-trade-adr-box .item-trade-adr-sub {width: 400px;height: 40px;border: 1px solid #ddd;border-radius: 4px;padding: 0 10px;}
 .item-trade-adr-search {
 	padding:8px 15px 8px 15px;
-	min-width: 100px;
+	max-width: 100px;
 	height: 40px;
 	box-sizing: border-box;
 	border-radius: 4px;
@@ -571,8 +571,9 @@
     text-align: center;
 }
 
-
-
+@media screen and (max-width:768px) {
+	.item-sch-area .sch-inner .sch-box {display:none}
+}
 
 
 

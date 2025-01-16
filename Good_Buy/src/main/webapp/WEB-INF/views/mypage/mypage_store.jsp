@@ -100,7 +100,10 @@
 												</div>
 											</c:if>
 											<c:if test="${empty scoreCount}">
-											 <span class="myReviewScoreCount">아직 작성된 후기가 없어요&nbsp; <i class="fa-regular fa-comment-dots"></i></span>
+											 	<span class="myReviewScoreCount">
+												    아직 작성된 후기가 없어요&nbsp;
+												    <i class="fa-regular fa-comment-dots"><a title="굿바이 회원들이 선정한 믿을 수 있는 리뷰로 검증된 상점입니다."></a></i>
+												</span>
 											</c:if>
 										</div>
 									</section>

@@ -93,6 +93,9 @@
 													</c:forEach>
 												</div>
 											</c:if>
+											<c:if test="${empty scoreCount}">
+											아직 작성된 리뷰가 없어요 😢
+											</c:if>
 										</div>
 									</section>
 								</div>

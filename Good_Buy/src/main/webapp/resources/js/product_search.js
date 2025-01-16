@@ -104,12 +104,14 @@ $(document).ready(function() {
 	searchProduct();
 	
 	$(window).scroll(function() {
-	    if ($(window).scrollTop() == $(document).height() - $(window).height()) {searchProduct()}
-	      
-})
+	    if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+			searchProduct()
+		    console.log("무한스크롤 실행");
+		}
+	})
 
 function searchProduct() {
-	
+	console.log("ajax 실행");
 	  $.ajax({
 	
 		url: "SearchPriceFilter",
@@ -128,6 +130,7 @@ function searchProduct() {
 				moment.locale('ko')
 //				$("#product-wrap").empty();
 				for(let item of data) {
+					
 					let addr = "";
 					let category = `<span>${item.PRODUCT_CATEGORY}</span>`;
 					let status = "";
@@ -164,8 +167,8 @@ function searchProduct() {
 								</div>
 							</div>
 						</li>`)
-						pageNum++;
 				};
+				pageNum++;
 			} else if (!$("#product-wrap2")) {
 				$("#product-list").append(
 					`<div class="no-data">

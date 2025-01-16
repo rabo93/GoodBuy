@@ -160,7 +160,28 @@
 	            }
 	        });
 	    });
+	    
+	    
+	    // 모바일 마이페이지 활성화 메뉴로 포커싱
+	    menuFocusing();
+	    
 	});
+	
+	function menuFocusing(){
+		let menuIdx = 0;
+	    const myMenu = document.querySelectorAll(".my-menu > a");
+		const menuSize = myMenu[menuIdx].getBoundingClientRect();
+	    
+		console.log(menuSize);
+		
+	    myMenu.forEach((elem, idx) => {
+	    	if(elem.classList.contains("active")) menuIdx = idx;
+	    });
+	    
+		$('.my-menu').scrollLeft(menuIdx);
+	}
+	
+	
 
     </script>
 </body>

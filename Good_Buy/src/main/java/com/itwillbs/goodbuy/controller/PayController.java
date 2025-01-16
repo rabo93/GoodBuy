@@ -53,8 +53,6 @@ public class PayController {
 		// token이 등록된 id인지 조회
 		String haveToken = service.getMemIdFromToken(id);
 		
-//		System.out.println("토큰이 있는지 조회   : " + haveToken);
-		
 		if(haveToken == null) {
 			return "pay/pay_empty_list";
 		}
@@ -143,7 +141,7 @@ public class PayController {
 	
 	// 사용자 인증 요청에 대한 콜백 처리
 	@LoginCheck(memberRole = MemberRole.USER)
-	@GetMapping("Callback")
+	@GetMapping("callback")
 	public String callback(@RequestParam Map<String, String> authResponse, HttpSession session, Model model) {
 		// System.out.println("callback 잘되나? " + authResponse); 
 		

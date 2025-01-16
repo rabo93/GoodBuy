@@ -65,7 +65,7 @@
                                         <c:forEach var="product" items="${order}">
                                             <li class="product-card">
                                             	<a href='ProductDetail?PRODUCT_ID=${product.PRODUCT_ID}'>
-                                                	<img src="${pageContext.request.contextPath}/resources/upload/${product.product_pic1}" class="card-thumb" alt="thumbnail" height="180px" />
+                                                	<img src="${pageContext.request.contextPath}/resources/upload/${product.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" height="180px" />
                                                 </a>
                                                 	<div class="card-info">
                                                     <div class="category">

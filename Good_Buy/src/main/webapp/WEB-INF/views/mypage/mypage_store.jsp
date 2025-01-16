@@ -110,7 +110,7 @@
 									<input type="hidden" id = "mem_id" value="${member.mem_id}">
 									<div class="store-intro"> 
 										<textarea class="mem-regi-intro" rows="5" cols="50" name="mem_intro" id="mem_intro">${storeIntro.mem_intro}</textarea>
-										<h6 id="intro-check"> 0/1000 </h6>
+										<h6 id="intro-check"> 0/100 </h6>
 										<button id="submitBtn">저장</button>
 									</div>
 								</div>
@@ -293,7 +293,7 @@
     }
 
     $(document).ready(function () {
-        updateByteCount("#mem_intro", "#intro-check", 1000, "최대 1000글자까지 가능합니다.");
+        updateByteCount("#mem_intro", "#intro-check", 100, "최대 100글자까지 가능합니다.");
     });
 	
 	</script>

@@ -58,7 +58,7 @@ public class OauthService {
 	        // 결과 코드가 200이라면 성공
 	        // 여기서 안되는경우가 많이 있어서 필수 확인 !! **
 	        int responseCode = conn.getResponseCode();
-	        log.info(">>>>> responseCode(200이면 정상) : " + responseCode);
+//	        log.info(">>>>> responseCode(200이면 정상) : " + responseCode);
 
 	        // 요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
 	        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -186,7 +186,6 @@ public class OauthService {
 	public MemberVO setMemberInfo(HashMap<String, Object> userInfo) {
 	    memberMapper.insertMemberInfo(userInfo);
 	    return memberMapper.getMemberById((String) userInfo.get("id"));
-//		return memberMapper.insertMemberInfo(userInfo);
 	}
 	//--------------------------------------------------------------------------------------
 	// 암호화된 비번 등록

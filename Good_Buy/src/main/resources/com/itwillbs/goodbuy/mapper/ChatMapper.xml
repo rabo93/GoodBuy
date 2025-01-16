@@ -172,6 +172,15 @@ ROOM_ID
 		 LIMIT 1
 	</select>
 	
+	<!-- 채팅방 나갔을때 채팅 상태 변경 -->
+	<update id="updateChatRoomState">
+		UPDATE CHATROOM
+		   SET STATUS = 0
+		 WHERE ROOM_ID = #{room_id}
+		   AND MEM_ID = #{sender_id}
+	</update>
+	
+	
 	
 </mapper>
 

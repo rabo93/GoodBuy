@@ -174,10 +174,10 @@ html.fixed .chat-container {z-index:9990;}
 .m-menu-wrap.is-active #m_nav {right:0;}
 .m-menu-wrap.is-active .m-menu-bg {display:block;opacity: 1;}
 .m-menu-wrap #m_nav .m-info {background:var(--primary);padding: 1rem 4rem 1rem 1rem;display: flex;align-items: center;gap:1rem;flex-wrap: wrap;min-height: 70px;height: auto;}
-.m-menu-wrap #m_nav .m-info img {width:40px;height:40px;}
 .m-menu-wrap #m_nav .m-info a {color:var(--white);}
 .m-menu-wrap #m_nav .m-info .m-info-row {flex:0 0 100%;display: flex;gap: 0 1rem;font-size: 13px;}
 .m-menu-wrap #m_nav .m-info .m-info-row a {flex: 0 0 calc(100% / 3);}
+.m-menu-wrap #m_nav .m-info img {width:40px;height:40px;border-radius:100%;object-fit:cover;}
 .m-menu-wrap #m_nav .m-info .login-link {}
 .m-menu-wrap #m_nav .m-info .my-info, .m-menu-wrap #m_nav .m-info .my-course {display:none;}
 .m-menu-wrap #m_nav .m-info.on .login-link {display:none;}

@@ -118,3 +118,62 @@
 #naver_id_login img {display:block;margin:0 auto;}
 #naver_id_login a {background:#1ec800;}
 
+
+
+
+
+
+/* 반응형 스타일 */
+
+/* 1400px 이하 */
+@media screen and (max-width: 1400px) {
+    .login-wrap .login-box {max-width: 350px;} /* 화면 크기에 맞춰 로그인 박스 크기 확장 */
+    .login-wrap .login-box2 {max-width: 400px;} /* 로그인 박스2 크기 조정 */
+    .login-wrap form input[type="text"], .login-wrap form input[type="password"] {
+        font-size: 1rem; /* 입력란 글자 크기 조정 */
+    }
+    .login-wrap .login-ttl {
+        font-size: 1.6rem; /* 제목 크기 축소 */
+    }
+    .signup-link {
+        font-size: 13px; /* 가입 링크 글자 크기 축소 */
+    }
+}
+
+/* 960px 이하 */
+@media screen and (max-width: 960px) {
+    .login-wrap {padding: 2rem 0;} /* 로그인 박스 패딩 조정 */
+    .login-wrap .login-box {max-width: 90%;} /* 로그인 박스 크기 확장 */
+    .login-wrap form input[type="text"], .login-wrap form input[type="password"] {
+        padding: 12px; /* 입력란 padding 축소 */
+    }
+    .login-wrap .login-ttl {
+        font-size: 1.5rem; /* 제목 크기 축소 */
+    }
+    #form-controls button {
+        padding: 12px 60px; /* 버튼 패딩 조정 */
+    }
+    .signup-link {
+        font-size: 13px;
+    }
+}
+
+/* 480px 이하 */
+@media screen and (max-width: 480px) {
+    .login-wrap .login-box {max-width: 90%;} /* 로그인 박스 크기 최대로 확장 */
+    .login-wrap form input[type="text"], .login-wrap form input[type="password"] {
+        padding: 10px; /* 입력란 padding 최소화 */
+        font-size: 0.9rem; /* 글자 크기 더 축소 */
+    }
+    .login-wrap .login-ttl {
+        font-size: 1.4rem; /* 제목 크기 더욱 축소 */
+    }
+    #form-controls button {
+        padding: 12px 40px; /* 버튼 크기 축소 */
+        font-size: 1rem; /* 글자 크기 축소 */
+    }
+    .signup-link {
+        font-size: 12px; /* 가입 링크 글자 크기 축소 */
+    }
+}
+

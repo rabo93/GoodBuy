@@ -61,18 +61,27 @@ public class ChatService {
 	
 	//	채팅 메세지 DB 저장 요청
 	public void insertChatMessage(ChatMessage chatMessage) {
+		System.out.println("타입 확인 : " + chatMessage.getType());
+		if(chatMessage.getType().equals(ChatMessage.TYPE_RESERVATION)) {
+			
+		}
 		mapper.insertChatMessage(chatMessage);
 	}
 	
 	//	기존 채팅 내역 조회
 	public List<ChatMessage> selectChatMessage(ChatMessage chatMessage) {
 		List<ChatMessage> chatMessageList = mapper.selectChatMessage(chatMessage);
+		
+		//	채팅 내역이 존재할 때 모든 메세지 읽음 처리
+		if(chatMessageList != null && chatMessageList.size() > 0) {
+			mapper.updateAllMessageRead(chatMessage);
+		}
+		
 		return chatMessageList;
 	}
 
 	//	채팅방 회원 신고
 	public int insertChatReport(String reporter_id, String reported_id, String reason, String room_id) {
-//		return 0;
 		return mapper.insertChatReport(reporter_id, reported_id, reason, room_id);
 	}
 	

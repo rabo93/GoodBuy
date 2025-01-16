@@ -57,6 +57,11 @@ public class MyReviewService {
 		// TODO Auto-generated method stub
 		return mapper.selectReviewHistoryCount(id);
 	}
+	//리뷰 평점 올라감
+//	public int addReviewCount(Map<String, String> reviewData) {
+//		// TODO Auto-generated method stub
+//		return mapper.insertReviewScore(reviewData);
+//	}
 	
 	
 	

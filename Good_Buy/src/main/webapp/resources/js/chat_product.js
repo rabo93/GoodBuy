@@ -125,7 +125,7 @@ $("#wrapper-bg").on("click", () => {
 });
 
 function showChatList(receiver_id, product_id) {
-	sendMessage(TYPE_INIT_COMPLETE, product_id, "", receiver_id, "", "", "");
+	sendMessage(TYPE_INIT_COMPLETE, product_id, "", receiver_id, "", "", 0);
 }
 
 function appendMessage(type, sender_id, receiver_id, message, send_time) {
@@ -182,7 +182,7 @@ function sendInputMessage() {
 	}).done(function(result){
 		let room_id = result.room_id;
 		console.log("TYPE_TALK에서 receiver_id 확인 - " + receiver_id);
-		sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, message, "");
+		sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, message, 0);
 	});
 	
 	$(".chatMessage").val("");

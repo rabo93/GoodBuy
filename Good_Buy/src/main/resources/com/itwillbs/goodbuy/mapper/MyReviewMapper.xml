@@ -38,9 +38,9 @@
 		   , REVIEW_OPTIONS 
 		) VALUES (
 		    #{review_id}             -- 리뷰 ID
-		    , #{mem_id}             -- 회원 ID
-		    , #{review}  	 -- 리뷰 내용
-		    , now()	 -- 리뷰 날짜
+		    , #{mem_id}              -- 회원 ID
+		    , #{review}  	 		 -- 리뷰 내용
+		    , now()					 -- 리뷰 날짜
 		    , #{product_title}
 		    , #{score}
 		    , #{product_id}            
@@ -48,6 +48,10 @@
 		);
 	
 	</insert>
+	
+	<!-- 리뷰평점 올라감!!! -->
+<!-- 	<update id=""></update> -->
+	
 	
 	<!-- 내가 쓴 리뷰 -->
 	<select id="selectReviewHistory" resultType="review">
@@ -89,11 +93,16 @@
 	</delete>
 	
 	<select id="selectScoreCount" resultType="map">
-		SELECT REVIEW_SCORE, COUNT(*) AS count
-		FROM MYREVIEW
-		WHERE MEM_ID = #{mem_id}
-		GROUP BY REVIEW_SCORE
-		ORDER BY REVIEW_SCORE DESC
+<!-- 		SELECT REVIEW_SCORE, COUNT(*) AS count -->
+<!-- 		FROM MYREVIEW -->
+<!-- 		WHERE MEM_ID = #{mem_id} -->
+<!-- 		GROUP BY REVIEW_SCORE -->
+<!-- 		ORDER BY REVIEW_SCORE DESC -->
+		SELECT R.REVIEW_SCORE, COUNT(*) AS count 
+		FROM MYREVIEW R
+		JOIN PRODUCT P
+		ON P.PRODUCT_ID = R.PRODUCT_ID AND P.MEM_ID=#{id}
+		GROUP BY REVIEW_SCORE  ;
 	</select>
 	
 	<select id="selectReviewHistoryCount">

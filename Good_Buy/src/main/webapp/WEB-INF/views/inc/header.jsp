@@ -19,9 +19,9 @@
 		</div>
 		<div class="hd-gnb">
 			<div class="gnb-left">
-				<a href="ProductRegist" class="gnb-btn"><i class="fa-solid fa-store"></i> 판매하기</a>
+				<a href="ProductRegist" class="gnb-btn"><i class="fa-solid fa-shop"></i> 판매하기</a>
 				<a href="javascript:void(0)" id="chat-btn" class="gnb-btn" onclick="startChat()">
-					<i class="fa-solid fa-comment-dots"></i> 채팅하기
+					<i class="fa-regular fa-comment-dots"></i> 채팅하기
 					<script type="text/javascript">
 						function startChat() {
 							alert("로그인이 필요합니다!");
@@ -51,13 +51,13 @@
 							<b>${sessionScope.sNick}</b> 님
 						</button>
 						<div id="login-panel">
-							<a href="MyStore">나의상점</a>
-							<a href="GoodPay">굿페이</a>
-							<a href="MyInfo">계정정보</a>
+							<a href="MyStore"><i class="fa-brands fa-pagelines"></i>&nbsp;&nbsp;&nbsp;나의상점</a>
+							<a href="GoodPay"><i class="fa-brands fa-paypal"></i>&nbsp;&nbsp;&nbsp;굿페이</a>
+							<a href="MyInfo"><i class="fa-regular fa-user"></i>&nbsp;&nbsp;&nbsp;계정정보</a>
 							<c:if test="${sessionScope.sId eq 'admin'}">
-								<a href="AdmMain">관리자화면</a>
+								<a href="AdmMain"><i class="fa-solid fa-gear"></i>&nbsp;&nbsp;&nbsp;관리자화면</a>
 							</c:if>
-							<a href="MemberLogout">로그아웃</a>
+							<a href="MemberLogout"><i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;&nbsp;로그아웃</a>
 <%-- 							<input type="hidden" id="sNick" value="${member.mem_nick}"> --%>
 							<input type="hidden" id="sNick" value="${sessionScope.sNick}">
 							<script src="${pageContext.request.contextPath}/resources/js/chat_header.js"></script>
@@ -85,24 +85,24 @@
         		<div class="m-info">
         			<c:choose>
 						<c:when test="${empty sessionScope.sId}">
-	        				<a href="SNSLogin" class="gnb-btn"><i class="fa-solid fa-user"></i> 로그인</a>
+	        				<a href="SNSLogin" class="gnb-btn">  <i class="fa-solid fa-user-large"></i>&nbsp;&nbsp;&nbsp;로그인을 해주세요.</a>
 						</c:when>
 						<c:otherwise>
 							<c:choose>
 								<c:when test="${not empty sessionScope.sProfile}">
-									<img src="${sessionScope.sProfile}" alt="프로필사진">
+									<img src="${sessionScope.sProfile}">
 								</c:when>
 								<c:otherwise>
-									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png" alt="프로필사진" clas>
+									<img src="${pageContext.request.contextPath}/resources/img/user_thumb.png">
 								</c:otherwise>
 							</c:choose>
 								<a href="MyInfo" class="my-info"><span>${sessionScope.sId} </span> 님</a>
 								<div class="m-info-row">
-				        			<a href="ProductRegist" class="gnb-btn"><i class="fa-solid fa-store"></i> 판매하기</a>
+				        			<a href="ProductRegist" class="gnb-btn"><i class="fa-solid fa-shop"></i>&nbsp;&nbsp;&nbsp;판매</a>
 									<a href="javascript:void(0)" class="gnb-btn" onclick="startChat()">
-										<i class="fa-solid fa-comment-dots"></i> 채팅하기
+										<i class="fa-regular fa-comment-dots"></i>&nbsp;&nbsp;&nbsp;채팅
 									</a>
-									<a href="MemberLogout">로그아웃</a>
+									<a href="MemberLogout"><i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;&nbsp;&nbsp;로그아웃</a>
 								</div>
 								<input type="hidden" id="sId" value="${sessionScope.sId}">
 								<input type="hidden" id="sNick" value="${sessionScope.sNick}">

@@ -459,8 +459,6 @@ textarea {
 .mypage-wrap .st-box .store-intro textarea {border:1px solid #ccc;border-radius:6px;background:var(--ivory);padding:10px;font-size:14px;color:var(--dark);margin-bottom: 0;}
 .mypage-wrap .st-box .store-intro button {padding: 8px 20px;border-radius: 6px;background: var(--primary);color: var(--white);margin-left: auto;display: block;font-size: 14px;font-weight: 700;}
 
-
-
 .my-tabs {display:flex;align-items:center;gap:10px;margin:20px 0;}
 .my-tabs .filter-btn {padding: 8px 20px;font-size: 15px;font-weight:500;background:var(--ivory);color:var(--dark);border-radius: 50px;}
 .my-tabs .filter-btn.active {background:var(--primary);color:var(--white);font-weight:600;}

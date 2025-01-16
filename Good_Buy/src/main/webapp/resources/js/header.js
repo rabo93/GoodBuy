@@ -76,8 +76,8 @@ if ($("#product-wrap2")) {
 					
 					$("#product-wrap2").append(
 					`<li class="product-card" id="product-card" onclick="location.href=\'ProductDetail?PRODUCT_ID=${item.PRODUCT_ID}'">
-						${status}
 						<div class="product-thumb">
+							${status}
 							<img src="../resources/upload/${item.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail"/>
 						</div>
 						<div class="card-info">

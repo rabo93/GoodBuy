@@ -23,7 +23,6 @@
 <!-- ******************* 아래 CSS와 JS는 페이지별로 알맞게 Import 해주세요 ****************** -->
 <!-- CSS for Page -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/product.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
 
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
@@ -62,7 +61,7 @@
 							</div>
 						</div>
 					</div>
-					<button class="more">
+					<button class="more" onclick="location.href='ProductList?SEARCHKEYWORD=${searchSeller.MEM_NICK}'">
 						<h1 class="sec-ttl">
 						이 판매자가 판매하는 물품
 						<i class="fa-solid fa-chevron-right"></i>

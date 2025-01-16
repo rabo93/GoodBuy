@@ -49,6 +49,7 @@ $(".sidebar-item").on("dblclick", function() {
 	console.log("mem_profile : " + mem_profile);
 	console.log("product_img : " + product_img);
 	
+//	window.room_id = room_id;
 	window.product_id = product_id;
 	window.mem_nick = mem_nick;
 	window.mem_profile = mem_profile;
@@ -195,9 +196,17 @@ function showChatRoom(room) {
 			<button class="close-chat-button" onclick="closeChat()">
 				<i class="fa-solid fa-arrow-left"></i>
 			</button>
-			<button class="report-chat-button" onclick="toggleChatModal(\'open\')">
-				<i class="fa-solid fa-land-mine-on"></i>&nbsp;신고하기
+			<button class="chat-option" onclick="">
+				<i class="fa-solid fa-ellipsis"></i>
 			</button>
+			<div class="chat-panel">
+				<button class="report-chat-button" onclick="toggleChatModal(\'open\')">
+					<i class="fa-solid fa-land-mine-on"></i>&nbsp;신고하기
+				</button>
+				<button class="report-chat-leave" onclick="leaveChat()">
+					<i class="fa-solid fa-arrow-right-from-bracket"></i>&nbsp;나가기
+				</button>
+			</div>
 		</div>
 		<div class="chat-header">
            	<a><img src="${baseUrl}/resources/upload/${product_img}" alt="item"></a>
@@ -270,9 +279,10 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 		
 		if(receiver_id == sId) {
 			if(type == TYPE_REQUEST_PAY) {
+				room_id = $(".chat-footer").find("#room_id").val();
 				requestPay = `
 					<p class="pay-text">${mem_nick}님이 ￦ ${message}원을 요청했어요</p>
-					<button class="item-button" onclick="openPayWindow(${product_id}, '${sender_id}', '${message}')">송금하기</button>
+					<button class="item-button" onclick="openPayWindow(${product_id}, '${sender_id}', '${message}', '${room_id}')">송금하기</button>
 				`;
 			} else if(type == TYPE_RESPONSE_PAY) {
 				requestPay = `
@@ -483,6 +493,13 @@ $(document).ready(function(){
 		}
 	});
 })
+
+function leaveChat(){
+	if(confirm("채팅방을 나가시겠습니까?")) {
+		console.log("채팅방 나감");
+	}
+}
+
 
 //	========================= 송금 요청 시작 =========================
 function requestPay(product_id, receiver_id, room_id) {

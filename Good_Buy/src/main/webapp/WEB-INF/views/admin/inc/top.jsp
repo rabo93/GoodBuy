@@ -2,12 +2,14 @@
     pageEncoding="UTF-8"%>
 <!-- Topbar -->
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-	<h4 class="m-0 text-gray-900">Good Buy 관리자 대시보드</h4>
-	
     <!-- Sidebar Toggle (Topbar) -->
    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
        <i class="fa fa-bars"></i>
    </button>
+   
+   <!-- Title -->
+	<h4 class="m-0 text-gray-900">Good Buy 관리자 대시보드</h4>
+	
    <!-- Topbar Navbar -->
    <ul class="navbar-nav ml-auto">
        <li class="nav-item dropdown no-arrow">

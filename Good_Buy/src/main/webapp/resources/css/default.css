@@ -24,11 +24,16 @@ header {box-shadow: 0 2px 14px rgb(226 226 226);}
 .hd-menu .hd-lnb a {display: block;font-weight: 500;transition: all 0.1s;}
 .hd-menu .hd-lnb a:hover {color:var(--primary);}
 
+
+@media screen and (max-width:1048px){
+     .hd-wrap {padding:5px 0;} 
+     .hd-top .hd-logo {width:120px;}
+}
+
 @media screen and (max-width:720px){
     .hd-wrap {padding:0;}
     .hd-top .hd-logo {width:100px;}
 }
-
 
 /************************ product-card ************************/
 .product-wrap {display: grid;-webkit-column-gap: 1rem;column-gap: 1rem;row-gap: 1rem;grid-template-columns: repeat(4, minmax(0, 1fr));} 

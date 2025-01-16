@@ -106,12 +106,10 @@ $(document).ready(function() {
 	$(window).scroll(function() {
 	    if ($(window).scrollTop() == $(document).height() - $(window).height()) {
 			searchProduct()
-		    console.log("무한스크롤 실행");
 		}
 	})
 
 function searchProduct() {
-	console.log("ajax 실행");
 	  $.ajax({
 	
 		url: "SearchPriceFilter",

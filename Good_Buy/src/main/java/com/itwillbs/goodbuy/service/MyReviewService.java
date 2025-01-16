@@ -62,6 +62,10 @@ public class MyReviewService {
 //		// TODO Auto-generated method stub
 //		return mapper.insertReviewScore(reviewData);
 //	}
+	//별점 3개 이상인 상점 조회
+	public Map<String, String> goodStore(String id) {
+		return mapper.selectGoodStore(id);
+	}
 	
 	
 	

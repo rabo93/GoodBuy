@@ -111,7 +111,7 @@
 														<c:if test="${product.PRODUCT_STATUS == 1}">
 															<button class="successOrder" 
 													            data-product-id="${product.PRODUCT_ID}" 
-													            data-product-seller="${product.BUYER_ID}">구매확정</button>
+													            data-product-seller="${product.BUYER_ID}">구매확정 <i class="fa-regular fa-circle-check"></i></button>
 											            </c:if>
                                                     	<c:choose>
 														    <c:when test="${empty product.REVIEW_CNT || product.REVIEW_CNT == 0}">

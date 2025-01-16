@@ -115,4 +115,15 @@
 		ORDER BY R.REVIEW_DATE DESC;
 	</select>
 	
+	<select id="selectGoodStore">
+	  SELECT 
+<!-- 	    R.REVIEW_SCORE, -->
+	    COUNT(*) AS count
+	FROM MYREVIEW R
+	JOIN PRODUCT P
+	    ON P.PRODUCT_ID = R.PRODUCT_ID
+	    AND P.MEM_ID = #{mem_id}
+	GROUP BY R.REVIEW_SCORE
+	HAVING R.REVIEW_SCORE = 2 AND COUNT(*) >= 3;
+	</select>
 </mapper>

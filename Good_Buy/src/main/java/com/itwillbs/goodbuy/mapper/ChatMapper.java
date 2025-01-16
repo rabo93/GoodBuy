@@ -49,6 +49,9 @@ public interface ChatMapper {
 	MemberVO selectMemberNick(String receiver_id);
 
 	//	메세지 읽음 처리
+	void updateAllMessageRead(ChatMessage chatMessage);
+	
+	//	메세지 읽음 처리
 	void updateMessageRead(ChatMessage chatMessage);
 	
 	//	상품 번호 가져오기

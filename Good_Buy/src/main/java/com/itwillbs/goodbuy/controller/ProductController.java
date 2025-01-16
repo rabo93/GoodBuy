@@ -148,6 +148,9 @@ public class ProductController {
 	@GetMapping("ProductDetail")
 	public String prodcutDetail(@RequestParam int PRODUCT_ID, Model model, HttpSession session) {
 		String id = (String) session.getAttribute("sId");
+		if (id != null) {
+			productService.plusviewcount(PRODUCT_ID);
+		}
 		ProductVO productSearch = productService.productSearch(PRODUCT_ID);
 		WishlistVO wishSearch = productService.checkWishlist(PRODUCT_ID, id);
 		

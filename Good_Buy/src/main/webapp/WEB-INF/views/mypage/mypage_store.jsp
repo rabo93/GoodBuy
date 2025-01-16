@@ -77,7 +77,13 @@
 									        </c:choose>
 										</div>
 										<div class="st-info">
-											<div class="st-ttl">${sessionScope.sNick}의 상점</div>
+												<div class="st-ttl">
+													<c:set var="isGoodStore" value="${goodStore.count >= 3}" />
+													<c:choose>
+														<c:when test="${isGoodStore}">${sessionScope.sNick}의 상점 <i class="fa-brands fa-square-web-awesome" style="color:var(--primary)";></i></c:when>
+														<c:otherwise>${sessionScope.sNick}의 상점</c:otherwise>
+													</c:choose>
+												</div>
 											<c:if test="${not empty scoreCount}">
 												<div class="st-review">
 													<c:forEach var="score" items="${scoreCount}">
@@ -92,6 +98,9 @@
 													    </c:if>
 													</c:forEach>
 												</div>
+											</c:if>
+											<c:if test="${empty scoreCount}">
+											 <span class="myReviewScoreCount">아직 작성된 후기가 없어요&nbsp; <i class="fa-regular fa-comment-dots"></i></span>
 											</c:if>
 										</div>
 									</section>

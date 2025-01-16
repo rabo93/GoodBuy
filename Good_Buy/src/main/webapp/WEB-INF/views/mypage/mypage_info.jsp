@@ -35,6 +35,8 @@
 		<jsp:include page="/WEB-INF/views/inc/header.jsp"></jsp:include>
 	</header>
 	<main>
+		<section class="wrapper">
+            <div class="page-inner">
 		<!-- 왼쪽 메뉴바 -->
 		<h2 class="page-ttl">마이페이지</h2>
 		<section class="my-wrap">
@@ -157,6 +159,8 @@
 					<!-- // contents -->
 				</div>
 			</div>
+		</section>
+		</div>
 		</section>
 	</main>
 	<footer>

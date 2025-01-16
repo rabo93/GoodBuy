@@ -85,8 +85,9 @@ $(function() {
 	window.onmessage = function(e) {
 		console.log("부모창 메세지 : " + e.data);
 		let data = JSON.parse(e.data);
-		
 		let recent_div = "";
+		let fileMessage
+		
 		if (data.type == TYPE_INIT) {	//	채팅 윈도우 초기화
 			showChatList(data);
 			return;
@@ -102,8 +103,8 @@ $(function() {
 			console.log("TYPE_TALK - room_id : " + data.room_id);
 			recent_div = `${data.message}<span class="item-send-time">${data.send_time}</span>`;
 		} else if(data.type == TYPE_FILE) {	// 파일 전송
-			data.message = "사진을 보냈습니다.";
-			recent_div = `${data.message}<span class="item-send-time">${data.send_time}</span>`
+			fileMessage = "사진을 보냈습니다.";
+			recent_div = `${fileMessage}<span class="item-send-time">${data.send_time}</span>`
 		} else if(data.type == TYPE_REQUEST_PAY) {
 			recent_div = `${data.message}원을 요청했어요.<span class="item-send-time">${data.send_time}</span>`
 		} else if(data.type == TYPE_RESPONSE_PAY) {
@@ -374,11 +375,11 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 		`;
 		
 	} else if(type == TYPE_TALK) {	// 채팅메세지
-		bubble_message = '<div class="bubble">' + message + '</div>';
+		bubble_message = `<div class="bubble">${message}</div>`;
 	} else if(type == TYPE_FILE) {
 		let hrefUrl = baseUrl + "/resources/upload/chat/" + message.split(":")[0];
 		let imgUrl = baseUrl + "/resources/upload/chat/" + message.split(":")[1];
-		bubble_message = '<div class="bubble"><a href="' + hrefUrl + '" target="_blank"><img class="img" src="' + imgUrl + '"</div>'
+		bubble_message = `<div class="bubble"><a href="${hrefUrl}" target="_blank"><img class="img" src="${imgUrl}"</div>`
 	} else if(type == TYPE_LEAVE) {
 		bubble_message = `<div class="bubble">${message}</div>`
 	}
@@ -452,7 +453,7 @@ function sendFile() {
 		}
 		
 		if(response.fileName != "" && response.thumbnailFileName != "") {
-			sendMessage(TYPE_FILE_UPLOAD_COMPLETE, product_id, sId, $("#receiver_id").val(), $("#room_id").val(), response.fileName + ":" + response.thumbnailFileName);
+			sendMessage(TYPE_FILE_UPLOAD_COMPLETE, product_id, sId, $("#receiver_id").val(), $("#room_id").val(), response.fileName + ":" + response.thumbnailFileName, 0);
 		}
 		
 	});

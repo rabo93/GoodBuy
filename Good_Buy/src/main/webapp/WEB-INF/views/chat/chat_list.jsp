@@ -47,13 +47,15 @@
 								<option value="기타 사유를 입력해주세요.">기타</option>
 							</select>
 							<textarea class="ch-modal-otherReason" readonly ></textarea>
+						</div>
+						<div class="ch-report-btn">
 							<button class="ch-model-report-btn" type="button" id="chatReporting">
 								신고하기
 							</button>
+							<button class="ch-model-close-btn" type="button" onclick="toggleChatModal('close')">
+								닫기
+							</button>
 						</div>
-						<button class="ch-model-close-btn" type="button" onclick="toggleChatModal('close')">
-							닫기
-						</button>
 					</div>
 				</section>
 				<div class="container chat-list">

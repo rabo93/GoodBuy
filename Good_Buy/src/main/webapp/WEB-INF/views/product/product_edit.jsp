@@ -24,8 +24,8 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/product.css">
 
 <!-- JS for Page -->
-<script src="${pageContext.request.contextPath}/resources/js/product_edit.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/product_regi.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/product_edit.js"></script>
 
 </head>
 <body>
@@ -85,8 +85,8 @@
 							<section class="item-regi-trade-adr">
 								<h6 class="item-regi-name">직거래 주소 설정</h6>
 								<div class="item-regi-trade-active">
-									<label><input type="radio" name="trade-adr-val" id="trade-enable" value="1">직거래 가능</label>
-									<label><input type="radio" name="trade-adr-val" id="trade-disable" value="0">직거래 불가능</label>
+									<label><input type="radio" name="trade-adr-val" id="trade-enable">직거래 가능</label>
+									<label><input type="radio" name="trade-adr-val" id="trade-disable">직거래 불가능</label>
 									<div class="item-trade-adr-box" id="item-trade-adr-box">
 										<div>
 											<input type="text" class="item-trade-adr-sub" id="item-trade-adr-sub" name="product_trade_adr1" value="${productContent.PRODUCT_TRADE_ADR1}" readonly>
@@ -98,12 +98,12 @@
 							<section class="item-regi-price">
 								<h6 class="item-regi-name">택배비 지정</h6>
 								<div class="item-regi-price-box">
-									<label><input type="radio" name="shipping-fee" id="shipping-fee-enable"  value="0">택배비 미포함</label>
-									<label><input type="radio" name="shipping-fee" id="shipping-fee-disable" value="1">택배비 포함</label>
+									<label><input type="radio" name="shipping-fee" id="shipping-fee-enable">택배비 미포함</label>
+									<label><input type="radio" name="shipping-fee" id="shipping-fee-disable">택배비 포함</label>
 									<div class="item-regi-price-number">
 										<input type="number" class="shipping-fee-price" id="shipping-fee-price" name="product_shipping_fee" placeholder="택배비를 입력해주세요."
 											<c:choose>
-												<c:when test="${not empty productContent.product_shipping_fee}">value="${productContent.product_shipping_fee}"</c:when>
+												<c:when test="${not empty productContent.PRODUCT_SHIPPING_FEE}">value="${productContent.PRODUCT_SHIPPING_FEE}"</c:when>
 												<c:otherwise>value="0"</c:otherwise>
 											</c:choose>
 										>

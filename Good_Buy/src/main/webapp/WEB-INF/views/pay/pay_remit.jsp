@@ -64,7 +64,7 @@
 									<input type="hidden" name="receiver_id" id="receiver_id" value="${param.receiver_id}">
 									<input type="hidden" name="product_id" id="product_id" value="${param.product_id}">
 									<input type="hidden" name="room_id" id="room_id" value="${param.room_id}">
-									<input type="hidden" name="tran_amt" id="tran_amt" value="2000">
+									<input type="hidden" name="tran_amt" id="tran_amt" value="${param.price }">
 							        <div class="recharge-button">
 							            <button class="transfer-btn-chat" id="transfer-btn-chat" >송금하기</button>
 							        </div> 

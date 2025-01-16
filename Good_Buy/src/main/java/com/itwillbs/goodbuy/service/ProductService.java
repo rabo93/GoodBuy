@@ -147,6 +147,12 @@ public class ProductService {
 		return mapper.getRecommendedItem();
 	}
 	
+	//구매확정버튼
+	
+	public int successOrder(String product_id,String product_seller) {
+		return mapper.updateProductStatus(product_id,product_seller);
+	}
+	
 	// 메인화면 무한 스크롤
 	public List<Map<String, Object>> getRecommendedItem(int startRow, int listLimit) {
 		return mapper.getRecommendedItem(startRow, listLimit);

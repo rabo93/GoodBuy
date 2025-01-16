@@ -21,6 +21,7 @@ import com.itwillbs.goodbuy.handler.MyWebSocketHandler;
 import com.itwillbs.goodbuy.service.ChatService;
 import com.itwillbs.goodbuy.service.PayService;
 import com.itwillbs.goodbuy.service.ProductService;
+import com.itwillbs.goodbuy.vo.PageInfo;
 import com.itwillbs.goodbuy.vo.PayToken;
 import com.itwillbs.goodbuy.vo.ProductVO;
 
@@ -77,7 +78,7 @@ public class PayController {
 		List<Map<String, String>> payInfo =  getPayInfoAll.stream()
                 					 .limit(5) 
                 					 .collect(Collectors.toList());
-		System.out.println("payInfo 상위 5개만 잘 잘라지는지 확인 :             " + payInfo);
+//		System.out.println("payInfo 상위 5개만 잘 잘라지는지 확인 :             " + payInfo);
 		
 		for(Map<String, String> pId : payInfo) {
 			Object obj = pId.get("PRODUCT_ID");
@@ -87,7 +88,9 @@ public class PayController {
 			    // 상품조회
 				ProductVO product = productService.productSearch(product_id);
 				String productName = product.getProduct_title();
-				model.addAttribute("productName", productName);
+				System.out.println("PRODUCT NAMEㅇㅣ 이상학 ㅔ나와서 productName 찍어봄.    :   "  + productName);
+				pId.put("productName", productName);
+//				model.addAttribute("productName", productName); 이렇게 보내니까 마지막 송금상품 이름만 뜸. 
 			}
 		}
 		model.addAttribute("getPayInfo", payInfo);
@@ -408,6 +411,8 @@ public class PayController {
 	@PayTokenCheck
 	@PostMapping("PayTransfer")
 	public String payTransfer(@RequestParam Map<String, Object> map, HttpSession session, Model model) throws Exception {
+		
+		
 		PayToken senderToken = (PayToken)session.getAttribute("token");
 		
 		// 이체에 필요한 사용자 계좌(입금받는 상대방) 관련 정보(토큰) 조회
@@ -417,6 +422,7 @@ public class PayController {
 		
 		String id = (String)session.getAttribute("sId");
 		String receiver_id = (String)map.get("receiver_id");
+//		System.out.println("PayTransfer에 receiver_id 정보 잘 받아오는 지 ㅎ확인 :     " +  receiver_id);
 		// 상품 조회
 		int product_id = Integer.parseInt((String) map.get("product_id"));
 		ProductVO productSearch = productService.productSearch(product_id);
@@ -509,13 +515,16 @@ public class PayController {
 	@LoginCheck(memberRole = MemberRole.USER)
 	@PayTokenCheck
 	@GetMapping("AllPayList")
-	public String allPayList(HttpSession session, Model model) {
+	public String allPayList(
+			@RequestParam(defaultValue = "1") int pageNum,
+				HttpSession session, 
+				Model model) {
 		String id = (String)session.getAttribute("sId");
 		PayToken token = (PayToken)session.getAttribute("token");
 		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
 		
-		
-		// 내 id로 거래한 모든 거래내역 조회 
+		// 내 id로 거래한 모든 거래내역 조회 - 페이징 처리 전에 한 payInfo 
+		/*
 		List<Map<String, String>> getPayInfo = service.getPayInfo(id);
 		for(Map<String, String> pId : getPayInfo) {
 			Object obj = pId.get("PRODUCT_ID");
@@ -525,78 +534,74 @@ public class PayController {
 			    // 상품조회
 				ProductVO product = productService.productSearch(product_id);
 				String productName = product.getProduct_title();
-				model.addAttribute("productName", productName);
+				pId.put("productName", productName);
 			}
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		*/
 		
 		// -------------------------------------------------------------------
 		// [ 페이징 처리 ]
 		// 1. 페이징 처리를 위해 조회 목록 갯수 조절에 사용될 변수 선언 및 계산
-//		int listLimit = 10; // 페이지 당 게시물 수
-//		int startRow = (pageNum - 1) * listLimit; // 조회할 게시물의 DB 행 번호(row 값)
-//		
-//		// 2. 실제 뷰페이지에서 페이징 처리를 위한 계산 작업
-//		// BoardService - getBoardListCount() 메서드 호출하여 전체 게시물 수 조회 요청
-//		// => 파라미터 : 검색타입, 검색어   리턴타입 : int(listCount)
+		int listLimit = 10; // 페이지 당 게시물 수
+		int startRow = (pageNum - 1) * listLimit; // 조회할 게시물의 DB 행 번호(row 값)
+		
+		// 2. 실제 뷰페이지에서 페이징 처리를 위한 계산 작업
 //		int listCount = service.getBoardListCount(searchType, searchKeyword);
-////				System.out.println("전체 게시물 수 : " + listCount);
-//		
-//		// 임시) 페이지 당 페이지 번호 갯수를 2개로 지정(1 2 or 3 4...)
-//		int pageListLimit = 3; 
-//		// 최대 페이지 번호 계산(전체 게시물 수를 페이지 당 게시물 수로 나눔)
-//		// => 이 때, 나머지가 0보다 크면 페이지 수 + 1
-//		int maxPage = listCount / listLimit + (listCount % listLimit > 0 ? 1 : 0);
-//		// => 단, 최대 페이지 번호가 0 일 경우 1페이지로 변경
-//		if(maxPage == 0) {
-//			maxPage = 1;
-//		}
-//		
-//		// 현재 페이지에서 보여줄 시작 페이지 번호 계산(1, 3, 5, 7, 9)
-//		int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
-//		// 현재 페이지에서 보여줄 마지막 페이지 번호 계산(2, 4, 6, 8, 10)
-//		int endPage = startPage + pageListLimit - 1;
-//		
-//		// 단, 마지막 페이지번호(endPage) 값이 최대 페이지번호(maxPage)보다 클 경우
-//		// 마지막 페이지 번호를 최대 페이지번호로 교체
-//		if(endPage > maxPage) {
-//			endPage = maxPage;
-//		}
-//		
-//		// 전달받은 페이지번호가 1보다 작거나 최대 페이지 번호보다 클 경우
-//		// fail.jsp 페이지 포워딩을 통해 "해당 페이지는 존재하지 않습니다!" 출력하고
-//		// 1페이지로 이동하도록 처리
-//		if(pageNum < 1 || pageNum > maxPage) {
-//			model.addAttribute("msg", "해당 페이지는 존재하지 않습니다!");
-//			model.addAttribute("targetURL", "BoardList?pageNum=1");
-//			return "result/fail";
-//		}
-//		
-//		// 페이징 정보 관리하는 PageInfo 객체 생성 및 계산 결과 저장
-//		PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage);
-//		
-//		// Model 객체에 페이징 정보 저장
-//		model.addAttribute("pageInfo", pageInfo);
+		int listCount = service.getPayInfoListCount(id);
+		
+		// 임시) 페이지 당 페이지 번호 갯수를 2개로 지정(1 2 or 3 4...)
+		int pageListLimit = 10; 
+		// 최대 페이지 번호 계산(전체 게시물 수를 페이지 당 게시물 수로 나눔)
+		// => 이 때, 나머지가 0보다 크면 페이지 수 + 1
+		int maxPage = listCount / listLimit + (listCount % listLimit > 0 ? 1 : 0);
+		// => 단, 최대 페이지 번호가 0 일 경우 1페이지로 변경
+		if(maxPage == 0) {
+			maxPage = 1;
+		}
+		
+		// 현재 페이지에서 보여줄 시작 페이지 번호 계산(1, 3, 5, 7, 9)
+		int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
+		// 현재 페이지에서 보여줄 마지막 페이지 번호 계산(2, 4, 6, 8, 10)
+		int endPage = startPage + pageListLimit - 1;
+		
+		// 단, 마지막 페이지번호(endPage) 값이 최대 페이지번호(maxPage)보다 클 경우
+		// 마지막 페이지 번호를 최대 페이지번호로 교체
+		if(endPage > maxPage) {
+			endPage = maxPage;
+		}
+		
+		// 전달받은 페이지번호가 1보다 작거나 최대 페이지 번호보다 클 경우
+		// fail.jsp 페이지 포워딩을 통해 "해당 페이지는 존재하지 않습니다!" 출력하고
+		// 1페이지로 이동하도록 처리
+		if(pageNum < 1 || pageNum > maxPage) {
+			model.addAttribute("msg", "해당 페이지는 존재하지 않습니다!");
+			model.addAttribute("targetURL", "AllPayList?pageNum=1");
+			return "result/fail";
+		}
+		
+		// 페이징 정보 관리하는 PageInfo 객체 생성 및 계산 결과 저장
+		PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage, pageNum);
+		
+		// Model 객체에 페이징 정보 저장
+		model.addAttribute("pageInfo", pageInfo);
 		// -------------------------------------------------------------------
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
+		// 페이징 처리 한 거래내역 조회.
+
+		List<Map<String, String>> getPayInfo = service.getPayInfoPaging(id, startRow, listLimit);
+//		List<BoardVO> boardList = boardService.getBoardList(searchType, searchKeyword, startRow, listLimit);
+		for(Map<String, String> pId : getPayInfo) {
+			Object obj = pId.get("PRODUCT_ID");
+			if (obj != null) {
+				String productId = obj.toString();
+			    int product_id = Integer.parseInt(productId);
+			    // 상품조회
+				ProductVO product = productService.productSearch(product_id);
+				String productName = product.getProduct_title();
+				pId.put("productName", productName);
+			}
+		}
 		model.addAttribute("getPayInfo", getPayInfo);
 		
 		

@@ -56,6 +56,10 @@ public interface ChatMapper {
 	
 	//	상품 번호 가져오기
 	int selectProductInfo(String room_id);
+	
+	//	채팅방 나갔을 때 채팅방 상태 변경
+	void updateChatRoomState(@Param("room_id") String room_id,
+							 @Param("sender_id") String sender_id);
 
 
 	

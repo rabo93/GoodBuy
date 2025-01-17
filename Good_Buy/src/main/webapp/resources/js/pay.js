@@ -100,3 +100,29 @@ function searchDate() {
 	let end_date = $('#end_date').val();
 	location.href="AllPayList?start_date=" + start_date + "&end_date=" + end_date;
 }
+
+
+// --------- 환불 모달에서 잔액보다 크면 환불불가 --------
+$(document).ready(function(){
+//.balance-info에 있는 텍스트 값을 읽어오면 되는데??
+	let maxAmount = $("#fefund-balance").text();
+	
+	// 잔액보다 높으면 경고메시지 띄움.
+	const amountInput = document.getElementById('total-amount');
+	
+	const warningMessage = document.getElementById('warningMessage');
+	
+	amountInput.addEventListener('input', () => {
+	    const inputValue = parseInt(amountInput.value, 10);
+		console.log(maxAmount);
+		console.log("입력액 : " + inputValue);
+	
+	    if (inputValue > maxAmount) {
+			alert("잔액보다 입력금액이 더 큽니다.");
+	        warningMessage.style.display = 'block'; // 경고 메시지 표시
+	        amountInput.value = maxAmount; // 최대 금액으로 입력 제한
+	    } else {
+	        warningMessage.style.display = 'none'; // 경고 메시지 숨김
+	    }
+	});
+});

@@ -177,22 +177,16 @@ public class PayService {
 	}
 
 	
-	
-	// PRODUCT_ID UPDATE 해야함.
-//	public int registPayInfo(Map<String, Object> map) {
-//		return mapper.insertPayInfo(map);
-//	}
-	
 	@Transactional
-	public void registPayInfo(Map<String, Object> map) {
-		
-//		public void processTransaction(String value1, String value2, String value3, String newStatus, int productId) {
-		
+	public void registPayInfo(Map<String, Object> transferResult, Map<String, Object> map) {
 		// TRANSACTIONINFO 테이블에 데이터 삽입
+		mapper.insertTransactionResult(transferResult, "TR");
+		
+		// PAYINFO 테이블에 데이터 삽입
 	    mapper.insertTransactionPayInfo(map);
 	
 	    // PRODUCT 테이블의 상태 변경
-	    mapper.updateProductStatus(map);
+//	    mapper.updateProductStatus(map);
 	}
 		
 		

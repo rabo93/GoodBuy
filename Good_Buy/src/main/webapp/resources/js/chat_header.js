@@ -120,15 +120,14 @@ function chatProduct(e) {
 //							+ "</div>");
 //}
 //	전달받은 메세지를 웹소켓 서버측으로 전송하는 함수
-function sendMessage(type, product_id, sender_id, receiver_id, room_id, message, idx, price) {
+function sendMessage(type, product_id, sender_id, receiver_id, room_id, message, idx) {
 //	console.log("전송할 메세지(JSON) : " + toJsonString(type, product_id, sender_id, receiver_id, room_id, message));
 	console.log("sendMessage() 호출됨!");
-	ws.send(toJsonString(type, product_id, sender_id, receiver_id, room_id, message, idx, price));
+	ws.send(toJsonString(type, product_id, sender_id, receiver_id, room_id, message, idx));
 }
 
 //	전달받은 메세지타입과 메세지를 JSON 형식 문자열로 변환하는 함수
-function toJsonString(type, product_id, sender_id, receiver_id, room_id, message, idx, price) {
-	console.log("전송할 메세지 : " + type + ", " + product_id + ", " + sender_id + ", " + receiver_id + ", " + room_id + ", " + message + ", " + idx + ", " + price);
+function toJsonString(type, product_id, sender_id, receiver_id, room_id, message, idx) {
 	
 	//	전달받은 파라미터들을 하나의 객체로 묶기
 	let data = {
@@ -138,8 +137,7 @@ function toJsonString(type, product_id, sender_id, receiver_id, room_id, message
 		receiver_id : receiver_id,
 		room_id : room_id,
 		message : message,
-		idx : idx,
-		price : price
+		idx : idx
 	}
 	return JSON.stringify(data);
 }

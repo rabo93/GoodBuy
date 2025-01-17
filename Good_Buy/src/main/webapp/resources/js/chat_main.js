@@ -341,7 +341,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 				`;
 			} else if(type == TYPE_RESPONSE_PAY) {
 				requestPay = `
-					<p class="pay-text">${receiver_id}님에게 ￦ ${message}원을 송금했어요</p>
+					<p class="pay-text">${sNick}님에게 ￦ ${message}원을 송금했어요</p>
 					<span><button class="item-button" onclick="closePayWindow('buyer')">구매내역으로 이동</button></span>				
 				`;
 			} else if(type == TYPE_RESERVATION) {
@@ -464,9 +464,9 @@ function sendFile() {
 //	=========================메세지 보내기 작업 끝============================
 //	===============================================================================
 //	부모창의 sendMessage() 함수 호출
-function sendMessage(type, product_id, sender_id, receiver_id, room_id, message, idx, price) {
-	console.log(type, product_id, sender_id, receiver_id, room_id, message, idx, price);
-	opener.sendMessage(type, product_id, sender_id, receiver_id, room_id, message, idx, price);
+function sendMessage(type, product_id, sender_id, receiver_id, room_id, message, idx) {
+	console.log(type, product_id, sender_id, receiver_id, room_id, message, idx);
+	opener.sendMessage(type, product_id, sender_id, receiver_id, room_id, message, idx);
 }
 function closeChat() {
 	$(".chat-area").empty();
@@ -601,20 +601,20 @@ $(document).ready(function() {
 		console.log(room_id);
 		console.log(receiver_id);
 		console.log(product_id);
-		sendMessage(TYPE_REQUEST_PAY, product_id, sId, receiver_id, room_id, 0, price);
+		sendMessage(TYPE_REQUEST_PAY, product_id, sId, receiver_id, room_id, price);
 		window.close();
 	});
     
-   $("#transfer-btn-chat").on("click", function() {
-//		alert('transfer-btn-chat'); 잘들어옴.
-		receiver_id = $("#receiver_id").val();
-		product_id = $("#product_id").val();
-		room_id = $("#room_id").val();
-		price = $("#tran_amt").val();
-		sendMessage(TYPE_RESPONSE_PAY, product_id, sId, receiver_id, room_id, 0, price); // 이거 안됨
-//		sendMessage(TYPE_REQUEST_PAY, product_id, sId, receiver_id, room_id, price); // 이거 됨
-
-	});		
+	
+//   $("#transfer-btn-chat").on("click", function() {
+////		alert('transfer-btn-chat'); 잘들어옴.
+//		receiver_id = $("#receiver_id").val();
+//		product_id = $("#product_id").val();
+//		room_id = $("#room_id").val();
+//		price = $("#tran_amt").val();
+//		sendMessage(TYPE_RESPONSE_PAY, product_id, sId, receiver_id, room_id, 0, price); 
+//
+//	});		
 	
     
 });
@@ -663,3 +663,4 @@ function closePayWindow(type) {
 	}
     window.close();
 }
+

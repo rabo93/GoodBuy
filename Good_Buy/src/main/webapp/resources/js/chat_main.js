@@ -123,7 +123,6 @@ $(function() {
 		if(isOpenedChatRoom && getOpenedChatRoomId() == data.room_id) {
 			appendMessage(data.type, data.sender_id, data.receiver_id, data.message, data.send_time);
 			if(data.receiver_id == sId) {
-				console.log("data.receiver_id == sId 일 때 idx : " + data.idx);
 				sendMessage(TYPE_READ, data.product_id, data.sender_id, data.receiver_id, data.room_id, data.message, data.idx);
 			}
 		} else { // 채팅방이 열려있지 않을 경우
@@ -134,8 +133,6 @@ $(function() {
 			} else {
 				$(".sidebar-item." + data.room_id).find(".item").find("span").text(Number(messageCnt) + 1);
 			}
-			
-//			Number(messageCnt) + 1
 			
 		}
 		
@@ -391,7 +388,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 			${bubble_message}
 		</div>
 		`;
-	} else if(receiver_id == sId) {	//	상대방이 보낸 메세지
+	} else if(receiver_id == sId && type != TYPE_LEAVE) {	//	상대방이 보낸 메세지
 		
 		if(mem_profile == "") {
 			window.mem_profile = "/resources/img/user_thumb.png";
@@ -407,7 +404,7 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 			</div>
 		</div>
 		`;
-	} else {
+	} else if (type == TYPE_LEAVE) {
 		div_message = `<div class="message center">${bubble_message}</div>`;
 	}
 
@@ -467,9 +464,9 @@ function sendFile() {
 //	=========================메세지 보내기 작업 끝============================
 //	===============================================================================
 //	부모창의 sendMessage() 함수 호출
-function sendMessage(type, product_id, sender_id, receiver_id, room_id, message, idx) {
-	console.log(type, product_id, sender_id, receiver_id, room_id, message, idx);
-	opener.sendMessage(type, product_id, sender_id, receiver_id, room_id, message, idx);
+function sendMessage(type, product_id, sender_id, receiver_id, room_id, message, idx, price) {
+	console.log(type, product_id, sender_id, receiver_id, room_id, message, idx, price);
+	opener.sendMessage(type, product_id, sender_id, receiver_id, room_id, message, idx, price);
 }
 function closeChat() {
 	$(".chat-area").empty();
@@ -537,6 +534,7 @@ function leaveChat(){
 		room_id = getOpenedChatRoomId();
 		receiver_id = getOpenedReciverId();
 		sendMessage(TYPE_LEAVE, 0, sId, receiver_id, room_id);
+		
 		location.reload();
 	}
 }
@@ -602,7 +600,7 @@ $(document).ready(function() {
 		console.log(room_id);
 		console.log(receiver_id);
 		console.log(product_id);
-		sendMessage(TYPE_REQUEST_PAY, product_id, sId, receiver_id, room_id, price);
+		sendMessage(TYPE_REQUEST_PAY, product_id, sId, receiver_id, room_id, 0, price);
 		window.close();
 	});
     
@@ -612,7 +610,7 @@ $(document).ready(function() {
 		product_id = $("#product_id").val();
 		room_id = $("#room_id").val();
 		price = $("#tran_amt").val();
-		sendMessage(TYPE_RESPONSE_PAY, product_id, sId, receiver_id, room_id, price); // 이거 안됨
+		sendMessage(TYPE_RESPONSE_PAY, product_id, sId, receiver_id, room_id, 0, price); // 이거 안됨
 //		sendMessage(TYPE_REQUEST_PAY, product_id, sId, receiver_id, room_id, price); // 이거 됨
 
 	});		

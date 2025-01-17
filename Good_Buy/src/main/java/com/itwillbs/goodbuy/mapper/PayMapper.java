@@ -72,12 +72,19 @@ public interface PayMapper {
 
 	List<Map<String, String>> selectPayInfoProduct(int product_id);
 
-	int selectPayInfoListCount(String id);
+	int selectPayInfoListCount(
+			@Param("id") String id, 
+			@Param("startDate") String startDate,
+			@Param("endDate") String endDate);
 
 	List<Map<String, String>> selectPayInfoPaging(
 			@Param("id") String id, 
 			@Param("startRow") int startRow, 
-			@Param("listLimit") int listLimit);
+			@Param("listLimit") int listLimit,
+			@Param("startDate") String startDate,
+			@Param("endDate") String endDate
+			
+			);
 
 
 }

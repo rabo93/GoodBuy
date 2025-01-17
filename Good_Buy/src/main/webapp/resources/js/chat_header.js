@@ -9,6 +9,12 @@ const TYPE_REQUEST_CHAT_ROOM_LIST = "REQUEST_CHAT_ROOM_LIST";
 const TYPE_REQUEST_CHAT_LIST = "REQUEST_CHAT_LIST";
 const TYPE_FILE_UPLOAD_COMPLETE = "FILE_UPLOAD_COMPLETE";
 const TYPE_FILE = "FILE";
+const TYPE_READ = "READ";
+const TYPE_REQUEST_PAY = "REQUEST_PAY";
+const TYPE_RESPONSE_PAY = "RESPONSE_PAY";
+const TYPE_RESERVATION = "RESERVATION";
+const TYPE_ACCEPT_RESERVATION = "ACCEPT_RESERVATION";
+const TYPE_CANCEL_RESERVATION = "CANCEL_RESERVATION";
 
 //	채팅 메세지 정렬 위치
 const ALIGN_CENTER = "center";
@@ -92,9 +98,7 @@ function chatProduct(e) {
 		if($(".chat-body").children().length == 0) {
 			sendMessage(TYPE_TALK, "", sId, receiver_id, room_id, "안녕하세요 판매글 보고 연락드립니다.");
 		}
-	}
-	
-	if (chatData.type == TYPE_TALK || chatData.type == TYPE_FILE) {
+	} else if (chatData.type == TYPE_TALK || chatData.type == TYPE_FILE) {
 		appendMessage(chatData.type, chatData.sender_id, chatData.receiver_id, chatData.message, chatData.send_time);
 	}
 	
@@ -103,11 +107,11 @@ function chatProduct(e) {
 
 //	==============================================================================
 //	자신의 채팅창에 메세지를 표시하는 함수
-function appendMessage(message, align) {
-	$(".chat-body").append("<div class='message "+ align +"'>"
-							+ "<div class='bubble'>" + message + "</div>"
-							+ "</div>");
-}
+//function appendMessage(message, align) {
+//	$(".chat-body").append("<div class='message "+ align +"'>"
+//							+ "<div class='bubble'>" + message + "</div>"
+//							+ "</div>");
+//}
 //	전달받은 메세지를 웹소켓 서버측으로 전송하는 함수
 function sendMessage(type, product_id, sender_id, receiver_id, room_id, message, idx) {
 //	console.log("전송할 메세지(JSON) : " + toJsonString(type, product_id, sender_id, receiver_id, room_id, message));

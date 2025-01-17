@@ -112,6 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         footerCallback: function (row, data, start, end, display) {
 			var api = this.api();
+			
 	        var totalMember = api
 	            .column(1, { page: 'current' })
 	            .data()
@@ -194,8 +195,11 @@ document.addEventListener("DOMContentLoaded", function () {
     //------------------------------------------------------------------------------------------------
 	// 날짜 검색 초기화
 	$("#initDateBtn").on('click', function() {
+		// 아래로 날짜 하드코딩 하지말고 이번달을 클릭한 걸로 하기
 		$('#schDate').val(defaultRange);
 		periodList.draw();
+		
+		
 	});
 	
     // 날짜 선택 후에도 placeholder 유지

@@ -1,5 +1,6 @@
 package com.itwillbs.goodbuy.controller;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +52,7 @@ public class PayController {
 		String id = (String)session.getAttribute("sId");
 		// token이 등록된 id인지 조회
 		String haveToken = service.getMemIdFromToken(id);
+		
 		if(haveToken == null) {
 			return "pay/pay_empty_list";
 		}
@@ -139,7 +141,7 @@ public class PayController {
 	
 	// 사용자 인증 요청에 대한 콜백 처리
 	@LoginCheck(memberRole = MemberRole.USER)
-	@GetMapping("Callback")
+	@GetMapping("callback")
 	public String callback(@RequestParam Map<String, String> authResponse, HttpSession session, Model model) {
 		// System.out.println("callback 잘되나? " + authResponse); 
 		
@@ -516,28 +518,27 @@ public class PayController {
 	@PayTokenCheck
 	@GetMapping("AllPayList")
 	public String allPayList(
-			@RequestParam(defaultValue = "1") int pageNum,
+				@RequestParam(defaultValue = "1") int pageNum,
+				@RequestParam(required=false) String start_date,
+				@RequestParam(required=false) String end_date,
 				HttpSession session, 
 				Model model) {
+		
 		String id = (String)session.getAttribute("sId");
 		PayToken token = (PayToken)session.getAttribute("token");
 		String fintech_use_num = service.getRepresentAccountNum(token.getUser_seq_no());
 		
-		// 내 id로 거래한 모든 거래내역 조회 - 페이징 처리 전에 한 payInfo 
-		/*
-		List<Map<String, String>> getPayInfo = service.getPayInfo(id);
-		for(Map<String, String> pId : getPayInfo) {
-			Object obj = pId.get("PRODUCT_ID");
-			if (obj != null) {
-				String productId = obj.toString();
-			    int product_id = Integer.parseInt(productId);
-			    // 상품조회
-				ProductVO product = productService.productSearch(product_id);
-				String productName = product.getProduct_title();
-				pId.put("productName", productName);
-			}
+		String startDate = start_date;
+		String endDate = end_date;
+		if (start_date == null || start_date.equals("")) {
+			LocalDate first_date = LocalDate.of(LocalDate.now().getYear(), 1, 1);
+			startDate = first_date+"";
 		}
-		*/
+		if (end_date == null || end_date.equals("")) {
+			LocalDate last_date = LocalDate.now();
+			endDate = last_date+"";
+		}
+		
 		
 		// -------------------------------------------------------------------
 		// [ 페이징 처리 ]
@@ -547,8 +548,8 @@ public class PayController {
 		
 		// 2. 실제 뷰페이지에서 페이징 처리를 위한 계산 작업
 //		int listCount = service.getBoardListCount(searchType, searchKeyword);
-		int listCount = service.getPayInfoListCount(id);
-		
+//		int listCount = service.getPayInfoListCount(id);
+		int listCount = service.getPayInfoListCount(id, startDate, endDate);
 		// 임시) 페이지 당 페이지 번호 갯수를 2개로 지정(1 2 or 3 4...)
 		int pageListLimit = 10; 
 		// 최대 페이지 번호 계산(전체 게시물 수를 페이지 당 게시물 수로 나눔)
@@ -589,8 +590,7 @@ public class PayController {
 		
 		// 페이징 처리 한 거래내역 조회.
 
-		List<Map<String, String>> getPayInfo = service.getPayInfoPaging(id, startRow, listLimit);
-//		List<BoardVO> boardList = boardService.getBoardList(searchType, searchKeyword, startRow, listLimit);
+		List<Map<String, String>> getPayInfo = service.getPayInfoPaging(id, startRow, listLimit, startDate, endDate);
 		for(Map<String, String> pId : getPayInfo) {
 			Object obj = pId.get("PRODUCT_ID");
 			if (obj != null) {
@@ -603,6 +603,8 @@ public class PayController {
 			}
 		}
 		model.addAttribute("getPayInfo", getPayInfo);
+		model.addAttribute("startDate", startDate);
+		model.addAttribute("endDate", endDate);
 		
 		
 		return "pay/pay_use_list";

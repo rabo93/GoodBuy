@@ -282,6 +282,9 @@
 		JOIN ACCOUNTINFO A  
 		ON T.FINTECH_USE_NUM = A.FINTECH_USE_NUM 
 		WHERE IF(T.MEM_ID = #{id}, T.MEM_ID = #{id}, T.RECEIVER_ID = PB.SELLER_ID)
+		
+		AND DATE(T.API_TRAN_DTM) BETWEEN #{startDate}  AND #{endDate} 
+		
 		GROUP BY API_TRAN_DTM, TRANSACTION_TYPE, MEM_ID, RECEIVER_ID, PB.PRODUCT_ID, TRAN_AMT, BANK_NAME, ACCOUNT_NUM
 		
 		
@@ -298,6 +301,7 @@
 		    FROM PAYINFO PB
 		    WHERE T.MEM_ID = PB.BUYER_ID AND T.MEM_ID = #{id}
 		  )
+		AND DATE(T.API_TRAN_DTM) BETWEEN #{startDate}  AND #{endDate} 
 		ORDER BY API_TRAN_DTM DESC
 		LIMIT 
 			#{startRow}    
@@ -320,6 +324,7 @@
 		        JOIN ACCOUNTINFO A
 		            ON T.FINTECH_USE_NUM = A.FINTECH_USE_NUM
 		        WHERE IF(T.MEM_ID = #{id}, T.MEM_ID = #{id}, T.RECEIVER_ID = PB.SELLER_ID)
+		        AND DATE(T.API_TRAN_DTM) BETWEEN #{startDate}  AND #{endDate} 
 		    ),
 		    buyer_count AS (
 		        SELECT COUNT(*) AS cnt
@@ -330,9 +335,9 @@
 		          AND EXISTS (
 		              SELECT 1
 		              FROM PAYINFO PB
-		              WHERE T.MEM_ID = PB.BUYER_ID
-		                AND T.MEM_ID = #{id}
+		              WHERE T.MEM_ID = PB.BUYER_ID AND T.MEM_ID = #{id}
 		          )
+		        AND DATE(T.API_TRAN_DTM) BETWEEN #{startDate}  AND #{endDate}
 		    )
 		SELECT (SELECT cnt FROM seller_count) + (SELECT cnt FROM buyer_count) AS total_count;
 			

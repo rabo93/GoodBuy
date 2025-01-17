@@ -1,10 +1,7 @@
 @charset "UTF-8";
 
 .page-inner {min-height:auto;}
-.container {
-            display: flex;
-            width: 100%;
-        }
+.container {display: flex;width: 100%;}
         
 .chat-list {
 	height:calc(100vh - 2rem);
@@ -95,26 +92,30 @@
     margin-right: 10px;
 }
 
+#chat-panel{display:none;position: fixed;padding: 20px;top: 60px;right: 20px;border-radius:14px;box-shadow: 1px 1px 5px rgb(201 187 176 / 67%);z-index: 9991;background: #fff;}
+#chat-panel.on{display:block;}
+
 .report-chat-button {
     background-color: #fff;
     border: none;
     font-size: 14px;
     font-weight: bold;
-    color: red;
+    color: var(--red);
     cursor: pointer;
     padding: 0;
-    margin-right: 10px;
+    margin-bottom: 14px;
+    width: 100%;
 }
 
 .report-chat-leave {
 	background-color: #fff;
-    border: none;
-    font-size: 14px;
-    font-weight: bold;
-    color: gray;
-    cursor: pointer;
-    padding: 0;
-    margin-right: 10px;
+	border: none;
+	font-size: 14px;
+	font-weight: bold;
+	color: var(--dark);
+	padding: 0;
+	margin-right: 10px;
+	width: 100%;
 }
 
 .chat-header {
@@ -135,6 +136,11 @@
 .chat-header .title {
     font-size: 18px;
     font-weight: bold;
+    width: 50%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
 }
 
 .chat-header .item-button {
@@ -178,10 +184,6 @@
     border-radius: 10px;
     max-width: 100%;
 }
-
-/* .message.center .bubble { */
-/*     background-color: #fff; */
-/* } */
 
 .message.user .bubble {
     background-color: #d1e7ff;
@@ -257,7 +259,7 @@
 	overflow: hidden;
 }
 
-.chat-body .chat-bubble .chat-profile img {/* width:100%; */display:block;max-height: 100%;object-fit: cover;margin: 0 auto;}
+.chat-body .chat-bubble .chat-profile img {display:block;max-height: 100%;object-fit: cover;margin: 0 auto;}
 
 
 .chat-body .chat-bubble.user{
@@ -322,7 +324,7 @@
 	top:0;left:0;
 	right:0;
 	background: rgba(0, 0, 0, 0.6);
-	z-index:9991;
+	z-index:9992;
 }
 .ch-report-modal .ch-modal-wrap {
 	display: none;
@@ -334,14 +336,15 @@
 	width: 500px;
 	height: 400px;
 	background:#fff;
-	z-index:9992;
+	z-index:9993;
 }
 
 .ch-report-modal .ch-modal-wrap .ch-modal-content {margin-bottom: 20px;}
-.ch-report-modal .ch-modal-wrap .ch-modal-sb {text-align: center;width: 500px;display: flex;}
-.ch-report-modal .ch-modal-wrap .ch-modal-otherReason {resize: none;width: 500px;display: flex;}
-.ch-report-modal .ch-modal-wrap .ch-model-report-btn {display: flex;}
-.ch-report-modal .ch-modal-wrap .ch-model-close-btn {display: flex;}
+.ch-report-modal .ch-modal-wrap .ch-modal-sb {text-align: center;font-size: 20px;width: 300px;height: 40px;display: flex;border: 1px solid #ddd;border-radius: 4px;margin: 20px auto;}
+.ch-report-modal .ch-modal-wrap .ch-modal-otherReason {resize: none;width: 400px;height: 200px;display: flex;margin: 23px auto;padding: 10px 10px;border: 1px solid #ddd;border-radius: 4px;}
+.ch-report-modal .ch-modal-wrap .ch-report-btn {display: flex;justify-content: center;gap: 20px;margin-top: 30px;}
+.ch-report-modal .ch-modal-wrap .ch-model-report-btn {width: 100px;height: 45px;padding: 8px 15px 8px 15px;box-sizing: border-box;border-radius: 10px;font-size: 16px;font-weight: 700;background-color: #ff2b61;border: 2px solid #ff2b61;color: #ffffff;cursor: pointer;}
+.ch-report-modal .ch-modal-wrap .ch-model-close-btn {width: 100px;height: 45px;padding: 8px 15px 8px 15px;box-sizing: border-box;border-radius: 10px;font-size: 16px;font-weight: 700;background-color: #cccccc;border: 2px solid #cccccc;color: #ffffff;cursor: pointer;}
 .ch-report-modal .ch-modal-result {display: none;}
 
 
@@ -362,3 +365,4 @@
 	padding: 0 6px;
 }
 
+#chat-option {background: none; width: 36px; height: 30px;}

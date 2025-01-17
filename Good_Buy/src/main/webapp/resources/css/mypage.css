@@ -601,3 +601,20 @@ textarea {
     color: var(--dark);
     font-weight: 600;
 }
+
+/*****상점 왕관 타이틀*/
+
+.fa-brands:hover {
+	 transform: scale(1.7);
+}
+
+.fa-brands{
+	font-size: 24px; 
+    color: var(--primary); 
+/*     transition: transform 0.3s ease, color 0.3s ease; */
+	
+}
+
+
+	
+	

@@ -128,6 +128,59 @@
 		    }
 		}
 	</script>
+	
+	<script>
+	$(document).ready(function () {
+	    // 필터 버튼 클릭 이벤트
+	    $(".filter-btn").click(function () {
+	    	$(".filter-btn").removeClass('active');
+	    	$(this).addClass('active');
+	        const status = $(this).data("status");  // 클릭된 버튼의 data-status 값
+
+	        // 상품 카드 필터링
+	        $(".product-card").each(function () {
+	            const productStatus = $(this).data("status");  // 각 상품 카드에서 data-status 값 가져오기
+	            
+	            // 콘솔 디버깅 (확인용)
+	            console.log("Button Status:", status);
+	            console.log("Product Status:", productStatus);
+
+	            // 상태가 일치하거나 '전체(all)'인 경우 보여주기
+	            if (status == 'all' || status == productStatus) {
+	                $(this).show();
+// 	                $(this).fadeIn();
+	            } else {
+// 	                $(this).hide();
+	                $(this).fadeOut();
+	            }
+	        });
+	    });
+	    
+	    
+	 	// 모바일 마이페이지 활성화 메뉴로 자동 스크롤 포커싱
+	    menuFocusing();
+	    
+	});
+	
+	// 모바일 마이페이지 활성화 메뉴로 자동 스크롤 포커싱
+	function menuFocusing(){
+		let menuIdx = 0;
+	    const myMenu = document.querySelector(".my-menu");
+	    const myMenuItems = document.querySelectorAll(".my-menu > a");
+		
+		myMenuItems.forEach((elem, idx) => {
+	    	if(elem.classList.contains("active")) menuIdx = idx;
+	    });
+		
+		myMenu.scrollTo({
+			left : myMenuItems[menuIdx].getBoundingClientRect().left - myMenuItems[menuIdx].getBoundingClientRect().width, 
+			behavior : 'smooth'
+		});
+	}
+	
+	
+
+    </script>
 
 </body>
 </html>

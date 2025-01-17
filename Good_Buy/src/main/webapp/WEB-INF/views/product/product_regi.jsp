@@ -93,7 +93,7 @@
 								</div>	
 							</section>
 							<section class="item-regi-price">
-								<h6 class="item-regi-name">상품설명</h6>
+								<h6 class="item-regi-name">상품 가격 설정</h6>
 								<div class="item-regi-price-box">
 									<label><input type="radio" name="shipping-fee" id="shipping-fee-enable"  value="0" checked>택배비 미포함</label>
 									<label><input type="radio" name="shipping-fee" id="shipping-fee-disable" value="1">택배비 포함</label>

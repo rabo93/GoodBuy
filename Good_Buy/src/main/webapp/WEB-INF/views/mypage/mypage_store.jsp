@@ -81,7 +81,12 @@
 													<c:set var="isGoodStore" value="${goodStore.count >= 3}" />
 													<c:choose>
 														<c:when test="${isGoodStore}">${sessionScope.sNick}의 상점&nbsp;&nbsp;
-																<i class="fa-brands fa-square-web-awesome" title="굿바이 회원들이 선정한 믿을 수 있는 리뷰로 검증된 상점입니다." style="color:var(--primary)";></i>
+															<div class="icon-container">
+															  <i class="fa-brands fa-square-web-awesome" style="font-size: 24px; color: var(--primary);"></i>
+															  <span class="tooltip">
+															    <i class="fa-solid fa-magnifying-glass"></i>&nbsp;&nbsp;굿바이 회원들이 선정한 믿을 수 있는 리뷰로 검증된 상점입니다.
+															  </span>
+															</div>
 														</c:when>
 														<c:otherwise>${sessionScope.sNick}의 상점</c:otherwise>
 													</c:choose>

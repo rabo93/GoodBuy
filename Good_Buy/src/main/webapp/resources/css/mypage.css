@@ -604,17 +604,36 @@ textarea {
 
 /*****상점 왕관 타이틀*/
 
-.fa-brands:hover {
-	 transform: scale(1.7);
+.icon-container .fa-brands fa-square-web-awesome:hover {
+	 transform: scale(1.7) ;
 }
 
-.fa-brands{
-	font-size: 24px; 
-    color: var(--primary); 
-/*     transition: transform 0.3s ease, color 0.3s ease; */
-	
+.icon-container {
+  position: relative;
+  display: inline-block;
 }
 
+.tooltip {
+  visibility: hidden; /* 기본적으로 숨김 */
+  background-color: rgba(0, 0, 0, 0.75); /* 툴팁 배경 */
+  color: #fff; /* 툴팁 텍스트 색상 */
+  text-align: center;
+  padding: 5px 10px;
+  border-radius: 4px;
+  position: absolute;
+  bottom: 100%; /* 아이콘 위에 표시 */
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.9rem;
+  z-index: 10;
+  opacity: 0; /* 투명도 0 */
+  transition: opacity 0.3s ease-in-out;
+}
 
-	
+.icon-container:hover .tooltip {
+  visibility: visible; /* 마우스 오버 시 보이기 */
+  opacity: 1; /* 투명도 1 */
+  
+}	
 	

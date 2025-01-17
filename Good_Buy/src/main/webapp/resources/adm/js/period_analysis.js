@@ -189,16 +189,38 @@ document.addEventListener("DOMContentLoaded", function () {
             '지난 3개월': [moment().subtract(3, 'months').startOf('month'), moment().endOf('month')], // 최근 3개월
         },
 //    }).on('show.daterangepicker', function (ev, picker) {
-//        picker.container.addClass('goodbuyCustomPicker');                            
+//       picker.container.addClass('goodbuyCustomPicker');                            
     });
     
     //------------------------------------------------------------------------------------------------
-	// 날짜 검색 초기화
+	// 날짜 검색 초기화 버튼 클릭시 
 	$("#initDateBtn").on('click', function() {
-		// 아래로 날짜 하드코딩 하지말고 이번달을 클릭한 걸로 하기
-		$('#schDate').val(defaultRange);
-		periodList.draw();
+		const datePicker = $('#schDate').data('daterangepicker');
 		
+		if (datePicker) {
+	        // daterangepicker 범위 업데이트
+	        datePicker.setStartDate(firstDayOfMonth);
+	        datePicker.setEndDate(lastDayOfMonth);
+	        $('#schDate').val(defaultRange); // 입력 필드에 반영
+	
+	        // "이번 달" 버튼 강제로 클릭된 상태로 만들기
+	        const ranges = datePicker.ranges; // ranges 확인
+//		    console.log(ranges); //{오늘: Array(2), 이번 달: Array(2), 지난 달: Array(2), 지난 7일: Array(2), 지난 14일: Array(2), …}
+	        for (let range in ranges) {
+	            if (
+	                ranges[range][0].isSame(firstDayOfMonth, 'day') &&
+	                ranges[range][1].isSame(lastDayOfMonth, 'day')
+	            ) {
+	                // UI에서 "이번 달" 버튼 활성화
+	                datePicker.container.find('.ranges li').removeClass('active'); // 기존 활성화 상태 제거
+	                datePicker.container.find('.ranges li').filter(function () {
+	                    return $(this).text() == range;
+	                }).addClass('active'); // "이번 달"에 활성화 추가
+	                break;
+	            }
+	        }
+	    }
+		periodList.draw();
 		
 	});
 	

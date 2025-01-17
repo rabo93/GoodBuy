@@ -166,6 +166,18 @@
 												<input type="button" value="상품 수정하기" class="item-detail-editItem" id="editItem">
 												<input type="button" value="상품 삭제" class="item-detail-removeItem" id="removeItem">
 											</c:when>
+											<c:when test="${productSearch.product_status == 1}">
+												<h2 class="trade-status">이 상품은 거래중인 상품입니다.</h2>
+											</c:when>
+											<c:when test="${productSearch.product_status == 2}">
+												<h2 class="trade-status">이 상품은 예약중인 상품입니다.</h2>
+												<a href="javascript:void(0)"  onclick="toggleSlideChat()">
+													<input type="button" value="판매자에게 톡하기" class="item-detail-contact-seller">
+												</a>
+											</c:when>
+											<c:when test="${productSearch.product_status == 3}">
+												<h2 class="trade-status">이 상품은 판매완료된 상품입니다.</h2>
+											</c:when>
 											<c:otherwise>
 												<c:choose>
 													<c:when test="${wishSearch.wishlist_id != '' && wishSearch.wishlist_id != undefined}">
@@ -181,12 +193,13 @@
 											</c:otherwise>
 										</c:choose>
 										<input type="hidden" id="sId" value="${sessionScope.sId}">
+										<input type="hidden" id="sNick" value="${sessionScope.sNick}">
 										<input type="hidden" id="receiver_id" value="${productSearch.mem_id}">
 										<input type="hidden" id="product_id" value="${productSearch.product_id}">
 									</c:if>
 								</c:if>
 							</div>
-							<c:if test="${not empty sessionScope.sId}">
+							<c:if test="${not empty sessionScope.sId && sessionScope.sId != productSearch.mem_id}">
 								<button type="button" onclick="toggleModal('open')" class="item-report">
 									<i class="fa-solid fa-land-mine-on"></i>&nbsp;이 상품 신고하기
 								</button>
@@ -352,9 +365,9 @@
 				</div>
 				<script src="${pageContext.request.contextPath}/resources/js/chat_product.js"></script>
 <!-- 				<script type="text/javascript"> -->
-// 					function requestReservation(product_id) {
-// 						alert(product_id);
-// 					}
+<!-- // 					function requestReservation(product_id) { -->
+<!-- // 						alert(product_id); -->
+<!-- // 					} -->
 <!-- 				</script> -->
 				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 			</div>

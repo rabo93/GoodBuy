@@ -56,6 +56,7 @@
 		FROM PRODUCT pro 
 		JOIN MEMBER mem
 		ON pro.MEM_ID = mem.MEM_ID
+		WHERE pro.PRODUCT_STATUS = 0
 		ORDER BY PRODUCT_REG_DATE DESC
 		<if test="startRow != null || listLimit != null">
 			LIMIT #{startRow}
@@ -142,7 +143,7 @@
 		</if>
 		<if test="search_keyword != null">
 			AND
-				(mem.MEM_NICK LIKE CONCAT('%', #{search_keyword}, '%')
+				(mem.MEM_NICK LIKE #{search_keyword}
 				OR pro.MEM_ID LIKE CONCAT('%', #{search_keyword}, '%')
 				OR pro.PRODUCT_TITLE LIKE CONCAT('%', #{search_keyword}, '%')
 				OR pro.PRODUCT_INTRO LIKE CONCAT('%', #{search_keyword}, '%')
@@ -266,6 +267,24 @@
 		         , mem.MEM_INTRO
 		FROM MEMBER mem
 		WHERE mem.MEM_NICK = #{mem_nick}
+	</select>
+	
+	<!-- 상점페이지 판매자 상품목록 -->
+	<select id="getSellerProduct" resultType="map">
+		SELECT pro.PRODUCT_PIC1
+				, pro.PRODUCT_CATEGORY
+				, pro.PRODUCT_TRADE_ADR1
+				, pro.PRODUCT_ID
+				, pro.PRODUCT_TITLE
+				, pro.PRODUCT_PRICE
+				, mem.MEM_NICK
+				, REPLACE(FORMAT(pro.PRODUCT_REG_DATE, 'yyyyMMddHHmmss'), ',', '') AS PRODUCT_REG_DATE
+				, pro.PRODUCT_STATUS
+		FROM PRODUCT pro
+		JOIN MEMBER mem
+		ON pro.MEM_ID = mem.MEM_ID
+		WHERE pro.MEM_ID = #{mem_id}
+		ORDER BY pro.PRODUCT_REG_DATE DESC
 	</select>
 	
 	<!-- 상점페이지 셀러 리뷰목록 조회 -->

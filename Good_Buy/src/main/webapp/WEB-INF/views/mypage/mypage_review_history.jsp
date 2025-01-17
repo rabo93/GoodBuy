@@ -176,8 +176,10 @@
 <!--             <input type="hidden" id="modal_review_cnt"> 리뷰 갯수 저장용 -->
             <textarea rows="4" cols="50" id="review_content" placeholder="후기를 작성해주세요.">content</textarea>
             <br>
-            <button id="close-modal">닫기</button>
-            <button id="submit-review">수정완료</button>
+            <div class="modal-ft">
+            	<button id="close-modal" class="close-modal">닫기</button>
+            	<button id="submit-review" class="submit-review">수정완료</button>
+            </div>
         </div>
     </div>
     

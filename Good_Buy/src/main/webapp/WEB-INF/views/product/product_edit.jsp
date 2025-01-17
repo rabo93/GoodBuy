@@ -45,19 +45,19 @@
 								<h2 class="item-regi-name">상품이미지</h2>
 								<div class="item-thumb">
 									<button class="item-thumb-upload" type="button">
-										<img src="${pageContext.request.contextPath}/resources/img/product-thumb-no.jpg" id="item-thumb-preview1">
+										<img src="${pageContext.request.contextPath}/resources/upload/${productContent.PRODUCT_PIC1}" id="item-thumb-preview1">
 									</button>
 									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn1" name="pic1">
 								</div>
 								<div class="item-thumb">
 									<button class="item-thumb-upload" type="button">
-										<img src="${pageContext.request.contextPath}/resources/img/product-thumb-no.jpg" id="item-thumb-preview2">
+										<img src="${pageContext.request.contextPath}/resources/upload/${productContent.PRODUCT_PIC2}" id="item-thumb-preview2">
 									</button>
 									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn2" name="pic2">
 								</div>
 								<div class="item-thumb">
 									<button class="item-thumb-upload" type="button">
-										<img src="${pageContext.request.contextPath}/resources/img/product-thumb-no.jpg" id="item-thumb-preview3">
+										<img src="${pageContext.request.contextPath}/resources/upload/${productContent.PRODUCT_PIC3}" id="item-thumb-preview3">
 									</button>
 									<input type="file" class="item-thumb-upload-btn" id="item-thumb-upload-btn3" name="pic3">
 								</div>
@@ -149,12 +149,26 @@
         }).open();
     }
     
-	$("select[name=product_category] option:contains('${productContent.PRODUCT_CATEGORY}')").prop("selected", true);
+	$.ajax({
+		url : "getCategory",
+		type : "GET",
+	}).done(function(data) {
+		for(let item of data) {
+			$("#product_category").append(
+				"<option>" + item.CODE_NAME + "</option>"
+			)
+		}
+		$("select[name=product_category] option:contains('${productContent.PRODUCT_CATEGORY}')").prop("selected", true);
+	}).fail(function() {
+		alert("카테고리 불러오기 실패\n나중에 다시 시도해주세요.");
+	})
+    
 	$("select[name=product_status]").val("${productContent.PRODUCT_STATUS}").prop("selected", true);
-// 	$("select[name=product_status] option:contains('${productContent.PRODUCT_STATUS}')").prop("selected", true);
 	
 	if (${productContent.PRODUCT_DISCOUNT_STATUS} != 0) {
 		$("#item-discount").prop("checked", true);
 	}
+	
+	
 </script>
 </html>

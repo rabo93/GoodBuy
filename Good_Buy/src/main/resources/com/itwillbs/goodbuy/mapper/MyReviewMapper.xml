@@ -12,6 +12,7 @@
 			JOIN MEMBER B ON B.MEM_ID = R.MEM_ID  -- 구매자 닉네임
 		 WHERE P.MEM_ID = #{mem_id}
 		 ORDER BY R.REVIEW_DATE DESC
+		 LIMIT 3
 	</select>
 	<!-- 	리뷰 갯수 -->
 	<select id="selectReviewCount" resultType="int">
@@ -21,7 +22,7 @@
 	</select>
 	
 <!-- 	리뷰작성 -->
-	<insert id="insertReview" parameterType="map">
+	<insert id="insertReview">
 		<selectKey resultType="int" order="BEFORE" keyProperty="review_id">
 <!-- 			SELECT MAX(REVIEW_ID) + 1 -->
 <!-- 			SELECT COALESCE(MAX(REVIEW_ID), 0) + 1 -->
@@ -103,7 +104,8 @@
 		FROM MYREVIEW R
 		JOIN PRODUCT P
 		ON P.PRODUCT_ID = R.PRODUCT_ID AND P.MEM_ID=#{id}
-		GROUP BY REVIEW_SCORE  ;
+		GROUP BY REVIEW_SCORE
+		ORDER BY REVIEW_SCORE DESC
 	</select>
 	
 	<select id="selectReviewHistoryCount">

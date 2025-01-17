@@ -26,6 +26,7 @@
 <!-- CSS for Page -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/product.css">
 
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
@@ -54,7 +55,6 @@
 					<a href="MyReview">나의 후기</a>
 					<a href="MyReviewHistory">내가 쓴 후기</a>
 					<a href="MySupport">1:1문의내역</a>
-					<a href="">나의 광고</a>
 				</aside>
 				<div class="my-container">
 					<div class="contents-ttl"><h3>판매내역 <small>(총 <span>${salesCount}</span>건)</small></h3>
@@ -83,38 +83,47 @@
 						                    <div class="card-info">
 						                        <div class="category">
 						                            <span>${product.product_category}</span>
-						                            <span class="type">
-						                            	<c:if test="${product.product_trade_adr1 != ''}">
-															<span class="type">직거래</span>
-														</c:if>
-						                            </span>
+					                            	<c:if test="${product.product_trade_adr1 != ''}">
+														<span class="type">직거래</span>
+													</c:if>
 						                        </div>
 						                        <div class="ttl">
 						                            <c:choose>
 						                                <c:when test="${product.product_status == 1}">[거래중]</c:when>
 						                                <c:when test="${product.product_status == 2}">[예약중]</c:when>
 						                                <c:when test="${product.product_status == 3}">[거래완료]</c:when>
-						                                <c:when test="${product.product_status == 4}">[🚫신고처리된 게시물입니다.]${product.product_title}
-						                                     <div class="price">
-									                            <fmt:formatNumber value="${product.product_price}" type="number" pattern="#,###" />원
-									                        </div>
-									                        <div class="card-row">
-									                            <span class="add">${product.product_trade_adr1}</span>
-									                            <span class="name">${product.mem_nick}</span>
-									                        </div>
+						                                <c:when test="${product.product_status == 4}"><span style="color: #ff2b43; font-size: 1.2rem;"><i class="fa-regular fa-circle-xmark"></i> 신고처리된 게시물입니다.<br></span>
 						                                </c:when>
 						                                <c:otherwise>[판매중]</c:otherwise>
 						                            </c:choose>
 						                            ${product.product_title}
 						                        </div>
+						                        
 						                        <div class="price">
 						                            <fmt:formatNumber value="${product.product_price}" type="number" pattern="#,###" />원
 						                        </div>
 						                        <div class="card-row">
-						                            <span class="add">${product.product_trade_adr1}</span>
+						                       <c:choose>
+					                         		<c:when test="${empty product.product_trade_adr1}"><span class="is-add">택배거래</span></c:when>
+					                         		<c:otherwise><span class="name">${product.mem_nick}</span></c:otherwise>
+					                         	</c:choose>
+						                        <span class="add">${product.product_trade_adr1}</span>
 						                            <span class="name">${product.mem_nick}</span>
 						                        </div>
 						                    </div>
+						                         <%--거래중 썸네일 --%>
+<!-- 					                            <div class="product-thumb"> -->
+<%-- 													<c:choose> --%>
+<%-- 														<c:when test="${product.product_status == 1}"> --%>
+<!-- 															<div class="status" id="status">거래중 <i class="fa-solid fa-cart-shopping"></i></div> -->
+<%-- 														</c:when> --%>
+<%-- 														<c:when test="${product.product_status == 2}"> --%>
+<!-- 															<div class="status" id="status">예약중 <i class="fa-solid fa-paper-plane"></i></div> -->
+<%-- 														</c:when> --%>
+<%-- 													</c:choose> --%>
+<%-- 													<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" /> --%>
+<!-- 												</div> -->
+					                            <%--거래중 썸네일 --%>
 						                </li>
 						            </c:forEach>
 						        </c:otherwise>

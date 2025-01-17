@@ -240,8 +240,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			
 			if (userList.get(receiver_id) != null) { //	접속중일 경우
 				WebSocketSession receiver_session = userSessionList.get(userList.get(receiver_id));
-				chatMessage.setSender_id("");
-				chatMessage.setReceiver_id("");
+//				chatMessage.setSender_id("");
+//				chatMessage.setReceiver_id("");
 				sendMessage(receiver_session, chatMessage);
 			}
 		}

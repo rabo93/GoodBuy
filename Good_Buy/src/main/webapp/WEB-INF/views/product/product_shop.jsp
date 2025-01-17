@@ -48,16 +48,16 @@
 							</c:choose>
 							<div class="item-shop-seller-description">${searchSeller.MEM_INTRO}</div>
 						</div>
-						<div class="item-shop-seller-review">
-							<div class="item-shop-seller-review-title">셀러평점</div>
-							<div class="item-shop-seller-review-star">
-								<c:if test="${not empty searchSellerScore}">
-									최고예요 + ${searchSellerScore.Best} |
-									좋아요 + ${searchSellerScore.Good} |
-									별로예요 + ${searchSellerScore.Bad}
-								</c:if>
+						<c:if test="${not empty searchSellerScore}">
+							<div class="item-shop-seller-review">
+								<div class="item-shop-seller-review-title">셀러평점</div>
+								<div class="item-shop-seller-review-star">
+										최고예요 + ${searchSellerScore.Best} |
+										좋아요 + ${searchSellerScore.Good} |
+										별로예요 + ${searchSellerScore.Bad}
+								</div>
 							</div>
-						</div>
+						</c:if>
 					</div>
 					<button class="more" onclick="location.href='ProductList?SEARCHKEYWORD=${searchSeller.MEM_NICK}'">
 						<h1 class="sec-ttl">
@@ -69,39 +69,39 @@
 						<ul class="product-wrap">
 							<!-- 8개 -->
 							<c:forEach items="${searchSellerProduct}" var="list" step="1" end="3">
-								<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.product_id}'">
+								<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.PRODUCT_ID}'">
 									<div class="product-thumb">
 										<c:choose>
-											<c:when test="${list.product_status == 1}">
-												<div class="status" id="status">거래중</div>
+											<c:when test="${list.PRODUCT_STATUS == 1}">
+												<div class="status" id="status">거래중<i class="fa-solid fa-cart-shopping"></i></div>
 											</c:when>
-											<c:when test="${list.product_status == 2}">
-												<div class="status" id="status">예약중</div>
+											<c:when test="${list.PRODUCT_STATUS == 2}">
+												<div class="status" id="status">예약중<i class="fa-regular fa-paper-plane"></i></div>
 											</c:when>
 										</c:choose>
-										<img src="${pageContext.request.contextPath}/resources/upload/${list.product_pic1}" class="card-thumb" alt="thumbnail" />
+										<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" />
 									</div>
 									<div class="card-info">
 										<div class="category">
-											<span>${list.product_category}</span>
-											<c:if test="${list.product_trade_adr1 != ''}">
+											<span>${list.PRODUCT_CATEGORY}</span>
+											<c:if test="${list.PRODUCT_TRADE_ADR1 != ''}">
 												<span class="type">직거래</span>
 											</c:if>
 										</div>
-										<div class="ttl">${list.product_title}</div>
+										<div class="ttl">${list.PRODUCT_TITLE}</div>
 										<div class="price">
-										 	<fmt:formatNumber var="price" value="${list.product_price}" type="number"/>
+										 	<fmt:formatNumber var="price" value="${list.PRODUCT_PRICE}" type="number"/>
 										 	${price} 원
 										 </div>
 										<div class="card-row">
-											<c:if test="${list.product_trade_adr1 != ''}">
-												<span class="add">${list.product_trade_adr1}</span>
+											<c:if test="${list.PRODUCT_TRADE_ADR1 != ''}">
+												<span class="add">${list.PRODUCT_TRADE_ADR1}</span>
 											</c:if>
-											<span class="name">${list.mem_nick}</span>
+											<span class="name">${list.MEM_NICK}</span>
 											<span class="time">
 												<script type="text/javascript">
 													moment.locale('ko')
-													$(".time").text(moment(`${list.product_reg_date}`, "YYYYMMDDhhmmss").fromNow())
+													$(".time").text(moment(`${list.PRODUCT_REG_DATE}`, "YYYYMMDDhhmmss").fromNow())
 												</script>
 											</span>
 										</div>

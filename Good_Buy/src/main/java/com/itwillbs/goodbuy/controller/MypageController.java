@@ -93,9 +93,19 @@ public class MypageController {
 		model.addAttribute("scoreCount",scoreCount);
 		System.out.println(">>>>"+scoreCount);
 		
+//		boolean is왕관Visible = false;
+//		for (Map<String, String> map : scoreCount) {
+//			if (Integer.parseInt(map.get("REVIEW_SCORE")) == 2 && map. >= 3) {
+//				is왕관Visible = true;
+//				break;
+//			}
+//		}
+		// goodStoreCnt
+		
+		
 		//별점 3개 이상인 상점 조회
 		Map<String, String> goodStore = reviewService.goodStore(id);
-		model.addAttribute("goodStore",goodStore);
+		model.addAttribute("goodStore", goodStore);
 		
 		
 		//기존 상점소개문구

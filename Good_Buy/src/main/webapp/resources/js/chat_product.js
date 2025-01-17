@@ -5,6 +5,7 @@ var baseUrl = productUrl.substring(0, productUrl.lastIndexOf('/ProductDetail'));
 //var sId;
 $(function() {
 	sId = $("#sId").val();
+	sNick = $("#sNick").val();
 	receiver_id = $("#receiver_id").val();
 	product_id = $("#product_id").val();
 	mem_nick = $("#chat-mem-nick").val();
@@ -113,13 +114,10 @@ function toggleSlideChat() {
 		}
 	});
 	
-	
 	//	슬라이드로 보이기
 	$("html").toggleClass("fixed");
 	$('.chat-container').toggleClass('open');
 	$(".chat-body").scrollTop($(".chat-body")[0].scrollHeight);
-	
-	
 	
 }
 
@@ -149,25 +147,25 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 				room_id = $(".chat-footer").find("#room_id").val();
 				requestPay = `
 					<p class="pay-text">${mem_nick}님이 ￦ ${message}원을 요청했어요</p>
-					<button class="item-button" onclick="openPayWindow(${product_id}, '${sender_id}', '${message}', '${window.room_id}')">송금하기</button>
+					<button class="item-button" onclick="openPayWindow(${product_id}, '${sender_id}', '${message}', '${room_id}')">송금하기</button>
 				`;
 			} else if(type == TYPE_RESPONSE_PAY) {
 				requestPay = `
 					<p class="pay-text">${mem_nick}님이 ￦ ${message}원을 송금했어요</p>
-					<span><button class="item-button" onclick="closePayWindow('seller')">판매내역으로 이동</button></span>				
+					<span><button class="item-button" onclick="closePayWindow('seller')">판매내역으로 이동</button></span>
 				`;
 			} else if(type == TYPE_RESERVATION) {
 				requestPay = `
 					<p class="pay-text">${mem_nick}님이 ${message}을 요청했어요</p>
-					<button class="item-button" onclick="acceptReservation(${product_id})">요청 수락</button>				
+					<button class="item-button" onclick="acceptReservation(${product_id})">요청 수락</button>
 				`;
 			} else if(type == TYPE_ACCEPT_RESERVATION) {
 				requestPay = `
-					<p class="pay-text">${mem_nick}님이 예약을 ${message} 했어요</p>				
+					<p class="pay-text">${mem_nick}님이 예약을 ${message} 했어요</p>
 				`;
 			} else if(type == TYPE_CANCEL_RESERVATION) {
 				requestPay = `
-					<p class="pay-text">${mem_nick}님이 예약을 ${message} 했어요</p>				
+					<p class="pay-text">${mem_nick}님이 예약을 ${message} 했어요</p>
 				`;
 			}
 			
@@ -182,20 +180,20 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 			} else if(type == TYPE_RESPONSE_PAY) {
 				requestPay = `
 					<p class="pay-text">${receiver_id}님에게 ￦ ${message}원을 송금했어요</p>
-					<span><button class="item-button" onclick="closePayWindow('buyer')">구매내역으로 이동</button></span>				
+					<span><button class="item-button" onclick="closePayWindow('buyer')">구매내역으로 이동</button></span>
 				`;
 			} else if(type == TYPE_RESERVATION) {
 				requestPay = `
-					<p class="pay-text">${sNick}님이 ${message}을 요청했어요</p>				
+					<p class="pay-text">${sNick}님이 ${message}을 요청했어요</p>
 				`;
 			} else if(type == TYPE_ACCEPT_RESERVATION) {
 				requestPay = `
 					<p class="pay-text">${sNick}님이 예약을 ${message} 했어요</p>
-					<button class="item-button" onclick="cancelReservation(${product_id})">예약 취소</button>				
+					<button class="item-button" onclick="cancelReservation(${product_id})">예약 취소</button>
 				`;
 			} else if(type == TYPE_CANCEL_RESERVATION) {
 				requestPay = `
-					<p class="pay-text">${sNick}님이 예약을 ${message} 했어요</p>				
+					<p class="pay-text">${sNick}님이 예약을 ${message} 했어요</p>
 				`;
 			}
 		}
@@ -322,10 +320,57 @@ function toggleChatModal(action) {
 
 // ==============================================================================
 function requestReservation(product_id) {
-	console.log("product_id : " + product_id);
-	console.log("room_id : " + room_id);
-	console.log("sId" + sId);
-	console.log("receiver_id" + receiver_id);
+	room_id = $("#room_id").val();
 	
-//	sendMessage(TYPE_RESERVATION, product_id, sId, receiver_id, room_id, "상품 예약");
+	if (!room_id) {
+		$.ajax({
+			url : "ChatRoomAjax",
+			type : "POST",
+			dataType : "JSON",
+			data : {
+				sender_id : sId,
+				receiver_id : receiver_id,
+				product_id : product_id
+			}
+		}).done(function(result){
+			sendMessage(TYPE_RESERVATION, product_id, sId, receiver_id, result.room_id, "상품예약");
+		});
+	} else {
+		sendMessage(TYPE_RESERVATION, product_id, sId, receiver_id, room_id, "상품 예약");
+	}
+}
+
+//	===============================================================================
+
+function openPayWindow(product_id, receiver_id, price, room_id) {
+	$.ajax({
+			url : "ChatRoomAjax",
+			type : "POST",
+			dataType : "JSON",
+			data : {
+				sender_id : sId,
+				receiver_id : receiver_id,
+				product_id : product_id
+			}
+		}).done(function(result){
+			var url = "PayTransferRequest?product_id=" + encodeURIComponent(product_id) +
+		              "&receiver_id=" + encodeURIComponent(receiver_id) +
+		              "&price=" + encodeURIComponent(price) +
+		              "&room_id=" + encodeURIComponent(result.room_id)
+		              ;
+		    payWindow = window.open(url, "chat_window", "width=500,height=500");
+		});
+}
+
+function closePayWindow(type) {
+	if(type == 'seller') {
+    	window.open("MySales", "_blank");
+		
+	} else if (type == 'buyer') {
+    	window.open("MyOrder", "_blank");
+	} else if (type == 'transfer') {
+    	window.open("AllPayList", "_blank");
+		
+	}
+    window.close();
 }

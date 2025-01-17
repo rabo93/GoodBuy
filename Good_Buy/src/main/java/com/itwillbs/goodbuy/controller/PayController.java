@@ -61,6 +61,7 @@ public class PayController {
 		return "redirect:/GoodPayAuth"; 
 		
 	}
+	
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("GoodPayAuth")
 	public String goodPayAuth(HttpSession session, Model model) {
@@ -485,11 +486,35 @@ public class PayController {
 		// 송금결과 DB 저장
 		// 사용자번호를 입금이체 결과 객체에 추가
 		transferResult.put("user_seq_no", senderToken.getUser_seq_no());
-		// 송금이체 성공 시 결과를 DB (TRANSACTIONINFO) 에 저장
-		service.registTransferResult(transferResult);
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		// 송금이체 성공 시 결과를 DB (TRANSACTIONINFO) 에 저장
+//		service.registTransferResult(transferResult);
 		// DB에 거래내역 저장
-		service.registPayInfo(map); // 일단 업데이트 치러감.
+		service.registPayInfo(transferResult, map); // 일단 업데이트 치러감.
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		

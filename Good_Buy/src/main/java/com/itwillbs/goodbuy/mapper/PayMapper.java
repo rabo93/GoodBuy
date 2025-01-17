@@ -36,9 +36,7 @@ public interface PayMapper {
 	// DB 사용자 대표계좌 정보 조회 - fintech_num
 	String selectRepresentAccountNum(String user_seq_no);
 
-	void insertTransactionResult(
-			@Param("withdrawResult") Map<String, Object> withdrawResult, 
-			@Param("trnsactionType") String trnsactionType);
+	
 
 	// 이체(출금, 입금) 결과 저장
 	Map<String, String> selectTransactionResult(String bank_tran_id);
@@ -47,9 +45,9 @@ public interface PayMapper {
 
 	Map<String, String> selectPayAccountInfo(String user_seq_no);
 
-
-//	update 치려고 주석처리함
-//	int insertPayInfo(Map<String, Object> map);
+	void insertTransactionResult(
+			@Param("withdrawResult") Map<String, Object> withdrawResult, 
+			@Param("trnsactionType") String trnsactionType);
 	void insertTransactionPayInfo(Map<String, Object> map);
 	
 	void updateProductStatus(Map<String, Object> map);

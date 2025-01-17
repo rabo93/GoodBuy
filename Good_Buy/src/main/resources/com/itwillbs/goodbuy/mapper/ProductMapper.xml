@@ -212,7 +212,7 @@
 		JOIN MEMBER mem
 		ON pro.MEM_ID = mem.MEM_ID
 		WHERE pro.MEM_ID = #{mem_id}
-		<if test="product_id != null || product_id != 0">
+		<if test="product_id != 0">
 			AND pro.PRODUCT_ID NOT IN (#{product_id})
 		</if>
 		ORDER BY pro.PRODUCT_REG_DATE DESC
@@ -267,6 +267,24 @@
 		         , mem.MEM_INTRO
 		FROM MEMBER mem
 		WHERE mem.MEM_NICK = #{mem_nick}
+	</select>
+	
+	<!-- 상점페이지 판매자 상품목록 -->
+	<select id="getSellerProduct" resultType="map">
+		SELECT pro.PRODUCT_PIC1
+				, pro.PRODUCT_CATEGORY
+				, pro.PRODUCT_TRADE_ADR1
+				, pro.PRODUCT_ID
+				, pro.PRODUCT_TITLE
+				, pro.PRODUCT_PRICE
+				, mem.MEM_NICK
+				, REPLACE(FORMAT(pro.PRODUCT_REG_DATE, 'yyyyMMddHHmmss'), ',', '') AS PRODUCT_REG_DATE
+				, pro.PRODUCT_STATUS
+		FROM PRODUCT pro
+		JOIN MEMBER mem
+		ON pro.MEM_ID = mem.MEM_ID
+		WHERE pro.MEM_ID = #{mem_id}
+		ORDER BY pro.PRODUCT_REG_DATE DESC
 	</select>
 	
 	<!-- 상점페이지 셀러 리뷰목록 조회 -->

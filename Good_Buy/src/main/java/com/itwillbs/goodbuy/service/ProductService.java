@@ -87,9 +87,7 @@ public class ProductService {
 	public List<Map<String, Object>> searchSellerProduct(String mem_id, int product_id) {
 		return mapper.searchSellerProduct(mem_id, product_id);
 	}
-	public List<Map<String, Object>> searchSellerProduct(String mem_id) {
-		return mapper.searchSellerProduct(mem_id);
-	}
+	
 	
 	// 상세페이지 같은 상품 카테고리 목록
 	public List<Map<String, Object>> searchSameCategoryProduct(String product_category, int product_id) {
@@ -104,6 +102,11 @@ public class ProductService {
 	// 개인상점페이지 조회
 	public Map<String, Object> searchSellerShop(String mem_nick) {
 		return mapper.searchSellerShop(mem_nick);
+	}
+	
+	// 상점페이지에 판매자 상품 목록
+	public List<Map<String, Object>> searchSellerProduct(String mem_id) {
+		return mapper.getSellerProduct(mem_id);
 	}
 	
 	// 판매자 리뷰 목록 조회

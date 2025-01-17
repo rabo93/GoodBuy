@@ -200,10 +200,10 @@ public class ProductController {
 		List<Map<String, Object>> searchSellerReview = productService.searchSellerReview(searchSeller.get("MEM_ID").toString());
 		Map<String, Object> searchSellerScore = productService.searchSellerScore(searchSeller.get("MEM_ID").toString());
 		
-		model.addAttribute("searchSellerScore", searchSellerScore);
 		model.addAttribute("searchSeller", searchSeller);
 		model.addAttribute("searchSellerProduct", searchSellerProduct);
 		model.addAttribute("searchSellerReview", searchSellerReview);
+		model.addAttribute("searchSellerScore", searchSellerScore);
 		return "product/product_shop";
 	}
 	

@@ -26,6 +26,7 @@
 <!-- CSS for Page -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/product.css">
 
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
@@ -100,6 +101,7 @@
 						                            </c:choose>
 						                            ${product.product_title}
 						                        </div>
+						                        
 						                        <div class="price">
 						                            <fmt:formatNumber value="${product.product_price}" type="number" pattern="#,###" />원
 						                        </div>
@@ -108,6 +110,19 @@
 						                            <span class="name">${product.mem_nick}</span>
 						                        </div>
 						                    </div>
+						                         <%--거래중 썸네일 --%>
+<!-- 					                            <div class="product-thumb"> -->
+<%-- 													<c:choose> --%>
+<%-- 														<c:when test="${product.product_status == 1}"> --%>
+<!-- 															<div class="status" id="status">거래중 <i class="fa-solid fa-cart-shopping"></i></div> -->
+<%-- 														</c:when> --%>
+<%-- 														<c:when test="${product.product_status == 2}"> --%>
+<!-- 															<div class="status" id="status">예약중 <i class="fa-solid fa-paper-plane"></i></div> -->
+<%-- 														</c:when> --%>
+<%-- 													</c:choose> --%>
+<%-- 													<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" /> --%>
+<!-- 												</div> -->
+					                            <%--거래중 썸네일 --%>
 						                </li>
 						            </c:forEach>
 						        </c:otherwise>

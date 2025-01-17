@@ -603,9 +603,9 @@ textarea {
 }
 
 /*****상점 왕관 타이틀*/
-
-.icon-container .fa-brands fa-square-web-awesome:hover {
-	 transform: scale(1.7) ;
+.icon-container .fa-square-web-awesome {transition:all 0.3s}
+.icon-container .fa-square-web-awesome:hover {
+	 transform: scale(1.2) ;
 }
 
 .icon-container {
@@ -621,7 +621,7 @@ textarea {
   padding: 5px 10px;
   border-radius: 4px;
   position: absolute;
-  bottom: 100%; /* 아이콘 위에 표시 */
+  top: -30px; /* 아이콘 위에 표시 */
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;

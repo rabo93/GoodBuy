@@ -27,6 +27,7 @@
 <!-- CSS for Page -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/product.css">
 
 <!-- JS for Page -->
 <script src="${pageContext.request.contextPath}/resources/js/slick.js"></script>
@@ -60,6 +61,7 @@
 					</aside>
 					<div class="my-container">
 						<div class="contents-ttl">나의 상점</div>
+						
 						<div class="contents">
 							<!-- contents -->
 							<article class="mypage-wrap">
@@ -78,9 +80,20 @@
 										</div>
 										<div class="st-info">
 												<div class="st-ttl">
+													<%-- ${sessionScope.sNick}의 상점
+													<c:if test="${is왕관Visible }">
+														<div class="icon-container">
+														  <i class="fa-brands fa-square-web-awesome" style="font-size: 24px; color: var(--primary);"></i>
+														  <span class="tooltip">
+														    <i class="fa-solid fa-magnifying-glass"></i>&nbsp;&nbsp;굿바이 회원들이 선정한 믿을 수 있는 리뷰로 검증된 상점입니다.
+														  </span>
+														</div>
+													</c:if> --%>
+												
 													<c:set var="isGoodStore" value="${goodStore.count >= 3}" />
 													<c:choose>
-														<c:when test="${isGoodStore}">${sessionScope.sNick}의 상점&nbsp;&nbsp;
+														<c:when test="${isGoodStore}">
+															${sessionScope.sNick}의 상점&nbsp;&nbsp;
 															<div class="icon-container">
 															  <i class="fa-brands fa-square-web-awesome" style="font-size: 24px; color: var(--primary);"></i>
 															  <span class="tooltip">
@@ -148,29 +161,14 @@
 																		</c:if>
 																	</span>
 									                            </div>
-									                            <div class="ttl">
+									                             <div class="ttl">
 									                                <c:choose>
-									                                    <c:when test="${product.product_status == 1}">
-									                                        [거래중]
-									                                    </c:when>
-									                                    <c:when test="${product.product_status == 2}">
-									                                        [예약중]
-									                                    </c:when>
-									                                    <c:when test="${product.product_status == 3}">
-									                                        [거래완료]
-									                                    </c:when>
-									                                    <c:when test="${product.product_status == 4}">
-									                                    [🚫신고처리된 게시물입니다.]${product.product_title}
-									                                     <div class="price">
-												                            <fmt:formatNumber value="${product.product_price}" type="number" pattern="#,###" />원
-												                        </div>
-												                        <div class="card-row">
-												                            <span class="add">${product.product_trade_adr1}</span>
-												                            <span class="name">${product.mem_nick}</span>
-												                        </div>
-					                            					    </c:when>
+									                                    <c:when test="${product.product_status == 1}">[거래중]</c:when>
+									                                    <c:when test="${product.product_status == 2}">[예약중]</c:when>
+									                                    <c:when test="${product.product_status == 3}">[거래완료]</c:when>
+									                                    <c:when test="${product.product_status == 4}"><span style="color: #ff2b43; font-size: 1.2rem;"><i class="fa-regular fa-circle-xmark"></i> 신고처리된 게시물입니다.<br></span></c:when>
 									                                </c:choose>
-									                                ${product.product_title}
+																${product.product_title}
 									                            </div>
 									                            <div class="price">
 									                                <fmt:formatNumber type="number" value="${product.product_price}" pattern="#,###"/>원
@@ -186,6 +184,20 @@
 									                                </span>
 									                            </div>
 									                        </div>
+									                        
+									                         <%--거래중 썸네일 --%>
+			<!-- 					                            <div class="product-thumb"> -->
+			<%-- 													<c:choose> --%>
+			<%-- 														<c:when test="${product.product_status == 1}"> --%>
+			<!-- 															<div class="status" id="status">거래중 <i class="fa-solid fa-cart-shopping"></i></div> -->
+			<%-- 														</c:when> --%>
+			<%-- 														<c:when test="${product.product_status == 2}"> --%>
+			<!-- 															<div class="status" id="status">예약중 <i class="fa-solid fa-paper-plane"></i></div> -->
+			<%-- 														</c:when> --%>
+			<%-- 													</c:choose> --%>
+			<%-- 													<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" /> --%>
+			<!-- 												</div> -->
+								                            <%--거래중 썸네일 --%>
 									                    </li>
 									                    </a>
 									                </c:forEach>

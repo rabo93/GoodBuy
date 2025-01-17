@@ -139,12 +139,12 @@
    <div id="review-modal" class="modal-overlay" style="display: none;">
     <div class="modal-content">
         <h2>
-            <span id="buyerName"></span>님께 구매한 [<span id="productTitle"></span>]<br>후기 보내기 <i class="fa-regular fa-envelope"></i>
+            <span id="buyerName" style="color:#0dcc5a;"></span>님께 구매한 [<span id="productTitle"></span>]<br>후기 보내기 <i class="fa-regular fa-envelope"></i>
         </h2>
         <div class="review-radio">
-            <label><input type="radio" name="score" value="2">최고예요🥳</label>
-            <label><input type="radio" name="score" value="1">좋아요💕</label>
-            <label><input type="radio" name="score" value="0">별로예요👿</label>
+            <label><input type="radio" name="score" value="2"> 최고예요🥳</label>
+            <label><input type="radio" name="score" value="1"> 좋아요💕</label>
+            <label><input type="radio" name="score" value="0"> 별로예요👿</label>
             <input type="hidden" id="modal_product_id">
         </div>
         <br><br>

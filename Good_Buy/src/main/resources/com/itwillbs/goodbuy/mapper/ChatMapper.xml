@@ -6,17 +6,15 @@
 
 	<!-- 기존 자신의 채팅방 목록 조회요청 -->
 	<select id="selectChatRoomList" resultType="chatRoom">
-		SELECT ROOM_ID
-			 , PRODUCT_ID
-			 , TITLE
-			 , MEM_ID
-			 , (
-		SELECT MEM_ID
-		  FROM CHATROOM
-		 WHERE ROOM_ID = s.ROOM_ID
-		   AND MEM_ID != #{sender_id}
-		     ) AS receiver_id
-		     , GRADE
+		SELECT s.ROOM_ID
+			 , s.PRODUCT_ID
+			 , s.TITLE
+			 , s.MEM_ID
+			 , (SELECT MEM_ID
+				  FROM CHATROOM
+				 WHERE ROOM_ID = s.ROOM_ID
+				   AND MEM_ID != #{sender_id}) AS receiver_id
+		     , s.GRADE
 		  FROM CHATROOM AS s
 		 WHERE MEM_ID = #{sender_id}
 		   AND STATUS = 1

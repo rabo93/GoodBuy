@@ -222,8 +222,8 @@
 													        <div class="user-info">
 													        	<div class="user-thumb">
 														            <c:choose>
-															            <c:when test="${not empty review.product_pic1}">
-															            	<img src="${pageContext.request.contextPath}/resources/upload/${review.product_pic1}" id="profile_preview">
+															            <c:when test="${not empty review.mem_profile}">
+															            	<img src="${pageContext.request.contextPath}/resources/upload/${review.mem_profile}" id="profile_preview">
 								<%-- 							                <img src="${member.mem_profile}" id="profile_preview"><br> --%>
 															            </c:when>
 															            <c:otherwise>

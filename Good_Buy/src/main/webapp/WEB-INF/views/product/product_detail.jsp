@@ -193,6 +193,7 @@
 											</c:otherwise>
 										</c:choose>
 										<input type="hidden" id="sId" value="${sessionScope.sId}">
+										<input type="hidden" id="sNick" value="${sessionScope.sNick}">
 										<input type="hidden" id="receiver_id" value="${productSearch.mem_id}">
 										<input type="hidden" id="product_id" value="${productSearch.product_id}">
 									</c:if>

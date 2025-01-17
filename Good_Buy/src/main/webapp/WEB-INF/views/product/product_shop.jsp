@@ -72,11 +72,11 @@
 								<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.PRODUCT_ID}'">
 									<div class="product-thumb">
 										<c:choose>
-											<c:when test="${list.PRODUCT_STATUS == 1}">
-												<div class="status" id="status">거래중</div>
+											<c:when test="${list.product_status == 1}">
+												<div class="status" id="status">거래중<i class="fa-solid fa-cart-shopping"></i></div>
 											</c:when>
-											<c:when test="${list.PRODUCT_STATUS == 2}">
-												<div class="status" id="status">예약중</div>
+											<c:when test="${list.product_status == 2}">
+												<div class="status" id="status">예약중<i class="fa-regular fa-paper-plane"></i></div>
 											</c:when>
 										</c:choose>
 										<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" />

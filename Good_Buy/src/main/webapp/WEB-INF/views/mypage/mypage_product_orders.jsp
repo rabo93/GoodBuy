@@ -70,14 +70,12 @@
                                                 	<div class="card-info">
                                                     <div class="category">
                                                         <span>${product.PRODUCT_CATEGORY}</span>
-                                                        <span class="type">
-                                                        	<c:if test="${product.PRODUCT_TRADE_ADR1 != ''}">
-																<span class="type">직거래</span>
-															</c:if>
-                                                        </span>
+                                                       	<c:if test="${product.PRODUCT_TRADE_ADR1 != ''}">
+															<span class="type">직거래</span>
+														</c:if>
                                                     </div>
                                                     <div class="ttl">
-                                                        <c:if test="${product.PRODUCT_STATUS == 1}">
+                                                        <c:if test="${product.PRODUCT_STATUS == 2}">
                                                             [예약중]
                                                         </c:if>
                                                         <c:if test="${product.PRODUCT_STATUS == 3}">
@@ -89,7 +87,10 @@
                                                         <fmt:formatNumber value="${product.PRODUCT_PRICE}" type="number" pattern="#,###" />원
                                                     </div>
                                                     <div class="card-row">
-                                                        <span class="add">${product.PRODUCT_TRADE_ADR1}</span>
+                                                       <c:choose>
+							                         		<c:when test="${empty product.product_trade_adr1}"><span class="is-add">택배거래</span></c:when>
+							                         		<c:otherwise><span class="name">${product.mem_nick}</span></c:otherwise>
+							                         	</c:choose>
                                                         <span class="name">${product.MEM_NICK}</span>
                                                     </div>
                                                     	<input type="hidden" name="product_id" id="hiddenProductId">
@@ -139,12 +140,12 @@
    <div id="review-modal" class="modal-overlay" style="display: none;">
     <div class="modal-content">
         <h2>
-            <span id="buyerName"></span>님께 구매한 [<span id="productTitle"></span>]<br>후기 보내기 <i class="fa-regular fa-envelope"></i>
+            <span id="buyerName" style="color:#0dcc5a;"></span>님께 구매한 [<span id="productTitle"></span>]<br>후기 보내기 <i class="fa-regular fa-envelope"></i>
         </h2>
         <div class="review-radio">
-            <label><input type="radio" name="score" value="2">최고예요🥳</label>
-            <label><input type="radio" name="score" value="1">좋아요💕</label>
-            <label><input type="radio" name="score" value="0">별로예요👿</label>
+            <label><input type="radio" name="score" value="2"> 최고예요🥳</label>
+            <label><input type="radio" name="score" value="1"> 좋아요💕</label>
+            <label><input type="radio" name="score" value="0"> 별로예요👿</label>
             <input type="hidden" id="modal_product_id">
         </div>
         <br><br>

@@ -6,20 +6,25 @@
 
 	<!-- 기존 자신의 채팅방 목록 조회요청 -->
 	<select id="selectChatRoomList" resultType="chatRoom">
-		SELECT ROOM_ID
-			 , PRODUCT_ID
-			 , TITLE
-			 , MEM_ID
-			 , (
-		SELECT MEM_ID
-		  FROM CHATROOM
-		 WHERE ROOM_ID = s.ROOM_ID
-		   AND MEM_ID != #{sender_id}
-		     ) AS receiver_id
-		     , GRADE
+		SELECT s.ROOM_ID
+			 , s.PRODUCT_ID
+			 , s.TITLE
+			 , s.MEM_ID
+			 , (SELECT MEM_ID
+				  FROM CHATROOM
+				 WHERE ROOM_ID = s.ROOM_ID
+				   AND MEM_ID != #{sender_id}) AS receiver_id
+		     , s.GRADE
 		  FROM CHATROOM AS s
 		 WHERE MEM_ID = #{sender_id}
 		   AND STATUS = 1
+		 ORDER
+		    BY (SELECT SEND_TIME
+		    	  FROM CHATTING
+		    	 WHERE ROOM_ID = s.ROOM_ID
+		    	 ORDER
+		    	    BY IDX DESC
+		    	 LIMIT 1) DESC
 	</select>
 	
 	<!-- 해당 채팅방 제일 마지막 대화 조회 -->
@@ -157,6 +162,7 @@ ROOM_ID
 		 WHERE ROOM_ID = #{room_id}
 		   AND RECEIVER_ID = #{sender_id}
 	</update>
+	
 	<!-- 메세지 읽음 처리 -->
 	<update id="updateMessageRead">
 		UPDATE CHATTING

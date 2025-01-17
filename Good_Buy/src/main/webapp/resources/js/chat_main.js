@@ -386,7 +386,11 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 	
 	
 	if(sender_id == sId) {	// 자신이 보낸 메세지(송신자가 자신인 경우)
-		div_message = '<div class="message user">' + bubble_message + '</div>';
+		div_message = `
+		<div class="message user">
+			${bubble_message}
+		</div>
+		`;
 	} else if(receiver_id == sId) {	//	상대방이 보낸 메세지
 		
 		if(mem_profile == "") {

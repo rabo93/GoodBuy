@@ -194,7 +194,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 			
 			sendMessage(session, chatMessage);
 		} else if(chatMessage.getType().equals(ChatMessage.TYPE_READ)) {
-			chatService.updateMessageRead(chatMessage);
+			chatService.updateMessageRead(chatMessage.getIdx());
 		} else if(chatMessage.getType().equals(ChatMessage.TYPE_RESERVATION)) {
 			//	현재 시스템 날짜 시각정보 받아와서 저장
 			chatMessage.setSend_time(getDateTimeNow());
@@ -244,6 +244,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 //				chatMessage.setReceiver_id("");
 				sendMessage(receiver_session, chatMessage);
 			}
+			
 		}
 		
 	}	// handleTextMessage() 메서드 끝

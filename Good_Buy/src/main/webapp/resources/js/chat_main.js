@@ -535,7 +535,8 @@ function leaveChat(){
 		receiver_id = getOpenedReciverId();
 		sendMessage(TYPE_LEAVE, 0, sId, receiver_id, room_id);
 		
-		location.reload();
+		$(".chat-area").empty();
+		$(".sidebar-item." + room_id).remove();
 	}
 }
 //	===============================================================================

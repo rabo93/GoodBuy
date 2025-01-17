@@ -18,6 +18,13 @@
 		  FROM CHATROOM AS s
 		 WHERE MEM_ID = #{sender_id}
 		   AND STATUS = 1
+		 ORDER
+		    BY (SELECT SEND_TIME
+		    	  FROM CHATTING
+		    	 WHERE ROOM_ID = s.ROOM_ID
+		    	 ORDER
+		    	    BY IDX DESC
+		    	 LIMIT 1) DESC
 	</select>
 	
 	<!-- 해당 채팅방 제일 마지막 대화 조회 -->
@@ -155,6 +162,7 @@ ROOM_ID
 		 WHERE ROOM_ID = #{room_id}
 		   AND RECEIVER_ID = #{sender_id}
 	</update>
+	
 	<!-- 메세지 읽음 처리 -->
 	<update id="updateMessageRead">
 		UPDATE CHATTING

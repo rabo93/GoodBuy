@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function(){
 				        case 1: return "<span class='status status-01'>거래중</span>";
 				        case 2: return "<span class='status status-02'>예약중</span>";
 				        case 3: return "<span class='status status-03'>거래완료</span>";
-				        case 4: return "<span class='status status-04'>신고처리</span>";
+//				        case 4: return "<span class='status status-04'>신고처리</span>";
 				        default: return "";
 				    }
 				}

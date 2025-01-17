@@ -221,17 +221,18 @@ public class PayService {
 		return mapper.selectPayInfo(id);
 	}
 	// paging 처리한 거래목록 조회
-	public List<Map<String, String>> getPayInfoPaging(String id, int startRow, int listLimit) {
-		return mapper.selectPayInfoPaging(id, startRow, listLimit);
+	public List<Map<String, String>> getPayInfoPaging(String id, int startRow, int listLimit, String startDate, String endDate) {
+		return mapper.selectPayInfoPaging(id, startRow, listLimit, startDate, endDate);
 	}
 
 	public List<Map<String, String>> getPayInfoProduct(int product_id) {
 		return mapper.selectPayInfoProduct(product_id);
 	}
 
-	public int getPayInfoListCount(String id) {
-		return mapper.selectPayInfoListCount(id);
+	public int getPayInfoListCount(String id, String startDate,  String endDate) {
+		return mapper.selectPayInfoListCount(id, startDate, endDate);
 	}
+
 
 	
 	

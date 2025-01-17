@@ -85,13 +85,15 @@
 								<option value="기타 사유를 입력해주세요.">기타</option>
 							</select>
 							<textarea class="ch-modal-otherReason" readonly ></textarea>
+						</div>
+						<div class="ch-report-btn">
 							<button class="ch-model-report-btn" type="button" id="chatReporting">
 								신고하기
 							</button>
+							<button class="ch-model-close-btn" type="button" onclick="toggleChatModal('close')">
+								닫기
+							</button>
 						</div>
-						<button class="ch-model-close-btn" type="button" onclick="toggleChatModal('close')">
-							닫기
-						</button>
 					</div>
 				</section>
 				<!-- 상품 페이지 -->
@@ -315,26 +317,29 @@
 							<button class="close-chat-button" onclick="toggleSlideChat()">
 								<i class="fa-solid fa-arrow-left"></i>
 							</button>
-<!-- 							<button class="report-chat-button" onclick="toggleChatModal('open')"> -->
-<!-- 								<i class="fa-solid fa-land-mine-on"></i>&nbsp;신고하기 -->
-<!-- 							</button> -->
+							<button class="report-chat-button" onclick="toggleChatModal('open')">
+								<i class="fa-solid fa-land-mine-on"></i>&nbsp;신고하기
+							</button>
 						</div>
 						<div class="chat-header">
 			            	<a><img src="${pageContext.request.contextPath}/resources/upload/${productSearch.product_pic1}"></a>
 			                <div class="chat-title">${productSearch.product_title}</div>
+			                <button class="chat-item-button" onclick="requestReservation(${productSearch.product_id})">예약요청</button>
 <%-- 			                <c:if test="${productSearch.product_status == 3}"> --%>
 <!-- 			               		<button class="chat-item-button" style="background-color: var(--gray)">판매완료된 상품</button> -->
 <%-- 			               	</c:if> --%>
 <%-- 			               	<c:if test="${productSearch.product_status != 3}"> --%>
 <%-- 			                <button class="chat-item-button" onclick="openPayWindow('${productSearch.product_id}' , '${productSearch.mem_id}')">구매하기</button> --%>
-							<button class="report-chat-button" onclick="toggleChatModal('open')">
-								<i class="fa-solid fa-land-mine-on"></i>&nbsp;신고하기
-							</button>
+<!-- 							<button class="report-chat-button" onclick="toggleChatModal('open')"> -->
+<!-- 								<i class="fa-solid fa-land-mine-on"></i>&nbsp;신고하기 -->
+<!-- 							</button> -->
 <%-- 		                	<button class="chat-item-button" onclick="openPayWindow('${productSearch.product_id}' , '${productSearch.mem_id}')">구매하기</button> --%>
 			            </div>
 			            <div class="chat-body">
 			            </div>
 			            <div class="chat-footer">
+			            	<input type="hidden" id="chat-mem-nick" value="${productSearch.mem_nick}">
+			            	<input type="hidden" id="chat-mem-profile" value="${productSearch.mem_profile}">
 			            	<!-- hidden 작업 생각중 -->
 			            	<span class="fileArea">
 					           	<label for="chatFile"><i class="fa-solid fa-circle-plus"></i></label>
@@ -346,6 +351,11 @@
 					</div>
 				</div>
 				<script src="${pageContext.request.contextPath}/resources/js/chat_product.js"></script>
+<!-- 				<script type="text/javascript"> -->
+// 					function requestReservation(product_id) {
+// 						alert(product_id);
+// 					}
+<!-- 				</script> -->
 				<!-- *********** // 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 			</div>
 		</section>

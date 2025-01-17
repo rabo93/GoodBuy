@@ -65,11 +65,10 @@ $(".sidebar-item").on("dblclick", function() {
 		grade : grade
 	}
 	
-	$(roomItem).find("#messageStatus").empty();
+	$(roomItem).find("#messageStatus").remove();
 	
 	showChatRoom(room);
 })
-
 
 $(function() {
 	
@@ -86,8 +85,9 @@ $(function() {
 	window.onmessage = function(e) {
 		console.log("부모창 메세지 : " + e.data);
 		let data = JSON.parse(e.data);
-		
 		let recent_div = "";
+		let fileMessage
+		
 		if (data.type == TYPE_INIT) {	//	채팅 윈도우 초기화
 			showChatList(data);
 			return;
@@ -103,8 +103,8 @@ $(function() {
 			console.log("TYPE_TALK - room_id : " + data.room_id);
 			recent_div = `${data.message}<span class="item-send-time">${data.send_time}</span>`;
 		} else if(data.type == TYPE_FILE) {	// 파일 전송
-			data.message = "사진을 보냈습니다.";
-			recent_div = `${data.message}<span class="item-send-time">${data.send_time}</span>`
+			fileMessage = "사진을 보냈습니다.";
+			recent_div = `${fileMessage}<span class="item-send-time">${data.send_time}</span>`
 		} else if(data.type == TYPE_REQUEST_PAY) {
 			recent_div = `${data.message}원을 요청했어요.<span class="item-send-time">${data.send_time}</span>`
 		} else if(data.type == TYPE_RESPONSE_PAY) {
@@ -130,8 +130,13 @@ $(function() {
 			let messageCnt = $(".sidebar-item." + data.room_id).find("#messageStatus").text();
 			if(!messageCnt) {
 				messageCnt = 0;
+				$(".sidebar-item." + data.room_id).find(".item").append(`<span id="messageStatus" class="unread_msg">${Number(messageCnt) + 1}</span>`);
+			} else {
+				$(".sidebar-item." + data.room_id).find(".item").find("span").text(Number(messageCnt) + 1);
 			}
-			$(".sidebar-item." + data.room_id).find(".messageStatus").html(Number(messageCnt) + 1);
+			
+//			Number(messageCnt) + 1
+			
 		}
 		
 		$(".sidebar-item." + data.room_id + " .item-chat").empty();
@@ -210,10 +215,10 @@ function showChatRoom(room) {
 			<button class="close-chat-button" onclick="closeChat()">
 				<i class="fa-solid fa-arrow-left"></i>
 			</button>
-			<button class="chat-option" onclick="">
+			<button id="chat-option">
 				<i class="fa-solid fa-ellipsis"></i>
 			</button>
-			<div class="chat-panel">
+			<div id="chat-panel">
 				<button class="report-chat-button" onclick="toggleChatModal(\'open\')">
 					<i class="fa-solid fa-land-mine-on"></i>&nbsp;신고하기
 				</button>
@@ -264,6 +269,19 @@ function showChatRoom(room) {
 		if (keyCode == 13) {
 			sendInputMessage();
 		}
+	});
+	
+	$("#chat-option").on("click", function(e){
+		e.stopPropagation();
+		$("#chat-panel").toggleClass("on");
+	});
+	
+	$("#chat-panel").on("click", function(e){
+		e.stopPropagation();
+	});
+	
+	$(document).on("click", function() {
+		$("#chat-panel").removeClass("on");
 	});
 	
 	//	채팅목록 수신메세지 표시 제거 작업 예정
@@ -357,11 +375,11 @@ function appendMessage(type, sender_id, receiver_id, message, send_time) {
 		`;
 		
 	} else if(type == TYPE_TALK) {	// 채팅메세지
-		bubble_message = '<div class="bubble">' + message + '</div>';
+		bubble_message = `<div class="bubble">${message}</div>`;
 	} else if(type == TYPE_FILE) {
 		let hrefUrl = baseUrl + "/resources/upload/chat/" + message.split(":")[0];
 		let imgUrl = baseUrl + "/resources/upload/chat/" + message.split(":")[1];
-		bubble_message = '<div class="bubble"><a href="' + hrefUrl + '" target="_blank"><img class="img" src="' + imgUrl + '"</div>'
+		bubble_message = `<div class="bubble"><a href="${hrefUrl}" target="_blank"><img class="img" src="${imgUrl}"</div>`
 	} else if(type == TYPE_LEAVE) {
 		bubble_message = `<div class="bubble">${message}</div>`
 	}
@@ -435,7 +453,7 @@ function sendFile() {
 		}
 		
 		if(response.fileName != "" && response.thumbnailFileName != "") {
-			sendMessage(TYPE_FILE_UPLOAD_COMPLETE, product_id, sId, $("#receiver_id").val(), $("#room_id").val(), response.fileName + ":" + response.thumbnailFileName);
+			sendMessage(TYPE_FILE_UPLOAD_COMPLETE, product_id, sId, $("#receiver_id").val(), $("#room_id").val(), response.fileName + ":" + response.thumbnailFileName, 0);
 		}
 		
 	});

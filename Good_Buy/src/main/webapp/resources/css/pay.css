@@ -527,7 +527,40 @@ html.fixed {overflow-y:hidden;}
 .account-number strong {
     font-weight: bold;
 }
+/* 검색 헤더 */
+.search-header {
+	display: flex;
+	justify-content: space-between;
+    align-items: center;
+}
+.search-date  input {
+	margin: 0;
+    padding: 0;
+    font-size: 1em;
+    font-family: 'Pretendard';
+    border: none;
+/*     border-bottom: 1px solid var(--gray); */
+    text-align: right;
+}
+.date-search-btn {
+	background-color: var(--primary);
+ 	color: var(--white);
+ 	padding: 4px 10px;
+    border-radius: 5px;
+    margin-left: 2px;
+}
 
+#pageList input {
+	margin: 0;
+    padding: 0;
+    font-size: 1em;
+    font-family: 'Pretendard';
+    border: none;
+/*     border-bottom: 1px solid var(--gray); */
+    text-align: right;
+    font-size: medium;
+    font-weight: bold;
+}
 /* 상단 버튼들 */
 .all-btn, .use-transfer-btn, .use-charge-btn, .use-refund-btn {
     background-color: lightgray;

@@ -92,3 +92,11 @@ function listToggleButton(type) {
 		});
 	});
 }
+
+
+
+function searchDate() {
+	let start_date = $('#start_date').val(); 
+	let end_date = $('#end_date').val();
+	location.href="AllPayList?start_date=" + start_date + "&end_date=" + end_date;
+}

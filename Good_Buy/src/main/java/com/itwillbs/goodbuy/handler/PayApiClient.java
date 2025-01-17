@@ -124,6 +124,7 @@ public class PayApiClient {
 	// ===================================================================
 	// 2.2. 사용자/서비스 관리 - 2.2.1. 사용자정보조회 API (GET)
 	public Map<String, Object> requestPayUserInfo(PayToken token) {
+		System.out.println("사용자 정보조회 TOKEN 객체 값 :        " + token);
 		// 1. POST 방식 요청을 수행할 URL 정보를 URI 타입 객체 또는 문자열로 생성
 		URI uri = UriComponentsBuilder
 					.fromUriString(base_url) // 기본 요청 주소 생성

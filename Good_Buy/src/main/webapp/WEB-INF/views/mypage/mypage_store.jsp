@@ -80,7 +80,9 @@
 												<div class="st-ttl">
 													<c:set var="isGoodStore" value="${goodStore.count >= 3}" />
 													<c:choose>
-														<c:when test="${isGoodStore}">${sessionScope.sNick}의 상점 <i class="fa-brands fa-square-web-awesome" style="color:var(--primary)";></i></c:when>
+														<c:when test="${isGoodStore}">${sessionScope.sNick}의 상점&nbsp;&nbsp;
+																<i class="fa-brands fa-square-web-awesome" title="굿바이 회원들이 선정한 믿을 수 있는 리뷰로 검증된 상점입니다." style="color:var(--primary)";></i>
+														</c:when>
 														<c:otherwise>${sessionScope.sNick}의 상점</c:otherwise>
 													</c:choose>
 												</div>
@@ -102,7 +104,7 @@
 											<c:if test="${empty scoreCount}">
 											 	<span class="myReviewScoreCount">
 												    아직 작성된 후기가 없어요&nbsp;
-												    <i class="fa-regular fa-comment-dots"><a title="굿바이 회원들이 선정한 믿을 수 있는 리뷰로 검증된 상점입니다."></a></i>
+												    <i class="fa-regular fa-comment-dots"></i>
 												</span>
 											</c:if>
 										</div>
@@ -260,45 +262,46 @@
 	</footer>
 	<script type="text/javascript">
 	$(document).ready(function () {
-		$("#submitBtn").click(function () {
-			//debugger;
-			//상점소개 변경하기
-			let mem_intro = $("#mem_intro").val();
-			console.log(">>>>>>>>>>>"+mem_intro);
-			$.ajax({
-				url : "MyStoreIntro",
-				type : "post",
-				dataType : "json",
-				data :{mem_intro : mem_intro},
-				success: function (response) {
-					alert(response);
-					// location.reload();
-				},
-			});
-		});
-		
-	</script>
-	
-	<script type="text/javascript">
+	    // 글자수 제한 설정
+	    updateByteCount("#mem_intro", "#intro-check", 100, "최대 100글자까지 가능합니다.");
+
+	    // 저장 버튼 클릭
+	    $("#submitBtn").click(function () {
+	        let mem_intro = $("#mem_intro").val(); 
+	        console.log(">>>>>>>>>>> " + mem_intro); 
+
+	        $.ajax({
+	            url: "MyStoreIntro",
+	            type: "post",
+	            dataType: "json",
+	            data: { mem_intro: mem_intro },
+	            success: function (response) {
+	                console.log("서버 응답:", response); 
+	                alert("상점소개가 수정되었습니다!");
+	                // location.reload(); // 페이지 새로고침
+	            },
+	            error: function (xhr, status, error) {
+	                console.error("AJAX 요청 오류:", status, error);
+	                alert("요청 중 문제가 발생했습니다.");
+	            }
+	        });
+	    });
+	});
+
 	function updateByteCount(select, byteSelector, maxLength, alertMessage) {
-        $(select).on('keydown change', function () {
-            var content = $(this).val(); // 입력 값 가져오기
-            var length = content.length; 
+	    $(select).on('keydown change', function () {
+	        var content = $(this).val();
+	        var length = content.length;
 
-            $(byteSelector).text(length + " / " + maxLength);
+	        $(byteSelector).text(length + " / " + maxLength);
 
-            if (length > maxLength) {
-                alert(alertMessage);
-                $(this).val(content.substring(0, maxLength));
-                $(byteSelector).text(maxLength + " / " + maxLength);
-            }
-        });
-    }
-
-    $(document).ready(function () {
-        updateByteCount("#mem_intro", "#intro-check", 100, "최대 100글자까지 가능합니다.");
-    });
-	
+	        if (length > maxLength) {
+	            alert(alertMessage);
+	            $(this).val(content.substring(0, maxLength));
+	            $(byteSelector).text(maxLength + " / " + maxLength);
+	        }
+	    });
+	}
 	</script>
 	
 </body>

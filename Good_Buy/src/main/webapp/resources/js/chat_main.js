@@ -602,16 +602,15 @@ $(document).ready(function() {
 		window.close();
 	});
     
-   $("#transfer-btn-chat").on("click", function() {
-//		alert('transfer-btn-chat'); 잘들어옴.
-		receiver_id = $("#receiver_id").val();
-		product_id = $("#product_id").val();
-		room_id = $("#room_id").val();
-		price = $("#tran_amt").val();
-		sendMessage(TYPE_RESPONSE_PAY, product_id, sId, receiver_id, room_id, price); // 이거 안됨
-//		sendMessage(TYPE_REQUEST_PAY, product_id, sId, receiver_id, room_id, price); // 이거 됨
-
-	});		
+//   $("#transfer-btn-chat").on("click", function() {
+////		alert('transfer-btn-chat'); 잘들어옴.
+//		receiver_id = $("#receiver_id").val();
+//		product_id = $("#product_id").val();
+//		room_id = $("#room_id").val();
+//		price = $("#tran_amt").val();
+//		sendMessage(TYPE_RESPONSE_PAY, product_id, sId, receiver_id, room_id, price);
+//	});		
+	
 	
     
 });
@@ -660,3 +659,14 @@ function closePayWindow(type) {
 	}
     window.close();
 }
+
+//------------------------
+// 송금결제가 완료 되어야 채팅창에 메시지를 뿌릴 수 있게 수정함. pay_remit.jsp
+//function executeFunction() {
+//    alert("Redirected and function executed!");
+//    receiver_id = $("#receiver_id").val();
+//	product_id = $("#product_id").val();
+//	room_id = $("#room_id").val();
+//	price = $("#tran_amt").val();
+//	sendMessage(TYPE_RESPONSE_PAY, product_id, sId, receiver_id, room_id, price);
+//}

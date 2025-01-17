@@ -31,20 +31,15 @@
 <script src="${pageContext.request.contextPath}/resources/js/pay.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/chat_main.js"></script>
 <script>
-	// 창이 닫히기 전에 부모 창 함수 호출
-// 	window.onbeforeunload = function () {
-// 		if (window.opener && !window.opener.closed) {
-// 			window.opener.reloadParent(); // 부모 창의 함수 호출
-// 		}
-// 	};
-	
-window.onload = function() {
-// 	alert('pay_transfer_result.jsp'); // 잘 작동됨
-// 	appendMessage();
-//     sendInputMessage();
-    
-//     sendMessage(TYPE_RESPONSE_PAY, 24 , 'apple123', 'bang', 'e02266e1-8082-4eaf-bede-c509166f1236', 2000);
-};
+	function executeFunction() {
+	    receiver_id = $("#receiver_id").val();
+		product_id = $("#product_id").val();
+		room_id = $("#room_id").val();
+		price = $("#tran_amt").val();
+		sendMessage(TYPE_RESPONSE_PAY, product_id, sId, receiver_id, room_id, price);
+	}
+	console.log($(".amount").text());
+	window.onload = executeFunction;
 </script>
 </head>
 

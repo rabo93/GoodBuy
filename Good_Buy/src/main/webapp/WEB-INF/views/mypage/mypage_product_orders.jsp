@@ -75,7 +75,7 @@
 														</c:if>
                                                     </div>
                                                     <div class="ttl">
-                                                        <c:if test="${product.PRODUCT_STATUS == 1}">
+                                                        <c:if test="${product.PRODUCT_STATUS == 2}">
                                                             [예약중]
                                                         </c:if>
                                                         <c:if test="${product.PRODUCT_STATUS == 3}">

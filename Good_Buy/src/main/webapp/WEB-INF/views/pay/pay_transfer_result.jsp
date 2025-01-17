@@ -32,10 +32,10 @@
 <script src="${pageContext.request.contextPath}/resources/js/chat_main.js"></script>
 <script>
 	function executeFunction() {
-	    receiver_id = $("#receiver_id").val();
-		product_id = $("#product_id").val();
-		room_id = $("#room_id").val();
-		price = $("#tran_amt").val();
+	    receiver_id = '${transferResult.withdrawResult.dps_print_content}';
+		product_id = '${transferResult.product_id}';
+		room_id = '${room_id}';
+		price = ${transferResult.withdrawResult.tran_amt};
 		sendMessage(TYPE_RESPONSE_PAY, product_id, sId, receiver_id, room_id, price);
 	}
 	console.log($(".amount").text());

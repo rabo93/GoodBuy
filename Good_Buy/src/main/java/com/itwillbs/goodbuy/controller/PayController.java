@@ -532,9 +532,12 @@ public class PayController {
 	public String payTransferResult(HttpSession session, Model model) {
 		// 세션에 저장된 이체결과객체 (transferResult) 꺼내기
 		Map<String, Object> transferResult =(Map<String, Object>)session.getAttribute("transferResult");
+		
+		System.out.println("room_id 잘 받아오니?" + session.getAttribute("room_id"));
 		// 세션에서 객체 꺼낸 후 세션내의 객체는 제거
-		session.removeAttribute("ransferResult"); // 마치 세션을 리퀘스트 처럼 사용함.
+		session.removeAttribute("transferResult"); // 마치 세션을 리퀘스트 처럼 사용함.
 		// 이체 결과 객체를 모델 객체에 저장
+		model.addAttribute("room_id", session.getAttribute("room_id"));
 		model.addAttribute("transferResult", transferResult);
 		return "pay/pay_transfer_result";
 	}

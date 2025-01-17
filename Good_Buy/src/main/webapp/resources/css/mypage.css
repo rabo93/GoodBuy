@@ -622,7 +622,7 @@ textarea {
   border-radius: 10px;
   position: absolute;
   top: -51px; /* 아이콘 위에 표시 */
-  left: 357%;
+  left: 112%;
   transform: translateX(-50%);
   white-space: nowrap;
   font-size: 0.9rem;

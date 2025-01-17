@@ -12,6 +12,7 @@
 			JOIN MEMBER B ON B.MEM_ID = R.MEM_ID  -- 구매자 닉네임
 		 WHERE P.MEM_ID = #{mem_id}
 		 ORDER BY R.REVIEW_DATE DESC
+		 LIMIT 3
 	</select>
 	<!-- 	리뷰 갯수 -->
 	<select id="selectReviewCount" resultType="int">

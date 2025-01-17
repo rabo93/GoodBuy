@@ -97,7 +97,7 @@
 															<div class="icon-container">
 															  <i class="fa-brands fa-square-web-awesome" style="font-size: 24px; color: var(--primary);"></i>
 															  <span class="tooltip">
-															    <i class="fa-solid fa-magnifying-glass"></i>&nbsp;&nbsp;굿바이 회원들이 선정한 믿을 수 있는 리뷰로 검증된 상점입니다.
+															    <i class="fa-solid fa-magnifying-glass"></i>&nbsp;&nbsp;굿바이 회원들의 리뷰로 검증된 상점입니다.
 															  </span>
 															</div>
 														</c:when>
@@ -155,9 +155,9 @@
 									                        <div class="card-info">
 									                            <div class="category">
 									                                <span>${product.product_category}</span>
-								                                	<c:if test="${product.product_trade_adr1 != ''}">
-																		<span class="type">직거래</span>
-																	</c:if>
+									                                	<c:if test="${product.product_trade_adr1 != ''}">
+																			<span class="type">직거래</span>
+																		</c:if>
 									                            </div>
 									                             <div class="ttl">
 									                                <c:choose>

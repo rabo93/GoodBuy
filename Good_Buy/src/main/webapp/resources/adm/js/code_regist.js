@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	const commoncodeForm = document.querySelector("form[name=commoncodeForm]");
 	const checkAll = document.querySelector("#checkAll");
 	let codeIdCheck = false;
+	let codeIdDuplicate = false;
 	
 	// 테이블 그리기
 	const codeTable = $('#commoncode').DataTable({
@@ -27,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 <label class="custom-control-label" for="customCheck${rowCount}"></label>
 			</div>`,
 			`<span class="num">${rowCount}</span>`,
-			`<input type="text" class="form-control" name="CODE_ID" placeholder="공통코드ID 입력" required>`,
+			`<input type="text" class="form-control code_id" name="CODE_ID" placeholder="공통코드ID 입력" required>`,
 			`<input type="text" class="form-control" name="CODE_NAME" placeholder="공통코드명 입력" required>`,
 			`<input type="text" class="form-control" name="CODE_DESCRIPTION" placeholder="설명 입력" required>`,
 			`<div class="form-check form-switch">
@@ -103,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	}
 	
 	
-	// 공통코드 ID 중복검사
+	// 코드타입 ID 중복검사
 	$("#codetype_id").on("keyup", function(){
 		
 		// 유효성 체크
@@ -132,17 +133,53 @@ document.addEventListener("DOMContentLoaded", function(){
 		});
 	});
 	
+	// 공통코드 ID 중복체크 
+	$(document).on('input', '.code_id', function(){
+		const input = $(this);
+		const codeIdValue = input.val().trim();
+		const allCodeIds = [];
+		
+		$(".code_id").each(function(){
+			const val = $(this).val().trim();
+			if(val) {
+				allCodeIds.push(val);
+			}
+		});
+		
+		const isDuplicate = allCodeIds.filter(id => id == codeIdValue).length > 1;
+		if (isDuplicate) {
+	        input.addClass('is-invalid');
+	        input.siblings('.invalid-feedback').remove();
+	        input.after('<div class="invalid-feedback">중복된 공통코드ID 입니다. 수정해주세요.</div>');
+	    	codeIdDuplicate = true;
+		} else {
+	        input.removeClass('is-invalid');
+	        input.siblings('.invalid-feedback').remove();
+			codeIdDuplicate = false;
+	    }
+		
+	});
+	
 	// 전체 폼 저장
 	function submitForm(e) {
 		e.preventDefault();
 		const formData = $(this).serializeArray();
 		console.log("폼데이터: " + formData); // 넘어오는거 확인
 		
+		// 코드타입 중복체크 확인
 		if(!codeIdCheck) {
 			alert("코드타입 ID를 확인해주세요.");
 			$("#codetype_id").focus();
 			return;
 		};
+		
+		// 공통코드 중복체크 확
+		if(codeIdDuplicate) {
+			alert("공통코드 ID를 확인해주세요.");
+			$(".is-invalid").focus();
+			return;
+		}
+		
 		
 		// 일반 필드 input 값 저장
 		const mainCode = {};
@@ -193,11 +230,15 @@ document.addEventListener("DOMContentLoaded", function(){
 	
 	// 체크박스 전체 선택
 	function allCheck() {
+		const isChecked = checkAll.checked;
+		
 	    codeTable.rows().every(function (index) {
 	        const row = this.node(); // 현재 행
 	        console.log(row);
 	        const checkBox = row.querySelector(".custom-control-input");
-	        checkBox.checked = checkAll.checked;
+			if(checkBox) {
+				checkBox.checked = isChecked;	
+			}
 	    });
 	}
 	

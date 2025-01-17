@@ -72,7 +72,10 @@
                                             <input class="form-control" id="description" name="DESCRIPTION" type="text" placeholder="설명 입력" required>
                                         </div>
                                         <hr class="mt-4 pt-2">
-                                        <h6 class="m-0 font-weight-bold text-primary">공통코드</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">
+                                        	공통코드
+                                        	<span class="result" id="duplicatedCodeIdResult"></span>
+                                        </h6>
                                         <div class="d-flex justify-right">
 	                                        <button class="btn btn-primary ml-auto mb-2" type="button" id="btnAddRow"><i class="fa-solid fa-plus"></i> 행 추가</button>
 	                                        <button class="btn btn-danger ml-2 mb-2" type="button" id="btnDeleteRow"><i class="fa-solid fa-minus"></i> 선택 삭제</button>

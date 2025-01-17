@@ -25,10 +25,10 @@ public class MainController {
 	
 	@GetMapping("/")
 	public String main(Model model, HttpSession session) {
-		String sId = (String)session.getAttribute("sId");
-		
-		List<Map<String, Object>> recommendedItem = productService.getRecommendedItem();
-		model.addAttribute("recommeded", recommendedItem);
+//		String sId = (String)session.getAttribute("sId");
+//		
+//		List<Map<String, Object>> recommendedItem = productService.getRecommendedItem();
+//		model.addAttribute("recommeded", recommendedItem);
 		return "index";
 	}
 	

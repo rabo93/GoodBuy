@@ -44,7 +44,13 @@ $(function(){
 		}).done(function(){
 			$("#removeWish").show();
 			$("#addWish").hide();
-			location.reload();
+			$(function(){
+				if (confirm("찜 목록에 등록되었습니다!\n찜 목록으로 이동하시겠습니까?")) {
+					location.href="MyWish";				
+				} else {
+					location.reload();
+				}
+			})
 		}).fail(function() {
 			alert("찜 등록실패!\n나중에 다시 시도해주세요.");
 			location.reload();

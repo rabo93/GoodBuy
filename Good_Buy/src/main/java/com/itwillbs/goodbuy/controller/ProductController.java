@@ -89,6 +89,7 @@ public class ProductController {
 	public String productRegistSubmit(ProductVO product, HttpSession session, Model model) {
 		int newProductId = productService.newProductId();
 		product.setProduct_id(newProductId);
+		
 		String sId = (String) session.getAttribute("sId");
 		
 		String realPath = session.getServletContext().getRealPath(uploadPath);
@@ -195,7 +196,7 @@ public class ProductController {
 	@GetMapping("ProductShop")
 	public String productShop(@RequestParam String MEM_NICK, Model model, HttpSession session) {
 		Map<String, Object> searchSeller = productService.searchSellerShop(MEM_NICK);
-		List<ProductVO> searchSellerProduct = (List<ProductVO>) productService.getProductListLimit(searchSeller.get("MEM_ID").toString());
+		List<Map<String, Object>> searchSellerProduct = productService.searchSellerProduct(searchSeller.get("MEM_ID").toString());
 		List<Map<String, Object>> searchSellerReview = productService.searchSellerReview(searchSeller.get("MEM_ID").toString());
 		Map<String, Object> searchSellerScore = productService.searchSellerScore(searchSeller.get("MEM_ID").toString());
 		
@@ -285,6 +286,7 @@ public class ProductController {
 	@ResponseBody
 	@GetMapping("ItemRemove")
 	public String itemRemove(@RequestParam("PRODUCT_ID")int product_ID, HttpSession session) {
+		
 		ProductVO getProductPic = productService.getProductPic(product_ID);
     	String realPath = session.getServletContext().getRealPath(uploadPath) + "/" + getProductPic.getMem_id() + "/" + product_ID;
     	File directory = new File(realPath);

@@ -87,6 +87,9 @@ public class ProductService {
 	public List<Map<String, Object>> searchSellerProduct(String mem_id, int product_id) {
 		return mapper.searchSellerProduct(mem_id, product_id);
 	}
+	public List<Map<String, Object>> searchSellerProduct(String mem_id) {
+		return mapper.searchSellerProduct(mem_id);
+	}
 	
 	// 상세페이지 같은 상품 카테고리 목록
 	public List<Map<String, Object>> searchSameCategoryProduct(String product_category, int product_id) {
@@ -157,5 +160,6 @@ public class ProductService {
 	public List<Map<String, Object>> getRecommendedItem(int startRow, int listLimit) {
 		return mapper.getRecommendedItem(startRow, listLimit);
 	}
+
 
 }

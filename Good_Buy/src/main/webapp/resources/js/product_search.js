@@ -29,8 +29,10 @@ function addAdr() {
 
 function addAdrEnter(e) {
     if (e.keyCode == 13) {
+	
         const region = url.searchParams.get('REGION');
         const regionValue = $("input[name='regionSearch']").val();
+        
         switch (true) {
             case regionValue == "":
                 url.searchParams.delete('REGION');
@@ -83,6 +85,7 @@ $(document).ready(function() {
 	
 	
 	if (url.searchParams.get('PRICE') != undefined) {
+		
 		let splitPrice = url.searchParams.get('PRICE').split('_');
 		$("input[name='ip-num1']").val(Number(splitPrice[0]));
 		$("input[name='ip-num2']").val(Number(splitPrice[1]));

@@ -56,6 +56,7 @@
 		FROM PRODUCT pro 
 		JOIN MEMBER mem
 		ON pro.MEM_ID = mem.MEM_ID
+		WHERE pro.PRODUCT_STATUS = 0
 		ORDER BY PRODUCT_REG_DATE DESC
 		<if test="startRow != null || listLimit != null">
 			LIMIT #{startRow}
@@ -142,7 +143,7 @@
 		</if>
 		<if test="search_keyword != null">
 			AND
-				(mem.MEM_NICK LIKE CONCAT('%', #{search_keyword}, '%')
+				(mem.MEM_NICK LIKE #{search_keyword}
 				OR pro.MEM_ID LIKE CONCAT('%', #{search_keyword}, '%')
 				OR pro.PRODUCT_TITLE LIKE CONCAT('%', #{search_keyword}, '%')
 				OR pro.PRODUCT_INTRO LIKE CONCAT('%', #{search_keyword}, '%')
@@ -211,7 +212,7 @@
 		JOIN MEMBER mem
 		ON pro.MEM_ID = mem.MEM_ID
 		WHERE pro.MEM_ID = #{mem_id}
-		<if test="product_id != 0">
+		<if test="product_id != null || product_id != 0">
 			AND pro.PRODUCT_ID NOT IN (#{product_id})
 		</if>
 		ORDER BY pro.PRODUCT_REG_DATE DESC

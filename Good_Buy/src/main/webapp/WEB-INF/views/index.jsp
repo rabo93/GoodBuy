@@ -90,59 +90,59 @@
 				</script>
 			</section>
 			<!-- section02. 실시간 인기 클래스 -->
-			<section id="sec02" class="sec">
-				<div class="sec-inner">
-					<h1 class="sec-ttl">
-						굿바이 추천 상품
-						<button class="more" type="button" onclick="location.href='ProductList'"><i class="fa-solid fa-chevron-right"></i></button>
-					</h1>
-					<div class="product-list">
-						<ul class="product-wrap" id="product-wrap">
-							<!-- 8개 -->
-							<c:forEach items="${recommeded}" var="list" step="1" end="7">
-								<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.PRODUCT_ID}'">
-									<div class="product-thumb">
-										<c:choose>
-											<c:when test="${list.PRODUCT_STATUS == 1}">
-												<div class="status" id="status">거래중</div>
-											</c:when>
-											<c:when test="${list.PRODUCT_STATUS == 2}">
-												<div class="status" id="status">예약중</div>
-											</c:when>
-										</c:choose>
-										<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" />
-									</div>
-									<div class="card-info">
-										<div class="category">
-											<span>${list.PRODUCT_CATEGORY}</span>
-											<c:if test="${list.PRODUCT_TRADE_ADR1 != ''}">
-												<span class="type">직거래</span>
-											</c:if>
-										</div>
-										<div class="ttl">${list.PRODUCT_TITLE}</div>
-										<div class="price">
-										 	<fmt:formatNumber var="price" value="${list.PRODUCT_PRICE}" type="number"/>
-										 	${price} 원
-										 </div>
-										<div class="card-row">
-											<c:if test="${list.PRODUCT_TRADE_ADR1 != ''}">
-												<span class="add">${list.PRODUCT_TRADE_ADR1}</span>
-											</c:if>
-											<span class="name">${list.MEM_NICK}</span>
-											<span class="time">
-												<script type="text/javascript">
-													moment.locale('ko')
-													$(".time").text(moment(`${list.PRODUCT_REG_DATE}`, "YYYYMMDDhhmmss").fromNow())
-												</script>
-											</span>
-										</div>
-									</div>
-								</li>	
-							</c:forEach>
-						</ul>
-					</div>
-				</div>
-			</section>
+<!-- 			<section id="sec02" class="sec"> -->
+<!-- 				<div class="sec-inner"> -->
+<!-- 					<h1 class="sec-ttl"> -->
+<!-- 						굿바이 추천 상품 -->
+<!-- 						<button class="more" type="button" onclick="location.href='ProductList'"><i class="fa-solid fa-chevron-right"></i></button> -->
+<!-- 					</h1> -->
+<!-- 					<div class="product-list"> -->
+<!-- 						<ul class="product-wrap" id="product-wrap"> -->
+<!-- 							8개 -->
+<%-- 							<c:forEach items="${recommeded}" var="list" step="1" end="7"> --%>
+<%-- 								<li class="product-card" onclick="location.href='ProductDetail?PRODUCT_ID=${list.PRODUCT_ID}'"> --%>
+<!-- 									<div class="product-thumb"> -->
+<%-- 										<c:choose> --%>
+<%-- 											<c:when test="${list.PRODUCT_STATUS == 1}"> --%>
+<!-- 												<div class="status" id="status">거래중</div> -->
+<%-- 											</c:when> --%>
+<%-- 											<c:when test="${list.PRODUCT_STATUS == 2}"> --%>
+<!-- 												<div class="status" id="status">예약중</div> -->
+<%-- 											</c:when> --%>
+<%-- 										</c:choose> --%>
+<%-- 										<img src="${pageContext.request.contextPath}/resources/upload/${list.PRODUCT_PIC1}" class="card-thumb" alt="thumbnail" /> --%>
+<!-- 									</div> -->
+<!-- 									<div class="card-info"> -->
+<!-- 										<div class="category"> -->
+<%-- 											<span>${list.PRODUCT_CATEGORY}</span> --%>
+<%-- 											<c:if test="${list.PRODUCT_TRADE_ADR1 != ''}"> --%>
+<!-- 												<span class="type">직거래</span> -->
+<%-- 											</c:if> --%>
+<!-- 										</div> -->
+<%-- 										<div class="ttl">${list.PRODUCT_TITLE}</div> --%>
+<!-- 										<div class="price"> -->
+<%-- 										 	<fmt:formatNumber var="price" value="${list.PRODUCT_PRICE}" type="number"/> --%>
+<%-- 										 	${price} 원 --%>
+<!-- 										 </div> -->
+<!-- 										<div class="card-row"> -->
+<%-- 											<c:if test="${list.PRODUCT_TRADE_ADR1 != ''}"> --%>
+<%-- 												<span class="add">${list.PRODUCT_TRADE_ADR1}</span> --%>
+<%-- 											</c:if> --%>
+<%-- 											<span class="name">${list.MEM_NICK}</span> --%>
+<!-- 											<span class="time"> -->
+<!-- 												<script type="text/javascript"> -->
+<!-- // 													moment.locale('ko') -->
+<%-- // 													$(".time").text(moment(`${list.PRODUCT_REG_DATE}`, "YYYYMMDDhhmmss").fromNow()) --%>
+<!-- 												</script> -->
+<!-- 											</span> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 								</li>	 -->
+<%-- 							</c:forEach> --%>
+<!-- 						</ul> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</section> -->
 			<section id="sec03" class="sec">
 				<div class="sec-inner">
 					<h1 class="sec-ttl">

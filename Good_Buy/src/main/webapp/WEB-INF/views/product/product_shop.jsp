@@ -73,10 +73,10 @@
 									<div class="product-thumb">
 										<c:choose>
 											<c:when test="${list.product_status == 1}">
-												<div class="status" id="status">거래중</div>
+												<div class="status" id="status">거래중 <i class="fa-solid fa-cart-shopping"></i></div>
 											</c:when>
 											<c:when test="${list.product_status == 2}">
-												<div class="status" id="status">예약중</div>
+												<div class="status" id="status">예약중<i class="fa-regular fa-paper-plane"></i></div>
 											</c:when>
 										</c:choose>
 										<img src="${pageContext.request.contextPath}/resources/upload/${list.product_pic1}" class="card-thumb" alt="thumbnail" />

@@ -155,11 +155,9 @@
 									                        <div class="card-info">
 									                            <div class="category">
 									                                <span>${product.product_category}</span>
-									                                <span class="type">
-									                                	<c:if test="${product.product_trade_adr1 != ''}">
-																			<span class="type">직거래</span>
-																		</c:if>
-																	</span>
+								                                	<c:if test="${product.product_trade_adr1 != ''}">
+																		<span class="type">직거래</span>
+																	</c:if>
 									                            </div>
 									                             <div class="ttl">
 									                                <c:choose>
@@ -191,7 +189,7 @@
 			<%-- 														<c:when test="${product.product_status == 1}"> --%>
 			<!-- 															<div class="status" id="status">거래중 <i class="fa-solid fa-cart-shopping"></i></div> -->
 			<%-- 														</c:when> --%>
-			<%-- 														<c:when test="${product.product_status == 2}"> --%>
+			<%-- 														<c:when tㄹest="${product.product_status == 2}"> --%>
 			<!-- 															<div class="status" id="status">예약중 <i class="fa-solid fa-paper-plane"></i></div> -->
 			<%-- 														</c:when> --%>
 			<%-- 													</c:choose> --%>

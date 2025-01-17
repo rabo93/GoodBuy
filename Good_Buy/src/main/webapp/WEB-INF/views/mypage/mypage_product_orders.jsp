@@ -70,11 +70,9 @@
                                                 	<div class="card-info">
                                                     <div class="category">
                                                         <span>${product.PRODUCT_CATEGORY}</span>
-                                                        <span class="type">
-                                                        	<c:if test="${product.PRODUCT_TRADE_ADR1 != ''}">
-																<span class="type">직거래</span>
-															</c:if>
-                                                        </span>
+                                                       	<c:if test="${product.PRODUCT_TRADE_ADR1 != ''}">
+															<span class="type">직거래</span>
+														</c:if>
                                                     </div>
                                                     <div class="ttl">
                                                         <c:if test="${product.PRODUCT_STATUS == 1}">

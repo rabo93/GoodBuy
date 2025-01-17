@@ -84,11 +84,9 @@
 						                    <div class="card-info">
 						                        <div class="category">
 						                            <span>${product.product_category}</span>
-						                            <span class="type">
-						                            	<c:if test="${product.product_trade_adr1 != ''}">
-															<span class="type">직거래</span>
-														</c:if>
-						                            </span>
+					                            	<c:if test="${product.product_trade_adr1 != ''}">
+														<span class="type">직거래</span>
+													</c:if>
 						                        </div>
 						                        <div class="ttl">
 						                            <c:choose>

@@ -93,10 +93,12 @@
 												<button type="button" class="fav-on" onclick="confirmDeleteWishItem(this)"><i class="fa-solid fa-heart"></i></button>
 											</form>
 											<div class="card-info">
-												<div class="category">
-													<span>${wish.product_category}</span>
-													<span class="type">직거래</span>
-												</div>
+												 <div class="category">
+						                            <span>${wish.product_category}</span>
+					                            	<c:if test="${wish.product_trade_adr1 != ''}">
+														<span class="type">직거래</span>
+													</c:if>
+						                        </div>
 												<div class="ttl">${wish.product_title}</div>
 												<div class="price">
 													<fmt:formatNumber value="${wish.product_price}" type="number" pattern="#,###" />원

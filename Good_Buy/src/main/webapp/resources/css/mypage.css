@@ -615,14 +615,14 @@ textarea {
 
 .tooltip {
   visibility: hidden; /* 기본적으로 숨김 */
-  background-color: rgba(0, 0, 0, 0.75); /* 툴팁 배경 */
+  background-color: #05b94d; /* 툴팁 배경 */
   color: #fff; /* 툴팁 텍스트 색상 */
   text-align: center;
-  padding: 5px 10px;
-  border-radius: 4px;
+  padding: 15px;
+  border-radius: 10px;
   position: absolute;
-  top: -30px; /* 아이콘 위에 표시 */
-  left: 50%;
+  top: -51px; /* 아이콘 위에 표시 */
+  left: 357%;
   transform: translateX(-50%);
   white-space: nowrap;
   font-size: 0.9rem;

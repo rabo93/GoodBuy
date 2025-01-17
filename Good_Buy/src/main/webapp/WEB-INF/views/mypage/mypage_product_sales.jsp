@@ -55,7 +55,6 @@
 					<a href="MyReview">나의 후기</a>
 					<a href="MyReviewHistory">내가 쓴 후기</a>
 					<a href="MySupport">1:1문의내역</a>
-					<a href="">나의 광고</a>
 				</aside>
 				<div class="my-container">
 					<div class="contents-ttl"><h3>판매내역 <small>(총 <span>${salesCount}</span>건)</small></h3>

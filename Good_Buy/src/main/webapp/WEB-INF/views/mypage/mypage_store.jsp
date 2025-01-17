@@ -171,8 +171,11 @@
 									                            <div class="price">
 									                                <fmt:formatNumber type="number" value="${product.product_price}" pattern="#,###"/>원
 									                            </div>
-									                            <div class="card-row">
-									                                <span class="add">${product.product_trade_adr1}</span>
+									                         <div class="card-row">
+									                         	<c:choose>
+									                         		<c:when test="${empty product.product_trade_adr1}"><span class="is-add">택배거래</span></c:when>
+									                         		<c:otherwise><span class="name">${product.mem_nick}</span></c:otherwise>
+									                         	</c:choose>
 									                                <span class="name">${product.mem_nick}</span>
 									                                <span class="time">
 									                                	<script type="text/javascript">
@@ -219,8 +222,8 @@
 													        <div class="user-info">
 													        	<div class="user-thumb">
 														            <c:choose>
-															            <c:when test="${not empty sessionScope.sProfile}">
-															            	<img src="${sessionScope.sProfile}?${System.currentTimeMillis()}" id="profile_preview">
+															            <c:when test="${not empty review.product_pic1}">
+															            	<img src="${pageContext.request.contextPath}/resources/upload/${review.product_pic1}" id="profile_preview">
 								<%-- 							                <img src="${member.mem_profile}" id="profile_preview"><br> --%>
 															            </c:when>
 															            <c:otherwise>

@@ -104,7 +104,10 @@
 													<fmt:formatNumber value="${wish.product_price}" type="number" pattern="#,###" />원
 												</div>
 												<div class="card-row">
-													<span class="add">${wish.product_trade_adr1}</span>
+													<c:choose>
+						                         		<c:when test="${empty product.product_trade_adr1}"><span class="is-add">택배거래</span></c:when>
+						                         		<c:otherwise><span class="name">${product.mem_nick}</span></c:otherwise>
+						                         	</c:choose>
 													<span class="name">${wish.seller_nickname}</span>
 												</div>
 											</div>

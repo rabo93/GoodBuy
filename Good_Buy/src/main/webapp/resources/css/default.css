@@ -43,7 +43,7 @@ header {box-shadow: 0 2px 14px rgb(226 226 226);}
 .product-card .card-info .category span.type {background:var(--secondary);}
 .product-card .card-info .ttl {height: 48px;font-size: 17px;font-weight: 500;margin: 10px 0 0;line-height: 1.4;text-overflow: ellipsis;overflow: hidden;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;color: #111618;}
 .product-card .card-info .price {margin: 10px 0;font-size: 20px;font-weight: 600;color: var(--dark);}
-.product-card .card-info .card-row {display:flex;align-items:center;gap: 20px;}
+.product-card .card-info .card-row {display:flex;gap: 20px;align-items: flex-start;}
 .product-card .card-info .card-row span {font-size: 14px;color: #4a4c4d;position:relative;font-weight: 600;}
 .product-card .card-info .card-row span:after {display:block;content:'';position:absolute;width:1px;height: 14px;background: var(--dark);right: -10px;top: 1px;opacity: 0.2;}
 .product-card .card-info .card-row span:last-child:after {display:none;}

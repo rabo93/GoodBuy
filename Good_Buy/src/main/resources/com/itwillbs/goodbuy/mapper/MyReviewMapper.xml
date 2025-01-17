@@ -22,7 +22,7 @@
 	</select>
 	
 <!-- 	리뷰작성 -->
-	<insert id="insertReview" parameterType="map">
+	<insert id="insertReview">
 		<selectKey resultType="int" order="BEFORE" keyProperty="review_id">
 <!-- 			SELECT MAX(REVIEW_ID) + 1 -->
 			SELECT COALESCE(MAX(REVIEW_ID), 0) + 1

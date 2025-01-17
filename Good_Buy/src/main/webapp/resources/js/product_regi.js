@@ -42,19 +42,20 @@ $(function(){
 	}
 	
 	// 카테고리 불러오기
-	$.ajax({
-		url : "getCategory",
-		type : "GET",
-	}).done(function(data) {
-		for(let item of data) {
-			$("#product_category").append(
-				`<option>${item.CODE_NAME}</option>`
-			)
-		}
-	}).fail(function() {
-		alert("카테고리 불러오기 실패\n나중에 다시 시도해주세요.");
-	})
-	
+	if (window.location.href.includes("ProductRegist")) {
+		$.ajax({
+			url : "getCategory",
+			type : "GET",
+		}).done(function(data) {
+			for(let item of data) {
+				$("#product_category").append(
+					`<option>${item.CODE_NAME}</option>`
+				)
+			}
+		}).fail(function() {
+			alert("카테고리 불러오기 실패\n나중에 다시 시도해주세요.");
+		})
+	}
 	
 	// 직거래 주소 입력박스
 	$("#trade-enable, #trade-disable").change(function() {
@@ -62,6 +63,7 @@ $(function(){
 	        $("#item-trade-adr-box").show();
 	    } else {
 	        $("#item-trade-adr-box").hide();
+	        $("#item-trade-adr-sub").val("");
 	    }
 	});
 	
@@ -75,6 +77,7 @@ $(function(){
 	    }
 	});
 	
+	// 유효성 검사
 	$("#productRegist").on("submit", function() {
 		if ($("#item-thumb-upload-btn1").val() == "") {
 			alert("썸네일을 등록해주세요!");
@@ -88,14 +91,20 @@ $(function(){
 			alert("내용을 입력해주세요!");
 			$("#item-regi-description-text").focus();
 			return false;
+		}  else if ($("#trade-enable").is(":checked") && $("#item-trade-adr-sub").val() == "") {
+			alert("주소를 입력해주세요!");
+			$("#item-trade-adr-sub").focus();
+			return false;
+		} else if ($("#shipping-fee-enable").is(":checked") && $("#shipping-fee-price").val() == "") {
+			alert("배송비를 입력해주세요!");
+			$("#shipping-fee-price").focus();
+			return false;
 		}  else if ($("#product_price").val() == "") {
 			alert("가격을 입력해주세요!");
 			$("#product_price").focus();
 			return false;
 		}
-		
 	})
-	
 })
 
 

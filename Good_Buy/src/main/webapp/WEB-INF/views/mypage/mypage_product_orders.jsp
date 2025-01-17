@@ -75,7 +75,7 @@
 														</c:if>
                                                     </div>
                                                     <div class="ttl">
-                                                        <c:if test="${product.PRODUCT_STATUS == 1}">
+                                                        <c:if test="${product.PRODUCT_STATUS == 2}">
                                                             [예약중]
                                                         </c:if>
                                                         <c:if test="${product.PRODUCT_STATUS == 3}">
@@ -87,7 +87,10 @@
                                                         <fmt:formatNumber value="${product.PRODUCT_PRICE}" type="number" pattern="#,###" />원
                                                     </div>
                                                     <div class="card-row">
-                                                        <span class="add">${product.PRODUCT_TRADE_ADR1}</span>
+                                                       <c:choose>
+							                         		<c:when test="${empty product.product_trade_adr1}"><span class="is-add">택배거래</span></c:when>
+							                         		<c:otherwise><span class="name">${product.mem_nick}</span></c:otherwise>
+							                         	</c:choose>
                                                         <span class="name">${product.MEM_NICK}</span>
                                                     </div>
                                                     	<input type="hidden" name="product_id" id="hiddenProductId">

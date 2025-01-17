@@ -273,6 +273,11 @@
 .item-detail .item-detail-pic .slick-arrow.visu-next {right: 0;}
 .item-detail .item-detail-pic .slick-arrow.visu-prev:hover, .item-detail .item-detail-pic .slick-arrow.visu-next:hover {color: #007730;}
 .item-detail .item-detail-title {font-weight: 900;font-size: 30px;}
+.item-detail .item-detail-content-text .reporting-item {
+    color: red;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
 .item-detail .item-detail-content-text {
     margin-left: auto;
     display: flex;
@@ -320,6 +325,10 @@
     font-weight: 900;
 }
 
+.item-detail .trade-status {
+    margin: 0 10px 0px auto;
+    font-size: 20px;
+}
 .item-detail .item-detail-button-group {
     display: flex;
     margin-top: 10px;

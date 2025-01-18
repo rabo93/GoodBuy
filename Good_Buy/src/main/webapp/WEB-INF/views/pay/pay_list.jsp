@@ -112,8 +112,8 @@
 											            			name="tran_amt"  placeholder="금액을 입력해 주세요" id="total-amount">
 											            	<p id="warningMessage" style="color: red; display: none;">금액이 초과되었습니다!</p>
 										        		</div>
-										        		
-											            <div class="balance-info">굿페이 잔액: <strong id="fefund-balance"><fmt:formatNumber pattern="#,###">${pay_amount}</fmt:formatNumber></strong> 원</div>
+										        		<input type="hidden" id="pay_amount" value="${pay_amount}">
+											            <div class="balance-info">굿페이 잔액: <strong><fmt:formatNumber pattern="#,###">${pay_amount}</fmt:formatNumber></strong> 원</div>
 											            <div class="amount-btns">
 												            <input type="button" class="amount-btn" onclick="addAmount(10000, 're')" value="+ 1만원">
 												            <input type="button" class="amount-btn" onclick="addAmount(50000, 're')" value="+ 5만원">

@@ -105,7 +105,8 @@ function searchDate() {
 // --------- 환불 모달에서 잔액보다 크면 환불불가 --------
 $(document).ready(function(){
 //.balance-info에 있는 텍스트 값을 읽어오면 되는데??
-	let maxAmount = $("#fefund-balance").text();
+//	let maxAmount = $("#fefund-balance").text(); // 이거 안된다 왜녀면 ,를 넣어서 string
+	let maxAmount = $("#pay_amount").val();
 	
 	// 잔액보다 높으면 경고메시지 띄움.
 	const amountInput = document.getElementById('total-amount');
@@ -118,7 +119,6 @@ $(document).ready(function(){
 		console.log("입력액 : " + inputValue);
 	
 	    if (inputValue > maxAmount) {
-			alert("잔액보다 입력금액이 더 큽니다.");
 	        warningMessage.style.display = 'block'; // 경고 메시지 표시
 	        amountInput.value = maxAmount; // 최대 금액으로 입력 제한
 	    } else {

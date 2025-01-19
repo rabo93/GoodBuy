@@ -50,6 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		        customize: function (xlsx) {
 					// 엑셀에 총합 추가
 					const sheet = xlsx.xl.worksheets['sheet1.xml'];
+					
                     const totalMember = $('#periodList').DataTable().column(1).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
                     const totalJoin = $('#periodList').DataTable().column(2).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
                     const totalProduct = $('#periodList').DataTable().column(3).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
@@ -58,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     const rows = $('sheetData row', sheet);
                     const lastRow = rows.last(); // 마지막 행 찾기
-                    const totalRow = `
+                    const totalRow = ` 
                         <row r="${rows.length + 1}">
                             <c t="inlineStr"><is><t>총합</t></is></c>
                             <c t="inlineStr"><is><t>${totalMember}</t></is></c>

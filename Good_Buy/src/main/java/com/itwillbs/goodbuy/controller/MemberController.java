@@ -69,7 +69,7 @@ public class MemberController {
 	// 로그인 폼 요청 시 공개키 전송하는 기능 추가
 	@GetMapping("MemberLogin")
 	public String memberLoginForm(HttpSession session, Model model) {
-		// RSA 알고리즘을 사용항 공개키/개인키 생성
+		// RSA 알고리즘을 사용한 공개키/개인키 생성
 		Map<String, String> rsaKey = RsaKeyGenerator.generateKey();
 //		System.out.println("공개키 : " + rsaKey.get("publicKey"));
 //		System.out.println("개인키 : " + rsaKey.get("privateKey"));
@@ -97,7 +97,7 @@ public class MemberController {
 	    //------------------------------------------------------------------
 		// [ 암호화 된 데이터 복호화 ] *2025/01/08 추가됨*
 		Map<String, String> rsaKey = (Map<String, String>) session.getAttribute("rsaKey");
-		System.out.println("rsaKey: " + rsaKey);
+//		System.out.println("rsaKey: " + rsaKey);
 		
 		// RsaKeyGenerator.decrypt() 메서드 호출하여 복호화 후 결과값 리턴받기
 		// => 파라미터 : 개인키, 암호문   리턴타입 : String

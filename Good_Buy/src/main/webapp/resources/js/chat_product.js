@@ -98,6 +98,10 @@ function toggleSlideChat() {
 		} else {
 			console.log(result.room_id);
 //			window.room_id = result.room_id;
+			if($("#room_id").length === 0) {
+				$(".chat-container .chat-area").find(".chat-footer").append(`<input type="hidden" id="room_id" value="${result.room_id}">`);
+			}
+			
 			$.ajax({
 				url : "ChatListAjax",
 				type : "POST",
@@ -279,7 +283,7 @@ function sendFile() {
 	let file = $("#chatFile")[0].files[0];
 	let formData = new FormData();
 	formData.append("file", file);
-	
+	room_id = $("#room_id").val();
 	$.ajax({
 		type : "POST",
 		url : "ChatFileUpload",
@@ -288,16 +292,14 @@ function sendFile() {
 		processData : false,
 		contentType : false
 	}).done(function(response) {
-		console.log("업로드 성공 후 AJAX 응답");
-		console.log(response);
-		
 		if(response.result == "fail") {
 			alert(response.message);
 			return;
 		}
+		room_id = $("#room_id").val();
 		
 		if(response.fileName != "" && response.thumbnailFileName != "") {
-			sendMessage(TYPE_FILE_UPLOAD_COMPLETE, product_id, sId, receiver_id, window.room_id , response.fileName + ":" + response.thumbnailFileName, 0);
+			sendMessage(TYPE_FILE_UPLOAD_COMPLETE, product_id, sId, receiver_id, room_id , response.fileName + ":" + response.thumbnailFileName, 0);
 		}
 		
 	});

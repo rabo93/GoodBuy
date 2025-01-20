@@ -223,9 +223,7 @@
 													        	<div class="user-thumb">
 														            <c:choose>
 															            <c:when test="${not empty review.mem_profile}">
-<%-- 															            	<img src="${pageContext.request.contextPath}/resources/upload/${review.mem_profile}" id="profile_preview"> --%>
 															            		<img src="${pageContext.request.contextPath}${review.mem_profile}" id="profile_preview">
-								<%-- 							                <img src="${member.mem_profile}" id="profile_preview"><br> --%>
 															            </c:when>
 															            <c:otherwise>
 															                <!-- member.memProfile이 비어 있으면 기본 이미지 출력 -->

@@ -486,24 +486,27 @@ public class MemberController {
 			// 일반 계정이면 탈퇴(3) 처리
 			memberService.removeMemInfo(id, 3);
 			
-			// 회원 탈퇴 성공 시 첨부파일 제거 작업
-			String realPath = getRealPath(session);
-			
-			// 끝에 "resources/upload"가 포함되어 있다면 지우기
-			if (realPath.endsWith("resources\\upload") || realPath.endsWith("resources/upload")) {
-				realPath = realPath.substring(0, realPath.lastIndexOf("resources\\upload"));
-			}
-			
-			//프로필 사진이 저장되어 있을 경우에만 삭제
-			if (member.getMem_profile() != null && !member.getMem_profile().isEmpty()) {
-				Path path = Paths.get(realPath, member.getMem_profile());
-				System.out.println("삭제하려는 파일 경로: " + path);
-				try {
-					Files.delete(path);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			//-------------------------------------------------------------------
+//			// 회원 탈퇴 성공 시 첨부파일 제거 작업
+//			String realPath = getRealPath(session);
+//			System.out.println("realPath1: "+ realPath);
+//			
+//			// 끝에 "resources/upload"가 포함되어 있다면 지우기
+//			if (realPath.endsWith("resources\\upload") || realPath.endsWith("resources/upload")) {
+//				realPath = realPath.substring(0, realPath.lastIndexOf("resources\\upload"));
+//			}
+//			System.out.println("realPath2: "+ realPath);
+//			//프로필 사진이 저장되어 있을 경우에만 삭제
+//			if (member.getMem_profile() != null && !member.getMem_profile().isEmpty()) {
+//				Path path = Paths.get(realPath, member.getMem_profile());
+//				System.out.println("삭제하려는 파일 경로: " + path);
+//				try {
+//					Files.delete(path);
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//			}
+			//-------------------------------------------------------------------
 		}
 		
 		// 세션 제거

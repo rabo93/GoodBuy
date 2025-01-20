@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function(){
 				data : "SUPPORT_CATEGORY", 
 				defaultContent: "이용문의", 
 				className : "dt-center", 
-				width: '80px',
+				width: '100px',
 				render : function(data, type, row) {
 					const categories = {
 						1: "이용문의",
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function(){
             { title: "문의 내용", data : "SUPPORT_CONTENT", defaultContent: "", orderable: false, width: '300px',},
             { title: "작성일시", data : "SUPPORT_DATE", defaultContent: "", width: '120px',},
             { 
-				title: "처리상태", data : "STATUS", defaultContent: "", width: '80px', className : "dt-center",
+				title: "처리상태", data : "STATUS", defaultContent: "", width: '90px', className : "dt-center",
 				render : function(data, type, row) {
 					if(!data) return "";
 					switch (data) {

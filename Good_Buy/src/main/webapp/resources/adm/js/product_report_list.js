@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function(){
 					if (!data) {
 						return "";
 					}
-                	return data.replace(/(.{16})/g, '$1<br>'); // 16자마다 줄바꿈
+                	return `<a href="AdmMemberDetailForm?mem_id=${data}" target="_blank" title="새 창 열기">${data.replace(/(.{16})/g, '$1<br>')}</a>`;
            		}
             },
             { title: "상품ID", data : "PRODUCT_ID", defaultContent: "", width: '100px',},

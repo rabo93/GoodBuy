@@ -96,7 +96,8 @@ $(document).ready(function() {
             error: function (xhr) {
             	// 서버 에러 메시지 처리
                 let errorMessage = xhr.responseText || "인증 실패! 다시 시도해주세요.";
-                alert(errorMessage);
+                console.log(errorMessage);
+//                alert(errorMessage);
                 $("#authCheckResult").text("인증 실패").css("color", "red");
             }
         });

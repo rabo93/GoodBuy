@@ -63,7 +63,7 @@ if ($("#product-wrap2")) {
 	
 	}).done(function(data) {
 		if(data.length != 0) {
-			moment.locale('ko')
+			moment.locale('ko');
 			for(let item of data) {
 				
 				let addr = "";

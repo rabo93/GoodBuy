@@ -122,14 +122,12 @@ document.addEventListener("DOMContentLoaded", function () {
         footerCallback: function (row, data, start, end, display) {
 			var api = this.api();
 			
-	        var totalMember = api
-	            .column(1, { page: 'current' })
-	            .data()
-	            .reduce(function (a, b) {
-	                return parseInt(a) + parseInt(b);
-	            }, 0);
-	            
-	            
+			// 회원수는 총합 계산이 아니라 마지막 행의 값을 출력
+			// 마지막 행의 데이터 가져오기
+			var lastRowData = data[data.length - 1] || {};
+	        var totalMember = lastRowData.memberTotal || 0;
+	        
+	        // 나머지 컬럼은 총합 합산 출력
 	        var totalJoin = api
 	            .column(2, { page: 'current' })
 	            .data()

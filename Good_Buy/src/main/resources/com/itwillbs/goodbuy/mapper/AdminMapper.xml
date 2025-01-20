@@ -1172,32 +1172,39 @@
     <!-- 기간별 통계 - 총 회원수 조회 -->
     <select id="selectTotalMember" resultType="map">
 <!--     < 이스케이프문자가 xml에서 적용되지 않아서 CDATA로 처리  -->
-	    <![CDATA[ 
-		    WITH
-		    -- 시작일자 이전 누적 회원 수 계산
-		    InitialCounts AS (
-		    	SELECT COUNT(*) AS initialMemberTotal
-		    	FROM MEMBER
-		    	WHERE MEM_STATUS = 1
-		    	AND MEM_REG_DATE < #{startDate}
-		    ),
-		    -- 기간 내 일자별 회원 가입 수 계산
-		    DailyCounts AS (
-		    	SELECT DATE(MEM_REG_DATE) AS date
-		    			,COUNT(*) AS dailyJoin
-		    	FROM MEMBER
-		    	WHERE MEM_STATUS = 1
-		    	AND MEM_REG_DATE BETWEEN #{startDate} AND #{endDate}
-		    	GROUP BY DATE(MEM_REG_DATE)
-		    )
-		    -- 누적 합계 계산
-		    SELECT d.date AS date
-		    		,(i.initialMemberTotal + SUM(d.dailyJoin) OVER (ORDER BY d.date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)) AS memberTotal
-		    FROM DailyCounts d CROSS JOIN InitialCounts i
-		    ORDER BY d.date ${orderDir}
+	    <![CDATA[
+	        -- 시작일자 이전 누적 회원 수 계산
+	        SELECT r.date AS date,
+	               (i.initialMemberTotal + 
+	                SUM(COALESCE(d.dailyJoin, 0)) 
+	                OVER (ORDER BY r.date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)) AS memberTotal
+	        FROM (
+	            SELECT COUNT(*) AS initialMemberTotal
+	            FROM MEMBER
+	            WHERE MEM_STATUS = 1
+	            AND MEM_REG_DATE < #{startDate}
+	        ) i
+	        CROSS JOIN (
+	            SELECT DATE(#{startDate}) + INTERVAL (a.a + (10 * b.a)) DAY AS date
+	            FROM (SELECT 0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 
+	                  UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) a
+	            CROSS JOIN (SELECT 0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 
+	                        UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) b
+	            WHERE DATE(#{startDate}) + INTERVAL (a.a + (10 * b.a)) DAY <= #{endDate}
+	        ) r
+	        LEFT JOIN (
+	            SELECT DATE(MEM_REG_DATE) AS date, COUNT(*) AS dailyJoin
+	            FROM MEMBER
+	            WHERE MEM_STATUS = 1
+	            AND MEM_REG_DATE BETWEEN #{startDate} AND #{endDate}
+	            GROUP BY DATE(MEM_REG_DATE)
+	        ) d
+	        ON r.date = d.date
+	        ORDER BY r.date ${orderDir};
 	    ]]>
     </select>
-    
+
+
     <!-- 기간별 통계 - 일자별 회원가입수 조회 -->
     <select id="selectTotalJoin" resultType="map">
     	SELECT DATE(MEM_REG_DATE) AS date

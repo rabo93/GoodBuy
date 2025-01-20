@@ -25,7 +25,8 @@
 	<insert id="insertReview">
 		<selectKey resultType="int" order="BEFORE" keyProperty="review_id">
 <!-- 			SELECT MAX(REVIEW_ID) + 1 -->
-			SELECT COALESCE(MAX(REVIEW_ID), 0) + 1
+<!-- 			SELECT COALESCE(MAX(REVIEW_ID), 0) + 1 -->
+			SELECT IFNULL(MAX(REVIEW_ID), 0) + 1
 			FROM MYREVIEW;
 		</selectKey>
 		INSERT INTO MYREVIEW (

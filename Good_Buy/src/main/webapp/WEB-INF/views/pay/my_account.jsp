@@ -107,7 +107,7 @@
 						            <button class="add-account-btn" onclick="linkAccount()">+ 연결계좌 추가하기</button>
 						        </div>
 						    </div><!-- account-container 끝  -->
-						        <div class="return-btn"><button onclick="location.href = document.referrer">돌아가기</button></div>
+						        <div class="return-btn"><button onclick="location.href = 'GoodPayAuth'">돌아가기</button></div>
 						</div>
 					</div>
 				</section><!-- my-wrap -->

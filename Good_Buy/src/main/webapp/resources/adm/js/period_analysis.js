@@ -27,6 +27,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			dataSrc: function (res) {
 //				console.log("res:" + JSON.stringify(res));
 				const data = res.periodList;
+				
+				// 날짜 정렬 추가
+    			data.sort((a, b) => new Date(a.date) - new Date(b.date));
+				
+				
 				return data;
 			},
 		},
@@ -45,6 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		        customize: function (xlsx) {
 					// 엑셀에 총합 추가
 					const sheet = xlsx.xl.worksheets['sheet1.xml'];
+					
                     const totalMember = $('#periodList').DataTable().column(1).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
                     const totalJoin = $('#periodList').DataTable().column(2).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
                     const totalProduct = $('#periodList').DataTable().column(3).data().reduce((a, b) => parseInt(a) + parseInt(b), 0);
@@ -53,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     const rows = $('sheetData row', sheet);
                     const lastRow = rows.last(); // 마지막 행 찾기
-                    const totalRow = `
+                    const totalRow = ` 
                         <row r="${rows.length + 1}">
                             <c t="inlineStr"><is><t>총합</t></is></c>
                             <c t="inlineStr"><is><t>${totalMember}</t></is></c>
@@ -80,6 +86,9 @@ document.addEventListener("DOMContentLoaded", function () {
             { title: "거래금액(원)", data: "payTotal", className : "dt-center", defaultContent: "0" },
         ],
         createdRow: function (row, data, dataIndex) {
+			// 날짜를 Date 객체로 변환하여 데이터 속성에 저장
+    		data.date = new Date(data.date);
+    		
             // 모든 숫자 데이터 셀에 대해 세자리 콤마 추가
             $('td', row).each(function () {
                 const cell = $(this);

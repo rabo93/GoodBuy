@@ -18,4 +18,5 @@ public class MyReviewVO {
 	    private String sellerNick;      // 판매자 NICK
 	    private String review_options ;      // 추가 리뷰 옵션
 	    private String mem_profile;
+	    private String product_pic1; 
 }

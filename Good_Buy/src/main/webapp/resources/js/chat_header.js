@@ -44,9 +44,9 @@ $(function() {
 
 function connect() {
 //	let ws_base_url = "ws://itwillbs.com";
-	let ws_base_url = "ws://localhost:8081";
+//	let ws_base_url = "ws://localhost:8081";
 //	let ws_base_url = "ws://localhost:8080";
-//	let ws_base_url = "ws://c3d2407t1p2.itwillbs.com/";
+	let ws_base_url = "ws://c3d2407t1p2.itwillbs.com/";
 
 //	let ws_base_url = window.location.href.replaceAll(window.location.href.split(':')[0], 'ws');	
 
@@ -128,7 +128,6 @@ function sendMessage(type, product_id, sender_id, receiver_id, room_id, message,
 
 //	전달받은 메세지타입과 메세지를 JSON 형식 문자열로 변환하는 함수
 function toJsonString(type, product_id, sender_id, receiver_id, room_id, message, idx) {
-	console.log("전송할 메세지 : " + type + ", " + product_id + ", " + sender_id + ", " + receiver_id + ", " + room_id + ", " + message + ", " + idx);
 	
 	//	전달받은 파라미터들을 하나의 객체로 묶기
 	let data = {

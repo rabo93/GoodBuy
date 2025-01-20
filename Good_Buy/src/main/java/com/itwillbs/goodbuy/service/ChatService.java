@@ -64,7 +64,11 @@ public class ChatService {
 		case "ACCEPT_RESERVATION": state = 2;proMapper.updateChatProductStatus(chatMessage.getProduct_id(), state);break;
 		case "CANCEL_RESERVATION": state = 0;proMapper.updateChatProductStatus(chatMessage.getProduct_id(), state);break;
 		case "RESPONSE_PAY": state = 1;proMapper.updateChatProductStatus(chatMessage.getProduct_id(), state);break;
-		case "LEAVE" : mapper.updateChatRoomState(chatMessage.getRoom_id(), chatMessage.getSender_id());
+		case "LEAVE" :
+			int leaveMessage = mapper.selectLastMessage(chatMessage.getRoom_id()).getIdx();
+			mapper.updateMessageRead(leaveMessage);
+			mapper.updateChatRoomState(chatMessage.getRoom_id(), chatMessage.getSender_id());
+			break;
 		}
 		
 	}
@@ -97,8 +101,8 @@ public class ChatService {
 	}
 
 	//	메세지 읽음 처리
-	public void updateMessageRead(ChatMessage chatMessage) {
-		mapper.updateMessageRead(chatMessage);
+	public void updateMessageRead(int idx) {
+		mapper.updateMessageRead(idx);
 	}
 
 	//	상품 사진 가져오기

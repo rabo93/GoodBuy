@@ -41,14 +41,14 @@
 				<!-- *********** 여기 안에 작업하세요. section.wrapper/div.page-inner 건들지말기 ******** -->
 	        	<div class="my-container">
 					<div class="contents-ttl">
-						<h3>굿페이 > 계좌송금</h3><br>
+						<h3 style="text-align: left; ">굿페이 > 계좌송금</h3><br>
 		        		<c:if test="${not empty getPayInfoProduct}">
 		        			<div class="input-section">
 		        				구매물품 : ${productSearch.product_title}<br>
 								<br>
-		        				이미 '${param.receiver_id}' 님에게 <fmt:formatNumber pattern="#,###">${price}</fmt:formatNumber>원을 송금하였습니다.
+		        				이미 '${productSearch.mem_nick }' 님에게 <fmt:formatNumber pattern="#,###">${price}</fmt:formatNumber>원을 송금하였습니다.
 		        				<br><br>
-		        				<div class="balance-info">굿페이 잔액: <strong>${pay_amount} 원</strong></div>
+		        				<div class="balance-info">굿페이 잔액: <strong><fmt:formatNumber pattern="#,###">${pay_amount}</fmt:formatNumber> 원</strong></div>
 		        				
 		        				<button class="transfer-btn-chat" onclick="closePayWindow('transfer')">송금내역으로 이동</button>
 		        			</div>
@@ -57,9 +57,9 @@
 		        			<div class="input-section">
 					        	구매물품 : ${productSearch.product_title}<br>
 								<br>
-								'${param.receiver_id}' 님에게 <fmt:formatNumber pattern="#,###">${price}</fmt:formatNumber>원을 송금합니다.
+								'${productSearch.mem_nick }' 님에게 <fmt:formatNumber pattern="#,###">${price}</fmt:formatNumber>원을 송금합니다.
 								<br><br>
-								<div class="balance-info">굿페이 잔액: <strong>${pay_amount} 원</strong></div>
+								<div class="balance-info">굿페이 잔액: <strong><fmt:formatNumber pattern="#,###">${pay_amount}</fmt:formatNumber> 원</strong></div>
 								<form action="PayTransfer" method="post">
 									<input type="hidden" name="receiver_id" id="receiver_id" value="${param.receiver_id}">
 									<input type="hidden" name="product_id" id="product_id" value="${param.product_id}">

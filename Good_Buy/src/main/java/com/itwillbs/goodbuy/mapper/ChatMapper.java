@@ -52,7 +52,7 @@ public interface ChatMapper {
 	void updateAllMessageRead(ChatMessage chatMessage);
 	
 	//	메세지 읽음 처리
-	void updateMessageRead(ChatMessage chatMessage);
+	void updateMessageRead(int idx);
 	
 	//	상품 번호 가져오기
 	int selectProductInfo(String room_id);

@@ -76,8 +76,9 @@
 									        <div class="user-info">
 									        	<div class="user-thumb">
 										            <c:choose>
-														<c:when test="${not empty sessionScope.sProfile}">
-															<img src="${sessionScope.sProfile}?${System.currentTimeMillis()}" id="profile_preview"><br>
+														 <c:when test="${not empty review.mem_profile}">
+<%-- 														<img src="${pageContext.request.contextPath}/resources/upload/${review.mem_profile}" id="profile_preview"> --%>
+										            		<img src="${pageContext.request.contextPath}${review.mem_profile}" id="profile_preview">
 														</c:when>
 														<c:otherwise>
 															<!-- member.memProfile이 비어 있으면 기본 이미지 출력 -->

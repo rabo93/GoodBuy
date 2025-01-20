@@ -61,6 +61,7 @@ public class PayController {
 		return "redirect:/GoodPayAuth"; 
 		
 	}
+	
 	@LoginCheck(memberRole = MemberRole.USER)
 	@GetMapping("GoodPayAuth")
 	public String goodPayAuth(HttpSession session, Model model) {
@@ -456,7 +457,6 @@ public class PayController {
 		
 		log.info(">>>>>>>> 송금 요청 정보 : " + map);
 
-		
 		// PayService - transfer() 메서드 호출하여 송금 작업 요청
 		Map<String, Object> transferResult = service.transfer(map);
 		
@@ -485,13 +485,9 @@ public class PayController {
 		// 송금결과 DB 저장
 		// 사용자번호를 입금이체 결과 객체에 추가
 		transferResult.put("user_seq_no", senderToken.getUser_seq_no());
-		// 송금이체 성공 시 결과를 DB (TRANSACTIONINFO) 에 저장
-		service.registTransferResult(transferResult);
-		
+
 		// DB에 거래내역 저장
-		service.registPayInfo(map); // 일단 업데이트 치러감.
-		
-		
+		service.registPayInfo(transferResult, map); // 일단 업데이트 치러감.
 		
 		session.setAttribute("room_id", map.get("room_id"));
 		session.setAttribute("transferResult", transferResult);
@@ -507,9 +503,12 @@ public class PayController {
 	public String payTransferResult(HttpSession session, Model model) {
 		// 세션에 저장된 이체결과객체 (transferResult) 꺼내기
 		Map<String, Object> transferResult =(Map<String, Object>)session.getAttribute("transferResult");
+		
+		System.out.println("room_id 잘 받아오니?" + session.getAttribute("room_id"));
 		// 세션에서 객체 꺼낸 후 세션내의 객체는 제거
-		session.removeAttribute("ransferResult"); // 마치 세션을 리퀘스트 처럼 사용함.
+		session.removeAttribute("transferResult"); // 마치 세션을 리퀘스트 처럼 사용함.
 		// 이체 결과 객체를 모델 객체에 저장
+		model.addAttribute("room_id", session.getAttribute("room_id"));
 		model.addAttribute("transferResult", transferResult);
 		return "pay/pay_transfer_result";
 	}

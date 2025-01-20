@@ -323,6 +323,12 @@
      	UPDATE MEMBER
      	   SET MEM_GRADE = #{mem_grade}
      	   	   , MEM_STATUS = #{mem_status}
+     	   	   <if test="mem_status != 3">
+		       , MEM_WITHDRAW_DATE = NULL
+		       </if>
+		       <if test="mem_status == 3">
+		       , MEM_WITHDRAW_DATE = NOW()
+		       </if>
      	 WHERE MEM_ID = #{mem_id}
      </update>
      

@@ -33,6 +33,7 @@
 			 , MESSAGE
 			 , ROOM_ID
 			 , SEND_TIME
+			 , IDX
 		  FROM CHATTING
 		 WHERE ROOM_ID = #{room_id}
 		 ORDER

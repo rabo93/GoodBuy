@@ -68,6 +68,9 @@ public interface ProductMapper {
 	// 상점페이지 조회
 	Map<String, Object> searchSellerShop(String mem_nick);
 	
+	// 상점페이지 판매자 상품목록
+	List<Map<String, Object>> getSellerProduct(String mem_id);
+	
 	// 셀러리뷰 목록 조회
 	List<Map<String, Object>> searchSellerReview(String mem_id);
 
@@ -103,5 +106,7 @@ public interface ProductMapper {
 	
 	// 메인화면 무한 스크롤
 	List<Map<String, Object>> getRecommendedItem(@Param("startRow")int startRow, @Param("listLimit")int listLimit);
+
+
 
 }

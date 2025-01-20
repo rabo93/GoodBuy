@@ -133,7 +133,7 @@
 									<input type="hidden" id = "mem_id" value="${member.mem_id}">
 									<div class="store-intro"> 
 										<textarea class="mem-regi-intro" rows="5" cols="50" name="mem_intro" id="mem_intro">${storeIntro.mem_intro}</textarea>
-										<h6 id="intro-check"> 0/100 </h6>
+										<h6 id="intro-check"> </h6>
 										<button id="submitBtn">저장</button>
 									</div>
 								</div>
@@ -224,6 +224,8 @@
 														            <c:choose>
 															            <c:when test="${not empty review.mem_profile}">
 															            	<img src="${pageContext.request.contextPath}/resources/upload/${review.mem_profile}" id="profile_preview">
+<%-- 															            	<img src="${pageContext.request.contextPath}/resources/upload/${review.mem_profile}" id="profile_preview"> --%>
+															            		<img src="${pageContext.request.contextPath}${review.mem_profile}" id="profile_preview">
 								<%-- 							                <img src="${member.mem_profile}" id="profile_preview"><br> --%>
 															            </c:when>
 															            <c:otherwise>

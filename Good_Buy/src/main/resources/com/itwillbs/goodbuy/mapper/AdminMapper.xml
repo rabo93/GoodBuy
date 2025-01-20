@@ -986,7 +986,6 @@
 			<choose>
 				<when test='param.orderColumn.equals("PRODUCT_CATEGORY")'>PRODUCT_TITLE</when>
 				<when test='param.orderColumn.equals("PRODUCT_PRICE")'>PRODUCT_PRICE</when>
-				<when test='param.orderColumn.equals("PRODUCT_PRICE")'>PRODUCT_PRICE</when>
 				<when test='param.orderColumn.equals("PRODUCT_REG_DATE")'>PRODUCT_REG_DATE</when>
 				<otherwise>PRODUCT_REG_DATE</otherwise>
 			</choose>

@@ -546,9 +546,9 @@ public class MemberController {
 	    }
 	    
 	    // 비밀번호가 없는 경우 비밀번호 등록 페이지로 이동
-	    if(dbMember.getMem_passwd() == null) {
-	    	return 3;
-	    }
+//	    if(dbMember.getMem_passwd() == null) {
+//	    	return 3;
+//	    }
 
 	    // 기존 회원 처리
 	    setSessionAttributes(session, dbMember); // 세션 설정

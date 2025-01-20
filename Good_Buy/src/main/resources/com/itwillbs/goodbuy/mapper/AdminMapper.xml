@@ -350,7 +350,7 @@
      <select id="selectProductReportFiltered" resultType="int">
      	SELECT COUNT(*)
 		  FROM PRODUCT_REPORTS R
-		  JOIN PRODUCT P
+		  LEFT JOIN PRODUCT P
 		    ON R.PRODUCT_ID = P.PRODUCT_ID
 		 WHERE 1 = 1
 		<if test="param.status != null and param.status != ''">
@@ -916,6 +916,79 @@
 				<when test='param.orderColumn.equals("pay_price")'>pi.PAY_DATE</when>
 				<when test='param.orderColumn.equals("pay_date")'>pi.PAY_DATE</when>
 				<otherwise>pi.PAY_DATE</otherwise>
+			</choose>
+			<if test='param.orderDir.equals("asc")'>ASC</if>
+			<if test='param.orderDir.equals("desc")'>DESC</if>
+		  LIMIT
+		 	   #{param.start}
+		 	   , #{param.length}
+     </select>
+     
+     
+     
+     <!-- 상품목록 -->
+     <!-- 상품 전체 컬럼 수 조회 - SELECT -->
+     <select id="selectProductListTotal" resultType="int">
+     	SELECT COUNT(*)
+		FROM PRODUCT
+     </select>
+     
+     <!-- 상품 필터링 후 컬럼 수 조회 - SELECT -->
+     <select id="selectProductListFiltered" resultType="int">
+     	SELECT COUNT(*)
+		FROM PRODUCT
+		WHERE 1=1
+		<if test="param.status != null and param.status != ''">
+        	AND PRODUCT_STATUS = #{param.status}
+		</if>
+		<if test="param.searchValue != null and !param.searchValue.equals('')">
+	        AND ( MEM_ID LIKE CONCAT('%', #{param.searchValue}, '%')
+	             OR PRODUCT_TITLE LIKE CONCAT('%', #{param.searchValue}, '%')
+	             OR PRODUCT_CATEGORY LIKE CONCAT('%', #{param.searchValue}, '%')
+		</if>
+		<if test="param.searchDate != null and !param.searchDate.equals('')">
+	        AND DATE(PRODUCT_REG_DATE) BETWEEN LEFT(#{param.searchValue}, 10) 
+	        AND RIGHT(#{param.searchValue}, 10)
+		</if>
+     </select>
+     
+     <!-- 필터링 된 상품 목록 조회 - SELECT -->
+     <select id="selectProductList" resultType="map">
+     	SELECT PRODUCT_ID
+			, PRODUCT_TITLE
+			, MEM_ID
+		    , (CASE 
+		        WHEN CHAR_LENGTH(PRODUCT_INTRO) > 30 THEN CONCAT(LEFT(PRODUCT_INTRO, 30), '...')
+		        ELSE PRODUCT_INTRO END) AS PRODUCT_INTRO
+			, FORMAT(PRODUCT_PRICE, 0) AS PRODUCT_PRICE
+			, FORMAT(PRODUCT_SHIPPING_FEE, 0) AS PRODUCT_SHIPPING_FEE
+			, (CASE WHEN PRODUCT_DISCOUNT_STATUS = 0 THEN "불가능"
+					WHEN PRODUCT_DISCOUNT_STATUS = 1 THEN "가능" END) AS PRODUCT_DISCOUNT_STATUS
+			, PRODUCT_CATEGORY
+			, DATE_FORMAT(PRODUCT_REG_DATE, '%Y-%m-%d %H:%i:%s') AS PRODUCT_REG_DATE
+			, PRODUCT_STATUS
+		FROM PRODUCT
+		WHERE 1 = 1
+		<if test="param.status != null and param.status != ''">
+        	AND PRODUCT_STATUS = #{param.status}
+		</if>
+		<if test="param.searchValue != null and !param.searchValue.equals('')">
+	        AND ( MEM_ID LIKE CONCAT('%', #{param.searchValue}, '%')
+	             OR PRODUCT_TITLE LIKE CONCAT('%', #{param.searchValue}, '%')
+	             OR PRODUCT_CATEGORY LIKE CONCAT('%', #{param.searchValue}, '%')
+	             OR PRODUCT_STATUS LIKE CONCAT('%', #{param.searchValue}, '%'))
+		</if>
+		<if test="param.searchDate != null and !param.searchDate.equals('')">
+	        AND DATE(PRODUCT_REG_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1)
+	        AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1)
+		</if>
+		ORDER BY 
+			<choose>
+				<when test='param.orderColumn.equals("PRODUCT_CATEGORY")'>PRODUCT_TITLE</when>
+				<when test='param.orderColumn.equals("PRODUCT_PRICE")'>PRODUCT_PRICE</when>
+				<when test='param.orderColumn.equals("PRODUCT_PRICE")'>PRODUCT_PRICE</when>
+				<when test='param.orderColumn.equals("PRODUCT_REG_DATE")'>PRODUCT_REG_DATE</when>
+				<otherwise>PRODUCT_REG_DATE</otherwise>
 			</choose>
 			<if test='param.orderDir.equals("asc")'>ASC</if>
 			<if test='param.orderDir.equals("desc")'>DESC</if>

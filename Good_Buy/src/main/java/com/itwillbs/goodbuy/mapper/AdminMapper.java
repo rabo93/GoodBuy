@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.NoticeVO;
 import com.itwillbs.goodbuy.vo.ProductOrderVO;
+import com.itwillbs.goodbuy.vo.ProductVO;
 
 @Mapper
 public interface AdminMapper {
@@ -175,6 +176,17 @@ public interface AdminMapper {
 	
 	// 필터링 된 상품 거래 목록 가져오기
 	List<ProductOrderVO> selectOrderList(@Param("param") Map<String, Object> param);
+	
+	// 상품 목록 전체 컬럼 수 조회
+	int selectProductListTotal();
+	
+	// 상품 검색 필터링 후 컬럼 수 조회
+	int selectProductListFiltered(@Param("param") Map<String, Object> param);
+	
+	// 필터링 된 상품 목록 조회
+	List<Map<String, Object>> selectProductList(@Param("param") Map<String, Object> convertParam);
+	
+	
 	// --------------------------------------------------------
 	// [ 로그 ]
 	// 로그 목록 전체 컬럼 수 조회
@@ -235,7 +247,6 @@ public interface AdminMapper {
 	List<Map<String, Object>> selectTotalOrder(@Param("orderDir") String orderDir, @Param("startDate") String startDate, @Param("endDate") String endDate);
 	// 기간별 거래금액 통계
 	List<Map<String, Object>> selectTotalPay(@Param("orderDir") String orderDir, @Param("startDate") String startDate, @Param("endDate") String endDate);
-
 
 
 }

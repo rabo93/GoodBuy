@@ -372,9 +372,11 @@
 	
 	<!-- 상품삭제 로직 -->
 	<delete id="productRemove">
-		DELETE
+		DELETE PRODUCT, PRODUCT_REPORTS
 		FROM PRODUCT
-		WHERE PRODUCT_ID = #{product_ID}
+		JOIN PRODUCT_REPORTS
+		ON PRODUCT.PRODUCT_ID = PRODUCT_REPORTS.PRODUCT_ID
+		WHERE PRODUCT.PRODUCT_ID = #{product_ID}
 	</delete>
 	
 	<!-- 구매상품 갯수 조회 -->

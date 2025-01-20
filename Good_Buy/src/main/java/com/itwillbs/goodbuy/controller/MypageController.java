@@ -210,7 +210,7 @@ public class MypageController {
 	public String myReview(HttpSession session,Model model) {
 		String id = getSessionUserId(session);
 		//나의 리뷰 조회
-		List<MyReviewVO> review = reviewService.getReview(id);
+		List<MyReviewVO> review = reviewService.getReviewAll(id);
 		model.addAttribute("review", review);
 		
 		//나의 리뷰 갯수조회

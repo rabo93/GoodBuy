@@ -66,6 +66,9 @@ public class MyReviewService {
 	public Map<String, String> goodStore(String id) {
 		return mapper.selectGoodStore(id);
 	}
+	public List<MyReviewVO> getReviewAll(String id) {
+		return mapper.selectReviewAll(id);
+	}
 	
 	
 	

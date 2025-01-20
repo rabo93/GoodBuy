@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itwillbs.goodbuy.mapper.MyReviewMapper">
-	<!-- 	리뷰 리스트 조회 -->
+	<!-- 	리뷰 리스트 조회(3개) -->
 	<select id="selectReview">
 		SELECT R.* , P.PRODUCT_TITLE , B.MEM_NICK AS BUYERNICK, S.MEM_NICK AS SELLERNICK,B.MEM_PROFILE
 		  FROM MYREVIEW R 
@@ -13,6 +13,16 @@
 		 WHERE P.MEM_ID = #{mem_id}
 		 ORDER BY R.REVIEW_DATE DESC
 		 LIMIT 3
+	</select>
+<!-- 	리뷰리스트 전체조회 -->
+	<select id="selectReviewAll">
+		SELECT R.* , P.PRODUCT_TITLE , B.MEM_NICK AS BUYERNICK, S.MEM_NICK AS SELLERNICK,B.MEM_PROFILE
+		  FROM MYREVIEW R 
+			JOIN PRODUCT P ON R.PRODUCT_ID = P.PRODUCT_ID
+			JOIN MEMBER S ON S.MEM_ID = P.MEM_ID  -- 판매자 닉네임
+			JOIN MEMBER B ON B.MEM_ID = R.MEM_ID  -- 구매자 닉네임
+		 WHERE P.MEM_ID = #{mem_id}
+		 ORDER BY R.REVIEW_DATE DESC
 	</select>
 	<!-- 	리뷰 갯수 -->
 	<select id="selectReviewCount" resultType="int">

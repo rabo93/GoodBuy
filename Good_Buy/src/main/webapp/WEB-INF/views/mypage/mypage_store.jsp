@@ -223,6 +223,7 @@
 													        	<div class="user-thumb">
 														            <c:choose>
 															            <c:when test="${not empty review.mem_profile}">
+															            	<img src="${pageContext.request.contextPath}/resources/upload/${review.mem_profile}" id="profile_preview">
 <%-- 															            	<img src="${pageContext.request.contextPath}/resources/upload/${review.mem_profile}" id="profile_preview"> --%>
 															            		<img src="${pageContext.request.contextPath}${review.mem_profile}" id="profile_preview">
 								<%-- 							                <img src="${member.mem_profile}" id="profile_preview"><br> --%>

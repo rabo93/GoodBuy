@@ -350,7 +350,7 @@
      <select id="selectProductReportFiltered" resultType="int">
      	SELECT COUNT(*)
 		  FROM PRODUCT_REPORTS R
-		  JOIN PRODUCT P
+		  LEFT JOIN PRODUCT P
 		    ON R.PRODUCT_ID = P.PRODUCT_ID
 		 WHERE 1 = 1
 		<if test="param.status != null and param.status != ''">
@@ -899,11 +899,13 @@
         	AND pi.PAY_STATUS = #{param.status}
 		</if>
 		<if test="param.searchValue != null and !param.searchValue.equals('')">
-	        AND ( pi.SELLER_ID LIKE CONCAT('%', #{param.searchValue}, '%')
+	        AND (
+	        	 pi.SELLER_ID LIKE CONCAT('%', #{param.searchValue}, '%')
 	             OR pi.BUYER_ID LIKE CONCAT('%', #{param.searchValue}, '%')
 	             OR pr.PRODUCT_CATEGORY LIKE CONCAT('%', #{param.searchValue}, '%')
-	             OR pr.PRODUCT_TITLE LIKE CONCAT('%', #{param.searchValue}, '%'))
-	             OR pi.PAY_ADDRESS LIKE CONCAT('%', #{param.searchValue}, '%'))
+	             OR pr.PRODUCT_TITLE LIKE CONCAT('%', #{param.searchValue}, '%')
+	             OR pi.PAY_ADDRESS LIKE CONCAT('%', #{param.searchValue}, '%')
+	            )
 		</if>
 		<if test="param.searchDate != null and !param.searchDate.equals('')">
 	        AND DATE(pi.PAY_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1)
@@ -913,9 +915,84 @@
 			<choose>
 				<when test='param.orderColumn.equals("product_category")'>pr.PRODUCT_TITLE</when>
 				<when test='param.orderColumn.equals("product_price")'>pr.PRODUCT_PRICE</when>
-				<when test='param.orderColumn.equals("pay_price")'>pi.PAY_DATE</when>
+				<when test='param.orderColumn.equals("pay_price")'>pi.PAY_PRICE</when>
 				<when test='param.orderColumn.equals("pay_date")'>pi.PAY_DATE</when>
 				<otherwise>pi.PAY_DATE</otherwise>
+			</choose>
+			<if test='param.orderDir.equals("asc")'>ASC</if>
+			<if test='param.orderDir.equals("desc")'>DESC</if>
+		  LIMIT
+		 	   #{param.start}
+		 	   , #{param.length}
+     </select>
+     
+     
+     
+     <!-- 상품목록 -->
+     <!-- 상품 전체 컬럼 수 조회 - SELECT -->
+     <select id="selectProductListTotal" resultType="int">
+     	SELECT COUNT(*)
+		FROM PRODUCT
+     </select>
+     
+     <!-- 상품 필터링 후 컬럼 수 조회 - SELECT -->
+     <select id="selectProductListFiltered" resultType="int">
+     	SELECT COUNT(*)
+		FROM PRODUCT
+		WHERE 1=1
+		<if test="param.status != null and param.status != ''">
+        	AND PRODUCT_STATUS = #{param.status}
+		</if>
+		<if test="param.searchValue != null and !param.searchValue.equals('')">
+	        AND ( 
+	        	 MEM_ID LIKE CONCAT('%', #{param.searchValue}, '%')
+	             OR PRODUCT_TITLE LIKE CONCAT('%', #{param.searchValue}, '%')
+	             OR PRODUCT_CATEGORY LIKE CONCAT('%', #{param.searchValue}, '%')
+	            )
+		</if>
+		<if test="param.searchDate != null and !param.searchDate.equals('')">
+	        AND (DATE(PRODUCT_REG_DATE) BETWEEN LEFT(#{param.searchValue}, 10) 
+	        AND RIGHT(#{param.searchValue}, 10))
+		</if>
+     </select>
+     
+     <!-- 필터링 된 상품 목록 조회 - SELECT -->
+     <select id="selectProductList" resultType="map">
+     	SELECT PRODUCT_ID
+			, PRODUCT_TITLE
+			, MEM_ID
+		    , (CASE 
+		        WHEN CHAR_LENGTH(PRODUCT_INTRO) > 30 THEN CONCAT(LEFT(PRODUCT_INTRO, 30), '...')
+		        ELSE PRODUCT_INTRO END) AS PRODUCT_INTRO
+			, FORMAT(PRODUCT_PRICE, 0) AS PRODUCT_PRICE
+			, FORMAT(PRODUCT_SHIPPING_FEE, 0) AS PRODUCT_SHIPPING_FEE
+			, (CASE WHEN PRODUCT_DISCOUNT_STATUS = 0 THEN "불가능"
+					WHEN PRODUCT_DISCOUNT_STATUS = 1 THEN "가능" END) AS PRODUCT_DISCOUNT_STATUS
+			, PRODUCT_CATEGORY
+			, DATE_FORMAT(PRODUCT_REG_DATE, '%Y-%m-%d %H:%i:%s') AS PRODUCT_REG_DATE
+			, PRODUCT_STATUS
+		FROM PRODUCT
+		WHERE 1 = 1
+		<if test="param.status != null and param.status != ''">
+        	AND PRODUCT_STATUS = #{param.status}
+		</if>
+		<if test="param.searchValue != null and !param.searchValue.equals('')">
+		   AND 
+			   MEM_ID LIKE CONCAT('%', #{param.searchValue}, '%')
+	 	       OR PRODUCT_TITLE LIKE CONCAT('%', #{param.searchValue}, '%')
+	 	       OR PRODUCT_CATEGORY LIKE CONCAT('%', #{param.searchValue}, '%') 
+	 	       OR PRODUCT_STATUS LIKE CONCAT('%', #{param.searchValue}, '%') 
+		</if>
+		<if test="param.searchDate != null and !param.searchDate.equals('')">
+		   AND (DATE(PRODUCT_REG_DATE) BETWEEN SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', 1) AND SUBSTRING_INDEX(#{param.searchDate}, ' ~ ', -1))
+		</if>
+		ORDER BY 
+			<choose>
+				<when test='param.orderColumn.equals("PRODUCT_CATEGORY")'>PRODUCT_TITLE</when>
+				<when test='param.orderColumn.equals("PRODUCT_PRICE")'>PRODUCT_PRICE</when>
+				<when test='param.orderColumn.equals("PRODUCT_PRICE")'>PRODUCT_PRICE</when>
+				<when test='param.orderColumn.equals("PRODUCT_REG_DATE")'>PRODUCT_REG_DATE</when>
+				<otherwise>PRODUCT_REG_DATE</otherwise>
 			</choose>
 			<if test='param.orderDir.equals("asc")'>ASC</if>
 			<if test='param.orderDir.equals("desc")'>DESC</if>
@@ -1095,32 +1172,39 @@
     <!-- 기간별 통계 - 총 회원수 조회 -->
     <select id="selectTotalMember" resultType="map">
 <!--     < 이스케이프문자가 xml에서 적용되지 않아서 CDATA로 처리  -->
-	    <![CDATA[ 
-		    WITH
-		    -- 시작일자 이전 누적 회원 수 계산
-		    InitialCounts AS (
-		    	SELECT COUNT(*) AS initialMemberTotal
-		    	FROM MEMBER
-		    	WHERE MEM_STATUS = 1
-		    	AND MEM_REG_DATE < #{startDate}
-		    ),
-		    -- 기간 내 일자별 회원 가입 수 계산
-		    DailyCounts AS (
-		    	SELECT DATE(MEM_REG_DATE) AS date
-		    			,COUNT(*) AS dailyJoin
-		    	FROM MEMBER
-		    	WHERE MEM_STATUS = 1
-		    	AND MEM_REG_DATE BETWEEN #{startDate} AND #{endDate}
-		    	GROUP BY DATE(MEM_REG_DATE)
-		    )
-		    -- 누적 합계 계산
-		    SELECT d.date AS date
-		    		,(i.initialMemberTotal + SUM(d.dailyJoin) OVER (ORDER BY d.date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)) AS memberTotal
-		    FROM DailyCounts d CROSS JOIN InitialCounts i
-		    ORDER BY d.date ${orderDir}
+	    <![CDATA[
+	        -- 시작일자 이전 누적 회원 수 계산
+	        SELECT r.date AS date,
+	               (i.initialMemberTotal + 
+	                SUM(COALESCE(d.dailyJoin, 0)) 
+	                OVER (ORDER BY r.date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)) AS memberTotal
+	        FROM (
+	            SELECT COUNT(*) AS initialMemberTotal
+	            FROM MEMBER
+	            WHERE MEM_STATUS = 1
+	            AND MEM_REG_DATE < #{startDate}
+	        ) i
+	        CROSS JOIN (
+	            SELECT DATE(#{startDate}) + INTERVAL (a.a + (10 * b.a)) DAY AS date
+	            FROM (SELECT 0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 
+	                  UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) a
+	            CROSS JOIN (SELECT 0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 
+	                        UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) b
+	            WHERE DATE(#{startDate}) + INTERVAL (a.a + (10 * b.a)) DAY <= #{endDate}
+	        ) r
+	        LEFT JOIN (
+	            SELECT DATE(MEM_REG_DATE) AS date, COUNT(*) AS dailyJoin
+	            FROM MEMBER
+	            WHERE MEM_STATUS = 1
+	            AND MEM_REG_DATE BETWEEN #{startDate} AND #{endDate}
+	            GROUP BY DATE(MEM_REG_DATE)
+	        ) d
+	        ON r.date = d.date
+	        ORDER BY r.date ${orderDir};
 	    ]]>
     </select>
-    
+
+
     <!-- 기간별 통계 - 일자별 회원가입수 조회 -->
     <select id="selectTotalJoin" resultType="map">
     	SELECT DATE(MEM_REG_DATE) AS date

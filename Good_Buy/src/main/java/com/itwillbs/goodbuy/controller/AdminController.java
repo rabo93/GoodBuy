@@ -34,6 +34,7 @@ import com.itwillbs.goodbuy.vo.CommonCodeVO;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.NoticeVO;
 import com.itwillbs.goodbuy.vo.ProductOrderVO;
+import com.itwillbs.goodbuy.vo.ProductVO;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -473,6 +474,47 @@ public class AdminController {
 		response.put("recordsTotal", recordsTotal); // 전체 컬럼 수
 		response.put("recordsFiltered", recordsFiltered); // 검색 필터링 후 컬럼 수
 		response.put("OrderList", OrderList); // 컬럼 데이터
+		
+		JSONObject jo = new JSONObject(response);
+		
+		return jo.toString();
+	}
+	
+	// [ 상품 목록 ]
+	@LoginCheck(memberRole = MemberRole.ADMIN)
+	@GetMapping("AdmProductList")
+	public String admProductListForm() {
+		return "admin/product_list";
+	}
+	
+	// 상품 거래내역 테이블
+	@ResponseBody
+	@PostMapping("AdmProductList")
+	public String AdmProductList(@RequestParam Map<String, String> param) {
+		// Map 형변환 처리 메서드 호출
+		Map<String, Object> convertParam = convertMap(param);
+		System.out.println("convertParam: " + convertParam);
+		System.out.println("거래상태: " + convertParam.get("status"));
+		System.out.println("검색어: " + convertParam.get("searchValue"));
+		
+		// 거래내역 목록 전체 컬럼 수 조회
+		int recordsTotal = service.getProductListTotal();
+		
+		// 거래내역 검색 필터링 후 컬럼 수 조회
+		int recordsFiltered = service.getProductListFiltered(convertParam);
+		
+		// 필터링 된 거래내역 목록 가져오기
+		List<Map<String, Object>> productList = service.getProductList(convertParam);
+		log.info(">>>>> 필터링 된 상품 목록 : " + productList);
+		
+		// 데이터를 map 객체에 담아서 JSON 객체로 변환하여 전달
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		// draw, recordsTotal, recordsFiltered 값을 돌려주어야 서버사이드 페이징 작동함
+		response.put("draw", convertParam.get("draw")); // 받은 draw 값 그대로 다시 전달(보안)
+		response.put("recordsTotal", recordsTotal); // 전체 컬럼 수
+		response.put("recordsFiltered", recordsFiltered); // 검색 필터링 후 컬럼 수
+		response.put("productList", productList); // 컬럼 데이터
 		
 		JSONObject jo = new JSONObject(response);
 		

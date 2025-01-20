@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function(){
 				data : "SUPPORT_CATEGORY", 
 				defaultContent: "이용문의", 
 				className : "dt-center", 
+				width: '80px',
 				render : function(data, type, row) {
 					const categories = {
 						1: "이용문의",
@@ -56,19 +57,19 @@ document.addEventListener("DOMContentLoaded", function(){
 				title: "작성자ID", 
 	            data : "MEM_ID",
 	            defaultContent: "",
-	            width: '120px',
+	            width: '50px',
 	            render: function (data, type, row) {
 					if (!data) {
 						return "";
 					}
-                	return data.replace(/(.{16})/g, '$1<br>'); // 16자마다 줄바꿈
+                	return data.replace(/(.{10})/g, '$1<br>'); // 16자마다 줄바꿈
            		}
             },
-            { title: "문의 제목", data : "SUPPORT_SUBJECT", defaultContent: "", orderable: false},
-            { title: "문의 내용", data : "SUPPORT_CONTENT", defaultContent: "", orderable: false},
-            { title: "작성일시", data : "SUPPORT_DATE", defaultContent: "", width: '180px',},
+            { title: "문의 제목", data : "SUPPORT_SUBJECT", defaultContent: "", orderable: false, width: '180px',},
+            { title: "문의 내용", data : "SUPPORT_CONTENT", defaultContent: "", orderable: false, width: '300px',},
+            { title: "작성일시", data : "SUPPORT_DATE", defaultContent: "", width: '120px',},
             { 
-				title: "처리상태", data : "STATUS", defaultContent: "", width: '100px', className : "dt-center",
+				title: "처리상태", data : "STATUS", defaultContent: "", width: '80px', className : "dt-center",
 				render : function(data, type, row) {
 					if(!data) return "";
 					switch (data) {
@@ -80,8 +81,8 @@ document.addEventListener("DOMContentLoaded", function(){
 				}
             },
 //            { title: "답변자", data : "ADMIN_ID", defaultContent: "", width: '100px', },
-            { title: "답변내용", data : "REPLY_CONTENT", defaultContent: "", orderable: false},
-            { title: "답변일시", data : "REPLY_DATE", defaultContent: "", width: '180px', },
+            { title: "답변내용", data : "REPLY_CONTENT", defaultContent: "", orderable: false, width: '300px',},
+            { title: "답변일시", data : "REPLY_DATE", defaultContent: "", width: '120px', },
             {
 				title : "관리",
 				data: null,

@@ -46,7 +46,7 @@
 								<c:when test="${isGoodStore}"><div class="shop-title">${searchSeller.MEM_NICK}의 상점&nbsp;&nbsp;<i class="fa-brands fa-square-web-awesome" style="color:var(--primary)";></i></div></c:when>
 								<c:otherwise>${searchSeller.MEM_NICK}의 상점</c:otherwise>
 							</c:choose>
-							<div class="item-shop-seller-description">${searchSeller.MEM_INTRO}</div>
+							<div class="item-shop-seller-description"><c:out value="${searchSeller.MEM_INTRO}"/></div>
 						</div>
 						<c:if test="${not empty searchSellerScore}">
 							<div class="item-shop-seller-review">

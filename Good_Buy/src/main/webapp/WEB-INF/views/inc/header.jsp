@@ -137,6 +137,7 @@
 		</nav>
 	</section>
 </div>
+<script src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/header.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/top.js"></script>
 

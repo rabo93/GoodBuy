@@ -88,7 +88,7 @@
 													</div>
 												</div>
 										    </div>
-										    <div class="col-4 px-4 search-box">
+										    <div class="col-3 px-4 search-box">
 			                                	<div class="search-ttl">기간별</div>
 												<div class="input-group align-items-center justify-content-center schDate-wrap">
 													<input type="text" class="form-control rounded-sm mr-2" placeholder="날짜 선택" value="" name="schDate" id="schDate"  autocomplete="off"/>
@@ -96,9 +96,9 @@
 													<button class="btn btn-success ml-2" id="initDateBtn" type="button"><i class="fa-solid fa-rotate"></i></button>
 												</div>
 										    </div>
-										    <div class="col-3 px-4 search-box">
+										    <div class="col-4 px-4 search-box">
 						                        <div class="input-group">
-						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="신고자ID, 신고상품, 신고사유, 처리상태 검색" aria-label="Search" aria-describedby="basic-addon2">
+						                            <input type="text" id="searchKeyword" class="form-control bg-light border small" name="keyword_search" placeholder="회원ID, 상품명, 상품소개, 상태 검색" aria-label="Search" aria-describedby="basic-addon2">
 						                            <div class="input-group-append">
 						                                <button class="btn btn-primary" id="searchBtn" type="button">검색</button>
 						                            </div>

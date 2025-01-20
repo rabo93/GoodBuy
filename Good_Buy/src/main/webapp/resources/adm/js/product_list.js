@@ -1,16 +1,17 @@
 document.addEventListener("DOMContentLoaded", function(){
-	const orderList = $('#orderList').DataTable({
+	const orderList = $('#productList').DataTable({
 		lengthChange : true, // 건수
 		searching : false, // 검색
 		info : true, // 정보
 		ordering : true, // 정렬
 		paging : true,
 		responsive: true, // 반응형
+		pageLength: 25,
 		destroy: true,
 		scrollX: true, 
 		autoWidth: false,
 		ajax : {
-			url: "AdmOrderList",
+			url: "AdmProductList",
 			type: "POST",
 			dataType : "JSON",
 			data: function(d) {
@@ -19,8 +20,9 @@ document.addEventListener("DOMContentLoaded", function(){
                 d.searchValue = $('input[name="keyword_search"]').val(); //키워드 검색
             },
 			dataSrc: function (res) {
-				const data = res.OrderList;
-				const start = $('#orderList').DataTable().page.info().start; 
+				console.log(res.productList);
+				const data = res.productList;
+				const start = $('#productList').DataTable().page.info().start; 
 				
 				// PK가 아닌 테이블 컬럼 번호 계산(페이징 포함)
 				for (let i = 0; i < data.length; i++) {
@@ -43,58 +45,59 @@ document.addEventListener("DOMContentLoaded", function(){
 		        },
             },
 		],
-		order: [[7, 'desc']], // 최초 조회 시 거래일시 최신순으로 기본 설정
+		order: [[9, 'desc']], // 최초 조회 시 거래일시 최신순으로 기본 설정
 		columnDefs: [
-			 { targets: [0, 1, 3, 5, 8, 9], orderable: false }, 
+			 { targets: [0, 4, 7], orderable: false }, 
 		],
 		columns: [
             { title: "No.", data: "listIndex", className : "dt-center", width: '30px', },
             { 
-				title: "판매자ID", 
-				data: "seller_id",
+				title: "판매자", 
+				data: "MEM_ID",
 				defaultContent: "",
-	            width: '150px',
+	            width: '100px',
 				className : "dt-center",
 	            render: function (data, type, row) {
 					if (!data) {
 						return "";
 					}
-                	return data.replace(/(.{16})/g, '$1<br>'); // 16자마다 줄바꿈
+					return `<a href="AdmMemberDetailForm?mem_id=${data}" target="_blank" title="새 창 열기">${data.replace(/(.{16})/g, '$1<br>')}</a>`;
            		}
 			},
-            { title: "상품유형", data: "product_category", defaultContent: "", className : "dt-center", width: '120px',},
-            { title: "상품명", data: "product_title", defaultContent: "", className : "dt-center",  width: '200px', 
-            	render : function(data, type, row) {
-					return `<a href="ProductDetail?PRODUCT_ID=${row.product_id}" target="_blank" title="새 창 열기">${data}</a>`;
+            { title: "ID", data: "PRODUCT_ID", defaultContent: "", className : "dt-center", width: '50px',},
+            {
+				 title: "상품명", 
+				 data: "PRODUCT_TITLE", 
+				 defaultContent: "", 
+				 className : "dt-center",  
+				 width: '200px', 
+				 render : function(data, type, row) {
+					return `<a href="ProductDetail?PRODUCT_ID=${row.PRODUCT_ID}" target="_blank" title="새 창 열기">${data}</a>`;
 				}
+            
             },
-            { title: "상품금액", data: "product_price", defaultContent: "", className : "dt-center", width: '150px', },
+            {
+				 title: "상품상세", 
+				 data: "PRODUCT_INTRO", 
+				 defaultContent: "", 
+				 className : "dt-center",  
+				 width: '220px',
+            },
+            { title: "가격(원)", data: "PRODUCT_PRICE", defaultContent: "", className : "dt-center", width: '90px', },
+            { title: "배송비(원)", data: "PRODUCT_SHIPPING_FEE", defaultContent: "", className : "dt-center", width: '90px',},
+            { title: "가격제안", data: "PRODUCT_DISCOUNT_STATUS", defaultContent: "", className : "dt-center", width: '70px',},
+            { title: "카테고리", data: "PRODUCT_CATEGORY", defaultContent: "", className : "dt-center", width: '100px',},
+            { title: "등록일자", data: "PRODUCT_REG_DATE", defaultContent: "", className : "dt-center", width: '180px',},
             { 
-				title: "구매자ID", 
-				data: "buyer_id",
-				defaultContent: "",
-	            width: '150px',
-				className : "dt-center",
-	            render: function (data, type, row) {
-					if (!data) {
-						return "";
-					}
-                	return data.replace(/(.{16})/g, '$1<br>'); // 16자마다 줄바꿈
-           		}
-			},
-            { title: "구매금액", data: "pay_price", defaultContent: "", className : "dt-center", width: '150px',},
-            { title: "거래일시", data: "pay_date", defaultContent: "", className : "dt-center", width: '200px',},
-            { title: "거래장소", data: "pay_address", defaultContent: "", className : "dt-center", width: '150px',},
-            { 
-				title: "거래상태", data : "pay_status", defaultContent: "", width: '100px', className : "dt-center",  width: '180px',
+				title: "상품상태", data : "PRODUCT_STATUS", defaultContent: "", width: '100px', className : "dt-center",  width: '100px',
 				render : function(data, type, row) {
-					if(!data) return "";
+					if(!data && data != 0) return "";
 					switch (data) {
 				        case 0: return "<span class='status status-00'>판매중</span>";
 				        case 1: return "<span class='status status-01'>거래중</span>";
-				        case 2: return "<span class='status status-02'>예약중</span>";
+				        case 2: return "<span class='status status-04'>예약중</span>";
 				        case 3: return "<span class='status status-03'>거래완료</span>";
-//				        case 4: return "<span class='status status-04'>신고처리</span>";
+				        case 4: return "<span class='status status-02'>신고처리</span>";
 				        default: return "";
 				    }
 				}
@@ -122,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	});
 	
 	// 기존 검색 숨기기
-	$("#orderList_filter").attr("hidden", "hidden");
+	$("#productList_filter").attr("hidden", "hidden");
 	
 	 // 필터 변경 시 데이터 테이블 다시 로드
     $('input[name="status"]').on('change', () => orderList.draw());

@@ -488,8 +488,7 @@
     margin-bottom: 10px;
     padding-bottom: 10px;
 }
-.item-shop-section .st-ttl .item-shop-seller-description {
-}
+.item-shop-section .st-ttl .item-shop-seller-description {width: 600px;}
 
 .item-shop-section .more {background: transparent;}
 .item-shop-section .sec-inner {max-width:1320px; margin:0 auto;}

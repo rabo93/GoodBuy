@@ -13,6 +13,7 @@ import com.itwillbs.goodbuy.mapper.AdminMapper;
 import com.itwillbs.goodbuy.vo.MemberVO;
 import com.itwillbs.goodbuy.vo.NoticeVO;
 import com.itwillbs.goodbuy.vo.ProductOrderVO;
+import com.itwillbs.goodbuy.vo.ProductVO;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -350,6 +351,25 @@ public class AdminService {
 	public List<ProductOrderVO> getOrderList(Map<String, Object> param) {
 		return mapper.selectOrderList(param);
 	}
+	
+
+	// 상품 목록 전체 컬럼 수 조회
+	public int getProductListTotal() {
+		return mapper.selectProductListTotal();
+	}
+	
+	// 상품 검색 필터링 후 컬럼 수 조회
+	public int getProductListFiltered(Map<String, Object> param) {
+		return mapper.selectProductListFiltered(param);
+	}
+	
+	// 필터링 된 상품 목록 조회
+	public List<Map<String, Object>> getProductList(Map<String, Object> convertParam) {
+		return mapper.selectProductList(convertParam);
+	}
+	
+	
+	// ================= [ 로그 관리 ] ===================
 
 	// 로그 목록 전체 컬럼 수 조회
 	public int getLogListTotal() {

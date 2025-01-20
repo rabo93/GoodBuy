@@ -46,7 +46,10 @@ public interface MyReviewMapper {
 	//리뷰 평점 올라감
 //	int insertReviewScore(Map<String, String> reviewData);
 	//별점이 3개 이상인 상점조회
+	
+	//나의 리뷰 전체조회
 	Map<String, String> selectGoodStore(String id);
+	List<MyReviewVO> selectReviewAll(String id);
 	
 
 }

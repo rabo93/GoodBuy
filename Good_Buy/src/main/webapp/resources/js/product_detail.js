@@ -99,18 +99,20 @@ $(function(){
 	})
 	
 	$("#removeItem").on('click', function() {
-		$.ajax({
-			url: "ItemRemove",
-			type: "GET",
-			data: {
-				PRODUCT_ID: url.searchParams.get('PRODUCT_ID'),
-			},
-		}).done(function(response){
-			location.href='MySales';
-			alert(decodeURIComponent(response).replaceAll("+", " "));
-		}).fail(function() {
-			alert("상품 삭제에 실패하였습니다.\n나중에 다시 시도해주세요");
-		});
+		if(confirm("상품을 삭제 하시겠습니까?")) {
+			$.ajax({
+				url: "ItemRemove",
+				type: "GET",
+				data: {
+					PRODUCT_ID: url.searchParams.get('PRODUCT_ID'),
+				},
+			}).done(function(response){
+				location.href='MySales';
+				alert(decodeURIComponent(response).replaceAll("+", " "));
+			}).fail(function() {
+				alert("상품 삭제에 실패하였습니다.\n나중에 다시 시도해주세요");
+			});
+		}
 	})
 	
 })
